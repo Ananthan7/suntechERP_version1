@@ -53,6 +53,7 @@ export class LoginComponent implements OnInit {
       year: new FormControl('', Validators.required),
     });
     this.getCompanyParameter()
+    this.getMessageBox()
   }
   /**use: to get company parameters before login, from API */
   getCompanyParameter() {
@@ -63,6 +64,20 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('COMPANY_PARAMETERS', JSON.stringify(data))
       } else {
         alert('Company parameters not Available')
+      }
+    }, error => {
+      console.log(error, 'Server error');
+    })
+  }
+  /**use: to get MessageBox parameters before login, from API */
+  getMessageBox() {
+    let API = 'Messagebox'
+    this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+      if (response.status == 'Success') {
+        let data = response.response
+        localStorage.setItem('MESSAGE_BOX', JSON.stringify(data))
+      } else {
+        alert('Messagebox parameters not Available')
       }
     }, error => {
       console.log(error, 'Server error');

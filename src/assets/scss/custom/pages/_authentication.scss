@@ -14,7 +14,7 @@
     background-size: 100% 50%;
     background-position: left bottom,right top;
     background-repeat: no-repeat;
-    background-image: url("../../../images/Mask-group-login.png");
+    // background-image: url("../../../images/Mask-group-login.png");
     display: flex;
     align-items: center;
     justify-content: center;
@@ -177,10 +177,10 @@
 
 body[data-layout-mode="dark"] {
     .authentication-bg{
-        background-image: url("../../../images/Mask-group-login.png");
+        // background-image: url("../../../images/Mask-group-login.png");
 
         // .bg-overlay{
-        //     opacity: 0.1;
+        //     opacity: 0.1;salesman
         // }
 
         .auth-logo{

@@ -66,6 +66,7 @@
     "ngx-cookie-service": "^12.0.0",
     "ngx-drag-drop": "^2.0.0",
     "ngx-dropzone-wrapper": "^10.0.1",
+    "ngx-font-picker": "^12.0.0",
     "ngx-lightbox": "^2.4.1",
     "ngx-mask": "^12.0.0",
     "ngx-pagination": "^6.0.3",

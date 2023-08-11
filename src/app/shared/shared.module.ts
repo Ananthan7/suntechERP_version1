@@ -10,13 +10,13 @@ import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FlatpickrModule } from 'angularx-flatpickr';
-import { NgbAccordionModule, NgbActiveModal, NgbProgressbarModule  } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordionModule, NgbActiveModal, NgbCollapseModule, NgbProgressbarModule  } from '@ng-bootstrap/ng-bootstrap';
 import { TimeframeComponent } from './timeframe/timeframe.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import {SliderModule} from 'primeng/slider';
 import {TableModule} from 'primeng/table';
 import { NgApexchartsModule } from "ng-apexcharts";
-import { DxDataGridModule,  DxButtonModule,DxCheckBoxModule,DxRadioGroupModule  } from 'devextreme-angular';
+import { DxDataGridModule,  DxButtonModule,DxCheckBoxModule,DxRadioGroupModule, DevExtremeModule  } from 'devextreme-angular';
 import { NgChartsModule } from 'ng2-charts';
 import {KnobModule} from 'primeng/knob';
 import {SidebarModule} from 'primeng/sidebar';
@@ -27,6 +27,7 @@ import { HeaderPanelComponent } from './header-panel/header-panel.component';
 import {DividerModule} from 'primeng/divider';
 import { CamelCasePipe } from './pipes/camel-case.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { MenubarComponent } from './component/menubar/menubar.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     CamelCasePipe,
     HeaderPanelComponent,
     CamelCasePipe,
+    MenubarComponent,
   ],
   imports: [
     CommonModule,
@@ -65,7 +67,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
     NgbTooltipModule,
     DividerModule,
     NgxPaginationModule,
-    NgChartsModule
+    NgChartsModule,
+    DevExtremeModule,
+    NgbCollapseModule
   ],
   exports: [
     FormsModule,
@@ -80,6 +84,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     LoaderComponent,
     MasterFilterComponent,
     TimeframeComponent,
+    MenubarComponent,
     SliderModule,
     TableModule,
     NgApexchartsModule,
@@ -98,7 +103,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
     HeaderPanelComponent,
     NgbTooltipModule,
     DividerModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    DevExtremeModule,
+    NgbCollapseModule
   ],
   providers:[NgbActiveModal]
 })

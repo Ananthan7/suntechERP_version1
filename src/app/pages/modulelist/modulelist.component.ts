@@ -8,17 +8,17 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
   styleUrls: ['./modulelist.component.scss']
 })
 export class ModulelistComponent implements OnInit {
-  menuList:any[] = [];
+  menuList: any[] = [];
   constructor(
     public dataService: SuntechAPIService
-  ) { 
+  ) {
     this.getModuleList()
   }
 
   ngOnInit(): void {
   }
-// /SuntechProdModuleMaster/GetProductModuleList
-  getModuleList(){
+  /**USE: get module list from API */
+  getModuleList() {
     let API = 'SuntechProdModuleMaster/GetProductModuleList'
     this.dataService.getDynamicAPI(API).subscribe((response: any) => {
       if (response.status == 'Success') {
@@ -39,8 +39,6 @@ export class ModulelistComponent implements OnInit {
           if (nameA > nameB) {
             return 1;
           }
-
-          // names must be equal
           return 0;
         });
 
@@ -70,10 +68,7 @@ export class ModulelistComponent implements OnInit {
           }
 
         });
-        console.log('menuList ', this.menuList);
-
         localStorage.setItem('menuList', JSON.stringify(this.menuList));
-
       } else {
         this.menuList = [];
       }

@@ -23,7 +23,7 @@ import { LAYOUT_MODE } from "../layouts.model";
  * Horizontal Topbar Component
  */
 export class HorizontaltopbarComponent implements OnInit {
-
+  app_version: string = environment.app_version
   mode: string | undefined;
   layoutMode!: string;
 

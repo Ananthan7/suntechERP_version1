@@ -46,7 +46,7 @@ body[data-layout="horizontal"] {
 }
 
 .topnav {
-    background: $header-bg;
+    background: #012C57 !important;
     padding: 0 calc(#{$grid-gutter-width} / 2);
     z-index: 100;
     border-top: 1px solid $border-color;
@@ -68,7 +68,7 @@ body[data-layout="horizontal"] {
             font-size: 14.4px;
             position: relative;
             padding: 1rem 1.3rem;
-            color: $menu-item-color;
+            color: #fff;
             font-weight: $font-weight-normal;
             i{
                 font-size: 15px;
@@ -76,7 +76,7 @@ body[data-layout="horizontal"] {
             svg {
                 height: 16px;
                 width: 16px;
-                color: $menu-item-color;
+                color: #fff;
                 margin-right: 7px;
                 margin-top: -1px;
             }

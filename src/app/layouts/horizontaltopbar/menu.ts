@@ -2,9 +2,16 @@ import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
     {
+        id: 3,
+        label: 'Home',
+        icon: 'grid',
+        link: '/modules',
+    },
+    {
         id: 1,
         label: 'All',
-        icon: 'grid',
+        icon: 'list',
+        link: '/modules',
         subItems: [
             {
                 id: 1,
@@ -81,38 +88,22 @@ export const MENU: MenuItem[] = [
           
         ]
     },
+    
     {
         id: 2,
         label: 'Management',
-        icon: 'user',
-        subItems: [
-            {
-                id: 2,
-                label: 'Modules',
-                link: '/modules',
-                parentId: 2
-            },
-          
-        ]
+        icon: 'edit',
+        link: '/modules',
     },
     {
         id: 3,
         label: 'Operational',
-        icon: 'monitor',
-        subItems: [
-            {
-                id: 2,
-                label: 'Modules',
-                link: '/modules',
-                parentId: 3
-            },
-          
-        ]
+        icon: 'settings',
     },
     {
         id: 4,
         label: 'Sales',
-        icon: 'user',
+        icon: 'trending-up',
         subItems: [
             {
                 id: 2,

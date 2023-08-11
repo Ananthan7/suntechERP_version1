@@ -43,6 +43,7 @@ export class RightsidebarComponent implements OnInit {
      if (this.layout == 'horizontal') {
        vertical?.removeAttribute('checked');
      }
+     this.changeWidth('boxed')
   }
   
 

@@ -1,0 +1,26 @@
+.favItems{
+    color: #3599cc;
+}
+
+.chat_info {
+    padding: 30px 0px;
+    .card_wrap {
+      border: 1px solid #3599cc;
+      border-radius: 10px;
+      padding: 20px;
+      width: 100%;
+      margin: 10px 0px;
+      h5 {
+        font-size: 16px;
+        font-weight: 600;
+        font-family: "Poppins", sans-serif;
+        color: #012c57;
+      }
+      h3 {
+        font-size: 20px;
+        font-weight: 500;
+        font-family: "Poppins", sans-serif;
+        color: #3599cc;
+      }
+    }
+  }
