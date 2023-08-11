@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
   public user_name: any;
   public validateState = 0;
   public dataForm: FormGroup;
+  public userDetails: any[] = [];
 
   options: string[] = [''];
   filteredOptions: Observable<string[]> | undefined;
@@ -104,10 +105,10 @@ export class LoginComponent implements OnInit {
       this.snackBarRef = this.snackBar.open('Validating Username ...');
       let API = 'UserDetailNetMaster/' + this.user_name
       this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
-        console.log(resp);
         if (resp.status == 'Success') {
-          localStorage.setItem('userRole', resp['response']['GROUP_NAME']);
-          localStorage.setItem('userLang', resp['response']['USER_LANGUAGE']);
+          this.userDetails = resp.response
+          // localStorage.setItem('userRole', resp['response']['GROUP_NAME']);
+          // localStorage.setItem('userLang', resp['response']['USER_LANGUAGE']);
           this.validateState = 1;
         }
         this.snackBar.dismiss();
@@ -133,7 +134,6 @@ export class LoginComponent implements OnInit {
               this.dataService.getDynamicAPI(API2)
                 .subscribe((resp) => {
                   this.all_branch = resp.response;
-                  console.log('branch', this.all_branch);
                   var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
 
                   this.options = data;
@@ -188,8 +188,6 @@ export class LoginComponent implements OnInit {
   signin() {
     let branch = this.dataForm.value.branch;
     let year = this.dataForm.value.year;
-    localStorage.setItem('username', 'user');
-    localStorage.setItem('currentUser', JSON.stringify(this.user_name));
 
     if (branch != '' && this.validateState == 2 && year != '') {
       let API = 'BranchMaster/' + branch
@@ -197,12 +195,14 @@ export class LoginComponent implements OnInit {
         if (resp.status == 'Success') {
           // if (resp.status == 'Success') {
           this.validateState = 3;
-          localStorage.setItem('branchdetails', JSON.stringify(resp.response));
+          localStorage.setItem('USER_PARAMETER', JSON.stringify(this.userDetails));
+          localStorage.setItem('BRANCH_PARAMETER', JSON.stringify(resp.response));
           // this.comFunc.allbranchMaster = resp.response;
+          localStorage.setItem('currentUser', JSON.stringify(this.user_name));
           localStorage.setItem('username', this.user_name);
           localStorage.setItem('userbranch', branch);
           localStorage.setItem('year', year);
-          this.getBranchCurrencyMaster();
+          // this.getBranchCurrencyMaster();
           // this.router.navigate(['/']);
           setTimeout(() => {
             window.location.href = '/';
@@ -217,19 +217,19 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  getBranchCurrencyMaster() {
-    //alert("test");
-    let branch = localStorage.getItem('userbranch')
-    let API = `BranchCurrencyMaster/GetBranchCurrencyMasterDetail/${branch}`
-    this.dataService.getDynamicAPI(API)
-      .subscribe((data: any) => {
-        // this.comFunc.allBranchCurrency = data.response;
-        console.log('===============curr=====================');
-        console.log(data);
-        console.log('====================================');
-        // this.comFunc.allBranchCurrency = data.response;
-      });
-  }
+  // getBranchCurrencyMaster() {
+  //   //alert("test");
+  //   let branch = localStorage.getItem('userbranch')
+  //   let API = `BranchCurrencyMaster/GetBranchCurrencyMasterDetail/${branch}`
+  //   this.dataService.getDynamicAPI(API)
+  //     .subscribe((data: any) => {
+  //       // this.comFunc.allBranchCurrency = data.response;
+  //       console.log('===============curr=====================');
+  //       console.log(data);
+  //       console.log('====================================');
+  //       // this.comFunc.allBranchCurrency = data.response;
+  //     });
+  // }
 
 
 }

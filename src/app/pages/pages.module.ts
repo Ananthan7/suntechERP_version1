@@ -9,15 +9,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { WidgetModule } from '../shared/widget/widget.module';
 import { FlatpickrModule } from 'angularx-flatpickr';
-import { DxDataGridModule,  DxButtonModule,DxCheckBoxModule,DxRadioGroupModule  } from 'devextreme-angular';
-import { NgbAccordionModule, NgbActiveModal, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { NgChartsModule } from 'ng2-charts';
-import {ButtonModule} from 'primeng/button';
-import {InputTextModule} from 'primeng/inputtext';
-import {DropdownModule} from 'primeng/dropdown';
-import { NgxPaginationModule } from 'ngx-pagination';
-
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -33,16 +25,7 @@ FullCalendarModule.registerPlugins([
     FullCalendarModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule,
     FlatpickrModule.forRoot(),
-    NgbAccordionModule,
-    NgbProgressbarModule,
-    DxDataGridModule,DxButtonModule,DxCheckBoxModule,DxRadioGroupModule ,
-    NgChartsModule,
-    ButtonModule,
-    InputTextModule,
-    DropdownModule,
-    NgxPaginationModule
   ],providers:[NgbActiveModal]
 })
 export class PagesModule { }

@@ -26,6 +26,7 @@ import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { HeaderPanelComponent } from './header-panel/header-panel.component';
 import {DividerModule} from 'primeng/divider';
 import { CamelCasePipe } from './pipes/camel-case.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,9 @@ import { CamelCasePipe } from './pipes/camel-case.pipe';
     SidebarModule,
     TooltipModule,
     NgbTooltipModule,
-    DividerModule
+    DividerModule,
+    NgxPaginationModule,
+    NgChartsModule
   ],
   exports: [
     FormsModule,
@@ -94,7 +97,8 @@ import { CamelCasePipe } from './pipes/camel-case.pipe';
     CamelCasePipe,
     HeaderPanelComponent,
     NgbTooltipModule,
-    DividerModule
+    DividerModule,
+    NgxPaginationModule
   ],
   providers:[NgbActiveModal]
 })
