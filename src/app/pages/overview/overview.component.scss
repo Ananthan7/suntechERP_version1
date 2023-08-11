@@ -1,0 +1,435 @@
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .banners {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+  }
+  .banrcontent {
+    width: 100%;
+    position: relative;
+    right: 60%;
+  }
+  .welcome {
+    font-size: 24px;
+  }
+  .branch {
+    font-size: 13px;
+  }
+  .innerbanner {
+    width: 100%;
+    height: 87%;
+  }
+  .innerbanner-2 {
+    width: 100%;
+    height: 87%;
+    margin: 4px 0px 0px 0px !important;
+  }
+  .details {
+    padding: 6px !important;
+  }
+  .card {
+    width: 100%;
+  }
+  .graphcontent {
+    margin-top: 12px;
+    width: 100%;
+    height: 28%;
+    display: flex;
+    flex-direction: column;
+  }
+  .chartSelected {
+    width: 100%;
+    height: 100%;
+  }
+  .graphheader {
+    // padding-top: 17px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .banners {
+    display: flex;
+    flex-direction: row;
+    height: 33vh;
+  }
+  .banrcontent {
+    width: 100%;
+    position: relative;
+    right: 50%;
+  }
+  .innerbanner {
+    width: 60%;
+    height: 90%;
+  }
+  .innerbanner-2 {
+    width: 31%;
+    height: 90%;
+  }
+  .welcome {
+    font-size: 2rem;
+  }
+  .branch {
+    font-size: 1rem;
+  }
+  .card {
+    width: 31%;
+  }
+  .graphcontent {
+    margin-top: 12px;
+    width: 100%;
+    height: 28%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .chartSelected {
+    width: 100%;
+    height: 100%;
+  }
+  .graphheader {
+    padding-top: 17px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .banners {
+    display: flex;
+    flex-direction: row;
+    height: 30vh;
+  }
+  .banrcontent {
+    width: 100%;
+    position: relative;
+    right: 50%;
+  }
+  .innerbanner {
+    width: 65%;
+    height: 90%;
+  }
+  .innerbanner-2 {
+    width: 31%;
+    height: 90%;
+  }
+  .welcome {
+    font-size: 2rem;
+  }
+  .branch {
+    font-size: 1rem;
+  }
+  .card {
+    width: 31%;
+  }
+  .graphcontent {
+    margin-top: 12px;
+    width: 100%;
+    height: 28%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .chartSelected {
+    width: 100%;
+    height: 100%;
+  }
+  .graphheader {
+    padding-top: 17px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .banners {
+    display: flex;
+    flex-direction: row;
+    height: 33vh;
+  }
+  .welcome {
+    font-size: 2.6rem;
+  }
+  .branch {
+    font-size: 0.7rem;
+  }
+  .innerbanner {
+    width: 67%;
+    height: 90%;
+  }
+  .innerbanner-2 {
+    width: 30%;
+    height: 90%;
+    .details {
+      padding-top: 9px !important;
+    }
+  }
+  .card {
+    width: 31%;
+  }
+  .graphcontent {
+    margin-top: 12px;
+    width: 100%;
+    height: 28%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .chartSelected {
+    width: 70%;
+    height: 70%;
+  }
+
+  .banrcontent {
+    width: 100%;
+    position: relative;
+    right: 65%;
+  }
+  .graphheader {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+::ng-deep {
+  .p-tooltip {
+    max-width: 400px;
+  }
+}
+.tableLength {
+  max-width: 100%;
+  max-height: 195px;
+  overflow: scroll;
+  font-size: 0.5rem;
+}
+.btn-outline-info {
+  font-family: "Mulish", sans-serif !important;
+  font-size: 13px;
+  border: 1.2px solid #3599cc !important;
+  min-width: 90px;
+  height: 26px;
+  color: #3599cc;
+  box-sizing: border-box;
+  // border-radius: 10px;
+  padding: 1px 1px 2px 1px !important;
+  text-transform: capitalize;
+  i {
+    font-size: 9px;
+  }
+}
+.btn-outline-info:hover {
+  background-color: #3599cc;
+  color: #fff;
+}
+.btn-outline {
+  font-family: "Mulish", sans-serif !important;
+  font-size: 13px;
+  border: 1.2px solid #ffffff !important;
+  min-width: 100px;
+  height: 24px;
+  color: #ffffff;
+  border-radius: 25px;
+  padding: 0px 2px 2px 2px !important;
+  box-sizing: border-box;
+  text-transform: capitalize;
+}
+.allcurrency {
+  padding-top: 4px;
+  font-size: 10px;
+  font-family: "Mulish", sans-serif !important;
+}
+
+/*banner style starts*/
+.banners {
+  width: 100%;
+  /* first banner starts*/
+  .innerbanner {
+    background-image: url("../../../assets/images/crm/Banner.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center 49%;
+    border-radius: 8px;
+    //content section
+    .bannercontent {
+      padding: 10px 0px 0px 23px;
+      font-family: "Mulish", sans-serif;
+      .welcome {
+        font-style: normal;
+        font-weight: bold;
+        color: #1e232c;
+      }
+      .User {
+        font-weight: 300;
+        font-size: 15px;
+        color: #1e232c;
+      }
+      .totalbranch {
+        font-weight: bold;
+        font-size: 12px;
+        color: #1e232c;
+      }
+      .number {
+        font-size: 28px;
+        font-weight: bold;
+        color: #fff;
+        // margin-top: 9px;
+      }
+      .branch {
+        font-weight: 900;
+        color: #336699;
+      }
+    }
+  }
+  /* second banner starts */
+  .innerbanner-2 {
+    background-image: url("../../../assets/images/crm/Banner-2.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: skyblue;
+    // height: 87%;
+    margin-left: 11px;
+    border-radius: 8px;
+    //banner content
+    .bannercontent-2 {
+      padding: 30px 0px 0px 23px;
+      font-family: "Mulish", sans-serif;
+      .number {
+        font-size: 30px;
+        font-weight: bold;
+        color: #fff;
+      }
+      .branch {
+        color: #fff;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+/* Graph style starts */
+.graphheader {
+  font-family: "Mulish", sans-serif;
+  font-weight: 900 !important;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+  color: #1e232c;
+}
+
+.tooltipStyle {
+  width: 400px;
+}
+.graphtopcontent {
+  font-family: "Mulish", sans-serif;
+  cursor: pointer;
+  .Revenue {
+    font-weight: bold !important;
+    color: #1e232c;
+    font-size: 15.5px;
+  }
+  .totalnum1 {
+    color: #00a561;
+    font-weight: bold;
+  }
+  .target1 {
+    font-weight: 600;
+    font-size: 9px;
+    color: #b2b2b2;
+    letter-spacing: 0.5px;
+  }
+  .percentage {
+    font-size: 12px;
+    i {
+      font-size: 12px;
+    }
+  }
+  .graphviewbtn {
+    font-size: 9px;
+    font-weight: 600;
+    min-width: 82px;
+    height: 20px;
+    margin-left: 5px;
+  }
+  .graphiconfilter {
+    margin: 5px 5px 0px 0px;
+    max-width: 300px;
+    div {
+      max-width: 45px;
+      max-height: 23px;
+      padding: 2px;
+      border-radius: 5px;
+      background-color: #b2b2b2;
+      margin-left: 3px;
+      color: #fff;
+    }
+  }
+}
+
+/* loader */
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  left: 40%;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 30px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #3599cc;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}

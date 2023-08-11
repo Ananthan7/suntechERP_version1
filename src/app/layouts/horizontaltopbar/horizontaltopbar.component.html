@@ -1,0 +1,275 @@
+<header id="page-topbar">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <!-- <div class="navbar-brand-box">
+                <a routerLink="/" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-sm.jpg" alt height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-dark.jpg" alt height="45">
+                    </span>
+                </a>
+
+                <a routerLink="/" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-sm.jpg" alt height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-dark.png" alt height="22">
+                    </span>
+                </a>
+            </div> -->
+            <div class="row">
+                <div>
+                    <div class="icons_menu">
+                        <img
+                            src="../../assets/images/lp-icons/menu.png"
+                            alt="menu"
+                            routerLink="/landing-page" />
+                        <h4>SunFacet 2.0</h4>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button"
+                class="btn btn-sm px-3 font-size-16 d-lg-none header-item"
+                data-bs-toggle="collapse"
+                data-bs-target="#topnav-menu-content"
+                (click)="toggleMobileMenu($event)">
+                <i class="fa fa-fw fa-bars"></i>
+            </button>
+
+        </div>
+
+        <div class="d-flex">
+            <div class="dropdown d-inline-block" ngbDropdown>
+                <button type="button" class="btn header-item"
+                    data-bs-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" ngbDropdownToggle>
+                    <i-feather class="icon-sm" name="search"></i-feather>
+                </button>
+                <div
+                    class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                    ngbDropdownMenu>
+                    <form class="p-2">
+                        <div class="search-box">
+                            <div class="position-relative">
+                                <input type="text"
+                                    class="form-control rounded bg-light border-0"
+                                    placeholder="Search...">
+                                <i class="mdi mdi-magnify search-icon"></i>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- <div class="dropdown d-inline-block" ngbDropdown>
+                <button type="button" class="btn header-item noti-icon"
+                    id="page-header-notifications-dropdown"
+                    data-bs-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" ngbDropdownToggle>
+                    <i-feather class="icon-sm" name="bell"></i-feather>
+                    <span class="noti-dot bg-danger"></span>
+                </button>
+            </div> -->
+
+            <div class="dropdown d-inline-block">
+                <button type="button"
+                    class="btn header-item noti-icon right-bar-toggle"
+                    id="right-bar-toggle"
+                    (click)="toggleRightSidebar()">
+                    <i-feather class="icon-sm" name="settings"></i-feather>
+                </button>
+            </div>
+
+            <div class="dropdown d-inline-block" ngbDropdown>
+                <button type="button"
+                    class="btn header-item user text-start d-flex align-items-center"
+                    id="page-header-user-dropdown" data-bs-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    ngbDropdownToggle>
+                    <img class="rounded-circle header-profile-user"
+                        src="assets/images/mheader.png"
+                        alt="Header Avatar" style="margin-right: 2px;">
+                    <span class="ms-2 d-none d-sm-block user-item-desc">
+                        <div class="navbar-brand-box">
+                            <a routerLink="/" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="assets/images/logo-sm.jpg" alt
+                                        height="22">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="assets/images/logo-dark.jpg" alt
+                                        height="45">
+                                </span>
+                            </a>
+
+                            <a routerLink="/" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="assets/images/logo-sm.jpg" alt
+                                        height="22">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="assets/images/logo-dark.png" alt
+                                        height="22">
+                                </span>
+                            </a>
+                        </div>
+                    </span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end pt-0"
+                    ngbDropdownMenu>
+                    <div class="p-3 bg-primary border-bottom">
+                        <h6 class="mb-0 text-white">Kate Dudley</h6>
+                        <p class="mb-0 font-size-11 text-white-50 fw-semibold">kate.dudley@email.com</p>
+                    </div>
+                    <a class="dropdown-item" routerLink="/pages/profile"><i
+                            class="mdi mdi-account-circle text-muted font-size-16 align-middle me-1"></i>
+                        <span
+                            class="align-middle">Profile</span></a>
+                    <a class="dropdown-item" routerLink="/chat"><i
+                            class="mdi mdi-message-text-outline text-muted font-size-16 align-middle me-1"></i>
+                        <span
+                            class="align-middle">Messages</span></a>
+                    <a class="dropdown-item" routerLink="/kanban-board"><i
+                            class="mdi mdi-calendar-check-outline text-muted font-size-16 align-middle me-1"></i>
+                        <span
+                            class="align-middle">Taskboard</span></a>
+                    <a class="dropdown-item" routerLink="/pages/faqs"><i
+                            class="mdi mdi-lifebuoy text-muted font-size-16 align-middle me-1"></i>
+                        <span
+                            class="align-middle">Help</span></a>
+                    <div class="dropdown-divider"></div>
+                    <!-- <a class="dropdown-item" routerLink="/pages/profile"><i
+                            class="mdi mdi-wallet text-muted font-size-16 align-middle me-1"></i>
+                        <span
+                            class="align-middle">Balance : <b>$6951.02</b></span></a> -->
+                    <a class="dropdown-item d-flex align-items-center"
+                        routerLink="/contacts/settings"><i
+                            class="mdi mdi-cog-outline text-muted font-size-16 align-middle me-1"></i>
+                        <span
+                            class="align-middle">Settings</span><span
+                            class="badge badge-soft-success ms-auto">New</span></a>
+                    <!-- <a class="dropdown-item"
+                        routerLink="/account/lockscreen/basic"><i
+                            class="mdi mdi-lock text-muted font-size-16 align-middle me-1"></i>
+                        <span
+                            class="align-middle">Lock screen</span></a> -->
+                    <a class="dropdown-item" href="javascript: void(0);"
+                        (click)="logout()"><i
+                            class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i>
+                        <span
+                            class="align-middle" (click)="logout()">Logout</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="topnav">
+        <div class="container-fluid">
+            <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+
+                <div class="collapse navbar-collapse" id="topnav-menu-content">
+                    <ul class="navbar-nav">
+                        <ng-container *ngFor="let item of menuItems">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle arrow-none"
+                                    *ngIf="!item.subItems"
+                                    (click)="onMenuClick($event)"
+                                    href="javascript: void(0);"
+                                    id="topnav-components"
+                                    [routerLink]="item.link" role="button">
+                                    <i-feather name="{{ item.icon }}"></i-feather>{{
+                                    item.label | translate}} <div
+                                        class="arrow-down"
+                                        *ngIf="hasItems(item)"></div>
+                                </a>
+
+                                <a *ngIf="item.subItems"
+                                    class="nav-link dropdown-toggle arrow-none"
+                                    (click)="onMenuClick($event)"
+                                    href="javascript: void(0);"
+                                    id="topnav-components"
+                                    role="button">
+                                    <i-feather name="{{ item.icon }}"></i-feather>
+                                    {{item.label | translate }}
+                                    <div class="arrow-down"></div>
+                                </a>
+
+                                <div class="dropdown-menu"
+                                    aria-labelledby="topnav-dashboard"
+                                    *ngIf="hasItems(item)">
+                                    <ng-template ngFor let-i="index" let-subitem
+                                        [ngForOf]="item.subItems">
+                                        <a
+                                            class="col dropdown-item side-nav-link-ref"
+                                            *ngIf="!hasItems(subitem)"
+                                            href="javascript: void(0);"
+                                            [routerLink]="subitem.link"
+                                            routerLinkActive="active">{{subitem.label
+                                            | translate }}</a>
+
+                                        <div class="dropdown"
+                                            *ngIf="hasItems(subitem)">
+                                            <a
+                                                class="dropdown-item dropdown-toggle"
+                                                href="javascript: void(0);"
+                                                (click)="onMenuClick($event)">{{
+                                                subitem.label | translate }}
+                                                <div class="arrow-down"></div>
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                <ng-template ngFor
+                                                    let-subSubitem
+                                                    [ngForOf]="subitem.subItems">
+                                                    <a
+                                                        class="dropdown-item side-nav-link-ref"
+                                                        *ngIf="!hasItems(subSubitem)"
+                                                        href="javascript: void(0);"
+                                                        [routerLink]="subSubitem.link"
+                                                        routerLinkActive="active">{{
+                                                        subSubitem.label |
+                                                        translate }}</a>
+                                                    <div class="dropdown"
+                                                        *ngIf="hasItems(subSubitem)">
+
+                                                        <a
+                                                            class="dropdown-item dropdown-toggle"
+                                                            href="javascript: void(0);"
+                                                            (click)="onMenuClick($event)">{{
+                                                            subSubitem.label |
+                                                            translate }}
+                                                            <div
+                                                                class="arrow-down"></div>
+                                                        </a>
+                                                        <div
+                                                            class="dropdown-menu">
+                                                            <ng-template ngFor
+                                                                let-subSubSubitem
+                                                                [ngForOf]="subSubitem.subItems">
+                                                                <a
+                                                                    class="dropdown-item side-nav-link-ref"
+                                                                    href="javascript: void(0);"
+                                                                    [routerLink]="subSubSubitem.link"
+                                                                    routerLinkActive="active">{{
+                                                                    subSubSubitem.label
+                                                                    |
+                                                                    translate }}</a>
+                                                            </ng-template>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </li>
+                        </ng-container>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>

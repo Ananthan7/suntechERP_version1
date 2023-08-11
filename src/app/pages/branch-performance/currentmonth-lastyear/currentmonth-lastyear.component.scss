@@ -1,0 +1,83 @@
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .card {
+    width: 100%;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .card {
+    width: 30%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .card {
+    width: 30%;
+  }
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .card {
+    width: 18%;
+  }
+}
+::ng-deep {
+  body[data-layout-mode="dark"] {
+    //ng select styles
+    .ng-select .ng-select-container {
+      border: none !important;
+      color: #fff !important;
+      background-color: #326c90 !important;
+    }
+    #gridContainer {
+      td,
+      .dx-widget,
+      .dx-datagrid-total-footer,
+      .dx-datagrid-nowrap {
+        color: #fff;
+        background-color: #03314d;
+      }
+      .dx-datagrid-headers {
+        td {
+          color: #fff;
+          background-color: #105c8b !important;
+        }
+      }
+      .dx-datagrid-summary-item,
+      .dx-datagrid-text-content {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.card {
+  font-family: "Mulish";
+  font-style: normal;
+  font-size: 12px;
+  color: #6a707c;
+  .graphheader {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    color: #3599cc;
+  }
+  .card-num {
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 45px;
+    letter-spacing: 0.2px;
+    color: #00a561;
+  }
+  .inner-num {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.2px;
+    color: #336699;
+  }
+}

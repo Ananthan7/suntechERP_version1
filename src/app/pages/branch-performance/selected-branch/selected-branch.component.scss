@@ -1,0 +1,113 @@
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .card {
+    flex-direction: column;
+    .graphheader {
+      padding-top: 6px;
+    }
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .card {
+    flex-direction: row;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .card {
+    flex-direction: row;
+  }
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .card {
+    flex-direction: row;
+  }
+}
+
+.btn-outline-info{
+  margin: 3px 0px 0px 0px;
+  font-family: 'Mulish', sans-serif !important;
+  font-size: 13px;
+  border: 1.2px solid #3599CC !important;
+  min-width: 90px;
+  height: 26px;
+  color: #3599CC;
+  box-sizing: border-box;
+  font-weight: 500;
+  padding: 1px 1px 2px 1px !important;
+  text-transform: capitalize; 
+  i{
+      font-size: 9px;
+  }
+}
+.card {
+  font-family: "Mulish";
+  display: flex;
+  .graphheader {
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: 0.4px;
+  }
+  .card-num {
+    font-family: "Mulish";
+    font-style: normal;
+    font-weight: 900;
+    font-size: 47px;
+    letter-spacing: 0.5px;
+    padding: 25px;
+    color: #3599cc;
+  }
+  .innercontent {
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    color: #336699;
+  }
+}
+.graphtopcontent {
+  font-family: "Mulish", sans-serif;
+  .graphheader {
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    padding: 3px;
+  }
+}
+.graphviewbtn {
+  font-family: "Mulish", sans-serif !important;
+  border: 1.2px solid #3599cc !important;
+  color: #3599cc;
+  padding: 1px 1px 1px 1px !important;
+  text-transform: capitalize;
+  font-size: 9px;
+  font-weight: 600;
+  min-width: 82px;
+  height: 20px;
+  margin-left: 5px;
+}
+.graphviewbtn:hover {
+  color: #fff;
+  background-color: #3599cc;
+}
+.chartSelected {
+  width: 100%;
+  height: 100%;
+}
+.graphiconfilter{
+  margin: 6px 5px 0px 0px;
+  max-width: 300px;
+  div{
+      max-width: 45px;
+      max-height: 23px;
+      padding: 2px;
+      border-radius: 5px;
+      background-color:#B2B2B2;
+      margin-left: 3px;
+      color: #fff;
+  }
+}

@@ -1,0 +1,62 @@
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .card{
+        flex-direction: column;
+        .graphheader{
+            padding-top: 6px;
+        }
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .card{
+        flex-direction: row;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .card{
+        flex-direction: row;
+    }
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .card{
+        flex-direction: row;
+    }
+}
+.card{
+    font-family: 'Mulish';
+    display: flex;
+    .graphheader{
+        font-weight: 900;
+        font-size: 17px;
+        letter-spacing: 0.4px;
+    }
+    .card-num{
+        font-family: 'Mulish';
+        font-style: normal;
+        font-weight: 900;
+        font-size: 40px;
+        letter-spacing: 0.5px;
+        color: #3599CC;
+    }
+    .innercontent{
+        font-weight: 500;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        color: #336699;
+    }
+}
+.graphtopcontent{
+    font-family: 'Mulish', sans-serif;
+    .graphheader{
+        font-weight: 900;
+        font-size: 18px;
+        line-height: 24px;
+        letter-spacing: 0.4px;
+        padding: 3px;
+    }
+}

@@ -1,0 +1,100 @@
+<div class="table-responsive">
+    <table *ngIf="tableData.length > 0 && graphFilter != 'QOQ' && graphFilter != 'Quarter'">
+        <thead>
+            <tr>
+                <th *ngIf="graphFilter=='Year'" scope="col">Year</th>
+                <th *ngIf="graphFilter=='Month' || graphFilter=='YTD'" scope="col">Month</th>
+                <th *ngIf="tableCode=='Revenue'" scope="col">REVENUE</th>
+                <th *ngIf="tableCode=='GrossMargin'" scope="col">Gross Margin</th>
+                <th *ngIf="tableCode=='GrossMarginPerc'" scope="col">Gross Margin %</th>
+                <th *ngIf="tableCode=='AverageSellingPrice'" scope="col">Average Selling Price</th>
+                <th *ngIf="tableCode=='SalesUnit'" scope="col">Sales Unit</th>
+                <th *ngIf="tableCode=='NoOfCustomers'" scope="col">Number Of Customers</th>
+                <th *ngIf="tableCode=='InventoryAmount'" scope="col">On Hand Inventory Amount</th>
+                <th *ngIf="tableCode=='InventoryQuantity'" scope="col">On Hand Inventory Quantity</th>
+                <th *ngIf="tableCode=='STOR'" scope="col">STOR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of tableData">
+                <td>{{ data.year}}</td>
+                <td *ngIf="tableCode=='Revenue'">{{ data.revenue | numberFormatter }}</td>
+                <td *ngIf="tableCode=='GrossMargin'">{{ data.grossmargin | numberFormatter}}</td>
+                <td *ngIf="tableCode=='GrossMarginPerc'">{{ data.grossmarginpercent | number}}%</td>
+                <td *ngIf="tableCode=='AverageSellingPrice'">{{ data.avprice | numberFormatter}}</td>
+                <td *ngIf="tableCode=='SalesUnit'">{{ data.salesunit | numberFormatter}}</td>
+                <td *ngIf="tableCode=='NoOfCustomers'">{{ data.totalcustomer | numberFormatter}}</td>
+                <td *ngIf="tableCode=='InventoryAmount'">{{ data.inventoryamount | numberFormatter}}</td>
+                <td *ngIf="tableCode=='InventoryQuantity'">{{ data.invqty | numberFormatter}}</td>
+                <td *ngIf="tableCode=='STOR'">{{ data.store | numberFormatter}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="table-responsive">
+    <table *ngIf="graphFilter == 'QOQ'">
+        <thead>
+            <tr>
+                <th scope="col">Year</th>
+                <th scope="col">Quarter</th>
+                <th *ngIf="tableCode=='Revenue'" scope="col">REVENUE</th>
+                <th *ngIf="tableCode=='GrossMargin'" scope="col">Gross Margin</th>
+                <th *ngIf="tableCode=='GrossMarginPerc'" scope="col">Gross Margin %</th>
+                <th *ngIf="tableCode=='AverageSellingPrice'" scope="col">Average Selling Price</th>
+                <th *ngIf="tableCode=='SalesUnit'" scope="col">Sales Unit</th>
+                <th *ngIf="tableCode=='NoOfCustomers'" scope="col">Number Of Customers</th>
+                <th *ngIf="tableCode=='InventoryAmount'" scope="col">OnHand Inventory Amount</th>
+                <th *ngIf="tableCode=='InventoryQuantity'" scope="col">OnHand Inventory Quantity</th>
+                <th *ngIf="tableCode=='STOR'" scope="col">STOR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of tableData">
+                <td>{{ data.year }}</td>
+                <td>{{ data.quarter }}</td>
+                <td *ngIf="tableCode=='Revenue'">{{ data.revenue | numberFormatter }}</td>
+                <td *ngIf="tableCode=='GrossMargin'">{{ data.grossmargin | numberFormatter}}</td>
+                <td *ngIf="tableCode=='GrossMarginPerc'">{{ data.grosspercentage | number}}%</td>
+                <td *ngIf="tableCode=='AverageSellingPrice'">{{ data.averageprice | numberFormatter}}</td>
+                <td *ngIf="tableCode=='SalesUnit'">{{ data.salesquantity | numberFormatter}}</td>
+                <td *ngIf="tableCode=='NoOfCustomers'">{{ data.customer | numberFormatter}}</td>
+                <td *ngIf="tableCode=='InventoryAmount'">{{ data.inventoryamount | numberFormatter}}</td>
+                <td *ngIf="tableCode=='InventoryQuantity'">{{ data.invqty | numberFormatter}}</td>
+                <td *ngIf="tableCode=='STOR'">{{ data.store | numberFormatter}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="table-responsive">
+    <table *ngIf="graphFilter == 'Quarter'">
+        <thead>
+            <tr>
+                <th scope="col">Quarter</th>
+                <th *ngIf="tableCode=='Revenue'" scope="col">REVENUE</th>
+                <th *ngIf="tableCode=='GrossMargin'" scope="col">Gross Margin</th>
+                <th *ngIf="tableCode=='GrossMarginPerc'" scope="col">Gross Margin %</th>
+                <th *ngIf="tableCode=='AverageSellingPrice'" scope="col">Average Selling Price</th>
+                <th *ngIf="tableCode=='SalesUnit'" scope="col">Sales Unit</th>
+                <th *ngIf="tableCode=='NoOfCustomers'" scope="col">Number Of Customers</th>
+                <th *ngIf="tableCode=='InventoryAmount'" scope="col">OnHand Inventory Amount</th>
+                <th *ngIf="tableCode=='InventoryQuantity'" scope="col">OnHand Inventory Quantity</th>
+                <th *ngIf="tableCode=='STOR'" scope="col">STOR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of tableData">
+                <td>{{ data.year }}</td>
+                <td *ngIf="tableCode=='Revenue'">{{ data.revenue | numberFormatter }}</td>
+                <td *ngIf="tableCode=='GrossMargin'">{{ data.grossmargin | numberFormatter}}</td>
+                <td *ngIf="tableCode=='GrossMarginPerc'">{{ data.grossmarginpercent | number}}%</td>
+                <td *ngIf="tableCode=='AverageSellingPrice'">{{ data.avprice | numberFormatter}}</td>
+                <td *ngIf="tableCode=='SalesUnit'">{{ data.salesunit | numberFormatter}}</td>
+                <td *ngIf="tableCode=='NoOfCustomers'">{{ data.totalcustomer | numberFormatter}}</td>
+                <td *ngIf="tableCode=='InventoryAmount'">{{ data.inventoryamount | numberFormatter}}</td>
+                <td *ngIf="tableCode=='InventoryQuantity'">{{ data.invqty | numberFormatter}}</td>
+                <td *ngIf="tableCode=='STOR'">{{ data.store | numberFormatter }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

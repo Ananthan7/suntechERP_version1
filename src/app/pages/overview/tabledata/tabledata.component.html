@@ -1,0 +1,36 @@
+<table  *ngIf="tableDataHeader.length>0">
+    <thead>
+        <tr>
+            <th scope="col">Month</th>
+            <th scope="col" *ngIf="tableCode=='Revenue'">CY Revenue</th>
+            <th scope="col" *ngIf="tableCode=='Revenue'">PY Revenue</th>
+            <th scope="col" *ngIf="tableCode=='GrossMargin'">CY Gross Margin</th>
+            <th scope="col" *ngIf="tableCode=='GrossMargin'">PY Gross Margin</th>
+            <th scope="col" *ngIf="tableCode=='GrossMarginPerc'">CY Gross Margin %</th>
+            <th scope="col" *ngIf="tableCode=='GrossMarginPerc'">PY Gross Margin %</th>
+            <th scope="col" *ngIf="tableCode=='StockValue'">CY Stock Value</th>
+            <th scope="col" *ngIf="tableCode=='StockValue'">PY Stock Value</th>
+            <th scope="col" *ngIf="tableCode=='AverageTicketSize'">CY Average Selling Prize</th>
+            <th scope="col" *ngIf="tableCode=='AverageTicketSize'">PY Average Selling Prize</th>
+            <th scope="col" *ngIf="tableCode=='StorValue'">CY STOR Value</th>
+            <th scope="col" *ngIf="tableCode=='StorValue'">PY STOR Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item  of tableData">
+            <td >{{item.MONTH}}</td>
+            <td *ngIf="tableCode=='Revenue'">{{item.REVENUE | numberFormatter}}</td>
+            <td *ngIf="tableCode=='Revenue'">{{item.LY_REVENUE | numberFormatter}}</td>
+            <td *ngIf="tableCode=='GrossMargin'">{{item.GROSS_MARGIN | numberFormatter}}</td>
+            <td *ngIf="tableCode=='GrossMargin'">{{item.LY_GROSS_MARGIN | numberFormatter}}</td>
+            <td *ngIf="tableCode=='GrossMarginPerc'">{{item.GROSS_MARGIN_PERC | numberFormatter}}%</td>
+            <td *ngIf="tableCode=='GrossMarginPerc'">{{item.LY_GROSS_MARGIN_PERC | numberFormatter}}%</td>
+            <td *ngIf="tableCode=='StockValue'">{{item.STOCK_VALUE | numberFormatter}}</td>
+            <td *ngIf="tableCode=='StockValue'">{{item.LY_STOCK_VALUE | numberFormatter}}</td>
+            <td *ngIf="tableCode=='AverageTicketSize'">{{item.AVERAGE_TICKET_SIZE | numberFormatter}}</td>
+            <td *ngIf="tableCode=='AverageTicketSize'">{{item.LY_AVERAGE_TICKET_SIZE | numberFormatter}}</td>
+            <td *ngIf="tableCode=='StorValue'">{{item.STOR_VALUE | numberFormatter}}</td>
+            <td *ngIf="tableCode=='StorValue'">{{item.LY_STOR_VALUE | numberFormatter}}</td>
+        </tr>
+    </tbody>
+</table>

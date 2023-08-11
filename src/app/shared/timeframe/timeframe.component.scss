@@ -1,0 +1,19 @@
+.btn-outline-primary{
+    font-family: 'Mulish', sans-serif !important;
+    font-size: 12px;
+    border: 0px solid #ffff !important;
+    min-width: 90px;
+    min-height: 26px;
+    color: grey;
+    padding: 1px 1px 2px 1px !important;
+    text-transform: capitalize; 
+}
+.btn-outline-primary:hover{
+    color: grey;
+    background-color: #ffff !important;
+}
+.timeframe{
+    position: relative;
+    bottom: 15px;
+    right: 15px;
+}

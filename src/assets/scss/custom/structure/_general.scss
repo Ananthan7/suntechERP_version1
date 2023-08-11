@@ -1,0 +1,43 @@
+body[data-layout-mode="dark"] {
+    background-color: darken($gray-dark-200, 2%);
+    color: $gray-dark-400;
+
+
+    .h1,.h2,.h3,.h4,.h5,.h6,
+    h1,h2,h3,h4,h5,h6 {
+        color: $gray-dark-600;
+    }
+    .salescards{
+        color: #fff !important;
+        background-color: #03273c !important;
+    }
+
+    .tableHeader, .graphheader, .dark-font-color, .progress-row,
+    .sliderCard, .cardHead {
+        color: #fff !important;
+    }
+   
+    .graphiconfilter{
+        div{
+            color: #000 !important;
+        }
+    }
+    .sales-detail{
+        p{
+            color: #fff !important;
+        }
+    }
+    .filter-img{
+        background-color: #03273c;
+    }
+    
+}
+
+// :host ::ng-deep {
+//     body[data-layout-mode="dark"] {
+//         //ng select styles
+//         .ng-select .ng-select-container {
+//             background-color: #6d6d6d !important;
+//         }
+//     }
+// }

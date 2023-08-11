@@ -1,0 +1,70 @@
+<div class="main">
+    <!-- <div class="navbar-1">
+        <nav class="navbar navbar-expand-lg">
+            <button
+                class="navbar-toggler shadow-none"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"><i class="fas fa-bars"
+                        style="color: #fff"></i></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page">All</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Operational</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Sales</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Support</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div> -->
+
+    <div class="landing_page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 my-2"
+                    *ngFor="let data of menuList; let i = index">
+                    <!-- Assuming you want to navigate to the route /target-route with query parameters -->
+                    <!-- <a [routerLink]="['/module-container']" [queryParams]="{ modulename :data.MODULE_NAME, id: i }"> -->
+                    <a
+                        routerLink="/{{ data.ANG_CMB_PATH_NAME || 'module-container' }}"
+                        [queryParams]="{ modulename: data.MODULE_NAME, id: i }">
+                        <div class="card_btn">
+                            <img [src]="data.imageUrl"
+                                alt="{{ data.MODULE_NAME }}" />
+                            <h6>{{ data.MODULE_NAME }}</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        Contact us for more queries:
+                        <span>www.suntech-global.com/customer-support</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

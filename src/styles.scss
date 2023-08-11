@@ -1,0 +1,415 @@
+// Custom Theming for Angular Material
+@use '@angular/material' as mat;
+// For more information: https://material.angular.io/guide/theming
+@import '@angular/material/theming';
+// Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ng-gradient-able-primary: mat.define-palette(mat.$indigo-palette);
+$ng-gradient-able-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+// The warn palette is optional (defaults to red).
+$ng-gradient-able-warn: mat.define-palette(mat.$red-palette);
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$ng-gradient-able-theme: mat.define-light-theme((color: (primary: $ng-gradient-able-primary, accent: $ng-gradient-able-accent, warn: $ng-gradient-able-warn, )));
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($ng-gradient-able-theme);
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '@angular/material/theming';
+// Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ng-gradient-able-primary: mat.define-palette(mat.$indigo-palette);
+$ng-gradient-able-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+// The warn palette is optional (defaults to red).
+$ng-gradient-able-warn: mat.define-palette(mat.$red-palette);
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$ng-gradient-able-theme: mat.define-light-theme((color: (primary: $ng-gradient-able-primary, accent: $ng-gradient-able-accent, warn: $ng-gradient-able-warn, )));
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($ng-gradient-able-theme);
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+
+/* Importing Stepper SCSS file */
+// @import '../node_modules/angular-archwizard/styles/archwizard.css';
+// @import '../node_modules/angular-archwizard/styles/variables.scss';
+// @import '../node_modules/angular-archwizard/styles/archwizard.scss';
+@font-face {
+  font-family: "Poppins";
+  font-weight: normal;
+  font-style: normal;
+
+  // src: url('assets/fonts/Poppins-Regular.ttf');
+  // src: url('../../../../fonts/boxicons.eot') format('embedded-opentype'),
+  // url('../../../../fonts/boxicons.woff2') format('woff2'),
+  // url('../../../../fonts/boxicons.woff') format('woff'),
+  src: url("assets/fonts/Poppins-Regular.ttf") format("truetype");
+  // url('../../../../fonts/boxicons.svg?#boxicons') format('svg');
+}
+@font-face {
+  font-family: "poppins-light";
+  font-weight: normal;
+  font-style: normal;
+
+  // src: url('assets/fonts/Poppins-Regular.ttf');
+  // src: url('../../../../fonts/boxicons.eot') format('embedded-opentype'),
+  // url('../../../../fonts/boxicons.woff2') format('woff2'),
+  // url('../../../../fonts/boxicons.woff') format('woff'),
+  src: url("assets/fonts/Poppins-Light.ttf") format("truetype");
+  // url('../../../../fonts/boxicons.svg?#boxicons') format('svg');
+}
+@font-face {
+  font-family: "poppins-thin";
+  font-weight: normal;
+  font-style: normal;
+
+  // src: url('assets/fonts/Poppins-Regular.ttf');
+  // src: url('../../../../fonts/boxicons.eot') format('embedded-opentype'),
+  // url('../../../../fonts/boxicons.woff2') format('woff2'),
+  // url('../../../../fonts/boxicons.woff') format('woff'),
+  src: url("assets/fonts/Poppins-Thin.ttf") format("truetype");
+  // url('../../../../fonts/boxicons.svg?#boxicons') format('svg');
+}
+@font-face {
+  font-family: "poppins-bold";
+  font-weight: normal;
+  font-style: normal;
+
+  // src: url('assets/fonts/Poppins-Regular.ttf');
+  // src: url('../../../../fonts/boxicons.eot') format('embedded-opentype'),
+  // url('../../../../fonts/boxicons.woff2') format('woff2'),
+  // url('../../../../fonts/boxicons.woff') format('woff'),
+  src: url("assets/fonts/Poppins-Bold.ttf") format("truetype");
+  // url('../../../../fonts/boxicons.svg?#boxicons') format('svg');
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "poppins-bold", sans-serif !important;
+}
+span {
+  font-family: "poppins" !important;
+}
+
+/*Dashboard*/
+.campaignlabel {
+  line-height: 1;
+  padding-top: 10px;
+}
+.cambfr:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  left: 220px;
+  top: -70px;
+  width: 65%;
+  height: 80%;
+  opacity: 0.1;
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
+  overflow: hidden;
+}
+// .emailcampaign {
+// }
+
+.mlr10 {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.btn-primary {
+  background-color: #3599cc !important;
+}
+.btn-danger {
+  background-color: #f34e4e !important;
+}
+.datatables {
+  .btn {
+    margin: 2px !important;
+  }
+}
+.modal-header {
+  background-color: #dbdcdd;
+  cursor: all-scroll;
+  .modal-title {
+    color: #000;
+  }
+  i {
+    font-size: 20px;
+    color: #ffffff;
+  }
+}
+.grid-table {
+  .btn {
+    padding: 0.37rem 0.65rem !important;
+    font-size: 0.7rem !important;
+  }
+  td.gridjs-td {
+    padding: 0.2rem 0.5rem !important;
+  }
+}
+// ui ux
+.btn-default {
+  background-color: #495057;
+  color: #495057;
+}
+.page-title-right {
+  float: right;
+}
+.form-control,
+.ng-select .ng-select-container {
+  // border-radius: 10px !important;
+  border: none !important;
+  border-bottom: 1px solid #d4d5d6 !important;
+  background-color: #f2f4ff !important;
+}
+.form-card label,
+.form-card .col-form-label {
+  font-weight: 900 !important;
+  color: #336699 !important;
+  font-family: "poppins" !important;
+  font-size: small !important;
+}
+.btn-primary {
+  background: #3599cc !important;
+  border-radius: 25px !important;
+  padding-right: 3rem !important;
+  padding-left: 3rem !important;
+  border: none !important;
+}
+.btn-danger {
+  background: #fff !important;
+  color: #336699 !important;
+  border-radius: 25px !important;
+  padding-right: 3rem !important;
+  padding-left: 3rem !important;
+  border: none !important;
+}
+.btn-light {
+  color: #336699 !important;
+  border-radius: 25px !important;
+  padding-right: 3rem !important;
+  padding-left: 3rem !important;
+  border-color: #336699 !important;
+  background-color: #fff !important;
+}
+// // Side Menu
+#side-menu {
+  padding: 10px;
+}
+#side-menu i {
+  height: 16px !important;
+  width: 16px !important;
+  line-height: 16px;
+}
+#sidebar-menu ul li.mm-active > a {
+  /* background-color: #f2f3fe; */
+  color: #fff !important;
+  border-left: 5px solid #336699;
+
+  background: linear-gradient(
+    257.63deg,
+    #057cb800 1.14%,
+    #3366994a 58.99%
+  ) !important;
+  // border-radius: 10px!important;
+  .nav-icon {
+    color: #fff !important;
+  }
+}
+#sidebar-menu ul li.mm-active .mm-show .mm-active > a {
+  color: #fff !important;
+}
+#sidebar-menu ul li ul.sub-menu li a {
+  padding: 0.5rem -0.5rem 0.5rem 0.6rem !important;
+  font-weight: 400 !important;
+  color: #7b8190 !important;
+  margin: 0 !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  font-family: "poppins" !important;
+  margin-right: 10px !important;
+  font-size: 12px !important;
+  line-height: 24px !important;
+}
+.sub_module {
+  .ng-select.ng-select-multiple.ng-select-disabled
+    > .ng-select-container
+    .ng-value-container
+    .ng-value
+    .ng-value-label {
+    color: #000 !important;
+  }
+}
+.qna {
+  label {
+    color: #336699 !important ;
+    align-items: end !important ;
+    display: flex !important ;
+    font-size: large !important ;
+    cursor: pointer !important;
+  }
+  i {
+    color: #336699 !important ;
+    font-size: 30px !important ;
+    display: flex !important ;
+  }
+}
+.parah p {
+  font-weight: 500 !important ;
+  font-size: medium !important ;
+  color: #6a707c !important ;
+}
+
+// devexpress table
+.dx-datagrid-headers {
+  .dx-header-row {
+    background-color: #3599cc !important;
+    color: #fff !important;
+  }
+}
+
+.salescards {
+  height: 115px;
+  background: rgba(213, 242, 255, 0.5);
+  border: 1px solid #3599cc;
+  border-radius: 10px;
+  text-align: center;
+  color: #336699;
+  font-family: "Mulish", sans-serif;
+  margin-left: 7px;
+  .bold {
+    min-height: 50%;
+    padding-top: 14px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+  }
+  .bold-num {
+    font-weight: 700;
+    font-size: 20px;
+  }
+}
+.admin-cardheader {
+  font-family: "Mulish";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 18px;
+  color: #336699;
+}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  body[data-sidebar-size="sm"] {
+    .main-content {
+      margin-right: 0px !important;
+    }
+  }
+  body[data-language="arb"] {
+    .main-content {
+      margin-left: 0px !important;
+      margin-right: 0px !important;
+    }
+    #page-topbar {
+      left: 0px !important;
+      right: 0px !important;
+    }
+  }
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  body[data-sidebar-size="sm"] {
+    .main-content {
+      margin-right: 0px !important;
+    }
+  }
+  body[data-language="arb"] {
+    .main-content {
+      margin-left: 0px !important;
+      margin-right: 0px !important;
+    }
+    #page-topbar {
+      left: 0px !important;
+      right: 0px !important;
+    }
+  }
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  body[data-sidebar-size="sm"] {
+    .main-content {
+      margin-right: 0px !important;
+    }
+  }
+  body[data-language="arb"] {
+    .main-content {
+      margin-left: 0px !important;
+      margin-right: 0px !important;
+    }
+    #page-topbar {
+      left: 0px !important;
+      right: 0px !important;
+    }
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  body[data-language="arb"] {
+    .main-content {
+      margin-left: 0px !important;
+      margin-right: 270px !important;
+    }
+    #page-topbar {
+      left: 0px !important;
+      right: 70px;
+    }
+    .vertical-menu {
+      #sidebar-menu {
+        > ul {
+          > li {
+            &:hover {
+              > ul {
+                left: 0px !important;
+                right: 70px !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  body[data-sidebar-size="sm"] {
+    .main-content {
+      margin-right: 95px !important;
+    }
+  }
+}

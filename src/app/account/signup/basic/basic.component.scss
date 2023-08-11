@@ -1,0 +1,128 @@
+.bg-clr{
+    // background: linear-gradient(#336699,#336699ce);
+    background: #336699;
+    
+}
+
+
+.divider-in:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(54, 49, 49, 0.582);
+    z-index: 1;
+    
+}
+
+.divider-in span{
+    background: rgba(255, 255, 255, 0.938);
+    position: relative;
+    padding: 0 10px;
+    z-index: 5;
+    font-size: 15px;
+}
+
+
+
+.card-square{
+    background:#fff  ;
+}
+.right-content{
+    
+    // margin-left: -200%;
+    // margin-top: 50%;
+    color: #fff;
+    font-size: 25px;
+    
+}
+.right-content-img{
+    margin-top:6rem;
+    margin-left: -8%;
+}
+
+.text-muted {
+    
+    color: #030304 !important;
+}
+#input-username,#password,#submit {
+    border-radius: 18px;   
+       
+}
+
+// .left-content{
+//     background-color: #fff !important;
+// }
+
+.title{
+    label{
+        font-family: 'Poppins';
+        font-weight: 600;
+        font-size: 24px;
+        text-align: center;
+        text-transform: capitalize;
+        color: #336699;
+    }
+    p{
+        font-family: 'Poppins';
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: center;
+        color: #B2B2B2;
+    }
+}
+
+.img-bfr::before{
+    content: "";
+    display: block;
+    position: absolute;
+    background-repeat: no-repeat;
+    mix-blend-mode: multiply;
+    width: 100%;
+    height: 100%;
+   //  background-image: url(contact_us_image.png);
+   //  border-radius: 4%;
+   //  overflow: hidden;
+    margin-left: -115px;
+    // margin-bottom: -14px;
+    background-size: 100% 50%;
+    background-position: left bottom, right top;
+   background-image: url('../../../../assets/images/Mask-group-login.png');
+}
+
+.input-fields{
+    flex-direction: column !important;
+    align-items: center !important;
+}
+.social-fields{
+    flex-direction: column !important;
+    .row{
+        justify-content: center !important;
+    }
+}
+.width100{
+    float: left;
+    width: 100%;
+}
+
+.btn-primary{    
+    background: #336699 !important;
+    border-radius: 10px !important;
+}
+.text-muted p{
+    font-family: 'Poppins';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    color: #292D32;
+
+}
+
+
+
+
+

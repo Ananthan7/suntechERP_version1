@@ -1,0 +1,453 @@
+<div class="row banners ms-1" *ngIf="isChartSelected">
+    <!-- <div class="col-md-12 col-sm-12 col-lg-12 contentstarts"> -->
+    <!-- first banner starts -->
+    <div class="innerbanner">
+        <div class="bannercontent"
+            [ngClass]="{'banrcontent': selectedlang == 'arb'}">
+            <div>
+                <span class="welcome fw-bold">Welcome </span>
+                <span class="User"> {{model.UserName}}</span>
+            </div>
+            <div>
+                <div class="totalbranch">Total Branches <br>
+                    <span class="number">{{branchCount}}</span> 
+                </div>
+                <span class="branch">{{userBranches}}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- second banner starts -->
+    <div class="innerbanner-2" [ngClass]="{'me-3': selectedlang == 'arb'}">
+        <div class="bannercontent-2">
+            <div class="pb-2">
+                <span class="branch fw-bold">Number Of Customers</span>
+            </div>
+            <div *ngIf="model.numCUSTOMERSTotal">
+                <span class="number">{{model.numCUSTOMERSTotal}}</span>
+                <span
+                    [ngStyle]="{'color': model.numbeR_OF_CUSTOMERS>=0? '#32D16D' : 'red' }"
+                    style="color: #32D16D;">
+                    {{model.numbeR_OF_CUSTOMERS}} %</span>
+                <span style="color: #fff;"> v/s Last Year</span>
+            </div>
+            <div class="details">
+                <button type="button" class="btn btn-outline"
+                    (click)="open(content)">
+                    <span>Details</span>
+                </button>
+                <ng-template #content let-modal>
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="modal-basic-title">Number Of
+                            Customers</h4>
+                        <button type="button" class="btn-close"
+                            aria-label="Close"
+                            (click)="closeModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <dx-data-grid id="gridContainer" height="350px"
+                            width="100%" [dataSource]="model.branchData"
+                            [showBorders]="true" class="mt-3"
+                            [columnAutoWidth]="true" [showRowLines]="true"
+                            [showColumnLines]="false"
+                            [rowAlternationEnabled]="true">
+                            <dxi-column dataField="BRANCH" caption="Branch">
+                            </dxi-column>
+                            <dxi-column dataField="NUMBER_OF_CUSTOMERS"
+                                caption="CY Number Of Customers"> </dxi-column>
+                            <dxi-column dataField="LY_NUMBER_OF_CUSTOMERS"
+                                caption="PY Number Of Customers">
+                            </dxi-column>
+                            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+                            <dxo-summary> [customizeText]="customizeText"
+                                <dxi-total-item column="BRANCH"
+                                    displayFormat="Total"></dxi-total-item>
+                                <dxi-total-item column="NUMBER_OF_CUSTOMERS"
+                                    summaryType="sum"
+                                    displayFormat="{0}"></dxi-total-item>
+                                <dxi-total-item column="LY_NUMBER_OF_CUSTOMERS"
+                                    summaryType="sum"
+                                    displayFormat="{0}"></dxi-total-item>
+                            </dxo-summary>
+                        </dx-data-grid>
+                    </div>
+                    <!-- <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+                            </div> -->
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <!-- </div> -->
+</div>
+<!-- graph header section starts -->
+<div class="graphheader ms-1"
+    [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }">
+    <div class="p-1" style="font-size: 19px;">How did my Overall Business
+        Perform in {{Curryear}}
+        <!-- <span style="font-size: 8px;" class="ps-3"> Time Period YTD</span> -->
+    </div>
+    <div class="pt-1 me-4">
+        <master-filter [viewBranch]="false" [viewFilterBtn]="viewFilterBtn"
+            (refreshData)="refreshBtnClick()"
+            (exportExcel)="exportbtnClick()" (exportPDF)="exportPdf()">
+        </master-filter>
+    </div>
+</div>
+
+<app-loader [isLoading]="isLoading"></app-loader>
+<div id="content" #content>
+    <!-- chart content section starts -->
+    <div class="graphcontent" *ngIf="firstChartrow">
+        <div class="card" *ngIf="isChartSelected || selectedChart=='Revenue'"
+            [ngClass]="{'chartSelected': selectedChart=='Revenue' && !isChartSelected}">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="Revenue"
+                        [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                        [pTooltip]="model.revtooltip">Revenue</div>
+                    <div class="totalnum1">{{model.revenueSum}}</div>
+                    <!-- <div class="target1">Target : 0</div> -->
+                    <div class="target1">
+                        <span class="percentage"
+                            [ngStyle]="{'color': model.revenuePercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.revenuePercentage>=0">
+                            <i class="pi pi-arrow-up"></i>
+                            {{model.revenuePercentage | numberFormatter}}%
+                        </span>
+                        <span class="percentage"
+                            [ngStyle]="{'color': model.revenuePercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.revenuePercentage<0">
+                            <i class="pi pi-arrow-down"></i>
+                            {{model.revenuePercentage | numberFormatter}}%
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <button type="button" (click)="selectChartView('Revenue')"
+                        class="btn btn-outline-info graphviewbtn">
+                        <span *ngIf="isChartSelected">View Report</span>
+                        <span *ngIf="!isChartSelected">Back</span>
+                    </button>
+                    <div class="d-flex graphiconfilter">
+                        <div
+                            [ngStyle]="{'background-color': lineChartType=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType('bar')"><i
+                                class="far fa-chart-bar p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType('line')"><i
+                                class="fas fa-chart-line p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType('pie')"><i
+                                class="fas fa-th p-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType=='pie'" class="tableLength">
+                <app-tabledata tableCode="Revenue"
+                    [tableData]="model.monthResult"></app-tabledata>
+            </div>
+            <canvas *ngIf="graphDatalabel.length>0 && lineChartType!='pie'"
+                style="width: 300px;padding: 6px;" baseChart
+                [data]="lineChartData" [plugins]="barChartPlugins"
+                [options]="lineChartOptions"
+                [type]="lineChartType"></canvas>
+        </div>
+        <!-- chart 2 -->
+        <div class="card"
+            *ngIf="isChartSelected || selectedChart=='GrossMargin'"
+            [ngClass]="{'chartSelected': selectedChart=='GrossMargin' && !isChartSelected}">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="Revenue"
+                        [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                        [pTooltip]="model.GMtooltip">Gross Margin</div>
+                    <div class="totalnum1">{{model.grosS_MARGIN}}</div>
+                    <!-- <div class="target1">Target : 0</div> -->
+                    <div class="target1">
+                        <span class="percentage"
+                            [ngStyle]="{'color': model.grossPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.grossPercentage>=0">
+                            <i class="pi pi-arrow-up"></i>
+                            {{model.grossPercentage | numberFormatter}}%
+                        </span>
+                        <span class="percentage"
+                            [ngStyle]="{'color': model.grossPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.grossPercentage<0">
+                            <i class="pi pi-arrow-down"></i>
+                            {{model.grossPercentage | numberFormatter}}%
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <button type="button"
+                        (click)="selectChartView('GrossMargin')"
+                        class="btn btn-outline-info graphviewbtn">
+                        <span *ngIf="isChartSelected">View Report</span>
+                        <span *ngIf="!isChartSelected">Back</span>
+                    </button>
+                    <div class="d-flex graphiconfilter">
+                        <div
+                            [ngStyle]="{'background-color': lineChartType2=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType2('bar')"><i
+                                class="far fa-chart-bar p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType2=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType2('line')"><i
+                                class="fas fa-chart-line p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType2=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType2('pie')"><i
+                                class="fas fa-th p-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType2=='pie'" class="tableLength">
+                <app-tabledata tableCode="GrossMargin"
+                    [tableData]="model.monthResult"></app-tabledata>
+            </div>
+            <canvas *ngIf="graphDatalabel.length>0 && lineChartType2!='pie'"
+                style="width: 300px; padding: 6px;"
+                baseChart [data]="grossMarginChartData"
+                [plugins]="barChartPlugins" [options]="lineChartOptions"
+                [type]="lineChartType2"></canvas>
+        </div>
+        <!-- chart 3 -->
+        <div class="card"
+            *ngIf="isChartSelected || selectedChart=='GrossMarginPerc'"
+            [ngClass]="{'chartSelected': selectedChart=='GrossMarginPerc' && !isChartSelected}">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="Revenue"
+                        [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                        [pTooltip]="model.GMPtooltip">Gross Margin %</div>
+                    <div class="totalnum1">{{model.grosS_MARGIN_PERC}}%</div>
+                    <!-- <div class="target1">Target : 0</div> -->
+                    <div class="target1">
+                        <span class="percentage"
+                            [ngStyle]="{'color': model.grossPerPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.grossPerPercentage>=0">
+                            <i class="pi pi-arrow-up"></i>
+                            {{model.grossPerPercentage}}%
+                        </span>
+                        <span class="percentage"
+                            [ngStyle]="{'color': model.grossPerPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.grossPerPercentage < 0">
+                            <i class="pi pi-arrow-down"></i>
+                            {{model.grossPerPercentage}}%
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <button type="button"
+                        (click)="selectChartView('GrossMarginPerc')"
+                        class="btn btn-outline-info graphviewbtn">
+                        <span *ngIf="isChartSelected">View Report</span>
+                        <span *ngIf="!isChartSelected">Back</span>
+                    </button>
+                    <div class="d-flex graphiconfilter">
+                        <div
+                            [ngStyle]="{'background-color': lineChartType3=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType3('bar')"><i
+                                class="far fa-chart-bar p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType3=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType3('line')"><i
+                                class="fas fa-chart-line p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType3=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType3('pie')"><i
+                                class="fas fa-th p-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType3=='pie'" class="tableLength">
+                <app-tabledata tableCode="GrossMarginPerc"
+                    [tableData]="model.monthResult"></app-tabledata>
+            </div>
+            <canvas *ngIf="graphDatalabel.length>0 && lineChartType3!='pie'"
+                style="width: 300px;padding: 6px;"
+                baseChart [data]="grossMarginPercChartData"
+                [plugins]="barChartPlugins" [options]="GMPlineChartOptions"
+                [type]="lineChartType3"></canvas>
+        </div>
+    </div>
+    <div class="graphcontent" *ngIf="secondChartrow || isChartSelected">
+        <!-- chart 4 -->
+        <div class="card" *ngIf="isChartSelected || selectedChart=='StockValue'"
+            [ngClass]="{'chartSelected': selectedChart=='StockValue' && !isChartSelected}">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="Revenue"
+                        [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                        [pTooltip]="model.stocktooltip">Stock Value</div>
+                    <div class="totalnum1">{{model.stocK_VALUE |
+                        numberFormatter}}</div>
+                    <!-- <div class="target1">Target : 0</div> -->
+                    <!-- <div class="target1">
+                        <span class="percentage" [ngStyle]="{'color': model.stocK_VALUEPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.stocK_VALUEPercentage>=0">
+                            <i class="pi pi-arrow-up"></i> {{model.stocK_VALUEPercentage}}%
+                        </span>
+                        <span class="percentage" [ngStyle]="{'color': model.stocK_VALUEPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.stocK_VALUEPercentage<0">
+                            <i class="pi pi-arrow-down"></i> {{model.stocK_VALUEPercentage}}%
+                        </span>
+                    </div> -->
+                </div>
+                <div>
+                    <button type="button"
+                        (click)="selectChartView('StockValue')"
+                        class="btn btn-outline-info graphviewbtn">
+                        <span *ngIf="isChartSelected">View Report</span>
+                        <span *ngIf="!isChartSelected">Back</span>
+                    </button>
+                    <div class="d-flex graphiconfilter">
+                        <div
+                            [ngStyle]="{'background-color': lineChartType4=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType4('bar')"><i
+                                class="far fa-chart-bar p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType4=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType4('line')"><i
+                                class="fas fa-chart-line p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType4=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType4('pie')"><i
+                                class="fas fa-th p-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType4=='pie'" class="tableLength">
+                <app-tabledata tableCode="StockValue"
+                    [tableData]="model.monthResult"></app-tabledata>
+            </div>
+            <canvas *ngIf="graphDatalabel.length>0 && lineChartType4!='pie'"
+                style="width: 300px;padding: 6px;"
+                baseChart [data]="stockValueChartData"
+                [plugins]="barChartPlugins" [options]="lineChartOptions"
+                [type]="lineChartType4"></canvas>
+        </div>
+        <!-- chart 5 -->
+        <div class="card"
+            *ngIf="isChartSelected || selectedChart=='AverageTicketSize'"
+            [ngClass]="{'chartSelected': selectedChart=='AverageTicketSize' && !isChartSelected}">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="Revenue"
+                        [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                        [pTooltip]="model.ASPtooltip">Average Selling Price
+                    </div>
+                    <div class="totalnum1">{{model.averagE_TICKET_SIZE |
+                        numberFormatter}}</div>
+                    <!-- <div class="target1">Target : 0</div> -->
+                    <!-- <div class="target1">
+                        <span class="percentage"
+                            [ngStyle]="{'color': model.averagE_TICKET_SIZEPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.averagE_TICKET_SIZEPercentage>=0">
+                            <i class="pi pi-arrow-up"></i> {{model.averagE_TICKET_SIZEPercentage}}%
+                        </span>
+                        <span class="percentage"
+                            [ngStyle]="{'color': model.averagE_TICKET_SIZEPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.averagE_TICKET_SIZEPercentage<0">
+                            <i class="pi pi-arrow-down"></i> {{model.averagE_TICKET_SIZEPercentage}}%
+                        </span>
+                    </div> -->
+                </div>
+                <div>
+                    <button type="button"
+                        (click)="selectChartView('AverageTicketSize')"
+                        class="btn btn-outline-info graphviewbtn">
+                        <span *ngIf="isChartSelected">View Report</span>
+                        <span *ngIf="!isChartSelected">Back</span>
+                    </button>
+                    <div class="d-flex graphiconfilter">
+                        <div
+                            [ngStyle]="{'background-color': lineChartType5=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType5('bar')"><i
+                                class="far fa-chart-bar p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType5=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType5('line')"><i
+                                class="fas fa-chart-line p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType5=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType5('pie')"><i
+                                class="fas fa-th p-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType5=='pie'" class="tableLength">
+                <app-tabledata tableCode="AverageTicketSize"
+                    [tableData]="model.monthResult"></app-tabledata>
+            </div>
+            <canvas *ngIf="graphDatalabel.length>0 && lineChartType5!='pie'"
+                style="width: 300px;padding: 6px;"
+                baseChart [data]="AvgTicketSizeChartData"
+                [plugins]="barChartPlugins" [options]="lineChartOptions"
+                [type]="lineChartType5"></canvas>
+        </div>
+        <!-- chart 6 -->
+        <div class="card" *ngIf="isChartSelected || selectedChart=='storValue'"
+            [ngClass]="{'chartSelected': selectedChart=='storValue' && !isChartSelected}">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="Revenue"
+                        [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                        [pTooltip]="model.STORtooltip">Stock Turn Over Ratio</div>
+                    <div class="totalnum1">{{model.stoR_VALUE |
+                        numberFormatter}}</div>
+                    <!-- <div class="target1">Target : 0</div> -->
+                    <!-- <div class="target1">
+                        <span class="percentage" [ngStyle]="{'color': model.stoR_VALUEPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.stoR_VALUEPercentage>=0">
+                            <i class="pi pi-arrow-up"></i> {{model.stoR_VALUEPercentage}}%
+                        </span>
+                        <span class="percentage" [ngStyle]="{'color': model.stoR_VALUEPercentage>=0? '#32D16D' : 'red' }"
+                            *ngIf="model.stoR_VALUEPercentage<0">
+                            <i class="pi pi-arrow-down"></i> {{model.stoR_VALUEPercentage}}%
+                        </span>
+                    </div> -->
+                </div>
+                <div>
+                    <button type="button" (click)="selectChartView('storValue')"
+                        class="btn btn-outline-info graphviewbtn">
+                        <span *ngIf="isChartSelected">View Report</span>
+                        <span *ngIf="!isChartSelected">Back</span>
+                    </button>
+                    <div class="d-flex graphiconfilter">
+                        <div
+                            [ngStyle]="{'background-color': lineChartType6=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType6('bar')"><i
+                                class="far fa-chart-bar p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType6=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType6('line')"><i
+                                class="fas fa-chart-line p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType6=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType6('pie')"><i
+                                class="fas fa-th p-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType6=='pie'" class="tableLength">
+                <app-tabledata tableCode="StorValue"
+                    [tableData]="model.monthResult"></app-tabledata>
+            </div>
+            <canvas *ngIf="graphDatalabel.length>0 && lineChartType6!='pie'"
+                style="width: 300px;padding: 6px;"
+                baseChart [data]="storValueChartData"
+                [plugins]="barChartPlugins" [options]="lineChartOptions"
+                [type]="lineChartType6"></canvas>
+        </div>
+    </div>
+</div>

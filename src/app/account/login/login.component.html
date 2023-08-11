@@ -1,0 +1,77 @@
+<div class="auth-wrapper-bg">
+    <div class="container">
+        <div class="row">
+            <!-- left section starts -->
+            <div
+                class="col-md-7 col-sm-10 d-flex justify-content-center flex-column">
+                <h1 class="text-white">SUN FACETS 2.0</h1>
+                <h5 class="text-white font-weight-light">Presenting efficient
+                    ERP
+                    software for Jewellery business providing integrated
+                    automation
+                    solutions catering to the Jewellery Industry.</h5>
+            </div>
+            <!-- right section / form section starts -->
+            <div class="col-md-5 auth-side-form p-5">
+                <div class=" auth-content">
+                    <img src="assets/images/logo/logo-suntech.png" alt
+                        class="img-fluid mb-4 d-block">
+                    <h3 class="mb-4 f-w-200">Signin</h3>
+
+                    <form class="example-form" [formGroup]='dataForm'
+                        autocomplete="off">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Username</mat-label>
+                            <input matInput placeholder="Username" value
+                                (focusout)="checkUserName($event)">
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Password</mat-label>
+                            <input type="password" matInput
+                                placeholder="Password"
+                                value (focusout)="checkUserNamePassword($event)">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Branch</mat-label>
+                            <input type="text" autocomplete="new-password"
+                                matInput
+                                formControlName="branch"
+                                [matAutocomplete]="branch" 
+                                (focusout)="changeBranch($event)">
+                            <mat-autocomplete #branch="matAutocomplete"
+                                autoActiveFirstOption>
+                                <mat-option *ngFor="let option of  filteredOptions | async" [value]="option">
+                                    {{option}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Year</mat-label>
+                            <input matInput type="text" formControlName="year"
+                                [matAutocomplete]="year">
+                            <mat-autocomplete #year="matAutocomplete"
+                                autoActiveFirstOption>
+                                <mat-option *ngFor="let option of  filteredOptions_year | async" [value]="option">
+                                    {{option}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </form>
+
+                    <button class="btn btn-block btn-primary mb-0"
+                        (click)="signin()">Signin</button>
+                    <div class="text-center">
+                        <div class="saprator my-4"><span></span></div>
+                        <p class="mb-2 text-muted">Forgot password? <a
+                                [routerLink]="['/auth/reset-password-v2']"
+                                class="f-w-400">Reset</a></p>
+                        <p class="mb-0 text-muted">Don’t have an account? <a
+                                [routerLink]="['/auth/signup-v2']"
+                                class="f-w-400">Signup</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

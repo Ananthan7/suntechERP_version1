@@ -1,0 +1,363 @@
+<header-panel [selectedTemplate]="savedTemplateDatas"></header-panel>
+<!-- common filter -->
+<master-filter (refreshData)="refreshBtnClick()"
+    (filterData)="dataToFilter($event)"
+    (exportExcel)="exportbtnClick()" (exportPDF)="exportPdf()"></master-filter>
+<app-loader [isLoading]="isLoading"></app-loader>
+<!-- content -->
+<div class="row mt-3 d-flex justify-content-center" *ngIf="!isChartSelected">
+    <div class="card slips p-3 d-flex flex-column">
+        <span class="graphheader" [pTooltip]="tooltipItems.revenue">Revenue</span>
+        <div>
+            <span class="card-num"
+                [ngStyle]="{'color': model.revenueColor ? '#00a561' : 'red'}">
+                {{model.sumOfrevenue | numberFormatter}}
+                <i class="fas fa-caret-up" *ngIf="model.revenueColor"></i>
+                <i class="fas fa-caret-down" *ngIf="!model.revenueColor"></i>
+            </span> <br>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color" [pTooltip]="tooltipItems.PY">PY</span>
+                <br>
+                <span class="inner-num">{{model.sumOfPYrevenue |
+                    numberFormatter}}</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color"
+                    [pTooltip]="tooltipItems.CY_TARGET">CY Target</span> <br>
+                <span class="inner-num">{{model.sumOfCYrevTarget |
+                    numberFormatter}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color"
+                    [pTooltip]="tooltipItems.PY_TARGET">PY Target</span> <br>
+                <span class="inner-num">{{model.sumOfPY_revTarget |
+                    numberFormatter}}</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color" [pTooltip]="tooltipItems.CY">CY :
+                    {{model.sumOfCYrevTargetPerc}}%</span>
+                <ngb-progressbar [showValue]="true"
+                    [value]="model.sumOfCYrevTargetPerc"
+                    style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color" [pTooltip]="tooltipItems.PY">PY :
+                    {{model.sumOfPYrevTargetPerc}}%</span>
+                <ngb-progressbar [showValue]="true"
+                    [value]="model.sumOfPYrevTargetPerc"
+                    style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+    <!-- grossmargin -->
+    <div class="card slips p-3 ms-2 d-flex flex-column">
+        <span class="graphheader" [pTooltip]="tooltipItems.grossMargin">Gross
+            Margin</span>
+        <div>
+            <span class="card-num"
+                [ngStyle]="{'color': model.GMPercColor ? '#00a561' : 'red'}">
+                {{model.sumOfgrossMargin | numberFormatter}}
+                <i class="fas fa-caret-up" *ngIf="model.GMPercColor"></i>
+                <i class="fas fa-caret-down" *ngIf="!model.GMPercColor"></i>
+            </span> <br>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY</span> <br>
+                <span class="inner-num">{{model.sumOfPYgrossMargin |
+                    numberFormatter}}</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color"
+                    [pTooltip]="tooltipItems.CY_TARGET">CY Target</span> <br>
+                <span class="inner-num">{{model.sumOfCYgrossMarginTarget |
+                    numberFormatter}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY Target</span> <br>
+                <span class="inner-num">{{model.sumOfPYgrossMarginTarget |
+                    numberFormatter}}</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY</span>
+                <ngb-progressbar [showValue]="true"
+                    [value]="model.sumOfCYgrossMarginPerc"
+                    style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color">PY</span>
+                <ngb-progressbar [showValue]="true" [value]="100"
+                    style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+    <div class="card slips p-3 ms-2 d-flex flex-column">
+        <span class="graphheader" [pTooltip]="tooltipItems.grossMarginPerc">Gross
+            Margin %</span>
+        <div>
+            <span class="card-num"
+                [ngStyle]="{'color': (model.PYGMpercentage < model.GMpercentage) ? '#00a561' : '#F14336'}">
+                {{model.GMpercentage}}%
+                <i class="fas fa-caret-up"
+                    *ngIf="model.PYGMpercentage < model.GMpercentage"></i>
+                <i class="fas fa-caret-down"
+                    *ngIf="model.PYGMpercentage > model.GMpercentage"></i>
+            </span> <br>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY</span> <br>
+                <span class="inner-num">{{model.PYGMpercentage |
+                    numberFormatter}}%</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color"
+                    [pTooltip]="tooltipItems.CY_TARGET">CY Target</span> <br>
+                <span class="inner-num">{{model.CYGMpercentageTGT |
+                    numberFormatter}}%</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY Target</span> <br>
+                <span class="inner-num">{{model.PYGMpercentageTGT |
+                    numberFormatter}}%</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY</span>
+                <ngb-progressbar [showValue]="true" [value]="100"
+                    style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color">PY</span>
+                <ngb-progressbar [showValue]="true" [value]="100"
+                    style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+    <div class="card slips p-3 ms-2 d-flex flex-column">
+        <span class="graphheader" [pTooltip]="tooltipItems.QUANTITY_SOLD">Quantity
+            Sold</span>
+        <div>
+            <span class="card-num"
+                [ngStyle]="{'color': model.QtySoldColor ? '#00a561' : '#F14336'}">
+                {{model.sumOfQtySold | numberFormatter}}
+                <i class="fas fa-caret-up" *ngIf="model.QtySoldColor"></i>
+                <i class="fas fa-caret-down" *ngIf="!model.QtySoldColor"></i>
+            </span> <br>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY</span> <br>
+                <span class="inner-num">{{model.sumOfPY_QtySold |
+                    numberFormatter}}</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color"
+                    [pTooltip]="tooltipItems.CY_TARGET">CY Target</span> <br>
+                <span class="inner-num">{{model.sumOfCY_QtySoldTarget |
+                    numberFormatter}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY Target</span> <br>
+                <span class="inner-num">{{model.sumOfPY_QtySoldTarget |
+                    numberFormatter}}</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY</span>
+                <ngb-progressbar [showValue]="true" [value]="100"
+                    style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color">PY</span>
+                <ngb-progressbar [showValue]="true" [value]="100"
+                    style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+    <div class="card slips p-3 ms-2 d-flex flex-column">
+        <span class="graphheader" [pTooltip]="tooltipItems.COGS">COGS</span>
+        <div>
+            <span class="card-num"
+                [ngStyle]="{'color': model.cogsColor ? '#00a561' : '#F14336'}">
+                {{model.sumOfCOGS | numberFormatter}}
+                <i class="fas fa-caret-up" *ngIf="model.cogsColor"></i>
+                <i class="fas fa-caret-down" *ngIf="!model.cogsColor"></i>
+            </span> <br>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY</span> <br>
+                <span class="inner-num">{{model.sumOfPY_COGSArray |
+                    numberFormatter}}</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color"
+                    [pTooltip]="tooltipItems.CY_TARGET">CY Target</span> <br>
+                <span class="inner-num">{{model.sumOfCY_COGSTarget |
+                    numberFormatter}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY Target</span> <br>
+                <span class="inner-num">{{model.sumOfPY_COGSTarget |
+                    numberFormatter}}</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY</span>
+                <ngb-progressbar [showValue]="true" [value]="60"
+                    style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color">PY</span>
+                <ngb-progressbar [showValue]="true" [value]="60"
+                    style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- chart section starts -->
+<div class="row graphcontent mt-3" #content>
+    <div class="col-md-12 col-sm-12"
+        *ngIf="!isChartSelected || selectedChart=='branchChart'"
+        [ngClass]="{'chartSelected': selectedChart=='branchChart' && isChartSelected}">
+        <div class="card">
+            <div class="p-2 graphtopcontent d-flex justify-content-between">
+                <div><span class="graphheader">By Branch</span>
+                    <p>click on the bar for detailed branch data</p>
+                </div>
+                <div>
+                    <button type="button"
+                        (click)="selectChartView('branchChart')"
+                        class="btn btn-outline-info graphviewbtn">
+                        <span *ngIf="!isChartSelected">View Report</span>
+                        <span *ngIf="isChartSelected">Back</span>
+                    </button>
+                    <div class="d-flex graphiconfilter">
+                        <div
+                            [ngStyle]="{'background-color': lineChartType=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType('bar')"><i
+                                class="far fa-chart-bar p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType('line')"><i
+                                class="fas fa-chart-line p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType('pie')"><i
+                                class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <canvas
+                *ngIf="model.branchChartLabel.length>0 && lineChartType != 'pie'"
+                [plugins]="barChartPlugins"
+                baseChart [data]="lineChartData" style="height: 280px;"
+                [options]="lineChartOptions" [type]="lineChartType">
+            </canvas>
+            <div *ngIf="lineChartType == 'pie'">
+                <app-table-grid [tableData]="branchResults"
+                    [tableHeader]="model.branchGridHeader"
+                    [tableType]="'branch'"></app-table-grid>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12" 
+        *ngIf="!isChartSelected || selectedChart=='monthChart'"
+        [ngClass]="{'chartSelected': selectedChart=='monthChart' && isChartSelected}">
+        <div class="card">
+            <div class="p-2 graphtopcontent d-flex justify-content-between">
+                <div class="graphheader">By Month</div>
+                <div>
+                    <button type="button"
+                        (click)="selectChartView('monthChart')"
+                        class="btn btn-outline-info graphviewbtn">
+                        <span *ngIf="!isChartSelected">View Report</span>
+                        <span *ngIf="isChartSelected">Back</span>
+                    </button>
+                    <div class="d-flex graphiconfilter">
+                        <div
+                            [ngStyle]="{'background-color': lineChartType2=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType2('bar')"><i
+                                class="far fa-chart-bar p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType2=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType2('line')"><i
+                                class="fas fa-chart-line p-1"></i></div>
+                        <div
+                            [ngStyle]="{'background-color': lineChartType2=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType2('pie')"><i
+                                class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <canvas
+                *ngIf="model.monthChartLabel.length>0 && lineChartType2 != 'pie'"
+                [type]="lineChartType2"
+                baseChart [data]="monthChartData" style="height: 280px;"
+                [options]="monthChartOptions" [plugins]="barChartPlugins">
+            </canvas>
+            <div *ngIf="lineChartType2 == 'pie'">
+                <app-table-grid [tableData]="monthResults"
+                    [tableHeader]="model.monthGridHeader"
+                    [tableType]="'month'"></app-table-grid>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- commented for second phase -->
+<!-- <div class="row">
+    <div class="col-md-6 col-sm-12">
+        <div class="card">
+            <div class=" p-2 graphtopcontent">
+                <div class="graphheader">Store Square Footage</div>
+            </div>
+            <canvas [plugins]="barChartPlugins" baseChart [data]="productsChartData" 
+                [options]="lineChartOptions"[type]="lineChartType">
+            </canvas>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="card">
+            <div class=" p-2 graphtopcontent">
+                <div class="graphheader">Revenue per Square feet</div>
+            </div>
+            <canvas [plugins]="barChartPlugins" baseChart [data]="productsChartData" 
+                [options]="lineChartOptions"[type]="lineChartType">
+            </canvas>
+        </div>
+    </div>
+</div> -->
+<!-- chart filter -->
+<!-- <div class="row mt-3">
+    <div>
+        <div class="d-flex">
+            <ng-select class="text-start" [items]="topBottomData" bindLabel="name" 
+                bindValue="value"
+                placeholder="Top/Bottom">
+            </ng-select>
+            <ng-select class="text-start ms-2" [items]="topBottomData" bindLabel="name" 
+                bindValue="value"
+                placeholder="N">
+            </ng-select>
+            <ng-select class="text-start ms-2" [items]="topBottomData" bindLabel="name" 
+                bindValue="value"
+                placeholder="Revenue/GP/GP%">
+            </ng-select>
+        </div>
+    </div>
+</div> -->
+<!-- doughnut chart -->
+<!-- <div class="row mt-3">
+    <div class="card col-md-4 col-sm-12">
+        <div class=" p-2 graphtopcontent">
+            <div class="graphheader">Top 5 Branches</div>
+        </div>
+        <canvas [plugins]="barChartPlugins" baseChart 
+        [data]="doughnutChartData" [options]="doughtnutChartOptions"
+        [type]="doughnutChartType">
+        </canvas>
+    </div>
+</div> -->

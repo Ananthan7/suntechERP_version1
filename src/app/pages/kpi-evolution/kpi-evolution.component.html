@@ -1,0 +1,424 @@
+<header-panel [selectedTemplate]="savedTemplateDatas"></header-panel>
+<master-filter (refreshData)="refreshBtnClick()" 
+(filterData)="dataToFilter($event)" (resetClick)="resetAll()" 
+(exportExcel)="exportbtnClick()" (exportPDF)="exportPdf()" ></master-filter>
+<!-- button section starts -->
+<div class="mt-2 firstbtns row d-flex">
+    <div class="col-md-12 col-lg-7 col-sm-12">
+        <button type="button" class="btn btn-outline-info" (click)="getChartData('Year')"
+            [ngClass]="{'btnClicked': graphContent === 'Year'}">
+            <span>Year</span>
+        </button>
+        <button type="button" class="btn btn-outline-info ms-2" (click)="getChartData('YTD')"
+            [ngClass]="{'btnClicked': graphContent === 'YTD'}">
+            <span>YTD</span>
+        </button>
+        <button type="button" class="btn btn-outline-info ms-2" (click)="getChartData('Quarter')"
+            [ngClass]="{'btnClicked': graphContent === 'Quarter'}">
+            <span>Quarter</span>
+        </button>
+        <button type="button" class="btn btn-outline-info ms-2" (click)="getChartData('QOQ')"
+            [ngClass]="{'btnClicked': graphContent === 'QOQ'}">
+            <span>QOQ</span>
+        </button>
+        <button type="button" class="btn btn-outline-info ms-2" (click)="getChartData('Month')"
+            [ngClass]="{'btnClicked': graphContent === 'Month'}">
+            <span>Month</span>
+        </button>
+    </div>
+    <div class="col-md-12 col-lg-5 col-sm-12 p-2">
+        <!-- common filter -->
+       
+    </div>
+</div>
+<app-loader [isLoading]="isLoading"></app-loader>
+<div id="content" #content>
+    <!-- GRAPH content section starts -->
+    <div class="graphcontent" *ngIf="firstChartrow">
+        <!-- revenueChart section 1 -->
+        <div class="card" [ngClass]="{'chartSelected': selectedChart=='Revenue'}"
+            *ngIf="isChartSelected || selectedChart=='Revenue'">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="graphheader" [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                    [pTooltip]="tooltipItems.revenue">Revenue</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart!='Revenue'"
+                        (click)="selectChartView('Revenue')">
+                        <span>View Report</span></button>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart=='Revenue'"
+                        (click)="getChartData('Year')">
+                        <span>Back</span></button>
+                    <div class="d-flex graphiconfilter">
+                        <div [ngStyle]="{'background-color': lineChartType=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType('bar')"><i class="far fa-chart-bar p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType('line')"><i class="fas fa-chart-line p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType('pie')"><i class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType=='pie'" class="tableLength">
+                <app-tablegrid tableCode="Revenue" [graphFilter]="graphContent" [tableHeader]="graphDatalabel"
+                    [tableData]="model.tabledata"></app-tablegrid>
+            </div>
+            <div *ngIf="graphContent!='QOQ'">
+                <canvas [plugins]="barChartPlugins" *ngIf="graphDatalabel.length>0 && lineChartType!='pie'"
+                    style="width: 300px; padding: 5px;" baseChart [data]="lineChartData" [options]="lineChartOptions"
+                    [type]="lineChartType"></canvas>
+            </div>
+            <div *ngIf="graphContent=='QOQ'">
+                <canvas *ngIf="QOQchartLabel.length>0 && lineChartType!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="lineChartDataQOQ" [options]="lineChartOptions"
+                    [type]="lineChartType"></canvas>
+            </div>
+        </div>
+        <!-- Sales Chart Data 2-->
+        <div class="card " [ngClass]="{'chartSelected': selectedChart=='SalesUnit'}"
+            *ngIf="isChartSelected || selectedChart=='SalesUnit'">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="graphheader" [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                    [pTooltip]="tooltipItems.salesUnit">Sales Unit</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart!='SalesUnit'"
+                        (click)="selectChartView('SalesUnit')">
+                        <span>View Report</span></button>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart=='SalesUnit'"
+                        (click)="getChartData('Year')">
+                        <span>Back</span></button>
+                    <div class="d-flex graphiconfilter">
+                        <div [ngStyle]="{'background-color': lineChartType2=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType2('bar')"><i class="far fa-chart-bar p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType2=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType2('line')"><i class="fas fa-chart-line p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType2=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType2('pie')"><i class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType2=='pie'" class="tableLength">
+                <app-tablegrid tableCode="SalesUnit" [graphFilter]="graphContent" [tableHeader]="graphDatalabel"
+                    [tableData]="model.tabledata"></app-tablegrid>
+            </div>
+            <div *ngIf="graphContent!='QOQ'">
+                <canvas *ngIf="graphDatalabel.length>0 && lineChartType2!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="SalesChartData" [options]="lineChartOptions"
+                    [type]="lineChartType2"></canvas>
+            </div>
+            <div *ngIf="graphContent=='QOQ'">
+                <canvas *ngIf="QOQchartLabel.length>0 && lineChartType2!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="SalesChartDataQOQ" [options]="lineChartOptions"
+                    [type]="lineChartType2"></canvas>
+            </div>
+        </div>
+        <!-- avgSellPriceChartData 3 -->
+        <div class="card " [ngClass]="{'chartSelected': selectedChart=='AverageSellingPrice'}"
+            *ngIf="isChartSelected || selectedChart=='AverageSellingPrice'">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="graphheader" [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                    [pTooltip]="tooltipItems.AverageSellingPrice">Average Selling Price</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-info graphviewbtn"
+                        *ngIf="selectedChart!='AverageSellingPrice'" (click)="selectChartView('AverageSellingPrice')">
+                        <span>View Report</span></button>
+                    <button type="button" class="btn btn-outline-info graphviewbtn"
+                        *ngIf="selectedChart=='AverageSellingPrice'" 
+                        (click)="getChartData('Year')">
+                        <span>Back</span></button>
+                    <div class="d-flex graphiconfilter">
+                        <div [ngStyle]="{'background-color': lineChartType3=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType3('bar')"><i class="far fa-chart-bar p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType3=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType3('line')"><i class="fas fa-chart-line p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType3=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType3('pie')"><i class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType3=='pie'" class="tableLength">
+                <app-tablegrid tableCode="AverageSellingPrice" [graphFilter]="graphContent"
+                    [tableHeader]="graphDatalabel" [tableData]="model.tabledata"></app-tablegrid>
+            </div>
+            <div *ngIf="graphContent!='QOQ'">
+                <canvas *ngIf="graphDatalabel.length>0 && lineChartType3!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="avgSellPriceChartData" [options]="lineChartOptions"
+                    [type]="lineChartType3"></canvas>
+            </div>
+            <div *ngIf="graphContent=='QOQ'">
+                <canvas *ngIf="QOQchartLabel.length>0 && lineChartType3!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="avgSellPriceChartDataQOQ" [options]="lineChartOptions"
+                    [type]="lineChartType3"></canvas>
+            </div>
+        </div>
+
+    </div>
+    <div class="graphcontent" *ngIf="secondChartrow">
+        <!-- GrossMarginChart 4 -->
+        <div class="card" [ngClass]="{'chartSelected': selectedChart=='GrossMargin'}"
+            *ngIf="isChartSelected || selectedChart=='GrossMargin'">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="graphheader" [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                    [pTooltip]="tooltipItems.grossMargin">Gross Margin</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart!='GrossMargin'"
+                        (click)="selectChartView('GrossMargin')"><span>
+                            View Report</span></button>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" 
+                        *ngIf="selectedChart=='GrossMargin'"
+                        (click)="getChartData('Year')"><span>
+                            Back</span></button>
+                    <div class="d-flex graphiconfilter">
+                        <div [ngStyle]="{'background-color': lineChartType4=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType4('bar')"><i class="far fa-chart-bar p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType4=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType4('line')"><i class="fas fa-chart-line p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType4=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType4('pie')"><i class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType4=='pie'" class="tableLength">
+                <app-tablegrid tableCode="GrossMargin" [graphFilter]="graphContent" [tableHeader]="graphDatalabel"
+                    [tableData]="model.tabledata"></app-tablegrid>
+            </div>
+            <div *ngIf="graphContent!='QOQ'">
+                <canvas *ngIf="graphDatalabel.length>0 && lineChartType4!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="GrossMarginChartData" [options]="lineChartOptions"
+                    [type]="lineChartType4"></canvas>
+            </div>
+            <div *ngIf="graphContent=='QOQ'">
+                <canvas *ngIf="QOQchartLabel.length>0 && lineChartType4!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="GrossMarginChartDataQOQ" [options]="lineChartOptions"
+                    [type]="lineChartType4"></canvas>
+            </div>
+        </div>
+        <!-- GrossMarginPercChartData 5 -->
+        <div class="card " [ngClass]="{'chartSelected': selectedChart=='GrossMarginPerc'}"
+            *ngIf="isChartSelected || selectedChart=='GrossMarginPerc'">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="graphheader" [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                    [pTooltip]="tooltipItems.grossMarginPerc">Gross Margin %</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart!='GrossMarginPerc'"
+                        (click)="selectChartView('GrossMarginPerc')">
+                        <span>
+                            View Report</span></button>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart=='GrossMarginPerc'"
+                        (click)="getChartData('Year')">
+                        <span>Back</span></button>
+                    <div class="d-flex graphiconfilter">
+                        <div [ngStyle]="{'background-color': lineChartType5=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType5('bar')"><i class="far fa-chart-bar p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType5=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType5('line')"><i class="fas fa-chart-line p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType5=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType5('pie')"><i class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType5=='pie'" class="tableLength">
+                <app-tablegrid tableCode="GrossMarginPerc" [graphFilter]="graphContent" [tableHeader]="graphDatalabel"
+                    [tableData]="model.tabledata"></app-tablegrid>
+            </div>
+            <div *ngIf="graphContent!='QOQ'">
+                <canvas *ngIf="graphDatalabel.length>0 && lineChartType5!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="GrossMarginPercChartData" [options]="GMPlineChartOptions"
+                    [type]="lineChartType5"></canvas>
+            </div>
+            <div *ngIf="graphContent=='QOQ'">
+                <canvas *ngIf="QOQchartLabel.length>0 && lineChartType5!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="GrossMarginPercChartDataQOQ" [options]="GMPlineChartOptions"
+                    [type]="lineChartType5"></canvas>
+            </div>
+    
+        </div>
+        <!-- Number of Customers 6 -->
+        <div class="card " [ngClass]="{'chartSelected': selectedChart=='Customers'}"
+            *ngIf="isChartSelected || selectedChart=='Customers'">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="graphheader" [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                    [pTooltip]="tooltipItems.numberOfCustomers">Number of Customers</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart!='Customers'"
+                        (click)="selectChartView('Customers')">
+                        <span>View Report</span></button>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart=='Customers'"
+                        (click)="getChartData('Year')">
+                        <span>Back</span></button>
+                    <div class="d-flex graphiconfilter">
+                        <div [ngStyle]="{'background-color': lineChartType6=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType6('bar')"><i class="far fa-chart-bar p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType6=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType6('line')"><i class="fas fa-chart-line p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType6=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType6('pie')"><i class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType6=='pie'" class="tableLength">
+                <app-tablegrid tableCode="NoOfCustomers" [graphFilter]="graphContent" [tableHeader]="graphDatalabel"
+                    [tableData]="model.tabledata"></app-tablegrid>
+            </div>
+            <div *ngIf="graphContent!='QOQ'">
+                <canvas *ngIf="graphDatalabel.length>0 && lineChartType6!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="NumofCustomersData" [options]="lineChartOptions"
+                    [type]="lineChartType6"></canvas>
+            </div>
+            <div *ngIf="graphContent=='QOQ'">
+                <canvas *ngIf="QOQchartLabel.length>0 && lineChartType6!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="NumofCustomersDataQOQ" [options]="lineChartOptions"
+                    [type]="lineChartType6"></canvas>
+            </div>
+    
+        </div>
+    
+    </div>
+    <div class="graphcontent pb-4" *ngIf="thirdChartrow">
+        <!-- On Hand Inventory Amount 7 -->
+        <div class="card" [ngClass]="{'chartSelected': selectedChart=='Inventory'}"
+            *ngIf="isChartSelected || selectedChart=='Inventory'">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="graphheader" [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                    [pTooltip]="tooltipItems.ON_HAND_INVENTORY_AMOUNT">On Hand Inventory Amount</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart!='Inventory'"
+                        (click)="selectChartView('Inventory')">
+                        <span>View Report</span></button>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart=='Inventory'"
+                        (click)="getChartData('Year')">
+                        <span>Back</span></button>
+                    <div class="d-flex graphiconfilter">
+                        <div [ngStyle]="{'background-color': lineChartType7=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType7('bar')"><i class="far fa-chart-bar p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType7=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType7('line')"><i class="fas fa-chart-line p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType7=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType7('pie')"><i class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType7=='pie'" class="tableLength">
+                <app-tablegrid tableCode="InventoryAmount" [graphFilter]="graphContent" [tableHeader]="graphDatalabel"
+                    [tableData]="model.tabledata"></app-tablegrid>
+            </div>
+            <div *ngIf="graphContent!='QOQ'">
+                <canvas *ngIf="graphDatalabel.length>0 && lineChartType7!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="InventoryAmountData" [options]="lineChartOptions"
+                    [type]="lineChartType7"></canvas>
+            </div>
+            <div *ngIf="graphContent=='QOQ'">
+                <canvas *ngIf="QOQchartLabel.length>0 && lineChartType7!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="InventoryAmountDataQOQ" [options]="lineChartOptions"
+                    [type]="lineChartType7"></canvas>
+            </div>
+    
+        </div>
+        <!-- On Hand Inventory Quantity 8 -->
+        <div class="card " [ngClass]="{'chartSelected': selectedChart=='InventoryQuantity'}"
+            *ngIf="isChartSelected || selectedChart=='InventoryQuantity'">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="graphheader" [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                    [pTooltip]="tooltipItems.ON_HAND_INVENTORY_QUANTITY">On Hand Inventory Quantity</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-info graphviewbtn"
+                        *ngIf="selectedChart!='InventoryQuantity'" (click)="selectChartView('InventoryQuantity')">
+                        <span>View Report</span></button>
+                    <button type="button" class="btn btn-outline-info graphviewbtn"
+                        *ngIf="selectedChart=='InventoryQuantity'" 
+                        (click)="getChartData('Year')">
+                        <span>Back</span></button>
+                    <div class="d-flex graphiconfilter">
+                        <div [ngStyle]="{'background-color': lineChartType8=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType8('bar')"><i class="far fa-chart-bar p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType8=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType8('line')"><i class="fas fa-chart-line p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType8=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType8('pie')"><i class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType8=='pie'" class="tableLength"> 
+                <app-tablegrid tableCode="InventoryQuantity" [graphFilter]="graphContent" [tableHeader]="graphDatalabel"
+                    [tableData]="model.tabledata"></app-tablegrid>
+            </div>
+            <div *ngIf="graphContent!='QOQ'">
+                <canvas *ngIf="graphDatalabel.length>0 && lineChartType8!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="InventoryQuantityData" [options]="lineChartOptions"
+                    [type]="lineChartType8"></canvas>
+            </div>
+            <div *ngIf="graphContent=='QOQ'">
+                <canvas *ngIf="QOQchartLabel.length>0 && lineChartType8!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="InventoryQuantityDataQOQ" [options]="lineChartOptions"
+                    [type]="lineChartType8"></canvas>
+            </div>
+    
+        </div>
+        <!-- STOR 9 -->
+        <div class="card " *ngIf="isChartSelected || selectedChart=='STOR'"
+            [ngClass]="{'chartSelected': selectedChart=='STOR'}">
+            <div class="d-flex justify-content-between p-2 graphtopcontent">
+                <div>
+                    <div class="graphheader" [ngClass]="{ 'dark-font-color': LayoutMode=='dark' }"
+                    [pTooltip]="tooltipItems.stor">Stock Turn Over Ratio</div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart!='STOR'"
+                        (click)="selectChartView('STOR')">
+                        <span> View Report</span></button>
+                    <button type="button" class="btn btn-outline-info graphviewbtn" *ngIf="selectedChart=='STOR'"
+                    (click)="getChartData('Year')">
+                        <span>Back</span></button>
+                    <div class="d-flex graphiconfilter">
+                        <div [ngStyle]="{'background-color': lineChartType9=='bar' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType9('bar')"><i class="far fa-chart-bar p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType9=='line' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType9('line')"><i class="fas fa-chart-line p-1"></i></div>
+                        <div [ngStyle]="{'background-color': lineChartType9=='pie' ? '#336699' : '#E6E8EC' }"
+                            (click)="changeGraphType9('pie')"><i class="fas fa-th p-1" style="font-size: 10px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="lineChartType9=='pie'" class="tableLength">
+                <app-tablegrid tableCode="STOR" [graphFilter]="graphContent" [tableHeader]="graphDatalabel"
+                    [tableData]="model.tabledata"></app-tablegrid>
+            </div>
+            <div *ngIf="graphContent!='QOQ'">
+                <canvas *ngIf="graphDatalabel.length>0 && lineChartType9!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="storChartData" [options]="lineChartOptions"
+                    [type]="lineChartType9"></canvas>
+            </div>
+            <div *ngIf="graphContent=='QOQ'">
+                <canvas *ngIf="QOQchartLabel.length>0 && lineChartType9!='pie'" style="width: 300px; padding: 5px;"
+                    baseChart [plugins]="barChartPlugins" [data]="storChartDataQOQ" [options]="lineChartOptions"
+                    [type]="lineChartType9"></canvas>
+            </div>
+    
+        </div>
+    
+    </div>
+</div>

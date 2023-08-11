@@ -1,0 +1,205 @@
+<!-- Heading section -->
+<div class="row pb-2">
+    <div class="col-md-10">
+        <h4 class="headingcontent">Current Month v/s Same Month Last Year</h4>
+    </div>
+    <div class="col-md-2">
+        <app-timeframe></app-timeframe>
+    </div>
+</div>
+<!-- common filter -->
+<master-filter></master-filter>
+<!-- content section starts -->
+<div class="row mt-3 d-flex justify-content-center">
+    <div class="card p-3 d-flex flex-column">
+        <span class="graphheader">Revenue</span>
+        <div>
+            <span class="card-num">762K
+                <i class="fas fa-caret-up"></i>
+            </span> <br>
+        </div>
+        <div class="d-flex justify-content-end" style="color: #336699;">
+            CY Target
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY Target</span> <br>
+                <span class="inner-num">697K</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY Target</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY</span>
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color">PY</span> 
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+    <div class="card p-3 ms-2 d-flex flex-column">
+        <span class="graphheader">Gross Margin</span>
+        <div>
+            <span class="card-num">550K
+                <i class="fas fa-caret-up"></i>
+            </span> <br>
+        </div>
+        <div class="d-flex justify-content-end" style="color: #336699;">
+            CY Target
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY Target</span> <br>
+                <span class="inner-num">697K</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY Target</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY</span> 
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color">PY</span> 
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+    <div class="card p-3 ms-2 d-flex flex-column">
+        <span class="graphheader">Gross Margin %</span>
+        <div>
+            <span class="card-num" style="color: #F14336;">49%
+                <i class="fas fa-caret-down"></i></span> <br>
+        </div>
+        <div class="d-flex justify-content-end" style="color: #336699;">
+            CY Target
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY Target</span> <br>
+                <span class="inner-num">697K</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY Target</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY</span> 
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color">PY</span> 
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+    <div class="card p-3 ms-2 d-flex flex-column">
+        <span class="graphheader">Quantity Sold</span>
+        <div>
+            <span class="card-num">67
+                <i class="fas fa-caret-up"></i>
+            </span> <br>
+        </div>
+        <div class="d-flex justify-content-end" style="color: #336699;">
+            CY Target
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY Target</span> <br>
+                <span class="inner-num">697K</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY Target</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY</span> 
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color">PY</span> 
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+    <div class="card p-3 ms-2 d-flex flex-column">
+        <span class="graphheader">COGS</span>
+        <div>
+            <span class="card-num">131K
+                <i class="fas fa-caret-up"></i>
+            </span> <br>
+        </div>
+        <div class="d-flex justify-content-end" style="color: #336699;">
+            CY Target
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY Target</span> <br>
+                <span class="inner-num">697K</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="dark-font-color">PY Target</span> <br>
+                <span class="inner-num">159K</span>
+            </div>
+            <div class="col-md-6">
+                <span class="dark-font-color">CY</span> 
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+                <span class="dark-font-color">PY</span> 
+                <ngb-progressbar [showValue]="true" [value]="60" style="border-radius: 2rem"></ngb-progressbar>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- table section -->
+<div class="row mt-3 ps-1 d-flex">
+    <div class="col-md-12 col-sm-12">
+        <h5>Revenue</h5>
+        <dx-data-grid id="gridContainer" [dataSource]="tabledata" [showBorders]="true" class="mt-3"
+            [columnAutoWidth]="true" [showRowLines]="true" [showColumnLines]="false" [rowAlternationEnabled]="true">
+            <dxi-column dataField="id" caption="Store"> </dxi-column>
+            <dxi-column dataField="name" caption="REV - CY"> </dxi-column>
+            <dxi-column dataField="id1" caption="REV - LY"> </dxi-column>
+            <dxi-column dataField="id" caption="GM - CY"> </dxi-column>
+            <dxi-column dataField="name" caption="GM - LY"> </dxi-column>
+            <dxi-column dataField="name" caption="GM - CY"> </dxi-column>
+            <dxi-column dataField="name" caption="GM - LY"> </dxi-column>
+            <dxi-column dataField="name" caption="Qty - CY"> </dxi-column>
+            <dxi-column dataField="name" caption="Qty - LY"> </dxi-column>
+            <dxi-column dataField="name" caption="COGS - CY"> </dxi-column>
+            <dxi-column dataField="name" caption="COGS - LY"> </dxi-column>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            <dxo-summary>
+                <dxi-total-item column="id" displayFormat="Total"></dxi-total-item>
+                <dxi-total-item column="name" summaryType="sum" displayFormat="{0}"></dxi-total-item>
+                <dxi-total-item column="id1" summaryType="sum" displayFormat="{0}"></dxi-total-item>
+                <dxi-total-item column="GM" summaryType="sum" displayFormat="{0}%"></dxi-total-item>
+            </dxo-summary>
+        </dx-data-grid>
+    </div>
+</div>

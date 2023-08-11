@@ -1,0 +1,567 @@
+<!-- <div class="row">
+    <div class="col-12">
+        <span class="heading dark-font-color">THEME OPTIONS & REPORT SETTINGS</span>
+    </div>
+</div> -->
+<div class="row">
+    <!-- content section -->
+    <div class="col-md-11 col-sm-12">
+        <div class="card p-4">
+            <span class="admin-cardheader">DASHBOARD THEME</span>
+            <!-- Light selected color row -->
+            <div class="row pt-3">
+                <!-- <div class="d-flex justify-content-between ">
+                    <span class="text-muted">Light</span>
+                    <div class="arrow-down"></div>
+                </div> -->
+                <ng-select [items]="themes" placeholder="Light" bindLabel="name" bindValue="code"
+                    [(ngModel)]="themeSelected" (change)="selectTheme($event)">
+                </ng-select>
+            </div>
+            <hr class="p-0 m-0">
+            <div [ngSwitch]="selectedtheme">
+                <div *ngSwitchCase="1">
+                    <div class="row pt-2">
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="pt-0 p-2 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color:#3599CC;"></div>
+                                <div class="clr-code p-2">#3599CC</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="p-2 pt-0 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color:#D5F2FF;"></div>
+                                <div class="clr-code p-2">#D5F2FF</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="p-2 pt-0 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color: #F7F8FB;"></div>
+                                <div class="clr-code p-2">#F7F8FB</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="p-2 pt-0 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color: #B2B2B2;"></div>
+                                <div class="clr-code p-2">#B2B2B2</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="p-2 pt-0 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color: #6A707C;"></div>
+                                <div class="clr-code p-2">#6A707C</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dark selected color row -->
+                <div *ngSwitchCase="2">
+
+                    <div class="row pt-2">
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="pt-0 p-2 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color:#000000;"></div>
+                                <div class="clr-code p-2">#000000</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="p-2 pt-0 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color:#1E232C;"></div>
+                                <div class="clr-code p-2">#1E232C</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="p-2 pt-0 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color: #336699;"></div>
+                                <div class="clr-code p-2">#336699</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="p-2 pt-0 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color: #542BB0;"></div>
+                                <div class="clr-code p-2">#542BB0</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="p-2 pt-0 commonColor">Select Color</span>
+                                <div class="clr-circle" style="background-color: #24566B;"></div>
+                                <div class="clr-code p-2">#24566B</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom selected color section-->
+                <div *ngSwitchCase="3">
+                    <div class="row pt-2">
+                        <div class="col-md-2 col-sm-11">
+                            <div class="card clrcard">
+                                <div class="d-flex justify-content-end w-100 pe-2">
+                                    <i class="mdi mdi-close noti-icon"></i>
+                                </div>
+                                <span class="pt-0 p-2 commonColor">Select Color</span>
+                                <!-- <div class="clr-circle d-flex justify-content-center align-items-center"
+                                    style="background-color:#fff; border: 2px solid black;">
+                                    <i class="fa fa-plus"></i>
+                                </div> -->
+                                <p-colorPicker [(ngModel)]="color"></p-colorPicker>
+                                <div class="clr-code p-2">{{color}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- button section starts-->
+            <div class="d-flex justify-content-end w-100 me-5">
+                <button type="submit" class="btn savebtn ms-3">
+                    <span>Apply</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Typography section starts -->
+<div class="row">
+    <div class="col-md-11 col-sm-12">
+        <div class="card p-4">
+            <span class="admin-cardheader">TYPOGRAPHY</span>
+            <!-- Light selected color row -->
+            <form [formGroup]="typographyForm" (ngSubmit)="saveData()">
+                <div class="row pt-3">
+                    <!-- <ng-select [items]="sections" bindLabel="name" bindValue="name" [(ngModel)]="typography"
+                        (change)="selecttypo($event)">
+                    </ng-select> -->
+                    <ng-select placeholder="GROUP NAME*" [items]="sections" bindLabel="name" bindValue="code"
+                        (change)="selecttypo($event)" formControlName="typo">
+                    </ng-select>
+                </div>
+                <hr class="p-0 m-0">
+                <div [ngSwitch]="selectedtypography" class="pt-3">
+                    <ng-container *ngSwitchCase="1">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="NavMenuFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="NavMenuFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="NavMenufontcolor" (change)="selectNavMenuColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  NavMenucolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="2">
+                        <div class="row pt-2">
+                            <div class="row pt-2">
+                                <div class="col-md-3 col-sm-12 mb-3">
+                                    <span>Font</span>
+                                    <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                        formControlName="NavMenuItemFont">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3 col-sm-12 mb-3">
+                                    <span>Font Size</span>
+                                    <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                        formControlName="NavMenuItemFontsize">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3 col-sm-12 mb-3">
+                                    <span>Font Color</span>
+                                    <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                        formControlName="NavMenuItemfontcolor"
+                                        (change)="selectNavMenuItemColor($event)">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3 col-sm-12 pt-4">
+                                    <div class="clr-circle" [ngStyle]="{'background-color':  NavMenuItemcolor}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="3">
+                        <div class="row pt-2">
+                            <div class="row pt-2">
+                                <div class="col-md-3 col-sm-12 mb-3">
+                                    <span>Font</span>
+                                    <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                        formControlName="displayNameFont">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3 col-sm-12 mb-3">
+                                    <span>Font Size</span>
+                                    <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                        formControlName="displayNameFontsize">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3 col-sm-12 mb-3">
+                                    <span>Font Color</span>
+                                    <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                        formControlName="displayNamefontcolor"
+                                        (change)="selectdisplayNameColor($event)">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3 col-sm-12 pt-4">
+                                    <div class="clr-circle" [ngStyle]="{'background-color':  displayNamecolor}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="4">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="chartNameFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="chartNameFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="chartNamefontcolor" (change)="selectchartNameColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  chartNamecolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="5">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="tableColheadFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="tableColheadFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="tableColheadfontcolor" (change)="selecttableColheadColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  tableColheadcolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="6">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="xaxisLabelFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="xaxisLabelFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="xaxisLabelfontcolor" (change)="selectxaxisLabelColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  xaxisLabelcolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="7">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="YaxisLabelFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="YaxisLabelFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="YaxisLabelfontcolor" (change)="selectYaxisLabelColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  YaxisLabelcolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="8">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="chartLabelFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="chartLabelFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="chartLabelfontcolor" (change)="selectchartLabelColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  chartLabelcolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="9">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="toolTipFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="toolTipFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="toolTipfontcolor" (change)="selecttoolTipColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  toolTipcolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="10">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="legendsFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="legendsFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="legendsfontcolor" (change)="selectlegendsColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  legendscolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <!-- button section starts-->
+                <div class="d-flex justify-content-end w-100 me-5">
+                    <button type="submit" class="btn savebtn ms-3">
+                        <span>Apply</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Buttons section starts -->
+<div class="row">
+    <div class="col-md-11 col-sm-12">
+        <div class="card p-4">
+            <span class="admin-cardheader">Buttons</span>
+            <!-- Light selected color row -->
+            <form [formGroup]="ButtonForm" (ngSubmit)="saveData()">
+                <div class="row pt-3">
+                    <div class="row pt-2">
+                        <div class="col-md-3 col-sm-12 mb-3">
+                            <span>Font</span>
+                            <ng-select [items]="font" bindLabel="name" bindValue="code" formControlName="buttonFont">
+                            </ng-select>
+                        </div>
+                        <div class="col-md-3 col-sm-12 mb-3">
+                            <span>Font Size</span>
+                            <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                formControlName="buttonFontsize">
+                            </ng-select>
+                        </div>
+                        <div class="col-md-3 col-sm-12 mb-3">
+                            <span>Font Color</span>
+                            <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                formControlName="buttonfontcolor" (change)="selectbuttonColor($event)">
+                            </ng-select>
+                        </div>
+                        <div class="col-md-3 col-sm-12 pt-4">
+                            <div class="clr-circle" [ngStyle]="{'background-color':  buttoncolor}"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- button section starts-->
+                <div class="d-flex justify-content-end w-100 me-5">
+                    <button type="submit" class="btn savebtn ms-3">
+                        <span>Apply</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Filter PANEL section starts -->
+<div class="row">
+    <div class="col-md-11 col-sm-12">
+        <div class="card p-4">
+            <span class="admin-cardheader">Filter Panel</span>
+            <form [formGroup]="FilterPanelForm" (ngSubmit)="saveData()">
+                <div class="row pt-3">
+                    <ng-select [items]="filterPanel" bindLabel="name" bindValue="code" formControlName="filterpanel"
+                        (change)="selectfilterPanel($event)">
+                    </ng-select>
+                </div>
+                <hr class="p-0 m-0">
+                <div [ngSwitch]="filterPanelSelected">
+                    <ng-container *ngSwitchCase="1">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="filterHeadFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="filterHeadFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="filterHeadfontcolor" (change)="selectfilterHeadColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  filterHeadcolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="2">
+                        <div class="row pt-2">
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="filterValueFont">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Size</span>
+                                <ng-select [items]="font" bindLabel="name" bindValue="code"
+                                    formControlName="filterValueFontsize">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 mb-3">
+                                <span>Font Color</span>
+                                <ng-select [items]="fontcolor" bindLabel="name" bindValue="code"
+                                    formControlName="filterValuefontcolor" (change)="selectfilterValueColor($event)">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 pt-4">
+                                <div class="clr-circle" [ngStyle]="{'background-color':  filterValuecolor}"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <!-- button section starts-->
+                <div class="d-flex justify-content-end w-100 me-5">
+                    <button type="submit" class="btn savebtn ms-3">
+                        <span>Apply</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-11 col-sm-12">
+        <!-- button section starts-->
+        <div class="d-flex justify-content-end w-100 me-5">
+            <button type="submit" class="btn savebtn ms-3">
+                <span>Save</span></button>
+        </div>
+    </div>
+</div>
