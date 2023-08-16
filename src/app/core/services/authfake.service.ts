@@ -11,7 +11,7 @@ export class AuthfakeauthenticationService {
     public currentUser: Observable<User>;
 
     constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')!));
+        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('USER_PARAMETER')!));
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
@@ -35,7 +35,7 @@ export class AuthfakeauthenticationService {
                 // login successful if there's a jwt token in the response
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('USER_PARAMETER', JSON.stringify(user));
                     this.currentUserSubject.next(user);
                 }
                 return user;
@@ -48,7 +48,7 @@ export class AuthfakeauthenticationService {
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('userRole');
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem('USER_PARAMETER');
         localStorage.removeItem('username');
         localStorage.removeItem('module');
         localStorage.removeItem('submodule');

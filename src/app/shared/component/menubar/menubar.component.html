@@ -1,59 +1,28 @@
-
-<!-- <nav class="navbar-title">
+<!-- 
+<div class="col-md-12 text-center">
     <h4>{{ menuTitle }}</h4>
-</nav>
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <button
-            class="navbar-toggler hidden-sm-up"
-            type="button"
-            (click)="isNavbarCollapsed = !isNavbarCollapsed"
-            data-target="#navbarsDefault"
-            aria-controls="navbarsDefault"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div
-            [ngbCollapse]="isNavbarCollapsed"
-            class="collapse navbar-collapse"
-            id="navbarsDefault">
-            <ul class="navbar-nav mr-auto">
-                <li
-                    class="nav-item dropdown"
-                    ngbDropdown
-                    *ngFor="let data of subMenuList">
-                    <a class="nav-link dropdown-toggle" id="id01"
-                        ngbDropdownToggle>
-                        {{ data.title }}</a>
-                    <div
-                        class="dropdown-menu"
-                        aria-labelledby="id01"
-                        ngbDropdownMenu
-                        (click)="isNavbarCollapsedSub = !isNavbarCollapsedSub">
-                        <a
-                            class="dropdown-item dropdown-item-border"
-                            *ngFor="let res of data.children; index as i">{{
-                            res.name }}
-                            <span><i class="fa fa-chevron-right arrow-right"></i></span>
-                            <div class="nestedmenu">
-                                <a
-                                    (click)="pageRoutes(obj.ANG_WEB_PATH_NAME || '/homepage-grid' , { title: this.menuTitle, menu: obj.MENU_CAPTION_ENG, id: i })"
-                                    class="dropdown-item dropdown-item-border blank"
-                                    *ngFor="let obj of res.children">{{
-                                    obj.MENU_CAPTION_ENG }}
-                                    <span><i
-                                            class="fa fa-chevron-right arrow-right"></i></span></a>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav> -->
+</div> -->
 <div class="row">
-    <div class="col-md-4 p-3">
-        <h4>{{ menuTitle }}</h4>
+    <!-- <div class="col-md-8 col-sm-12 p-3">
+        <h4>{{ subMenuName }}</h4>
+    </div> -->
+    <div class="col-md-12 col-sm-12 pb-2 menu-nav">
+        <div ngbDropdown class="d-inline-block"
+            *ngFor="let group of groupedMenuData">
+            <button type="button" class="btn btn-outline-primary"
+                style="border: none; font-weight: 600;" id="dropdownBasic1"
+                ngbDropdownToggle>
+                {{group.label}}
+                <i class="fa fa-caret-down"></i>
+                <!-- <i-feather name="arrow" style="color: black;"></i-feather> -->
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button ngbDropdownItem *ngFor="let submenu of group.submenus"
+                    (click)="pageRoutes( '/'+ submenu.ANG_WEB_COMPONENT_NAME + '/'+     submenu.ANG_WEB_PATH_NAME, 
+                    { modulename: this.menuTitle, subMenuName: submenu.MENU_CAPTION_ENG, ctrl: submenu.ANG_WEB_CONTROLLER_NAME})">
+                    {{ submenu.MENU_CAPTION_ENG }}
+                </button>
+            </div>
+        </div>
     </div>
 </div>

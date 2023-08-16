@@ -17,40 +17,40 @@ export class SuntechAPIService {
   }
 
   // use: dynamic function for get API data 
-  getDynamicAPI(apiName: any): Observable<any> {
+  getDynamicAPI(apiName: string): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap((config:any) => {
         const apiUrl = config.baseUrl;
-        const response = this.http.get(apiUrl+apiName).toPromise();
+        const response = this.http.get(apiUrl+apiName);
         return response
       })
     );
   }
   // use: dynamic function for post API data 
-  postDynamicAPI(apiName: any, data: any): Observable<any> {
+  postDynamicAPI(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
-        return this.http.post(apiUrl+ apiName, data).toPromise();
+        return this.http.post(apiUrl+ apiName, data);
       })
     );
   }
  
   // use: dynamic function for put API data 
-  putDynamicAPI(apiName: any, data: any): Observable<any> {
+  putDynamicAPI(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
-        return this.http.put(apiUrl+ apiName, data).toPromise();
+        return this.http.put(apiUrl+ apiName, data);
       })
     );
   }
   // use: dynamic function for delete API data 
-  deleteDynamicAPI(apiName: any, data: any): Observable<any> {
+  deleteDynamicAPI(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
-        return this.http.delete(apiUrl+ apiName, data).toPromise();
+        return this.http.delete(apiUrl+ apiName, data);
       })
     );
   }

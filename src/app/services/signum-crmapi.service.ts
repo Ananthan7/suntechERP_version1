@@ -11,7 +11,7 @@ export class SignumCRMApiService {
   liveAPIPath: string = 'http://supportdata.sunwebapps.com/api/';
   SignumAPIPath: string = 'http://34.242.202.25:93/api/';
 
-  branchCode: any = localStorage.getItem('branch');
+  branchCode: any = localStorage.getItem('userbranch');
 
   private _trickerSubject = new Subject<any>();
   public editorData: any;

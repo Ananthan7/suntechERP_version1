@@ -52,7 +52,7 @@ export const MENU: MenuItem[] = [
             {
                 id: 7,
                 label: 'Jewellery Manufacturing',
-                link: '/modules',
+                link: '/jewellery-manufacturing',
                 parentId: 1
             },
             {

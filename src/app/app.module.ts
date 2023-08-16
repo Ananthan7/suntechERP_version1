@@ -35,7 +35,8 @@ import { DxDataGridModule } from 'devextreme-angular';
 
 import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts';
 import { ConfigService } from './services/config.service';
-
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
 @NgModule({
   declarations: [
     AppComponent
@@ -60,7 +61,9 @@ import { ConfigService } from './services/config.service';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     DxDataGridModule,
-    NgChartsModule.forRoot()
+    NgChartsModule.forRoot(),
+    FeatherModule.pick(allIcons),
+    
     ],
   providers: [ConfigService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

@@ -1,0 +1,78 @@
+<div class="row items">
+    <div class="col-md-8">
+        <div class="d-flex justify-content-start text-start">
+            <div class="p-1">
+                <button type="button" class="btn btn-primary text-center">
+                    Save
+                </button>
+            </div>
+            <div class="p-1">
+                <button type="button" class="btn btn-primary text-center">
+                    Cancel
+                </button>
+            </div>
+            <div class="p-1">
+                <button type="button" class="btn btn-danger" text-center>
+                    Delete
+                </button>
+            </div>
+            <!-- <div class="p-1 bd-highlight">
+                <button
+                    type="button"
+                    class="btn btn-outline-primary "
+                    style="width: 70px;">
+                    Discard
+                </button>
+            </div>
+            <div class="p-1 bd-highlight">
+                <button
+                    type="button"
+                    class="btn btn-outline-primary "
+                    style="width: 70px;">
+                    Delete
+                </button>
+            </div> -->
+            <div class="p-1 dropdown text-right">
+                <div class="d-inline-block" ngbDropdown
+                    #myDrop="ngbDropdown">
+                    <button style="border: none !important;"
+                        type="button"
+                        class="btn btn-danger me-2"
+                        id="dropdownManual"
+                        ngbDropdownAnchor
+                        (focus)="myDrop.open()">
+                        More
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div ngbDropdownMenu
+                        aria-labelledby="dropdownManual">
+                        <button ngbDropdownItem>
+                            <!-- <i class="fa fa-print"></i>  -->
+                            Print Barcode</button>
+                        <button ngbDropdownItem>
+                            <!-- <i class="fa fa-envelopes-bulk icon-common"></i> -->
+                            Attachment</button>
+                        <button ngbDropdownItem>
+                            <!-- <i class="fa fa-copy icon-common"></i> -->
+                            Copy</button>
+                        <button ngbDropdownItem>
+                            <!-- <i class="fa fa-file-lines icon-common"></i> -->
+                            Log</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="pt-1 arrowicons">
+            <span>
+                <i class="fa fa-angle-left"></i>
+            </span>
+            &nbsp;
+            <span class="ps-2">
+                <i class="fa fa-angle-right"></i>
+            </span>
+        </div>
+    </div>
+</div>

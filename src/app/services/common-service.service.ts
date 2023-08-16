@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import * as FileSaver from "file-saver";
@@ -8,20 +9,53 @@ import * as XLSX from "xlsx";
   providedIn: 'root'
 })
 export class CommonServiceService {
+  /** common variables and functions used in all components */
+  branchCode: any = localStorage.getItem('userbranch');
+  menuTitle: any;
+  menuName: any;
+  queryParamAPI: any;
+  
+  /**Apex chart chart settings */
   myChart(ctx: any, arg1: string, labels: string[], cfg: { type: string; data: { datasets: { data: { Sales: number; Taarget: number; PreviousYear: number; }; }[]; }; }, colors: string[], arg5: string): any {
     throw new Error('Method not implemented.');
   }
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+  ) {
+  }
+  //use: to get menu ModuleName from queryParams
+  getModuleName() {
+    this.route.queryParams.subscribe((data: any) => {
+      this.menuName = data.subMenuName;
+    });
+    return this.menuName
+  }
+  //use: to get menu title from queryParams
+  getTitleName() {
+    this.route.queryParams.subscribe((data: any) => {
+      this.menuTitle = data.modulename;
+    });
+    return this.menuTitle
+  }
+  getqueryParamAPI() {
+    let queryParamAPI
+    this.route.queryParams.subscribe((data: any) => {
+      queryParamAPI = data.ctrl;
+    });
+    return queryParamAPI
+  }
 
+  /**USE: to get create dynamic colors */
   dynamicColors() {
     var r = Math.floor(Math.random() * 255);
     var g = Math.floor(Math.random() * 255);
     var b = Math.floor(Math.random() * 255);
     return "rgb(" + r + "," + g + "," + b + ")";
   };
+  /**Apex chart chart settings */
   drawChart(divClass: any, graphType: any, labels: any, values: any, colors: any, labelTips: any) {
-    let options = {indexAxis: 'y', responsive: true, legend: {}, scales: {}, plugins: {} };
+    let options = { indexAxis: 'y', responsive: true, legend: {}, scales: {}, plugins: {} };
     options.legend = {
       align: "start",
       position: "bottom",
@@ -30,10 +64,10 @@ export class CommonServiceService {
       labelTips = '';
     } else {
       options.plugins = {
-          legend: {
-              display: true,
-              position:'bottom',              
-            }
+        legend: {
+          display: true,
+          position: 'bottom',
+        }
       }
       options.scales = {
         y: {
@@ -42,7 +76,7 @@ export class CommonServiceService {
       }
 
       // colors = colors[0]
-    }    
+    }
 
     const myChart = new Chart(divClass, {
       type: graphType,
@@ -61,9 +95,9 @@ export class CommonServiceService {
 
     return myChart;
   }
-
-  createChart(divClass: any, graphType: any, labels: any, values:any, colors: any, labelTips: any) {
-    let options = {indexAxis: 'y', responsive: true, legend: {}, scales: {}, plugins: {} };
+  /**Apex chart settings to create chart */
+  createChart(divClass: any, graphType: any, labels: any, values: any, colors: any, labelTips: any) {
+    let options = { indexAxis: 'y', responsive: true, legend: {}, scales: {}, plugins: {} };
     options.legend = {
       align: "start",
       position: "bottom",
@@ -72,10 +106,10 @@ export class CommonServiceService {
       labelTips = '';
     } else {
       options.plugins = {
-          legend: {
-              display: true,
-              position:'bottom',              
-            }
+        legend: {
+          display: true,
+          position: 'bottom',
+        }
       }
       options.scales = {
         y: {
@@ -84,7 +118,7 @@ export class CommonServiceService {
       }
 
       // colors = colors[0]
-    }    
+    }
 
     const myChart = new Chart(divClass, {
       type: graphType,
@@ -116,14 +150,14 @@ export class CommonServiceService {
     ].join('-');
   }
   /**purpose: date in order format dd-mm-yy */
-  formatDDMMYY(date:any){
+  formatDDMMYY(date: any) {
     let day = date.getDate();
     let month = (date.getMonth() > 9 ? date.getMonth() : date.getMonth()) + 1;
     let year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
   /**purpose: date in order format dd-mm-yy */
-  formatMMDDYY(date:any){
+  formatMMDDYY(date: any) {
     let day = date.getDate();
     let month = (date.getMonth() > 9 ? date.getMonth() : date.getMonth()) + 1;
     let year = date.getFullYear();
@@ -133,7 +167,7 @@ export class CommonServiceService {
   formatDateTime(date: any) {
     return date.toISOString()
   }
- 
+
   /**purpose: to format number with M,K values(eg: 1k,2M) */
   numberFormatter(value: any) {
     if (value >= 1000000) {
@@ -150,13 +184,13 @@ export class CommonServiceService {
       const multiplier = Math.pow(10, decimalPlaces);
       const roundedValue = Math.floor(thousands * multiplier) / multiplier;
       return roundedValue.toFixed(decimalPlaces) + "K";
-    } 
+    }
     return value.toString();
   }
 
   /**purpose: to find average of array */
-  avgOfArray(arr:any){
-    const average = arr.reduce((a:number, b:number) => a + b, 0) / arr.length;
+  avgOfArray(arr: any) {
+    const average = arr.reduce((a: number, b: number) => a + b, 0) / arr.length;
     return average
   }
 
@@ -178,14 +212,14 @@ export class CommonServiceService {
     return data
   }
   /**purpose: calculation of COGS */
-  getCOGSvalue(grossMarginArray: any, revArray: any){
-    let data: any =  this.sumArray(revArray) - this.sumArray(grossMarginArray)
+  getCOGSvalue(grossMarginArray: any, revArray: any) {
+    let data: any = this.sumArray(revArray) - this.sumArray(grossMarginArray)
     data = Math.trunc(data)
     return data
   }
   /**purpose: calculation of COGS */
-  getAvgSellPrice(revArray: any,QtySoldArray: any){
-    let data: any =  this.sumArray(revArray) / this.sumArray(QtySoldArray)
+  getAvgSellPrice(revArray: any, QtySoldArray: any) {
+    let data: any = this.sumArray(revArray) / this.sumArray(QtySoldArray)
     data = Math.trunc(data)
     return data
   }
@@ -194,7 +228,7 @@ export class CommonServiceService {
    * in: data=[{key:value}]
    * out: excelsheet
   */
-  exportExcel(data:any,excelName:string) {
+  exportExcel(data: any, excelName: string) {
     const EXCEL_TYPE =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
@@ -212,8 +246,8 @@ export class CommonServiceService {
     FileSaver.saveAs(blobData, excelName);
   }
 
-  model:any = {}
-  getTooltipDescription(){
+  model: any = {}
+  getTooltipDescription() {
     this.model.revenue = 'Revenue refers to the total amount of money that a company or organization earns from its business activities, such as selling goods or services, over a specific period of time.'
     this.model.grossMargin = "Gross margin is a financial metric that represents the difference between a company's net sales revenue and the cost of goods sold (COGS)"
     this.model.grossMarginPerc = "It is calculated by subtracting the COGS from the total revenue and then dividing the result by the total revenue. The resulting percentage is the gross margin percentage."

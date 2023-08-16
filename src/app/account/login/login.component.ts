@@ -11,7 +11,7 @@ import { EventService } from 'src/app/core/services/event.service';
 // import { SuntechapiService } from '../../services/suntechapi.service';
 // import { SharedService } from '../../services/shared.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
@@ -39,6 +39,8 @@ export class LoginComponent implements OnInit {
 
   options_year: string[] = [''];
   filteredOptions_year: Observable<string[]> | undefined;
+  private subscriptions: Subscription[] = [];
+
 
   constructor(
     private snackBar: MatSnackBar,
@@ -52,13 +54,15 @@ export class LoginComponent implements OnInit {
       branch: new FormControl('', Validators.required),
       year: new FormControl('', Validators.required),
     });
+  }
+  ngAfterViewInit() {
     this.getCompanyParameter()
     this.getMessageBox()
   }
   /**use: to get company parameters before login, from API */
   getCompanyParameter() {
     let API = 'CompanyParameters'
-    this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+    let sub1: Subscription = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
       if (response.status == 'Success') {
         let data = response.response
         localStorage.setItem('COMPANY_PARAMETERS', JSON.stringify(data))
@@ -66,13 +70,15 @@ export class LoginComponent implements OnInit {
         alert('Company parameters not Available')
       }
     }, error => {
-      console.log(error, 'Server error');
+      alert(error+' Server error');
     })
+    //to unsubscribe
+    this.subscriptions.push(sub1)
   }
   /**use: to get MessageBox parameters before login, from API */
   getMessageBox() {
     let API = 'Messagebox'
-    this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+    let sub2: Subscription = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
       if (response.status == 'Success') {
         let data = response.response
         localStorage.setItem('MESSAGE_BOX', JSON.stringify(data))
@@ -80,8 +86,10 @@ export class LoginComponent implements OnInit {
         alert('Messagebox parameters not Available')
       }
     }, error => {
-      console.log(error, 'Server error');
+      alert(error+'Server error');
     })
+    //to unsubscribe
+    this.subscriptions.push(sub2)
   }
 
   changeRtlLayout(flag: any) {
@@ -113,13 +121,12 @@ export class LoginComponent implements OnInit {
   }
   /**use: to check username */
   checkUserName(event: any) {
-    console.log(event.target.value);
     event.target.value = event.target.value.toString().toUpperCase();
     this.user_name = event.target.value;
     if (this.user_name != '') {
       this.snackBarRef = this.snackBar.open('Validating Username ...');
       let API = 'UserDetailNetMaster/' + this.user_name
-      this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+      let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
         if (resp.status == 'Success') {
           this.userDetails = resp.response
           // localStorage.setItem('userRole', resp['response']['GROUP_NAME']);
@@ -128,11 +135,12 @@ export class LoginComponent implements OnInit {
         }
         this.snackBar.dismiss();
       });
+      //to unsubscribe
+      this.subscriptions.push(sub)
     }
   }
   // use: to check username and password from API
   checkUserNamePassword(event: any) {
-    console.log(event.target.value);
     let password = event.target.value;
     if (this.validateState == 1) {
       if (password != '') {
@@ -141,37 +149,37 @@ export class LoginComponent implements OnInit {
         );
         /* ****** vb ****** */
         let API = 'ValidatePassword?strusername=' + this.user_name + '&strPassword=' + password
-        this.dataService.getDynamicAPI(API)
-          .subscribe((resp: any) => {
-            console.log(resp);
-            if (resp.status == 'Success') {
-              let API2 = 'UseBranchNetMaster/' + this.user_name + ''
-              this.dataService.getDynamicAPI(API2)
-                .subscribe((resp) => {
-                  this.all_branch = resp.response;
-                  var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
+        let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+          if (resp.status == 'Success') {
+            let API2 = 'UseBranchNetMaster/' + this.user_name + ''
+            let sub2: Subscription = this.dataService.getDynamicAPI(API2).subscribe((resp) => {
+              this.all_branch = resp.response;
+              var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
 
-                  this.options = data;
-                  this.filteredOptions =
-                    this.dataForm.controls.branch.valueChanges.pipe(
-                      startWith(''),
-                      map((value) => this._filter(value))
-                    );
-                });
-              this.validateState = 2;
-              this.snackBar.dismiss();
-            } else {
-              this.snackBar.open(
-                'Invalid User Credentials! Check Username & Password.',
-                '',
-                {
-                  duration: 3000,
-                }
-              );
-              this.filteredOptions = undefined;
-            }
+              this.options = data;
+              this.filteredOptions =
+                this.dataForm.controls.branch.valueChanges.pipe(
+                  startWith(''),
+                  map((value) => this._filter(value))
+                );
+            });
+            this.subscriptions.push(sub2)
+            this.validateState = 2;
             this.snackBar.dismiss();
-          });
+          } else {
+            this.snackBar.open(
+              'Invalid User Credentials! Check Username & Password.',
+              '',
+              {
+                duration: 3000,
+              }
+            );
+            this.filteredOptions = undefined;
+          }
+          this.snackBar.dismiss();
+        });
+        //to unsubscribe
+        this.subscriptions.push(sub)
       }
     } else {
       this.snackBar.open('Enter Valid UserName', '', {
@@ -186,18 +194,20 @@ export class LoginComponent implements OnInit {
     let selectedBranch = this.dataForm.value.branch;
     if (selectedBranch != '') {
       let API = `FinancialYear?branchcode=${selectedBranch}&strusername=${this.user_name}`
-      this.dataService.getDynamicAPI(API)
-        .subscribe((resp) => {
-          this.all_year = resp.response;
-          this.options_year = this.all_year.map((item: any) => item.fyearcode);
+      let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp) => {
+        this.all_year = resp.response;
+        this.options_year = this.all_year.map((item: any) => item.fyearcode);
 
-          this.filteredOptions_year =
-            this.dataForm.controls.year.valueChanges.pipe(
-              startWith(''),
-              map((value) => this._filteryear(value))
-            );
-        });
+        this.filteredOptions_year =
+          this.dataForm.controls.year.valueChanges.pipe(
+            startWith(''),
+            map((value) => this._filteryear(value))
+          );
+      });
+      //to unsubscribe
+      this.subscriptions.push(sub)
     }
+    
   }
   /**USE: sign in with API branchmaster */
   signin() {
@@ -206,17 +216,20 @@ export class LoginComponent implements OnInit {
 
     if (branch != '' && this.validateState == 2 && year != '') {
       let API = 'BranchMaster/' + branch
-      this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+      let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+        //to unsubscribe
+        this.subscriptions.push(sub)
+        this.unsubscribeAll();
         if (resp.status == 'Success') {
           // if (resp.status == 'Success') {
           this.validateState = 3;
           localStorage.setItem('USER_PARAMETER', JSON.stringify(this.userDetails));
           localStorage.setItem('BRANCH_PARAMETER', JSON.stringify(resp.response));
           // this.comFunc.allbranchMaster = resp.response;
-          localStorage.setItem('currentUser', JSON.stringify(this.user_name));
+          // localStorage.setItem('currentUser', JSON.stringify(this.userDetails));
           localStorage.setItem('username', this.user_name);
           localStorage.setItem('userbranch', branch);
-          localStorage.setItem('year', year);
+          localStorage.setItem('YEAR', year);
           // this.getBranchCurrencyMaster();
           // this.router.navigate(['/']);
           setTimeout(() => {
@@ -224,12 +237,26 @@ export class LoginComponent implements OnInit {
           }, 500);
         }
         this.snackBar.dismiss();
+      },(err)=>{
+        //to unsubscribe
+        this.subscriptions.push(sub)
+        this.unsubscribeAll();
+        alert('Server error ')
       });
+     
     } else {
       this.snackBar.open('Invalid Credentials', '', {
         duration: 2000,
       });
     }
+  }
+
+  ngOnDestroy() {
+  }
+
+  private unsubscribeAll() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions = []; // Clear the array
   }
 
   // getBranchCurrencyMaster() {
@@ -239,9 +266,6 @@ export class LoginComponent implements OnInit {
   //   this.dataService.getDynamicAPI(API)
   //     .subscribe((data: any) => {
   //       // this.comFunc.allBranchCurrency = data.response;
-  //       console.log('===============curr=====================');
-  //       console.log(data);
-  //       console.log('====================================');
   //       // this.comFunc.allBranchCurrency = data.response;
   //     });
   // }

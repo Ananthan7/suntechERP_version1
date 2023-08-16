@@ -1,0 +1,151 @@
+<!-- menu section -->
+<app-menubar [menuTitle]="menuTitle" (subMenuChange)="getMasterGridData()"></app-menubar>
+<app-loader [isLoading]="isLoading"></app-loader>
+<!-- content section starts -->
+<div class="row d-flex justify-content-between"
+    style="min-height: 100vh !important;">
+    <div class="col-md-2 col-sm-12">
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Cycle Time</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Yield %</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Through Out</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap h-100">
+                <h5>Defect Analysis</h5>
+                <img
+                    src="../../assets/images/chats/chat-7.png"
+                    alt="chat"
+                    width="100%" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 col-sm-12">
+        <div class="card p-3">
+            <div class="col-md-12">
+                <div class="card_wrap">
+                    <h5>{{menuTitle}}</h5>
+                        <div class="module_form">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table_header">
+                                        <button class="btn btn-white add-btn" (click)="openJobcard()">
+                                            <i class="fa fa-plus"></i> Add
+                                        </button>
+                                        <div class="icons_wrap">
+                                            <a class="pe-2">
+                                                <img src="../../../assets/images/menu/xls.png"
+                                                alt="excel" width="24px" height="23px"/>
+                                            </a>
+                                            <!-- <a>
+                                                <img src="../../../assets/images/menu/pdf.png"
+                                                alt="pdf" width="21px" height="25px" />
+                                            </a>
+                                            <a>
+                                                <img src="../../../assets/images/menu/doc.png"
+                                                alt="excel" width="18px" height="23px"/>
+                                            </a> -->
+                                            <!-- <p-divider layout="vertical"></p-divider> -->
+                                            <!-- <a>
+                                                <img src="../../../assets/images/menu/printer.png"
+                                                alt="excel" width="20px" height="23px"/>
+                                            </a> -->
+                                            <!-- <a><i class="fa fa-envelope icons"></i></a> -->
+                                            <!-- <div class="p-2">
+                                                <p-inputSwitch ></p-inputSwitch>
+                                            </div> 
+                                            <span style="color: #fff;">Edit</span> -->
+                                        </div>
+                                    </div>
+                                    <dx-data-grid width="100%" #gridContainer [loadPanel]="{ enabled: true, text: 'Loading...' }"
+                                        id="gridContainer"
+                                        [allowColumnReordering]="true"
+                                        [dataSource]="orderedItems" keyExpr="Id"
+                                        [showColumnLines]="true"
+                                        [showRowLines]="true"
+                                        [showBorders]="true"
+                                        [remoteOperations]="true"
+                                        [rowAlternationEnabled]="false"
+                                        [columnAutoWidth]="true">
+                                        <!-- <dxo-filter-row visible="true"></dxo-filter-row> -->
+                                        <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
+                                        <dxo-paging [pageSize]="150"
+                                        [pageIndex]="1"></dxo-paging>
+                                        <dxo-pager [showPageSizeSelector]="true"
+                                            [allowedPageSizes]="[10, 20, 30, 40, 50, 100]"></dxo-pager>
+                                        <dxo-selection mode="single"></dxo-selection>
+                                        <dxi-column type="buttons"
+                                            caption="Edit | View" 
+                                            [fixed]="true" fixedPosition="left">
+                                            <dxi-button icon="fa fa-edit"></dxi-button>
+                                            <dxi-button icon="fa fa-eye"></dxi-button>
+                                        </dxi-column>
+                                        <dxi-column
+                                            *ngFor="let data of orderedItemsHead"
+                                            dataField="{{data}}"
+                                            caption="{{data}}"
+                                            [allowEditing]="true"
+                                            alignment="center"
+                                            [visible]="data == 'Id'? false: true"
+                                            [dataType]="data == 'Voc Date'? 'date': ''"
+                                            [format]="data == 'Voc Date'? 'dd-MM-yyyy': ''">
+                                        </dxi-column>
+                                        <dxo-summary>
+                                        </dxo-summary>
+                                    </dx-data-grid>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="col-md-6">
+                <div class="card_wrap">
+                    <h5>Avg Working Hours</h5>
+                    <img
+                        src="../../assets/images/chats/chat-5.png"
+                        alt="chat"
+                        width="100%"
+                        height=" 165px" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 col-sm-12">
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Quantity Produced</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Overall</h5>
+                <img
+                    src="../../assets/images/chats/chat-2.png"
+                    alt="chat"
+                    width="100%" />
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Quantity Produced</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+    </div>
+</div>

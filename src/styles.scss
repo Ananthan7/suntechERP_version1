@@ -187,10 +187,10 @@ span {
 }
 .form-control,
 .ng-select .ng-select-container {
-  // border-radius: 10px !important;
+  border-radius: none !important;
   border: none !important;
-  border-bottom: 1px solid #d4d5d6 !important;
-  background-color: #f2f4ff !important;
+  border-bottom: 1px solid #cececf !important;
+  background: transparent;
 }
 .form-card label,
 .form-card .col-form-label {
@@ -293,8 +293,9 @@ span {
 // devexpress table
 .dx-datagrid-headers {
   .dx-header-row {
-    background-color: #3599cc !important;
+    background-color: #51b2e2 !important;
     color: #fff !important;
+    font-family: Poppins;
   }
 }
 

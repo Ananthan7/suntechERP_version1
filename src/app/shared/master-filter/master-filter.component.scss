@@ -56,7 +56,7 @@
 ::ng-deep {
   body[data-layout-mode="dark"] {
     .ng-select .ng-select-container {
-      border-radius: 0px 0px 10px 10px !important;
+      border-radius: none !important;
       border: none !important;
       background-color: #326c90 !important;
     }
@@ -279,7 +279,7 @@
   
   //ng select styles
   .ng-select .ng-select-container {
-    border-radius: 10px !important;
+    border-radius: none !important;
     border: none !important;
     width: 100% !important;
     // border: 1px solid #d4d5d6 !important;

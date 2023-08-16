@@ -7,6 +7,14 @@ const routes: Routes = [
     path: '',
     component: JewelleryManufacturingComponent
   },
+  {
+    path: 'jewellery-manufacturing-master-grid',
+    loadChildren: () => import('../jewellery-manufacturing/master/master.module').then(m => m.MasterModule)
+  },
+  {
+    path: 'jewellery-manufacturing-transaction-grid',
+    loadChildren: () => import('../jewellery-manufacturing/transaction/transaction.module').then(m => m.TransactionModule)
+  },
 ];
 
 @NgModule({

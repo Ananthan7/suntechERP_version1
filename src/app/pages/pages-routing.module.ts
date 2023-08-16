@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-let user = localStorage.getItem('username');
+// let user:string = JSON.parse(localStorage.getItem('currentUser')) ;
 const routes: Routes = [
   {
     path: '',
@@ -17,6 +17,12 @@ const routes: Routes = [
     path: 'jewellery-manufacturing',
     loadChildren: () => import('../pages/jewellery-manufacturing/jewellery-manufacturing.module').then(m => m.JewelleryManufacturingModule)
   },
+  {
+    path: 'retail',
+    loadChildren: () => import('../pages/retail/retail.module').then(m => m.RetailModule)
+  },
+  
+  /**Add here new modules from modulelist */
 ];
 
 @NgModule({

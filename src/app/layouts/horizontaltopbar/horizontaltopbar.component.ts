@@ -78,7 +78,7 @@ export class HorizontaltopbarComponent implements OnInit {
     this.element = document.documentElement;
     this.layoutMode = LAYOUT_MODE;
     this.initialize();
-    this.loginData = localStorage.getItem('currentUser');
+    // this.loginData = localStorage.getItem('currentUser');
     /***
      * Language value cookies wise set
      */

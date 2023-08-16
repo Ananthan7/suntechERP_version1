@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { SignumCRMApiService } from 'src/app/services/signum-crmapi.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
@@ -9,6 +10,9 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 })
 export class ModulelistComponent implements OnInit {
   menuList: any[] = [];
+  isLoading: boolean = false;
+  subscriptions$!: Subscription;
+
   constructor(
     public dataService: SuntechAPIService
   ) {
@@ -19,8 +23,10 @@ export class ModulelistComponent implements OnInit {
   }
   /**USE: get module list from API */
   getModuleList() {
+    this.isLoading = true;
     let API = 'SuntechProdModuleMaster/GetProductModuleList'
-    this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+    this.subscriptions$ = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+      this.isLoading = false;
       if (response.status == 'Success') {
         this.menuList = response.response;
         this.menuList.push(
@@ -43,7 +49,7 @@ export class ModulelistComponent implements OnInit {
         });
 
         this.menuList.forEach(data => {
-          if (data.MID == 12) {
+          if (data.MODULE_NAME == 'Boiling') {
             data.imageUrl = '../../assets/images/lp-icons/2.png'
           } else if (data.MID == 14) {
             data.imageUrl = '../../assets/images/lp-icons/3.png'
@@ -65,13 +71,22 @@ export class ModulelistComponent implements OnInit {
             data.imageUrl = '../../assets/images/lp-icons/12.png'
           } else if (data.MID == 1) {
             data.imageUrl = '../../assets/images/lp-icons/11.png'
+          } else if (data.MODULE_NAME == 'Wholesale') {
+            data.imageUrl = '../../assets/images/lp-icons/11.png'
           }
 
         });
-        localStorage.setItem('menuList', JSON.stringify(this.menuList));
+        localStorage.setItem('MENU_LIST', JSON.stringify(this.menuList));
       } else {
         this.menuList = [];
       }
+    },err =>{
+      this.isLoading = false;
+      alert(err)
     })
+  }
+
+  ngOnDestroy():void{
+    this.subscriptions$.unsubscribe()
   }
 }
