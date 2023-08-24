@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-retail',
   templateUrl: './retail.component.html',
-  styleUrls: ['./retail.component.scss']
+  styleUrls: ['./retail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RetailComponent implements OnInit {
   menuTitle: any;
   constructor(
     public dataService: SuntechAPIService,
-    private CommonService: CommonServiceService
+    private CommonService: CommonServiceService,
+    private ChangeDetector: ChangeDetectorRef //to detect changes in dom
   ) {
   }
 

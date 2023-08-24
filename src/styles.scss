@@ -189,7 +189,7 @@ span {
 .ng-select .ng-select-container {
   border-radius: none !important;
   border: none !important;
-  border-bottom: 1px solid #cececf !important;
+  border-bottom: 2px solid #bebebe !important;
   background: transparent;
 }
 .form-card label,
@@ -412,5 +412,10 @@ span {
     .main-content {
       margin-right: 95px !important;
     }
+  }
+}
+:host ::ng-deep  {
+  .mat-form-field {
+      width: 100%;
   }
 }

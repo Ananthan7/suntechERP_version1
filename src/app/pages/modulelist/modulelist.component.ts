@@ -1,20 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SignumCRMApiService } from 'src/app/services/signum-crmapi.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-modulelist',
   templateUrl: './modulelist.component.html',
-  styleUrls: ['./modulelist.component.scss']
+  styleUrls: ['./modulelist.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModulelistComponent implements OnInit {
+  //variables
   menuList: any[] = [];
   isLoading: boolean = false;
-  subscriptions$!: Subscription;
 
+  subscriptions$!: Subscription;
   constructor(
-    public dataService: SuntechAPIService
+    private dataService: SuntechAPIService,
+    private ChangeDetector: ChangeDetectorRef
   ) {
     this.getModuleList()
   }
@@ -77,6 +79,7 @@ export class ModulelistComponent implements OnInit {
 
         });
         localStorage.setItem('MENU_LIST', JSON.stringify(this.menuList));
+        this.ChangeDetector.detectChanges()
       } else {
         this.menuList = [];
       }

@@ -4,27 +4,30 @@ import { CommonModule } from '@angular/common';
 import { RetailTransactionRoutingModule } from './retail-transaction.routing';
 import { RetailTransactionComponent } from './retail-transaction.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { AddPosComponent } from './add-pos/add-pos.component';
+import { AddCustomerComponent } from './common/add-customer/add-customer.component';
+import { AddItemsComponent } from './common/add-items/add-items.component';
+import { AddSalesReturnComponent } from './common/add-sales-return/add-sales-return.component';
+import { AddExchangeComponent } from './common/add-exchange/add-exchange.component';
+import { NewPosEntryComponent } from './new-pos-entry/new-pos-entry.component';
+import { AddPaymentComponent } from './common/add-payment/add-payment.component';
 
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MatRippleModule, DateAdapter} from '@angular/material/core';
+
 
 @NgModule({
   declarations: [
     RetailTransactionComponent,
-    AddPosComponent
+    AddCustomerComponent,
+    AddItemsComponent,
+    AddSalesReturnComponent,
+    AddExchangeComponent,
+    NewPosEntryComponent,
+    AddPaymentComponent,
   ],
   imports: [
     CommonModule,
     RetailTransactionRoutingModule,
     SharedModule,
-    MatFormFieldModule,MatInputModule,MatAutocompleteModule,MatExpansionModule,
-    MatSelectModule,MatDatepickerModule,MatNativeDateModule, MatRippleModule, 
   ]
+  
 })
 export class RetailTransactionModule { }

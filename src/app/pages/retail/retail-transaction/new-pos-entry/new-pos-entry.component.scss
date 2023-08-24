@@ -1,0 +1,172 @@
+// body {
+//     background: #cccccc !important;
+// }
+
+.btn-primary {
+  background-color: #0d4f9e !important;
+  border-color: #0d4f9e !important;
+  border-radius: 5px !important;
+  padding: 6px 15px 6px 15px !important;
+}
+
+.pcoded-main-container {
+  background-color: #cccccc !important;
+}
+
+.form-group {
+  margin-bottom: 0.4rem;
+}
+
+label {
+  margin-bottom: 0.1rem;
+}
+
+.textboxcorner {
+  border-radius: 2px;
+  height: 30px;
+  text-align: right;
+}
+
+.card-header {
+  padding: 10px;
+  background-color: #d2d2d2;
+}
+
+.card-body {
+  padding: 10px 10px;
+  margin-top: 10px;
+}
+
+.table thead th {
+  background-color: #f0f0f0;
+  padding: 5px;
+  text-transform: capitalize;
+}
+
+.table td {
+  padding: 5px;
+  vertical-align: middle;
+}
+
+.notification-card {
+  cursor: pointer;
+}
+
+.touch-big-button-black {
+  background-color: #666666 !important;
+}
+
+.badge {
+  font-size: 113%;
+  padding: 1em 0.6em;
+  font-weight: 600;
+  width: 50px;
+  height: 50px;
+}
+
+.touch-big-button {
+  width: 100%;
+  height: 50px;
+  background-color: #0861a9;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer;
+}
+.touch-big-button-inner {
+  text-align: center !important;
+  padding-left: 0px !important;
+  padding-top: 4px !important;
+  font-size: 15px !important;
+}
+
+.touch-big-button i {
+  padding-right: 7px;
+  padding-top: 13px;
+}
+
+.touch-big-button i {
+  font-size: 20px;
+  padding-top: 10px;
+}
+
+.touch-big-button div {
+  text-align: center;
+  padding-left: 0px;
+  padding-top: 0px;
+  font-size: 12px;
+}
+
+button[aria-label="Close"]:focus {
+  outline: none;
+}
+
+.tabletd_gray {
+  width: 100%;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+.tabletd_gray tr td,
+.tabletd_gray tr th {
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.rhs-table-1 {
+  border-collapse: separate;
+  border-spacing: 0 0.5em;
+}
+
+.rhs-table-1 td {
+  border: 1px solid #a4a4a4;
+}
+
+.rhs-table-1 tr td input {
+  border: none !important;
+}
+
+.mat-form-field {
+  display: inline !important;
+}
+
+.rhs-table-1 .td-w-40 {
+  width: 40% !important;
+  border-right: none !important;
+  padding-left: 5px;
+  background-color: #dedede;
+}
+
+.btnsml {
+  padding: 2px 5px !important;
+  font-size: 12px !important;
+}
+
+.btn-m-r-10 {
+  margin-right: 10px;
+}
+
+.st_txt_right {
+  text-align: right;
+}
+
+.dx-column-indicators {
+  float: unset !important;
+}
+
+.dx-datagrid-action.dx-cell-focus-disabled {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+::ng-deep {
+    .cdk-overlay-container {
+        position: fixed;
+        z-index: 1070 !important;
+    }
+}
+.form-control {
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid #969696 !important;
+  background: transparent;
+}

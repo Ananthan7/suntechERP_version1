@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SignumCRMApiService } from 'src/app/services/signum-crmapi.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -26,7 +25,6 @@ export class BasicComponent implements OnInit {
   public validateState = 0;
 
   constructor(private formBuilder: FormBuilder,
-    private apiService: SignumCRMApiService,
     private router:Router,
     private toastr: ToastrService,
     ) { }

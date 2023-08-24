@@ -76,7 +76,7 @@ export const MENU: MenuItem[] = [
             {
                 id: 11,
                 label: 'Retail',
-                link: '/modules',
+                link: '/retail',
                 parentId: 1
             },
             {

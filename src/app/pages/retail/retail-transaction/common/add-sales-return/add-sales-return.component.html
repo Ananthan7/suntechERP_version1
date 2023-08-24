@@ -1,0 +1,172 @@
+<div class="p-3" style="border: 1px solid rgb(210, 210, 210);">
+    <!-- header section ADD CUSTOMER -->
+    <div
+        class="pos-sales-modalheader border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Sales Return</h5>
+        <button type="button" class="btn btn-close close-btn p-2"
+            (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <!-- content section starts -->
+    <div class="row">
+        <form [formGroup]="salesReturnForm">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <mat-form-field>
+                        <mat-label>Fin Year</mat-label>
+                        <input matInput type="text" id="fcn_returns_fin_year"
+                            formControlName="fcn_returns_fin_year"
+                            [matAutocomplete]="year">
+                        <mat-autocomplete #year="matAutocomplete"
+                            autoActiveFirstOption>
+                            <mat-option
+                                *ngFor="let option of  filteredOptions_year"
+                                [value]="option">
+                                {{option}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Branch</mat-label>
+                        <input type="text" matInput
+                            formControlName="fcn_returns_branch"
+                            [matAutocomplete]="branch"
+                            (focusout)="changeBranch($event)"
+                            [readonly]="viewOnly">
+                        <mat-autocomplete #branch="matAutocomplete"
+                            autoActiveFirstOption>
+                            <mat-option
+                                *ngFor="let option of  filteredSalesReturnBranchOptions"
+                                [value]="option">
+                                {{option}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field>
+                        <mat-label>Voc Type</mat-label>
+                        <mat-select formControlName="fcn_returns_voc_type"
+                            [disabled]="viewOnly">
+                            <mat-option
+                                *ngFor="let voctype of vocTypesinExchange"
+                                [value]="voctype.value">
+                                {{ voctype.viewValue }}
+                            </mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field>
+                        <mat-label>Voc No</mat-label>
+                        <input type="text" matInput
+                            formControlName="fcn_returns_voc_no"
+                            (change)="getRetailSReturn_EvnFn($event)"
+                            [readonly]="viewOnly || this.sales_returns_items.length > 0" />
+                    </mat-form-field>
+                </div>
+                <div class="col-md-1 text-right">
+                    <button (click)="searchVocNoSalRet()"
+                        class="btn btn-secondary"
+                        [disabled]="viewOnly">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <mat-form-field>
+                        <mat-label>Voc Date</mat-label>
+                        <input type="text" matInput
+                            formControlName="fcn_returns_voc_date"
+                            value="{{ fcn_returns_voc_date_val }}"
+                            [readonly]="viewOnly" />
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field>
+                        <mat-label>Sales Man</mat-label>
+                        <input type="text" matInput
+                            formControlName="fcn_returns_sales_man"
+                            value="{{ fcn_returns_sales_man_val }}"
+                            [readonly]="viewOnly" />
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field>
+                        <mat-label>Cust Code</mat-label>
+                        <input type="text" matInput
+                            formControlName="fcn_returns_cust_code"
+                            value="{{ fcn_returns_cust_code_val }}"
+                            [readonly]="viewOnly" />
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field>
+                        <mat-label>Cust Mobile</mat-label>
+                        <input type="number"
+                            oninput="validity.valid||(value='');" matInput
+                            formControlName="fcn_returns_cust_mobile"
+                            value="{{ fcn_returns_cust_mobile_val }}"
+                            [readonly]="viewOnly" />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <table
+                        class="container table table-responsive table-striped"
+                        id="adjustsalesreturn_table">
+                        <tbody>
+                            <tr>
+                                <th style="text-align: center">Division</th>
+                                <th>Item Code</th>
+                                <th>Item Desc</th>
+                                <th>Gross Weight</th>
+                                <th>Amount</th>
+                                <th>Select</th>
+                            </tr>
+
+                            <tr
+                                *ngFor="let slsReturn of salesReturnsItems_forVoc; let id= index"
+                                (dblclick)="changeRetailSalesReturnVal(slsReturn)"
+                                class="sales-return-row">
+                                <td style="text-align: center">{{
+                                    slsReturn.DIVISION_CODE }}</td>
+                                <td>{{ slsReturn.STOCK_CODE }}</td>
+                                <td>{{ slsReturn.STOCK_DOCDESC }}</td>
+                                <td style="text-align: center">{{
+                                    slsReturn.GROSSWT }}</td>
+                                <td style="text-align: right">
+                                    {{ slsReturn.TOTAL_AMOUNTFC }}
+                                </td>
+                                <td style="text-align: center">
+                                    <input [disabled]="viewOnly" type="checkbox"
+                                        value="{{ slsReturn.STOCK_CODE }}"
+                                        [readonly]="viewOnly"
+                                        [checked]="checkSelectedVal(slsReturn.STOCK_CODE, slsReturn.TOTAL_AMOUNTFC, slsReturn.SRNO)"
+                                        (change)="addSalesReturnOnSelect($event, slsReturn, id)" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <h6>Total : {{ sales_returns_total_amt | number:'1.2' }}</h6>
+                </div>
+
+            </div>
+            <div style="text-align: right; padding-left: 10px">
+                <button mat-flat-button color="primary"
+                    *ngIf="!viewOnly">SAVE</button>
+                &nbsp;
+                <button mat-flat-button color="warn" (click)="close()">CANCEL</button>
+            </div>
+        </form>
+    </div>
+</div>

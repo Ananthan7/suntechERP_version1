@@ -11,19 +11,81 @@ import * as XLSX from "xlsx";
 export class CommonServiceService {
   /** common variables and functions used in all components */
   branchCode: any = localStorage.getItem('userbranch');
+  yearSelected: any = localStorage.getItem('YEAR');
   menuTitle: any;
   menuName: any;
   queryParamAPI: any;
-  
-  /**Apex chart chart settings */
-  myChart(ctx: any, arg1: string, labels: string[], cfg: { type: string; data: { datasets: { data: { Sales: number; Taarget: number; PreviousYear: number; }; }[]; }; }, colors: string[], arg5: string): any {
-    throw new Error('Method not implemented.');
-  }
+  //POS datas
+  public allMessageBoxData: any;
 
   constructor(
     private route: ActivatedRoute,
   ) {
   }
+  //service for ADD POS starts
+  posKARATRATECHANGE: any = '';
+  getDivisionMS(division:any) {
+    // return this.divisionMasterList.filter((data) => data.DIVISION_CODE == division)[0].DIVISION;
+  }
+  Null2BitValue(value:any) {
+    value = value.trim();
+    if (value == null || value.toString() == '' || value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0") {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+  emptyToZero(value:any) {
+    value = typeof (value) == 'number' || value == undefined ? value : value.trim();
+
+    if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
+      return 0;
+    }
+    else {
+      return parseFloat(value);
+      // return value;
+    }
+  }
+
+  formControlSetReadOnlyByClass(className: any, isReadonly: boolean) {
+    const ele: any = document.getElementsByClassName(className);
+    if (ele != null && ele != undefined)
+      for (let i = 0; i < ele.length; i++) {
+        ele[i].readOnly = isReadonly;
+      }
+  }
+  // Get Messages by id
+  getMsgByID(id: any) {
+    id = id.trim();
+    const res = this.allMessageBoxData?.filter((data: any) => data.MSG_ID == id)
+    if (res != null)
+      return res[0].MSG_ENGLISH;
+    else
+      return '';
+  }
+  enforceMinMax(el: any) {
+    if (el.value != '') {
+
+      if (parseFloat(el.value) < parseFloat(el.min) && el.min != '') {
+        el.value = el.min;
+      }
+      if (
+        parseFloat(el.value) >
+        parseFloat(el.max) && el.max != ''
+      ) {
+        el.value = el.max;
+      }
+      if (el.value.length > el.maxLength && el.maxLength != -1) {
+        el.value = el.value.slice(0, el.maxLength);
+      }
+    } else {
+      // el.value = el.value.slice(el.val.toString().length, 1);
+    }
+    return true;
+  }
+  //service for ADD POS ends
+
   //use: to get menu ModuleName from queryParams
   getModuleName() {
     this.route.queryParams.subscribe((data: any) => {
@@ -53,6 +115,11 @@ export class CommonServiceService {
     var b = Math.floor(Math.random() * 255);
     return "rgb(" + r + "," + g + "," + b + ")";
   };
+
+  /**Apex chart chart settings */
+  myChart(ctx: any, arg1: string, labels: string[], cfg: { type: string; data: { datasets: { data: { Sales: number; Taarget: number; PreviousYear: number; }; }[]; }; }, colors: string[], arg5: string): any {
+    throw new Error('Method not implemented.');
+  }
   /**Apex chart chart settings */
   drawChart(divClass: any, graphType: any, labels: any, values: any, colors: any, labelTips: any) {
     let options = { indexAxis: 'y', responsive: true, legend: {}, scales: {}, plugins: {} };

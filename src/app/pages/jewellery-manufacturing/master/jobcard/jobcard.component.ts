@@ -7,6 +7,7 @@ import { Font } from 'ngx-font-picker';
   styleUrls: ['./jobcard.component.scss']
 })
 export class JobcardComponent implements OnInit {
+  //variables
   modalReference:any;
   closeResult:any;
   pageTitle: any;
@@ -15,12 +16,6 @@ export class JobcardComponent implements OnInit {
   showHeaderFilter: boolean = false;
   divisionMS: any = 'ID';
   itemList: any[] = []
-  // public font: Font = new Font({
-  //   family: 'Roboto',
-  //   size: '14px',
-  //   style: 'regular',
-  //   styles: ['regular']
-  // });
 
   columnhead:any[] = ['Sl No','Job Reference','Part Code','Description','Pcs','Metal Color','Metal Wt','Stone Wt','Gross Wt' ];
   constructor(

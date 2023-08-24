@@ -7,7 +7,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PagesRoutingModule } from './pages-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { WidgetModule } from '../shared/widget/widget.module';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,7 +20,6 @@ FullCalendarModule.registerPlugins([
     CommonModule,
     PagesRoutingModule,
     SharedModule,
-    WidgetModule,
     FullCalendarModule,
     FormsModule,
     ReactiveFormsModule,

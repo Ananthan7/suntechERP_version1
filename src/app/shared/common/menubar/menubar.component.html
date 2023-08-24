@@ -1,0 +1,32 @@
+<!-- submenu list -->
+<div class="row">
+    <div class="col-md-12 col-sm-12 pb-2 menu-nav">
+        <div ngbDropdown class="d-inline-block"
+            *ngFor="let group of groupedMenuData">
+            <button type="button" class="btn btn-outline-primary"
+                style="border: none; font-weight: 600;" id="dropdownBasic1"
+                ngbDropdownToggle>
+                {{group.label}}
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button ngbDropdownItem *ngFor="let submenu of group.submenus"
+                    (click)="pageRoutes( '/'+ submenu.ANG_WEB_COMPONENT_NAME + '/'+     submenu.ANG_WEB_PATH_NAME, 
+                    { modulename: this.menuTitle, subMenuName: submenu.MENU_CAPTION_ENG, ctrl: submenu.ANG_WEB_CONTROLLER_NAME})">
+                    {{ submenu.MENU_CAPTION_ENG }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" *ngIf="skeltonLoading">
+    <div class="col-md-1">
+        <p-skeleton styleClass="mb-2"></p-skeleton>
+    </div>
+    <div class="col-md-1">
+        <p-skeleton styleClass="mb-2"></p-skeleton>
+    </div>
+    <div class="col-md-1">
+        <p-skeleton styleClass="mb-2"></p-skeleton>
+    </div>
+</div>

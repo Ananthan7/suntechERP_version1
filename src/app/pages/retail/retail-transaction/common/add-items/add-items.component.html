@@ -1,0 +1,554 @@
+<div class="p-3" style="border: 1px solid rgb(210, 210, 210);">
+    <!-- header section ADD CUSTOMER -->
+    <div
+        class="pos-sales-modalheader border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Line Item</h5>
+        <button type="button" class="btn btn-close close-btn p-2"
+            (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <!-- content section starts -->
+    <div class="row">
+        <form [formGroup]="lineItemForm">
+            <mat-tab-group>
+                <mat-tab label="ITEM DETAILS">
+                    <div class="row" style="padding-top: 15px">
+                        <div class="errormsg col-md-12" id="modelerrmsg">
+                            {{ pos_div_modelerrmsg }}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <mat-form-field>
+                                    <mat-label>Division </mat-label>
+                                    <input type="text" matInput
+                                        formControlName="fcn_li_division"
+                                        id="fcn_li_division" readonly />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field>
+                                    <mat-label>Item Code </mat-label>
+                                    <input type="text" matInput
+                                        formControlName="fcn_li_item_code.value"
+                                        #fcn_li_item_code
+                                        id="fcn_li_item_code" autofocus
+                                        (change)="getStockDesc($event)"
+                                        [readonly]="viewOnly" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field>
+                                    <mat-label>Item Description </mat-label>
+                                    <input type="text" matInput
+                                        formControlName="fcn_li_item_desc"
+                                        id="fcn_li_item_desc"
+                                        [readonly]="viewOnly" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field>
+                                    <mat-label>Location </mat-label>
+                                    <input type="text" matInput
+                                        formControlName="fcn_li_location"
+                                        id="fcn_li_location" readonly />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <mat-form-field aria-readonly="true">
+                                    <mat-label>PCs</mat-label>
+                                    <input class="st_txt_right"
+                                        type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput id="fcn_li_pcs"
+                                        formControlName="fcn_li_pcs"
+                                        (change)="changePCS($event)"
+                                        readonly />
+                                    <mat-error
+                                        *ngIf="lineItemForm.controls.fcn_li_pcs.hasError('required')">
+                                        PCS is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="lineItemForm.controls.fcn_li_pcs.hasError('min')">
+                                        {{ 'PCS should Not Be Zero' }}
+                                        <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field>
+                                    <mat-label>{{
+                                        newDictionary?.lblGrossWeight ||
+                                        "Gross Wt" }}</mat-label>
+                                    <input class="st_txt_right"
+                                        type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_li_gross_wt"
+                                        id="fcn_li_gross_wt"
+                                        (change)="changeGrossWt($event)"
+                                        [readonly]="viewOnly" />
+                                    <mat-error
+                                        *ngIf="lineItemForm.controls.fcn_li_gross_wt.hasError('required')">
+                                        Gross Weight is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="lineItemForm.controls.fcn_li_gross_wt.hasError('min')">
+                                        {{ getMsgByID('MSG1306') }}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3"
+                                *ngIf="this.divisionMS == 'S' ? false : true">
+                                <mat-form-field>
+                                    <mat-label>Stone Wt</mat-label>
+                                    <input class="st_txt_right"
+                                        type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_li_stone_wt"
+                                        id="fcn_li_stone_wt"
+                                        (change)="changeStoneWt($event)"
+                                        [readonly]="viewOnly" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3"
+                                *ngIf="this.divisionMS == 'S' ? false : true">
+                                <mat-form-field>
+                                    <mat-label>Net Wt </mat-label>
+                                    <input class="st_txt_right"
+                                        type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        max="{{this.lineItemForm.value.fcn_li_gross_wt}}"
+                                        matInput
+                                        formControlName="fcn_li_net_wt"
+                                        id="fcn_li_net_wt"
+                                        (focusout)="changeNettWt($event)"
+                                        readonly />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8 col-sm-12">
+                                <div class="row" *ngIf="divisionMS == 'M'">
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <mat-label>Purity </mat-label>
+                                            <input type="number" [min]="0"
+                                                [maxLength]="14"
+                                                (keyup)="enforceMinMax($event.target)"
+                                                class="st_txt_right" matInput
+                                                formControlName="fcn_li_purity"
+                                                id="fcn_li_purity" readonly />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <mat-label>Pure Weight</mat-label>
+                                            <input class="st_txt_right"
+                                                type="number" [min]="0"
+                                                [maxLength]="14"
+                                                (keyup)="enforceMinMax($event.target)"
+                                                matInput
+                                                formControlName="fcn_li_pure_wt"
+                                                id="fcn_li_pure_wt" readonly />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row"
+                                    *ngIf="this.divisionMS == 'S' ? false : true">
+                                    <div class="col-md-6">
+                                        <mat-form-field>
+                                            <mat-label>Metal Rate</mat-label>
+                                            <input class="st_txt_right"
+                                                type="number" [min]="0"
+                                                [maxLength]="14"
+                                                (keyup)="enforceMinMax($event.target)"
+                                                matInput
+                                                formControlName="fcn_ad_metal_rate"
+                                                id="fcn_ad_metal_rate" readonly />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field>
+                                            <mat-label>Metal Amount</mat-label>
+                                            <input class="st_txt_right"
+                                                type="number" [min]="0"
+                                                [maxLength]="14"
+                                                (keyup)="enforceMinMax($event.target)"
+                                                matInput
+                                                formControlName="fcn_ad_metal_amount"
+                                                id="fcn_ad_metal_amount"
+                                                readonly />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-form-field>
+                                            <mat-label>{{divisionMS == 'M' ?
+                                                'Making Rate' : 'Rate'}}</mat-label>
+                                            <input class="st_txt_right"
+                                                type="number" [min]="0"
+                                                [maxLength]="14"
+                                                (keyup)="enforceMinMax($event.target)"
+                                                matInput id="fcn_li_rate"
+                                                id="fcn_li_rate"
+                                                formControlName="fcn_li_rate"
+                                                (change)="changeRate($event)"
+                                                readonly="{{ viewOnly || divisionMS == 'S' ? true: false }}"
+                                                (focus)="setValToLocalStorage($event, 'fcn_li_rate')" />
+                                            <mat-error
+                                                *ngIf="lineItemForm.controls.fcn_li_rate.hasError('required')">
+                                                {{divisionMS == 'M' ?
+                                                'Making Rate' : 'Rate'}} is
+                                                <strong>required</strong>
+                                            </mat-error>
+                                            <mat-error
+                                                *ngIf="lineItemForm.controls.fcn_li_rate.hasError('min')">
+                                                {{divisionMS == 'M' ?
+                                                'Making Rate' : 'Rate'}} should
+                                                Not Be Zero
+                                            </mat-error>
+                                            <!-- formControlName="fcn_li_rate" value="{{li_rate_val}}" (keyup)="changeRate()" (mouseup)="changeRate()" > -->
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field>
+                                            <mat-label> {{divisionMS == 'M' ?
+                                                'Making Amount' : 'Total Amount'}}</mat-label>
+                                            <input class="st_txt_right"
+                                                type="number" [min]="0"
+                                                [maxLength]="14"
+                                                (keyup)="enforceMinMax($event.target)"
+                                                id="fcn_li_total_amount"
+                                                matInput
+                                                formControlName="fcn_li_total_amount"
+                                                (change)="changeTotalAmt($event)"
+                                                id="fcn_li_total_amount"
+                                                readonly="{{ viewOnly || divisionMS == 'S' ? true: false }}" />
+                                            <mat-error
+                                                *ngIf="lineItemForm.controls.fcn_li_total_amount.hasError('required')">
+                                                {{divisionMS == 'M' ?
+                                                'Making Amount' : 'Total Amount'}}
+                                                is <strong>required</strong>
+                                            </mat-error>
+                                            <mat-error
+                                                *ngIf="lineItemForm.controls.fcn_li_total_amount.hasError('min')">
+                                                {{divisionMS == 'M' ?
+                                                'Making Amount' : 'Total Amount'}}
+                                                should Not Be Zero
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row"
+                                    *ngIf="this.divisionMS == 'M' ? false : true">
+                                    <div class="col-md-6">
+                                        <mat-form-field>
+                                            <mat-label>Discount %</mat-label>
+                                            <input class="st_txt_right"
+                                                type="number" [min]="0"
+                                                [maxLength]="14"
+                                                (keyup)="enforceMinMax($event.target)"
+                                                matInput
+                                                formControlName="fcn_li_discount_percentage"
+                                                (change)="changeDisPer($event)"
+                                                id="fcn_li_discount_percentage"
+                                                [readonly]="viewOnly" />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field>
+                                            <mat-label>Discount Amount</mat-label>
+                                            <input class="st_txt_right"
+                                                type="number" [min]="0"
+                                                [maxLength]="14"
+                                                (keyup)="enforceMinMax($event.target)"
+                                                matInput
+                                                formControlName="fcn_li_discount_amount"
+                                                id="fcn_li_discount_amount"
+                                                (change)="changeDisAmount($event)"
+                                                [readonly]="viewOnly" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <!-- todo image section -->
+                                <div class="form-group">
+                                    <div
+                                        style="height: 150px; text-align: center"
+                                        class="productImage">
+                                        <img class="card-img-top"
+                                            alt="Product image" loading="lazy"
+                                            style="
+                                        border: 1px solid #ccc;
+                                        height: 150px;
+                                        width: 150px;
+                                        " />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <mat-form-field>
+                                    <mat-label>
+                                        {{divisionMS == 'M' ? 'Total Amount'
+                                        : 'Net Amount'}}
+                                    </mat-label>
+                                    <input class="st_txt_right"
+                                        type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_li_gross_amount"
+                                        id="fcn_li_gross_amount"
+                                        [readonly]="viewOnly"
+                                        (change)="changeGrossAmt($event)"
+                                        (focus)="setValToLocalStorage($event, 'fcn_li_gross_amount')" />
+                                    <mat-error
+                                        *ngIf="lineItemForm.controls.fcn_li_gross_amount.hasError('required')">
+                                        {{divisionMS == 'M' ? 'Total Amount'
+                                        : 'Net Amount'}} is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="lineItemForm.controls.fcn_li_gross_amount.hasError('min')">
+                                        {{divisionMS == 'M' ? 'Total Amount'
+                                        : 'Net Amount'}} should Not Be Zero
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3" *ngIf="taxType == 1">
+                                <mat-form-field>
+                                    <mat-label>Tax %</mat-label>
+                                    <input class="st_txt_right"
+                                        type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_li_tax_percentage"
+                                        id="fcn_li_tax_percentage" readonly />
+
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3" *ngIf="taxType == 2">
+                                <mat-form-field>
+                                    <mat-label>CGST %</mat-label>
+                                    <input class="st_txt_right"
+                                        type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_li_cgst_percentage"
+                                        id="fcn_li_cgst_percentage" readonly />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3" *ngIf="taxType == 1">
+                                <mat-form-field>
+                                    <mat-label>Tax Amount</mat-label>
+                                    <input class="st_txt_right"
+                                        type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_li_tax_amount"
+                                        id="fcn_li_tax_amount" readonly />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2" *ngIf="taxType == 2">
+                                <mat-form-field>
+                                    <mat-label>CGST Amount</mat-label>
+                                    <input class="st_txt_right"
+                                        type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_li_cgst_amount"
+                                        id="fcn_li_cgst_amount" readonly />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field>
+                                    <mat-label>{{divisionMS == 'M' ?
+                                        'Net Amount' : 'Total+Tax'}}</mat-label>
+                                    <input class="st_txt_right"
+                                        type="number"
+                                        (focus)="setValToLocalStorage($event, 'fcn_li_net_amount')"
+                                        [min]="0" [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_li_net_amount"
+                                        id="fcn_li_net_amount"
+                                        (change)="changeNettAmt($event)"
+                                        [readonly]="viewOnly" />
+                                    <mat-error
+                                        *ngIf="lineItemForm.controls.fcn_li_net_amount.hasError('required')">
+                                        {{divisionMS == 'M' ? 'Net Amount' :
+                                        'Total+Tax'}} is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="lineItemForm.controls.fcn_li_net_amount.hasError('min')">
+                                        {{divisionMS == 'M' ? 'Net Amount' :
+                                        'Total+Tax'}} should Not Be Zero
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="ADDITIONAL DETAILS"
+                    *ngIf="this.divisionMS == 'S' ? false : true">
+                    <div class="col-md-12"
+                        style="margin-top: 20px; margin-bottom: 20px">
+                        <!-- <form [formGroup]="additionalDetailsForm"> -->
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Stone Rate</mat-label>
+                                    <input class="st_txt_right" type="number"
+                                        [min]="0" [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_ad_stone_rate"
+                                        id="fcn_ad_stone_rate"
+                                        (change)="changeStoneRate($event)"
+                                        value="{{ li_stone_rate_val }}"
+                                        [readonly]="viewOnly" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Stone Amount</mat-label>
+                                    <input class="st_txt_right" type="number"
+                                        [min]="0" [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        id="fcn_ad_stone_amount" matInput
+                                        formControlName="fcn_ad_stone_amount"
+                                        value="{{ li_stone_amount_val }}"
+                                        (change)="changeStoneAmt($event)"
+                                        [readonly]="viewOnly" />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-4" hidden>
+                                <mat-form-field>
+                                    <mat-label>Making Rate</mat-label>
+                                    <input class="st_txt_right" type="number"
+                                        [min]="0" [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_ad_making_rate"
+                                        id="fcn_ad_making_rate" readonly />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4" hidden>
+                                <mat-form-field>
+                                    <mat-label>Making Amount</mat-label>
+                                    <input class="st_txt_right" type="number"
+                                        [min]="0" [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput
+                                        formControlName="fcn_ad_making_amount"
+                                        id="fcn_ad_making_amount" readonly />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-4"
+                                *ngIf="this.divisionMS == 'M' ? false : true"
+                                hidden>
+                                <mat-form-field>
+                                    <mat-label>PCs</mat-label>
+                                    <input type="text" matInput
+                                        formControlName="fcn_ad_pcs"
+                                        id="fcn_ad_pcs" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4"
+                                *ngIf="this.divisionMS == 'M' ? false : true"
+                                hidden>
+                                <mat-form-field>
+                                    <mat-label>Cts</mat-label>
+                                    <input type="number" matInput
+                                        formControlName="fcn_ad_cts"
+                                        id="fcn_ad_cts" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4" hidden>
+                                <mat-form-field>
+                                    <mat-label>GMS</mat-label>
+                                    <input type="text" matInput
+                                        formControlName="fcn_ad_gms"
+                                        id="fcn_ad_gms" [readonly]="viewOnly" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Rate Type</mat-label>
+                                    <input type="text" matInput
+                                        formControlName="fcn_ad_rate_type"
+                                        id="fcn_ad_rate_type"
+                                        [readonly]="viewOnly" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4" hidden>
+                                <mat-form-field>
+                                    <mat-label>Rate</mat-label>
+                                    <input type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput formControlName="fcn_ad_rate"
+                                        id="fcn_ad_rate" [readonly]="viewOnly" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4" hidden>
+                                <mat-form-field>
+                                    <mat-label>Amount</mat-label>
+                                    <input type="number" [min]="0"
+                                        [maxLength]="14"
+                                        (keyup)="enforceMinMax($event.target)"
+                                        matInput formControlName="fcn_ad_amount"
+                                        id="fcn_ad_amount" [readonly]="viewOnly" />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label
+                                        class="font-weight-bold col-form-label">Tag
+                                        Details</label>
+                                    <textarea class="form-control"
+                                        style="height: 170px"
+                                        formControllName="fcn_tab_details"
+                                        [readonly]="viewOnly">
+                                        {{ li_tag_val }}
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+            <div class="col-md-12" style="padding-bottom: 20px">
+                <div style="text-align: right; padding: 10px">
+                    <button mat-flat-button color="primary"
+                        *ngIf="!viewOnly">NEXT ITEM</button>
+                    &nbsp;
+                    <button mat-flat-button color="primary"
+                        *ngIf="!viewOnly">FINISH</button>
+                    &nbsp;
+                    <button mat-flat-button color="warn" (click)="close()">CANCEL</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

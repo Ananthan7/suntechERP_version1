@@ -1,0 +1,507 @@
+<div class="p-3" style="border: 1px solid rgb(210, 210, 210);">
+    <!-- header section ADD CUSTOMER -->
+    <div
+        class="pos-sales-modalheader border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Payments</h5>
+        <button type="button" class="btn btn-close close-btn p-2"
+            (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <!-- content section starts -->
+    <div class="row">
+        <!-- tab section starts -->
+        <mat-tab-group [(selectedIndex)]="selectedTabIndex"
+            (selectedTabChange)="setTabByIndex($event.index)">
+            <!-- CASH RECEIPT tab section starts -->
+            <mat-tab label="CASH RECEIPT"
+                [disabled]="!this.receiptModesList?.BTN_CASH || viewOnly">
+                <form [formGroup]="(cashreceiptForm)" novalidate="true">
+                    <div class="col-md-12"
+                        style="margin-top: 20px; margin-bottom: 20px">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Receipt Mode </mat-label>
+                                    <input type="text" matInput
+                                        formControlName="paymentsCash"
+                                        [matAutocomplete]="receiptmode"
+                                        [readonly]="viewOnly" />
+                                    <mat-autocomplete
+                                        #receiptmode="matAutocomplete"
+                                        autoActiveFirstOption>
+                                        <mat-option
+                                            *ngFor="let option of receiptModeOptions_Cash"
+                                            [value]="option">
+                                            {{ option }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error
+                                        *ngIf="cashreceiptForm.controls.paymentsCash.hasError('required')">
+                                        Receipt Mode is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Amount LC</mat-label>
+                                    <input type="number" class="st_txt_right"
+                                        matInput formControlName="cashAmtLC"
+                                        id="cashAmtLC"
+                                        placeholder="0.00" readonly />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Amount FC</mat-label>
+                                    <input type="number" class="st_txt_right"
+                                        matInput formControlName="cashAmtFC"
+                                        id="cashAmtFC"
+                                        (focusout)="changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')"
+                                        placeholder="0.00"
+                                        [readonly]="viewOnly" />
+                                    <mat-error
+                                        *ngIf="cashreceiptForm.controls.cashAmtFC.hasError('required')">
+                                        Amount FC is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="cashreceiptForm.controls.cashAmtFC.hasError('min')">
+                                        Amount FC is should Not Be Zero
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </mat-tab>
+            <!-- CREDIT CARD tab section starts -->
+            <mat-tab label="CREDIT CARD"
+                [disabled]="!this.receiptModesList?.BTN_CREDITCARD || viewOnly">
+                <form [formGroup]="creditCardReceiptForm" novalidate="true">
+                    <div class="col-md-12"
+                        style="margin-top: 20px; margin-bottom: 20px">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Receipt Mode </mat-label>
+                                    <input type="text" matInput
+                                        formControlName="paymentsCreditCard"
+                                        [matAutocomplete]="receiptmodecc"
+                                        [readonly]="viewOnly" />
+                                    <mat-autocomplete
+                                        #receiptmodecc="matAutocomplete"
+                                        autoActiveFirstOption>
+                                        <mat-option
+                                            *ngFor="let option of receiptModeOptions_CC"
+                                            [value]="option">
+                                            {{ option }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error
+                                        *ngIf="creditCardReceiptForm.controls.paymentsCreditCard.hasError('required')">
+                                        Receipt Mode is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>CC No.</mat-label>
+                                    <input type="number" matInput
+                                        formControlName="cardCCNo" id="cardCCNo"
+                                        maxlength="19"
+                                        [readonly]="viewOnly" />
+                                    <mat-error
+                                        *ngIf="creditCardReceiptForm.controls.cardCCNo.hasError('required')">
+                                        CC No. is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Amount </mat-label>
+                                    <input type="number" class="st_txt_right"
+                                        matInput formControlName="cardAmtFC"
+                                        id="cardAmtFC"
+                                        placeholder="0.00" [readonly]="viewOnly" />
+                                    <mat-error
+                                        *ngIf="creditCardReceiptForm.controls.cardAmtFC.hasError('required')">
+                                        Amount is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="creditCardReceiptForm.controls.cardAmtFC.hasError('min')">
+                                        Amount is should Not Be Zero
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </mat-tab>
+            <!-- ADVANCE tab section starts -->
+            <mat-tab label="ADVANCE"
+                [disabled]="!this.receiptModesList?.BTN_ADVANCE || viewOnly">
+                <form [formGroup]="advanceReceiptForm" novalidate="true">
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <mat-form-field>
+                                <mat-label>Receipt Mode </mat-label>
+                                <input type="text" matInput
+                                    formControlName="paymentsAdvance"
+                                    id="paymentsAdvance"
+                                    [matAutocomplete]="paymentsAdvance"
+                                    [readonly]="viewOnly" />
+                                <mat-autocomplete
+                                    #paymentsAdvance="matAutocomplete"
+                                    autoActiveFirstOption>
+                                    <mat-option
+                                        *ngFor="let option of receiptModeAdvanceOthers"
+                                        [value]="option">
+                                        {{ option }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error
+                                    *ngIf="advanceReceiptForm.controls.paymentsAdvance.hasError('required')">
+                                    Receipt Mode is <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Branch</mat-label>
+                                <input type="text" matInput
+                                    formControlName="advanceBranch"
+                                    [matAutocomplete]="advanceBranch"
+                                    id="advanceBranch"
+                                    (focusout)="changeBranch($event)"
+                                    [readonly]="viewOnly">
+                                <mat-autocomplete
+                                    #advanceBranch="matAutocomplete"
+                                    autoActiveFirstOption>
+                                    <mat-option
+                                        *ngFor="let option of filteredAdvanceBranchOptions"
+                                        [value]="option">
+                                        {{option}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error
+                                    *ngIf="advanceReceiptForm.controls.advanceBranch.hasError('required')">
+                                    Branch is <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field>
+                                <mat-label>Year</mat-label>
+                                <input matInput type="text" id="advanceYear"
+                                    formControlName="advanceYear"
+                                    id="advanceYear"
+                                    [matAutocomplete]="advanceYear"
+                                    [readonly]="viewOnly">
+                                <mat-autocomplete
+                                    #advanceYear="matAutocomplete"
+                                    autoActiveFirstOption>
+                                    <mat-option
+                                        *ngFor="let option of  filteredadvanceYear"
+                                        [value]="option">
+                                        {{option}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error
+                                    *ngIf="advanceReceiptForm.controls.advanceYear.hasError('required')">
+                                    Year is <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>Rec No.</mat-label>
+                                <input type="text" matInput
+                                    formControlName="advanceRecNo" value
+                                    id="advanceRecNo"
+                                    (change)="changeAdvanceVocNo($event)"
+                                    [readonly]="viewOnly" />
+
+                                <mat-error
+                                    *ngIf="advanceReceiptForm.controls.advanceRecNo.hasError('required')">
+                                    Rec No. is <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field>
+                                <mat-label>Amount</mat-label>
+                                <input type="number" class="st_txt_right"
+                                    matInput formControlName="advanceAmount"
+                                    id="advanceAmount"
+                                    [readonly]="viewOnly" />
+                                <mat-error
+                                    *ngIf="advanceReceiptForm.controls.advanceAmount.hasError('required')">
+                                    Amount is <strong>required</strong>
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="advanceReceiptForm.controls.advanceAmount.hasError('min')">
+                                    Amount is should Not Be Zero
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field>
+                                <mat-label>Vat Amount Paid LC</mat-label>
+                                <input type="number" class="st_txt_right"
+                                    matInput
+                                    formControlName="advanceVatAmountLC"
+                                    id="advanceVatAmountLC"
+                                    placeholder="0.00" readonly />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field>
+                                <mat-label>Vat Amount Paid FC</mat-label>
+                                <input type="number" class="st_txt_right"
+                                    matInput
+                                    formControlName="advanceVatAmountFC"
+                                    id="advanceVatAmountFC"
+                                    (focusout)="changeReceiptAmtFC($event)"
+                                    placeholder="0.00" readonly />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+            </mat-tab>
+            <!-- OTHERS tab section starts -->
+            <mat-tab label="OTHERS"
+                [disabled]="!this.receiptModesList?.BTN_OTHERS || viewOnly ">
+                <form [formGroup]="othersReceiptForm" novalidate="true">
+
+                    <div class="col-md-12"
+                        style="margin-top: 20px; margin-bottom: 20px">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <mat-form-field>
+                                    <mat-label>Receipt Mode </mat-label>
+                                    <input type="text" matInput
+                                        formControlName="paymentsOthers"
+                                        id="paymentsOthers"
+                                        [matAutocomplete]="receiptmodeOthers"
+                                        [readonly]="viewOnly" />
+                                    <mat-autocomplete
+                                        #receiptmodeOthers="matAutocomplete"
+                                        autoActiveFirstOption>
+                                        <mat-option
+                                            *ngFor="let option of receiptModeOptionsOthers"
+                                            [value]="option">
+                                            {{ option }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error
+                                        *ngIf="othersReceiptForm.controls.paymentsOthers.hasError('required')">
+                                        Receipt Mode is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field>
+                                    <mat-label>Amount</mat-label>
+                                    <input type="number" class="st_txt_right"
+                                        matInput formControlName="othersAmtFC"
+                                        id="othersAmtFC"
+                                        placeholder="0.00" [readonly]="viewOnly" />
+                                    <mat-error
+                                        *ngIf="othersReceiptForm.controls.othersAmtFC.hasError('required')">
+                                        Amount is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="othersReceiptForm.controls.othersAmtFC.hasError('min')">
+                                        Amount is should be Greater than Zero
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </mat-tab>
+            <!-- GIFT tab section starts -->
+            <mat-tab label="GIFT. VOC"
+                [disabled]="!this.receiptModesList?.BTN_GIFT || viewOnly ">
+                <form [formGroup]="giftReceiptForm" novalidate="true">
+
+                    <div class="col-md-12"
+                        style="margin-top: 20px; margin-bottom: 20px">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <mat-form-field>
+                                    <mat-label>Receipt Mode </mat-label>
+                                    <input type="text" matInput
+                                        formControlName="paymentsCreditGIftVoc"
+                                        id="paymentsCreditGIftVoc"
+                                        [matAutocomplete]="paymentsCreditGIftVoc"
+                                        [readonly]="viewOnly" />
+                                    <mat-autocomplete
+                                        #paymentsCreditGIftVoc="matAutocomplete"
+                                        autoActiveFirstOption>
+                                        <mat-option
+                                            *ngFor="let option of receiptModeGiftOptions"
+                                            [value]="option">
+                                            {{ option }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error
+                                        *ngIf="giftReceiptForm.controls.paymentsCreditGIftVoc.hasError('required')">
+                                        Receipt Mode <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Branch</mat-label>
+                                    <input type="text" matInput
+                                        formControlName="giftBranch"
+                                        [matAutocomplete]="giftBranch"
+                                        id="giftBranch"
+                                        (focusout)="changeBranch($event)"
+                                        [readonly]="viewOnly">
+                                    <mat-autocomplete
+                                        #giftBranch="matAutocomplete"
+                                        autoActiveFirstOption>
+                                        <mat-option
+                                            *ngFor="let option of  filteredGiftModeBranchOptions"
+                                            [value]="option">
+                                            {{option}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error
+                                        *ngIf="giftReceiptForm.controls.giftBranch.hasError('required')">
+                                        Branch is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12"
+                        style="margin-top: 20px; margin-bottom: 20px">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <mat-form-field>
+                                    <mat-label>Voc No.</mat-label>
+                                    <input type="text" matInput
+                                        formControlName="giftVocNo" value
+                                        id="giftVocNo"
+                                        [readonly]="viewOnly" />
+                                    <mat-error
+                                        *ngIf="giftReceiptForm.controls.giftVocNo.hasError('required')">
+                                        Voc No. is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field>
+                                    <mat-label>Amount</mat-label>
+                                    <input type="number" class="st_txt_right"
+                                        matInput formControlName="giftAmtFC"
+                                        id="giftAmtFC"
+                                        placeholder="0.00" [readonly]="viewOnly" />
+                                    <mat-error
+                                        *ngIf="giftReceiptForm.controls.giftAmtFC.hasError('required')">
+                                        Amount is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="giftReceiptForm.controls.giftAmtFC.hasError('min')">
+                                        Amount is should be Greater than Zero
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </mat-tab>
+            <!-- customers tab section starts -->
+            <mat-tab label="CUSTOMERS"
+                [disabled]="!this.receiptModesList?.BTN_CUSTOMER || viewOnly ">
+                <form [formGroup]="(customerReceiptForm)" novalidate="true">
+
+                    <div class="col-md-12"
+                        style="margin-top: 20px; margin-bottom: 20px">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Select Accode</mat-label>
+                                    <input type="text" matInput
+                                        formControlName="customAcCodeList"
+                                        [matAutocomplete]="customAcCodeList"
+                                        id="customAcCodeList"
+                                        [readonly]="viewOnly" />
+                                    <mat-autocomplete
+                                        #customAcCodeList="matAutocomplete"
+                                        autoActiveFirstOption
+                                        (optionSelected)="changeCustAcCode($event.option.value)">
+                                        <mat-option
+                                            *ngFor="let option of customAcCodeListOptions"
+                                            [value]="option.CODE">
+                                            {{ option.CODE +' - '+
+                                            option.DESCRIPTION}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error
+                                        *ngIf="customerReceiptForm.controls.customAcCodeList.hasError('required')">
+                                        Accode is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Amount LC</mat-label>
+                                    <input type="number" class="st_txt_right"
+                                        matInput formControlName="customerAmtLC"
+                                        id="customerAmtLC"
+                                        placeholder="0.00" readonly />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <mat-label>Amount FC</mat-label>
+                                    <input type="number" class="st_txt_right"
+                                        matInput formControlName="customerAmtFC"
+                                        id="customerAmtFC"
+                                        (focusout)="changeReceiptAmtFC($event, 'customerReceiptForm', 'customerAmtLC')"
+                                        placeholder="0.00"
+                                        [readonly]="viewOnly" />
+
+                                    <mat-error
+                                        *ngIf="customerReceiptForm.controls.customerAmtFC.hasError('required')">
+                                        Amount FC is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="customerReceiptForm.controls.customerAmtFC.hasError('min')">
+                                        Amount FC is should be Greater than Zero
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </mat-tab>
+
+        </mat-tab-group>
+        <!-- tab section ends -->
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="padding-bottom: 20px">
+            <div style="text-align: right; padding: 10px">
+                <button mat-flat-button color="primary"
+                    *ngIf="!viewOnly">CONTINUE</button>
+                &nbsp;
+                <button mat-flat-button color="primary"
+                    *ngIf="!viewOnly">FINISH</button>
+                &nbsp;
+                <button mat-flat-button color="warn" (click)="close()">CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>

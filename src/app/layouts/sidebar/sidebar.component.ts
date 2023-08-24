@@ -7,7 +7,6 @@ import { MENU } from './menu';
 import { MenuItem } from './menu.model';
 import { filter } from 'rxjs/operators';
 import { LanguageService } from 'src/app/core/services/language.service';
-import { SignumCRMApiService } from 'src/app/services/signum-crmapi.service';
 import { EventService } from 'src/app/core/services/event.service';
 
 @Component({
@@ -32,7 +31,6 @@ export class SidebarComponent implements OnInit {
   constructor(private router: Router,
     public translate: TranslateService,
     private langService: LanguageService,
-    private apiService: SignumCRMApiService,
     private eventService: EventService,
   ) {
     translate.setDefaultLang('en');

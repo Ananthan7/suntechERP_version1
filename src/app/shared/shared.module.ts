@@ -1,15 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PagetitleComponent } from './pagetitle/pagetitle.component';
 import { LoaderComponent } from './loader/loader.component';
-import { MasterFilterComponent } from './master-filter/master-filter.component';
-import { TimeframeComponent } from './timeframe/timeframe.component';
-import { HeaderPanelComponent } from './header-panel/header-panel.component';
-import { MenubarComponent } from './component/menubar/menubar.component';
-import { ModalHeaderComponent } from './component/modal-header/modal-header.component';
+import { MenubarComponent } from './common/menubar/menubar.component';
+import { ModalHeaderComponent } from './common/modal-header/modal-header.component';
 
-import { WidgetModule } from './widget/widget.module';
 import {ButtonModule} from 'primeng/button';
 import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
@@ -37,10 +32,21 @@ import { FontPickerModule } from 'ngx-font-picker';
 //Material imports
 import { MatTabsModule } from '@angular/material/tabs';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-
-
-
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MatRippleModule, DateAdapter} from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatProgressBarModule} from '@angular/material/progress-bar'
+import { DateFormat } from './data/date-format';
+import { MatButtonModule } from '@angular/material/button';
+import { DialogboxComponent } from './common/dialogbox/dialogbox.component';
+import { SkeletonModule } from 'primeng/skeleton';
+import { CardboxComponent } from './common/cardbox/cardbox.component';
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -48,17 +54,14 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     CamelCasePipe,
     CamelCasePipe,
     //components declarations
-    PagetitleComponent,
     LoaderComponent,
-    MasterFilterComponent,
-    TimeframeComponent,
-    HeaderPanelComponent,
     MenubarComponent,
     ModalHeaderComponent,
+    DialogboxComponent,
+    CardboxComponent
   ],
   imports: [
     CommonModule,
-    WidgetModule,
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
@@ -90,17 +93,18 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     InputSwitchModule,
     MatTabsModule,
     FontPickerModule,
-   
+    SkeletonModule,
+    MatFormFieldModule,MatInputModule,MatAutocompleteModule,MatExpansionModule,MatButtonModule,
+    MatSelectModule,MatDatepickerModule,MatNativeDateModule, MatRippleModule, MatTooltipModule,
+    MatProgressBarModule,MatDialogModule
   ],
   exports: [
     //component exports
-    PagetitleComponent,
     LoaderComponent,
-    MasterFilterComponent,
-    TimeframeComponent,
     MenubarComponent,
     ModalHeaderComponent,
-    HeaderPanelComponent,
+    DialogboxComponent,
+    CardboxComponent,
     //pipes exports
     NumberFormatterPipe,
     CamelCasePipe,
@@ -135,7 +139,15 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     InputSwitchModule,
     MatTabsModule,
     FontPickerModule,
+    SkeletonModule,
+    MatFormFieldModule,MatInputModule,MatAutocompleteModule,MatExpansionModule,MatButtonModule,
+    MatSelectModule,MatDatepickerModule,MatNativeDateModule, MatRippleModule, MatTooltipModule,
+    MatProgressBarModule,MatDialogModule
   ],
-  providers:[NgbActiveModal]
+  providers:[NgbActiveModal,{ provide: DateAdapter, useClass: DateFormat }]
 })
-export class SharedModule { }
+export class SharedModule {
+  constructor(private dateAdapter: DateAdapter<any>) {
+    dateAdapter.setLocale('en-in'); // DD/MM/YYYY
+  }
+ }

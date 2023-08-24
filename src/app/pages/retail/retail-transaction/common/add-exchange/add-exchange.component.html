@@ -1,0 +1,249 @@
+<div class="p-3" style="border: 1px solid rgb(210, 210, 210);">
+    <!-- header section ADD CUSTOMER -->
+    <div
+        class="pos-sales-modalheader border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Exchange</h5>
+        <button type="button" class="btn btn-close close-btn p-2"
+            (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <!-- content section starts -->
+    <div class="row">
+        <form [formGroup]="exchangeForm">
+            <div class="col-md-12">
+                <div class="bg-gray-card">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <mat-form-field>
+                                <mat-label>Division</mat-label>
+                                <input type="text" matInput
+                                    formControlName="fcn_exchange_division"
+                                    value="{{ fcn_exchange_division_val }}"
+                                    readonly />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-form-field>
+                                <mat-label>Stock Code</mat-label>
+                                <input type="text" matInput
+                                    formControlName="fcn_exchange_item_code"
+                                    id="fcn_exchange_item_code"
+                                    [matAutocomplete]="stockId"
+                                    [readonly]="viewOnly"
+                                    (change)="exchangeStockCode($event)" />
+                                <mat-autocomplete #stockId="matAutocomplete"
+                                    (optionSelected)="getStockforExchange($event.option.value)"
+                                    autoActiveFirstOption>
+                                    <mat-option
+                                        *ngFor="let option of exStockCodeFilteredOptions"
+                                        [value]="option">
+                                        {{ option }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field>
+                                <mat-label>Item Description </mat-label>
+                                <input type="text" matInput
+                                    formControlName="fcn_exchange_item_desc"
+                                    value="{{ fcn_exchange_item_desc_val }}"
+                                    readonly />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Pcs </mat-label>
+                            <input type="number" [min]="0" [maxLength]="8"
+                                (keyup)="enforceMinMax($event.target)"
+                                matInput formControlName="fcn_exchange_pcs"
+                                [readonly]="viewOnly" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Gross Wt</mat-label>
+                            <input type="number" [min]="0" [maxLength]="10"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" id="fcn_exchange_gross_wt"
+                                matInput formControlName="fcn_exchange_gross_wt"
+                                (focusout)="getExchangeNwtWt($event)"
+                                [readonly]="viewOnly" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Stone Wt</mat-label>
+                            <input type="number" [min]="0" [maxLength]="10"
+                                (keyup)="enforceMinMax($event.target)"
+                                [max]="this.exchangeForm.value.fcn_exchange_gross_wt"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_stone_wt"
+                                (change)="changeExchangeStoneWt($event)"
+                                id="fcn_exchange_stone_wt" [readonly]="viewOnly" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Net Wt </mat-label>
+                            <input type="number" [min]="0" [maxLength]="10"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_net_wt"
+                                [readonly]="viewOnly"
+                                id="fcn_exchange_net_wt"
+                                [max]="this.exchangeForm.value.fcn_exchange_gross_wt"
+                                (change)="changeExchangeNettWt($event)" />
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Chargable Wt </mat-label>
+                            <input type="number" [min]="0" [maxLength]="14"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_chargeable_wt"
+                                [readonly]="viewOnly"
+                                id="fcn_exchange_chargeable_wt"
+                                [max]="this.exchangeForm.value.fcn_exchange_gross_wt" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Purity </mat-label>
+                            <input type="number"
+                                [min]="this._exchangeItemchange?.PURITY_FROM || 0"
+                                [max]="this._exchangeItemchange?.PURITY_TO"
+                                [step]="0.01" [maxLength]="14"
+                                (change)="changeExPurity($event)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_purity"
+                                [readonly]="viewOnly" id="fcn_exchange_purity" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Pure Weight</mat-label>
+                            <input class="st_txt_right" type="number" [min]="0"
+                                [maxLength]="14"
+                                (change)="enforceMinMax($event.target)" matInput
+                                formControlName="fcn_exchange_pure_weight"
+                                id="fcn_exchange_pure_weight" [readonly]="true" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+
+                        <mat-form-field>
+                            <mat-label>Purity Difference</mat-label>
+                            <input type="number" [min]="0" [maxLength]="14"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_purity_diff"
+                                [readonly]="true" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Stone Rate</mat-label>
+                            <input type="number" [min]="0" [maxLength]="14"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_stone_rate"
+                                id="fcn_exchange_stone_rate"
+                                (change)="changeExchangeStoneRate($event)" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Stone Amount</mat-label>
+                            <input type="number" [min]="0" [maxLength]="14"
+                                (keyup)="enforceMinMax($event.target)"
+                                [min]="0" class="st_txt_right" matInput
+                                formControlName="fcn_exchange_stone_amount"
+                                id="fcn_exchange_stone_amount" [readonly]="true" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Metal Rate </mat-label>
+                            <input type="number" [min]="0" [maxLength]="14"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_metal_rate"
+                                readonly />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Making Rate </mat-label>
+                            <input type="number" [min]="0" [maxLength]="14"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_making_rate"
+                                [readonly]="viewOnly"
+                                (change)="changeExMakingRate($event)" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Making Amount </mat-label>
+                            <input type="number" [min]="0" [maxLength]="14"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_making_amt"
+                                [readonly]="true" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Metal Amount</mat-label>
+                            <input type="number" [min]="0" [maxLength]="14"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_metal_amount"
+                                (change)="changeExchangeMetalAmt($event)"
+                                [readonly]="viewOnly" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <mat-label>Net Amount</mat-label>
+                            <input type="number" [min]="0" [maxLength]="14"
+                                (keyup)="enforceMinMax($event.target)"
+                                class="st_txt_right" matInput
+                                formControlName="fcn_exchange_net_amount"
+                                [readonly]="true"
+                                (change)="changeExNetAmt($event)" />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom: 20px">
+                    <div style="text-align: right; padding: 10px">
+                        <button mat-flat-button color="primary"
+                            [disabled]="!viewOnly">CONTINUE</button>
+                        &nbsp;
+                        <button mat-flat-button color="primary"
+                            [disabled]="!viewOnly">SAVE</button>
+                        &nbsp;
+                        <button mat-flat-button color="warn" (click)="close()">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
