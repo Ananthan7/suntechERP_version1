@@ -5,8 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
-
-import { LazyLoadEvent } from 'primeng/api';
 import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
@@ -21,10 +19,13 @@ export class MasterSearchComponent implements OnInit {
   @Input() MasterSearchData!: MasterSearchModel;
   searchFieldLabel: any;
   searchNameLabel: any;
-  showFilterRow: boolean = true
-  showHeaderFilter: boolean = true
+  showFilterRow: boolean = true;
+  showHeaderFilter: boolean = true;
   isLoading: boolean = false;
   currentFilter: any;
+
+  alphabetSource: any[] =  ["A","B","C","D","E","F","G","H","I","J","K","L",
+  "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
   dataSource: any[] = [];
   dataSourceHead: any[] = [];
@@ -45,6 +46,10 @@ export class MasterSearchComponent implements OnInit {
     // this.getInitialValue()
     this.loadData();
   }
+  alphabetClicked(item:any){
+    this.MasterSearchData.SEARCH_VALUE = item;
+    this.loadData(item)
+  }
   @HostListener('scroll', ['$event'])
   onScroll(event: any) {
     const container = event.target;
@@ -55,11 +60,13 @@ export class MasterSearchComponent implements OnInit {
     }
   }
 
-  loadData() {
+  loadData(letter?:string) {
     let param = {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
       "LOOKUPID": this.MasterSearchData.LOOKUPID,
+      "ORDER_TYPE": letter ? 1 : 0,
+      "WHERECONDITION": "ACCODE <> ''",
       "searchField": this.MasterSearchData.SEARCH_FIELD || "",
       "searchValue": this.MasterSearchData.SEARCH_VALUE || ""
     }

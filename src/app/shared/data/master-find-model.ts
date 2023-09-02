@@ -1,10 +1,12 @@
 export interface MasterSearchModel {
-    PAGENO?: any,
-    RECORDS?: any,
-    LOOKUPID?: any,
-    SEARCH_HEADING?: any;
-    SEARCH_FIELD?: any;
-    SEARCH_VALUE?: any;
+    PAGENO?: number,
+    RECORDS?: number,
+    LOOKUPID?: number,
+    SEARCH_HEADING?: string;
+    ORDER_TYPE?: number,
+    WHERECONDITION?: string,
+    SEARCH_FIELD?: string;
+    SEARCH_VALUE?: string;
     VIEW_INPUT?: boolean;
     VIEW_TABLE?: boolean;
 }
