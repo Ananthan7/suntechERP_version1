@@ -146,7 +146,8 @@
                   <button type="button"
                     (click)="open('more_customer_detail_modal')"
                     mat-flat-button color="primary"
-                    [disabled]="viewOnly" style="font-size: 11px; padding: 0px 9px;">
+                    [disabled]="viewOnly"
+                    style="font-size: 11px; padding: 0px 9px;">
                     {{ this.customerDetails.MOBILE == null || undefined ?
                     'Add Customer': 'Edit Customer' }}
                   </button>
@@ -613,14 +614,8 @@
                   </div>
                 </div>
 
-                <div class="col-md-6 col-xl-6" style="padding-left: 5px"
-                  (click)="viewOnly ? '' : printInvoice()">
-                  <!-- *ngIf="!viewOnly" -->
-                  <div class="touch-big-button">
-                    <div class="touch-big-button-inner p-2"><i
-                        class="fa fa-print"></i>
-                      <span> Print Bill</span></div>
-                  </div>
+                <div class="col-md-6 col-xl-6" style="padding-left: 5px">
+                  <app-print-invoice></app-print-invoice>
                 </div>
               </div>
 

@@ -31,12 +31,11 @@ export class ModulelistComponent implements OnInit {
       this.isLoading = false;
       if (response.status == 'Success') {
         this.menuList = response.response;
-        this.menuList.push(
-          {
-            MID: 15,
-            MODULE_NAME: 'Addons',
-            imageUrl: '../../assets/images/lp-icons/1.png'
-          });
+        this.menuList.push({
+          MID: 15,
+          MODULE_NAME: 'Addons',
+          imageUrl: '../../assets/images/lp-icons/1.png'
+        });
 
         this.menuList.sort((a, b) => {
           const nameA = a.MODULE_NAME;
@@ -83,13 +82,13 @@ export class ModulelistComponent implements OnInit {
       } else {
         this.menuList = [];
       }
-    },err =>{
+    }, err => {
       this.isLoading = false;
       alert(err)
     })
   }
 
-  ngOnDestroy():void{
+  ngOnDestroy(): void {
     this.subscriptions$.unsubscribe()
   }
 }

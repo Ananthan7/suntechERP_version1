@@ -41,6 +41,14 @@
     }
   }
 }
+
+@media (min-width: 1200px) {
+  ::ng-deep {
+    .modal-xl {
+      max-width: 95vw !important;
+    }
+  }
+}
 // .modal-backdrop{
 //   z-index: 1;
 // }

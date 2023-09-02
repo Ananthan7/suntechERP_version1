@@ -1,0 +1,73 @@
+<span >
+    <button (click)="showOverlayPanel($event)" style="border: none; background-color: transparent;">
+        <i class="fa fa-search searchIcon"></i>
+    </button>
+    <p-overlayPanel #overlayPanel >
+        <ng-template pTemplate="content">
+           <div (mouseleave)="closeOverlayPanel()">
+                <div class="row border-bottom">
+                    <h6>{{MasterSearchData.SEARCH_HEADING}}</h6>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field style="width: 100%">
+                            <mat-label>Search</mat-label>
+                            <input type="text" matInput
+                                [(ngModel)]="MasterSearchData.SEARCH_VALUE"
+                                (keyup.enter)="searchValueChange($event)"
+                                (focusout)="searchValueChange($event)" />
+                            <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+                        </mat-form-field>
+                    </div>
+                    
+                </div>
+                <!-- Lazy loading table -->
+                <div (scroll)="onScroll($event)" style="max-height: 150px;overflow-y: scroll;">
+                    <table class="lazyTable">
+                        <!-- Table headers -->
+                        <thead>
+                        <tr>
+                            <th *ngFor="let col of dataSourceHead">{{ col }}</th>
+                        </tr>
+                        </thead>
+                        <!-- Table body -->
+                        <tbody>
+                        <tr *ngFor="let item of dataSource" (click)="handleRowClick(item)">
+                            <td *ngFor="let col of dataSourceHead">{{ item[col] }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+           </div>
+            <!-- <div class="col-md-6 pt-3" style="text-align: right;">
+                        <button class="btn btn-white add-btn"
+                            (click)="previousPage()">
+                            <i class="fa fa-angle-left"></i>
+                        </button>
+                        <button class="btn btn-white add-btn"
+                            (click)="nextPage()">
+                            <i class="fa fa-angle-right"></i>
+                        </button >
+                </div> -->
+            <!-- <dx-data-grid width="40vw" height="240px" #gridContainer
+                id="gridContainer" [allowColumnReordering]="true"
+                [dataSource]="dataSource"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [showBorders]="true"
+                [columnAutoWidth]="true"
+                (onRowClick)="handleRowClick($event)">
+                <dxo-filter-row [visible]="showFilterRow"
+                [applyFilter]="currentFilter"></dxo-filter-row>
+                <dxo-paging [enabled]="true"
+                [pageSize]="pageSize"
+                [pageIndex]="pageIndex"></dxo-paging>
+                <dxi-column *ngFor="let data of dataSourceHead" dataField="{{data}}"
+                    caption="{{data}}"
+                    alignment="left">
+                </dxi-column>
+            </dx-data-grid> -->
+            
+        </ng-template>
+    </p-overlayPanel>
+</span>

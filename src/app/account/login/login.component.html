@@ -5,18 +5,21 @@
             <div
                 class="col-md-7 col-sm-10 d-flex justify-content-center flex-column">
                 <h1 class="text-white">SUN FACETS 2.0</h1>
-                <h5 class="text-white font-weight-light">Presenting efficient
-                    ERP
-                    software for Jewellery business providing integrated
-                    automation
-                    solutions catering to the Jewellery Industry.</h5>
+                <span style="font-size: 20px;" class="text-white">Presenting
+                    efficient
+                    ERP software for Jewellery business providing integrated
+                    automation solutions catering to the Jewellery Industry.</span>
             </div>
             <!-- right section / form section starts -->
             <div class="col-md-5 auth-side-form p-5">
                 <div class=" auth-content">
-                    <img src="assets/images/logo/logo-suntech.png" alt
-                        class="img-fluid mb-4 d-block">
-                    <h3 class="mb-4 f-w-200">Signin</h3>
+                    <div class="d-flex justify-content-center">
+                        <img src="assets/images/logo/logo-suntech.png" w alt
+                            class="img-fluid mb-4 d-block">
+                    </div>
+                        <span style="font-size: 24px;font-weight: 600;"
+                            class="mb-4">Signin</span>
+
 
                     <form class="example-form" [formGroup]='dataForm'
                         autocomplete="off">
@@ -37,11 +40,13 @@
                             <input type="text" autocomplete="new-password"
                                 matInput
                                 formControlName="branch"
-                                [matAutocomplete]="branch" 
+                                [matAutocomplete]="branch"
                                 (focusout)="changeBranch($event)">
                             <mat-autocomplete #branch="matAutocomplete"
                                 autoActiveFirstOption>
-                                <mat-option *ngFor="let option of  filteredOptions | async" [value]="option">
+                                <mat-option
+                                    *ngFor="let option of  filteredOptions | async"
+                                    [value]="option">
                                     {{option}}
                                 </mat-option>
                             </mat-autocomplete>
@@ -52,21 +57,26 @@
                                 [matAutocomplete]="year">
                             <mat-autocomplete #year="matAutocomplete"
                                 autoActiveFirstOption>
-                                <mat-option *ngFor="let option of  filteredOptions_year | async" [value]="option">
+                                <mat-option
+                                    *ngFor="let option of  filteredOptions_year | async"
+                                    [value]="option">
                                     {{option}}
                                 </mat-option>
                             </mat-autocomplete>
                         </mat-form-field>
                     </form>
 
-                    <button class="btn btn-block btn-primary mb-0"
+                    <button class="btn btn-block btn-primary w-100 mb-0"
+                        style="border-radius: 5px !important;"
                         (click)="signin()">Signin</button>
                     <div class="text-center">
                         <div class="saprator my-4"><span></span></div>
                         <p class="mb-2 text-muted">Forgot password? <a
+                                style="font-weight: 600;"
                                 [routerLink]="['/auth/reset-password-v2']"
                                 class="f-w-400">Reset</a></p>
                         <p class="mb-0 text-muted">Don’t have an account? <a
+                                style="font-weight: 600;"
                                 [routerLink]="['/auth/signup-v2']"
                                 class="f-w-400">Signup</a></p>
                     </div>

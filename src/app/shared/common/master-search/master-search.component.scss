@@ -1,0 +1,39 @@
+::ng-deep {
+  .p-overlaypanel {
+    z-index: 1070 !important;
+    display: fixed !important;
+  }
+  .mat-input-element {
+    font-size: 12px !important;
+  }
+  .mat-form-field {
+    font-size: 12px !important;
+  }
+}
+.arrow-icon {
+  font-size: 24px;
+  transition: transform 0.3s ease; /* Animation transition */
+}
+
+.arrow-icon.rotate-up {
+  transform: rotate(180deg);
+}
+.lazyTable {
+  min-width: 30vw;
+  th {
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid #e1e1e1;
+    color: #fff;
+    background-color: #2dacdf;
+  }
+  td {
+    font-size: 13px;
+    padding: 5px;
+    padding: 3px;
+    border: 1px solid #e1e1e1;
+  }
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+}

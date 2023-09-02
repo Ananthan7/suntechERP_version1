@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { JobcardComponent } from './jobcard/jobcard.component';
+import { WorkerMasterComponent } from './worker-master/worker-master.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -26,13 +27,35 @@ export class MasterComponent implements OnInit {
     private modalService: NgbModal,
     private ChangeDetector: ChangeDetectorRef
   ) {
-
+    this.viewRowDetails = this.viewRowDetails.bind(this);
   }
 
   ngOnInit(): void {
     /**USE: to get table data from API */
     this.getMasterGridData()
+    // this.openModalView()
   }
+
+  viewRowDetails(e: any) {
+    let str = e.row.data;
+    console.log(str);
+  }
+  //  open Jobcard in modal
+  openModalView() {
+    let contents;
+    if(this.menuTitle == 'Job Card'){
+      contents = JobcardComponent
+    }else if(this.menuTitle == 'Worker Master'){
+      contents = WorkerMasterComponent
+    }
+    this.modalService.open(contents, {
+      size: 'xl',
+      backdrop: 'static',
+      keyboard: false,
+      windowClass: 'modal-full-width'
+    });
+  }
+
 
   //PAGINATION
   totalItems: number = 1000; // Total number of items
@@ -45,7 +68,7 @@ export class MasterComponent implements OnInit {
       if (this.orderedItems.length > 10) {
         this.orderedItems.splice(this.orderedItems.length - this.pageSize, this.pageSize);
       }
-    } 
+    }
   }
   nextPage() {
     if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
@@ -54,31 +77,47 @@ export class MasterComponent implements OnInit {
     }
   }
 
-  //  open Jobcard in modal
-  openJobcard() {
-    this.modalService.open(JobcardComponent, {
-      size: 'xl',
-      backdrop: true,
-      keyboard: false,
-      windowClass: 'modal-full-width'
-    });
-  }
-
+  
   /**USE: to get table data from API */
-  getMasterGridData(pageIndex?: number) {
+  getMasterGridData(data?: any) {
+    let tableName = this.CommonService.getqueryParamTable()
     //use: to get menu title from queryparams and API endpoint
     this.menuTitle = this.CommonService.getModuleName()
     if (this.orderedItems.length == 0) {
       this.snackBar.open('loading...');
     }
-    this.apiCtrl = 'MasterMainGrid'
-    let params = {
-      "PAGENO": pageIndex || 1,
-      "RECORDS": this.pageSize || 10,
-      "TABLE_NAME": "DIAMOND_STOCK_MASTER",
-      "CUSTOM_PARAM": ""
+    if(tableName =='WORKER_MASTER'){
+      this.orderedItemsHead = [
+        { 
+          dataField: "WORKER_CODE",
+          caption:"WORKER_CODE",
+          alignment:"left"
+        },
+        { 
+          dataField: "DESCRIPTION",
+          caption:"DESCRIPTION",
+          alignment:"left"
+        },
+    ]
     }
-    this.subscriptions$ = this.dataService.postDynamicAPI(this.apiCtrl, params).subscribe((resp: any) => {
+    this.apiCtrl = 'TransctionMainGrid'
+    let params = {
+      "PAGENO": this.pageIndex || 1,
+      "RECORDS": this.pageSize || 10,
+      "TABLE_NAME": tableName,
+      "CUSTOM_PARAM": {
+        "FILTER": {
+          "YEARMONTH": localStorage.getItem('YEAR') || '',
+          "BRANCHCODE": 'MOE',
+          "VOCTYPE": "PCR"
+        },
+        "TRANSACTION": {
+          "VOCTYPE": "PCR",
+        }
+      }
+    }
+    this.subscriptions$ = this.dataService.postDynamicAPI(this.apiCtrl, params)
+    .subscribe((resp: any) => {
       this.snackBar.dismiss();
       if (resp.dynamicData) {
         // resp.dynamicData[0].map((s: any, i: any) => s.id = i + 1);

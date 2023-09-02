@@ -41,3 +41,36 @@
     }
   }
 }
+
+@media (min-width: 1200px) {
+  ::ng-deep {
+    .modal-xl {
+      max-width: 95vw !important;
+      max-height: 90vh !important;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 13px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f3f3f3;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #999999;
+      border-radius: 5px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  }
+}
+

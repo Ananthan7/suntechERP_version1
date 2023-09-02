@@ -1,0 +1,249 @@
+
+<div (click)="printInvoice()" class="touch-big-button">
+    <div class="touch-big-button-inner p-2"><i
+            class="fa fa-print"></i>
+        <span> Print Bill</span>
+    </div>
+</div>
+<ng-container>
+    <div style="display: none" id="print_invoice">
+        <table style="border: hidden; width: 100%">
+            <tr>
+                <td style="border: hidden; vertical-align: top">
+                    <div
+                        style="font-weight: bold; text-align: center; font-size: 24px">
+                        <h4 style="margin: 5px 0px">POS</h4>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- <table style="width: 100%">
+            <tr style="border-bottom: hidden">
+                <td>
+                    <label style="font-weight: bold">Customer Name </label>
+                    <label style="float: right">{{ inv_customer_name }}</label>
+                </td>
+                <td>
+                    <label style="font-weight: bold">INVOICE NO </label>
+                    <label style="font-weight: bold; float: right"> {{
+                        inv_number }}</label>
+                </td>
+            </tr>
+            <tr style="border-bottom: hidden">
+                <td>
+                    <label style="font-weight: bold">ID No/Passport </label>
+                    <label style="float: right">{{ inv_cust_id_no }}</label>
+                </td>
+                <td>
+                    <label style="font-weight: bold">Bill Date </label>
+                    <label style="float: right">{{ inv_bill_date }}</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight: bold">Mobile Mumber</label>
+                    <label style="float: right">{{ inv_cust_mobile_no }}</label>
+                </td>
+                <td>
+                    <label style="font-weight: bold">Salesman</label>
+                    <label style="float: right">{{ inv_sales_man }}</label>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <div class="row">
+            <table class="table" style="margin-left: 0px; width: 100%">
+                <thead
+                    style="background: #eaecea; -webkit-print-color-adjust: exact">
+                    <tr style="text-align-last: center">
+                        <th style="vertical-align: middle; text-align: center">No</th>
+                        <th style="vertical-align: middle; text-align: center">
+                            Description
+                        </th>
+                        <th style="vertical-align: middle; text-align: center">Pcs</th>
+                        <th style="vertical-align: middle; text-align: center">Qty/Gms</th>
+                        <th style="vertical-align: middle; text-align: center">
+                            Rate (Mkg/Pcs)
+                        </th>
+                        <th style="vertical-align: middle; text-align: center">
+                            Net Amount (Excl.VAT)
+                        </th>
+                        <th style="vertical-align: middle; text-align: center">VAT
+                            %</th>
+                        <th style="vertical-align: middle; text-align: center">Tax
+                            Amount</th>
+                        <th style="vertical-align: middle; text-align: center">
+                            Net Amount (Incl.VAT)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cli of ordered_items; let id= index">
+                        <td
+                            style="border-bottom-style: hidden; text-align: center">
+                            {{ cli.sn_no }}
+                        </td>
+                        <td style="border-bottom-style: hidden">
+                            {{ cli.description }} - {{ cli.stock_code }}
+                        </td>
+                        <td
+                            style="border-bottom-style: hidden; text-align-last: right">
+                            {{ cli.pcs }}
+                        </td>
+                        <td
+                            style="border-bottom-style: hidden; text-align-last: right">
+                            {{ cli.weight }}
+                        </td>
+                        <td
+                            style="border-bottom-style: hidden; text-align-last: right">
+                            {{ cli.rate | number:'1.2'}}
+                        </td>
+                        <td
+                            style="border-bottom-style: hidden; text-align-last: right">
+                            {{ cli.gross_amt| number:'1.2' }}
+                        </td>
+                        <td
+                            style="border-bottom-style: hidden; text-align-last: right">
+                            {{ cli.taxPer | number:'1.2' }}
+                        </td>
+                        <td
+                            style="border-bottom-style: hidden; text-align-last: right">
+                            {{ cli.tax_amount | number:'1.2'}}
+                        </td>
+                        <td
+                            style="border-bottom-style: hidden; text-align-last: right">
+                            {{ cli.net_amount | number:'1.2' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="border-right-style: hidden" colspan="2">
+                            <div>
+                                <p style="float: left">({{ prnt_inv_total_pcs }}
+                                    items)</p>
+                                <p style="float: right">Total</p>
+                            </div>
+                        </td>
+                        <td style="font-weight: 600; text-align-last: right">
+                            {{ prnt_inv_total_pcs }}
+                        </td>
+                        <td style="font-weight: 600; text-align-last: right">
+                            &nbsp;
+
+                        </td>
+                        <td style="font-weight: 600; text-align-last: right">
+                            &nbsp;
+                        </td>
+                        <td style="font-weight: 600; text-align-last: right">
+                            {{ prnt_inv_total_gross_amt | number:'1.2' }}
+                        </td>
+                        <td style="font-weight: 600; text-align-last: right">&nbsp;</td>
+                        <td style="font-weight: 600; text-align-last: right">
+                            {{ prnt_inv_total_tax_amount | number:'1.2' }}
+                        </td>
+                        <td style="font-weight: 600; text-align-last: right">
+                            {{ order_items_total_gross_amount | number:'1.2'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8"
+                            style="font-weight: 600; text-align-last: right">
+                            Total Before VAT
+                        </td>
+                        <td style="text-align-last: right">
+                            {{ prnt_inv_total_gross_amt | number:'1.2' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8"
+                            style="font-weight: 600; text-align-last: right">
+                            Total VAT 5%
+                        </td>
+                        <td style="text-align-last: right">
+                            {{ prnt_inv_total_tax_amount | number:'1.2' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8"
+                            style="font-weight: 600; text-align-last: right">
+                            Net Amount
+                        </td>
+                        <td style="text-align-last: right">
+                            {{ order_items_total_gross_amount | number:'1.2' }}
+                        </td>
+                    </tr>
+
+                    <tr style="border-bottom: hidden"
+                        *ngIf="invReturnSalesTotalNetTotal !=0">
+                        <td colspan="9" style="font-weight: 600">
+                            Sales Return : {{ invReturnSalesTotalNetTotal |
+                            number:'1.2' }}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: hidden"
+                        *ngIf="order_total_exchange !=0">
+                        <td colspan="9" style="font-weight: 600">
+                            Exchange : {{ order_total_exchange | number:'1.2' }}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: hidden">
+                        <td colspan="9" style="font-weight: 600">
+                            Recieved : {{ prnt_received_amount | number:'1.2' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="9" style="text-transform: capitalize">
+                            {{ prnt_received_amount_words !='' ?
+                            prnt_received_amount_words +
+                            'UNITED ARAB EMIRATES DIRHAM Only' :'' }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3">Confirmed on behalf of</td>
+                        <td colspan="6"
+                            style="font-weight: 600; text-align-last: right">
+                            Suntech Business Solutions
+                        </td>
+                    </tr>
+
+                    <tr style="border-bottom: hidden; height: 120px">
+                        <td colspan="3"></td>
+                        <td colspan="3"></td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"
+                            style="font-weight: 600; font-size: 14px; text-align: center">
+                            CUSTOMER'S SIGNATURE
+                        </td>
+                        <td colspan="3"
+                            style="font-weight: 600; font-size: 14px; text-align: center">
+                            INVOICE CHECKED BY
+                        </td>
+                        <td colspan="3"
+                            style="font-weight: 600; font-size: 14px; text-align: center">
+                            AUTHORISED SIGNATURE
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="9"
+                            style="font-weight: 300; text-align-last: center; font-size: 14px">
+                            THANK YOU FOR SHOPPING WITH US
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+    </div>
+</ng-container>

@@ -37,6 +37,87 @@ import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts';
 import { ConfigService } from './services/config.service';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
+
+import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
+import { DecimalPipe } from '@angular/common';
+
+const dbConfig: DBConfig = {
+  name: 'suntechPos',
+  version: 1,
+  objectStoresMeta: [
+    {
+      store: 'compparams',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'PARAMETER', keypath: 'PARAMETER', options: { unique: false } },
+        { name: 'PARAM_VALUE', keypath: 'PARAM_VALUE', options: { unique: false } },
+        { name: 'DISPLAY_NAME', keypath: 'DISPLAY_NAME', options: { unique: false } },
+        { name: 'DESCRIPTION', keypath: 'DESCRIPTION', options: { unique: false } },
+        { name: 'CONTROLTYPE', keypath: 'CONTROLTYPE', options: { unique: false } },
+        { name: 'FUNCTIONS', keypath: 'FUNCTIONS', options: { unique: false } },
+        { name: 'PARAMGROUP', keypath: 'PARAMGROUP', options: { unique: false } },
+        { name: 'SUBGROUP', keypath: 'SUBGROUP', options: { unique: false } },
+        { name: 'DIVISION', keypath: 'DIVISION', options: { unique: false } },
+        { name: 'DIVISION_CODE', keypath: 'DIVISION_CODE', options: { unique: false } },
+      ]
+    },
+
+    {
+      store: 'branchCurrencyMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'REFMID', keypath: 'REFMID', options: { unique: false } },
+        { name: 'CURRENCY_CODE', keypath: 'CURRENCY_CODE', options: { unique: false } },
+        { name: 'DESCRIPTION', keypath: 'DESCRIPTION', options: { unique: false } },
+        { name: 'CURRENCY_FRACTION', keypath: 'CURRENCY_FRACTION', options: { unique: false } },
+        { name: 'CONV_RATE', keypath: 'CONV_RATE', options: { unique: false } },
+        { name: 'MUL_DIV', keypath: 'MUL_DIV', options: { unique: false } },
+        { name: 'MIN_CONV_RATE', keypath: 'MIN_CONV_RATE', options: { unique: false } },
+        { name: 'MAX_CONV_RATE', keypath: 'MAX_CONV_RATE', options: { unique: false } },
+        { name: 'SYMBOL', keypath: 'SYMBOL', options: { unique: false } },
+        { name: 'SYSTEM_DATE', keypath: 'SYSTEM_DATE', options: { unique: false } },
+        { name: 'CMBRANCH_CODE', keypath: 'CMBRANCH_CODE', options: { unique: false } },
+      ]
+    },
+    {
+      store: 'messageBox',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+    {
+      store: 'comboFilter',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+    {
+      store: 'countryMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+    {
+      store: 'nationalityMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+    {
+      store: 'idMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+    {
+      store: 'divisionMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+    {
+      store: 'customerTypeMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+
+  ]
+};
+
 @NgModule({
   declarations: [
     AppComponent
@@ -63,13 +144,16 @@ import { allIcons } from 'angular-feather/icons';
     DxDataGridModule,
     NgChartsModule.forRoot(),
     FeatherModule.pick(allIcons),
+    NgxIndexedDBModule.forRoot(dbConfig),
     
     ],
   providers: [ConfigService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
-    { provide: NgChartsConfiguration, useValue: { generateColors: false }}
+    { provide: NgChartsConfiguration, useValue: { generateColors: false }},
+    DecimalPipe,
+
   ],
   bootstrap: [AppComponent]
 })

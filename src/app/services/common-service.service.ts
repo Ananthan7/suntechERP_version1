@@ -1,3 +1,5 @@
+// import { DecimalPipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
@@ -16,18 +18,173 @@ export class CommonServiceService {
   menuName: any;
   queryParamAPI: any;
   //POS datas
+  //service for ADD POS starts
+  amtDecimals: any
+  amtFormat: any
+  mQtyFormat: any
+  mQtyDecimals: any
+  basePartyCode: any
+  compCurrency: any
+  popMetalValueOnNet: any
+
   public allMessageBoxData: any;
+  public allCompanyParams: any;
+  public baseUsername: any;
+  public baseUserbranch: any;
+  public baseYear: any;
+  public allbranchMaster: any = localStorage.getItem('branchdetails');
+  public allBranchCurrency: any;
+  public currencyRate: any;
+  public divisionMasterList: any;
+  public mastersList: any = [];
+  public comboFilter: any = [];
+  public countryMaster: any = [];
+  public cityMaster: any = [];
+  public nationalityMaster: any = [];
+  public idMaster: any = [];
+  public customerTypeMaster: any = [];
 
   constructor(
     private route: ActivatedRoute,
+    private _decimalPipe: DecimalPipe,
   ) {
   }
+  //common Number validation
+  isNumeric(event: any) {
+    var keyCode = event.which ? event.which : event.keyCode;
+    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || keyCode === 46;
+    return isValid;
+  }
   //service for ADD POS starts
+  stringToBoolean = (string: string) => string != undefined && string != null ? string.toString().toLowerCase() == 'false' ? false : true : false;
+  formControlSetReadOnly(id: any, isReadonly: boolean) {
+    const ele: any = document.getElementById(id);
+    console.log('ele ', ele);
+    if (ele != null && ele != undefined)
+      ele.readOnly = isReadonly;
+    // (<any>formControl).nativeElement.readonly = isReadonly;
+  }
+  formControlSetReadOnlyByClass(className: any, isReadonly: boolean) {
+    const ele: any = document.getElementsByClassName(className);
+    if (ele != null && ele != undefined)
+      for (let i = 0; i < ele.length; i++) {
+        ele[i].readOnly = isReadonly;
+      }
+  }
+  // convert date to mm-dd-yyy format
+  convertDateToMDY(data: any) {
+    if (data != '' && data != null) {
+      const date = new Date(data);
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const formattedDate = `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+      return formattedDate;
+    } else {
+      return '';
+    }
+
+  }
+  getCurrRate(currency: any) {
+    const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
+    return result[0].CONV_RATE;
+  }
+  CCToFC(currency: any, amount: any) {
+
+    let rate = this.getCurrRate(currency);
+    currency = currency;
+    rate = typeof (rate) == 'number' ? rate : rate;
+    amount = typeof (amount) == 'number' ? amount : amount;
+    let convertedAmount = 0;
+    const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
+    if (result.MUL_DIV == 'M') {
+      convertedAmount = amount / rate;
+      console.log('.MUL_DIV == m', convertedAmount);
+      return convertedAmount;
+    } else {
+      convertedAmount = amount * rate;
+      console.log('.MUL_DIV == D', convertedAmount);
+      return convertedAmount;
+    }
+  }
+  // Transform number to decimal
+  transformDecimalVB(format: any, num: any) {
+    // alert((42385.6075).toFixed(1))
+    // alert(`${num} - ${parseFloat(num).toFixed(format)}`);
+
+    const formatVal = `1.${format}-${format}`;
+    // console.log('formatVal',formatVal, 'num',num);
+    var val: any = this._decimalPipe.transform(num || 0, formatVal);
+    // console.log(val);
+    val = val.includes(',') ? val.replaceAll(',', '') : val;
+    // console.log(val);
+
+    // alert(this._decimalPipe.transform(num, formatVal));
+    return parseFloat(val).toFixed(format);
+    // return parseFloat(num).toFixed(format);
+    // return parseFloat( parseFloat(num).toFixed(format));
+  }
+
+  FCToCC(currency: any, amount: any) {
+    let rate = this.getCurrRate(currency);
+    currency = currency;
+    rate = typeof (rate) == 'number' ? rate : rate;
+    amount = typeof (amount) == 'number' ? amount : amount;
+
+    let convertedAmount = 0;
+
+    const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
+    if (result.MUL_DIV == 'M') {
+      convertedAmount = amount / rate;
+
+      return this.transformDecimalVB(this.amtDecimals, convertedAmount);
+    } else {
+      convertedAmount = amount * rate;
+      return this.transformDecimalVB(this.amtDecimals, convertedAmount);
+    }
+  }
+
+  setCompParaValues() {
+    this.allCompanyParams.map((data: any) => {
+      if (data.PARAMETER == 'AMTFORMAT')
+        this.amtFormat = data.PARAM_VALUE;
+      if (data.PARAMETER == 'MQTYFORMAT')
+        this.mQtyFormat = data.PARAM_VALUE;
+      if (data.PARAMETER == 'AMTDECIMALS') {
+        this.amtDecimals = data.PARAM_VALUE;
+        console.log('this.amtDecimals', this.amtDecimals);
+      }
+      if (data.PARAMETER == 'MQTYDECIMALS')
+        this.mQtyDecimals = data.PARAM_VALUE;
+      if (data.PARAMETER == 'POSSHOPCTRLAC')
+        this.basePartyCode = data.PARAM_VALUE;
+
+      if (data.PARAMETER == 'COMPANYCURRENCY') {
+        this.compCurrency = data.PARAM_VALUE;
+      }
+      if (data.Parameter == 'POSKARATRATECHANGE') {
+        this.posKARATRATECHANGE = data.Param_Value;
+        if (this.posKARATRATECHANGE.toString() == '0') {
+          this.formControlSetReadOnlyByClass('karat_code', true);
+        }
+      }
+
+      if (data.PARAMETER == 'POPMETALVALUEONNET') {
+        this.popMetalValueOnNet = data.PARAM_VALUE;
+      }
+    });
+  }
+  // Get Combo filter(selectbox) data by id
+  getComboFilterByID(type: any) {
+    type = type.trim();
+    const res = this.comboFilter.filter((data: any) => data.COMBO_TYPE.toString().toLowerCase() == type.toString().toLowerCase())
+    return res;
+  }
   posKARATRATECHANGE: any = '';
-  getDivisionMS(division:any) {
+  getDivisionMS(division: any) {
     // return this.divisionMasterList.filter((data) => data.DIVISION_CODE == division)[0].DIVISION;
   }
-  Null2BitValue(value:any) {
+  Null2BitValue(value: any) {
     value = value.trim();
     if (value == null || value.toString() == '' || value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0") {
       return false;
@@ -36,7 +193,7 @@ export class CommonServiceService {
       return true;
     }
   }
-  emptyToZero(value:any) {
+  emptyToZero(value: any) {
     value = typeof (value) == 'number' || value == undefined ? value : value.trim();
 
     if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
@@ -48,13 +205,7 @@ export class CommonServiceService {
     }
   }
 
-  formControlSetReadOnlyByClass(className: any, isReadonly: boolean) {
-    const ele: any = document.getElementsByClassName(className);
-    if (ele != null && ele != undefined)
-      for (let i = 0; i < ele.length; i++) {
-        ele[i].readOnly = isReadonly;
-      }
-  }
+
   // Get Messages by id
   getMsgByID(id: any) {
     id = id.trim();
@@ -107,7 +258,16 @@ export class CommonServiceService {
     });
     return queryParamAPI
   }
-
+  getqueryParamTable() {
+    let queryParamAPI
+    this.route.queryParams.subscribe((data: any) => {
+      queryParamAPI = data.tableName;
+    });
+    return queryParamAPI
+  }
+  generateNumber() {
+    return Math.floor(1000 + Math.random() * 9000)
+  }
   /**USE: to get create dynamic colors */
   dynamicColors() {
     var r = Math.floor(Math.random() * 255);

@@ -4,12 +4,10 @@
     <div class="landing_page">
         <div class="container">
             <div class="row">
-                <div class="col-md-3 my-2"
-                    *ngFor="let data of menuList; let i = index">
+                <div class="col-md-3 my-2" *ngFor="let data of menuList; let i = index">
                     <!-- Assuming you want to navigate to the route /target-route with query parameters -->
                     <!-- <a [routerLink]="['/module-container']" [queryParams]="{ modulename :data.MODULE_NAME, id: i }"> -->
-                    <a
-                        routerLink="/{{ data.ANG_CMB_PATH_NAME || 'module-container' }}"
+                    <a routerLink="/{{ data.ANG_CMB_PATH_NAME || 'module-container' }}"
                         [queryParams]="{ modulename: data.MODULE_NAME, id: i }">
                         <div class="card_btn">
                             <img [src]="data.imageUrl" loading="lazy"

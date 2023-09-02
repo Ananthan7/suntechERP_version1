@@ -1,0 +1,67 @@
+<i class="fa fa-search searchIcon"
+    (click)="openMasterSearch()"></i>
+<!-- modal content starts -->
+<ng-template #master_search let-modal>
+    <div>
+        <!-- header section ADD CUSTOMER -->
+        <div class="border-bottom d-flex justify-content-between p-2">
+            <h6>{{MasterSearch.SEARCH_HEADING}}</h6>
+            <button type="button" class="btn btn-close close-btn p-2"
+                (click)="close()">
+                <i class="feather icon-x close-icon"></i>
+            </button>
+        </div>
+        <div class="row p-3">
+            <div class="col-md-5">
+                <mat-form-field style="width: 65%">
+                    <mat-label>Search</mat-label>
+                    <input type="text" matInput
+                        [(ngModel)]="MasterSearch.SEARCH_VALUE"
+                        (keyup.enter)="searchValueChange($event)"
+                        (focusout)="searchValueChange($event)" />
+                    <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+                </mat-form-field>
+                <!-- <i class="fa fa-search searchIcon"
+                    (click)="searchValueChange($event)"></i> -->
+            </div>
+            <div class="col-md-6 d-flex justify-content-end pt-2">
+                <div style="float: right;">
+                        <button class="btn btn-white add-btn"
+                            (click)="previousPage()">
+                            <i class="fa fa-angle-left"></i>
+                        </button>
+                        <button class="btn btn-white add-btn"
+                            (click)="nextPage()">
+                            <i class="fa fa-angle-right"></i></button>
+                </div>
+            </div>
+            <dx-data-grid width="100%" #gridContainer
+                id="gridContainer" [allowColumnReordering]="true"
+                [dataSource]="dataSource"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [showBorders]="true"
+                [columnAutoWidth]="true"
+                (onRowClick)="handleRowClick($event)">
+                <dxo-filter-row [visible]="showFilterRow"
+                    [applyFilter]="currentFilter"></dxo-filter-row>
+                <dxo-paging [enabled]="true"
+                    [pageSize]="pageSize"
+                    [pageIndex]="pageIndex"></dxo-paging>
+                <!-- <dxo-selection mode="single"></dxo-selection> -->
+                <dxi-column *ngFor="let data of dataSourceHead"
+                    dataField="{{data}}"
+                    caption="{{data}}">
+                </dxi-column>
+            </dx-data-grid>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="padding-bottom: 20px">
+                <div style="text-align: right; padding: 10px">
+                    <button mat-flat-button color="primary" (click)="close()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,9 +1,7 @@
 <!-- menu section -->
 <app-menubar [menuTitle]="menuTitle" (subMenuChange)="getMasterGridData()"></app-menubar>
-<app-loader [isLoading]="isLoading"></app-loader>
-
 <!-- content section starts -->
-<div class="row d-flex justify-content-between"
+<div class="row d-flex justify-content-between" 
     style="min-height: 100vh !important;">
     <div class="col-md-2 col-sm-12">
         <app-cardbox [header]="'Cycle Time'" [content]="'32'"></app-cardbox>
@@ -75,7 +73,6 @@
                                         [showRowLines]="true"
                                         [showBorders]="true"
                                         [remoteOperations]="true"
-                                        [rowAlternationEnabled]="false"
                                         [columnAutoWidth]="true">
                                         <!-- <dxo-filter-row visible="true"></dxo-filter-row> -->
                                         <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
@@ -90,11 +87,12 @@
                                             <dxi-button icon="fa fa-edit"></dxi-button>
                                             <dxi-button icon="fa fa-eye"></dxi-button>
                                         </dxi-column>
-                                        <dxi-column dataField="BRANCH_CODE"caption="Branch" alignment="center" ></dxi-column>
-                                        <dxi-column dataField="VOCDATE" caption="Date" alignment="center" ></dxi-column>
-                                        <dxi-column dataField="VOCNO"caption="VocNo" alignment="center" ></dxi-column>
-                                        <dxi-column dataField="PARTYNAME"caption="Customer" alignment="center" ></dxi-column>
-                                        <dxi-column dataField="MOBILE"caption="Mobile No." alignment="center" ></dxi-column>
+                                        <!-- <dxi-column dataField="BRANCH_CODE"caption="Branch" alignment="center" ></dxi-column> -->
+                                        <dxi-column dataField="VOCNO"caption="VocNo" alignment="left" ></dxi-column>
+                                        <dxi-column dataField="VOCDATE" caption="Date" alignment="left" ></dxi-column>
+                                        <dxi-column dataField="PARTYNAME" caption="Customer" alignment="left" ></dxi-column>
+                                        <dxi-column dataField="MOBILE" caption="Mobile No." alignment="left" ></dxi-column>
+                                        <dxi-column dataField="NETVALUE_CC" caption="Total Amount" alignment="right" ></dxi-column>
                                         <dxo-summary>
                                         </dxo-summary>
                                     </dx-data-grid>

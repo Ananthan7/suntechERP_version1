@@ -5,12 +5,13 @@ import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { NewPosEntryComponent } from './new-pos-entry/new-pos-entry.component';
+import { AddPosComponent } from './add-pos/add-pos.component';
 
 @Component({
   selector: 'app-retail-transaction',
   templateUrl: './retail-transaction.component.html',
   styleUrls: ['./retail-transaction.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RetailTransactionComponent implements OnInit {
   //variables
@@ -18,7 +19,6 @@ export class RetailTransactionComponent implements OnInit {
   apiCtrl: any
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
-  isLoading: boolean = false;
 
   subscriptions$!: Subscription;
   constructor(
@@ -26,22 +26,30 @@ export class RetailTransactionComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     private modalService: NgbModal,
-    private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
+    // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
   }
 
   ngOnInit(): void {
     this.getMasterGridData()
-    this.openMadalView()
+    if(localStorage.getItem('AddNewFlag') && localStorage.getItem('AddNewFlag') == '1'){
+      this.openMadalView()
+      localStorage.removeItem('AddNewFlag')
+    }
   }
+
   //PAGINATION
   totalItems: number = 1000; // Total number of items
   pageSize: number = 10; // Number of items per page
   pageIndex: number = 1; // Current page index
+
   previousPage() {
     if (this.pageIndex > 0) {
       this.pageIndex = this.pageIndex - 1;
-    } 
+      if (this.orderedItems.length > 10) {
+        this.orderedItems.splice(this.orderedItems.length - this.pageSize, this.pageSize);
+      }
+    }
   }
   nextPage() {
     if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
@@ -50,39 +58,67 @@ export class RetailTransactionComponent implements OnInit {
     }
   }
   /**USE: to get table data from API */
-  getMasterGridData(pageIndex?:number) {
+  getMasterGridData(pageIndex?: number) {
     //use: to get menu title from queryparams and API endpoint
     this.menuTitle = this.CommonService.getModuleName()
     this.apiCtrl = this.CommonService.getqueryParamAPI()
-    this.snackBar.open('loading...');
-    this.isLoading = true;
-    let params: any = { "PageNumber": 1, "PageSize": 10 }
-    let API: string = `${this.apiCtrl}?strBranchCode=${this.CommonService.branchCode}&strVocType=${'POS'}&strYearMonth=${this.CommonService.yearSelected}`
+    if (this.orderedItems.length == 0) {
+      this.snackBar.open('loading...');
+    }
+    // let params: any = { "PageNumber": 1, "PageSize": 10 }
+    // let API: string = `${this.apiCtrl}?strBranchCode=${this.CommonService.branchCode}&strVocType=${'POS'}&strYearMonth=${this.CommonService.yearSelected}`
+    let API = 'TransctionMainGrid'
+    let params = {
+        "PAGENO": this.pageIndex || 1,
+        "RECORDS": this.pageSize || 10,
+        "TABLE_NAME": "RETAIL_SALES",
+        "CUSTOM_PARAM": {
+          "FILTER": {
+            "YEARMONTH": localStorage.getItem('YEAR') || '',
+            "BRANCHCODE":  'MOE',
+            "VOCTYPE": "PCR"
+          },
+          "TRANSACTION": {
+            "VOCTYPE": "PCR",
+          }
+        }
+    }
     this.subscriptions$ = this.dataService.postDynamicAPI(API, params)
       .subscribe((resp: any) => {
-        this.isLoading = false;
         this.snackBar.dismiss();
-        if (resp.response) {
-          resp.response.forEach((item: any, i: any) => {
+        if (resp.dynamicData) {
+          // resp.dynamicData[0].map((s: any, i: any) => s.id = i + 1);
+          resp.dynamicData[0].forEach((item: any, i: any) => {
             item.Id = i + 1;
           });
-          this.orderedItems = resp.response;
-          this.ChangeDetector.detectChanges() //detect dom change
+          if (this.orderedItems.length > 0) {
+            this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
+          } else {
+            this.orderedItems = resp.dynamicData[0];
+            this.nextPage()
+          }
         } else {
           this.orderedItems = [];
-          // Calling the DT trigger to manually render the table
         }
+        // if (resp.response) {
+        //   resp.response.forEach((item: any, i: any) => {
+        //     item.Id = i + 1;
+        //   });
+        //   this.orderedItems = resp.response;
+        //   this.ChangeDetector.detectChanges() //detect dom change
+        // } else {
+        //   this.orderedItems = [];
+        // }
       }, err => {
-        this.isLoading = false;
         alert(err)
       });
 
   }
   //  open Jobcard in modal
   openMadalView() {
-    this.modalService.open(NewPosEntryComponent, {
+    this.modalService.open(AddPosComponent, {
       size: 'xl',
-      backdrop: true,
+      backdrop: 'static',
       keyboard: false,
       windowClass: 'modal-full-width'
     });
@@ -98,5 +134,5 @@ export class RetailTransactionComponent implements OnInit {
   }
 
 
-  
+
 }

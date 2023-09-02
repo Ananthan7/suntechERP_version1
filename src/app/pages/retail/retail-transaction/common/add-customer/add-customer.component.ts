@@ -495,11 +495,10 @@ export class AddCustomerComponent implements OnInit {
             });
 
           } else {
-            // this.modalReference.close();
-            // this.customerDetails = {};
-            // this.snackBar.open(data.message, '', {
-            //   duration: 2000 // time in milliseconds
-            // });
+            this.customerDetails = {};
+            this.snackBar.open(data.message, '', {
+              duration: 2000 // time in milliseconds
+            });
             // this.modalReference.close();
           }
         });

@@ -1,161 +1,151 @@
 body {
-    background: #cccccc !important;
+  background: #cccccc !important;
 }
 
 .card {
-    background-color: #ffffff;
+  background-color: #ffffff;
 }
 
 .pcoded-main-container {
-    background-color: #cccccc !important;
+  background-color: #cccccc !important;
 }
 
 .form-group {
-    margin-bottom: 0.4rem;
+  margin-bottom: 0.4rem;
 }
 
 label {
-    margin-bottom: 0.1rem;
+  margin-bottom: 0.1rem;
 }
 
 .textboxcorner {
-    border-radius: 2px;
-    height: 30px;
-    text-align: right;
+  border-radius: 2px;
+  height: 30px;
+  text-align: right;
 }
 
 .card-header {
-    padding: 10px;
-    background-color: #f0f0f0;
+  padding: 10px;
+  background-color: #f0f0f0;
 }
 
 .card-body {
-    padding: 10px 10px;
-    margin-top: 10px;
+  padding: 10px 10px;
+  margin-top: 10px;
 }
 
 .table thead th {
-    background-color: #f0f0f0;
-    padding: 5px;
-    text-transform: capitalize;
+  background-color: #f0f0f0;
+  padding: 5px;
+  text-transform: capitalize;
 }
 
 .table td {
-    padding: 5px;
-    vertical-align: middle;
+  padding: 5px;
+  vertical-align: middle;
 }
 
 .notification-card {
-    cursor: pointer;
-}
-
-.touch-big-button-black {
-    background-color: #666666 !important;
+  cursor: pointer;
 }
 
 .badge {
-    font-size: 113%;
-    padding: 1.0em 0.6em;
-    font-weight: 600;
-    width: 50px;
-    height: 50px;
+  font-size: 113%;
+  padding: 1em 0.6em;
+  font-weight: 600;
+  width: 50px;
+  height: 50px;
 }
 
+// touch-big-button styles
+.touch-big-button-black {
+  background-color: #666666 !important;
+}
 .touch-big-button {
-    width: 100%;
-    height: 50px;
-    background-color: #0861a9;
-    text-align: center;
-    color: #ffffff;
-    cursor: pointer;
-
-}
-.touch-big-button-inner{
+  min-width: 130px;
+  background-color: #0861a9;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0px 4px 4px 4px;
   text-align: center !important;
-  padding-left: 0px !important;
-  padding-top: 10px !important;
-  font-size: 16px !important;
 }
 
 .touch-big-button i {
-    padding-right: 7px;
-    padding-top: 13px;
+  padding-right: 7px;
+  padding-top: 13px;
+  font-size: 15px;
 }
 
-.touch-big-button i {
-    font-size: 20px;
-    padding-top: 10px;
-}
-
-.touch-big-button div {
-    text-align: center;
-    padding-left: 0px;
-    padding-top: 0px;
-    font-size: 12px;
-}
 
 button[aria-label="Close"]:focus {
-    outline: none;
+  outline: none;
 }
 
 .tabletd_gray {
-    width: 100%;
-    margin-bottom: 10px;
-    background: #fff;
+  width: 100%;
+  margin-bottom: 10px;
+  background: #fff;
 }
 
 .tabletd_gray tr td,
 .tabletd_gray tr th {
-    text-align: center;
-    border: 1px solid #ccc;
+  text-align: center;
+  border: 1px solid #ccc;
 }
 
 .rhs-table-1 {
-    border-collapse: separate;
-    border-spacing: 0 .5em;
+  border-collapse: separate;
+  border-spacing: 0 0.5em;
 }
 
 .rhs-table-1 td {
-    border: 1px solid #a4a4a4;
+  border: 1px solid #a4a4a4;
 }
 
 .rhs-table-1 tr td input {
-    border: none !important;
+  border: none !important;
 }
 
 .mat-form-field {
-    display: inline !important;
+  display: inline !important;
 }
 
 .rhs-table-1 .td-w-40 {
-    width: 40% !important;
-    border-right: none !important;
-    padding-left: 5px;
-    background-color: #dedede;
+  width: 40% !important;
+  border-right: none !important;
+  padding-left: 5px;
+  background-color: #dedede;
 }
 
 .btnsml {
-    padding: 2px 5px !important;
-    font-size: 12px !important;
+  padding: 2px 5px !important;
+  font-size: 12px !important;
 }
 
 .btn-m-r-10 {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .st_txt_right {
-    text-align: right;
+  text-align: right;
 }
 
 .dx-column-indicators {
-    float: unset !important;
+  float: unset !important;
 }
 
 .dx-datagrid-action.dx-cell-focus-disabled {
-    text-align: center !important;
-    vertical-align: middle !important;
+  text-align: center !important;
+  vertical-align: middle !important;
 }
 
 ::ng-deep .mat-tab-body-content {
-    overflow: hidden !important;
+  overflow: hidden !important;
+}
+::ng-deep {
+    .cdk-overlay-container {
+        position: fixed;
+        z-index: 1070 !important;
+    }
 }
