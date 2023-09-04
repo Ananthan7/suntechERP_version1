@@ -114,9 +114,6 @@ export class AppComponent implements OnInit {
       // this.suntechApi.getBranchCurrencyMaster(branch)
       .subscribe((data) => {
         // this.comFunc.allBranchCurrency = data.response;
-        console.log('===============curr=====================');
-        console.log(data);
-        console.log('====================================');
         this.comFunc.allBranchCurrency = data.response;
         this.inDb.bulkInsert('branchCurrencyMaster', data.response);
 
@@ -127,10 +124,6 @@ export class AppComponent implements OnInit {
     let map = new Map();
     this.suntechApi.getDynamicAPI('CompanyParameters').subscribe((resp) => {
       if (resp.status == 'Success') {
-        console.log('===============resp.response[0]=====================');
-        console.log(resp.response[0]);
-        console.log('====================================');
-
         //  set data in local
         this.inDb.bulkInsert('compparams', resp.response);
 
@@ -165,7 +158,6 @@ export class AppComponent implements OnInit {
         this.comFunc.mQtyFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'AMTDECIMALS') {
         this.comFunc.amtDecimals = data.PARAM_VALUE;
-        console.log('this.comFunc.amtDecimals', this.comFunc.amtDecimals);
 
       }
       if (data.PARAMETER == 'MQTYDECIMALS')
@@ -191,11 +183,9 @@ export class AppComponent implements OnInit {
 
   getAllMessageBox() {
     this.suntechApi.getDynamicAPI('Messagebox').subscribe((resp) => {
-      console.log('allMessageBoxData res', resp);
       if (resp.status == 'Success') {
 
         this.comFunc.allMessageBoxData = resp.response;
-        console.log('allMessageBoxData ', this.comFunc.allMessageBoxData);
 
         this.inDb.bulkInsert('messageBox', resp.response);
 
@@ -226,7 +216,6 @@ export class AppComponent implements OnInit {
       if (data.length == 0) {
         this.getBranchCurrencyMaster();
       } else {
-        console.log(' this.comFunc.allBranchCurrency', this.comFunc.allBranchCurrency);
 
         this.comFunc.allBranchCurrency = data;
       }
@@ -234,12 +223,10 @@ export class AppComponent implements OnInit {
 
     this.inDb.getAllData('messageBox').subscribe((data) => {
       if (data.length == 0) {
-        console.log('messagebox not get', this.comFunc.allMessageBoxData);
 
         this.getAllMessageBox();
       } else {
         this.comFunc.allMessageBoxData = data;
-        console.log('messagebox got', this.comFunc.allMessageBoxData);
       }
     });
     this.inDb.getAllData('comboFilter').subscribe((data) => {
@@ -250,13 +237,11 @@ export class AppComponent implements OnInit {
       }
     });
     this.inDb.getAllData('divisionMaster').subscribe((data) => {
-      console.log('divisionMasterList', data);
 
       if (data.length == 0) {
 
         this.getDivisionMaster();
       } else {
-        console.log('divisionMasterList', data);
 
         this.comFunc.divisionMasterList = data;
       }
@@ -287,9 +272,6 @@ export class AppComponent implements OnInit {
         this.getCustomerTypeMaster();
       } else {
         this.comFunc.customerTypeMaster = data;
-        console.log('=============customerTypeMaster=======================');
-        console.log(this.comFunc.customerTypeMaster);
-        console.log('====================================');
       }
     });
     /** End set basic api data */

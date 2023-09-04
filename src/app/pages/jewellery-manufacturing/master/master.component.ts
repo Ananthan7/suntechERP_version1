@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -16,6 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 export class MasterComponent implements OnInit {
   //variables
   menuTitle: any
+  PERMISSIONS: any
   tableName: any
   apiCtrl: any
   orderedItems: any[] = [];
@@ -31,6 +32,7 @@ export class MasterComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.viewRowDetails = this.viewRowDetails.bind(this);
+    this.editRowDetails = this.editRowDetails.bind(this);
   }
 
   ngOnInit(): void {
@@ -41,22 +43,29 @@ export class MasterComponent implements OnInit {
 
   viewRowDetails(e: any) {
     let str = e.row.data;
-    console.log(str);
+    str.FLAG = 'VIEW'
+    this.openModalView(str)
+  }
+  editRowDetails(e: any) {
+    let str = e.row.data;
+    str.FLAG = 'EDIT'
+    this.openModalView(str)
   }
   //  open Jobcard in modal
-  openModalView() {
+  openModalView(data?:any) {
     let contents;
     if(this.menuTitle == 'Job Card'){
       contents = JobcardComponent
     }else if(this.menuTitle == 'Worker Master'){
       contents = WorkerMasterComponent
     }
-    this.modalService.open(contents, {
+    const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
       backdrop: 'static',
       keyboard: false,
-      windowClass: 'modal-full-width'
+      windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.content = data;
   }
 
 
@@ -80,18 +89,13 @@ export class MasterComponent implements OnInit {
     }
   }
 
-  
+ 
   /**USE: to get table data from API */
   getMasterGridData(data?:any) {
-    console.log(data,'data');
-    //use: to get menu title from queryparams and API endpoint
-    // this.route.queryParams.subscribe((data: any) => {
-    //   this.menuTitle = data.MENU_CAPTION_ENG;
-    //   this.tableName = data.tableName;
-    // });
     if(data){
       this.menuTitle = data.MENU_CAPTION_ENG;
       this.tableName = data.HEADER_TABLE;
+      this.PERMISSIONS = data.PERMISSION;
     }else{
       this.menuTitle = this.CommonService.getModuleName()
       this.tableName = this.CommonService.getqueryParamTable()

@@ -57,7 +57,7 @@
                                     [showRowLines]="true"
                                     [showBorders]="true"
                                     [columnAutoWidth]="true">
-                                    <!-- <dxo-filter-row visible="true"></dxo-filter-row> -->
+                                    <dxo-filter-row visible="true"></dxo-filter-row>
                                     <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
                                     <dxo-paging [enabled]="true"
                                         [pageSize]="pageSize"
@@ -67,8 +67,8 @@
                                     <!-- <dxo-selection mode="single"></dxo-selection> -->
                                     <dxi-column type="buttons" caption="Edit | View"
                                         [fixed]="true" fixedPosition="left">
-                                        <dxi-button [onClick]="viewRowDetails" icon="fa fa-edit"></dxi-button>
-                                        <dxi-button icon="fa fa-eye"></dxi-button>
+                                        <dxi-button [onClick]="editRowDetails" icon="fa fa-edit"></dxi-button>
+                                        <dxi-button [onClick]="viewRowDetails" icon="fa fa-eye"></dxi-button>
                                     </dxi-column>
                                     <dxi-column *ngFor="let data of orderedItemsHead"
                                         dataField="{{data.dataField}}"

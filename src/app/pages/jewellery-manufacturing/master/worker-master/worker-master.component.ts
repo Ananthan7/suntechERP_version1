@@ -1,5 +1,4 @@
-import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -15,11 +14,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./worker-master.component.scss']
 })
 export class WorkerMasterComponent implements OnInit {
+  @Input() content!: any;
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Process', 'Description'];
+  selectedProcessArr: any[] = [];
   private subscriptions: Subscription[] = [];
 
   accountMasterData: MasterSearchModel = {
@@ -59,13 +60,13 @@ export class WorkerMasterComponent implements OnInit {
     WorkerAcCode: ['', [Validators.required]],
     NameOfSupervisor: ['', [Validators.required]],
     DefaultProcess: ['', [Validators.required]],
-    LossAllowed: ['', [Validators.required]],
+    LossAllowed: [''],
     Password: [''],
-    TrayWeight: ['', [Validators.required]],
-    TargetPcs: ['', [Validators.required]],
-    TargetCaratWt: ['', [Validators.required]],
-    TargetMetalWt: ['', [Validators.required]],
-    TargetWeight: ['', [Validators.required]],
+    TrayWeight: [''],
+    TargetPcs: [''],
+    TargetCaratWt: [''],
+    TargetMetalWt: [''],
+    TargetWeight: [''],
     DailyTarget: [false],
     MonthlyTarget: [false],
     YearlyTarget: [false],
@@ -79,6 +80,101 @@ export class WorkerMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if(this.content){
+      this.setFormValues()
+    }
+  }
+  setFormValues() {
+    if(!this.content) return
+    this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
+    this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
+    this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
+    this.workerMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR)
+    this.workerMasterForm.controls.DefaultProcess.setValue(this.content.PROCESS_CODE)
+    this.workerMasterForm.controls.LossAllowed.setValue(this.content.LOSS_ALLOWED)
+    this.workerMasterForm.controls.TrayWeight.setValue(this.content.TRAY_WEIGHT)
+    this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS)
+    this.workerMasterForm.controls.TargetCaratWt.setValue(this.content.TARGET_CARAT_WT)
+    this.workerMasterForm.controls.TargetMetalWt.setValue(this.content.TARGET_METAL_WT)
+    this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT)
+  }
+  /**USE:  get PaymentType*/
+  formSubmit() {
+    console.log(this.workerMasterForm.value);
+    
+    if (this.workerMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'WorkerMaster/InsertWorkerMaster'
+    let postData = {
+      "MID": 0,
+      "WORKER_CODE": this.workerMasterForm.value.WorkerCode || "",
+      "DESCRIPTION": "",
+      "DEPARTMENT_CODE": "",
+      "NETSAL": 0,
+      "PERKS": 0,
+      "GROSSAL": 0,
+      "EXP": 0,
+      "TOTALSAL": 0,
+      "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
+      "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
+      "SECRET_CODE": "",
+      "PROCESS_CODE": "",
+      "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
+      "SUPERVISOR": "",
+      "ACTIVE": true,
+      "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
+      "TARGET_BY": "",
+      "FINGER_ID": "",
+      "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
+      "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
+      "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0.000,
+      "WORKER_EXPIRY_DATE": null,
+      "workerDetails": this.selectedProcessArr
+    }
+
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if(result.status == "Success"){
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.workerMasterForm.reset()
+                this.tableData = []
+                this.close()
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+  /**use: checkbox change */
+  changedCheckbox(cellInfo: any) {
+    let value = cellInfo.data
+
+    this.tableData.forEach((item: any) => {
+      if (value.SrNo == item.SrNo) {
+        value.isChecked = !value.isChecked
+      }
+      this.selectedProcessArr.push({
+        "UNIQUEID": 0,
+        "SRNO": value.SrNo,
+        "WORKER_CODE": value.PROCESS_DESC,
+        "PROCESS_CODE": value.PROCESS_CODE
+      })
+    })
   }
   selectProcess() {
     let params = {
@@ -92,14 +188,13 @@ export class WorkerMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, params)
       .subscribe((result) => {
         if (result.response) {
-          console.log(result, 'result');
-          result.response[0].forEach((item: any, i: any) => {
+          result.response.forEach((item: any, i: any) => {
             item.SrNo = i + 1;
+            item.isChecked = false;
           });
           this.tableData = result.response
-          console.log(this.tableData);
-          
-         
+
+
         } else {
           Swal.fire({
             title: '',
@@ -137,7 +232,7 @@ export class WorkerMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
+  //selected fields
   WorkerAcCodeSelected(data: any) {
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)
   }
@@ -149,62 +244,6 @@ export class WorkerMasterComponent implements OnInit {
   }
   workerCodeChange(event: any) {
     this.accountMasterData.SEARCH_VALUE = event.target.value
-  }
-  /**USE:  get PaymentType*/
-  formSubmit() {
-    if (this.workerMasterForm.invalid) {
-      this.toastr.error('')
-      return
-    }
-    let API = 'WorkerMaster/InsertWorkerMaster'
-    let postData = {
-      "MID": 0,
-      "WORKER_CODE": this.workerMasterForm.value.WorkerCode || "",
-      "DESCRIPTION": "",
-      "DEPARTMENT_CODE": "",
-      "NETSAL": 0,
-      "PERKS": 0,
-      "GROSSAL": 0,
-      "EXP": 0,
-      "TOTALSAL": 0,
-      "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
-      "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": "",
-      "PROCESS_CODE": "",
-      "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
-      "SUPERVISOR": "",
-      "ACTIVE": true,
-      "TARGET_WEIGHT": this.workerMasterForm.value.WorkerCode || 0,
-      "TARGET_BY": "s",
-      "FINGER_ID": "strin",
-      "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
-      "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0,
-      "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0,
-      "WORKER_EXPIRY_DATE": "2023-09-01T03:39:10.654Z",
-      "workerDetails": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "WORKER_CODE": "",
-          "PROCESS_CODE": ""
-        }
-      ]
-    }
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result) {
-          console.log(result);
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
-
-  selectedCustomer(data: any) {
-    console.log(data);
-    // this.receiptDetailsForm.controls.POSCustomerName.setValue(data.NAME)
-    // this.receiptDetailsForm.controls.POSCustomerCode.setValue(data.CODE)
   }
 
   /**USE: close modal window */

@@ -12,7 +12,7 @@
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                 <button ngbDropdownItem *ngFor="let submenu of group.submenus"
                     (click)="pageRoutes( '/'+ submenu.ANG_WEB_COMPONENT_NAME + '/'+     submenu.ANG_WEB_PATH_NAME, 
-                    { modulename: this.menuTitle, subMenuName: submenu.MENU_CAPTION_ENG, ctrl: submenu.ANG_WEB_CONTROLLER_NAME, tableName: submenu.HEADER_TABLE},submenu)">
+                    { modulename: submenu.MENU_MODULE, subMenuName: submenu.MENU_CAPTION_ENG, ctrl: submenu.ANG_WEB_CONTROLLER_NAME, tableName: submenu.HEADER_TABLE},submenu)">
                     {{ submenu.MENU_CAPTION_ENG }}
                 </button>
             </div>

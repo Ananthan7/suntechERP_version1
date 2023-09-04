@@ -35,6 +35,8 @@ export class MenubarComponent implements OnInit {
     this.branchCode = this.CommonService.branchCode
     this.subMenuName = this.CommonService.getModuleName()
     this.menuTitle = this.CommonService.getTitleName()
+    console.log(this.menuTitle,'this.menuTitle');
+    
     this.getSubmenuList(this.menuTitle);
   }
   /**USE: To get submenus of Transaction,Master,Reports from API */

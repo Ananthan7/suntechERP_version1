@@ -52,7 +52,7 @@ export class MasterSearchComponent implements OnInit {
     this.loadData()
   }
   @HostListener('scroll', ['$event'])
-  onScroll(event: any) {
+  onScrollTable(event: any) {
     const container = event.target;
     const scrollPosition = container.scrollTop + container.clientHeight;
     // const isAtBottom = scrollPosition >= container.scrollHeight  - 4;

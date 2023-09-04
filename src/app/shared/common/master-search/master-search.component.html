@@ -19,7 +19,6 @@
                             <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
                         </mat-form-field>
                     </div>
-                    
                 </div>
                 <div class="letters" >
                     <ng-container *ngFor="let item of alphabetSource">
@@ -28,7 +27,7 @@
                 </div>
                 <div class="d-flex">
                     <!-- Lazy loading table -->
-                    <div (scroll)="onScroll($event)" style="max-height: 180px;overflow-y: scroll;">
+                    <div (scroll)="onScrollTable($event)" style="max-height: 180px;overflow-y: scroll;">
                         <table class="lazyTable">
                             <!-- Table headers -->
                             <thead>
