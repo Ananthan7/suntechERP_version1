@@ -19,7 +19,7 @@
   transform: rotate(180deg);
 }
 .lazyTable {
-  min-width: 35vw;
+  min-width: 40vw;
   th {
     font-size: 14px;
     padding: 5px;
@@ -38,7 +38,8 @@
   }
 }
 .letters{
-  font-size: 12.5px; 
+  min-width: 40vw;
+  font-size: 13px; 
   color: #0597cb;
   span:not(:first-of-type){
     padding: 0px 6px 0px 6px;

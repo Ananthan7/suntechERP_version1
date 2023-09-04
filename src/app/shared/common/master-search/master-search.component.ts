@@ -48,7 +48,7 @@ export class MasterSearchComponent implements OnInit {
   }
   alphabetClicked(item:any){
     this.MasterSearchData.SEARCH_VALUE = item;
-    this.loadData(item)
+    this.loadData()
   }
   @HostListener('scroll', ['$event'])
   onScroll(event: any) {
@@ -60,13 +60,13 @@ export class MasterSearchComponent implements OnInit {
     }
   }
 
-  loadData(letter?:string) {
+  loadData() {
     let param = {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
       "LOOKUPID": this.MasterSearchData.LOOKUPID,
-      "ORDER_TYPE": letter ? 1 : 0,
-      "WHERECONDITION": "ACCODE <> ''",
+      "ORDER_TYPE": this.MasterSearchData.SEARCH_VALUE ? 1 : 0,
+      "WHERECONDITION": this.MasterSearchData.WHERECONDITION || "",
       "searchField": this.MasterSearchData.SEARCH_FIELD || "",
       "searchValue": this.MasterSearchData.SEARCH_VALUE || ""
     }
@@ -94,8 +94,10 @@ export class MasterSearchComponent implements OnInit {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,
       "LOOKUPID": this.MasterSearchData.LOOKUPID,
+      "ORDER_TYPE": this.MasterSearchData.SEARCH_VALUE ? 1 : 0,
+      "WHERECONDITION": this.MasterSearchData.WHERECONDITION || "",
       "searchField": this.MasterSearchData.SEARCH_FIELD || "",
-      "searchValue": this.MasterSearchData.SEARCH_VALUE || ""
+      "searchValue": this.MasterSearchData.SEARCH_VALUE || "",
     }
     let APIS = 'MasterLookUp'
     this.isLoading = true;
