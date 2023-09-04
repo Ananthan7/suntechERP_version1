@@ -6,6 +6,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { JobcardComponent } from './jobcard/jobcard.component';
 import { WorkerMasterComponent } from './worker-master/worker-master.component';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -15,6 +16,7 @@ import { WorkerMasterComponent } from './worker-master/worker-master.component';
 export class MasterComponent implements OnInit {
   //variables
   menuTitle: any
+  tableName: any
   apiCtrl: any
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
@@ -25,7 +27,8 @@ export class MasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     private modalService: NgbModal,
-    private ChangeDetector: ChangeDetectorRef
+    private ChangeDetector: ChangeDetectorRef,
+    private route: ActivatedRoute,
   ) {
     this.viewRowDetails = this.viewRowDetails.bind(this);
   }
@@ -73,23 +76,30 @@ export class MasterComponent implements OnInit {
   nextPage() {
     if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
       this.pageIndex = this.pageIndex + 1;
-      this.getMasterGridData(this.pageIndex);
+      this.getMasterGridData();
     }
   }
 
   
   /**USE: to get table data from API */
-  getMasterGridData(data?: any) {
-    let tableName = this.CommonService.getqueryParamTable()
+  getMasterGridData(data?:any) {
+    console.log(data,'data');
     //use: to get menu title from queryparams and API endpoint
-    this.menuTitle = this.CommonService.getModuleName()
     // this.route.queryParams.subscribe((data: any) => {
-    //   this.menuTitle = data.subMenuName;
+    //   this.menuTitle = data.MENU_CAPTION_ENG;
+    //   this.tableName = data.tableName;
     // });
+    if(data){
+      this.menuTitle = data.MENU_CAPTION_ENG;
+      this.tableName = data.HEADER_TABLE;
+    }else{
+      this.menuTitle = this.CommonService.getModuleName()
+      this.tableName = this.CommonService.getqueryParamTable()
+    }
     if (this.orderedItems.length == 0) {
       this.snackBar.open('loading...');
     }
-    if(tableName =='WORKER_MASTER'){
+    if(this.tableName =='WORKER_MASTER'){
       this.orderedItemsHead = [
         { 
           dataField: "WORKER_CODE",
@@ -107,7 +117,7 @@ export class MasterComponent implements OnInit {
     let params = {
       "PAGENO": this.pageIndex || 1,
       "RECORDS": this.pageSize || 10,
-      "TABLE_NAME": tableName,
+      "TABLE_NAME": this.tableName,
       "CUSTOM_PARAM": {
         "FILTER": {
           "YEARMONTH": localStorage.getItem('YEAR') || '',

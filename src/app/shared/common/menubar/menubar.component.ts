@@ -11,7 +11,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 })
 export class MenubarComponent implements OnInit {
   @Input() menuTitle = '';
-  @Output() subMenuChange = new EventEmitter<void>()
+  @Output() subMenuChange = new EventEmitter()
 
   subMenuName: any;
   subMenuList: any;
@@ -52,7 +52,6 @@ export class MenubarComponent implements OnInit {
           if (!groupedData[item.MENU_SUB_MODULE]) {
             groupedData[item.MENU_SUB_MODULE] = [];
           }
-
           groupedData[item.MENU_SUB_MODULE].push(item);
         }
 
@@ -76,16 +75,18 @@ export class MenubarComponent implements OnInit {
     })
   }
 
-  pageRoutes(path: any, obj: any) {
+  pageRoutes(path: any, obj: any,submenu:any) {
+    console.log(submenu,'submenu');
+    this.subMenuChange.emit(submenu);
+
     let navigationExtras: NavigationExtras = {
       queryParams: obj
     };
     this.router.navigate([path], navigationExtras);
-    this.subMenuChange.emit();
   }
 
   ngOnDestroy():void{
-    this.subscriptions$.unsubscribe()
+    this.subscriptions$ && this.subscriptions$.unsubscribe()
   }
 
 }

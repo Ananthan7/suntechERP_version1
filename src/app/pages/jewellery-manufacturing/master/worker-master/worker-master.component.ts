@@ -80,20 +80,27 @@ export class WorkerMasterComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  selectProcess(){
-    let params:any = new HttpParams()
-    .set('strBranchcode', this.commonService.branchCode)
-    .set('strUserName', this.commonService.userName)
-    .set('strProcessCode', this.workerMasterForm.value.DefaultProcess)
-    .set('strSubJobNO', ' ');
+  selectProcess() {
+    let params = {
+      "BranchCode": this.commonService.branchCode || '',
+      "UserName": this.commonService.userName || '',
+      "ProcessCode": this.workerMasterForm.value.DefaultProcess || '',
+      "SubJobNo": ""
+    }
     let API = 'ProcessCodeValidate/GetProcessCodeValidate'
 
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,params)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, params)
       .subscribe((result) => {
         if (result.response) {
-          console.log(result,'result');
+          console.log(result, 'result');
+          result.response[0].forEach((item: any, i: any) => {
+            item.SrNo = i + 1;
+          });
+          this.tableData = result.response
+          console.log(this.tableData);
           
-        }else{
+         
+        } else {
           Swal.fire({
             title: '',
             text: 'Data not available!',
@@ -110,7 +117,7 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   checkWorkerExists(event: any) {
-    if(event.target.value == '') return
+    if (event.target.value == '') return
     let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -203,6 +210,10 @@ export class WorkerMasterComponent implements OnInit {
   /**USE: close modal window */
   close() {
     this.activeModal.close();
+  }
+  //number validation
+  isNumeric(event: any) {
+    return this.commonService.isNumeric(event);
   }
 
   ngOnDestroy() {

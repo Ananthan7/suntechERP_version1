@@ -205,11 +205,14 @@
                             <dxo-selection mode="multiple"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column *ngFor="let data of columnhead"
-                                dataField="{{data}}" width="auto"
-                                caption="{{data}}"
-                                [allowEditing]="true" alignment="center"
-                                backgroundcolor="#000">
+                            <dxi-column dataField="SrNo" width="auto" caption="Sr No"
+                                [allowEditing]="true" alignment="center">
+                            </dxi-column>
+                            <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process"
+                                [allowEditing]="true" alignment="center">
+                            </dxi-column>
+                            <dxi-column dataField="PROCESS_DESC" width="auto" caption="Description"
+                                [allowEditing]="true" alignment="center">
                             </dxi-column>
                         </dx-data-grid>
                     </div>
