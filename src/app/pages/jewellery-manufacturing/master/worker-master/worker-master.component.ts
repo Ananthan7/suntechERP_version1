@@ -111,7 +111,7 @@ export class WorkerMasterComponent implements OnInit {
     let postData = {
       "MID": 0,
       "WORKER_CODE": this.workerMasterForm.value.WorkerCode || "",
-      "DESCRIPTION": "",
+      "DESCRIPTION": this.workerMasterForm.value.WorkerDESCRIPTION || "",
       "DEPARTMENT_CODE": "",
       "NETSAL": 0,
       "PERKS": 0,
@@ -123,7 +123,7 @@ export class WorkerMasterComponent implements OnInit {
       "SECRET_CODE": "",
       "PROCESS_CODE": "",
       "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
-      "SUPERVISOR": "",
+      "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
       "ACTIVE": true,
       "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
       "TARGET_BY": "",
@@ -237,7 +237,7 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)
   }
   supervisorSelected(data: any) {
-    this.workerMasterForm.controls.NameOfSupervisor.setValue(data.DESCRIPTION)
+    this.workerMasterForm.controls.NameOfSupervisor.setValue(data.WORKER_CODE)
   }
   defaultProcessSelected(data: any) {
     this.workerMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
@@ -248,6 +248,8 @@ export class WorkerMasterComponent implements OnInit {
 
   /**USE: close modal window */
   close() {
+    this.workerMasterForm.reset()
+    this.tableData = []
     this.activeModal.close();
   }
   //number validation
