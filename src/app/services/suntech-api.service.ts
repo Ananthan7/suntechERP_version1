@@ -26,6 +26,16 @@ export class SuntechAPIService {
       })
     );
   }
+  // use: dynamic function for get API data 
+  getDynamicAPIwithParams(apiName: string,params:any): Observable<any> {
+    return this.configService.getConfig().pipe(
+      switchMap((config:any) => {
+        const apiUrl = config.baseUrl;
+        const response = this.http.get(apiUrl+apiName,{params: params});
+        return response
+      })
+    );
+  }
   // use: dynamic function for post API data 
   postDynamicAPI(apiName: string, data: any): Observable<any> {
     return this.configService.getConfig().pipe(

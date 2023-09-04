@@ -27,7 +27,8 @@
                             <mat-form-field
                                 style="width: 40%; margin-left: 7px;">
                                 <input type="text" matInput
-                                    formControlName="WorkerName" />
+                                    placeholder="Description"
+                                    formControlName="WorkerDESCRIPTION" />
                             </mat-form-field>
                         </span>
                     </div>
@@ -184,8 +185,8 @@
                     <div class="row my-3">
                         <div class="col-md-6">
                             <button type="button" mat-flat-button
-                                color="primary">Select
-                                Process</button>
+                                color="primary" (click)="selectProcess()">Select Process
+                            </button>
                         </div>
                     </div>
                     <div class="row">

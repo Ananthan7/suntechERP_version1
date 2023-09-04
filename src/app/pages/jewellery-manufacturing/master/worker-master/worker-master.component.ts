@@ -1,8 +1,10 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
@@ -53,7 +55,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   workerMasterForm: FormGroup = this.formBuilder.group({
     WorkerCode: ['', [Validators.required]],
-    WorkerName: ['', [Validators.required]],
+    WorkerDESCRIPTION: ['', [Validators.required]],
     WorkerAcCode: ['', [Validators.required]],
     NameOfSupervisor: ['', [Validators.required]],
     DefaultProcess: ['', [Validators.required]],
@@ -73,21 +75,29 @@ export class WorkerMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
   }
-  checkWorkerExists(event: any) {
-    console.log(event.target.value, 'fffff');
+  selectProcess(){
+    let params:any = new HttpParams()
+    .set('strBranchcode', this.commonService.branchCode)
+    .set('strUserName', this.commonService.userName)
+    .set('strProcessCode', this.workerMasterForm.value.DefaultProcess)
+    .set('strSubJobNO', ' ');
+    let API = 'ProcessCodeValidate/GetProcessCodeValidate'
 
-    let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,params)
       .subscribe((result) => {
         if (result.response) {
+          console.log(result,'result');
+          
+        }else{
           Swal.fire({
             title: '',
-            text: 'Worker Already Exists!',
-            icon: 'error',
+            text: 'Data not available!',
+            icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
           }).then((result: any) => {
@@ -95,7 +105,28 @@ export class WorkerMasterComponent implements OnInit {
               this.workerMasterForm.reset()
             }
           });
-        } 
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  checkWorkerExists(event: any) {
+    if(event.target.value == '') return
+    let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          Swal.fire({
+            title: '',
+            text: 'Worker Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.workerMasterForm.reset()
+            }
+          });
+        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }

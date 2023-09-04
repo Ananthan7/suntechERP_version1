@@ -48,6 +48,7 @@ export class MasterSearchComponent implements OnInit {
   }
   alphabetClicked(item:any){
     this.MasterSearchData.SEARCH_VALUE = item;
+    this.currentPage = 1
     this.loadData()
   }
   @HostListener('scroll', ['$event'])

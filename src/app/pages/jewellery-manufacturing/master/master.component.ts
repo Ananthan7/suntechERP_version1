@@ -83,6 +83,9 @@ export class MasterComponent implements OnInit {
     let tableName = this.CommonService.getqueryParamTable()
     //use: to get menu title from queryparams and API endpoint
     this.menuTitle = this.CommonService.getModuleName()
+    // this.route.queryParams.subscribe((data: any) => {
+    //   this.menuTitle = data.subMenuName;
+    // });
     if (this.orderedItems.length == 0) {
       this.snackBar.open('loading...');
     }
