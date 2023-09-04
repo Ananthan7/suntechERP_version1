@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-worker-master',
@@ -16,18 +17,9 @@ export class WorkerMasterComponent implements OnInit {
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
-  columnhead:any[] = ['Sr No','Process','Description'  ];
+  columnhead: any[] = ['Sr No', 'Process', 'Description'];
   private subscriptions: Subscription[] = [];
-  workerCodeNameData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 95,
-    SEARCH_FIELD: 'ACCOUNT_HEAD',
-    SEARCH_HEADING: 'Worker Code & Name',
-    SEARCH_VALUE: '',
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -63,15 +55,15 @@ export class WorkerMasterComponent implements OnInit {
     WorkerCode: ['', [Validators.required]],
     WorkerName: ['', [Validators.required]],
     WorkerAcCode: ['', [Validators.required]],
-    NameOfSupervisor: ['',[Validators.required]],
+    NameOfSupervisor: ['', [Validators.required]],
     DefaultProcess: ['', [Validators.required]],
-    LossAllowed: ['',[Validators.required]],
+    LossAllowed: ['', [Validators.required]],
     Password: [''],
-    TrayWeight: ['',[Validators.required]],
+    TrayWeight: ['', [Validators.required]],
     TargetPcs: ['', [Validators.required]],
     TargetCaratWt: ['', [Validators.required]],
-    TargetMetalWt: ['',[Validators.required]],
-    TargetWeight: ['',[Validators.required]],
+    TargetMetalWt: ['', [Validators.required]],
+    TargetWeight: ['', [Validators.required]],
     DailyTarget: [false],
     MonthlyTarget: [false],
     YearlyTarget: [false],
@@ -85,22 +77,44 @@ export class WorkerMasterComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  
-  WorkerAcCodeSelected(data:any){
+  checkWorkerExists(event: any) {
+    console.log(event.target.value, 'fffff');
+
+    let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          Swal.fire({
+            title: '',
+            text: 'Worker Already Exists!',
+            icon: 'error',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.workerMasterForm.reset()
+            }
+          });
+        } 
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+  WorkerAcCodeSelected(data: any) {
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)
   }
-  supervisorSelected(data:any){
+  supervisorSelected(data: any) {
     this.workerMasterForm.controls.NameOfSupervisor.setValue(data.DESCRIPTION)
   }
-  defaultProcessSelected(data:any){
+  defaultProcessSelected(data: any) {
     this.workerMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
   }
-  workerCodeChange(event:any){
+  workerCodeChange(event: any) {
     this.accountMasterData.SEARCH_VALUE = event.target.value
   }
-   /**USE:  get PaymentType*/
-   formSubmit() {
-    if(this.workerMasterForm.invalid){
+  /**USE:  get PaymentType*/
+  formSubmit() {
+    if (this.workerMasterForm.invalid) {
       this.toastr.error('')
       return
     }
@@ -138,7 +152,7 @@ export class WorkerMasterComponent implements OnInit {
         }
       ]
     }
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result) {
           console.log(result);
