@@ -7,6 +7,11 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { JobcardComponent } from './jobcard/jobcard.component';
 import { WorkerMasterComponent } from './worker-master/worker-master.component';
 import { ActivatedRoute } from '@angular/router';
+import { DepartmentMasterComponent } from './department-master/department-master.component';
+import { ProcessMasterComponent } from './process-master/process-master.component';
+import { SequenceMasterComponent } from './sequence-master/sequence-master.component';
+import { StonePricingMasterComponent } from './stone-pricing-master/stone-pricing-master.component';
+import { LabourChargeMasterComponent } from './labour-charge-master/labour-charge-master.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -58,6 +63,16 @@ export class MasterComponent implements OnInit {
       contents = JobcardComponent
     }else if(this.menuTitle == 'Worker Master'){
       contents = WorkerMasterComponent
+    }else if(this.menuTitle == 'Department Master'){
+      contents = DepartmentMasterComponent
+    }else if(this.menuTitle == 'Process Master'){
+      contents = ProcessMasterComponent
+    }else if(this.menuTitle == 'Sequance Master'){
+      contents = SequenceMasterComponent
+    }else if(this.menuTitle == 'Stone Pricing Master'){
+      contents = StonePricingMasterComponent
+    }else if(this.menuTitle == 'Labour Charge Master'){
+      contents = LabourChargeMasterComponent
     }
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',

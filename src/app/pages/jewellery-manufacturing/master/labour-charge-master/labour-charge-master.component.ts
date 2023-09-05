@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-labour-charge-master',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LabourChargeMasterComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private activeModal: NgbActiveModal,
+  ) { }
 
   ngOnInit(): void {
+  }
+  formSubmit(){
+  }
+  close() {
+    //TODO reset forms and data before closing
+    this.activeModal.close();
   }
 
 }
