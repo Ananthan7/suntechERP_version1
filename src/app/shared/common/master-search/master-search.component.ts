@@ -75,7 +75,7 @@ export class MasterSearchComponent implements OnInit {
     this.isLoading = true;
     this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
       this.isLoading = false;
-      if (result.dynamicData[0]) {
+      if (result.dynamicData[0] && result.dynamicData[0].length>0) {
         this.dataSource = result.dynamicData[0]
         let dataCount = result.dynamicData[1] || []
         this.totalItems = dataCount.COUNT
