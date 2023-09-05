@@ -12,6 +12,10 @@ import { ProcessMasterComponent } from './process-master/process-master.componen
 import { SequenceMasterComponent } from './sequence-master/sequence-master.component';
 import { StonePricingMasterComponent } from './stone-pricing-master/stone-pricing-master.component';
 import { LabourChargeMasterComponent } from './labour-charge-master/labour-charge-master.component';
+import { MeltingTypeComponent } from './melting-type/melting-type.component';
+import { AlloyMasterComponent } from './alloy-master/alloy-master.component';
+import { PictureTypeMasterComponent } from './picture-type-master/picture-type-master.component';
+import { ApprovalMasterComponent } from './approval-master/approval-master.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -73,10 +77,18 @@ export class MasterComponent implements OnInit {
       contents = StonePricingMasterComponent
     }else if(this.menuTitle == 'Labour Charge Master'){
       contents = LabourChargeMasterComponent
+    }else if(this.menuTitle == 'Melting Type'){
+      contents = MeltingTypeComponent
+    }else if(this.menuTitle == 'Alloy Master'){
+      contents = AlloyMasterComponent
+    }else if(this.menuTitle == 'PictureType Master'){
+      contents = PictureTypeMasterComponent
+    }else if(this.menuTitle == 'Approval Master'){
+      contents = ApprovalMasterComponent
     }
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
-      backdrop: 'static',
+      backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });

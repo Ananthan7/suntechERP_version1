@@ -5,7 +5,7 @@
   
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #f3f3f3;
   }
   
   /* Handle */
@@ -27,7 +27,7 @@
   }
   
   .dropdown-item {
-    background-color: #d5f2ff;
+    background-color: #def3fd;
     display: flex;
     justify-content: space-between;
     font-weight: 300;
@@ -55,6 +55,7 @@
     width: auto;
     max-width: 400px;
     height: auto;
-    max-height: 400px;
+    max-height: 50vh;
+    overflow-y: scroll;
   }
   
