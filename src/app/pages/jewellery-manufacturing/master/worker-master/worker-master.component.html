@@ -88,7 +88,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                    (keypress)="isNumeric($event)"
+                                    numericInput
                                     formControlName="LossAllowed" />
                             </mat-form-field>
                         </div>
@@ -109,7 +109,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                    (keypress)="isNumeric($event)"
+                                    numericInput
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
@@ -118,7 +118,7 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="text" matInput
-                                    (keypress)="isNumeric($event)"
+                                    numericInput
                                     formControlName="TargetPcs" />
                             </mat-form-field>
                         </div>
@@ -129,7 +129,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput ThreeDecimalInput
-                                    (keypress)="isNumeric($event)"
+                                    numericInput
                                     formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
@@ -138,8 +138,8 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="number" class="numericInput"
-                                     matInput ThreeDecimalInput
-                                    (keypress)="isNumeric($event)"
+                                     matInput numericInput
+                                     ThreeDecimalInput
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>

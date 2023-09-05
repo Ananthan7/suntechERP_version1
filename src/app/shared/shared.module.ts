@@ -53,6 +53,7 @@ import { MasterFindIconComponent } from './common/master-find-icon/master-find-i
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { MasterSearchComponent } from './common/master-search/master-search.component';
 import { AppDecimalInputDirective } from './directives/app-decimal-input.directive';
+import { NumericInputDirective } from './directives/numeric-input.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -68,6 +69,7 @@ import { AppDecimalInputDirective } from './directives/app-decimal-input.directi
     MasterFindIconComponent,
     MasterSearchComponent,
     AppDecimalInputDirective,
+    NumericInputDirective,
   ],
   imports: [
     CommonModule,
@@ -123,6 +125,7 @@ import { AppDecimalInputDirective } from './directives/app-decimal-input.directi
     NumberFormatterPipe,
     CamelCasePipe,
     AppDecimalInputDirective,
+    NumericInputDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,
