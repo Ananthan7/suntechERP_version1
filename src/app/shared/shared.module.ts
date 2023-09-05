@@ -52,6 +52,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MasterFindIconComponent } from './common/master-find-icon/master-find-icon.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { MasterSearchComponent } from './common/master-search/master-search.component';
+import { AppDecimalInputDirective } from './directives/app-decimal-input.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -66,6 +67,7 @@ import { MasterSearchComponent } from './common/master-search/master-search.comp
     CardboxComponent,
     MasterFindIconComponent,
     MasterSearchComponent,
+    AppDecimalInputDirective,
   ],
   imports: [
     CommonModule,
