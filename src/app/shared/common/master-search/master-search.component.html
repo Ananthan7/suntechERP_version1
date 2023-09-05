@@ -2,6 +2,7 @@
     <button (click)="showOverlayPanel($event)" style="border: none; background-color: transparent;">
         <i class="fa fa-search searchIcon"></i>
     </button>
+    <!-- panel -->
     <p-overlayPanel #overlayPanel >
         <ng-template pTemplate="content">
            <div (mouseleave)="closeOverlayPanel()">
@@ -46,35 +47,6 @@
                     
                 </div>
            </div>
-            <!-- <div class="col-md-6 pt-3" style="text-align: right;">
-                        <button class="btn btn-white add-btn"
-                            (click)="previousPage()">
-                            <i class="fa fa-angle-left"></i>
-                        </button>
-                        <button class="btn btn-white add-btn"
-                            (click)="nextPage()">
-                            <i class="fa fa-angle-right"></i>
-                        </button >
-                </div> -->
-            <!-- <dx-data-grid width="40vw" height="240px" #gridContainer
-                id="gridContainer" [allowColumnReordering]="true"
-                [dataSource]="dataSource"
-                [showColumnLines]="true"
-                [showRowLines]="true"
-                [showBorders]="true"
-                [columnAutoWidth]="true"
-                (onRowClick)="handleRowClick($event)">
-                <dxo-filter-row [visible]="showFilterRow"
-                [applyFilter]="currentFilter"></dxo-filter-row>
-                <dxo-paging [enabled]="true"
-                [pageSize]="pageSize"
-                [pageIndex]="pageIndex"></dxo-paging>
-                <dxi-column *ngFor="let data of dataSourceHead" dataField="{{data}}"
-                    caption="{{data}}"
-                    alignment="left">
-                </dxi-column>
-            </dx-data-grid> -->
-            
         </ng-template>
     </p-overlayPanel>
 </span>
