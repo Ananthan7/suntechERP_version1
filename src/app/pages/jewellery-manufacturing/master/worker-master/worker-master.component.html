@@ -125,7 +125,7 @@
                     </div>
                     <div class="row">
                         <span for="inputPassword"
-                            class="col-sm-4 col-form-label">Target Metal Wt :</span>
+                            class="col-sm-4 col-form-label">Target Metal Weight :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
@@ -134,10 +134,11 @@
                             </mat-form-field>
                         </div>
                         <span for="inputPassword"
-                            class="col-sm-3 col-form-label">Target Carat Wt :</span>
+                            class="col-sm-3 col-form-label">Target Carat Weight :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="text" matInput
+                                <input type="number" matInput
+                                    step="0.001" min="0" maxlength="4"
                                     (keypress)="isNumeric($event)"
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
@@ -150,7 +151,7 @@
                             Weight(GMS) :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput
+                                <input type="number" matInput
                                     (keypress)="isNumeric($event)"
                                     formControlName="TargetWeight" />
                             </mat-form-field>

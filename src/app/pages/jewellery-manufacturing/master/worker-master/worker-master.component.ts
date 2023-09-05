@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./worker-master.component.scss']
 })
 export class WorkerMasterComponent implements OnInit {
-  @Input() content!: any;
+  @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
@@ -98,10 +98,8 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.content.TARGET_METAL_WT)
     this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT)
   }
-  /**USE:  get PaymentType*/
+  /**USE:  final save API call*/
   formSubmit() {
-    console.log(this.workerMasterForm.value);
-    
     if (this.workerMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -176,6 +174,7 @@ export class WorkerMasterComponent implements OnInit {
       })
     })
   }
+  /**select process API call */
   selectProcess() {
     let params = {
       "BranchCode": this.commonService.branchCode || '',
@@ -193,8 +192,6 @@ export class WorkerMasterComponent implements OnInit {
             item.isChecked = false;
           });
           this.tableData = result.response
-
-
         } else {
           Swal.fire({
             title: '',
@@ -211,6 +208,7 @@ export class WorkerMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+  /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
     if (event.target.value == '') return
     let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
@@ -232,7 +230,7 @@ export class WorkerMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  //selected fields
+  //selected field value setting
   WorkerAcCodeSelected(data: any) {
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)
   }
@@ -259,7 +257,7 @@ export class WorkerMasterComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
-      this.subscriptions.forEach(subscription => subscription.unsubscribe());
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions = []; // Clear the array
     }
   }

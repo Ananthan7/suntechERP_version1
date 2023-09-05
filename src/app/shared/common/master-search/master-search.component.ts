@@ -60,7 +60,7 @@ export class MasterSearchComponent implements OnInit {
       this.loadMoreData(this.currentPage);
     }
   }
-
+  /**use: first call to load data */
   loadData() {
     let param = {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
@@ -88,7 +88,7 @@ export class MasterSearchComponent implements OnInit {
     })
 
   }
-
+  /**use: load datas on scroll */
   loadMoreData(currentPage?:number) {
     if(this.totalItems >= this.dataSource.length+1 && this.currentPage != currentPage) return
     let param = {
