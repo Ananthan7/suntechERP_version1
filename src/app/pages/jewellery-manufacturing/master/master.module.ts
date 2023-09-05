@@ -11,6 +11,10 @@ import { ProcessMasterComponent } from './process-master/process-master.componen
 import { SequenceMasterComponent } from './sequence-master/sequence-master.component';
 import { LabourChargeMasterComponent } from './labour-charge-master/labour-charge-master.component';
 import { StonePricingMasterComponent } from './stone-pricing-master/stone-pricing-master.component';
+import { AlloyMasterComponent } from './alloy-master/alloy-master.component';
+import { MeltingTypeComponent } from './melting-type/melting-type.component';
+import { ApprovalMasterComponent } from './approval-master/approval-master.component';
+import { PictureTypeMasterComponent } from './picture-type-master/picture-type-master.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +25,11 @@ import { StonePricingMasterComponent } from './stone-pricing-master/stone-pricin
     ProcessMasterComponent,
     SequenceMasterComponent,
     LabourChargeMasterComponent,
-    StonePricingMasterComponent
+    StonePricingMasterComponent,
+    AlloyMasterComponent,
+    MeltingTypeComponent,
+    ApprovalMasterComponent,
+    PictureTypeMasterComponent
   ],
   imports: [
     CommonModule,
