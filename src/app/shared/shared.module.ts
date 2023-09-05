@@ -122,6 +122,7 @@ import { AppDecimalInputDirective } from './directives/app-decimal-input.directi
     //pipes exports
     NumberFormatterPipe,
     CamelCasePipe,
+    AppDecimalInputDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,
