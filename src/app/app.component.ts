@@ -124,6 +124,8 @@ export class AppComponent implements OnInit {
     let map = new Map();
     this.suntechApi.getDynamicAPI('CompanyParameters').subscribe((resp) => {
       if (resp.status == 'Success') {
+        console.log(resp.status);
+        
         //  set data in local
         this.inDb.bulkInsert('compparams', resp.response);
 
@@ -158,7 +160,6 @@ export class AppComponent implements OnInit {
         this.comFunc.mQtyFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'AMTDECIMALS') {
         this.comFunc.amtDecimals = data.PARAM_VALUE;
-
       }
       if (data.PARAMETER == 'MQTYDECIMALS')
         this.comFunc.mQtyDecimals = data.PARAM_VALUE;
@@ -207,6 +208,8 @@ export class AppComponent implements OnInit {
       if (data.length == 0) {
         this.getAllCompanyParameters();
       } else {
+        console.log(data,'data');
+        
         this.comFunc.allCompanyParams = data;
         this.comFunc.setCompParaValues();
       }

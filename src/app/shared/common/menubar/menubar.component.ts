@@ -48,7 +48,6 @@ export class MenubarComponent implements OnInit {
       this.skeltonLoading = false;
       if (response.status == 'Success') {
         let menuData = response.response
-        console.table(menuData)
         const groupedData: { [key: string]: any[] } = {};
 
         for (const item of menuData) {

@@ -130,20 +130,20 @@ export class MasterComponent implements OnInit {
     if (this.orderedItems.length == 0) {
       this.snackBar.open('loading...');
     }
-    if(this.tableName =='WORKER_MASTER'){
-      this.orderedItemsHead = [
-        { 
-          dataField: "WORKER_CODE",
-          caption:"WORKER_CODE",
-          alignment:"left"
-        },
-        { 
-          dataField: "DESCRIPTION",
-          caption:"DESCRIPTION",
-          alignment:"left"
-        },
-    ]
-    }
+    // if(this.tableName =='WORKER_MASTER'){
+    //   this.orderedItemsHead = [
+    //     { 
+    //       dataField: "WORKER_CODE",
+    //       caption:"WORKER_CODE",
+    //       alignment:"left"
+    //     },
+    //     { 
+    //       dataField: "DESCRIPTION",
+    //       caption:"DESCRIPTION",
+    //       alignment:"left"
+    //     },
+    // ]
+    // }
     this.apiCtrl = 'TransctionMainGrid'
     let params = {
       "PAGENO": this.pageIndex || 1,
@@ -174,8 +174,8 @@ export class MasterComponent implements OnInit {
           this.orderedItems = resp.dynamicData[0];
           this.nextPage()
         }
-        // this.orderedItemsHead = Object.keys(this.orderedItems[0]);
-        // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
+        this.orderedItemsHead = Object.keys(this.orderedItems[0]);
+        this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
         //change detector code
         this.ChangeDetector.detectChanges()
       } else {
