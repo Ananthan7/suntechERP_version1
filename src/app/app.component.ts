@@ -124,8 +124,6 @@ export class AppComponent implements OnInit {
     let map = new Map();
     this.suntechApi.getDynamicAPI('CompanyParameters').subscribe((resp) => {
       if (resp.status == 'Success') {
-        console.log(resp.status);
-        
         //  set data in local
         this.inDb.bulkInsert('compparams', resp.response);
 

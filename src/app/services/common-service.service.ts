@@ -153,7 +153,6 @@ export class CommonServiceService {
         this.mQtyFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'AMTDECIMALS') {
         this.amtDecimals = data.PARAM_VALUE;
-        console.log('this.amtDecimals', this.amtDecimals);
       }
       if (data.PARAMETER == 'MQTYDECIMALS')
         this.mQtyDecimals = data.PARAM_VALUE;

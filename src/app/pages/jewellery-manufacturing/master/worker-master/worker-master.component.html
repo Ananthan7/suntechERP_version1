@@ -9,7 +9,7 @@
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
     <!-- content section -->
-    <div class="row ">
+    <div class="row">
         <form [formGroup]="workerMasterForm">
             <div class="row p-3">
                 <div class="col-md-7">
@@ -88,7 +88,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                    numericInput
+                                    numericInput class="text-right"
                                     formControlName="LossAllowed" />
                             </mat-form-field>
                         </div>
@@ -109,7 +109,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                    numericInput
+                                    numericInput class="text-right"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
@@ -118,7 +118,7 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="text" matInput
-                                    numericInput
+                                    numericInput class="text-right"
                                     formControlName="TargetPcs" />
                             </mat-form-field>
                         </div>
@@ -129,7 +129,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput ThreeDecimalInput
-                                    numericInput
+                                    numericInput class="text-right"
                                     formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
@@ -137,8 +137,8 @@
                             class="col-sm-3 col-form-label">Target Carat Weight :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="number" class="numericInput"
-                                     matInput numericInput
+                                <input type="text" class="text-right"
+                                     matInput 
                                      ThreeDecimalInput
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
@@ -152,6 +152,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput
+                                     class="text-right"
                                     (keypress)="isNumeric($event)"
                                     formControlName="TargetWeight" />
                             </mat-form-field>
