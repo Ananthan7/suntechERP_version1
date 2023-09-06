@@ -198,9 +198,9 @@ export class AppComponent implements OnInit {
     this.userBranch = localStorage.getItem('userbranch');
 
     this.comFunc.mastersList = JSON.parse(sessionStorage.getItem('generalMastersList') || 'null');
-    this.comFunc.allbranchMaster = JSON.parse(localStorage.getItem('branchdetails') || 'null');
+    this.comFunc.allbranchMaster = JSON.parse(localStorage.getItem('BRANCH_PARAMETER') || 'null');
 
-    const branchDetailsString = localStorage.getItem('branchdetails');
+    const branchDetailsString = localStorage.getItem('BRANCH_PARAMETER');
 
     this.inDb.getAllData('compparams').subscribe((data) => {
       if (data.length == 0) {

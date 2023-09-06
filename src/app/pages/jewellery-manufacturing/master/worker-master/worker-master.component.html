@@ -128,7 +128,7 @@
                             class="col-sm-4 col-form-label">Target Metal Weight :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput ThreeDecimalInput
+                                <input type="text" matInput AmountDecimalInput
                                     numericInput class="text-right"
                                     formControlName="TargetMetalWt" />
                             </mat-form-field>
@@ -138,8 +138,8 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="text" class="text-right"
-                                     matInput 
-                                     ThreeDecimalInput
+                                     matInput numericInput
+                                     AmountDecimalInput
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
@@ -153,7 +153,8 @@
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput
                                      class="text-right"
-                                    (keypress)="isNumeric($event)"
+                                     numericInput
+                                     AmountDecimalInput
                                     formControlName="TargetWeight" />
                             </mat-form-field>
                         </div>

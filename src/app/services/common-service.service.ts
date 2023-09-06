@@ -33,7 +33,7 @@ export class CommonServiceService {
   public baseUsername: any;
   public baseUserbranch: any;
   public baseYear: any;
-  public allbranchMaster: any = localStorage.getItem('branchdetails');
+  public allbranchMaster: any = localStorage.getItem('BRANCH_PARAMETER');
   public allBranchCurrency: any;
   public currencyRate: any;
   public divisionMasterList: any;
