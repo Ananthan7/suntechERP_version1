@@ -15,7 +15,6 @@ export class AppDecimalInputDirective {
   @HostListener('blur', ['$event']) onBlur(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value;
-
     // Remove non-numeric characters except the decimal point
     value = value.replace(/[^0-9.]/g, '');
 
@@ -24,24 +23,17 @@ export class AppDecimalInputDirective {
     let integerPart = parts[0];
     let fractionalPart = parts[1];
    
-    let AMTCount:any = this.countZeros(this.commonService.amtFormat)
-   
-    let zeroArr:any[] = ['0','00','000']
-    // if(decimalNo < AMTCount ){
-    //   current = current.toString() + zeroArr[AMTCount - decimalNo]
-    // }
-    // Ensure there is a fractional part
+    let AMTCount:any = 3
+    
+    let zeroArr:any[] = ['','0','00','000','0000']
+    
     // Limit the fractional part to 3 decimal places
     if (fractionalPart.length > AMTCount) {
       event.preventDefault();
     }
     if (fractionalPart && AMTCount > fractionalPart.length) {
-      console.log('firedd22');
       fractionalPart += zeroArr[AMTCount-fractionalPart.length]; // If there's one decimal, add two zeros
     }
-
-    
-    
     // Reconstruct the value and set it back to the input field
     value = `${integerPart}.${fractionalPart}`;
     // this.el.nativeElement.value = value;
@@ -55,10 +47,8 @@ export class AppDecimalInputDirective {
  
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    let AMTCount:any = this.countZeros(this.commonService.amtFormat)
-    console.log(AMTCount,'AMTCount');
-    
-    let regex: RegExp = new RegExp(`/^\d*\.?\d{0,${AMTCount}}$/g`);
+    // let AMTCount:any = this.countZeros(this.commonService.amtFormat)
+    let regex: RegExp = new RegExp(/^\d*\.?\d{0,3}$/g);
 
     // Allow Backspace, tab, end, and home keys
     if (this.specialKeys.indexOf(event.key) !== -1) {
@@ -67,7 +57,7 @@ export class AppDecimalInputDirective {
     let current: string = this.el.nativeElement.value;
     const position = this.el.nativeElement.selectionStart;
     const next: string = [current.slice(0, position), event.key == 'Decimal' ? '.' : event.key, current.slice(position)].join('');
-    if (next && !String(next).match(this.regex)) {
+    if (next && !String(next).match(regex)) {
       event.preventDefault();
     }
   }
