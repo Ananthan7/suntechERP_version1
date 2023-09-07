@@ -100,8 +100,13 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**USE:  final save API call*/
   formSubmit() {
-    if (this.workerMasterForm.invalid) {
-      this.toastr.error('select all required fields')
+    if(this.content && this.content.FLAG == 'EDIT'){
+      this.selectProcess()
+      this.updateWorkerMaster()
+      return
+    }
+    if (this.workerMasterForm.invalid && this.selectedProcessArr) {
+      this.toastr.error('select all required fields & Process')
       return
     }
 
@@ -134,6 +139,65 @@ export class WorkerMasterComponent implements OnInit {
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if(result.status == "Success"){
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.workerMasterForm.reset()
+                this.tableData = []
+                this.close()
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  updateWorkerMaster(){
+    console.log( this.workerMasterForm.value);
+    if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'WorkerMaster/UpdateWorkerMaster/'+this.workerMasterForm.value.WorkerCode
+    let postData = {
+      "MID": 0,
+      "WORKER_CODE": this.workerMasterForm.value.WorkerCode || "",
+      "DESCRIPTION": this.workerMasterForm.value.WorkerDESCRIPTION || "",
+      "DEPARTMENT_CODE": "",
+      "NETSAL": 0,
+      "PERKS": 0,
+      "GROSSAL": 0,
+      "EXP": 0,
+      "TOTALSAL": 0,
+      "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
+      "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
+      "SECRET_CODE": "",
+      "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
+      "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
+      "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
+      "ACTIVE": true,
+      "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
+      "TARGET_BY": "",
+      "FINGER_ID": "",
+      "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
+      "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
+      "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0.000,
+      "WORKER_EXPIRY_DATE": "",
+      "workerDetails": this.selectedProcessArr
+    }
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if(result.status == "Success"){
