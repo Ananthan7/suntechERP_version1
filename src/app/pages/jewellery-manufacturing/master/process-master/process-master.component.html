@@ -91,7 +91,8 @@
                                     <mat-form-field style="width: 90%">
                                         <input type="text" matInput maxlength="6" formControlName="approvalCode" />
                                     </mat-form-field>
-                                    <master-search>
+                                    <master-search [MasterSearchData]="approvalCodeData"
+                                    (newRowClick)="ApprovalCodeSelected($event)">
                                     </master-search>
 
                                 </div>
@@ -100,7 +101,8 @@
                                     <mat-form-field style="width: 90%">
                                         <input type="text" matInput maxlength="6" formControlName="approvalProcess" />
                                     </mat-form-field>
-                                    <master-search>
+                                    <master-search [MasterSearchData]="approvalProcessData"
+                                    (newRowClick)="ApprovalProcessSelected($event)">
                                     </master-search>
                                 </div>
                             </div>
@@ -120,7 +122,7 @@
                                     <mat-form-field style="width: 90%">
                                         <input type="text" matInput maxlength="6" formControlName="labour_charge" />
                                     </mat-form-field>
-                                    <master-search>
+                                    <master-search >
                                     </master-search>
                                 </div>
                             </div>

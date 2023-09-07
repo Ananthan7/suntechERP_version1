@@ -143,6 +143,19 @@ export class MasterComponent implements OnInit {
           alignment:"left"
         },
     ]
+    }else if(this.tableName =='PROCESS_MASTER_DJ'){
+      this.orderedItemsHead = [
+        { 
+          dataField: "PROCESS_CODE",
+          caption:"PROCESS_CODE",
+          alignment:"left"
+        },
+        { 
+          dataField: "DESCRIPTION",
+          caption:"DESCRIPTION",
+          alignment:"left"
+        },
+      ]
     }
     this.apiCtrl = 'TransctionMainGrid'
     let params = {
