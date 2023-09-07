@@ -156,30 +156,32 @@ export class StonePricingMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.content);
+    
     if(this.content){
       this.setFormValues()
     }
   }
   setFormValues() {
     if(!this.content) return
-    this.stonePrizeMasterForm.controls.price_code.setValue(this.content.price_code)
-    this.stonePrizeMasterForm.controls.sleve_set.setValue(this.content.sleve_set)
-    this.stonePrizeMasterForm.controls.shape.setValue(this.content.shape)
-    this.stonePrizeMasterForm.controls.sleve_form.setValue(this.content.sleve_form)
-    this.stonePrizeMasterForm.controls.sleve_to.setValue(this.content.sleve_to)
-    this.stonePrizeMasterForm.controls.color.setValue(this.content.color)
-    this.stonePrizeMasterForm.controls.clarity.setValue(this.content.clarity)
-    this.stonePrizeMasterForm.controls.size_from.setValue(this.content.size_from)
-    this.stonePrizeMasterForm.controls.size_to.setValue(this.content.size_to)
-    this.stonePrizeMasterForm.controls.currency.setValue(this.content.currency)
-    this.stonePrizeMasterForm.controls.carat_wt.setValue(this.content.carat_wt)
-    this.stonePrizeMasterForm.controls.size_from_desc.setValue(this.content.size_from_desc)
-    this.stonePrizeMasterForm.controls.size_to_desc.setValue(this.content.size_to_desc)
-    this.stonePrizeMasterForm.controls.wt_from.setValue(this.content.wt_from)
-    this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.wt_to)
-    this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.issue_rate)
-    this.stonePrizeMasterForm.controls.selling.setValue(this.content.selling)
-    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.selling_rate)
+    this.stonePrizeMasterForm.controls.price_code.setValue(this.content.CODE)
+    this.stonePrizeMasterForm.controls.sleve_set.setValue(this.content.SIEVE_SET)
+    this.stonePrizeMasterForm.controls.shape.setValue(this.content.SHAPE)
+    this.stonePrizeMasterForm.controls.sleve_form.setValue(this.content.SIEVE)
+    this.stonePrizeMasterForm.controls.sleve_to.setValue(this.content.SIEVE_TO)
+    this.stonePrizeMasterForm.controls.color.setValue(this.content.COLOR)
+    this.stonePrizeMasterForm.controls.clarity.setValue(this.content.CLARITY)
+    this.stonePrizeMasterForm.controls.size_from.setValue(this.content.SIZE_FROM)
+    this.stonePrizeMasterForm.controls.size_to.setValue(this.content.SIZE_TO)
+    this.stonePrizeMasterForm.controls.currency.setValue(this.content.CURRENCYCODE)
+    this.stonePrizeMasterForm.controls.carat_wt.setValue(this.content.CARAT_WT)
+    this.stonePrizeMasterForm.controls.size_from_desc.setValue(this.content.SIZE_FROM)
+    this.stonePrizeMasterForm.controls.size_to_desc.setValue(this.content.SIZE_TO)
+    this.stonePrizeMasterForm.controls.wt_from.setValue(this.content.WEIGHT_FROM)
+    this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.WEIGHT_TO)
+    this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
+    this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
+    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
   }
   formSubmit(){
     if (this.stonePrizeMasterForm.invalid) {

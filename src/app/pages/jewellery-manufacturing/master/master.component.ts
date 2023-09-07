@@ -143,6 +143,19 @@ export class MasterComponent implements OnInit {
           alignment:"left"
         },
     ]
+    }else if(this.tableName =='STONE_PRICE_MASTER_DJ'){
+      this.orderedItemsHead = [
+        { 
+          dataField: "CODE",
+          caption:"CODE",
+          alignment:"left"
+        },
+        { 
+          dataField: "DESCRIPTION",
+          caption:"DESCRIPTION",
+          alignment:"left"
+        },
+    ]
     }
     this.apiCtrl = 'TransctionMainGrid'
     let params = {
