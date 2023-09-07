@@ -20,7 +20,7 @@ import { ApprovalMasterComponent } from './approval-master/approval-master.compo
   selector: 'app-master',
   templateUrl: './master.component.html',
   styleUrls: ['./master.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MasterComponent implements OnInit {
   //variables
@@ -37,7 +37,7 @@ export class MasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     private modalService: NgbModal,
-    private ChangeDetector: ChangeDetectorRef,
+    // private ChangeDetector: ChangeDetectorRef,
     private route: ActivatedRoute,
   ) {
     this.viewRowDetails = this.viewRowDetails.bind(this);
@@ -109,17 +109,20 @@ export class MasterComponent implements OnInit {
       }
     }
   }
+  nextCall: any = 0
   nextPage() {
     if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
       this.pageIndex = this.pageIndex + 1;
-      this.getMasterGridData();
+      
+        this.getMasterGridData();
     }
   }
-
- 
   /**USE: to get table data from API */
   getMasterGridData(data?:any) {
     if(data){
+      this.pageIndex = 1;
+      this.orderedItems = [];
+      this.orderedItemsHead = [];
       this.menuTitle = data.MENU_CAPTION_ENG;
       this.tableName = data.HEADER_TABLE;
       this.PERMISSIONS = data.PERMISSION;
@@ -127,23 +130,11 @@ export class MasterComponent implements OnInit {
       this.menuTitle = this.CommonService.getModuleName()
       this.tableName = this.CommonService.getqueryParamTable()
     }
+    
     if (this.orderedItems.length == 0) {
       this.snackBar.open('loading...');
     }
-    // if(this.tableName =='WORKER_MASTER'){
-    //   this.orderedItemsHead = [
-    //     { 
-    //       dataField: "WORKER_CODE",
-    //       caption:"WORKER_CODE",
-    //       alignment:"left"
-    //     },
-    //     { 
-    //       dataField: "DESCRIPTION",
-    //       caption:"DESCRIPTION",
-    //       alignment:"left"
-    //     },
-    // ]
-    // }
+   
     this.apiCtrl = 'TransctionMainGrid'
     let params = {
       "PAGENO": this.pageIndex || 1,
@@ -152,7 +143,7 @@ export class MasterComponent implements OnInit {
       "CUSTOM_PARAM": {
         "FILTER": {
           "YEARMONTH": localStorage.getItem('YEAR') || '',
-          "BRANCHCODE": 'MOE',
+          "BRANCHCODE": this.CommonService.branchCode,
           "VOCTYPE": "PCR"
         },
         "TRANSACTION": {
@@ -160,6 +151,8 @@ export class MasterComponent implements OnInit {
         }
       }
     }
+    console.log(params);
+    
     this.subscriptions$ = this.dataService.postDynamicAPI(this.apiCtrl, params)
     .subscribe((resp: any) => {
       this.snackBar.dismiss();
@@ -177,7 +170,7 @@ export class MasterComponent implements OnInit {
         this.orderedItemsHead = Object.keys(this.orderedItems[0]);
         this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
         //change detector code
-        this.ChangeDetector.detectChanges()
+        // this.ChangeDetector.detectChanges()
       } else {
         alert('No Response Found')
       }
