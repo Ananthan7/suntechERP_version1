@@ -10,402 +10,392 @@
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
     <!-- content section -->
     <div class="row">
-
-        <div>
-            <div class="container-fluid pt-3">
-                <!-- <div class="card metal-sales-card"> -->
-                <!-- <div class="card-body sales-card-body p-2"> -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Process Code :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label ">Process Type :</label>
-                            <div class="col-sm-3">
-
-                                <mat-form-field style="width: 100%;">
-                                    
-                                    <mat-select formControlName="mode">
-                                      <mat-option>Active</mat-option>
-                                      <mat-option>In Active</mat-option>
-                                    </mat-select>
-                                  </mat-form-field>
-
-                            </div>
-                            <label for="input" class="col-sm-3 col-form-label">Standard Time :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">                                   
-                                    <mat-select formControlName="mode">
-                                      <mat-option>Active</mat-option>
-                                      <mat-option>In Active</mat-option>
-                                    </mat-select>
-                                  </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">WIP A/C :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                            <label for="input" class="col-sm-3 col-form-label">Maximum Time :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                   
-                                    <mat-select formControlName="mode">
-                                      <mat-option>Active</mat-option>
-                                      <mat-option>In Active</mat-option>
-                                    </mat-select>
-                                  </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Position :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                            <label for="input" class="col-sm-3 col-form-label">Tray Weight :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Approval Code :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 90%">
-                                    <input type="text" matInput
-                                        
-                                        maxlength="6"                                        
-                                        formControlName="WorkerAcCode" />
-                                </mat-form-field>
-                                <master-search
-                                    >
-                                </master-search>
-
-                            </div>
-                            <label for="input" class="col-sm-3 col-form-label">Approval Process :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 90%">
-                                    <input type="text" matInput
-                                        
-                                        maxlength="6"                                        
-                                        formControlName="WorkerAcCode" />
-                                </mat-form-field>
-                                <master-search
-                                    >
-                                </master-search>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Recov. Stock Code :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 90%">
-                                    <input type="text" matInput
-                                        
-                                        maxlength="6"                                        
-                                        formControlName="WorkerAcCode" />
-                                </mat-form-field>
-                                <master-search
-                                    >
-                                </master-search>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Labour Charge/Hour :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 90%">
-                                    <input type="text" matInput
-                                        
-                                        maxlength="6"                                        
-                                        formControlName="WorkerAcCode" />
-                                </mat-form-field>
-                                <master-search
-                                    >
-                                </master-search>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row py-3 align-items-center">
-                    <div class="col-md-2">
-                        <div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                    id="flexRadioDefault1">
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                    Loss
-                                </label>
-                            </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                    id="flexRadioDefault2" checked>
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    Recovery
-                                </label>
-                            </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                    id="flexRadioDefault3" checked>
-                                <label class="form-check-label" for="flexRadioDefault3">
-                                    Allow Gain
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-12 col-form-label">Labour Charge/Hour :</label>
-                            <div class="col-sm-12 my-2">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-sm-12">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-12 col-form-label  text-center">Min % :</label>
-                            <div class="col-sm-12 my-2">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-sm-12">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="row mb-2 ">
-                            <label for="input" class="col-sm-12 col-form-label text-center">Max % :</label>
-                            <div class="col-sm-12 my-2">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-12 col-form-label text-center">Account Code :</label>
-                            <div class="col-sm-12 my-2">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-sm-12">
-                                <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="WorkerDESCRIPTION" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <form action="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                    id="flexRadioDefault1">
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                    Loss on Gross only
-                                </label>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="check_radio_btn">
+        <form [formGroup]="processMasterForm">
+            <div>
+                <div class="container-fluid pt-3">
+                    <!-- <div class="card metal-sales-card"> -->
+                    <!-- <div class="card-body sales-card-body p-2"> -->
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="radio-btn">
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        Final Process
-                                    </label>
+                        <div class="col-md-12">
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-3 col-form-label">Process Code :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="processCode" />
+                                    </mat-form-field>
                                 </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Setting
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault3">
-                                    <label class="form-check-label" for="flexRadioDefault3">
-                                        Lab Process
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault4">
-                                    <label class="form-check-label" for="flexRadioDefault4">
-                                        Wax Process
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault5">
-                                    <label class="form-check-label" for="flexRadioDefault5">
-                                        Stone
-                                    </label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="processDesc" />
+                                    </mat-form-field>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="radio-btn">
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        Merge Pcs
-                                    </label>
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-3 col-form-label ">Process Type :</label>
+                                <div class="col-sm-3">
+
+                                    <mat-form-field style="width: 100%;">
+
+                                        <mat-select formControlName="processType">
+                                            <mat-option>Active</mat-option>
+                                            <mat-option>In Active</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
                                 </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Lock Weight
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault3">
-                                    <label class="form-check-label" for="flexRadioDefault3">
-                                        Have Tree No
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault4">
-                                    <label class="form-check-label" for="flexRadioDefault4">
-                                        Non Quantity
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault5">
-                                    <label class="form-check-label" for="flexRadioDefault5">
-                                        Consumable
-                                    </label>
+                                <label for="input" class="col-sm-3 col-form-label">Standard Time :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%;">
+                                        <mat-select formControlName="stand_time">
+                                            <mat-option>Active</mat-option>
+                                            <mat-option>In Active</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="radio-btn">
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        Refinery Auto Process
-                                    </label>
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-3 col-form-label">WIP A/C :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="wip_ac" />
+                                    </mat-form-field>
                                 </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Apply Auto Loss to Refinery
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault3">
-                                    <label class="form-check-label" for="flexRadioDefault3">
-                                        Repair Process
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault4">
-                                    <label class="form-check-label" for="flexRadioDefault4">
-                                        Metal
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault5">
-                                    <label class="form-check-label" for="flexRadioDefault5">
-                                        Approval Required
-                                    </label>
+                                <label for="input" class="col-sm-3 col-form-label">Maximum Time :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%;">
+
+                                        <mat-select formControlName="max_time">
+                                            <mat-option>Active</mat-option>
+                                            <mat-option>In Active</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="radio-btn">
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        Deduct Pure Wt
-                                    </label>
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-3 col-form-label">Position :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="processPosition" />
+                                    </mat-form-field>
                                 </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Stone Included
-                                    </label>
+                                <label for="input" class="col-sm-3 col-form-label">Tray Weight :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="trayWeight" />
+                                    </mat-form-field>
                                 </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault3">
-                                    <label class="form-check-label" for="flexRadioDefault3">
-                                        Time Calculate on Process
-                                    </label>
+                            </div>
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-3 col-form-label">Approval Code :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 90%">
+                                        <input type="text" matInput maxlength="6" formControlName="approvalCode" />
+                                    </mat-form-field>
+                                    <master-search>
+                                    </master-search>
+
                                 </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault4">
-                                    <label class="form-check-label" for="flexRadioDefault4">
-                                        Recovery Process
-                                    </label>
+                                <label for="input" class="col-sm-3 col-form-label">Approval Process :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 90%">
+                                        <input type="text" matInput maxlength="6" formControlName="approvalProcess" />
+                                    </mat-form-field>
+                                    <master-search>
+                                    </master-search>
                                 </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault5">
-                                    <label class="form-check-label" for="flexRadioDefault5">
-                                        Auto Transfer
-                                    </label>
+                            </div>
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-3 col-form-label">Recov. Stock Code :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 90%">
+                                        <input type="text" matInput maxlength="6" formControlName="recStockCode" />
+                                    </mat-form-field>
+                                    <master-search>
+                                    </master-search>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-3 col-form-label">Labour Charge/Hour :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 90%">
+                                        <input type="text" matInput maxlength="6" formControlName="labour_charge" />
+                                    </mat-form-field>
+                                    <master-search>
+                                    </master-search>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row my-3">
-                    <div class="col-md-12">
-                        <div class="d-flex justify-content-end text-end">
+                    <div class="row py-3 align-items-center">
+                        <div class="col-md-2">
+                            <div>
+                                <div class="form-check mb-1">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Loss
+                                    </label>
+                                </div>
+                                <div class="form-check mb-1">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Recovery
+                                    </label>
+                                </div>
+                                <div class="form-check mb-1">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault3" checked>
+                                    <label class="form-check-label" for="flexRadioDefault3">
+                                        Allow Gain
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-12 col-form-label">Standard % :</label>
+                                <div class="col-sm-12 my-2">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="standard_start" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-12">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="standard_end" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-12 col-form-label  text-center">Min % :</label>
+                                <div class="col-sm-12 my-2">
+                                    <mat-form-field style="width: 100%">
+                                        <input type="number" matInput
+                                            step="0.001" min="0" maxlength="4"
+                                            
+                                            formControlName="TargetCaratWt" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-12">
+                                    <mat-form-field style="width: 100%">
+                                        <input type="number" matInput
+                                            step="0.001" min="0" maxlength="4"
+                                            
+                                            formControlName="TargetCaratWt" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row mb-2 ">
+                                <label for="input" class="col-sm-12 col-form-label text-center">Max % :</label>
+                                <div class="col-sm-12 my-2">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="WorkerDESCRIPTION" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-12 col-form-label text-center">Account Code :</label>
+                                <div class="col-sm-12 my-2">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="WorkerDESCRIPTION" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-12">
+                                    <mat-form-field style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput formControlName="WorkerDESCRIPTION" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <form action="#">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Loss on Gross only
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="check_radio_btn">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="radio-btn">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault1">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Final Process
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Setting
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault3">
+                                        <label class="form-check-label" for="flexRadioDefault3">
+                                            Lab Process
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault4">
+                                        <label class="form-check-label" for="flexRadioDefault4">
+                                            Wax Process
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault5">
+                                        <label class="form-check-label" for="flexRadioDefault5">
+                                            Stone
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="radio-btn">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault1">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Merge Pcs
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Lock Weight
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault3">
+                                        <label class="form-check-label" for="flexRadioDefault3">
+                                            Have Tree No
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault4">
+                                        <label class="form-check-label" for="flexRadioDefault4">
+                                            Non Quantity
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault5">
+                                        <label class="form-check-label" for="flexRadioDefault5">
+                                            Consumable
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="radio-btn">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault1">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Refinery Auto Process
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Apply Auto Loss to Refinery
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault3">
+                                        <label class="form-check-label" for="flexRadioDefault3">
+                                            Repair Process
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault4">
+                                        <label class="form-check-label" for="flexRadioDefault4">
+                                            Metal
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault5">
+                                        <label class="form-check-label" for="flexRadioDefault5">
+                                            Approval Required
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="radio-btn">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault1">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Deduct Pure Wt
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Stone Included
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault3">
+                                        <label class="form-check-label" for="flexRadioDefault3">
+                                            Time Calculate on Process
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault4">
+                                        <label class="form-check-label" for="flexRadioDefault4">
+                                            Recovery Process
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault5">
+                                        <label class="form-check-label" for="flexRadioDefault5">
+                                            Auto Transfer
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-end text-end">
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-</div>
 
-<!-- </div>
+    <!-- </div>
 </div> -->
