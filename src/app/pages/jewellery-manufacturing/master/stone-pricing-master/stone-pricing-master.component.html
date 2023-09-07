@@ -31,8 +31,10 @@
                                                     maxlength="6"                                        
                                                     formControlName="price_code" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search  [MasterSearchData]="priceCodeData"
+                                            (newRowClick)="priceCodeSelected($event)"
                                                 >
+                                                
                                             </master-search>
                                         </div>
                                     </div>
@@ -45,7 +47,8 @@
                                                     maxlength="6"                                        
                                                     formControlName="sleve_set" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search [MasterSearchData]="sleve_setData"
+                                            (newRowClick)="sleve_setDataSelected($event)"
                                                 >
                                             </master-search>
                                         </div>
@@ -59,7 +62,8 @@
                                                     maxlength="6"                                        
                                                     formControlName="shape" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search [MasterSearchData]="shapeData"
+                                            (newRowClick)="shapeDataSelected($event)"
                                                 >
                                             </master-search>
                                         </div>
@@ -73,7 +77,8 @@
                                                     maxlength="6"                                        
                                                     formControlName="sleve_form" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search [MasterSearchData]="sleveData"
+                                            (newRowClick)="slevefromDataSelected($event)"
                                                 >
                                             </master-search>
                                         </div>
@@ -87,7 +92,8 @@
                                                     maxlength="6"                                        
                                                     formControlName="sleve_to" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search [MasterSearchData]="sleveData"
+                                            (newRowClick)="slevetoDataSelected($event)"
                                                 >
                                             </master-search>
                                         </div>
@@ -101,7 +107,8 @@
                                                     maxlength="6"                                        
                                                     formControlName="color" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search [MasterSearchData]="colorData"
+                                            (newRowClick)="colorDataSelected($event)"
                                                 >
                                             </master-search>
                                         </div>
@@ -115,7 +122,8 @@
                                                     maxlength="6"                                        
                                                     formControlName="clarity" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search  [MasterSearchData]="clarityData"
+                                            (newRowClick)="clarityDataSelected($event)"
                                                 >
                                             </master-search>
                                         </div>
@@ -129,7 +137,8 @@
                                                     maxlength="6"                                        
                                                     formControlName="size_from" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search [MasterSearchData]="sizefromData"
+                                            (newRowClick)="sizefromDataSelected($event)"
                                                 >
                                             </master-search>
                                         </div>
@@ -143,7 +152,8 @@
                                                     maxlength="6"                                        
                                                     formControlName="size_to" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search [MasterSearchData]="sizetoData"
+                                            (newRowClick)="sizetoDataSelected($event)"
                                                 >
                                             </master-search>
                                         </div>
@@ -162,7 +172,8 @@
                                                     maxlength="6"                                        
                                                     formControlName="currency" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search [MasterSearchData]="currencyData"
+                                            (newRowClick)="currencyDataSelected($event)"
                                                 >
                                             </master-search>
                                         </div>
