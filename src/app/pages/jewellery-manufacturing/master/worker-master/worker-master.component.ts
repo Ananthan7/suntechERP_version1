@@ -119,7 +119,7 @@ export class WorkerMasterComponent implements OnInit {
       "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
       "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
       "SECRET_CODE": "",
-      "PROCESS_CODE": "",
+      "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
       "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
       "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
       "ACTIVE": true,
@@ -129,7 +129,7 @@ export class WorkerMasterComponent implements OnInit {
       "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
       "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
       "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0.000,
-      "WORKER_EXPIRY_DATE": null,
+      "WORKER_EXPIRY_DATE": "",
       "workerDetails": this.selectedProcessArr
     }
 

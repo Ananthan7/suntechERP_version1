@@ -7,20 +7,13 @@ export class NumericInputDirective {
 
   constructor(private el: ElementRef) { }
   @HostListener('input', ['$event']) onInputChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    let value = input.value;
+    const input = this.el.nativeElement as HTMLInputElement;
+    const value = input.value;
+    const sanitizedValue = value.replace(/[^0-9]/g, '')
 
-    // Remove non-numeric and non-decimal characters except for one decimal point
-    value = value.replace(/[^0-9.]/g, '');
-
-    // Ensure there is at most one decimal point
-    const decimalCount = value.split('.').length - 1;
-    if (decimalCount > 1) {
-      const parts = value.split('.');
-      value = `${parts[0]}.${parts.slice(1).join('')}`;
+    if (value !== sanitizedValue) {
+      input.value = sanitizedValue; // Update the input field with the sanitized value
+      input.dispatchEvent(new Event('input')); // Trigger an input event to propagate changes
     }
-
-    // Set the cleaned value back to the input field
-    input.value = value;
   }
 }
