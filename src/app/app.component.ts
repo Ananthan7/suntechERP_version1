@@ -158,7 +158,6 @@ export class AppComponent implements OnInit {
         this.comFunc.mQtyFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'AMTDECIMALS') {
         this.comFunc.amtDecimals = data.PARAM_VALUE;
-
       }
       if (data.PARAMETER == 'MQTYDECIMALS')
         this.comFunc.mQtyDecimals = data.PARAM_VALUE;
@@ -199,14 +198,16 @@ export class AppComponent implements OnInit {
     this.userBranch = localStorage.getItem('userbranch');
 
     this.comFunc.mastersList = JSON.parse(sessionStorage.getItem('generalMastersList') || 'null');
-    this.comFunc.allbranchMaster = JSON.parse(localStorage.getItem('branchdetails') || 'null');
+    this.comFunc.allbranchMaster = JSON.parse(localStorage.getItem('BRANCH_PARAMETER') || 'null');
 
-    const branchDetailsString = localStorage.getItem('branchdetails');
+    const branchDetailsString = localStorage.getItem('BRANCH_PARAMETER');
 
     this.inDb.getAllData('compparams').subscribe((data) => {
       if (data.length == 0) {
         this.getAllCompanyParameters();
       } else {
+        console.log(data,'data');
+        
         this.comFunc.allCompanyParams = data;
         this.comFunc.setCompParaValues();
       }

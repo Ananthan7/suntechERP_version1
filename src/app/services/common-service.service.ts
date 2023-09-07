@@ -33,7 +33,7 @@ export class CommonServiceService {
   public baseUsername: any;
   public baseUserbranch: any;
   public baseYear: any;
-  public allbranchMaster: any = localStorage.getItem('branchdetails');
+  public allbranchMaster: any = localStorage.getItem('BRANCH_PARAMETER');
   public allBranchCurrency: any;
   public currencyRate: any;
   public divisionMasterList: any;
@@ -147,13 +147,15 @@ export class CommonServiceService {
 
   setCompParaValues() {
     this.allCompanyParams.map((data: any) => {
+      
       if (data.PARAMETER == 'AMTFORMAT')
+        console.log(data,'++++++++AMTFORMAT++++++++++');
         this.amtFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'MQTYFORMAT')
         this.mQtyFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'AMTDECIMALS') {
+        console.log(data,'++++++++++AMTDECIMALS+++++++++++');
         this.amtDecimals = data.PARAM_VALUE;
-        console.log('this.amtDecimals', this.amtDecimals);
       }
       if (data.PARAMETER == 'MQTYDECIMALS')
         this.mQtyDecimals = data.PARAM_VALUE;

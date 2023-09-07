@@ -71,9 +71,8 @@
                                         <dxi-button [onClick]="viewRowDetails" icon="fa fa-eye"></dxi-button>
                                     </dxi-column>
                                     <dxi-column *ngFor="let data of orderedItemsHead"
-                                        dataField="{{data.dataField}}"
-                                        caption="{{data.caption}}"
-                                        alignment="{{data.alignment}}">
+                                        dataField="{{data}}"
+                                        caption="{{data}}" >
                                     </dxi-column>
                                     <dxo-summary>
                                     </dxo-summary>

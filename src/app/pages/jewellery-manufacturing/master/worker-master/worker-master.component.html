@@ -9,7 +9,7 @@
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
     <!-- content section -->
-    <div class="row ">
+    <div class="row">
         <form [formGroup]="workerMasterForm">
             <div class="row p-3">
                 <div class="col-md-7">
@@ -88,7 +88,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                    (keypress)="isNumeric($event)"
+                                    numericInput class="text-right"
                                     formControlName="LossAllowed" />
                             </mat-form-field>
                         </div>
@@ -109,7 +109,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                    (keypress)="isNumeric($event)"
+                                    numericInput class="text-right"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
@@ -118,7 +118,7 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="text" matInput
-                                    (keypress)="isNumeric($event)"
+                                    numericInput class="text-right"
                                     formControlName="TargetPcs" />
                             </mat-form-field>
                         </div>
@@ -128,8 +128,8 @@
                             class="col-sm-4 col-form-label">Target Metal Weight :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput
-                                    (keypress)="isNumeric($event)"
+                                <input type="text" matInput AmountDecimalInput
+                                    numericInput class="text-right"
                                     formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
@@ -137,9 +137,9 @@
                             class="col-sm-3 col-form-label">Target Carat Weight :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="number" matInput
-                                    step="0.001" min="0" maxlength="4"
-                                    (keypress)="isNumeric($event)"
+                                <input type="text" class="text-right"
+                                     matInput numericInput
+                                     AmountDecimalInput
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
@@ -152,7 +152,9 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput
-                                    (keypress)="isNumeric($event)"
+                                     class="text-right"
+                                     numericInput
+                                     AmountDecimalInput
                                     formControlName="TargetWeight" />
                             </mat-form-field>
                         </div>
