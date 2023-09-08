@@ -56,7 +56,7 @@ export class SuntechAPIService {
     );
   }
   // use: dynamic function for delete API data 
-  deleteDynamicAPI(apiName: string, data: any): Observable<any> {
+  deleteDynamicAPI(apiName: string, data?: any): Observable<any> {
     return this.configService.getConfig().pipe(
       switchMap(config => {
         const apiUrl = config.baseUrl;
