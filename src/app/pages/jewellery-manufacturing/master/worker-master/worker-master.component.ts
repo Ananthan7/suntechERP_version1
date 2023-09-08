@@ -163,7 +163,6 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   updateWorkerMaster(){
-    console.log( this.workerMasterForm.value);
     if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -171,7 +170,7 @@ export class WorkerMasterComponent implements OnInit {
 
     let API = 'WorkerMaster/UpdateWorkerMaster/'+this.workerMasterForm.value.WorkerCode
     let postData = {
-      "MID": 0,
+      "MID": this.content.MID,
       "WORKER_CODE": this.workerMasterForm.value.WorkerCode || "",
       "DESCRIPTION": this.workerMasterForm.value.WorkerDESCRIPTION || "",
       "DEPARTMENT_CODE": "",
