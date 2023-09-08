@@ -8,7 +8,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 export class ModalHeaderComponent implements OnInit {
   @Output() saveClick = new EventEmitter();
   @Output() cancelClick = new EventEmitter();
-  
+  @Output() deleteClick = new EventEmitter();
   constructor() { }
 
   ngOnInit(): void {
@@ -19,6 +19,9 @@ export class ModalHeaderComponent implements OnInit {
   }
   cancelClicked() {
     this.cancelClick.emit();
+  }
+  deleteClicked() {
+    this.deleteClick.emit();
   }
 
 }
