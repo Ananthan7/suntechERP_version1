@@ -58,7 +58,7 @@ export class AppDecimalInputDirective {
     // Reconstruct the value and set it back to the input field
     value = `${integerPart}.${fractionalPart}`;
     // this.el.nativeElement.value = value;
-    this.renderer.setProperty(input, 'value', Number(value));
+    this.renderer.setProperty(input, 'value', value);
   }
 
   countZeros(string:string) {

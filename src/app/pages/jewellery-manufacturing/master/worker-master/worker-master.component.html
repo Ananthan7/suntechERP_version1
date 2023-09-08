@@ -7,7 +7,8 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    (deleteClick)="deleteWorkerMaster()"></modal-header>
     <!-- content section -->
     <div class="row">
         <form [formGroup]="workerMasterForm">
