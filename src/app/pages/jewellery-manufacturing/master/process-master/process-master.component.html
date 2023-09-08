@@ -109,21 +109,19 @@
                             <div class="row mb-2">
                                 <label for="input" class="col-sm-3 col-form-label">Recov. Stock Code :</label>
                                 <div class="col-sm-3">
-                                    <mat-form-field style="width: 90%">
+                                    <mat-form-field style="width: 100%">
                                         <input type="text" matInput maxlength="6" formControlName="recStockCode" />
                                     </mat-form-field>
-                                    <master-search>
-                                    </master-search>
+                                    
                                 </div>
                             </div>
                             <div class="row mb-2">
                                 <label for="input" class="col-sm-3 col-form-label">Labour Charge/Hour :</label>
                                 <div class="col-sm-3">
-                                    <mat-form-field style="width: 90%">
+                                    <mat-form-field style="width: 100%">
                                         <input type="text" matInput maxlength="6" formControlName="labour_charge" />
                                     </mat-form-field>
-                                    <master-search >
-                                    </master-search>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -133,21 +131,21 @@
                             <div>
                                 <div class="form-check mb-1">
                                     <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1">
+                                        id="flexRadioDefault1" formControlName="loss">
                                     <label class="form-check-label" for="flexRadioDefault1">
                                         Loss
                                     </label>
                                 </div>
                                 <div class="form-check mb-1">
                                     <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2" checked>
+                                        id="flexRadioDefault2" formControlName="recovery">
                                     <label class="form-check-label" for="flexRadioDefault2">
                                         Recovery
                                     </label>
                                 </div>
                                 <div class="form-check mb-1">
                                     <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault3" checked>
+                                        id="flexRadioDefault3" formControlName="gain">
                                     <label class="form-check-label" for="flexRadioDefault3">
                                         Allow Gain
                                     </label>
