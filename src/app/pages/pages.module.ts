@@ -10,6 +10,8 @@ import { SharedModule } from '../shared/shared.module';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+
+
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
   interactionPlugin
@@ -21,7 +23,7 @@ FullCalendarModule.registerPlugins([
     PagesRoutingModule,
     SharedModule,
     FullCalendarModule,
-    FormsModule,
+    FormsModule,    
     ReactiveFormsModule,
     FlatpickrModule.forRoot(),
   ],providers:[NgbActiveModal]

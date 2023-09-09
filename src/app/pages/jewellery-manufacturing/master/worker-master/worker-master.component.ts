@@ -83,6 +83,7 @@ export class WorkerMasterComponent implements OnInit {
     if(this.content){
       this.setFormValues()
     }
+   
   }
   setFormValues() {
     if(!this.content) return
