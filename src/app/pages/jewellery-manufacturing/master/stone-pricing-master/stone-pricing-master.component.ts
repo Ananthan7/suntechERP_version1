@@ -157,7 +157,6 @@ export class StonePricingMasterComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content);
-    
     if(this.content){
       this.setFormValues()
     }
@@ -184,6 +183,10 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
   }
   formSubmit(){
+    if(this.content && this.content.FLAG == 'EDIT'){
+      this.update()
+      return
+    }
     if (this.stonePrizeMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -195,7 +198,7 @@ export class StonePricingMasterComponent implements OnInit {
       "MID": 0,
       "SRNO": 0,
       "CODE": this.stonePrizeMasterForm.value.price_code || "",
-      "DESCRIPTION": "string",
+      "DESCRIPTION": "",
       "SHAPE": this.stonePrizeMasterForm.value.shape || "",
       "COLOR": this.stonePrizeMasterForm.value.color || "",
       "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
@@ -208,13 +211,13 @@ export class StonePricingMasterComponent implements OnInit {
       "LAST_SELLING_RATE": 0,
       "SELLING_PER":  this.stonePrizeMasterForm.value.selling || 0,
       "CARAT_WT":  this.stonePrizeMasterForm.value.carat_wt || 0,
-      "SIEVE": "string",
+      "SIEVE": "",
       "SIEVE_SET": this.stonePrizeMasterForm.value.sleve_set || "",
       "WEIGHT_FROM":  this.stonePrizeMasterForm.value.wt_from || 0,
       "WEIGHT_TO":  this.stonePrizeMasterForm.value.wt_to || 0,
       "SIEVE_TO":  this.stonePrizeMasterForm.value.sleve_to || "",
-      "SIEVEFROM_DESC": "string",
-      "SIEVETO_DESC": "string",
+      "SIEVEFROM_DESC": "",
+      "SIEVETO_DESC": "",
       "LAST_UPDATE": new Date().toISOString()
     }
 
@@ -242,10 +245,73 @@ export class StonePricingMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+  update(){
+    console.log( this.stonePrizeMasterForm.value);
+    if (this.stonePrizeMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'StonePriceMasterDJ/UpdateStonePriceMaster/'+this.content.MID
+    let postData = {
+      "MID": this.content.MID,
+      "SRNO": 0,
+      "CODE": this.stonePrizeMasterForm.value.price_code || "",
+      "DESCRIPTION": "",
+      "SHAPE": this.stonePrizeMasterForm.value.shape || "",
+      "COLOR": this.stonePrizeMasterForm.value.color || "",
+      "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
+      "SIZE_FROM": this.stonePrizeMasterForm.value.size_from || "",
+      "SIZE_TO": this.stonePrizeMasterForm.value.size_to || "",
+      "CURRENCYCODE": this.stonePrizeMasterForm.value.currency || "",
+      "ISSUE_RATE":  this.stonePrizeMasterForm.value.issue_rate || 0,
+      "SELLING_RATE":  this.stonePrizeMasterForm.value.selling_rate || 0,
+      "LAST_ISSUE_RATE": 0,
+      "LAST_SELLING_RATE": 0,
+      "SELLING_PER":  this.stonePrizeMasterForm.value.selling || 0,
+      "CARAT_WT":  this.stonePrizeMasterForm.value.carat_wt || 0,
+      "SIEVE": "",
+      "SIEVE_SET": this.stonePrizeMasterForm.value.sleve_set || "",
+      "WEIGHT_FROM":  this.stonePrizeMasterForm.value.wt_from || 0,
+      "WEIGHT_TO":  this.stonePrizeMasterForm.value.wt_to || 0,
+      "SIEVE_TO":  this.stonePrizeMasterForm.value.sleve_to || "",
+      "SIEVEFROM_DESC": "",
+      "SIEVETO_DESC": "",
+      "LAST_UPDATE": new Date().toISOString()
+    }
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if(result.status == "Success"){
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.stonePrizeMasterForm.reset()
+                this.tableData = []
+                this.close()
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  
   close() {
     //TODO reset forms and data before closing
     this.activeModal.close();
   }
+
+  
 
   priceCodeSelected(data: any) {
     // console.log(data);

@@ -164,7 +164,6 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   updateWorkerMaster(){
-    console.log( this.workerMasterForm.value);
     if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -172,7 +171,7 @@ export class WorkerMasterComponent implements OnInit {
 
     let API = 'WorkerMaster/UpdateWorkerMaster/'+this.workerMasterForm.value.WorkerCode
     let postData = {
-      "MID": 0,
+      "MID": this.content.MID,
       "WORKER_CODE": this.workerMasterForm.value.WorkerCode || "",
       "DESCRIPTION": this.workerMasterForm.value.WorkerDESCRIPTION || "",
       "DEPARTMENT_CODE": "",
@@ -221,6 +220,72 @@ export class WorkerMasterComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
+  }
+  /**USE: delete worker master from row */
+  deleteWorkerMaster() {
+    if (!this.content.WORKER_CODE) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'WorkerMaster/DeleteWorkerMaster/' + this.content.WORKER_CODE
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.workerMasterForm.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.workerMasterForm.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
+      }
+    });
   }
 
   /**use: checkbox change */
