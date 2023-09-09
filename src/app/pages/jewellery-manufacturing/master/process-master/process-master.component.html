@@ -13,115 +13,154 @@
         <form [formGroup]="processMasterForm">
             <div>
                 <div class="container-fluid pt-3">
-                    <!-- <div class="card metal-sales-card"> -->
-                    <!-- <div class="card-body sales-card-body p-2"> -->
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-3 col-form-label">Process Code :</label>
+                                <label for="input"
+                                    class="col-sm-2 col-form-label">Process Code
+                                    :</label>
                                 <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="processCode" />
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="processCode" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="processDesc" />
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="processDesc" />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-3 col-form-label ">Process Type :</label>
+                                <label for="input"
+                                    class="col-sm-2 col-form-label ">Process
+                                    Type :</label>
                                 <div class="col-sm-3">
-
                                     <mat-form-field style="width: 100%;">
-                                        <mat-select formControlName="processType">
-                                          <mat-option *ngFor="let process of processType" [value]="process.SRNO">{{ process.ENGLISH }}</mat-option>
+                                        <mat-select
+                                            formControlName="processType">
+                                            <mat-option
+                                                *ngFor="let option of processTypeList"
+                                                [value]="option.SRNO">
+                                                {{ option.ENGLISH }}
+                                            </mat-option>
                                         </mat-select>
-                                      </mat-form-field>
-
+                                    </mat-form-field>
                                 </div>
-                                <label for="input" class="col-sm-3 col-form-label">Standard Time :</label>
-                                <div class="col-sm-3">
+                                <label for="input"
+                                    class="col-sm-2  col-form-label">Standard
+                                    Time :</label>
+                                <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <!-- <mat-select formControlName="stand_time">
-                                            <mat-option>Active</mat-option>
-                                            <mat-option>In Active</mat-option>
-                                        </mat-select> -->
-                                        <input type="time" formControlName="stand_time" matInput>
+                                        <input type="time"
+                                            formControlName="stand_time"
+                                            matInput>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-3 col-form-label">WIP A/C :</label>
+                                <label for="input"
+                                    class="col-sm-2 col-form-label">WIP A/C :</label>
                                 <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="wip_ac" />
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="wip_ac" />
                                     </mat-form-field>
                                 </div>
-                                <label for="input" class="col-sm-3 col-form-label">Maximum Time :</label>
-                                <div class="col-sm-3">
+                                <label for="input"
+                                    class="col-sm-2 col-form-label">Maximum Time
+                                    :</label>
+                                <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-
-                                        <!-- <mat-select formControlName="max_time">
-                                            <mat-option>Active</mat-option>
-                                            <mat-option>In Active</mat-option>
-                                        </mat-select> -->
-                                        <input type="time" formControlName="max_time" matInput>
+                                        <input type="time"
+                                            formControlName="max_time" matInput>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-3 col-form-label">Position :</label>
+                                <label for="input"
+                                    class="col-sm-2 col-form-label">Position :</label>
                                 <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="processPosition" />
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="processPosition" />
                                     </mat-form-field>
                                 </div>
-                                <label for="input" class="col-sm-3 col-form-label">Tray Weight :</label>
-                                <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="trayWeight" />
+                                <label for="input"
+                                    class="col-sm-2 col-form-label">Tray Weight
+                                    :</label>
+                                <div class="col-sm-2">
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="trayWeight" />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-3 col-form-label">Approval Code :</label>
+                                <label for="input"
+                                    class="col-sm-2 col-form-label">Approval
+                                    Code :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 90%">
-                                        <input type="text" matInput maxlength="6" formControlName="approvalCode" />
+                                        <input type="text" matInput
+                                            maxlength="6"
+                                            formControlName="approvalCode" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="approvalCodeData"
-                                    (newRowClick)="ApprovalCodeSelected($event)">
+                                    <master-search
+                                        [MasterSearchData]="approvalCodeData"
+                                        (newRowClick)="ApprovalCodeSelected($event)">
                                     </master-search>
 
                                 </div>
-                                <label for="input" class="col-sm-3 col-form-label">Approval Process :</label>
+                                <label for="input"
+                                    class="col-sm-2 col-form-label">Approval
+                                    Process :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 90%">
-                                        <input type="text" matInput maxlength="6" formControlName="approvalProcess" />
+                                        <input type="text" matInput
+                                            maxlength="6"
+                                            formControlName="approvalProcess" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="approvalProcessData"
-                                    (newRowClick)="ApprovalProcessSelected($event)">
+                                    <master-search
+                                        [MasterSearchData]="approvalProcessData"
+                                        (newRowClick)="ApprovalProcessSelected($event)">
                                     </master-search>
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-3 col-form-label">Recov. Stock Code :</label>
+                                <label for="input"
+                                    class="col-sm-2 col-form-label">Recov. Stock
+                                    Code :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput maxlength="6" formControlName="recStockCode" />
+                                        <input type="text" matInput
+                                            maxlength="6"
+                                            formControlName="recStockCode" />
                                     </mat-form-field>
-                                    
+
+                                </div>
+                                <div class="col-sm-3">
+                                    <button type="button" mat-flat-button
+                                        color="primary" >Pending Transactions
+                                    </button>
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-3 col-form-label">Labour Charge/Hour :</label>
+                                <label for="input"
+                                    class="col-sm-3 col-form-label">Labour
+                                    Charge/Hour :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput maxlength="6" formControlName="labour_charge" />
+                                        <input type="text" matInput
+                                            maxlength="6"
+                                            formControlName="labour_charge" />
                                     </mat-form-field>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -130,99 +169,104 @@
                         <div class="col-md-2">
                             <div>
                                 <div class="form-check mb-1">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1" formControlName="loss">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        Loss
-                                    </label>
+                                    <mat-checkbox formControlName="loss"
+                                        class="example-margin">
+                                        Loss</mat-checkbox>
                                 </div>
                                 <div class="form-check mb-1">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2" formControlName="recovery">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Recovery
-                                    </label>
+                                    <mat-checkbox formControlName="recovery"
+                                        class="example-margin">
+                                        Recovery</mat-checkbox>
                                 </div>
                                 <div class="form-check mb-1">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault3" formControlName="gain">
-                                    <label class="form-check-label" for="flexRadioDefault3">
-                                        Allow Gain
-                                    </label>
+                                    <mat-checkbox formControlName="AllowGain"
+                                        class="example-margin">
+                                        Allow Gain</mat-checkbox>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-12 col-form-label">Standard % :</label>
+                                <label for="input"
+                                    class="col-sm-12 col-form-label">Standard %
+                                    :</label>
                                 <div class="col-sm-12 my-2">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="standard_start" />
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="standard_start" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="standard_end" />
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="standard_end" />
                                     </mat-form-field>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-12 col-form-label  text-center">Min % :</label>
+                                <label for="input"
+                                    class="col-sm-12 col-form-label  text-center">Min
+                                    % :</label>
                                 <div class="col-sm-12 my-2">
                                     <mat-form-field style="width: 100%">
                                         <input type="number" matInput
-                                            step="0.001" min="0" maxlength="4"
-                                            
+                                            step="0.01" min="0" maxlength="4"
                                             formControlName="min_start" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%">
                                         <input type="number" matInput
-                                            step="0.001" min="0" maxlength="4"
-                                            
+                                            step="0.01" min="0" maxlength="4"
                                             formControlName="min_end" />
                                     </mat-form-field>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="row mb-2 ">
-                                <label for="input" class="col-sm-12 col-form-label text-center">Max % :</label>
-                                <div class="col-sm-12 my-2">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="max" />
+                        <div class="col-md-2 mb-3">
+                            <div class="row mb-4">
+                                <label for="input"
+                                    class="col-sm-12 col-form-label text-center">Max
+                                    % :
+                                </label>
+                                <div class="col-sm-12 mb-4">
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="max" />
                                     </mat-form-field>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-12 col-form-label text-center">Account Code :</label>
+                                <label for="input"
+                                    class="col-sm-12 col-form-label text-center">Account
+                                    Code :</label>
                                 <div class="col-sm-12 my-2">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="accode_start" />
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="accode_start" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
-                                    <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="accode_end" />
+                                    <mat-form-field
+                                        style="width: 100%; margin-left: 7px;">
+                                        <input type="text" matInput
+                                            formControlName="accode_end" />
                                     </mat-form-field>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <form action="#">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1" formControlName="loss_on_gross" >
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        Loss on Gross only
-                                    </label>
-                                </div>
-                            </form>
+                            <mat-checkbox formControlName="loss_on_gross"
+                                class="example-margin">
+                                Loss on Gross only</mat-checkbox>
                         </div>
                     </div>
                     <div class="check_radio_btn">
@@ -230,37 +274,52 @@
                             <div class="col-md-3">
                                 <div class="radio-btn">
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="FinalProcess"
                                             id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault1">
                                             Final Process
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="Setting"
                                             id="flexRadioDefault2">
-                                        <label class="form-check-label" for="flexRadioDefault2">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault2">
                                             Setting
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="LabProcess"
                                             id="flexRadioDefault3">
-                                        <label class="form-check-label" for="flexRadioDefault3">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault3">
                                             Lab Process
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="WaxProcess"
                                             id="flexRadioDefault4">
-                                        <label class="form-check-label" for="flexRadioDefault4">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault4">
                                             Wax Process
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="Stone"
                                             id="flexRadioDefault5">
-                                        <label class="form-check-label" for="flexRadioDefault5">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault5">
                                             Stone
                                         </label>
                                     </div>
@@ -269,37 +328,52 @@
                             <div class="col-md-3">
                                 <div class="radio-btn">
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="MergePices"
                                             id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            Merge Pcs
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault1">
+                                            Merge Pices
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="LockWeight"
                                             id="flexRadioDefault2">
-                                        <label class="form-check-label" for="flexRadioDefault2">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault2">
                                             Lock Weight
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="HaveTreeNo"
                                             id="flexRadioDefault3">
-                                        <label class="form-check-label" for="flexRadioDefault3">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault3">
                                             Have Tree No
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="NonQuantity"
                                             id="flexRadioDefault4">
-                                        <label class="form-check-label" for="flexRadioDefault4">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault4">
                                             Non Quantity
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="Consumable"
                                             id="flexRadioDefault5">
-                                        <label class="form-check-label" for="flexRadioDefault5">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault5">
                                             Consumable
                                         </label>
                                     </div>
@@ -308,37 +382,52 @@
                             <div class="col-md-3">
                                 <div class="radio-btn">
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="RefineryAutoProcess"
                                             id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault1">
                                             Refinery Auto Process
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="ApplyAutoLossToRefinery"
                                             id="flexRadioDefault2">
-                                        <label class="form-check-label" for="flexRadioDefault2">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault2">
                                             Apply Auto Loss to Refinery
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="RepairProcess"
                                             id="flexRadioDefault3">
-                                        <label class="form-check-label" for="flexRadioDefault3">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault3">
                                             Repair Process
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="Metal"
                                             id="flexRadioDefault4">
-                                        <label class="form-check-label" for="flexRadioDefault4">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault4">
                                             Metal
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="ApprovalRequired"
                                             id="flexRadioDefault5">
-                                        <label class="form-check-label" for="flexRadioDefault5">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault5">
                                             Approval Required
                                         </label>
                                     </div>
@@ -347,38 +436,63 @@
                             <div class="col-md-3">
                                 <div class="radio-btn">
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="DeductPureWeight"
                                             id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            Deduct Pure Wt
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault1">
+                                            Deduct Pure Weight
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="StoneIncluded"
                                             id="flexRadioDefault2">
-                                        <label class="form-check-label" for="flexRadioDefault2">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault2">
                                             Stone Included
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="TimeCalculateonProcess"
                                             id="flexRadioDefault3">
-                                        <label class="form-check-label" for="flexRadioDefault3">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault3">
                                             Time Calculate on Process
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="RecoveryProcess"
                                             id="flexRadioDefault4">
-                                        <label class="form-check-label" for="flexRadioDefault4">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault4">
                                             Recovery Process
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="AutoTransfer"
                                             id="flexRadioDefault5">
-                                        <label class="form-check-label" for="flexRadioDefault5">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault5">
                                             Auto Transfer
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            formControlName="ApplySetting"
+                                            id="flexRadioDefault5">
+                                        <label class="form-check-label"
+                                            for="flexRadioDefault5">
+                                            Apply Setting
                                         </label>
                                     </div>
                                 </div>

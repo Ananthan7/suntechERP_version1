@@ -55,7 +55,6 @@ import { MasterSearchComponent } from './common/master-search/master-search.comp
 import { AppDecimalInputDirective } from './directives/app-decimal-input.directive';
 import { NumericInputDirective } from './directives/numeric-input.directive';
 import { DecimalInputDirective } from './directives/decimal-input.directive';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 @NgModule({
   declarations: [
@@ -176,5 +175,4 @@ export class SharedModule {
     dateAdapter.setLocale('en-in'); // DD/MM/YYYY
   }
 }
-platformBrowserDynamic().bootstrapModule(SharedModule);
 ​

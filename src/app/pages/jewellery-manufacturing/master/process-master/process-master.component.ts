@@ -15,11 +15,11 @@ import Swal from 'sweetalert2';
   styleUrls: ['./process-master.component.scss']
 })
 export class ProcessMasterComponent implements OnInit {
-  @Input() content!: any; 
+  @Input() content!: any;
 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
-  processType:any[] = [];
+  processTypeList: any[] = [];
 
   approvalCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -45,14 +45,11 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-
-
-
   processMasterForm: FormGroup = this.formBuilder.group({
-    mid:[],
+    mid: [''],
     processCode: [''],
     processDesc: [''],
-    processType: [''],
+    processType: [null],
     stand_time: [''],
     wip_ac: [''],
     max_time: [''],
@@ -63,24 +60,40 @@ export class ProcessMasterComponent implements OnInit {
     recStockCode: [''],
     labour_charge: [''],
 
-    loss:[],
-    recovery:[],
-    gain:[],
-    standard_start:[],
-    standard_end:[],
-    min_start:[],
-    min_end:[],
-    max:[],
-    accode_start:[],
-    accode_end:[],
-    loss_on_gross:[],
-
-
-
-   
+    loss: [false],
+    recovery: [false],
+    AllowGain: [false],
+    standard_start: [''],
+    standard_end: [''],
+    min_start: [''],
+    min_end: [''],
+    max: [''],
+    accode_start: [''],
+    accode_end: [''],
+    loss_on_gross: [''],
+    FinalProcess: [false],
+    Setting: [false],
+    LabProcess: [false],
+    WaxProcess: [false],
+    Stone: [false],
+    MergePices: [false],
+    LockWeight: [false],
+    HaveTreeNo: [false],
+    NonQuantity: [false],
+    Consumable: [false],
+    RefineryAutoProcess: [false],
+    ApplyAutoLossToRefinery: [false],
+    RepairProcess: [false],
+    Metal: [false],
+    ApprovalRequired: [false],
+    DeductPureWeight: [false],
+    StoneIncluded: [false],
+    TimeCalculateonProcess: [false],
+    RecoveryProcess: [false],
+    AutoTransfer: [false],
   })
-
-  constructor(   
+  
+  constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
@@ -88,24 +101,31 @@ export class ProcessMasterComponent implements OnInit {
     private commonService: CommonServiceService,
   ) { }
 
- 
-
   ngOnInit(): void {
-    if(this.content){
+    if (this.content) {
       this.setFormValues()
     }
-    let API = 'ComboFilter/PROCESS TYPE MASTER';
-    this.dataService.getDynamicAPI(API).subscribe((result) => {
-      console.log(result); 
-      this.processType = result.response;
-    });
+    this.getProcessTypeOptions()
   }
+  // USE: get select options Process TypeMaster
+  getProcessTypeOptions() {
+    let API = 'ComboFilter/PROCESS TYPE MASTER';
+    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
+      if(result.response){
+        this.processTypeList = result.response;
+        this.processTypeList.sort((a:any,b:any)=> a.SRNO - b.SRNO)
+      }
+    });
+    this.subscriptions.push(Sub)
+  }
+
   setFormValues() {
-    if(!this.content) return
+    if (!this.content) return
     this.processMasterForm.controls.mid.setValue(this.content.MID);
   }
-  formSubmit(){
-    if(this.content && this.content.FLAG == 'EDIT'){     
+  // final save
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.updateProcessMaster()
       return
     }
@@ -116,9 +136,7 @@ export class ProcessMasterComponent implements OnInit {
     }
 
     let API = 'ProcessMasterDj/InsertProcessMasterDJ'
-   
-
-    let postData ={
+    let postData = {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode || "0123",
       "DESCRIPTION": this.processMasterForm.value.processCode || "0123",
@@ -126,7 +144,7 @@ export class ProcessMasterComponent implements OnInit {
       "MAX_TIME": 0,
       "LOSS_ACCODE": "string",
       "WIP_ACCODE": "string",
-      "CURRENCY_CODE": "stri",     
+      "CURRENCY_CODE": "stri",
       "PROCESS_TYPE": "string",
       "UNIT": "string",
       "NO_OF_UNITS": 0,
@@ -144,18 +162,18 @@ export class ProcessMasterComponent implements OnInit {
       "MASTER_WEIGHT": 0,
       "MERGE_BLOCK": 0,
       "LAB_PROCESS": 0,
-      "WAX_PROCESS": 0,     
+      "WAX_PROCESS": 0,
       "STD_LOSS_QTY": 0,
-      "POSITION": 0,     
+      "POSITION": 0,
       "RECOV_MIN": 0,
       "RECOV_ACCODE": "string",
-      "RECOV_STOCK_CODE": "string",      
+      "RECOV_STOCK_CODE": "string",
       "RECOV_VAR1": 0,
       "RECOV_VAR2": 0,
       "DEDUCT_PURE_WT": 0,
       "APPR_PROCESS": "string",
-      "APPR_CODE":this.processMasterForm.value.approvalCode || "",
-      "ALLOW_GAIN": true,     
+      "APPR_CODE": this.processMasterForm.value.approvalCode || "",
+      "ALLOW_GAIN": true,
       "STD_GAIN": 0,
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,
@@ -164,31 +182,28 @@ export class ProcessMasterComponent implements OnInit {
       "MIN_LOSS": 0,
       "MAX_LOSS": 0,
       "LOSS_ON_GROSS": true,
-      "JOB_NUMBER": "string",     
+      "JOB_NUMBER": "string",
       "LABCHRG_PERHOUR": 0,
-     
+
       "APPLY_SETTING": true,
       "TIMEON_PROCESS": true,
       "STONE_INCLUDED": true,
-      "RECOVERY_PROCESS": true,     
+      "RECOVERY_PROCESS": true,
       "ALLOW_METAL": true,
       "ALLOW_STONE": true,
       "ALLOW_CONSUMABLE": true,
       "APPROVAL_REQUIRED": true,
-      "NON_QUANTITY": true,     
+      "NON_QUANTITY": true,
       "DF_REFINERY": true,
       "AUTO_LOSS": true,
       "ISACCUPDT": true,
       "TREE_NO": true,
-
-
-
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -214,19 +229,19 @@ export class ProcessMasterComponent implements OnInit {
     this.activeModal.close();
   }
 
-  ApprovalCodeSelected(e:any){
-    console.log(e);    
+  ApprovalCodeSelected(e: any) {
+    console.log(e);
     this.processMasterForm.controls.approvalCode.setValue(e.APPR_CODE);
   }
-  ApprovalProcessSelected(e:any){
+  ApprovalProcessSelected(e: any) {
     console.log(e);
-    this.processMasterForm.controls.approvalProcess.setValue(e.Process_Code);    
+    this.processMasterForm.controls.approvalProcess.setValue(e.Process_Code);
   }
 
-  updateProcessMaster(){
-   
+  updateProcessMaster() {
 
-    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/'+this.processMasterForm.value.mid
+
+    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.mid
     let postData = {
       "MID": this.processMasterForm.value.mid,
       "PROCESS_CODE": this.processMasterForm.value.processCode || "0125",
@@ -235,7 +250,7 @@ export class ProcessMasterComponent implements OnInit {
       "MAX_TIME": 0,
       "LOSS_ACCODE": "string",
       "WIP_ACCODE": "string",
-      "CURRENCY_CODE": "stri",     
+      "CURRENCY_CODE": "stri",
       "PROCESS_TYPE": "string",
       "UNIT": "string",
       "NO_OF_UNITS": 0,
@@ -253,18 +268,18 @@ export class ProcessMasterComponent implements OnInit {
       "MASTER_WEIGHT": 0,
       "MERGE_BLOCK": 0,
       "LAB_PROCESS": 0,
-      "WAX_PROCESS": 0,     
+      "WAX_PROCESS": 0,
       "STD_LOSS_QTY": 0,
-      "POSITION": 0,     
+      "POSITION": 0,
       "RECOV_MIN": 0,
       "RECOV_ACCODE": "string",
-      "RECOV_STOCK_CODE": "string",      
+      "RECOV_STOCK_CODE": "string",
       "RECOV_VAR1": 0,
       "RECOV_VAR2": 0,
       "DEDUCT_PURE_WT": 0,
       "APPR_PROCESS": "string",
-      "APPR_CODE":this.processMasterForm.value.approvalCode || "",
-      "ALLOW_GAIN": true,     
+      "APPR_CODE": this.processMasterForm.value.approvalCode || "",
+      "ALLOW_GAIN": true,
       "STD_GAIN": 0,
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,
@@ -273,18 +288,18 @@ export class ProcessMasterComponent implements OnInit {
       "MIN_LOSS": 0,
       "MAX_LOSS": 0,
       "LOSS_ON_GROSS": true,
-      "JOB_NUMBER": "string",     
+      "JOB_NUMBER": "string",
       "LABCHRG_PERHOUR": 0,
-     
+
       "APPLY_SETTING": true,
       "TIMEON_PROCESS": true,
       "STONE_INCLUDED": true,
-      "RECOVERY_PROCESS": true,     
+      "RECOVERY_PROCESS": true,
       "ALLOW_METAL": true,
       "ALLOW_STONE": true,
       "ALLOW_CONSUMABLE": true,
       "APPROVAL_REQUIRED": true,
-      "NON_QUANTITY": true,     
+      "NON_QUANTITY": true,
       "DF_REFINERY": true,
       "AUTO_LOSS": true,
       "ISACCUPDT": true,
@@ -294,7 +309,7 @@ export class ProcessMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',

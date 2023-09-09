@@ -5,10 +5,6 @@ import { JewelleryManufacturingRoutingModule } from './jewellery-manufacturing.r
 import { JewelleryManufacturingComponent } from './jewellery-manufacturing.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
-
-
-
-
 @NgModule({
   declarations: [
     JewelleryManufacturingComponent
