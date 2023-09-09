@@ -56,6 +56,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="time"
+                                            step="1"
                                             formControlName="stand_time"
                                             matInput>
                                     </mat-form-field>
@@ -64,12 +65,24 @@
                             <div class="row mb-2">
                                 <label for="input"
                                     class="col-sm-2 col-form-label">WIP A/C :</label>
-                                <div class="col-sm-3">
+                                <!-- <div class="col-sm-3">
                                     <mat-form-field
                                         style="width: 100%; margin-left: 7px;">
                                         <input type="text" matInput
                                             formControlName="wip_ac" />
                                     </mat-form-field>
+                                </div> -->
+
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 90%">
+                                        <input type="text" matInput
+                                            maxlength="6"
+                                            formControlName="WIP_ACCOUNT" />
+                                    </mat-form-field>
+                                    <master-search
+                                        [MasterSearchData]="accountMasterData"
+                                        (newRowClick)="ACCODESelected($event)">
+                                    </master-search>
                                 </div>
                                 <label for="input"
                                     class="col-sm-2 col-form-label">Maximum Time
@@ -146,19 +159,19 @@
 
                                 </div>
                                 <div class="col-sm-3">
-                                    <button type="button" mat-flat-button
+                                    <button type="button" *ngIf="false" mat-flat-button
                                         color="primary" >Pending Transactions
                                     </button>
                                 </div>
                             </div>
                             <div class="row mb-2">
                                 <label for="input"
-                                    class="col-sm-3 col-form-label">Labour
+                                    class="col-sm-2 col-form-label">Labour
                                     Charge/Hour :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%">
                                         <input type="text" matInput
-                                            maxlength="6"
+                                             AmountDecimalInput
                                             formControlName="labour_charge" />
                                     </mat-form-field>
                                 </div>
