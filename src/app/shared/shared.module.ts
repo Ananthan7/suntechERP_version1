@@ -56,6 +56,7 @@ import { AppDecimalInputDirective } from './directives/app-decimal-input.directi
 import { NumericInputDirective } from './directives/numeric-input.directive';
 import { DecimalInputDirective } from './directives/decimal-input.directive';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -113,7 +114,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
     MatDatepickerModule, MatNativeDateModule, MatRippleModule,
     MatTooltipModule, MatProgressBarModule, MatDialogModule,
     MatCheckboxModule, MatProgressSpinnerModule,
-    OverlayPanelModule
+    OverlayPanelModule,DragDropModule
   ],
   exports: [
     //component exports
@@ -166,7 +167,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
     MatDatepickerModule, MatNativeDateModule, MatRippleModule, 
     MatTooltipModule, MatProgressBarModule, MatDialogModule, 
     MatCheckboxModule, MatProgressSpinnerModule,
-    OverlayPanelModule
+    OverlayPanelModule,DragDropModule
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })

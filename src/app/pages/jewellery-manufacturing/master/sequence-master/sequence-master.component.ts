@@ -7,7 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
-
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-sequence-master',
   templateUrl: './sequence-master.component.html',
@@ -15,6 +15,8 @@ import Swal from 'sweetalert2';
 })
 export class SequenceMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
+  items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
@@ -75,6 +77,12 @@ export class SequenceMasterComponent implements OnInit {
   ngOnInit(): void {
     if(this.content){
       this.setFormValues()
+    }
+  }
+
+  onItemDrop(event: CdkDragDrop<string[]>): void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     }
   }
   setFormValues() {

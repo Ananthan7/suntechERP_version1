@@ -66,14 +66,21 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <dx-data-grid #dataGrid id="gridContainer"
+                                <div cdkDropList
+                                    [cdkDropListData]="items"
+                                    (cdkDropListDropped)="onItemDrop($event)">
+                                    <div *ngFor="let item of items"
+                                        cdkDrag class="drag-item">
+                                        {{ item }}
+                                    </div>
+                                </div>
+                                <!-- <dx-data-grid #dataGrid id="gridContainer"
                                     width="100%" [dataSource]="tableData"
                                     [showBorders]="true">
                                     <dxo-filter-row [visible]="showFilterRow"
                                         [applyFilter]="currentFilter"></dxo-filter-row>
                                     <dxo-header-filter
                                         [visible]="showHeaderFilter"></dxo-header-filter>
-                                    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell"
                                         [allowUpdating]="true">
@@ -107,7 +114,7 @@
                                         caption="Description"
                                         [allowEditing]="true" alignment="center">
                                     </dxi-column>
-                                </dx-data-grid>
+                                </dx-data-grid> -->
                             </div>
 
                         </div>
