@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -18,6 +19,7 @@ export class ProcessMasterComponent implements OnInit {
 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
+  processType:any[] = [];
 
   approvalCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -60,9 +62,21 @@ export class ProcessMasterComponent implements OnInit {
     recStockCode: [''],
     labour_charge: [''],
 
-    DailyTarget: [false],
-    MonthlyTarget: [false],
-    YearlyTarget: [false],
+    loss:[],
+    recovery:[],
+    gain:[],
+    standard_start:[],
+    standard_end:[],
+    min_start:[],
+    min_end:[],
+    max:[],
+    accode_start:[],
+    accode_end:[],
+    loss_on_gross:[],
+
+
+
+   
   })
 
   constructor(   
@@ -79,6 +93,11 @@ export class ProcessMasterComponent implements OnInit {
     if(this.content){
       this.setFormValues()
     }
+    let API = 'ComboFilter/PROCESS TYPE MASTER';
+    this.dataService.getDynamicAPI(API).subscribe((result) => {
+      console.log(result); 
+      this.processType = result.response;
+    });
   }
   setFormValues() {
     if(!this.content) return
@@ -101,31 +120,9 @@ export class ProcessMasterComponent implements OnInit {
     }
 
     let API = 'WorkerMaster/InsertWorkerMaster'
-    let postData = {
-     
-      "DEPARTMENT_CODE": "",
-      "NETSAL": 0,
-      "PERKS": 0,
-      "GROSSAL": 0,
-      "EXP": 0,
-      "TOTALSAL": 0,
-      "ACCODE": this.processMasterForm.value.WorkerAcCode || "",
-      "LOSS_ALLOWED": this.processMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": "",
-      "PROCESS_CODE": "",
-      "TRAY_WEIGHT": this.processMasterForm.value.TrayWeight || 0,
-      "SUPERVISOR": this.processMasterForm.value.NameOfSupervisor || "",
-      "ACTIVE": true,
-      "TARGET_WEIGHT": this.processMasterForm.value.TargetWeight || 0.000,
-      "TARGET_BY": "",
-      "FINGER_ID": "",
-      "TARGET_PCS": this.processMasterForm.value.TargetPcs || 0,
-      "TARGET_CARAT_WT": this.processMasterForm.value.TargetCaratWt || 0.000,
-      "TARGET_METAL_WT": this.processMasterForm.value.TargetMetalWt || 0.000,
-      "WORKER_EXPIRY_DATE": null,      
-    }
+   
 
-    let newData ={
+    let postData ={
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode || "",
       "DESCRIPTION": this.processMasterForm.value.processCode || "",

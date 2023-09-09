@@ -6,6 +6,9 @@ import { JewelleryManufacturingComponent } from './jewellery-manufacturing.compo
 import { SharedModule } from 'src/app/shared/shared.module';
 
 
+
+
+
 @NgModule({
   declarations: [
     JewelleryManufacturingComponent
@@ -13,7 +16,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     JewelleryManufacturingRoutingModule,
-    SharedModule
+    SharedModule,
+    
   ]
 })
 export class JewelleryManufacturingModule { }
