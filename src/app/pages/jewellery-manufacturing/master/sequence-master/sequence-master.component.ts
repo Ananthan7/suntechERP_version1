@@ -15,19 +15,19 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class SequenceMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
-  items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+  tableDataHead = ['SrNo', 'PROCESS_CODE', 'PROCESS_CODE', 'PROCESS_CODE'];
 
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
   tableData: any[] = [
-    {SrNo: 'SrNo',PROCESS_CODE: '1'},
-    {SrNo: 'SrNo',PROCESS_CODE: '2'},
-    {SrNo: 'SrNo',PROCESS_CODE: '3'},
+    {SrNo: 'SrNo',PROCESS_CODE: 'aa1'},
+    {SrNo: 'SrNo',PROCESS_CODE: 'aa2'},
+    {SrNo: 'SrNo',PROCESS_CODE: 'aa3'},
     {SrNo: 'SrNo',PROCESS_CODE: '4'},
-    {SrNo: 'SrNo',PROCESS_CODE: '5'},
+    {SrNo: 'SrNo',PROCESS_CODE: 'aa5'},
     {SrNo: 'SrNo',PROCESS_CODE: '6'},
-    {SrNo: 'SrNo',PROCESS_CODE: '7'},
+    {SrNo: 'SrNo',PROCESS_CODE: '7a'},
     {SrNo: 'SrNo',PROCESS_CODE: '8'},
   ];
   columnhead: any[] = ['Sr No', 'Process', 'Description'];
@@ -81,6 +81,8 @@ export class SequenceMasterComponent implements OnInit {
   }
 
   onItemDrop(event: CdkDragDrop<string[]>): void {
+    console.log(this.tableData,'this.tableData');
+    
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     }

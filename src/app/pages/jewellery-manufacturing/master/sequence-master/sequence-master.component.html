@@ -59,19 +59,26 @@
                         <div class="col-md-11">
                             <div class="row my-3">
                                 <div class="col-md-6">
-                                    <button type="button" mat-flat-button
-                                        color="primary">
+                                    <div >
                                         Sequence
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div cdkDropList
-                                    [cdkDropListData]="items"
+                                <div class="dragTable" cdkDropList
+                                    [cdkDropListData]="tableData"
                                     (cdkDropListDropped)="onItemDrop($event)">
-                                    <div *ngFor="let item of items"
+                                    <div class="drag-item">
+                                        <div  *ngFor="let col of tableDataHead">
+                                            {{ col }}
+                                        </div>
+                                    </div>
+                                    <div *ngFor="let item of tableData"
                                         cdkDrag class="drag-item">
-                                        {{ item }}
+                                        <div>{{ item.SrNo }}</div>
+                                        <div>{{ item.PROCESS_CODE }}</div>
+                                        <div>{{ item.PROCESS_CODE }}</div>
+                                        <div>{{ item.PROCESS_CODE }}</div>
                                     </div>
                                 </div>
                                 <!-- <dx-data-grid #dataGrid id="gridContainer"
