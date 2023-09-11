@@ -58,22 +58,47 @@
                     <div class="row p-2">
                         <div class="col-md-11">
                             <div class="row">
+                                <!-- drag and drop table -->
                                 <table
                                     class="table table-sm table-bordered table-striped text-center dragTable"
-                                    cdkDropList (cdkDropListDropped)="drop($event)">
+                                    cdkDropList
+                                    (cdkDropListDropped)="drop($event)">
                                     <thead>
                                         <tr>
-                                            <th *ngFor="let col of displayedColumns" scope="col">
-                                                {{col}}
-                                            </th>
+                                            <th scope="col"><input
+                                                    type="checkbox" /></th>
+                                            <th scope="col">No</th>
+                                            <th scope="col">Process</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">WIP AC</th>
+                                            <th scope="col">Gain A/c</th>
+                                            <th scope="col">Lab A/c</th>
+                                            <th scope="col">Loss A/c</th>
+                                            <th scope="col">Std.Loss</th>
+                                            <th scope="col">Max.Loss</th>
+                                            <th scope="col">StdTime</th>
+                                            <th scope="col">MaxTime</th>
+                                            <th scope="col">Calculate Time</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr cdkDrag cdkDragLockAxis="y" class="drag-item"
+                                        <tr cdkDrag class="drag-item"
                                             *ngFor="let data of dataSource">
-                                            <td *ngFor="let col of displayedColumns" cdkDragHandle>{{data[col]}}</td>
-                                            <!-- <td cdkDragHandle>{{data.name}}</td>
-                                            <td cdkDragHandle>{{data.price}}</td> -->
+                                            <td><input type="checkbox" /></td>
+                                            <td>{{data['MID']}}</td>
+                                            <td cdkDragHandle>{{data['PROCESS_CODE']}}</td>
+                                            <td style="text-align: left;" cdkDragHandle>{{data['DESCRIPTION']}}</td>
+                                            <td cdkDragHandle>{{data['WIP_ACCODE']}}</td>
+                                            <td cdkDragHandle>{{data['GAIN_ACCODE']}}</td>
+                                            <td class="text-right" cdkDragHandle>{{data['LAB_ACCODE']}}</td>
+                                            <td class="text-right" cdkDragHandle>{{data['LOSS_ACCODE']}}</td>
+                                            <td class="text-right" cdkDragHandle>{{data['STD_LOSS']}}</td>
+                                            <td class="text-right" cdkDragHandle>{{data['MAX_LOSS']}}</td>
+                                            <td cdkDragHandle>{{data['STDTIME']}}</td>
+                                            <td cdkDragHandle>{{data['MAXTIME']}}</td>
+                                            <td>
+                                                <input type="checkbox" [value]="data['TIMEON_PROCESS']"/>
+                                            </td>
 
                                             <!-- Preview -->
                                             <div *cdkDragPreview
@@ -84,23 +109,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <!-- <div class="dragTable" cdkDropList
-                                    [cdkDropListData]="tableData"
-                                    (cdkDropListDropped)="onItemDrop($event)">
-                                    <div class="drag-item">
-                                        <div  *ngFor="let col of tableDataHead">
-                                            {{ col }}
-                                        </div>
-                                    </div>
-                                    <div *ngFor="let item of tableData"
-                                        cdkDrag class="drag-item">
-                                        <div>{{ item.SrNo }}</div>
-                                        <div>{{ item.PROCESS_CODE }}</div>
-                                        <div>{{ item.PROCESS_CODE }}</div>
-                                        <div>{{ item.PROCESS_CODE }}</div>
-                                    </div>
-                                </div> -->
-                                <!-- <dx-data-grid #dataGrid id="gridContainer"
+                            </div>
+
+                            <!-- <dx-data-grid #dataGrid id="gridContainer"
                                     width="100%" [dataSource]="tableData"
                                     [showBorders]="true">
                                     <dxo-filter-row [visible]="showFilterRow"
@@ -141,7 +152,6 @@
                                         [allowEditing]="true" alignment="center">
                                     </dxi-column>
                                 </dx-data-grid> -->
-                            </div>
 
                         </div>
                     </div>
