@@ -15,22 +15,17 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class SequenceMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
-  tableDataHead = ['SrNo', 'PROCESS_CODE', 'PROCESS_CODE', 'PROCESS_CODE'];
+
+  dataSource = [];
+  displayedColumns: string[] = ['MID','PROCESS_CODE','DESCRIPTION','WIP_ACCODE','GAIN_ACCODE',
+      'LAB_ACCODE','LOSS_ACCODE','STD_LOSS','MAX_LOSS','STDTIME','MAXTIME','TIMEON_PROCESS'];
 
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
-  tableData: any[] = [
-    {SrNo: 'SrNo',PROCESS_CODE: 'aa1'},
-    {SrNo: 'SrNo',PROCESS_CODE: 'aa2'},
-    {SrNo: 'SrNo',PROCESS_CODE: 'aa3'},
-    {SrNo: 'SrNo',PROCESS_CODE: '4'},
-    {SrNo: 'SrNo',PROCESS_CODE: 'aa5'},
-    {SrNo: 'SrNo',PROCESS_CODE: '6'},
-    {SrNo: 'SrNo',PROCESS_CODE: '7a'},
-    {SrNo: 'SrNo',PROCESS_CODE: '8'},
-  ];
-  columnhead: any[] = ['Sr No', 'Process', 'Description'];
+  tableData: any[] = [];
+  tableDataHead: any[] = [];
+
   selectedProcessArr: any[] = [];
   private subscriptions: Subscription[] = [];
 
@@ -72,6 +67,7 @@ export class SequenceMasterComponent implements OnInit {
   ) {
     this.showDragIcons = true;
     this.onReorder = this.onReorder.bind(this);
+    this.getTableData()
   }
 
   ngOnInit(): void {
@@ -80,13 +76,27 @@ export class SequenceMasterComponent implements OnInit {
     }
   }
 
-  onItemDrop(event: CdkDragDrop<string[]>): void {
-    console.log(this.tableData,'this.tableData');
-    
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    }
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
   }
+  getTableData(){
+    let API = 'ProcessMasterDj/GetProcessMasterDJList'
+
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          this.dataSource = result.response
+          console.log(this.dataSource,'this.dataSource');
+
+          // this.displayedColumns = Object.keys(this.dataSource[0]);
+        } else {
+          this.toastr.error('No Data Found')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+ 
   setFormValues() {
     if(!this.content) return
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)

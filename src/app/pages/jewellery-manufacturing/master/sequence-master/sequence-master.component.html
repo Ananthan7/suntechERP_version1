@@ -57,15 +57,34 @@
                 <div class="col-md-12">
                     <div class="row p-2">
                         <div class="col-md-11">
-                            <div class="row my-3">
-                                <div class="col-md-6">
-                                    <div >
-                                        Sequence
-                                    </div>
-                                </div>
-                            </div>
                             <div class="row">
-                                <div class="dragTable" cdkDropList
+                                <table
+                                    class="table table-sm table-bordered table-striped text-center dragTable"
+                                    cdkDropList (cdkDropListDropped)="drop($event)">
+                                    <thead>
+                                        <tr>
+                                            <th *ngFor="let col of displayedColumns" scope="col">
+                                                {{col}}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr cdkDrag cdkDragLockAxis="y" class="drag-item"
+                                            *ngFor="let data of dataSource">
+                                            <td *ngFor="let col of displayedColumns" cdkDragHandle>{{data[col]}}</td>
+                                            <!-- <td cdkDragHandle>{{data.name}}</td>
+                                            <td cdkDragHandle>{{data.price}}</td> -->
+
+                                            <!-- Preview -->
+                                            <div *cdkDragPreview
+                                                matchSize="true"
+                                                class="container dragdrop-placeholder">
+                                                {{data}}
+                                            </div>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- <div class="dragTable" cdkDropList
                                     [cdkDropListData]="tableData"
                                     (cdkDropListDropped)="onItemDrop($event)">
                                     <div class="drag-item">
@@ -80,7 +99,7 @@
                                         <div>{{ item.PROCESS_CODE }}</div>
                                         <div>{{ item.PROCESS_CODE }}</div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <!-- <dx-data-grid #dataGrid id="gridContainer"
                                     width="100%" [dataSource]="tableData"
                                     [showBorders]="true">

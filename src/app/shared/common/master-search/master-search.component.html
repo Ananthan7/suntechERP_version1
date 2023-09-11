@@ -39,7 +39,9 @@
                             <!-- Table body -->
                             <tbody>
                             <tr *ngFor="let item of dataSource" (click)="handleRowClick(item)">
-                                <td *ngFor="let col of dataSourceHead">{{ item[col] }}</td>
+                                <td *ngFor="let col of dataSourceHead">
+                                    {{ item[col] }}
+                                </td>
                             </tr>
                             </tbody>
                         </table>
