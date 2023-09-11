@@ -8,6 +8,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class LabourChargeMasterComponent implements OnInit {
 
+  labourTypeList: any[] = [];
+  divisionMS: any = 'ID';
   constructor(
     private activeModal: NgbActiveModal,
   ) { }

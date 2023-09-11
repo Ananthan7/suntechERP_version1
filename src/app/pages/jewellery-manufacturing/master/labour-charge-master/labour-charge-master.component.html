@@ -10,6 +10,292 @@
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
     <!-- content section -->
     <div class="row">
-        <!-- content -->
+        <!-- <div class="container-fluid pt-3"> -->
+
+            <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
+                <mat-tab label="Diamond Labour Master">
+    
+    
+                </mat-tab>
+                <mat-tab label="Metal Labour Master">
+                    <div class="container-fluid pt-3">
+                        <div class="card metal-sales-card">
+                            <div class="card-body sales-card-body p-2">
+    
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Division :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                    <label for="input" class="col-sm-2 col-form-label">Stock Code :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Labour Code :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        
+                                    </div>
+    
+                                    <div class="col-sm-5">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                       
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Labour Type :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 100%;">
+                                            <mat-select
+                                                formControlName="processType">
+                                                <mat-option
+                                                    *ngFor="let option of labourTypeList"
+                                                    [value]="option.SRNO">
+                                                    {{ option.ENGLISH }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <label for="input" class="col-sm-2 col-form-label">Currency :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Karat :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                    <label for="input" class="col-sm-2 col-form-label">Labour AC :</label>
+                                    <div class="col-sm-3">
+    
+                                        <input class="form-control" type="text" />
+    
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Color :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                    <label for="input" class="col-sm-2 col-form-label">Cost Rate :</label>
+                                    <div class="col-sm-3">
+    
+                                        <input class="form-control" type="text" />
+    
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Type :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                    <label for="input" class="col-sm-2 col-form-label">Selling Rate :</label>
+                                    <div class="col-sm-3">
+    
+                                        <input class="form-control" type="text" />
+    
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Category :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                    <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
+                                    <div class="col-sm-3">
+    
+                                        <input class="form-control" type="text" />
+    
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Sub Category :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                    <label for="input" class="col-sm-2 col-form-label">Wastage % :</label>
+                                    <div class="col-sm-3">
+    
+                                        <input class="form-control" type="text" />
+    
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Brand :</label>
+                                    <div class="col-sm-3">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput
+                                                
+                                                maxlength="6"                                        
+                                                formControlName="price_code" />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+    
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Unit :</label>
+                                    <div class="col-sm-3">
+                                         <mat-form-field style="width: 100%;">
+                                            <mat-select
+                                                formControlName="processType">
+                                                <mat-option
+                                                    *ngFor="let option of labourTypeList"
+                                                    [value]="option.SRNO">
+                                                    {{ option.ENGLISH }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <label for="input" class="col-sm-2 col-form-label">Purity :</label>
+                                    <div class="col-sm-3">
+    
+                                        <input class="form-control" type="text" />
+    
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
+                                    <div class="col-sm-3">
+    
+                                        <input class="form-control" type="text" />
+    
+                                    </div>
+    
+                                </div>
+                                <div class="row mb-2">
+    
+                                    <label for="input" class="col-sm-2 col-form-label">Wt to :</label>
+                                    <div class="col-sm-3">
+                                         <mat-form-field style="width: 100%;">
+                                            <mat-select
+                                                formControlName="processType">
+                                                <mat-option
+                                                    *ngFor="let option of labourTypeList"
+                                                    [value]="option.SRNO">
+                                                    {{ option.ENGLISH }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3 form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault1">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            On Gross Wt
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-3 form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            id="flexRadioDefault1">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            For Design Only
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row my-3">
+                                    <div class="col-md-12">
+                                      <div class="d-flex justify-content-end text-end">
+                                        <!-- <div class="p-2 bd-highlight">
+                                          <button type="button" class="btn btn-outline-primary rounded-pill cancel-button">
+                                            Cancel
+                                          </button>
+                                        </div>
+                                        <div class="p-2 bd-highlight">
+                                          <button type="button" class="btn btn-primary rounded-pill cancel-button">
+                                            Save
+                                          </button>
+                                        </div> -->
+                                      </div>
+                                    </div>
+                                  </div>
+    
+    
+                            </div>
+                        </div>
+                    </div>
+    
+    
+    
+    
+    
+                </mat-tab>
+    
+            </mat-tab-group>
+    
+    
+        <!-- </div> -->
     </div>
 </div>
