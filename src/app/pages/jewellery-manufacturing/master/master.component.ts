@@ -151,7 +151,6 @@ export class MasterComponent implements OnInit {
         }
       }
     }
-    console.log(params);
     
     this.subscriptions$ = this.dataService.postDynamicAPI(this.apiCtrl, params)
     .subscribe((resp: any) => {
