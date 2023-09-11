@@ -35,10 +35,29 @@
                                 <div class="col-sm-3">
 
                                     <mat-form-field style="width: 100%;">
-                                        <mat-select formControlName="processType">
+                                        <!-- <mat-select formControlName="processType">
                                           <mat-option *ngFor="let process of processType" [value]="process.SRNO">{{ process.ENGLISH }}</mat-option>
-                                        </mat-select>
+                                        </mat-select> -->
+                                        <!-- <mat-select formControlName="processType">
+                                            <mat-option>test</mat-option>
+                                        </mat-select> -->
+                                        <select matNativeControl required>
+                                            <option *ngFor="let process of processType" [value]="process.SRNO">{{ process.ENGLISH }}</option>
+                                            
+                                          </select>
                                       </mat-form-field>
+
+                                      <!-- <mat-form-field>
+                                        <input matInput placeholder="Name" #NameInput>
+                                    </mat-form-field>
+                                    
+                                    <mat-select placeholder="How Many?">
+                                        <mat-option>One</mat-option>
+                                        <mat-option>Two</mat-option>
+                                        <mat-option>Three</mat-option>
+                                        <mat-option>Four</mat-option>
+                                        <mat-option>Five</mat-option>
+                                    </mat-select> -->
 
                                 </div>
                                 <label for="input" class="col-sm-3 col-form-label">Standard Time :</label>

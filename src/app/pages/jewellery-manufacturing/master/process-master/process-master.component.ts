@@ -97,7 +97,11 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ComboFilter/PROCESS TYPE MASTER';
     this.dataService.getDynamicAPI(API).subscribe((result) => {
       console.log(result); 
-      this.processType = result.response;
+      if(result.status == 'Success'){
+        this.processType = result.response;
+      }
+      // console.log('type:',this.processType);
+      
     });
   }
   setFormValues() {

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+
 
 @Component({
   selector: 'app-melting-type',
@@ -23,18 +25,52 @@ export class MeltingTypeComponent implements OnInit {
 
   columnheads:any[] = ['Sr','Division','Default Alloy','Description','Alloy %'];
 
-  // fontChange(event){
-  //   console.log('====================================');
-  //   console.log( event);
-  //   console.log(this.font.getStyles());
-  //   console.log('====================================');
-  // }
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
-  // public font: Font = new Font({
-  //   family: 'Roboto',
-  //   size: '14px',
-  //   style: 'regular',
-  //   styles: ['regular']
-  // });
+  ColorCodeSelected(e:any){
+
+  }
+
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 84,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  KaratCodeSelected(e:any){
+
+  }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  StockCodeSelected(e:any){
+
+  }
 
 }
