@@ -15,6 +15,9 @@
     font-weight: bold;
     cursor: move;
   }
+  .inputSec:hover{
+    cursor: pointer !important;
+  }
 
   .cdk-drag-preview {
     box-sizing: border-box;

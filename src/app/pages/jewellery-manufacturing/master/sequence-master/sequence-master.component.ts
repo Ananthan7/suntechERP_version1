@@ -17,14 +17,11 @@ export class SequenceMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
 
   dataSource = [];
-  displayedColumns: string[] = ['MID','PROCESS_CODE','DESCRIPTION','WIP_ACCODE','GAIN_ACCODE',
-      'LAB_ACCODE','LOSS_ACCODE','STD_LOSS','MAX_LOSS','STDTIME','MAXTIME','TIMEON_PROCESS'];
+  selectedSequence: string[] = [];
 
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
-  tableData: any[] = [];
-  tableDataHead: any[] = [];
 
   selectedProcessArr: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -66,7 +63,6 @@ export class SequenceMasterComponent implements OnInit {
     private commonService: CommonServiceService,
   ) {
     this.showDragIcons = true;
-    this.onReorder = this.onReorder.bind(this);
     this.getTableData()
   }
 
@@ -86,6 +82,9 @@ export class SequenceMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           this.dataSource = result.response
+          this.dataSource.forEach((item:any)=>{
+            item.isChecked = false
+          })
           console.log(this.dataSource,'this.dataSource');
 
           // this.displayedColumns = Object.keys(this.dataSource[0]);
@@ -112,14 +111,7 @@ export class SequenceMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT)
   }
  
-  onReorder(e:any) {
-    const visibleRows = e.component.getVisibleRows();
-    const toIndex = this.tableData.findIndex((item) => item.ID === visibleRows[e.toIndex].data.ID);
-    const fromIndex = this.tableData.findIndex((item) => item.ID === e.itemData.ID);
-
-    this.tableData.splice(fromIndex, 1);
-    this.tableData.splice(toIndex, 0, e.itemData);
-  }
+  
   /**USE:  final save API call*/
   formSubmit() {
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -172,7 +164,6 @@ export class SequenceMasterComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.workerMasterForm.reset()
-                this.tableData = []
                 this.close()
               }
             });
@@ -230,7 +221,6 @@ export class SequenceMasterComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.workerMasterForm.reset()
-                this.tableData = []
                 this.close()
               }
             });
@@ -280,7 +270,6 @@ export class SequenceMasterComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.workerMasterForm.reset()
-                    this.tableData = []
                     this.close()
                   }
                 });
@@ -294,7 +283,6 @@ export class SequenceMasterComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.workerMasterForm.reset()
-                    this.tableData = []
                     this.close()
                   }
                 });
@@ -307,22 +295,22 @@ export class SequenceMasterComponent implements OnInit {
       }
     });
   }
-
+  selectAllChekbox(event: any){
+    this.dataSource.forEach((item: any) => {
+      item.isChecked = event.target.checked
+    })
+  }
   /**use: checkbox change */
-  changedCheckbox(cellInfo: any) {
-    let value = cellInfo.data
-
-    this.tableData.forEach((item: any) => {
-      if (value.SrNo == item.SrNo) {
+  changedCheckbox(value: any) {
+    this.dataSource.forEach((item: any) => {
+      if (value.MID == item.MID) {
         value.isChecked = !value.isChecked
       }
-      this.selectedProcessArr.push({
-        "UNIQUEID": 0,
-        "SRNO": value.SrNo,
-        "WORKER_CODE": value.PROCESS_DESC,
-        "PROCESS_CODE": value.PROCESS_CODE
-      })
     })
+      
+    this.selectedSequence = this.dataSource.filter((item:any)=> item.isChecked == true)
+    console.log(this.selectedSequence,'this.selectedSequence');
+    
   }
   
   /**use: to check worker exists in db */
@@ -364,7 +352,6 @@ export class SequenceMasterComponent implements OnInit {
   /**USE: close modal window */
   close() {
     this.workerMasterForm.reset()
-    this.tableData = []
     this.activeModal.close();
   }
   //number validation
