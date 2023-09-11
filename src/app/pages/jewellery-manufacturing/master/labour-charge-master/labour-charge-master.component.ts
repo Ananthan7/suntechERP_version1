@@ -7,7 +7,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./labour-charge-master.component.scss']
 })
 export class LabourChargeMasterComponent implements OnInit {
-
+  divisionMS: any = 'ID';
+  labourTypeList: any[] = [];
   constructor(
     private activeModal: NgbActiveModal,
   ) { }
