@@ -49,7 +49,7 @@ export class MeltingTypeComponent implements OnInit {
       return
     }
 
-    let API = 'Manufacturing/Master/MeltingType/InsertMeltingType'
+    let API = 'MeltingType/InsertMeltingType'
     let postData=
       {
         "MID": 0,
@@ -201,7 +201,7 @@ export class MeltingTypeComponent implements OnInit {
   }
 
  updateMeltingType() {
-  let API = 'Manufacturing/Master/MeltingType/UpdateMeltingType/'+ this.meltingTypeForm.value.mid;
+  let API = 'MeltingType/UpdateMeltingType/'+ this.meltingTypeForm.value.mid;
     let postData=
       {
         "MID": 0,
@@ -268,7 +268,7 @@ export class MeltingTypeComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'Manufacturing/Master/MeltingType/DeleteMeltingType/' + this.content.MID;
+        let API = 'MeltingType/DeleteMeltingType/' + this.content.MID;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
