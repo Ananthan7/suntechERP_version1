@@ -23,7 +23,7 @@
                                 <input type="text" matInput
                                     placeholder="Code" maxlength="6"
                                     formControlName="sequenceCode"
-                                    (focusout)="checkWorkerExists($event)" />
+                                    (focusout)="checkSequenceExists($event)" />
                             </mat-form-field>
                             <mat-form-field
                                 style="width: 40%; margin-left: 7px;">
@@ -48,129 +48,89 @@
                                     formControlName="sequencePrefixCode" />
                             </mat-form-field>
                             <master-search
-                                [MasterSearchData]="accountMasterData"
+                                [MasterSearchData]="sequenceMasterData"
                                 (newRowClick)="sequencePrefixCodeSelected($event)">
                             </master-search>
                         </span>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="row p-2">
-                        <div class="col-md-11">
-                            <div class="row">
-                                <div class="d-flex w-100"
-                                    style="background-color: #427dae;color: #fff;text-align: center;">
-                                    <div
-                                        style="width: 38.5%; border-right: 1px solid #fff;">Sequence</div>
-                                    <div
-                                        style="width: 25.5%; border-right: 1px solid #fff;">Labour Account</div>
-                                    <div style="width: 35%;">Manufacturing Loss</div>
-                                </div>
-                                <!-- drag and drop table -->
-                                <table class="table table-sm table-bordered table-striped text-center dragTable"
-                                    cdkDropList
-                                    (cdkDropListDropped)="drop($event)">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">&nbsp;</th>
-                                            <th scope="col">No</th>
-                                            <th scope="col">Process</th>
-                                            <th scope="col">Description</th>
-                                            <th scope="col">WIP AC</th>
-                                            <th scope="col">Gain A/c</th>
-                                            <th scope="col">Lab A/c</th>
-                                            <th scope="col">Loss A/c</th>
-                                            <th scope="col">Std.Loss</th>
-                                            <th scope="col">Max.Loss</th>
-                                            <th scope="col">StdTime</th>
-                                            <th scope="col">MaxTime</th>
-                                            <th scope="col">Calculate Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr cdkDrag class="drag-item"
-                                            *ngFor="let data of dataSource;let i=index">
-                                            <td><input type="checkbox"
-                                                    class="inputSec"
-                                                    (change)="changedCheckbox(data)"
-                                                    [value]="data['isChecked']" /></td>
-                                            <td>{{i+1}}</td>
-                                            <td cdkDragHandle>{{data['PROCESS_CODE']}}</td>
-                                            <td style="text-align: left;"
-                                                cdkDragHandle>{{data['DESCRIPTION']}}</td>
-                                            <td cdkDragHandle>{{data['WIP_ACCODE']}}</td>
-                                            <td cdkDragHandle>{{data['GAIN_ACCODE']}}</td>
-                                            <td class="text-right" cdkDragHandle>{{data['LAB_ACCODE']}}</td>
-                                            <td class="text-right" cdkDragHandle>{{data['LOSS_ACCODE']}}</td>
-                                            <td class="text-right" cdkDragHandle>{{data['STD_LOSS']}}</td>
-                                            <td class="text-right" cdkDragHandle>{{data['MAX_LOSS']}}</td>
-                                            <td cdkDragHandle>{{data['STDTIME']}}</td>
-                                            <td cdkDragHandle>{{data['MAXTIME']}}</td>
-                                            <td>
-                                                <input type="checkbox"
-                                                    disabled="true"
-                                                    [value]="data['TIMEON_PROCESS']" />
-                                            </td>
-
-                                            <!-- Preview -->
-                                            <div *cdkDragPreview
-                                                matchSize="true"
-                                                class="container dragdrop-placeholder">
-                                                {{data}}
-                                            </div>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <!-- <dx-data-grid #dataGrid id="gridContainer"
-                                    width="100%" [dataSource]="tableData"
-                                    [showBorders]="true">
-                                    <dxo-filter-row [visible]="showFilterRow"
-                                        [applyFilter]="currentFilter"></dxo-filter-row>
-                                    <dxo-header-filter
-                                        [visible]="showHeaderFilter"></dxo-header-filter>
-                                    <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell"
-                                        [allowUpdating]="true">
-                                    </dxo-editing>
-
-                                    <dxi-column width="auto"
-                                        cellTemplate="limitTemplate"
-                                        alignment="right"></dxi-column>
-                                    <div
-                                        *dxTemplate="let cellInfo of 'limitTemplate'">
-                                        <input type="checkbox"
-                                            (change)="changedCheckbox(cellInfo)" />
-                                    </div>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                    <dxo-row-dragging
-                                        [allowReordering]="true"
-                                        [onReorder]="onReorder"
-                                        [showDragIcons]="showDragIcons"
-                                        ></dxo-row-dragging>
-                                    <dxi-column dataField="SrNo" width="auto"
-                                        caption="Sr No"
-                                        [allowEditing]="true" alignment="center">
-                                    </dxi-column>
-                                    <dxi-column dataField="PROCESS_CODE"
-                                        width="auto"
-                                        caption="Process"
-                                        [allowEditing]="true" alignment="center">
-                                    </dxi-column>
-                                    <dxi-column dataField="PROCESS_DESC"
-                                        width="auto"
-                                        caption="Description"
-                                        [allowEditing]="true" alignment="center">
-                                    </dxi-column>
-                                </dx-data-grid> -->
-
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
         </form>
+
+        <!-- table section starts -->
+        <div class="row">
+            <div class="col-md-11">
+                <div class="row ps-4">
+                    <div class="d-flex w-100"
+                        style="background-color: #427dae;color: #fff;text-align: center;">
+                        <div
+                            style="width: 38.5%; border-right: 1px solid #fff;">Sequence</div>
+                        <div
+                            style="width: 25.5%; border-right: 1px solid #fff;">Labour
+                            Account</div>
+                        <div style="width: 35%;">Manufacturing Loss</div>
+                    </div>
+                    <!-- drag and drop table -->
+                    <table
+                        class="table table-sm table-bordered table-striped text-center dragTable"
+                        cdkDropList
+                        (cdkDropListDropped)="drop($event)">
+                        <thead>
+                            <tr>
+                                <th scope="col">&nbsp;</th>
+                                <th scope="col">No</th>
+                                <th scope="col">Process</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">WIP AC</th>
+                                <th scope="col">Gain A/c</th>
+                                <th scope="col">Lab A/c</th>
+                                <th scope="col">Loss A/c</th>
+                                <th scope="col">Std.Loss</th>
+                                <th scope="col">Max.Loss</th>
+                                <th scope="col">StdTime</th>
+                                <th scope="col">MaxTime</th>
+                                <th scope="col">Calculate Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr cdkDrag class="drag-item"
+                                *ngFor="let data of dataSource;let i=index">
+                                <td><input type="checkbox"
+                                        class="inputSec"
+                                        [(ngModel)]="data['isChecked']"
+                                        (change)="changedCheckbox(data)" /></td>
+                                <td>{{i+1}}</td>
+                                <td cdkDragHandle>{{data['PROCESS_CODE']}}</td>
+                                <td style="text-align: left;"
+                                    cdkDragHandle>{{data['DESCRIPTION']}}</td>
+                                <td cdkDragHandle>{{data['WIP_ACCODE']}}</td>
+                                <td cdkDragHandle>{{data['GAIN_ACCODE']}}</td>
+                                <td class="text-right" cdkDragHandle>{{data['LAB_ACCODE']}}</td>
+                                <td class="text-right" cdkDragHandle>{{data['LOSS_ACCODE']}}</td>
+                                <td class="text-right" cdkDragHandle>{{data['STD_LOSS']}}</td>
+                                <td class="text-right" cdkDragHandle>{{data['MAX_LOSS']}}</td>
+                                <td cdkDragHandle>{{data['STDTIME']}}</td>
+                                <td cdkDragHandle>{{data['MAXTIME']}}</td>
+                                <td>
+                                    <input type="checkbox"
+                                        disabled="true"
+                                        [value]="data['TIMEON_PROCESS']" />
+                                </td>
+
+                                <!-- Preview -->
+                                <div *cdkDragPreview
+                                    matchSize="true"
+                                    class="container dragdrop-placeholder">
+                                    {{data}}
+                                </div>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
     </div>
 </div>

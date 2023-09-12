@@ -16,7 +16,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class SequenceMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
 
-  dataSource = [];
+  dataSource: any[] = [];
   selectedSequence: string[] = [];
 
   currentFilter: any;
@@ -26,14 +26,14 @@ export class SequenceMasterComponent implements OnInit {
   selectedProcessArr: any[] = [];
   private subscriptions: Subscription[] = [];
 
-  accountMasterData: MasterSearchModel = {
+  sequenceMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 152,
-    SEARCH_FIELD: 'ACCOUNT_HEAD',
-    SEARCH_HEADING: 'Worker A/c Code',
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Prefix master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE <> ''",
+    WHERECONDITION: "PREFIX_CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -53,7 +53,7 @@ export class SequenceMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.content){
+    if (this.content) {
       this.setFormValues()
     }
   }
@@ -61,15 +61,18 @@ export class SequenceMasterComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
   }
-  getTableData(){
+  /**USE: get table data on initial load */
+  private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
 
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           this.dataSource = result.response
-          this.dataSource.forEach((item:any)=>{
+          this.dataSource.forEach((item: any) => {
+            item.UNIQUEID = 0
             item.isChecked = false
+            item.orderId = this.dataSource.length
           })
           // this.displayedColumns = Object.keys(this.dataSource[0]);
         } else {
@@ -79,19 +82,19 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
- 
+
   setFormValues() {
-    if(!this.content) return
+    if (!this.content) return
     // this.sequenceMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
     // this.sequenceMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
     // this.sequenceMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
     // this.sequenceMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR)
   }
- 
-  
+
+
   /**USE:  final save API call*/
   formSubmit() {
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.updateWorkerMaster()
       return
     }
@@ -102,47 +105,18 @@ export class SequenceMasterComponent implements OnInit {
 
     let API = 'SequenceMasterDJ/InsertSequenceMasterDJ'
     let postData = {
-      "SEQ_CODE": "string",
-      "DESCRIPTION": "string",
+      "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode || "",
+      "DESCRIPTION": this.sequenceMasterForm.value.sequenceDESCRIPTION || "",
       "PRINT_COUNT": 0,
-      "PREFIX_CODE": "string",
+      "PREFIX_CODE": this.sequenceMasterForm.value.sequencePrefixCode || "",
       "MID": 0,
-      "sequenceDetails": [
-        {
-          "UNIQUEID": 0,
-          "SEQ_CODE": "string",
-          "SEQ_NO": 0,
-          "PROCESS_CODE": "string",
-          "PROCESS_DESCRIPTION": "string",
-          "PROCESS_TYPE": "string",
-          "CURRENCY_CODE": "stri",
-          "UNIT_RATE": 0,
-          "UNIT": "string",
-          "NO_OF_UNITS": 0,
-          "STD_TIME": 0,
-          "MAX_TIME": 0,
-          "STD_LOSS": 0,
-          "MIN_LOSS": 0,
-          "MAX_LOSS": 0,
-          "LOSS_ACCODE": "string",
-          "WIP_ACCODE": "string",
-          "LAB_ACCODE": "string",
-          "POINTS": 0,
-          "GAIN_ACCODE": "string",
-          "GAIN_AC": "string",
-          "TRAY_WT": 0,
-          "PACKET_CODE": "string",
-          "LOSS_ON_GROSS": true,
-          "TIMEON_PROCESS": true,
-          "LABCHRG_PERHOUR": 0
-        }
-      ]
+      "sequenceDetails": this.selectedSequence || []
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -162,44 +136,44 @@ export class SequenceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  updateWorkerMaster(){
+  updateWorkerMaster() {
     if (this.selectedProcessArr.length == 0 && this.sequenceMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
 
-    let API = 'WorkerMaster/UpdateWorkerMaster/'+this.sequenceMasterForm.value.WorkerCode
+    let API = 'WorkerMaster/UpdateWorkerMaster/' + this.sequenceMasterForm.value.WorkerCode
     let postData = {
-      "SEQ_CODE": "string",
-      "DESCRIPTION": "string",
+      "SEQ_CODE": "",
+      "DESCRIPTION": "",
       "PRINT_COUNT": 0,
-      "PREFIX_CODE": "string",
+      "PREFIX_CODE": "",
       "MID": 0,
       "sequenceDetails": [
         {
           "UNIQUEID": 0,
-          "SEQ_CODE": "string",
+          "SEQ_CODE": "",
           "SEQ_NO": 0,
-          "PROCESS_CODE": "string",
-          "PROCESS_DESCRIPTION": "string",
-          "PROCESS_TYPE": "string",
+          "PROCESS_CODE": "",
+          "PROCESS_DESCRIPTION": "",
+          "PROCESS_TYPE": "",
           "CURRENCY_CODE": "stri",
           "UNIT_RATE": 0,
-          "UNIT": "string",
+          "UNIT": "",
           "NO_OF_UNITS": 0,
           "STD_TIME": 0,
           "MAX_TIME": 0,
           "STD_LOSS": 0,
           "MIN_LOSS": 0,
           "MAX_LOSS": 0,
-          "LOSS_ACCODE": "string",
-          "WIP_ACCODE": "string",
-          "LAB_ACCODE": "string",
+          "LOSS_ACCODE": "",
+          "WIP_ACCODE": "",
+          "LAB_ACCODE": "",
           "POINTS": 0,
-          "GAIN_ACCODE": "string",
-          "GAIN_AC": "string",
+          "GAIN_ACCODE": "",
+          "GAIN_AC": "",
           "TRAY_WT": 0,
-          "PACKET_CODE": "string",
+          "PACKET_CODE": "",
           "LOSS_ON_GROSS": true,
           "TIMEON_PROCESS": true,
           "LABCHRG_PERHOUR": 0
@@ -210,7 +184,7 @@ export class SequenceMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -294,32 +268,98 @@ export class SequenceMasterComponent implements OnInit {
       }
     });
   }
-  selectAllChekbox(event: any){
+  selectAllChekbox(event: any) {
     this.dataSource.forEach((item: any) => {
       item.isChecked = event.target.checked
     })
   }
+  seqIndex: number = 0;
+
   /**use: checkbox change */
   changedCheckbox(value: any) {
-    this.dataSource.forEach((item: any) => {
+    if (this.sequenceMasterForm.value.sequenceCode == "") {
+      Swal.fire({
+        title: '',
+        text: 'Code cannot be empty!',
+        icon: 'warning',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          this.dataSource.forEach((item: any, index: number) => {
+            item.isChecked = false;
+          })
+        }
+      });
+      return
+    }
+    let dataSet: any
+    this.dataSource.forEach((item: any, index: number) => {
       if (value.MID == item.MID) {
-        value.isChecked = !value.isChecked
+        item.UNIQUEID = index + 1
+        item.isChecked = value.isChecked
+        item.orderId = index+1
       }
     })
-      
-    this.selectedSequence = this.dataSource.filter((item:any)=> item.isChecked == true)
+    if (value.isChecked) {
+      dataSet = {
+        "UNIQUEID": 0,
+        "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode || "",
+        "SEQ_NO": this.seqIndex || 0,
+        "PROCESS_CODE": value.PROCESS_CODE || "",
+        "PROCESS_DESCRIPTION": value.DESCRIPTION || "",
+        "PROCESS_TYPE": value.PROCESS_TYPE || "",
+        "CURRENCY_CODE": value.CURRENCY_CODE || "",
+        "UNIT_RATE": value.UNIT_RATE || 0,
+        "UNIT": value.UNIT || "",
+        "NO_OF_UNITS": value.NO_OF_UNITS || 0,
+        "STD_TIME": value.STD_TIME || 0,
+        "MAX_TIME": value.MAX_TIME || 0,
+        "STD_LOSS": value.STD_LOSS || 0,
+        "MIN_LOSS": value.MIN_LOSS || 0,
+        "MAX_LOSS": value.MAX_LOSS || 0,
+        "LOSS_ACCODE": value.LOSS_ACCODE || "",
+        "WIP_ACCODE": value.WIP_ACCODE || "",
+        "LAB_ACCODE": value.LAB_ACCODE || "",
+        "POINTS": value.POINTS || 0,
+        "GAIN_ACCODE": value.GAIN_ACCODE || "",
+        "GAIN_AC": "",
+        "TRAY_WT": value.TRAY_WT || 0,
+        "PACKET_CODE": "",
+        "LOSS_ON_GROSS": value.LOSS_ON_GROSS || true,
+        "TIMEON_PROCESS": value.TIMEON_PROCESS || true,
+        "LABCHRG_PERHOUR": value.LABCHRG_PERHOUR || 0
+      }
+      this.selectedSequence.push(dataSet)
+      // Reorder the data array based on the order of clicks
+      this.dataSource.sort((a, b) => a.orderId - b.orderId);
+    } else {
+      const index = this.selectedSequence.indexOf(value);
+      this.selectedSequence.splice(index, 1); // Remove the item from its current position
+      this.dataSource.forEach((item: any, index: number) => {
+        if (value.MID == item.MID) {
+          item.orderId = this.dataSource.length
+        }
+      })
+      this.dataSource.sort((a, b) => a.orderId - b.orderId);
+    }
+    this.selectedSequence.forEach((item: any, index: number) => {
+        item.SEQ_NO = index+1
+    })
+
+    console.log(this.selectedSequence, 'selectedSequence');
   }
-  
   /**use: to check worker exists in db */
-  checkWorkerExists(event: any) {
+  checkSequenceExists(event: any) {
     if (event.target.value == '') return
-    let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
+
+    let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           Swal.fire({
             title: '',
-            text: 'Worker Already Exists!',
+            text: 'Sequence Already Exists!',
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
@@ -343,7 +383,7 @@ export class SequenceMasterComponent implements OnInit {
     this.sequenceMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
   }
   PrefixCodeChange(event: any) {
-    this.accountMasterData.SEARCH_VALUE = event.target.value
+    this.sequenceMasterData.SEARCH_VALUE = event.target.value
   }
 
   /**USE: close modal window */
