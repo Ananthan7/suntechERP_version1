@@ -74,11 +74,8 @@ export class ProcessMasterComponent implements OnInit {
     accode_start:[],
     accode_end:[],
     loss_on_gross:[],
-
-
-
    
-  })
+  });
 
   constructor(   
     private activeModal: NgbActiveModal,

@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { ToastrService } from 'ngx-toastr';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+
 
 
 @Component({
@@ -9,12 +14,21 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
   styleUrls: ['./melting-type.component.scss']
 })
 export class MeltingTypeComponent implements OnInit {
+  @Input() content!: any; 
+
 
   constructor(
     private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    if(this.content){
+      this.setFormValues()
+    }
   }
   formSubmit(){
   }
@@ -72,5 +86,41 @@ export class MeltingTypeComponent implements OnInit {
   StockCodeSelected(e:any){
 
   }
+
+  processMasterForm: FormGroup = this.formBuilder.group({
+    mid:[],
+    processCode: [''],
+    processDesc: [''],
+    processType: [''],
+    stand_time: [''],
+    wip_ac: [''],
+    max_time: [''],
+    processPosition: [''],
+    trayWeight: [''],
+    approvalCode: [''],
+    approvalProcess: [''],
+    recStockCode: [''],
+    labour_charge: [''],
+
+    loss:[],
+    recovery:[],
+    gain:[],
+    standard_start:[],
+    standard_end:[],
+    min_start:[],
+    min_end:[],
+    max:[],
+    accode_start:[],
+    accode_end:[],
+    loss_on_gross:[],
+   
+  });
+
+  setFormValues() {
+    if(!this.content) return
+    this.processMasterForm.controls.mid.setValue(this.content.MID);
+  }
+
+
 
 }
