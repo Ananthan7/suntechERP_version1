@@ -56,7 +56,7 @@ export class MeltingTypeComponent implements OnInit {
         "MELTYPE_CODE":  this.meltingTypeForm.value.code,
         "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
         "KARAT_CODE": this.meltingTypeForm.value.karat,
-        "PURITY": this.meltingTypeForm.value.purity,
+        "PURITY": this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
         "METAL_PER": this.meltingTypeForm.value.metal,
         "ALLOY_PER": this.meltingTypeForm.value.alloy,
         "CREATED_BY": this.userName,
@@ -168,17 +168,19 @@ export class MeltingTypeComponent implements OnInit {
   });
 
   addTableData(){
+    console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
+    
     let data = {
       "UNIQUEID": 0,
       "SRNO": 0,
       "MELTYPE_CODE":  this.meltingTypeForm.value.code,
       "MELTYPE_DESCRIPTION":  this.meltingTypeForm.value.description,
       "KARAT_CODE":  this.meltingTypeForm.value.karat,
-      "PURITY":  this.meltingTypeForm.value.purity,
+      "PURITY":  this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
       "DIVISION_CODE":  this.meltingTypeForm.value.divCode,
       "DEF_ALLOY_STOCK":  this.meltingTypeForm.value.stockCode,
       "DEF_ALLOY_DESCRIPTION":  this.meltingTypeForm.value.stockCodeDes,
-      "ALLOY_PER":  this.meltingTypeForm.value.alloy
+      "ALLOY_PER":  parseFloat(this.meltingTypeForm.value.alloy)
     }
 
     this.tableData.push(data);
@@ -208,9 +210,9 @@ export class MeltingTypeComponent implements OnInit {
         "MELTYPE_CODE":  this.meltingTypeForm.value.code,
         "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
         "KARAT_CODE": this.meltingTypeForm.value.karat,
-        "PURITY": this.meltingTypeForm.value.purity,
+        "PURITY": this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
         "METAL_PER": this.meltingTypeForm.value.metal,
-        "ALLOY_PER": this.meltingTypeForm.value.alloy,
+        "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
         "CREATED_BY": this.userName,
         "COLOR": this.meltingTypeForm.value.color,
         "STOCK_CODE": this.meltingTypeForm.value.stockCode,
