@@ -149,12 +149,10 @@ export class CommonServiceService {
     this.allCompanyParams.map((data: any) => {
       
       if (data.PARAMETER == 'AMTFORMAT')
-        console.log(data,'++++++++AMTFORMAT++++++++++');
         this.amtFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'MQTYFORMAT')
         this.mQtyFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'AMTDECIMALS') {
-        console.log(data,'++++++++++AMTDECIMALS+++++++++++');
         this.amtDecimals = data.PARAM_VALUE;
       }
       if (data.PARAMETER == 'MQTYDECIMALS')

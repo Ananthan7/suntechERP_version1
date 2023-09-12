@@ -17,13 +17,12 @@ export class SequenceMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
 
   dataSource: any[] = [];
-  selectedSequence: string[] = [];
+  selectedSequence: any[] = [];
 
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
 
-  selectedProcessArr: any[] = [];
   private subscriptions: Subscription[] = [];
 
   sequenceMasterData: MasterSearchModel = {
@@ -82,23 +81,19 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-
   setFormValues() {
     if (!this.content) return
-    // this.sequenceMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
-    // this.sequenceMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
-    // this.sequenceMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
-    // this.sequenceMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR)
+    this.sequenceMasterForm.controls.sequenceCode.setValue(this.content.SEQ_CODE)
+    this.sequenceMasterForm.controls.sequenceDESCRIPTION.setValue(this.content.DESCRIPTION)
+    this.sequenceMasterForm.controls.sequencePrefixCode.setValue(this.content.PREFIX_CODE)
   }
-
-
   /**USE:  final save API call*/
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateWorkerMaster()
       return
     }
-    if (this.sequenceMasterForm.invalid && this.selectedProcessArr) {
+    if (this.sequenceMasterForm.invalid && this.selectedSequence) {
       this.toastr.error('select all required fields & Process')
       return
     }
@@ -137,48 +132,19 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   updateWorkerMaster() {
-    if (this.selectedProcessArr.length == 0 && this.sequenceMasterForm.invalid) {
+    if (this.selectedSequence.length == 0 && this.sequenceMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
 
-    let API = 'WorkerMaster/UpdateWorkerMaster/' + this.sequenceMasterForm.value.WorkerCode
+    let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
     let postData = {
-      "SEQ_CODE": "",
-      "DESCRIPTION": "",
+      "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode || "",
+      "DESCRIPTION": this.sequenceMasterForm.value.sequenceDESCRIPTION || "",
       "PRINT_COUNT": 0,
-      "PREFIX_CODE": "",
+      "PREFIX_CODE": this.sequenceMasterForm.value.sequencePrefixCode || "",
       "MID": 0,
-      "sequenceDetails": [
-        {
-          "UNIQUEID": 0,
-          "SEQ_CODE": "",
-          "SEQ_NO": 0,
-          "PROCESS_CODE": "",
-          "PROCESS_DESCRIPTION": "",
-          "PROCESS_TYPE": "",
-          "CURRENCY_CODE": "stri",
-          "UNIT_RATE": 0,
-          "UNIT": "",
-          "NO_OF_UNITS": 0,
-          "STD_TIME": 0,
-          "MAX_TIME": 0,
-          "STD_LOSS": 0,
-          "MIN_LOSS": 0,
-          "MAX_LOSS": 0,
-          "LOSS_ACCODE": "",
-          "WIP_ACCODE": "",
-          "LAB_ACCODE": "",
-          "POINTS": 0,
-          "GAIN_ACCODE": "",
-          "GAIN_AC": "",
-          "TRAY_WT": 0,
-          "PACKET_CODE": "",
-          "LOSS_ON_GROSS": true,
-          "TIMEON_PROCESS": true,
-          "LABCHRG_PERHOUR": 0
-        }
-      ]
+      "sequenceDetails": this.selectedSequence || []
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -206,7 +172,7 @@ export class SequenceMasterComponent implements OnInit {
   }
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
-    if (!this.content.WORKER_CODE) {
+    if (!this.content.SEQ_CODE) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -229,7 +195,7 @@ export class SequenceMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'WorkerMaster/DeleteWorkerMaster/' + this.content.WORKER_CODE
+        let API = 'SequenceMasterDJ/DeleteSequenceMasterDJ/' + this.content.SEQ_CODE
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

@@ -206,8 +206,6 @@ export class AppComponent implements OnInit {
       if (data.length == 0) {
         this.getAllCompanyParameters();
       } else {
-        console.log(data,'data');
-        
         this.comFunc.allCompanyParams = data;
         this.comFunc.setCompParaValues();
       }
