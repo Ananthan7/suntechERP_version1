@@ -57,23 +57,80 @@
                 <div class="col-md-12">
                     <div class="row p-2">
                         <div class="col-md-11">
-                            <div class="row my-3">
-                                <div class="col-md-6">
-                                    <button type="button" mat-flat-button
-                                        color="primary">
-                                        Sequence
-                                    </button>
-                                </div>
-                            </div>
                             <div class="row">
-                                <dx-data-grid #dataGrid id="gridContainer"
+                                <div class="d-flex w-100"
+                                    style="background-color: #427dae;color: #fff;text-align: center;">
+                                    <div
+                                        style="width: 38.5%; border-right: 1px solid #fff;">Sequence</div>
+                                    <div
+                                        style="width: 25.5%; border-right: 1px solid #fff;">LabourAccount</div>
+                                    <div style="width: 35%;">Manufacturing Loss</div>
+                                </div>
+                                <!-- drag and drop table -->
+                                <table
+                                    class="table table-sm table-bordered table-striped text-center dragTable"
+                                    cdkDropList
+                                    (cdkDropListDropped)="drop($event)">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">&nbsp;</th>
+                                            <th scope="col">No</th>
+                                            <th scope="col">Process</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">WIP AC</th>
+                                            <th scope="col">Gain A/c</th>
+                                            <th scope="col">Lab A/c</th>
+                                            <th scope="col">Loss A/c</th>
+                                            <th scope="col">Std.Loss</th>
+                                            <th scope="col">Max.Loss</th>
+                                            <th scope="col">StdTime</th>
+                                            <th scope="col">MaxTime</th>
+                                            <th scope="col">Calculate Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr cdkDrag class="drag-item"
+                                            *ngFor="let data of dataSource;let i=index">
+                                            <td><input type="checkbox"
+                                                    class="inputSec"
+                                                    (change)="changedCheckbox(data)"
+                                                    [value]="data['isChecked']" /></td>
+                                            <td>{{i+1}}</td>
+                                            <td cdkDragHandle>{{data['PROCESS_CODE']}}</td>
+                                            <td style="text-align: left;"
+                                                cdkDragHandle>{{data['DESCRIPTION']}}</td>
+                                            <td cdkDragHandle>{{data['WIP_ACCODE']}}</td>
+                                            <td cdkDragHandle>{{data['GAIN_ACCODE']}}</td>
+                                            <td class="text-right" cdkDragHandle>{{data['LAB_ACCODE']}}</td>
+                                            <td class="text-right" cdkDragHandle>{{data['LOSS_ACCODE']}}</td>
+                                            <td class="text-right" cdkDragHandle>{{data['STD_LOSS']}}</td>
+                                            <td class="text-right" cdkDragHandle>{{data['MAX_LOSS']}}</td>
+                                            <td cdkDragHandle>{{data['STDTIME']}}</td>
+                                            <td cdkDragHandle>{{data['MAXTIME']}}</td>
+                                            <td>
+                                                <input type="checkbox"
+                                                    disabled="true"
+                                                    [value]="data['TIMEON_PROCESS']" />
+                                            </td>
+
+                                            <!-- Preview -->
+                                            <div *cdkDragPreview
+                                                matchSize="true"
+                                                class="container dragdrop-placeholder">
+                                                {{data}}
+                                            </div>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- <dx-data-grid #dataGrid id="gridContainer"
                                     width="100%" [dataSource]="tableData"
                                     [showBorders]="true">
                                     <dxo-filter-row [visible]="showFilterRow"
                                         [applyFilter]="currentFilter"></dxo-filter-row>
                                     <dxo-header-filter
                                         [visible]="showHeaderFilter"></dxo-header-filter>
-                                    <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell"
                                         [allowUpdating]="true">
@@ -107,8 +164,7 @@
                                         caption="Description"
                                         [allowEditing]="true" alignment="center">
                                     </dxi-column>
-                                </dx-data-grid>
-                            </div>
+                                </dx-data-grid> -->
 
                         </div>
                     </div>

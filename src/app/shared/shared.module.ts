@@ -55,7 +55,9 @@ import { MasterSearchComponent } from './common/master-search/master-search.comp
 import { AppDecimalInputDirective } from './directives/app-decimal-input.directive';
 import { NumericInputDirective } from './directives/numeric-input.directive';
 import { DecimalInputDirective } from './directives/decimal-input.directive';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {MatTableModule} from '@angular/material/table';
+
 @NgModule({
   declarations: [
     //pipes declarations
@@ -113,7 +115,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
     MatDatepickerModule, MatNativeDateModule, MatRippleModule,
     MatTooltipModule, MatProgressBarModule, MatDialogModule,
     MatCheckboxModule, MatProgressSpinnerModule,
-    OverlayPanelModule
+    OverlayPanelModule,DragDropModule,MatTableModule
   ],
   exports: [
     //component exports
@@ -166,7 +168,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
     MatDatepickerModule, MatNativeDateModule, MatRippleModule, 
     MatTooltipModule, MatProgressBarModule, MatDialogModule, 
     MatCheckboxModule, MatProgressSpinnerModule,
-    OverlayPanelModule
+    OverlayPanelModule,DragDropModule,MatTableModule
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })
@@ -175,5 +177,4 @@ export class SharedModule {
     dateAdapter.setLocale('en-in'); // DD/MM/YYYY
   }
 }
-platformBrowserDynamic().bootstrapModule(SharedModule);
 ​
