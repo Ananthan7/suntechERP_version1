@@ -37,23 +37,10 @@ export class SequenceMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  showDragIcons: boolean;
-  workerMasterForm: FormGroup = this.formBuilder.group({
-    WorkerCode: ['', [Validators.required]],
-    WorkerDESCRIPTION: ['', [Validators.required]],
-    WorkerAcCode: ['', [Validators.required]],
-    NameOfSupervisor: ['', [Validators.required]],
-    DefaultProcess: ['', [Validators.required]],
-    LossAllowed: [''],
-    Password: [''],
-    TrayWeight: [''],
-    TargetPcs: [''],
-    TargetCaratWt: [''],
-    TargetMetalWt: [''],
-    TargetWeight: [''],
-    DailyTarget: [false],
-    MonthlyTarget: [false],
-    YearlyTarget: [false],
+  sequenceMasterForm: FormGroup = this.formBuilder.group({
+    sequenceCode: ['', [Validators.required]],
+    sequenceDESCRIPTION: ['', [Validators.required]],
+    sequencePrefixCode: ['', [Validators.required]],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -62,7 +49,6 @@ export class SequenceMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) {
-    this.showDragIcons = true;
     this.getTableData()
   }
 
@@ -71,7 +57,7 @@ export class SequenceMasterComponent implements OnInit {
       this.setFormValues()
     }
   }
-
+  /**USE: drag and drop event */
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
   }
@@ -85,8 +71,6 @@ export class SequenceMasterComponent implements OnInit {
           this.dataSource.forEach((item:any)=>{
             item.isChecked = false
           })
-          console.log(this.dataSource,'this.dataSource');
-
           // this.displayedColumns = Object.keys(this.dataSource[0]);
         } else {
           this.toastr.error('No Data Found')
@@ -98,17 +82,10 @@ export class SequenceMasterComponent implements OnInit {
  
   setFormValues() {
     if(!this.content) return
-    this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
-    this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
-    this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
-    this.workerMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR)
-    this.workerMasterForm.controls.DefaultProcess.setValue(this.content.PROCESS_CODE)
-    this.workerMasterForm.controls.LossAllowed.setValue(this.content.LOSS_ALLOWED)
-    this.workerMasterForm.controls.TrayWeight.setValue(this.content.TRAY_WEIGHT)
-    this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS)
-    this.workerMasterForm.controls.TargetCaratWt.setValue(this.content.TARGET_CARAT_WT)
-    this.workerMasterForm.controls.TargetMetalWt.setValue(this.content.TARGET_METAL_WT)
-    this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT)
+    // this.sequenceMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
+    // this.sequenceMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
+    // this.sequenceMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
+    // this.sequenceMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR)
   }
  
   
@@ -118,37 +95,48 @@ export class SequenceMasterComponent implements OnInit {
       this.updateWorkerMaster()
       return
     }
-    if (this.workerMasterForm.invalid && this.selectedProcessArr) {
+    if (this.sequenceMasterForm.invalid && this.selectedProcessArr) {
       this.toastr.error('select all required fields & Process')
       return
     }
 
-    let API = 'WorkerMaster/InsertWorkerMaster'
+    let API = 'SequenceMasterDJ/InsertSequenceMasterDJ'
     let postData = {
+      "SEQ_CODE": "string",
+      "DESCRIPTION": "string",
+      "PRINT_COUNT": 0,
+      "PREFIX_CODE": "string",
       "MID": 0,
-      "WORKER_CODE": this.workerMasterForm.value.WorkerCode || "",
-      "DESCRIPTION": this.workerMasterForm.value.WorkerDESCRIPTION || "",
-      "DEPARTMENT_CODE": "",
-      "NETSAL": 0,
-      "PERKS": 0,
-      "GROSSAL": 0,
-      "EXP": 0,
-      "TOTALSAL": 0,
-      "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
-      "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": "",
-      "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
-      "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
-      "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
-      "ACTIVE": true,
-      "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
-      "TARGET_BY": "",
-      "FINGER_ID": "",
-      "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
-      "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
-      "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0.000,
-      "WORKER_EXPIRY_DATE": "",
-      "workerDetails": this.selectedProcessArr
+      "sequenceDetails": [
+        {
+          "UNIQUEID": 0,
+          "SEQ_CODE": "string",
+          "SEQ_NO": 0,
+          "PROCESS_CODE": "string",
+          "PROCESS_DESCRIPTION": "string",
+          "PROCESS_TYPE": "string",
+          "CURRENCY_CODE": "stri",
+          "UNIT_RATE": 0,
+          "UNIT": "string",
+          "NO_OF_UNITS": 0,
+          "STD_TIME": 0,
+          "MAX_TIME": 0,
+          "STD_LOSS": 0,
+          "MIN_LOSS": 0,
+          "MAX_LOSS": 0,
+          "LOSS_ACCODE": "string",
+          "WIP_ACCODE": "string",
+          "LAB_ACCODE": "string",
+          "POINTS": 0,
+          "GAIN_ACCODE": "string",
+          "GAIN_AC": "string",
+          "TRAY_WT": 0,
+          "PACKET_CODE": "string",
+          "LOSS_ON_GROSS": true,
+          "TIMEON_PROCESS": true,
+          "LABCHRG_PERHOUR": 0
+        }
+      ]
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -163,7 +151,7 @@ export class SequenceMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.workerMasterForm.reset()
+                this.sequenceMasterForm.reset()
                 this.close()
               }
             });
@@ -175,37 +163,48 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   updateWorkerMaster(){
-    if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
+    if (this.selectedProcessArr.length == 0 && this.sequenceMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
 
-    let API = 'WorkerMaster/UpdateWorkerMaster/'+this.workerMasterForm.value.WorkerCode
+    let API = 'WorkerMaster/UpdateWorkerMaster/'+this.sequenceMasterForm.value.WorkerCode
     let postData = {
-      "MID": this.content.MID,
-      "WORKER_CODE": this.workerMasterForm.value.WorkerCode || "",
-      "DESCRIPTION": this.workerMasterForm.value.WorkerDESCRIPTION || "",
-      "DEPARTMENT_CODE": "",
-      "NETSAL": 0,
-      "PERKS": 0,
-      "GROSSAL": 0,
-      "EXP": 0,
-      "TOTALSAL": 0,
-      "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
-      "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": "",
-      "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
-      "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
-      "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
-      "ACTIVE": true,
-      "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
-      "TARGET_BY": "",
-      "FINGER_ID": "",
-      "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
-      "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
-      "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0.000,
-      "WORKER_EXPIRY_DATE": "",
-      "workerDetails": this.selectedProcessArr
+      "SEQ_CODE": "string",
+      "DESCRIPTION": "string",
+      "PRINT_COUNT": 0,
+      "PREFIX_CODE": "string",
+      "MID": 0,
+      "sequenceDetails": [
+        {
+          "UNIQUEID": 0,
+          "SEQ_CODE": "string",
+          "SEQ_NO": 0,
+          "PROCESS_CODE": "string",
+          "PROCESS_DESCRIPTION": "string",
+          "PROCESS_TYPE": "string",
+          "CURRENCY_CODE": "stri",
+          "UNIT_RATE": 0,
+          "UNIT": "string",
+          "NO_OF_UNITS": 0,
+          "STD_TIME": 0,
+          "MAX_TIME": 0,
+          "STD_LOSS": 0,
+          "MIN_LOSS": 0,
+          "MAX_LOSS": 0,
+          "LOSS_ACCODE": "string",
+          "WIP_ACCODE": "string",
+          "LAB_ACCODE": "string",
+          "POINTS": 0,
+          "GAIN_ACCODE": "string",
+          "GAIN_AC": "string",
+          "TRAY_WT": 0,
+          "PACKET_CODE": "string",
+          "LOSS_ON_GROSS": true,
+          "TIMEON_PROCESS": true,
+          "LABCHRG_PERHOUR": 0
+        }
+      ]
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -220,7 +219,7 @@ export class SequenceMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.workerMasterForm.reset()
+                this.sequenceMasterForm.reset()
                 this.close()
               }
             });
@@ -269,7 +268,7 @@ export class SequenceMasterComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.workerMasterForm.reset()
+                    this.sequenceMasterForm.reset()
                     this.close()
                   }
                 });
@@ -282,7 +281,7 @@ export class SequenceMasterComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.workerMasterForm.reset()
+                    this.sequenceMasterForm.reset()
                     this.close()
                   }
                 });
@@ -309,8 +308,6 @@ export class SequenceMasterComponent implements OnInit {
     })
       
     this.selectedSequence = this.dataSource.filter((item:any)=> item.isChecked == true)
-    console.log(this.selectedSequence,'this.selectedSequence');
-    
   }
   
   /**use: to check worker exists in db */
@@ -328,7 +325,7 @@ export class SequenceMasterComponent implements OnInit {
             confirmButtonText: 'Ok'
           }).then((result: any) => {
             if (result.value) {
-              this.workerMasterForm.reset()
+              this.sequenceMasterForm.reset()
             }
           });
         }
@@ -336,27 +333,23 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   //selected field value setting
-  WorkerAcCodeSelected(data: any) {
-    this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)
+  sequencePrefixCodeSelected(data: any) {
+    this.sequenceMasterForm.controls.sequencePrefixCode.setValue(data.PREFIX_CODE)
   }
   supervisorSelected(data: any) {
-    this.workerMasterForm.controls.NameOfSupervisor.setValue(data.WORKER_CODE)
+    this.sequenceMasterForm.controls.NameOfSupervisor.setValue(data.WORKER_CODE)
   }
   defaultProcessSelected(data: any) {
-    this.workerMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
+    this.sequenceMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
   }
-  workerCodeChange(event: any) {
+  PrefixCodeChange(event: any) {
     this.accountMasterData.SEARCH_VALUE = event.target.value
   }
 
   /**USE: close modal window */
   close() {
-    this.workerMasterForm.reset()
+    this.sequenceMasterForm.reset()
     this.activeModal.close();
-  }
-  //number validation
-  isNumeric(event: any) {
-    return this.commonService.isNumeric(event);
   }
 
   ngOnDestroy() {
