@@ -190,6 +190,8 @@ export class MeltingTypeComponent implements OnInit {
 
   setFormValues() {
     if(!this.content) return
+    console.log(this.content);
+    
     this.meltingTypeForm.controls.mid.setValue(this.content.MID);
     this.meltingTypeForm.controls.code.setValue(this.content.MELTYPE_CODE);
     this.meltingTypeForm.controls.description.setValue(this.content.MELTYPE_DESCRIPTION);
@@ -199,6 +201,7 @@ export class MeltingTypeComponent implements OnInit {
     this.meltingTypeForm.controls.alloy.setValue(this.content.ALLOY_PER);
     this.meltingTypeForm.controls.color.setValue(this.content.COLOR);
     this.meltingTypeForm.controls.stockCode.setValue(this.content.STOCK_CODE);
+    this.tableData = this.content.MELTING_TYPE_DETAIL;
 
   }
 
@@ -206,7 +209,7 @@ export class MeltingTypeComponent implements OnInit {
   let API = 'MeltingType/UpdateMeltingType/'+ this.meltingTypeForm.value.mid;
     let postData=
       {
-        "MID": 0,
+        "MID": this.meltingTypeForm.value.mid,
         "MELTYPE_CODE":  this.meltingTypeForm.value.code,
         "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
         "KARAT_CODE": this.meltingTypeForm.value.karat,
@@ -216,7 +219,7 @@ export class MeltingTypeComponent implements OnInit {
         "CREATED_BY": this.userName,
         "COLOR": this.meltingTypeForm.value.color,
         "STOCK_CODE": this.meltingTypeForm.value.stockCode,
-        "Details": this.tableData
+        "MELTING_TYPE_DETAIL": this.tableData || []
       
     }
 
