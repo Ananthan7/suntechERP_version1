@@ -62,7 +62,7 @@ export class MeltingTypeComponent implements OnInit {
         "CREATED_BY": this.userName,
         "COLOR": this.meltingTypeForm.value.color,
         "STOCK_CODE": this.meltingTypeForm.value.stockCode,
-        "Details": this.tableData
+        "MELTING_TYPE_DETAIL": this.tableData
       
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -310,6 +310,13 @@ export class MeltingTypeComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
   }
 
  

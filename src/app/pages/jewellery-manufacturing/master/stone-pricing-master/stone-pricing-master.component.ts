@@ -414,4 +414,11 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.currency.setValue(data.CURRENCY_CODE)
   }
 
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
+  }
+
 }

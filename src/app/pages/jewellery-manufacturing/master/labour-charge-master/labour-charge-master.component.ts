@@ -555,6 +555,12 @@ sizeFromCodeData: MasterSearchModel = {
     console.log(e); 
     this.metallabourMasterForm.controls.brand.setValue(e.CODE);
   }
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
+  }
 }
 
 
