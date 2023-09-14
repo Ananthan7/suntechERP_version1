@@ -12,6 +12,7 @@ import { MetalIssueComponent } from './metal-issue/metal-issue.component';
 import { StoneIssueComponent } from './stone-issue/stone-issue.component';
 import { MeltingProcessComponent } from './melting-process/melting-process.component';
 import { CADProcessingComponent } from './cad-processing/cad-processing.component';
+import { AddNewdetailComponent } from './diamond-salesorder/add-newdetail/add-newdetail.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { CADProcessingComponent } from './cad-processing/cad-processing.componen
     MetalIssueComponent,
     StoneIssueComponent,
     MeltingProcessComponent,
-    CADProcessingComponent
+    CADProcessingComponent,
+    AddNewdetailComponent
   ],
   imports: [
     CommonModule,
