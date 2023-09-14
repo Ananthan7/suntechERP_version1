@@ -7,6 +7,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { DiamondSalesorderComponent } from './diamond-salesorder/diamond-salesorder.component';
 import { DiamondQuotationComponent } from './diamond-quotation/diamond-quotation.component';
+import { JobCardComponent } from './job-card/job-card.component';
 
 @Component({
   selector: 'app-transaction',
@@ -54,10 +55,19 @@ export class TransactionComponent implements OnInit {
   //  open Jobcard in modal
   openModalView(data?: any) {
     let contents;
-    if (this.menuTitle == 'Diamond Sales Order') {
-      contents = DiamondSalesorderComponent
-    } else if (this.menuTitle == 'Diamond Quotation'){
-      contents = DiamondQuotationComponent
+    switch(this.menuTitle) {
+      case 'Diamond Sales Order':
+        contents = DiamondSalesorderComponent
+        break;
+      case 'Diamond Quotation':
+        contents = DiamondQuotationComponent
+        break;
+      case 'Job Card':
+        contents = JobCardComponent
+        break;
+        //continue adding components using case then break
+      default:
+        alert('Module Not found')
     }
     
     const modalRef: NgbModalRef = this.modalService.open(contents, {
