@@ -57,6 +57,7 @@ import { NumericInputDirective } from './directives/numeric-input.directive';
 import { DecimalInputDirective } from './directives/decimal-input.directive';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatTableModule} from '@angular/material/table';
+import { DateValidationDirective } from './directives/date-validation.directive';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import {MatTableModule} from '@angular/material/table';
     AppDecimalInputDirective,
     NumericInputDirective,
     DecimalInputDirective,
+    DateValidationDirective,
   ],
   imports: [
     CommonModule,
@@ -131,6 +133,7 @@ import {MatTableModule} from '@angular/material/table';
     CamelCasePipe,
     AppDecimalInputDirective,
     NumericInputDirective,
+    DateValidationDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,

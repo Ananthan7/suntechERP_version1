@@ -46,7 +46,7 @@
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <!-- <mat-label>Date Of Birth</mat-label> -->
-                                            <input
+                                            <input DateValidation
                                                 matInput
                                                 [matDatepicker]="dob"
                                                 formControlName="VoucherDate"
@@ -189,7 +189,7 @@
                                         </mat-form-field>
                                         <mat-form-field
                                             style="width: 40%;margin-left: 7px;">
-                                            <input matInput
+                                            <input matInput DateValidation
                                                 [matDatepicker]="DeliveryOn"
                                                 formControlName="VoucherDate"
                                                 placeholder="DD/MM/YYYY" />
