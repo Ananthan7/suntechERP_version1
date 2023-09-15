@@ -8,7 +8,7 @@
     </div>
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    (deleteClick)="deleteWorkerMaster()"></modal-header>
+        (deleteClick)="deleteWorkerMaster()"></modal-header>
     <!-- content section -->
     <div class="row">
         <form [formGroup]="workerMasterForm">
@@ -16,7 +16,7 @@
                 <div class="col-md-7">
                     <div class="row">
                         <span>
-                            <label for="inputPassword"
+                            <label
                                 class="col-sm-4 col-form-label">
                                 Worker Code & Name :</label>
                             <mat-form-field style="width: 20%">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="row">
                         <span>
-                            <label for="inputPassword"
+                            <label
                                 class="col-sm-4 col-form-label">
                                 Worker A/c Code :</label>
                             <mat-form-field style="width: 150px">
@@ -53,12 +53,12 @@
                     </div>
                     <div class="row">
                         <span>
-                            <label for="inputPassword"
+                            <label
                                 class="col-sm-4 col-form-label">
                                 Name of Supervisor :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                     maxlength="6"
+                                    maxlength="6"
                                     formControlName="NameOfSupervisor" />
                             </mat-form-field>
                             <master-search
@@ -69,7 +69,7 @@
                     </div>
                     <div class="row">
                         <span>
-                            <label for="inputPassword"
+                            <label
                                 class="col-sm-4 col-form-label">
                                 Default Process :</label>
                             <mat-form-field style="width: 150px">
@@ -84,7 +84,7 @@
                         </span>
                     </div>
                     <div class="row">
-                        <span for="inputPassword"
+                        <span
                             class="col-sm-4 col-form-label">Loss Allowed :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
@@ -93,7 +93,7 @@
                                     formControlName="LossAllowed" />
                             </mat-form-field>
                         </div>
-                        <span for="inputPassword"
+                        <span
                             class="col-sm-3 col-form-label">Password
                             (optional):</span>
                         <div class="col-sm-2">
@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="row">
-                        <span for="inputPassword"
+                        <span
                             class="col-sm-4 col-form-label">Tray Weight :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
@@ -115,7 +115,7 @@
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
-                        <span for="inputPassword"
+                        <span
                             class="col-sm-3 col-form-label">Target Pcs :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
@@ -126,8 +126,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <span for="inputPassword"
-                            class="col-sm-4 col-form-label">Target Metal Weight :</span>
+                        <span
+                            class="col-sm-4 col-form-label">Target Metal Weight
+                            :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput AmountDecimalInput
@@ -135,27 +136,27 @@
                                     formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
-                        <span for="inputPassword"
-                            class="col-sm-3 col-form-label">Target Carat Weight :</span>
+                        <span
+                            class="col-sm-3 col-form-label">Target Carat Weight
+                            :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="text" class="text-right"
-                                     matInput
-                                     AmountDecimalInput
+                                    matInput
+                                    AmountDecimalInput
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
                     </div>
 
                     <div class="row align-items-center">
-                        <span for="inputPassword"
-                            class="col-sm-4 col-form-label">Target
+                        <span class="col-sm-4 col-form-label">Target
                             Weight(GMS) :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput
-                                     class="text-right"
-                                     AmountDecimalInput
+                                    class="text-right"
+                                    AmountDecimalInput
                                     formControlName="TargetWeight" />
                             </mat-form-field>
                         </div>
@@ -218,10 +219,11 @@
                                 [allowUpdating]="true">
                             </dxo-editing>
 
-                            <dxi-column width="auto" 
+                            <dxi-column width="auto"
                                 cellTemplate="limitTemplate" alignment="right"></dxi-column>
-                            <div  *dxTemplate="let cellInfo of 'limitTemplate'">
-                                <input type="checkbox" (change)="changedCheckbox(cellInfo)"/>
+                            <div *dxTemplate="let cellInfo of 'limitTemplate'">
+                                <input type="checkbox"
+                                    (change)="changedCheckbox(cellInfo)" />
                             </div>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
                             <dxi-column dataField="SrNo" width="auto"
