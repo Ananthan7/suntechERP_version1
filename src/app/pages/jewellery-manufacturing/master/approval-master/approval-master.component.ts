@@ -106,8 +106,8 @@ export class ApprovalMasterComponent implements OnInit {
   formSubmit(){
     let API = 'ApprovalMaster/InsertApprovalMaster'
     let postData = {
-      "CODE": this.approvalMasterForm.value.code || "",
-      "DESCRIPTION": this.approvalMasterForm.value.description || "",
+      "APPR_CODE": this.approvalMasterForm.value.code || "",
+      "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
       "approvalDetails": this.tableData,
       
     }
