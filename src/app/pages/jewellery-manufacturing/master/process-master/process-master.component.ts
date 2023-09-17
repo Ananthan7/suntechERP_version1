@@ -134,7 +134,7 @@ export class ProcessMasterComponent implements OnInit {
 
   private setFormValues() {
     if (!this.content) return
-    this.processMasterForm.controls.mid.setValue(this.content.MID);
+    this.processMasterForm.controls.mid.setValue(this.content.PROCESS_CODE);
   }
   // final save
   formSubmit() {
@@ -372,7 +372,7 @@ export class ProcessMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'ProcessMasterDj/DeleteProcessMasterDJ/' + this.content.WORKER_CODE
+        let API = 'ProcessMasterDj/DeleteProcessMasterDJ/' + this.content.PROCESS_CODE
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
