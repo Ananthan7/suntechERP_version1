@@ -15,6 +15,7 @@ import { AlloyMasterComponent } from './alloy-master/alloy-master.component';
 import { MeltingTypeComponent } from './melting-type/melting-type.component';
 import { ApprovalMasterComponent } from './approval-master/approval-master.component';
 import { PictureTypeMasterComponent } from './picture-type-master/picture-type-master.component';
+import { DesignMasterComponent } from './design-master/design-master.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,9 @@ import { PictureTypeMasterComponent } from './picture-type-master/picture-type-m
     AlloyMasterComponent,
     MeltingTypeComponent,
     ApprovalMasterComponent,
-    PictureTypeMasterComponent
+    PictureTypeMasterComponent,
+    DesignMasterComponent
+    
   ],
   imports: [
     CommonModule,
