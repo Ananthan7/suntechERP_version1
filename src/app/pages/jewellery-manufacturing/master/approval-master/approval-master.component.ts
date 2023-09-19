@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./approval-master.component.scss']
 })
 export class ApprovalMasterComponent implements OnInit {
+  @Input() content!: any; 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -54,9 +55,9 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   Mandatorycheckevent(data:any,value: any){
-     console.log(data);
-    console.log(data.target.checked);
-    this.tableData[value.data.SRNO - 1].APPRREQUIRED = data.target.checked;
+      // console.log(value);
+    // console.log(data.target.checked);
+    this.tableData[value.data.SRNO - 1].APPRREQUIRED = data.target.checked; 
   }
 
   attachcheckevent(data:any,value: any){
@@ -65,15 +66,25 @@ export class ApprovalMasterComponent implements OnInit {
   messagecheckevent(data:any,value: any){
     this.tableData[value.data.SRNO - 1].ORG_MESSAGE = data.target.checked;
   }
-  emailcheckevent(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].EMAIL = data.target.checked;
+  emailcheckevent(data:any,value: any){ 
+  this.tableData[value.data.SRNO - 1].EMAIL = data.target.checked;
   }
   systemcheckevent(data:any,value: any){
     this.tableData[value.data.SRNO - 1].SYS_MESSAGE = data.target.checked;
   }
 
   ngOnInit(): void {
+    console.log(this.content);
+    if(this.content){
+      this.setFormValues()
+    }
+  }
 
+  setFormValues() {
+    if(!this.content) return
+    this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
+    this.approvalMasterForm.controls.description.setValue(this.content.APPR_DESCRIPTION)
+   
   }
   
   approvalMasterForm: FormGroup = this.formBuilder.group({
