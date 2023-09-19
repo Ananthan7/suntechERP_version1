@@ -12,7 +12,7 @@
             </div>
             <!-- right section / form section starts -->
             <div class="col-md-5 auth-side-form p-5">
-                <div class=" auth-content">
+                <div class="auth-content">
                     <div class="d-flex justify-content-center">
                         <img src="assets/images/logo/logo-suntech.png" w alt
                             class="img-fluid mb-4 d-block">
@@ -26,6 +26,7 @@
                         <mat-form-field class="example-full-width">
                             <mat-label>Username</mat-label>
                             <input matInput placeholder="Username" value
+                                (keyup)="changeTextUpperCase($event)"
                                 (focusout)="checkUserName($event)">
                         </mat-form-field>
 
@@ -41,6 +42,7 @@
                                 matInput
                                 formControlName="branch"
                                 [matAutocomplete]="branch"
+                                (keyup)="changeBranchText($event)"
                                 (focusout)="changeBranch($event)">
                             <mat-autocomplete #branch="matAutocomplete"
                                 autoActiveFirstOption>

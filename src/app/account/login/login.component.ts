@@ -7,9 +7,6 @@ import { LanguageService } from 'src/app/core/services/language.service';
 import { LAYOUT_MODE } from '../../layouts/layouts.model';
 import { EventService } from 'src/app/core/services/event.service';
 
-// import { CommonfuncService } from 'src/app/services/commonfunc.service';
-// import { SuntechapiService } from '../../services/suntechapi.service';
-// import { SharedService } from '../../services/shared.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -119,10 +116,12 @@ export class LoginComponent implements OnInit {
       option.toLowerCase().includes(filterValue)
     );
   }
-  /**use: to check username */
-  checkUserName(event: any) {
+  changeTextUpperCase(event: any){
     event.target.value = event.target.value.toString().toUpperCase();
     this.user_name = event.target.value;
+  }
+  /**use: to check username */
+  checkUserName(event: any) {
     if (this.user_name != '') {
       this.snackBarRef = this.snackBar.open('Validating Username ...');
       let API = 'UserDetailNetMaster/' + this.user_name
@@ -187,10 +186,12 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-  /**USE: branch change function to call financial year API */
-  changeBranch(e: any) {
+  changeBranchText(e: any) {
     e.target.value = e.target.value.toString().toUpperCase();
     this.dataForm.controls.branch.setValue(e.target.value);
+  }
+  /**USE: branch change function to call financial year API */
+  changeBranch(e: any) {
     let selectedBranch = this.dataForm.value.branch;
     if (selectedBranch != '') {
       let API = `FinancialYear?branchcode=${selectedBranch}&strusername=${this.user_name}`
@@ -269,6 +270,4 @@ export class LoginComponent implements OnInit {
   //       // this.comFunc.allBranchCurrency = data.response;
   //     });
   // }
-
-
 }
