@@ -75,16 +75,17 @@ export class MasterSearchComponent implements OnInit {
     this.isLoading = true;
     this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
       this.isLoading = false;
-      if (result.dynamicData[0] && result.dynamicData[0].length>0) {
+      if (result.dynamicData && result.dynamicData[0].length>0) {
         this.dataSource = result.dynamicData[0]
         let dataCount = result.dynamicData[1] || []
         this.totalItems = dataCount.COUNT
 
         this.dataSourceHead = Object.keys(this.dataSource[0]);
         this.currentPage++;
-      } else {
-        this.toastr.error('Data Not Available')
       }
+      // else {
+      //   this.toastr.error('Data Not Available')
+      // }
     })
 
   }
@@ -109,9 +110,10 @@ export class MasterSearchComponent implements OnInit {
         this.dataSource = this.dataSource.concat(result.dynamicData[0]);
         
         this.currentPage++;
-      } else {
-        this.toastr.error('Data Not Available')
-      }
+      } 
+      // else {
+      //   this.toastr.error('Data Not Available')
+      // }
     })
 
   }
@@ -148,9 +150,10 @@ export class MasterSearchComponent implements OnInit {
         this.dataSource = result.dynamicData[0]
         
         this.dataSourceHead = Object.keys(this.dataSource[0]);
-      } else {
-        this.toastr.error('Data Not Available')
-      }
+      } 
+      // else {
+      //   this.toastr.error('Data Not Available')
+      // }
     })
   }
   //number validation

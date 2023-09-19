@@ -58,7 +58,7 @@ import { DecimalInputDirective } from './directives/decimal-input.directive';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatTableModule} from '@angular/material/table';
 import { DateValidationDirective } from './directives/date-validation.directive';
-
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -116,7 +116,7 @@ import { DateValidationDirective } from './directives/date-validation.directive'
     MatExpansionModule, MatButtonModule, MatSelectModule,
     MatDatepickerModule, MatNativeDateModule, MatRippleModule,
     MatTooltipModule, MatProgressBarModule, MatDialogModule,
-    MatCheckboxModule, MatProgressSpinnerModule,
+    MatCheckboxModule, MatProgressSpinnerModule,MatCardModule,
     OverlayPanelModule,DragDropModule,MatTableModule
   ],
   exports: [
@@ -170,7 +170,7 @@ import { DateValidationDirective } from './directives/date-validation.directive'
     MatExpansionModule, MatButtonModule, MatSelectModule, 
     MatDatepickerModule, MatNativeDateModule, MatRippleModule, 
     MatTooltipModule, MatProgressBarModule, MatDialogModule, 
-    MatCheckboxModule, MatProgressSpinnerModule,
+    MatCheckboxModule, MatProgressSpinnerModule,MatCardModule,
     OverlayPanelModule,DragDropModule,MatTableModule
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
