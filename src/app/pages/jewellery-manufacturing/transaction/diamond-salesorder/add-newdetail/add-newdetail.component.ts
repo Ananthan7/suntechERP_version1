@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
   selector: 'app-add-newdetail',
@@ -19,13 +20,17 @@ export class AddNewdetailComponent implements OnInit {
   columnheader:any[] = ['','','','','','','','','','','','',''];
   columnheaders:any[] = ['Code','Div','Pcs','Qty','Rate','Amount', 'Wst %','Wst Amt','Lab Type'];
   columnheadmain:any[] = ['Stock Code','Stone Size','Stone Pcs','Stone Weight'];
-  // public font: Font = new Font({
-  //   family: 'Roboto',
-  //   size: '14px',
-  //   style: 'regular',
-  //   styles: ['regular']
-  // });
-
+  DesignCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Design Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   constructor(
     private activeModal: NgbActiveModal,
   ) { }

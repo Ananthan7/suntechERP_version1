@@ -28,7 +28,7 @@
                             <mat-form-field style="width: 70%;">
                                 <input type="text" matInput />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="DesignCodeData"></master-search>
                         </div>
                         <div class="col-md-4">
                             <mat-form-field style="width: 100%;">
@@ -49,7 +49,7 @@
                             <mat-form-field style="width: 70%;">
                                 <input type="text" matInput />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="DesignCodeData"></master-search>
                         </div>
                         <div class="col-md-4">
                             <mat-form-field style="width: 100%;">
@@ -119,7 +119,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="border p-2">
+                    <div class="p-2" style="border: 1px solid #c2c2c2;">
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Pcs :</label>
                             <div class="col-md-3">
@@ -165,17 +165,17 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="row statusbox">
+                    <div class="row statusbox border">
                         <div class="box">
                         </div>
                         <div class="footers">
                             <div class="footer">
-                                <button class="bttn"> <i class="fa-solid fa-backward-step icon-common"></i></button>
-                                <button class="bttn"> <i class="fa-solid fa-caret-left icon-common"></i> </button>
+                                <button class="bttn"> <i class="fa fa-backward-step icon-common"></i></button>
+                                <button class="bttn"> <i class="fa fa-caret-left icon-common"></i> </button>
                                 <p>0/10</p>
-                                <button class="bttn"> <i class="fa-solid fa-caret-right icon-common"></i> </button>
-                                <button class="bttn"> <i class="fa-solid fa-forward-step icon-common"></i></button>
-                                <button class="bttn"> <i class="fa-solid fa-plus icon-common"></i></button>
+                                <button class="bttn"> <i class="fa fa-caret-right icon-common"></i> </button>
+                                <button class="bttn"> <i class="fa fa-forward-step icon-common"></i></button>
+                                <button class="bttn"> <i class="fa fa-plus icon-common"></i></button>
                             </div>
                         </div>
                     </div>
