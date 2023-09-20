@@ -60,6 +60,7 @@ import {MatTableModule} from '@angular/material/table';
 import { DateValidationDirective } from './directives/date-validation.directive';
 import {MatRadioButton, MatRadioModule} from '@angular/material/radio';
 
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -119,8 +120,7 @@ import {MatRadioButton, MatRadioModule} from '@angular/material/radio';
     MatTooltipModule, MatProgressBarModule, MatDialogModule,
     MatCheckboxModule, MatProgressSpinnerModule,
     OverlayPanelModule,DragDropModule,MatTableModule,
-    MatRadioModule,
-    
+    MatRadioModule,MatCardModule,
   ],
   exports: [
     //component exports
@@ -173,7 +173,7 @@ import {MatRadioButton, MatRadioModule} from '@angular/material/radio';
     MatExpansionModule, MatButtonModule, MatSelectModule, 
     MatDatepickerModule, MatNativeDateModule, MatRippleModule, 
     MatTooltipModule, MatProgressBarModule, MatDialogModule, 
-    MatCheckboxModule, MatProgressSpinnerModule,
+    MatCheckboxModule, MatProgressSpinnerModule,MatRadioModule,MatCardModule,
     OverlayPanelModule,DragDropModule,MatTableModule
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
