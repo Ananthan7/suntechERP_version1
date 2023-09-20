@@ -21,3 +21,29 @@
     height: 165px;
     border: 1px solid #ddd;
 }
+.form-control{
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1px solid #d4d5d6 !important;
+    background: transparent;
+    // //font-family: sans-serif;
+  }
+  .form-select{
+    border-bottom: 1px solid #d4d5d6 !important;
+    background-color: #f5f2ed00;
+    //font-family: sans-serif;
+  }
+
+
+.save-button{
+    padding: 4px 17px;
+}
+
+
+.mat-radio-button {
+  margin: 0px 10px;
+}
+
+  .icon-common{
+    color: #012C57;
+  }

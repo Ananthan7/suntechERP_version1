@@ -16,6 +16,7 @@ import { MeltingTypeComponent } from './melting-type/melting-type.component';
 import { AlloyMasterComponent } from './alloy-master/alloy-master.component';
 import { PictureTypeMasterComponent } from './picture-type-master/picture-type-master.component';
 import { ApprovalMasterComponent } from './approval-master/approval-master.component';
+import { DesignMasterComponent } from './design-master/design-master.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -85,7 +86,10 @@ export class MasterComponent implements OnInit {
       contents = PictureTypeMasterComponent
     }else if(this.menuTitle == 'Approval Master'){
       contents = ApprovalMasterComponent
+    } else if(this.menuTitle == 'Design Master (mfg)'){
+      contents = DesignMasterComponent
     }
+
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
       backdrop: 'static',//'static'

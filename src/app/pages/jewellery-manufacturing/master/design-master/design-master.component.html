@@ -9,188 +9,27 @@
 <modal-header (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="row">
-    <div class="row">
-        <div class="col-md-8">
-          <div class="d-flex justify-content-start text-start">
-            <div class="p-1  pl-1 bd-highlight">
-              <button type="button" class="btn btn-primary suntech-btn-primary">
-                Save
-              </button>
-            </div>
-            <div class="p-1 bd-highlight">
-              <button type="button" class="btn btn-outline-primary suntech-btn-outline-primary">
-                Discard
-              </button>
-            </div>
-            <div class="p-1 bd-highlight">
-              <button type="button" class="btn btn-outline-primary suntech-btn-outline-primary">
-                Delete
-              </button>
-            </div>
-            <div class="p-1 dropdown text-right">
-              <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
-                <button style="border: none !important;" type="button" class="btn btn-outline-primary me-2"
-                  id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">
-                  More
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownManual">
-                  <button ngbDropdownItem><i class="fa-solid fa-file icon-common"></i> New</button>
-                  <button ngbDropdownItem><i class="fa fa-file-pen icon-common"></i> Edit</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-file-circle-minus icon-common"></i> Delete</button>
-                  <button ngbDropdownItem><i class="ffa-solid fa-rotate icon-common"></i> Refresh</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-magnifying-glass icon-common"></i> Search</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-backward-step icon-common"></i> First</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-caret-left icon-common"></i> Previous</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-caret-right icon-common"></i> Next</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-forward-step icon-common"></i> Last</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-envelopes-bulk icon-common"></i> Attachment</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-file-lines icon-common"></i> Log</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-copy"></i> Copy</button>
-                  <button ngbDropdownItem><i class="fa-solid fa-arrow-right-from-bracket icon-common"></i> Exit</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      
-        <!-- <div class="pos-sales-modalbody modelbody">
-          <div class="row justify-content-center">
-            <div class="col-md-12">
-              <nav class="nav">
-                <div class="first-row">
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-file icon-common"></i>
-                    </span>
-                    <span class="caption">New</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa fa-file-pen icon-common"></i>
-                    </span>
-                    <span class="caption">Edit</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-file-circle-minus icon-common"></i>
-                    </span>
-                    <span class="caption">Delete</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-rotate icon-common"></i>
-                    </span>
-                    <span class="caption refresh">Refresh</span>
-                  </button>
-                </div>
-      
-                <div class="first-row">
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-magnifying-glass icon-common"></i>
-                    </span>
-                    <span class="caption">Search</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-backward-step icon-common"></i>
-                    </span>
-                    <span class="caption">First</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-caret-left icon-common"></i>
-                    </span>
-                    <span class="caption">Previous</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-caret-right icon-common"></i>
-                    </span>
-                    <span class="caption">Next</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-forward-step icon-common"></i>
-                    </span>
-                    <span class="caption">Last</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa fa-print icon-common"></i>
-                    </span>
-                    <span class="caption">Print</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-file-circle-check icon-common"></i>
-                     <img class="image mx-2" src="../../../assets/images/certificate_icon.png" />
-                    </span>
-                    <span class="caption">Certificate Print</span>
-                  </button>
-                </div>
-                <div class="first-row">
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-circle-check icon-common"></i>
-                    </span>
-                    <span class="caption">Audit Trial</span>
-                  </button>
-                  <button class="ribbon-button">
-                    <span class="icon">
-                      <i class="fa-solid fa-file-export icon-common"></i>
-                    </span>
-                    <span class="caption">Post</span>
-                  </button>
-                </div>
-                <button class="ribbon-button">
-                  <span class="icon">
-                    <i class="fa-solid fa-envelopes-bulk icon-common"></i>
-                  </span>
-                  <span class="caption">Atachment</span>
-                </button>
-      
-                <button class="ribbon-button">
-                  <span class="icon">
-                    <i class="fa-solid fa-copy"></i>
-                  </span>
-                  <span class="caption">Copy</span>
-                </button>
-      
-                <button class="ribbon-button">
-                  <span class="icon">
-                    <i class="fa-solid fa-file-lines icon-common"></i>
-                  </span>
-                  <span class="caption">Log</span>
-                </button>
-      
-                <button class="ribbon-button">
-                  <span class="icon">
-                    <i class="fa-solid fa-arrow-right-from-bracket icon-common"></i>
-                  </span>
-                  <span class="caption">Exit</span>
-                </button>
-              </nav>
-            </div>
-          </div> -->
+    
       
         <div class="container-fluid pt-3">
-          <div class="">
+          <div class="row">
             <div class="col-12">
-              <div class="card metal-sales-card">
-                <div class="card-body sales-card-body p-0">
+             
                   <mat-tab-group >
                     <mat-tab label="General">
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value=""
-                          aria-label="...">
-                        <label class="form-check-label" for="inlineRadio1">Diamond</label>
-                      </div>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value=""
-                          aria-label="...">
-                        <label class="form-check-label" for="inlineRadio2">Metal</label>
-                      </div>
+                        <div class="row m-1 mt-3">
+                            <div class="form-check form-check-inline col-md-2">
+                                <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value=""
+                                  aria-label="...">
+                                <label class="form-check-label" for="inlineRadio1">Diamond</label>
+                              </div>
+                              <div class="form-check form-check-inline col-md-2">
+                                <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value=""
+                                  aria-label="...">
+                                <label class="form-check-label" for="inlineRadio2">Metal</label>
+                              </div>
+                        </div>
+                    
                       <div class="row m-1">
                         <div class="col-md-3 ">
                           <div class="mb-2 row">
@@ -390,9 +229,7 @@
                             </label>
                           </div>
                         </div>
-                        <div>
-                          <div class="vl"></div>
-                        </div>
+                       
       
                         <div class="col-md-5">
                           <div class="container-fluid pt-3">
@@ -539,7 +376,7 @@
                                                 </mat-radio-group>
                                               </div>
                                             </div>
-                                            <hr class="hs">
+                                            <hr>
                                             <div>
                                               <label for="inputPassword" class="col-md-7"></label>
                                               <div class="d-flex rado">
@@ -554,11 +391,11 @@
                                                 </div>
                                               </div>
                                             </div>
-                                            <div class="container-fluid pt-3">
-                                              <div class="row mb-3">
+                                            <hr>
+                                            <div class="container-fluid pt-3 ">
+                                              <div class="row mb-3 ms-3">
                                                 <div class="col-12">
-                                                  <div class="card metal-sales-card">
-                                                    <div class="card-body sales-card-body p-0">
+                                                  
       
                                                       <div class="mb-1 row">
                                                         <label for="inputPassword" class="col-md-4 col-form-label">Engraving
@@ -589,8 +426,7 @@
                                                       </div>
       
                                                     </div>
-                                                  </div>
-                                                </div>
+                                                  
                                               </div>
                                             </div>
       
@@ -617,8 +453,7 @@
                     <mat-tab label="UDF Grouping"> </mat-tab>
                   </mat-tab-group>
       
-                </div>
-              </div>
+               
             </div>
       
             <div class="">
@@ -645,14 +480,7 @@
       
                       <div class="row  justify-content-end pt-4">
                         <div class="col-6 d-flex  justify-content-end">
-                          <!-- <div class="p-2 bd-highlight">
-                          <button type="button" class="btn btn-primary cancel-button rounded-pill">Save</button>
-                        </div>
-                        <div class="p-2 bd-highlight">
-                          <button type="button" class="btn btn-outline-primary cancel-button rounded-pill">
-                            Cancel
-                          </button>
-                        </div> -->
+                         
                         </div>
                       </div>
                     </div>
@@ -665,4 +493,3 @@
       </div>
 
 
-</div>
