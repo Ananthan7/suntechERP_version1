@@ -27,6 +27,7 @@ export class ApprovalMasterComponent implements OnInit {
     WHERECONDITION: "UsersName<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
   
   constructor(

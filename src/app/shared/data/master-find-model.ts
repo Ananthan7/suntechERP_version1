@@ -9,4 +9,5 @@ export interface MasterSearchModel {
     SEARCH_VALUE?: string;
     VIEW_INPUT?: boolean;
     VIEW_TABLE?: boolean;
+    LOAD_ONCLICK?: boolean;
 }
