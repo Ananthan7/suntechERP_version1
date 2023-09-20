@@ -84,6 +84,16 @@ export class ApprovalMasterComponent implements OnInit {
     if(!this.content) return
     this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
     this.approvalMasterForm.controls.description.setValue(this.content.APPR_DESCRIPTION)
+
+
+    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/'+this.content.APPR_CODE).subscribe((data) => {
+      if (data.status == 'Success') {
+
+        this.tableData = data.response.approvalDetails;
+       
+
+      }
+    });
    
   }
   
@@ -115,6 +125,16 @@ export class ApprovalMasterComponent implements OnInit {
     this.tableData.pop();
   }
   formSubmit(){
+
+    if(this.content && this.content.FLAG == 'EDIT'){
+      this.update()
+      return
+    }
+    if (this.approvalMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
     let API = 'ApprovalMaster/InsertApprovalMaster'
     let postData = {
       "APPR_CODE": this.approvalMasterForm.value.code || "",
@@ -146,6 +166,111 @@ export class ApprovalMasterComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
+  }
+
+  update(){
+    if (this.approvalMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'ApprovalMaster/UpdateApprovalMaster/'+this.content.APPR_CODE
+    let postData = {
+      "APPR_CODE": this.approvalMasterForm.value.code || "",
+      "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
+      "MID": this.content.MID,
+      "approvalDetails": this.tableData,  
+    }
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if(result.status == "Success"){
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.approvalMasterForm.reset()
+                this.tableData = []
+                this.close()
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+  deleteRecord() {
+    if (!this.content.MID) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'ApprovalMaster/DeleteApprovalMaster/' + this.content.APPR_CODE
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.approvalMasterForm.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.approvalMasterForm.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
+      }
+    });
   }
 
   ngOnDestroy() {

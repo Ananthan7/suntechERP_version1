@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild,SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MasterSearchModel } from '../../data/master-find-model';
 import { ToastrService } from 'ngx-toastr';
@@ -44,7 +44,7 @@ export class MasterSearchComponent implements OnInit {
   }
   ngOnInit(): void {
     // this.getInitialValue()
-    this.loadData();
+    // this.loadData();
   }
   alphabetClicked(item:any){
     this.MasterSearchData.SEARCH_VALUE = item;
@@ -117,6 +117,7 @@ export class MasterSearchComponent implements OnInit {
   }
 
   showOverlayPanel(event: Event) {
+    this.loadData();
     this.overlayPanel.show(event);
   }
 
@@ -164,6 +165,10 @@ export class MasterSearchComponent implements OnInit {
   //unsubscriptions of streams
   ngOnDestroy(): void {
     this.subscriptions$ && this.subscriptions$.unsubscribe()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes)
   }
 
 }
