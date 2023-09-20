@@ -16,6 +16,7 @@ import { MeltingTypeComponent } from './melting-type/melting-type.component';
 import { ApprovalMasterComponent } from './approval-master/approval-master.component';
 import { PictureTypeMasterComponent } from './picture-type-master/picture-type-master.component';
 import { DesignMasterComponent } from './design-master/design-master.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,9 @@ import { DesignMasterComponent } from './design-master/design-master.component';
   imports: [
     CommonModule,
     MasterRoutingModule,
-    SharedModule
+    SharedModule,
+    MatRadioModule
+
   ],
   // schemas: [
   //   CUSTOM_ELEMENTS_SCHEMA

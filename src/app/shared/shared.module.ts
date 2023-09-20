@@ -58,6 +58,7 @@ import { DecimalInputDirective } from './directives/decimal-input.directive';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatTableModule} from '@angular/material/table';
 import { DateValidationDirective } from './directives/date-validation.directive';
+import {MatRadioButton, MatRadioModule} from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -117,7 +118,9 @@ import { DateValidationDirective } from './directives/date-validation.directive'
     MatDatepickerModule, MatNativeDateModule, MatRippleModule,
     MatTooltipModule, MatProgressBarModule, MatDialogModule,
     MatCheckboxModule, MatProgressSpinnerModule,
-    OverlayPanelModule,DragDropModule,MatTableModule
+    OverlayPanelModule,DragDropModule,MatTableModule,
+    MatRadioModule,
+    
   ],
   exports: [
     //component exports

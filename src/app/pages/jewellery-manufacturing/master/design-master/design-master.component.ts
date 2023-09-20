@@ -16,6 +16,8 @@ import Swal from 'sweetalert2';
 })
 export class DesignMasterComponent implements OnInit {
   @Input() content!: any; 
+  favoriteSeason: string = "";
+
 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
@@ -26,7 +28,6 @@ export class DesignMasterComponent implements OnInit {
 
   columnhead:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
 
-  favoriteSeason: string;
   seasons: string[] = ['Customer Exclusive', 'Keep on Hold', 'Add Steel'];
 
   constructor(
