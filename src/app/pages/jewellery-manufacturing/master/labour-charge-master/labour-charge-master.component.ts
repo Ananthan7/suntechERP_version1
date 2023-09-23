@@ -150,9 +150,9 @@ export class LabourChargeMasterComponent implements OnInit {
 
    
   
-  close() {
+  close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close();
+    this.activeModal.close(data);
   }
 
   formSubmit(){
@@ -223,7 +223,7 @@ export class LabourChargeMasterComponent implements OnInit {
             if (result.value) {
               this.diamondlabourMasterForm.reset()
               this.tableData = []
-              this.close()
+              this.close('reloadMainGrid')
             }
           });
         }
@@ -293,7 +293,7 @@ export class LabourChargeMasterComponent implements OnInit {
               this.diamondlabourMasterForm.reset()
               this.metallabourMasterForm.reset()
               this.tableData = []
-              this.close()
+              this.close('reloadMainGrid')
             }
           });
         }
@@ -345,7 +345,7 @@ export class LabourChargeMasterComponent implements OnInit {
                       this.diamondlabourMasterForm.reset()
                       this.metallabourMasterForm.reset()
                       this.tableData = []
-                      this.close()
+                      this.close('reloadMainGrid')
                     }
                   });
                 } else {

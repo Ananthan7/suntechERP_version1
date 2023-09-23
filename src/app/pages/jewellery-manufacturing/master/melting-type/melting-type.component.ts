@@ -79,7 +79,7 @@ export class MeltingTypeComponent implements OnInit {
             if (result.value) {
               this.meltingTypeForm.reset()
               this.tableData = []
-              this.close()
+              this.close('reloadMainGrid')
             }
           });
         }
@@ -90,9 +90,9 @@ export class MeltingTypeComponent implements OnInit {
   this.subscriptions.push(Sub)
   }
   
-  close() {
+  close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close();
+    this.activeModal.close(data);
   }
 
   columnheads:any[] = ['Sr','Division','Default Alloy','Description','Alloy %'];
@@ -237,7 +237,7 @@ export class MeltingTypeComponent implements OnInit {
               if (result.value) {
                 this.meltingTypeForm.reset()
                 this.tableData = []
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -288,7 +288,7 @@ export class MeltingTypeComponent implements OnInit {
                   if (result.value) {
                     this.meltingTypeForm.reset()
                     this.tableData = []
-                    this.close()
+                    this.close('reloadMainGrid')
                   }
                 });
               } else {

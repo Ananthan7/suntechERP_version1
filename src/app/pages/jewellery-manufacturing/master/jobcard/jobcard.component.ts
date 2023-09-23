@@ -25,8 +25,8 @@ export class JobcardComponent implements OnInit {
   ngOnInit(): void {
   }
   /**USE: close modal window */
-  close() {
-    this.activeModal.close();
+  close(data?: any) {
+    this.activeModal.close(data);
   }
 
 }

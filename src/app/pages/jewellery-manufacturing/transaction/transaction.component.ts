@@ -141,8 +141,14 @@ export class TransactionComponent implements OnInit {
         this.snackBar.dismiss();
         if (resp.dynamicData) {
           // resp.dynamicData[0].map((s: any, i: any) => s.id = i + 1);
-          resp.dynamicData[0].forEach((item: any, i: any) => {
-            item.Id = i + 1;
+          resp.dynamicData[0].forEach((obj: any, i: any) => {
+            obj.Id = i + 1;
+            for (const prop in obj) {
+              if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
+                // Replace empty object with an empty string
+                obj[prop] = '';
+              }
+            }
           });
           if (this.orderedItems.length > 0) {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];

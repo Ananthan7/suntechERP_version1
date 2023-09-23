@@ -235,7 +235,7 @@ export class StonePricingMasterComponent implements OnInit {
               if (result.value) {
                 this.stonePrizeMasterForm.reset()
                 this.tableData = []
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -295,7 +295,7 @@ export class StonePricingMasterComponent implements OnInit {
               if (result.value) {
                 this.stonePrizeMasterForm.reset()
                 this.tableData = []
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -306,9 +306,9 @@ export class StonePricingMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   
-  close() {
+  close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close();
+    this.activeModal.close(data);
   }
 
   /**USE: delete worker master from row */
@@ -351,7 +351,7 @@ export class StonePricingMasterComponent implements OnInit {
                   if (result.value) {
                     this.stonePrizeMasterForm.reset()
                     this.tableData = []
-                    this.close()
+                    this.close('reloadMainGrid')
                   }
                 });
               } else {

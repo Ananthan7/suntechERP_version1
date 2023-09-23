@@ -38,9 +38,9 @@ export class ApprovalMasterComponent implements OnInit {
     private commonService: CommonServiceService,
   ) { }
 
-  close() {
+  close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close();
+    this.activeModal.close(data);
   }
 
   userDataSelected(data: any,value: any) {
@@ -158,7 +158,7 @@ export class ApprovalMasterComponent implements OnInit {
               if (result.value) {
                 this.approvalMasterForm.reset()
                 this.tableData = []
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -197,7 +197,7 @@ export class ApprovalMasterComponent implements OnInit {
               if (result.value) {
                 this.approvalMasterForm.reset()
                 this.tableData = []
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -247,7 +247,7 @@ export class ApprovalMasterComponent implements OnInit {
                   if (result.value) {
                     this.approvalMasterForm.reset()
                     this.tableData = []
-                    this.close()
+                    this.close('reloadMainGrid')
                   }
                 });
               } else {

@@ -62,31 +62,31 @@ export class MasterComponent implements OnInit {
     this.openModalView(str)
   }
   //  open Jobcard in modal
-  openModalView(data?:any) {
+  openModalView(data?: any) {
     let contents;
-    if(this.menuTitle == 'Job Card'){
+    if (this.menuTitle == 'Job Card') {
       contents = JobcardComponent
-    }else if(this.menuTitle == 'Worker Master'){
+    } else if (this.menuTitle == 'Worker Master') {
       contents = WorkerMasterComponent
-    }else if(this.menuTitle == 'Department Master'){
+    } else if (this.menuTitle == 'Department Master') {
       contents = DepartmentMasterComponent
-    }else if(this.menuTitle == 'Process Master'){
+    } else if (this.menuTitle == 'Process Master') {
       contents = ProcessMasterComponent
-    }else if(this.menuTitle == 'Sequance Master'){
+    } else if (this.menuTitle == 'Sequance Master') {
       contents = SequenceMasterComponent
-    }else if(this.menuTitle == 'Stone Pricing Master'){
+    } else if (this.menuTitle == 'Stone Pricing Master') {
       contents = StonePricingMasterComponent
-    }else if(this.menuTitle == 'Labour Charge Master'){
+    } else if (this.menuTitle == 'Labour Charge Master') {
       contents = LabourChargeMasterComponent
-    }else if(this.menuTitle == 'Melting Type'){
+    } else if (this.menuTitle == 'Melting Type') {
       contents = MeltingTypeComponent
-    }else if(this.menuTitle == 'Alloy Master'){
+    } else if (this.menuTitle == 'Alloy Master') {
       contents = AlloyMasterComponent
-    }else if(this.menuTitle == 'PictureType Master'){
+    } else if (this.menuTitle == 'PictureType Master') {
       contents = PictureTypeMasterComponent
-    }else if(this.menuTitle == 'Approval Master'){
+    } else if (this.menuTitle == 'Approval Master') {
       contents = ApprovalMasterComponent
-    } else if(this.menuTitle == 'Design Master (mfg)'){
+    } else if (this.menuTitle == 'Design Master (mfg)') {
       contents = DesignMasterComponent
     }
 
@@ -126,28 +126,28 @@ export class MasterComponent implements OnInit {
   nextPage() {
     if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
       this.pageIndex = this.pageIndex + 1;
-      
+
       this.getMasterGridData();
     }
   }
   /**USE: to get table data from API */
-  getMasterGridData(data?:any) {
-    if(data){
+  getMasterGridData(data?: any) {
+    if (data) {
       this.pageIndex = 1;
       this.orderedItems = [];
       this.orderedItemsHead = [];
       this.menuTitle = data.MENU_CAPTION_ENG;
       this.tableName = data.HEADER_TABLE;
       this.PERMISSIONS = data.PERMISSION;
-    }else{
+    } else {
       this.menuTitle = this.CommonService.getModuleName()
       this.tableName = this.CommonService.getqueryParamTable()
     }
-    
+
     if (this.orderedItems.length == 0) {
       this.snackBar.open('loading...');
     }
-   
+
     this.apiCtrl = 'TransctionMainGrid'
     let params = {
       "PAGENO": this.pageIndex || 1,
@@ -164,36 +164,36 @@ export class MasterComponent implements OnInit {
         }
       }
     }
-    
+
     this.subscriptions$ = this.dataService.postDynamicAPI(this.apiCtrl, params)
-    .subscribe((resp: any) => {
-      this.snackBar.dismiss();
-      if (resp.dynamicData) {
-        resp.dynamicData[0].forEach((obj: any, i: any) => {
-          obj.Id = i + 1;
-          for (const prop in obj) {
-            if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
-              // Replace empty object with an empty string
-              obj[prop] = '';
+      .subscribe((resp: any) => {
+        this.snackBar.dismiss();
+        if (resp.dynamicData) {
+          resp.dynamicData[0].forEach((obj: any, i: any) => {
+            obj.Id = i + 1;
+            for (const prop in obj) {
+              if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
+                // Replace empty object with an empty string
+                obj[prop] = '';
+              }
             }
+          });
+          if (this.orderedItems.length > 0) {
+            this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
+          } else {
+            this.orderedItems = resp.dynamicData[0];
+            this.nextPage()
           }
-        });
-        if (this.orderedItems.length > 0) {
-          this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
+          this.orderedItemsHead = Object.keys(this.orderedItems[0]);
+          this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
+          //change detector code
+          // this.ChangeDetector.detectChanges()
         } else {
-          this.orderedItems = resp.dynamicData[0];
-          this.nextPage()
+          alert('No Response Found')
         }
-        this.orderedItemsHead = Object.keys(this.orderedItems[0]);
-        this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
-        //change detector code
-        // this.ChangeDetector.detectChanges()
-      } else {
-        alert('No Response Found')
-      }
-    }, err => {
-      alert(err)
-    });
+      }, err => {
+        alert(err)
+      });
   }
   //pagination change
   handlePageIndexChanged(event: any) {

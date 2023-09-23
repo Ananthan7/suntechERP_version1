@@ -227,7 +227,7 @@ export class ProcessMasterComponent implements OnInit {
               if (result.value) {
                 this.processMasterForm.reset()
                 this.tableData = []
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -237,9 +237,9 @@ export class ProcessMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  close() {
+  close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close();
+    this.activeModal.close(data);
   }
 
   ApprovalCodeSelected(e: any) {
@@ -337,7 +337,7 @@ export class ProcessMasterComponent implements OnInit {
               if (result.value) {
                 this.processMasterForm.reset()
                 this.tableData = []
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -387,7 +387,7 @@ export class ProcessMasterComponent implements OnInit {
                   if (result.value) {
                     this.processMasterForm.reset()
                     this.tableData = []
-                    this.close()
+                    this.close('reloadMainGrid')
                   }
                 });
               } else {
