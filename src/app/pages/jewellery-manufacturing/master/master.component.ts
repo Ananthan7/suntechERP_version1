@@ -96,12 +96,22 @@ export class MasterComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.result.then((result) => {
+      if (result === 'reloadMainGrid') {
+        this.orderedItems = [];
+        this.orderedItemsHead = [];
+        this.pageIndex = 1;
+        this.getMasterGridData()
+      }
+    }, (reason) => {
+      // Handle modal dismissal (if needed)
+    });
     modalRef.componentInstance.content = data;
   }
 
 
   //PAGINATION
-  totalItems: number = 1000; // Total number of items
+  totalItems: number = 10000000; // Total number of items
   pageSize: number = 10; // Number of items per page
   pageIndex: number = 1; // Current page index
 
@@ -113,12 +123,11 @@ export class MasterComponent implements OnInit {
       }
     }
   }
-  nextCall: any = 0
   nextPage() {
     if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
       this.pageIndex = this.pageIndex + 1;
       
-        this.getMasterGridData();
+      this.getMasterGridData();
     }
   }
   /**USE: to get table data from API */
@@ -160,9 +169,14 @@ export class MasterComponent implements OnInit {
     .subscribe((resp: any) => {
       this.snackBar.dismiss();
       if (resp.dynamicData) {
-        // resp.dynamicData[0].map((s: any, i: any) => s.id = i + 1);
-        resp.dynamicData[0].forEach((item: any, i: any) => {
-          item.Id = i + 1;
+        resp.dynamicData[0].forEach((obj: any, i: any) => {
+          obj.Id = i + 1;
+          for (const prop in obj) {
+            if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
+              // Replace empty object with an empty string
+              obj[prop] = '';
+            }
+          }
         });
         if (this.orderedItems.length > 0) {
           this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];

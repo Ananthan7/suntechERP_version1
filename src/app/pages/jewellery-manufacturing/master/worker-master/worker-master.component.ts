@@ -153,7 +153,7 @@ export class WorkerMasterComponent implements OnInit {
               if (result.value) {
                 this.workerMasterForm.reset()
                 this.tableData = []
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -211,7 +211,7 @@ export class WorkerMasterComponent implements OnInit {
               if (result.value) {
                 this.workerMasterForm.reset()
                 this.tableData = []
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -261,7 +261,7 @@ export class WorkerMasterComponent implements OnInit {
                   if (result.value) {
                     this.workerMasterForm.reset()
                     this.tableData = []
-                    this.close()
+                    this.close('reloadMainGrid') //reloads data in MainGrid
                   }
                 });
               } else {
@@ -275,7 +275,7 @@ export class WorkerMasterComponent implements OnInit {
                   if (result.value) {
                     this.workerMasterForm.reset()
                     this.tableData = []
-                    this.close()
+                    this.close('reloadMainGrid')
                   }
                 });
               }
@@ -375,10 +375,11 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   /**USE: close modal window */
-  close() {
+  close(data?: any) {
     this.workerMasterForm.reset()
     this.tableData = []
-    this.activeModal.close();
+    // this.activeModal.close();
+    this.activeModal.close(data);
   }
   //number validation
   isNumeric(event: any) {
