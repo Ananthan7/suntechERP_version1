@@ -1,0 +1,227 @@
+.ribbon-button {
+    height: auto;
+    min-height: 64px;
+    width: auto;
+    padding: 11.5px;
+    margin: 0;
+  }
+  .form-control {
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1px solid #d4d5d6 !important;
+    background: transparent;
+    // //font-family: sans-serif;
+  }
+  .form-select {
+    border-bottom: 1px solid #d4d5d6 !important;
+    background-color: #f5f2ed00;
+    //font-family: sans-serif;
+  }
+  .cancel-button {
+    border: 2px solid #012c57;
+    font-weight: 500;
+    color: #012c57;
+    padding: 4px 12px;
+    font-size: 14px;
+  }
+  
+  .save-button {
+    padding: 4px 17px;
+  }
+  
+  .btn-primary {
+    background-color: #0d4f9e;
+    border-color: #0d4f9e;
+    font-size: 12px;
+    padding: 2px 10px 2px 10px;
+  }
+  .btn-outline-primary {
+    font-size: 12px;
+    padding: 2px 10px 2px 10px;
+  }
+  
+  .save {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #e3eaef;
+  }
+  .excel-row {
+    margin-left: 90px;
+  }
+  
+  .icon-common {
+    color: #012c57;
+  }
+  
+  .first-row {
+    border-right: 1px solid #d5f2ff;
+    border-width: 4px;
+  }
+  
+  .bg-lighted {
+    background: #f5f2ed;
+    box-shadow: 0px 10px 25px 0px rgba(0, 0, 0, 0.09);
+  }
+  
+  .btn_print {
+    color: #f5f2ed !important;
+    border-color: #4099ff;
+    background-color: #4099ff !important;
+  }
+  
+  .add-button {
+    border-radius: 25px;
+  }
+  .delete-button {
+    border-radius: 25px;
+  }
+  .cancel-button {
+    border-color: #0d4f9e;
+    color: #0d4f9e;
+  }
+  .dx-datagrid {
+    background-color: #ffffff00 !important;
+  }
+  
+  .dx-datagrid-headers {
+    background-color: #f5f5f500;
+    font-weight: bold;
+    // background-color: #0d4f9e;
+    // color: white;
+  }
+  .close-icon {
+    color: white;
+  }
+  // ::ng-deep .mat-tab-list .mat-tab-labels {
+  //   color: #09bdf3;
+  //   background-color: #0f59b2;
+  // }
+  
+  ::ng-deep {
+      // .mat-tab-list .mat-tab-labels {
+      //     color: rgb(255, 255, 255);
+      //     background-color: #336b8b;
+      //   }
+      //   .mat-tab-list .mat-tab-label-content {
+      //     color: rgb(254, 254, 255);
+      //   }
+      // .mat-ink-bar{
+      //     color: #fff;
+      //     background-color: #fff !important;
+      // }
+  }
+  
+  
+  .box {
+    padding-left: 35px;
+    padding-right: 1px;
+  }
+  .inp {
+    padding-left: 38px;
+  }
+  .rem {
+    padding-left: 35px;
+  }
+  .colo {
+    color: #012c57;
+  }
+  .rw {
+    padding-left: 15px;
+  }
+  .boxs {
+    width: 130px;
+  }
+  .bx {
+    padding-left: 50px;
+  }
+  .bxe {
+    padding-left: 70px;
+  }
+  
+  .lig {
+    padding-left: 820px;
+    padding-top: 8px;
+  }
+  .ico {
+    padding-right: 150px;
+  }
+  .bxe {
+    padding-left: 100px;
+  }
+  .boi {
+    padding-left: 25px;
+    padding-right: 10px;
+  }
+  .boxi {
+    padding-left: 30px;
+    padding-right: 1px;
+  }
+  .pad {
+    padding-top: 20px;
+  }
+  .inn {
+    width: 74px;
+  }
+  .bxs {
+    width: 153px;
+  }
+  .iin {
+    width: 50px;
+  }
+  .bbx {
+    width: 50px;
+  }
+  .voc {
+    padding-top: 20px;
+  }
+  #gridContainer {
+    height: 255px;
+  }
+  .pads {
+    padding-top: 7px;
+  }
+  .pai {
+    padding-top: 20px;
+    padding-left: 6px;
+  }
+  .btt {
+    padding-left: 50px;
+  }
+  
+  .sum {
+    padding-left: 60px;
+    padding-top: 10px;
+  }
+  .cal {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+  .tab {
+    height: 110px;
+  }
+  .lets {
+    padding-top: 10px;
+    button{
+      font-weight: bold;
+    }
+  }
+  .chbox {
+    padding-top: 5px;
+    padding-left: 15px;
+  }
+  #gridContainer {
+    padding-left: 10px;
+  }
+  .let {
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+  .top {
+    padding-top: 20px;
+  }
+  ::ng-deep {
+      .cdk-overlay-container {
+          position: fixed;
+          z-index: 1070 !important;
+      }
+  }

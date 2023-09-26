@@ -13,6 +13,8 @@ import { StoneIssueComponent } from './stone-issue/stone-issue.component';
 import { MeltingProcessComponent } from './melting-process/melting-process.component';
 import { CADProcessingComponent } from './cad-processing/cad-processing.component';
 import { AddNewdetailComponent } from './diamond-salesorder/add-newdetail/add-newdetail.component';
+import { AddNewdiamondquotationComponent } from './diamond-quotation/add-newdiamondquotation/add-newdiamondquotation.component';
+
 
 
 @NgModule({
@@ -26,7 +28,9 @@ import { AddNewdetailComponent } from './diamond-salesorder/add-newdetail/add-ne
     StoneIssueComponent,
     MeltingProcessComponent,
     CADProcessingComponent,
-    AddNewdetailComponent
+    AddNewdetailComponent,
+    AddNewdiamondquotationComponent
+    
   ],
   imports: [
     CommonModule,
