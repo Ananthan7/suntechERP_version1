@@ -19,16 +19,17 @@ export class DiamondSalesorderComponent implements OnInit {
   currentFilter: any;
   divisionMS: any = 'ID';
   tableData: any[] = [
-    {Division: 'Division', Description: 'value'},
-    {Division: 'Division', Description: 'value'},
-    {Division: 'Division', Description: 'value'},
-    {Division: 'Division', Description: 'value'},
+    { Division: 'Division', Description: 'value' },
+    { Division: 'Division', Description: 'value' },
+    { Division: 'Division', Description: 'value' },
+    { Division: 'Division', Description: 'value' },
   ]
-  columnhead:any[] = ['Code','Div','Qty', 'Rate','Wts %','Lab type','Lab A/C','Unit','Shape','Karat'];
-  column1:any[] = ['SRNO','DESIGN CODE', 'KARAT','METAL_COLOR','PCS','METAL_WT','GROSS_WT','RATEFC','RATECC'];
+  columnhead: any[] = ['Code', 'Div', 'Qty', 'Rate', 'Wts %', 'Lab type', 'Lab A/C', 'Unit', 'Shape', 'Karat'];
+  column1: any[] = ['SRNO', 'DESIGN CODE', 'KARAT', 'METAL_COLOR', 'PCS', 'METAL_WT', 'GROSS_WT', 'RATEFC', 'RATECC'];
   checked = false;
   check = false;
   indeterminate = false;
+  currentDate = new Date()
   private subscriptions: Subscription[] = [];
 
   OrderTypeData: MasterSearchModel = {
@@ -64,14 +65,41 @@ export class DiamondSalesorderComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  rateTypeMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 22,
+    SEARCH_FIELD: 'RATE_TYPE',
+    SEARCH_HEADING: 'RATE TYPE MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "RATE_TYPE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  currencyMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 9,
+    SEARCH_FIELD: 'Currency',
+    SEARCH_HEADING: 'CURRENCY MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Currency <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   diamondSalesOrderForm: FormGroup = this.formBuilder.group({
-    VoucherType: ['', [Validators.required]],
-    VoucherDESC: ['', [Validators.required]],
-    VoucherDate: ['', [Validators.required]],
+    voucherType: ['', [Validators.required]],
+    voucherDESC: ['', [Validators.required]],
+    voucherDate: ['', [Validators.required]],
+    orderType: ['', [Validators.required]],
     PartyCode: ['', [Validators.required]],
     Salesman: ['', [Validators.required]],
-    SelectAll: [false, ],
+    FixedMetal: [false,],
+    rateType: ['', [Validators.required]],
+    rateTypeDESC: ['', [Validators.required]],
+    partyCurrencyType: ['', [Validators.required]],
+    partyCurrencyDESC: ['', [Validators.required]],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -82,9 +110,20 @@ export class DiamondSalesorderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.diamondSalesOrderForm.controls.voucherDate.setValue(this.currentDate)
   }
-
-  addNewDetail(){
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.diamondSalesOrderForm.controls.VoucherDate.setValue(new Date(date))
+    }
+  }
+  addNewDetail() {
     const modalRef: NgbModalRef = this.modalService.open(AddNewdetailComponent, {
       size: 'xl',
       backdrop: true,//'static'
@@ -93,9 +132,9 @@ export class DiamondSalesorderComponent implements OnInit {
     });
     // modalRef.componentInstance.content = data;
   }
-   /**USE:  final save API call*/
-   formSubmit() {
-    if(this.content && this.content.FLAG == 'EDIT'){
+  /**USE:  final save API call*/
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
       // this.selectProcess()
       // this.updateWorkerMaster()
       return
@@ -105,7 +144,6 @@ export class DiamondSalesorderComponent implements OnInit {
       return
     }
 
-    let API = 'WorkerMaster/InsertWorkerMaster'
     let postData = {
       "MID": 0,
       "BRANCH_CODE": "",
@@ -291,10 +329,12 @@ export class DiamondSalesorderComponent implements OnInit {
         }
       ]
     }
+    let API = 'WebEnquiry/DiamondSalesOrder'
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -317,30 +357,36 @@ export class DiamondSalesorderComponent implements OnInit {
   }
 
 
-  deleteClicked(){
+  deleteClicked() {
 
   }
-  OrderTypeSelected(event:any){
-    console.log(event);
-    
+  //data settings
+  OrderTypeSelected(event: any) {
+    this.diamondSalesOrderForm.controls.orderType.setValue(event.CODE)
   }
   OrderTypeChange(event: any) {
     this.OrderTypeData.SEARCH_VALUE = event.target.value
   }
-  PartyCodeSelected(event:any){
-    console.log(event);
-    
+  PartyCodeSelected(event: any) {
+    this.diamondSalesOrderForm.controls.PartyCode.setValue(event.ACCODE)
   }
   PartyCodeChange(event: any) {
-    this.OrderTypeData.SEARCH_VALUE = event.target.value
+    this.PartyCodeData.SEARCH_VALUE = event.target.value
   }
-  SalesmanSelected(event:any){
-    console.log(event);
-    
+  SalesmanSelected(event: any) {
+    this.diamondSalesOrderForm.controls.Salesman.setValue(event.SALESPERSON_CODE)
+  }
+  rateTypeSelected(event: any) {
+    this.diamondSalesOrderForm.controls.rateType.setValue(event.RATE_TYPE)
+    this.diamondSalesOrderForm.controls.rateTypeDESC.setValue(event.DESCRIPTION)
+  }
+  currencyTypeSelected(event: any) {
+    this.diamondSalesOrderForm.controls.partyCurrencyType.setValue(event.CURRENCY)
   }
   SalesmanChange(event: any) {
-    this.OrderTypeData.SEARCH_VALUE = event.target.value
+    this.SalesmanData.SEARCH_VALUE = event.target.value
   }
+
   close() {
     this.activeModal.close();
   }

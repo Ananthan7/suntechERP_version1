@@ -15,6 +15,7 @@
         <mat-tab-group>
             <mat-tab label="Party Details">
                 <div style="width: 96%;" class="p-3">
+                    <!-- form starts -->
                     <form [formGroup]="diamondSalesOrderForm">
                         <div class="row">
                             <div class="col-sm-12 col-md-4 col-lg-4">
@@ -23,10 +24,10 @@
                                         Voucher Type:</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
-                                            <input type="text" matInput maxlength="6" formControlName="VoucherType" />
+                                            <input type="text" matInput formControlName="voucherType" />
                                         </mat-form-field>
                                         <mat-form-field style="width: 40%; margin-left: 7px;">
-                                            <input type="text" matInput formControlName="VoucherDESC" />
+                                            <input type="number" maxlength="6" matInput formControlName="voucherDESC" />
                                         </mat-form-field>
                                     </span>
                                 </div>
@@ -36,8 +37,9 @@
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <!-- <mat-label>Date Of Birth</mat-label> -->
-                                            <input DateValidation matInput [matDatepicker]="dob"
-                                                formControlName="VoucherDate" placeholder="DD/MM/YYYY" />
+                                            <input matInput DateValidation (dateChange)="formatDate($event)"
+                                                [matDatepicker]="dob" formControlName="voucherDate"
+                                                placeholder="DD/MM/YYYY" />
                                             <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
                                             <mat-datepicker #dob></mat-datepicker>
                                         </mat-form-field>
@@ -48,8 +50,9 @@
                                         Type:</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
-                                            <input type="text" matInput maxlength="6" (change)="OrderTypeChange($event)"
-                                                formControlName="WorkerAcCode" />
+                                            <input type="text" matInput readonly
+                                                (change)="OrderTypeChange($event)"
+                                                formControlName="orderType" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="OrderTypeData"
                                             (newRowClick)="OrderTypeSelected($event)">
@@ -61,7 +64,8 @@
                                         Party Code:</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
-                                            <input type="text" matInput maxlength="6" (change)="PartyCodeChange($event)"
+                                            <input type="text" matInput 
+                                                readonly (change)="PartyCodeChange($event)"
                                                 formControlName="PartyCode" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="PartyCodeData"
@@ -74,21 +78,21 @@
                                         Salesman:</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
-                                            <input type="text" matInput maxlength="6" (change)="SalesmanChange($event)"
-                                                formControlName="Salesman" />
+                                            <input type="text" matInput (change)="SalesmanChange($event)"
+                                                readonly formControlName="Salesman" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="SalesmanData"
                                             (newRowClick)="SalesmanSelected($event)">
                                         </master-search>
                                     </span>
                                 </div>
-                                <div class="row">
+                                <div class="row" *ngIf="false">
                                     <label class="col-sm-4 col-form-label">
                                         Prosp Origin:</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
-                                            <input type="text" matInput maxlength="6" (change)="SalesmanChange($event)"
-                                                formControlName="Salesman" />
+                                            <input type="text" matInput (change)="SalesmanChange($event)"
+                                                readonly formControlName="Salesman" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="OrderTypeData"
                                             (newRowClick)="SalesmanSelected($event)">
@@ -99,17 +103,20 @@
                             <div class="col-sm-12 col-md-4 col-lg-4">
                                 <div class="row">
                                     <section class="col-sm-4 example-section">
-                                        <mat-checkbox formControlName="SelectAll" class="example-margin"
+                                        <mat-checkbox formControlName="FixedMetal" class="example-margin"
                                             class="col-sm-4">Fixed Metal
                                         </mat-checkbox>
                                     </section>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
-                                            <input type="text" matInput maxlength="6" formControlName="VoucherType" />
+                                            <input type="text" matInput maxlength="6" formControlName="rateType" />
                                         </mat-form-field>
                                         <mat-form-field style="width: 40%; margin-left: 7px;">
-                                            <input type="text" matInput formControlName="VoucherDESC" />
+                                            <input type="text" matInput formControlName="rateTypeDESC" />
                                         </mat-form-field>
+                                        <master-search [MasterSearchData]="rateTypeMasterData"
+                                            (newRowClick)="rateTypeSelected($event)">
+                                        </master-search>
                                     </span>
                                 </div>
                                 <div class="row">
@@ -117,12 +124,11 @@
                                         Party Currency:</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
-                                            <input type="text" matInput maxlength="6" formControlName="VoucherType" />
+                                            <input type="text" matInput maxlength="6" formControlName="partyCurrencyType" />
                                         </mat-form-field>
                                         <mat-form-field style="width: 40%; margin-left: 7px;">
-                                            <input type="text" matInput formControlName="VoucherDESC" />
+                                            <input type="text" matInput formControlName="partyCurrencyDESC" />
                                         </mat-form-field>
-                                        
                                     </span>
                                 </div>
                                 <div class="row">
@@ -130,11 +136,14 @@
                                         Item Currency:</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
-                                            <input type="text" matInput maxlength="6" formControlName="VoucherType" />
+                                            <input type="text" matInput maxlength="6" formControlName="voucherType" />
                                         </mat-form-field>
                                         <mat-form-field style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput formControlName="VoucherDESC" />
                                         </mat-form-field>
+                                        <master-search [MasterSearchData]="currencyMasterData"
+                                        (newRowClick)="currencyTypeSelected($event)">
+                                        </master-search>
                                     </span>
                                 </div>
                                 <div class="row">
