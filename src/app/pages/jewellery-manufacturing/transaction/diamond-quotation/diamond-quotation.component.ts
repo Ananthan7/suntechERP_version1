@@ -21,6 +21,14 @@ export class DiamondQuotationComponent implements OnInit {
   currentFilter: any;
 
   diamondQuotTableHeaders: any[] = ['SRNO', 'DESIGN CODE', 'STOCK_CODE', 'KARAT', 'METAL_COLOR', 'PCS', 'GROSS_WT', 'METAL_WT', 'STONE_WT', 'RATEFC', 'VALUEFC', 'NETVALUEFC', 'CHARGE1FC', 'CHARGE1LC'];
+  labourDetailsColHeads:any[] = ['Code','Div','Qty', 'Rate','Wts %','Lab type','Lab A/C','Unit','Shape','Karat'];
+  calculationtableData: any[] = [
+    {Division: 'Division', Description: 'value'},
+    {Division: 'Division', Description: 'value'},
+    {Division: 'Division', Description: 'value'},
+    {Division: 'Division', Description: 'value'},];
+    checked = false;
+    indeterminate = false;
   private subscriptions: Subscription[] = [];
 
   OrderTypeData: MasterSearchModel = {
