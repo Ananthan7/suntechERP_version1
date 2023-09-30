@@ -25,16 +25,8 @@ export class IndexedDbService {
   onDeleteIndexedDB() {
     //  return this.dbService.deleteObjectStore('suntechPos');
     return this.dbService.deleteDatabase().subscribe((deleted) => {
-      console.log('Database deleted successfully: ', deleted);
-    });
-
-    // this.dbService.deleteDatabase();
-    // .subscribe((result) => {
-    //   console.log('IndexedDB deleted successfully.');
-    // })
-    // .catch((error) => {
-    //   console.error('Error deleting IndexedDB:', error);
-    // });
+      console.log('Local Database deleted successfully: ', deleted);
+    },err=> {console.log('Local Database not deleted');});
   }
 
   getAllData(colName: string) {

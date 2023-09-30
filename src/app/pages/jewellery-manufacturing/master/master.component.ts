@@ -154,11 +154,11 @@ export class MasterComponent implements OnInit {
       "RECORDS": this.pageSize || 10,
       "TABLE_NAME": this.tableName,
       "CUSTOM_PARAM": {
-        "FILTER": {
-          "YEARMONTH": localStorage.getItem('YEAR') || '',
-          "BRANCHCODE": this.CommonService.branchCode,
-          "VOCTYPE": "PCR"
-        },
+        // "FILTER": {
+        //   "YEARMONTH": localStorage.getItem('YEAR') || '',
+        //   "BRANCHCODE": this.CommonService.branchCode,
+        //   "VOCTYPE": "PCR"
+        // },
         "TRANSACTION": {
           "VOCTYPE": "PCR",
         }

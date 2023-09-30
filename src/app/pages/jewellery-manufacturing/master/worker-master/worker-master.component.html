@@ -19,8 +19,10 @@
                             <label class="col-sm-4 col-form-label">
                                 Worker Code & Name :</label>
                             <mat-form-field style="width: 20%">
-                                <input type="text" appFocusOnLoad matInput placeholder="Code" maxlength="6"
-                                    formControlName="WorkerCode" (focusout)="checkWorkerExists($event)" />
+                                <input type="text" appFocusOnLoad matInput 
+                                    placeholder="Code" maxlength="6"
+                                    formControlName="WorkerCode" [readonly]="viewOnlyFlag"
+                                    (focusout)="checkWorkerExists($event)" />
                                 <mat-error *ngIf="workerMasterForm.controls.WorkerCode.touched 
                                         && workerMasterForm.controls.WorkerCode.hasError('required')">
                                     Worker Code <strong>required</strong>
@@ -36,7 +38,8 @@
                             <label class="col-sm-4 col-form-label">
                                 Worker A/c Code :</label>
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput placeholder="AC Code" maxlength="6"
+                                <input type="text" matInput placeholder="AC Code" 
+                                    [readonly]="viewOnlyFlag" maxlength="6"
                                     (change)="workerCodeChange($event)" formControlName="WorkerAcCode" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="accountMasterData"
@@ -49,7 +52,8 @@
                             <label class="col-sm-4 col-form-label">
                                 Name of Supervisor :</label>
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput maxlength="6" formControlName="NameOfSupervisor" />
+                                <input type="text" matInput maxlength="6" 
+                                    [readonly]="viewOnlyFlag" formControlName="NameOfSupervisor" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="supervisorData"
                                 (newRowClick)="supervisorSelected($event)">
@@ -61,7 +65,8 @@
                             <label class="col-sm-4 col-form-label">
                                 Default Process :</label>
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput maxlength="6" formControlName="DefaultProcess" />
+                                <input type="text" matInput maxlength="6" 
+                                    [readonly]="viewOnlyFlag" formControlName="DefaultProcess" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="processData"
                                 (newRowClick)="defaultProcessSelected($event)">
@@ -72,8 +77,9 @@
                         <span class="col-sm-4 col-form-label">Loss Allowed :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput numericInput class="text-right" autocomplete="LossAllowed"
-                                    formControlName="LossAllowed" />
+                                <input type="text" matInput numericInput 
+                                    class="text-right" autocomplete="LossAllowed"
+                                    formControlName="LossAllowed" [readonly]="viewOnlyFlag"/>
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Password
@@ -89,14 +95,16 @@
                         <span class="col-sm-4 col-form-label">Tray Weight :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput numericInput class="text-right"
+                                <input type="text" matInput numericInput 
+                                    [readonly]="viewOnlyFlag"   class="text-right"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Target Pcs :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="text" matInput numericInput class="text-right"
+                                <input type="text" matInput numericInput 
+                                    [readonly]="viewOnlyFlag" class="text-right"
                                     formControlName="TargetPcs" />
                             </mat-form-field>
                         </div>
@@ -106,7 +114,8 @@
                             :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="number" matInput AmountDecimalInput class="text-right"
+                                <input type="number" matInput AmountDecimalInput 
+                                [readonly]="viewOnlyFlag" class="text-right"
                                     formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
@@ -114,7 +123,8 @@
                             :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="text" class="text-right" matInput AmountDecimalInput
+                                <input type="text" class="text-right" [readonly]="viewOnlyFlag"
+                                    matInput AmountDecimalInput
                                     formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
@@ -125,7 +135,8 @@
                             Weight(GMS) :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput class="text-right" AmountDecimalInput
+                                <input type="text" matInput [readonly]="viewOnlyFlag"
+                                    class="text-right" AmountDecimalInput
                                     formControlName="TargetWeight" />
                             </mat-form-field>
                         </div>

@@ -12,6 +12,7 @@ import { AuthfakeauthenticationService } from '../../core/services/authfake.serv
 import { MENU } from './menu';
 import { MenuItem } from './menu.model';
 import { LAYOUT_MODE } from "../layouts.model";
+import { IndexedDbService } from 'src/app/services/indexed-db.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -55,7 +56,8 @@ export class HorizontaltopbarComponent implements OnInit {
     public languageService: LanguageService,
     public _cookiesService: CookieService,
     private authService: AuthenticationService,
-    private authFackservice: AuthfakeauthenticationService
+    private authFackservice: AuthfakeauthenticationService,
+    private inDb: IndexedDbService
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -253,6 +255,7 @@ export class HorizontaltopbarComponent implements OnInit {
       // } else {
         this.authFackservice.logout();
       // }
+      this.inDb.onDeleteIndexedDB()
       localStorage.clear();
       this.router.navigate(['/account/login']);
     }

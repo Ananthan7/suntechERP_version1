@@ -18,6 +18,7 @@ export class WorkerMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   showFilterRow!: boolean;
+  viewOnlyFlag: boolean = false;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Process', 'Description'];
@@ -90,6 +91,9 @@ export class WorkerMasterComponent implements OnInit {
   
   setFormValues() {
     if(!this.content) return
+    if(this.content.flag == 'VIEW'){
+      this.viewOnlyFlag = true
+    }
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
     this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
     this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
@@ -343,7 +347,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
-    if (event.target.value == '') return
+    if (event.target.value == '' || this.viewOnlyFlag == true) return
     let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
