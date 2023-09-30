@@ -44,6 +44,7 @@ export class CommonServiceService {
   public nationalityMaster: any = [];
   public idMaster: any = [];
   public customerTypeMaster: any = [];
+  public RateTypeMasterData: any = [];
 
   constructor(
     private route: ActivatedRoute,

@@ -61,6 +61,7 @@ import { DateValidationDirective } from './directives/date-validation.directive'
 import {MatRadioButton, MatRadioModule} from '@angular/material/radio';
 
 import { MatCardModule } from '@angular/material/card';
+import { FocusOnLoadDirective } from './directives/focus-on-load.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -79,6 +80,7 @@ import { MatCardModule } from '@angular/material/card';
     NumericInputDirective,
     DecimalInputDirective,
     DateValidationDirective,
+    FocusOnLoadDirective,
   ],
   imports: [
     CommonModule,
@@ -131,12 +133,13 @@ import { MatCardModule } from '@angular/material/card';
     CardboxComponent,
     MasterFindIconComponent,
     MasterSearchComponent,
-    //pipes exports
+    //pipes && Directives exports
     NumberFormatterPipe,
     CamelCasePipe,
     AppDecimalInputDirective,
     NumericInputDirective,
     DateValidationDirective,
+    FocusOnLoadDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,

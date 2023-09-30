@@ -114,6 +114,11 @@ const dbConfig: DBConfig = {
       storeConfig: { keyPath: 'id', autoIncrement: true },
       storeSchema: []
     },
+    {
+      store: 'RateTypeMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
 
   ]
 };

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +11,8 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-worker-master',
   templateUrl: './worker-master.component.html',
-  styleUrls: ['./worker-master.component.scss']
+  styleUrls: ['./worker-master.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkerMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
@@ -77,14 +78,16 @@ export class WorkerMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    // private ChangeDetector: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
     if(this.content){
       this.setFormValues()
     }
-   
+    
   }
+  
   setFormValues() {
     if(!this.content) return
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)

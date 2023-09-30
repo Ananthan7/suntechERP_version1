@@ -139,11 +139,6 @@ export class AppComponent implements OnInit {
         // this.comFunc.allCompanyParams = jsonObject;
         this.comFunc.allCompanyParams = resp.response;
         this.setCompParaValues();
-        // alert('data'+this.comFunc.amtDecimals)
-        // console.log('===============amtFormat=====================');
-        // console.log(this.comFunc.amtFormat);
-        // console.log(this.comFunc.compCurrency);
-        // console.log('====================================');
       } else {
         this.comFunc.allCompanyParams = [];
       }
@@ -183,11 +178,18 @@ export class AppComponent implements OnInit {
   getAllMessageBox() {
     this.suntechApi.getDynamicAPI('Messagebox').subscribe((resp) => {
       if (resp.status == 'Success') {
-
         this.comFunc.allMessageBoxData = resp.response;
-
         this.inDb.bulkInsert('messageBox', resp.response);
-
+      }
+    });
+  }
+  getRateTypeMaster() {
+    this.suntechApi.getDynamicAPI('RateTypeMaster/GetRateTypeMasterHeaderList').subscribe((resp) => {
+      if (resp.status == 'Success') {
+        this.comFunc.RateTypeMasterData = resp.response;
+        console.log(this.comFunc.RateTypeMasterData,'this.comFunc.RateTypeMasterData');
+        
+        this.inDb.bulkInsert('RateTypeMaster', resp.response);
       }
     });
   }
@@ -271,6 +273,16 @@ export class AppComponent implements OnInit {
         this.getCustomerTypeMaster();
       } else {
         this.comFunc.customerTypeMaster = data;
+      }
+    });
+    
+    this.inDb.getAllData('RateTypeMaster').subscribe((data) => {
+      console.log('RateTypeMaster');
+      
+      if (data.length == 0) {
+        this.getRateTypeMaster();
+      } else {
+        this.comFunc.RateTypeMasterData = data;
       }
     });
     /** End set basic api data */
