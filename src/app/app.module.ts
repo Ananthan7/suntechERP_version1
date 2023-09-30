@@ -119,6 +119,16 @@ const dbConfig: DBConfig = {
       storeConfig: { keyPath: 'id', autoIncrement: true },
       storeSchema: []
     },
+    {
+      store: 'LocationMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+    {
+      store: 'karatMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
 
   ]
 };

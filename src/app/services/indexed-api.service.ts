@@ -97,12 +97,24 @@ export class IndexedApiService {
     });
 
     this.inDb.getAllData('RateTypeMaster').subscribe((data) => {
-      console.log('RateTypeMaster');
-
       if (data.length == 0) {
         this.getRateTypeMaster();
       } else {
         this.comFunc.RateTypeMasterData = data;
+      }
+    });
+    this.inDb.getAllData('LocationMaster').subscribe((data) => {
+      if (data.length == 0) {
+        this.getLocationMasterList();
+      } else {
+        this.comFunc.LocationMasterData = data;
+      }
+    });
+    this.inDb.getAllData('karatMaster').subscribe((data) => {
+      if (data.length == 0) {
+        this.getKaratMasterList();
+      } else {
+        this.comFunc.karatMasterData = data;
       }
     });
     /** End set basic api data */
@@ -269,9 +281,23 @@ export class IndexedApiService {
     this.suntechApi.getDynamicAPI('RateTypeMaster/GetRateTypeMasterHeaderList').subscribe((resp) => {
       if (resp.status == 'Success') {
         this.comFunc.RateTypeMasterData = resp.response;
-        console.log(this.comFunc.RateTypeMasterData, 'this.comFunc.RateTypeMasterData');
-
         this.inDb.bulkInsert('RateTypeMaster', resp.response);
+      }
+    });
+  }
+  getLocationMasterList() {
+    this.suntechApi.getDynamicAPI('LocationMaster/GetLocationMasterList').subscribe((resp) => {
+      if (resp.status == 'Success') {
+        this.comFunc.LocationMasterData = resp.response;
+        this.inDb.bulkInsert('LocationMaster', resp.response);
+      }
+    });
+  }
+  getKaratMasterList() {
+    this.suntechApi.getDynamicAPI('karatMaster/GetKaratMasterList').subscribe((resp) => {
+      if (resp.status == 'Success') {
+        this.comFunc.karatMasterData = resp.response;
+        this.inDb.bulkInsert('karatMaster', resp.response);
       }
     });
   }

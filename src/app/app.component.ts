@@ -1,9 +1,4 @@
-import { IndexedDbService } from './services/indexed-db.service';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { SuntechAPIService } from './services/suntech-api.service';
-import { CommonServiceService } from './services/common-service.service';
 import { IndexedApiService } from './services/indexed-api.service';
 @Component({
   selector: 'app-root',
@@ -16,16 +11,12 @@ export class AppComponent implements AfterViewInit {
   value: Object | undefined;
 
   constructor(
-    private router: Router,
-    private suntechApi: SuntechAPIService,
-    private comFunc: CommonServiceService,
-    private inDb: IndexedDbService,
     private indexedApiService: IndexedApiService,
   ) {
   }
-  ngOnInit() {
-  }
+
   ngAfterViewInit(){
+    //fetch datas and save into indexed db
     this.indexedApiService.setInitailLoadSetUp()
   }
 }

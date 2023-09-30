@@ -255,7 +255,7 @@ export class HorizontaltopbarComponent implements OnInit {
       // } else {
         this.authFackservice.logout();
       // }
-      this.inDb.onDeleteIndexedDB()
+      // this.inDb.onDeleteIndexedDB()
       localStorage.clear();
       this.router.navigate(['/account/login']);
     }

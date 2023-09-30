@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { IndexedApiService } from 'src/app/services/indexed-api.service';
+import { IndexedDbService } from 'src/app/services/indexed-db.service';
 
 
 @Component({
@@ -42,7 +44,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private router: Router,
-    public dataService: SuntechAPIService
+    public dataService: SuntechAPIService,
+    public indexedApiService: IndexedApiService,
+    public indexedDb: IndexedDbService,
   ) {
     let isLayoutRTL = false;
     this.changeRtlLayout(isLayoutRTL);
@@ -53,50 +57,26 @@ export class LoginComponent implements OnInit {
     });
   }
   ngAfterViewInit() {
-    this.getCompanyParameter()
-    this.getMessageBox()
+    // this.getCompanyParameter()
+    // this.getMessageBox()
   }
-  /**use: to get company parameters before login, from API */
-  getCompanyParameter() {
-    let API = 'CompanyParameters'
-    let sub1: Subscription = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
-      if (response.status == 'Success') {
-        let data = response.response
-        localStorage.setItem('COMPANY_PARAMETERS', JSON.stringify(data))
-      } else {
-        alert('Company parameters not Available')
-      }
-    }, error => {
-      alert(error+' Server error');
-    })
-    //to unsubscribe
-    this.subscriptions.push(sub1)
-  }
-  /**use: to get MessageBox parameters before login, from API */
-  getMessageBox() {
-    let API = 'Messagebox'
-    let sub2: Subscription = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
-      if (response.status == 'Success') {
-        let data = response.response
-        localStorage.setItem('MESSAGE_BOX', JSON.stringify(data))
-      } else {
-        alert('Messagebox parameters not Available')
-      }
-    }, error => {
-      alert(error+'Server error');
-    })
-    //to unsubscribe
-    this.subscriptions.push(sub2)
+  /**use: to get all parameters before login, from indexedDb */
+  private setIndexedDB(): void{
+      let sub: Subscription = this.indexedDb.getAllData('compparams').subscribe((data) => {
+        if (data.length > 0) {
+          this.indexedApiService.setInitailLoadSetUp()
+        } 
+      });
+      this.subscriptions.push(sub)
   }
 
-  changeRtlLayout(flag: any) {
+  private changeRtlLayout(flag: any): void {
     // if (flag) {
     //   document.querySelector('body').classList.add('gradient-rtl');
     // } else {
     //   document.querySelector('body').classList.remove('gradient-rtl');
     // }
   }
-
   ngOnInit() {
 
   }
