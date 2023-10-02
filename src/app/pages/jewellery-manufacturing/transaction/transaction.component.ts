@@ -125,11 +125,11 @@ export class TransactionComponent implements OnInit {
       "RECORDS": this.pageSize || 10,
       "TABLE_NAME": this.tableName,
       "CUSTOM_PARAM": {
-        "FILTER": {
-          "YEARMONTH": localStorage.getItem('YEAR') || '',
-          "BRANCHCODE": this.CommonService.branchCode,
-          "VOCTYPE": "PCR"
-        },
+        // "FILTER": {
+        //   "YEARMONTH": localStorage.getItem('YEAR') || '',
+        //   "BRANCHCODE": this.CommonService.branchCode,
+        //   "VOCTYPE": "PCR"
+        // },
         "TRANSACTION": {
           "VOCTYPE": "PCR",
         }
@@ -161,10 +161,14 @@ export class TransactionComponent implements OnInit {
           //change detector code
           // this.ChangeDetector.detectChanges()
         } else {
-          alert('No Response Found')
+          this.snackBar.open('No Response Found!', 'Close', {
+            duration: 3000, 
+          });
         }
       }, err => {
-        alert(err)
+        this.snackBar.open(err, 'Close', {
+          duration: 3000, 
+        });
       });
   }
   //pagination change

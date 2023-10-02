@@ -256,8 +256,6 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   updateProcessMaster() {
-
-
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.mid
     let postData = {
       "MID": this.processMasterForm.value.mid,

@@ -47,6 +47,9 @@ export class CommonServiceService {
   public RateTypeMasterData: any = [];
   public LocationMasterData: any = [];
   public karatMasterData: any = [];
+  public creditCardMasterData: any = [];
+  public SalespersonMasterData: any = [];
+  public VocTypeMasterData: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -266,6 +269,13 @@ export class CommonServiceService {
     let queryParamAPI
     this.route.queryParams.subscribe((data: any) => {
       queryParamAPI = data.tableName;
+    });
+    return queryParamAPI
+  }
+  getqueryParamVocType() {
+    let queryParamAPI
+    this.route.queryParams.subscribe((data: any) => {
+      queryParamAPI = data.VocType;
     });
     return queryParamAPI
   }

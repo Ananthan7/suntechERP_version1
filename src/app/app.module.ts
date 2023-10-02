@@ -129,6 +129,21 @@ const dbConfig: DBConfig = {
       storeConfig: { keyPath: 'id', autoIncrement: true },
       storeSchema: []
     },
+    {
+      store: 'CreditCardMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+    {
+      store: 'SalespersonMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
+    {
+      store: 'VocTypeMaster',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
 
   ]
 };

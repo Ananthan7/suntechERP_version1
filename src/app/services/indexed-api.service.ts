@@ -117,9 +117,56 @@ export class IndexedApiService {
         this.comFunc.karatMasterData = data;
       }
     });
+    this.inDb.getAllData('CreditCardMaster').subscribe((data) => {
+      if (data.length == 0) {
+        this.getCreditCardMaster();
+      } else {
+        this.comFunc.creditCardMasterData = data;
+      }
+    });
+    this.inDb.getAllData('SalespersonMaster').subscribe((data) => {
+      if (data.length == 0) {
+        this.getSalespersonMasterList();
+      } else {
+        this.comFunc.SalespersonMasterData = data;
+      }
+    });
+    this.inDb.getAllData('VocTypeMaster').subscribe((data) => {
+      if (data.length == 0) {
+        this.getVocTypeMaster();
+      } else {
+        this.comFunc.VocTypeMasterData = data;
+      }
+    });
     /** End set basic api data */
   }
 
+
+  getVocTypeMaster() {
+    this.suntechApi.getDynamicAPI('VoctypeMaster/GetVocTypeMaster').subscribe((data) => {
+      if (data.status == 'Success') {
+        this.comFunc.VocTypeMasterData = data.response;
+        this.inDb.bulkInsert('VocTypeMaster', data.response);
+      }
+    });
+  }
+  getSalespersonMasterList() {
+    this.suntechApi.getDynamicAPI('SalesPersonMaster/GetSalespersonMasterList').subscribe((data) => {
+      if (data.status == 'Success') {
+        this.comFunc.SalespersonMasterData = data.response;
+        this.inDb.bulkInsert('SalespersonMaster', data.response);
+      }
+    });
+  }
+
+  getCreditCardMaster() {
+    this.suntechApi.getDynamicAPI('CreditCardMaster/GetCreditCardMaster').subscribe((data) => {
+      if (data.status == 'Success') {
+        this.comFunc.creditCardMasterData = data.response;
+        this.inDb.bulkInsert('CreditCardMaster', data.response);
+      }
+    });
+  }
 
   getDivisionMaster() {
     this.suntechApi.getDynamicAPI('DivisionMaster/GetDivisionMaster').subscribe((data) => {

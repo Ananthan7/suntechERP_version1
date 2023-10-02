@@ -8,6 +8,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { AddNewdetailComponent } from './add-newdetail/add-newdetail.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-diamond-salesorder',
@@ -79,27 +80,32 @@ export class DiamondSalesorderComponent implements OnInit {
   currencyMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 9,
-    SEARCH_FIELD: 'Currency',
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'CURRENCY MASTER',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Currency <> ''",
+    WHERECONDITION: "CURRENCY_CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
   diamondSalesOrderForm: FormGroup = this.formBuilder.group({
     voucherType: ['', [Validators.required]],
-    voucherDESC: ['', [Validators.required]],
+    voucherDESC: [''],
     voucherDate: ['', [Validators.required]],
     orderType: ['', [Validators.required]],
     PartyCode: ['', [Validators.required]],
     Salesman: ['', [Validators.required]],
     FixedMetal: [false,],
     rateType: ['', [Validators.required]],
-    rateTypeDESC: ['', [Validators.required]],
+    wholeSaleRate: ['', [Validators.required]],
     partyCurrencyType: ['', [Validators.required]],
-    partyCurrencyDESC: ['', [Validators.required]],
+    partyCurrencyRate: ['', [Validators.required]],
+    ItemCurrency: ['', [Validators.required]],
+    ItemCurrencyRate: ['', [Validators.required]],
+    BillToAccountHead: [''],
+    BillToAddress: [''],
+    DeliveryOnDate: [''],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -107,11 +113,59 @@ export class DiamondSalesorderComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
+    private commonService: CommonServiceService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
     this.diamondSalesOrderForm.controls.voucherDate.setValue(this.currentDate)
+    this.diamondSalesOrderForm.controls.DeliveryOnDate.setValue(this.currentDate)
+    this.diamondSalesOrderForm.controls.voucherType.setValue(this.commonService.getqueryParamVocType())
+    this.getRateType()
   }
+  getRateType() {
+    let data = this.commonService.RateTypeMasterData.filter((item: any) => item.DIVISION_CODE == 'G' && item.DEFAULT_RTYPE == 1)
+
+    if (data[0].WHOLESALE_RATE)
+      this.diamondSalesOrderForm.controls.wholeSaleRate.setValue(data[0].WHOLESALE_RATE)
+    if (data[0].RATE_TYPE)
+      this.diamondSalesOrderForm.controls.rateType.setValue(data[0].RATE_TYPE)
+  }
+
+  //party Code Change
+  partyCodeChange(event: any) {
+    if (event.target.value == '') return
+    this.snackBar.open('Loading...')
+    let API = `AccountMaster/${event.target.value}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.snackBar.dismiss()
+        if (result.response) {
+          let data = result.response
+          if (data.CURRENCY_CODE) {
+            this.diamondSalesOrderForm.controls.partyCurrencyType.setValue(data.CURRENCY_CODE)
+            this.diamondSalesOrderForm.controls.ItemCurrency.setValue(data.CURRENCY_CODE)
+            this.diamondSalesOrderForm.controls.BillToAccountHead.setValue(data.ACCOUNT_HEAD)
+            this.diamondSalesOrderForm.controls.BillToAddress.setValue(data.ADDRESS)
+
+            let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data.CURRENCY_CODE)
+            this.diamondSalesOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+            this.diamondSalesOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+          }
+        } else {
+          this.toastr.error('PartyCode not found in Account Master', result.Message ? result.Message : '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.snackBar.dismiss()
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
+    this.subscriptions.push(Sub)
+  }
+
   formatDate(event: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue)
@@ -369,6 +423,7 @@ export class DiamondSalesorderComponent implements OnInit {
   }
   PartyCodeSelected(event: any) {
     this.diamondSalesOrderForm.controls.PartyCode.setValue(event.ACCODE)
+    this.partyCodeChange({ target: { value: event.ACCODE } })
   }
   PartyCodeChange(event: any) {
     this.PartyCodeData.SEARCH_VALUE = event.target.value
@@ -380,8 +435,13 @@ export class DiamondSalesorderComponent implements OnInit {
     this.diamondSalesOrderForm.controls.rateType.setValue(event.RATE_TYPE)
     this.diamondSalesOrderForm.controls.rateTypeDESC.setValue(event.DESCRIPTION)
   }
-  currencyTypeSelected(event: any) {
-    this.diamondSalesOrderForm.controls.partyCurrencyType.setValue(event.CURRENCY)
+  itemCurrencySelected(event: any) {
+    this.diamondSalesOrderForm.controls.ItemCurrency.setValue(event.CURRENCY_CODE)
+    this.diamondSalesOrderForm.controls.ItemCurrencyRate.setValue(event.CONV_RATE)
+  }
+  partyCurrencySelected(event: any) {
+    this.diamondSalesOrderForm.controls.partyCurrencyType.setValue(event.CURRENCY_CODE)
+    this.diamondSalesOrderForm.controls.partyCurrencyRate.setValue(event.CONV_RATE)
   }
   SalesmanChange(event: any) {
     this.SalesmanData.SEARCH_VALUE = event.target.value
@@ -389,6 +449,12 @@ export class DiamondSalesorderComponent implements OnInit {
 
   close() {
     this.activeModal.close();
+  }
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
   }
 
 }

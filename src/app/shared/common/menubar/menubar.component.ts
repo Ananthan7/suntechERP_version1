@@ -78,7 +78,6 @@ export class MenubarComponent implements OnInit {
   }
 
   pageRoutes(path: any, obj: any,submenu:any) {
-    console.log(submenu,'submenu');
     this.subMenuChange.emit(submenu);
 
     let navigationExtras: NavigationExtras = {

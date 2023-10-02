@@ -112,7 +112,7 @@
                                             <input type="text" matInput maxlength="6" formControlName="rateType" />
                                         </mat-form-field>
                                         <mat-form-field style="width: 40%; margin-left: 7px;">
-                                            <input type="text" matInput formControlName="rateTypeDESC" />
+                                            <input type="text" matInput formControlName="wholeSaleRate" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="rateTypeMasterData"
                                             (newRowClick)="rateTypeSelected($event)">
@@ -127,8 +127,11 @@
                                             <input type="text" matInput maxlength="6" formControlName="partyCurrencyType" />
                                         </mat-form-field>
                                         <mat-form-field style="width: 40%; margin-left: 7px;">
-                                            <input type="text" matInput formControlName="partyCurrencyDESC" />
+                                            <input type="text" matInput formControlName="partyCurrencyRate" />
                                         </mat-form-field>
+                                        <master-search [MasterSearchData]="currencyMasterData"
+                                        (newRowClick)="partyCurrencySelected($event)">
+                                        </master-search>
                                     </span>
                                 </div>
                                 <div class="row">
@@ -136,13 +139,13 @@
                                         Item Currency:</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
-                                            <input type="text" matInput maxlength="6" formControlName="voucherType" />
+                                            <input type="text" matInput maxlength="6" formControlName="ItemCurrency" />
                                         </mat-form-field>
                                         <mat-form-field style="width: 40%; margin-left: 7px;">
-                                            <input type="text" matInput formControlName="VoucherDESC" />
+                                            <input type="text" matInput formControlName="ItemCurrencyRate" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="currencyMasterData"
-                                        (newRowClick)="currencyTypeSelected($event)">
+                                        (newRowClick)="itemCurrencySelected($event)">
                                         </master-search>
                                     </span>
                                 </div>
@@ -167,7 +170,7 @@
                                         </mat-form-field>
                                         <mat-form-field style="width: 40%;margin-left: 7px;">
                                             <input matInput DateValidation [matDatepicker]="DeliveryOn"
-                                                formControlName="VoucherDate" placeholder="DD/MM/YYYY" />
+                                                formControlName="DeliveryOnDate" placeholder="DD/MM/YYYY" />
                                             <mat-datepicker-toggle matSuffix [for]="DeliveryOn"></mat-datepicker-toggle>
                                             <mat-datepicker #DeliveryOn></mat-datepicker>
                                         </mat-form-field>
@@ -193,18 +196,19 @@
                                                 <mat-tab label="Bill To">
                                                     <div class="col-11">
                                                         <mat-form-field style="width: 100%; margin-left: 7px;">
-                                                            <input type="text" matInput formControlName="VoucherDESC" />
+                                                            <input type="text" matInput formControlName="BillToAccountHead" />
                                                         </mat-form-field>
-                                                        <textarea style="width: 100%;height: 120px; margin-left: 7px;">
+                                                        <textarea style="width: 100%;height: 120px; margin-left: 7px;"
+                                                        formControlName="BillToAddress">
                                                         </textarea>
                                                     </div>
                                                 </mat-tab>
                                                 <mat-tab label="U D F">
                                                     <div class="col-11">
                                                         <div class="row">
-                                                            <label class="col-sm-3 col-form-label">
-                                                                UDF 1 :</label>
-                                                            <span class="col-sm-8">
+                                                            <label class="col-sm-4 col-form-label">
+                                                                Proposal :</label>
+                                                            <span class="col-sm-7">
                                                                 <mat-form-field>
                                                                     <input type="text" matInput maxlength="6"
                                                                         formControlName="VoucherType" />
@@ -212,9 +216,9 @@
                                                             </span>
                                                         </div>
                                                         <div class="row">
-                                                            <label class="col-sm-3 col-form-label">
-                                                                UDF 2 :</label>
-                                                            <span class="col-sm-8">
+                                                            <label class="col-sm-4 col-form-label">
+                                                                Bussiness Type :</label>
+                                                            <span class="col-sm-7">
                                                                 <mat-form-field>
                                                                     <input type="text" matInput maxlength="6"
                                                                         formControlName="VoucherType" />
@@ -222,9 +226,9 @@
                                                             </span>
                                                         </div>
                                                         <div class="row">
-                                                            <label class="col-sm-3 col-form-label">
-                                                                UDF 3 :</label>
-                                                            <span class="col-sm-8">
+                                                            <label class="col-sm-4 col-form-label">
+                                                                Language :</label>
+                                                            <span class="col-sm-7">
                                                                 <mat-form-field>
                                                                     <input type="text" matInput maxlength="6"
                                                                         formControlName="VoucherType" />
@@ -232,9 +236,9 @@
                                                             </span>
                                                         </div>
                                                         <div class="row">
-                                                            <label class="col-sm-3 col-form-label">
-                                                                UDF 4 :</label>
-                                                            <span class="col-sm-8">
+                                                            <label class="col-sm-4 col-form-label">
+                                                                Referred By :</label>
+                                                            <span class="col-sm-7">
                                                                 <mat-form-field>
                                                                     <input type="text" matInput maxlength="6"
                                                                         formControlName="VoucherType" />
