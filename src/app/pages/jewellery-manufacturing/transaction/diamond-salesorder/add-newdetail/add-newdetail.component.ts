@@ -40,10 +40,23 @@ export class AddNewdetailComponent implements OnInit {
   }
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
-    voucherDESC: [''],
-    voucherDate: ['', [Validators.required]],
-    orderType: ['', [Validators.required]],
-    PartyCode: ['', [Validators.required]],
+    designDescription: ['', [Validators.required]],
+    StockCode: [''],
+    StockCodeDesc: ['', [Validators.required]],
+    DeliveryType: ['', [Validators.required]],
+    DeliveryType2: ['', [Validators.required]],
+    ProductionDate: ['', [Validators.required]],
+    DeliveryOnDate: ['', [Validators.required]],
+    Remarks: [''],
+    StockBOM: [false, [Validators.required]],
+    Pcs: ['', [Validators.required]],
+    MetalWeight: ['', [Validators.required]],
+    Rate: ['', [Validators.required]],
+    StoneWeight: ['', [Validators.required]],
+    Amount: ['', [Validators.required]],
+    GrossWeight: ['', [Validators.required]],
+    STOCK_CODE: ['', [Validators.required]],
+    CATEGORY_CODE: ['', [Validators.required]],
 
   })
 
@@ -58,25 +71,34 @@ export class AddNewdetailComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  designCodeSelected(event: any) {
-    this.diamondSalesDetailForm.controls.designCode.setValue(event.DESIGN_CODE)
+  designCodeSelected(data: any) {
+    this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
+    this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
+    this.designCodeValidate({target: { value: data.DESIGN_CODE }})
   }
-  //party Code Change
-  partyCodeChange(event: any) {
+  /**use: design code change fn to fetch data with design code */
+  designCodeValidate(event: any) {
     if (event.target.value == '') return
     this.snackBar.open('Loading...')
-    let API = `AccountMaster/${event.target.value}`
+    let API = `DesignMaster/GetDesignMasterDetails/${event.target.value}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         this.snackBar.dismiss()
         if (result.response) {
           let data = result.response
-          if (data.CURRENCY_CODE) {
-            this.diamondSalesDetailForm.controls.partyCurrencyType.setValue(data.CURRENCY_CODE)
-            this.diamondSalesDetailForm.controls.ItemCurrency.setValue(data.CURRENCY_CODE)
+          this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
+          this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
+          this.diamondSalesDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
+          this.diamondSalesDetailForm.controls.CATEGORY_CODE.setValue(data.SubCategory_Code)
+
+          if(data.PCS == 0){
+            this.diamondSalesDetailForm.controls.Pcs.setValue(1)
           }
+          this.diamondSalesDetailForm.controls.Rate.setValue(data.RATE)
+          this.diamondSalesDetailForm.controls.Rate.setValue(data.METALWT)
+          this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
         } else {
-          this.toastr.error('PartyCode not found in Account Master', result.Message ? result.Message : '', {
+          this.toastr.error('Design Code not found', result.Message ? result.Message : '', {
             timeOut: 3000,
           })
         }
