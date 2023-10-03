@@ -8,6 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 import { DiamondSalesorderComponent } from './diamond-salesorder/diamond-salesorder.component';
 import { DiamondQuotationComponent } from './diamond-quotation/diamond-quotation.component';
 import { JobCardComponent } from './job-card/job-card.component';
+import { MetalIssueComponent } from './metal-issue/metal-issue.component';
+import { WaxProcessComponent } from './wax-process/wax-process.component';
 
 @Component({
   selector: 'app-transaction',
@@ -64,6 +66,12 @@ export class TransactionComponent implements OnInit {
         break;
       case 'Job Card':
         contents = JobCardComponent
+        break;
+      case 'Metal Issue (diamond Jewellery)':
+        contents = MetalIssueComponent
+        break;
+      case 'Waxing Process Issue':
+        contents = WaxProcessComponent
         break;
         //continue adding components using case then break
       default:
