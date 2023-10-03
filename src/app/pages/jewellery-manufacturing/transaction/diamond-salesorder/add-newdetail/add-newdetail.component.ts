@@ -38,6 +38,31 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+    
+  tableItems: any = [
+    {
+      slno: 1,
+      Category: 'value',
+      Brand: 'value',
+      Inventory: 'value',
+      Forecast: 'value',
+      Management: 'value',
+      Inventory2: 'value',
+      Forecast2: 'value',
+      Management2: 'value',
+    },
+    {
+      slno: 2,
+      Category: 'value',
+      Brand: 'value',
+      Inventory: 'value',
+      Forecast: 'value',
+      Management: 'value',
+      Inventory2: 'value',
+      Forecast2: 'value',
+      Management2: 'value',
+    },
+  ]
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
     designDescription: ['', [Validators.required]],
