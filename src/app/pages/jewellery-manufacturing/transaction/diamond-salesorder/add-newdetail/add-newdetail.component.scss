@@ -10,20 +10,24 @@
   background-color: #f5f2ed00;
   //font-family: sans-serif;
 }
-
+.rhs-table-1{
+}
 .rhs-table-1,
 td {
   border: 1px solid #636161;
 }
 
 .td-p-5 {
-  padding: 5px;
-  background: #cbccce;
+  padding-left: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #d2ebfa;
+  color: #434343;
 }
 
 .textboxcorner {
   background-color: #fff;
-  padding: 5px;
+  padding: 1px;
 }
 
 .statusbox {
