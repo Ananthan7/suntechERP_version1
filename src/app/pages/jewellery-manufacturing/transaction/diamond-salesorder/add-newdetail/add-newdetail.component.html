@@ -27,17 +27,15 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput 
-                                    (focusout)="designCodeValidate($event)" 
-                                    formControlName="designCode"/>
+                                    <input type="text" matInput (focusout)="designCodeValidate($event)"
+                                        formControlName="designCode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="DesignCodeData" 
+                                <master-search [MasterSearchData]="DesignCodeData"
                                     (newRowClick)="designCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput 
-                                    formControlName="designDescription"/>
+                                    <input type="text" matInput formControlName="designDescription" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -52,13 +50,13 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="StockCode"/>
+                                    <input type="text" matInput formControlName="StockCode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="DesignCodeData"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="StockCodeDesc"/>
+                                    <input type="text" matInput formControlName="StockCodeDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -66,10 +64,10 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Delivery Type :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 50%;">
-                                    <input type="text" matInput formControlName="DeliveryType"/>
+                                    <input type="text" matInput formControlName="DeliveryType" />
                                 </mat-form-field>
                                 <mat-form-field style="width: 40%;margin-left: 3px;">
-                                    <input type="text" matInput formControlName="DeliveryType2"/>
+                                    <input type="text" matInput formControlName="DeliveryType2" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Production Date :</label>
@@ -97,7 +95,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Remarks :</label>
                             <div class="col-md-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="Remarks"/>
+                                    <input type="text" matInput formControlName="Remarks" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -108,7 +106,7 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Branch Code:</label>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput/>
+                                        <input type="text" matInput />
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Cost :</label>
@@ -128,8 +126,8 @@
                         <div class="row mb-1">
                             <div class="col-md-12">
                                 <div class="form-check mt-1">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                    formControlName="StockBOM" id="flexCheckDefault">
+                                    <input class="form-check-input" type="checkbox" value="" formControlName="StockBOM"
+                                        id="flexCheckDefault">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Stock BOM
                                     </label>
@@ -141,13 +139,13 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Pcs :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="Pcs"/>
+                                        <input type="text" matInput formControlName="Pcs" />
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Metal Weight :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="MetalWeight"/>
+                                        <input type="text" matInput formControlName="MetalWeight" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -155,13 +153,13 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Rate :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="Rate"/>
+                                        <input type="text" matInput formControlName="Rate" />
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Stone Weight :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="StoneWeight"/>
+                                        <input type="text" matInput formControlName="StoneWeight" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -169,7 +167,7 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Amount :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="Amount"/>
+                                        <input type="text" matInput formControlName="Amount" />
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Gross Weight :</label>
@@ -205,22 +203,37 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-11 p-2">
+                <div class="col-md-12 p-2">
                     <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                         <mat-tab label="BOM Details">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                                        <dxo-paging [enabled]="false"></dxo-paging>
-                                        <dxo-editing mode="cell" [allowUpdating]="true">
+                                    <!-- table sectin starts -->
+                                    <dx-data-grid id="gridContainer" [dataSource]="tableItems" keyExpr="slno"
+                                        [allowColumnReordering]="true" [showBorders]="true">
+                                        <dxo-editing mode="row" [allowUpdating]="true" [allowAdding]="false">
                                         </dxo-editing>
-                                        <dxo-selection mode="multiple"></dxo-selection>
-                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                        <dxi-column *ngFor="let data of columnheads" dataField="{{ data }}" width="auto"
-                                            caption="{{ data }}" [allowEditing]="true" alignment="center"
-                                            backgroundcolor="#000">
+                                        <dxi-column dataField="slno" caption="#"> </dxi-column>
+                                        <dxi-column dataField="Category" caption="Category">
                                         </dxi-column>
+                                        <dxi-column dataField="Brand" caption="Brand"> </dxi-column>
+                                        <dxi-column [caption]="'January'" alignment="center">
+                                        </dxi-column>
+                                        <dxi-column dataField="Inventory" caption="Inventory">
+                                        </dxi-column>
+                                        <dxi-column dataField="Forecast" caption="Forecast">
+                                        </dxi-column>
+                                        <dxi-column dataField="Management" caption="Management">
+                                        </dxi-column>
+                                        <!-- <dxi-column [caption]="'February'" alignment="center">
+                                            <dxi-column dataField="Inventory2" caption="Inventory">
+                                            </dxi-column>
+                                            <dxi-column dataField="Forecast2" caption="Forecast">
+                                            </dxi-column>
+                                            <dxi-column dataField="Management2" caption="Management">
+                                            </dxi-column>
+                                        </dxi-column> -->
+                                        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
                                     </dx-data-grid>
                                 </div>
                             </div>
@@ -262,21 +275,21 @@
                         <mat-tab label="Summary">
                             <div class="row mt-2">
                                 <div class="col-md-5">
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-3 col-form-label">Metal Color</label>
-                                        <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label style="min-width: 50%;">Metal Color :</label>
+                                            <mat-form-field style="width: 40%;">
                                                 <input type="text" matInput />
                                             </mat-form-field>
                                         </div>
-                                        <label for="inputPassword" class="col-sm-3 col-form-label">Type</label>
-                                        <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
+                                        <div class="col-md-6">
+                                            <label style="min-width: 50%;">Type :</label>
+                                            <mat-form-field style="width: 40%;">
                                                 <input type="text" matInput />
                                             </mat-form-field>
                                         </div>
                                     </div>
-                                    <div class="row mb-1">
+                                    <div class="row">
                                         <label for="inputPassword" class="col-sm-3 col-form-label">Karat</label>
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
@@ -308,7 +321,7 @@
                                         <label for="inputPassword" class="col-sm-3 col-form-label">Category</label>
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="CATEGORY_CODE"/>
+                                                <input type="text" matInput formControlName="CATEGORY_CODE" />
                                             </mat-form-field>
                                         </div>
                                         <label for="inputPassword" class="col-sm-3 col-form-label">Sequence Code</label>
