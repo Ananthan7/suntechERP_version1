@@ -92,25 +92,6 @@
 .close-icon {
   color: white;
 }
-// ::ng-deep .mat-tab-list .mat-tab-labels {
-//   color: #09bdf3;
-//   background-color: #0f59b2;
-// }
-
-::ng-deep {
-    // .mat-tab-list .mat-tab-labels {
-    //     color: rgb(255, 255, 255);
-    //     background-color: #336b8b;
-    //   }
-    //   .mat-tab-list .mat-tab-label-content {
-    //     color: rgb(254, 254, 255);
-    //   }
-    // .mat-ink-bar{
-    //     color: #fff;
-    //     background-color: #fff !important;
-    // }
-}
-
 
 .box {
   padding-left: 35px;
@@ -223,5 +204,12 @@
     .cdk-overlay-container {
         position: fixed;
         z-index: 1070 !important;
+    }
+    .mat-flat-button{
+      line-height: 0px !important;
+      height: 30px !important;
+    }
+    .mat-tab-body-content{
+      overflow: hidden !important;
     }
 }

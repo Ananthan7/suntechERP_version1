@@ -411,7 +411,7 @@ export class DiamondSalesorderComponent implements OnInit {
   }
 
 
-  deleteClicked() {
+  deleteClicked():void {
 
   }
   //data settings

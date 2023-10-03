@@ -114,7 +114,7 @@ export class AddNewdetailComponent implements OnInit {
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
           this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
           this.diamondSalesDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
-          this.diamondSalesDetailForm.controls.CATEGORY_CODE.setValue(data.SubCategory_Code)
+          // this.diamondSalesDetailForm.controls.CATEGORY_CODE.setValue(data.SubCategory_Code)
 
           if(data.PCS == 0){
             this.diamondSalesDetailForm.controls.Pcs.setValue(1)
@@ -136,6 +136,13 @@ export class AddNewdetailComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
  
+  selectionChanged(data: any) {
+    console.log(data,'fireddddd');
+    
+    console.log(this.tableItems);
+    
+  }
+
   close() {
     this.activeModal.close();
   }
