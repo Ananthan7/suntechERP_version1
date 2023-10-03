@@ -14,6 +14,7 @@ import { MeltingProcessComponent } from './melting-process/melting-process.compo
 import { CADProcessingComponent } from './cad-processing/cad-processing.component';
 import { AddNewdetailComponent } from './diamond-salesorder/add-newdetail/add-newdetail.component';
 import { AddNewdiamondquotationComponent } from './diamond-quotation/add-newdiamondquotation/add-newdiamondquotation.component';
+import { WaxProcessComponent } from './wax-process/wax-process.component';
 
 
 
@@ -29,7 +30,8 @@ import { AddNewdiamondquotationComponent } from './diamond-quotation/add-newdiam
     MeltingProcessComponent,
     CADProcessingComponent,
     AddNewdetailComponent,
-    AddNewdiamondquotationComponent
+    AddNewdiamondquotationComponent,
+    WaxProcessComponent
     
   ],
   imports: [
