@@ -70,7 +70,7 @@ export class TransactionComponent implements OnInit {
       case 'Metal Issue (diamond Jewellery)':
         contents = MetalIssueComponent
         break;
-      case 'Waxing Process Issue':
+      case 'Wax Process':
         contents = WaxProcessComponent
         break;
         //continue adding components using case then break
