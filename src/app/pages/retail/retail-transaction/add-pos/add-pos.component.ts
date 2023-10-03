@@ -180,6 +180,7 @@ export class AddPosComponent implements OnInit {
 
   idTypeFilteredOptions!: Observable<any[]>;
   idTypeOptions: any[] = [''];
+  idTypeOptionList: any;
 
   exStockCodeFilteredOptions!: Observable<any[]>;
   exStockCodeOptions: any[] = [''];
@@ -436,6 +437,10 @@ export class AddPosComponent implements OnInit {
   countryMasterOptions!: Observable<any[]>;
   stateMaster: any = [];
   stateMasterOptions!: Observable<any[]>;
+
+  mobileCountryMaster: any = [];
+  mobileCountryMasterOptions!: Observable<any[]>;
+
   cityMaster: any = [];
   cityMasterOptions!: Observable<any[]>;
   nationalityMaster: any = [];
@@ -506,12 +511,12 @@ export class AddPosComponent implements OnInit {
       fcn_customer_mobile: ['', Validators.required],
       fcn_customer_name: ['', Validators.required],
       fcn_customer_id_number: ['', Validators.required],
-      fcn_customer_id_type: ['', Validators.required],
+      fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
     });
 
     this.vocDataForm = this.formBuilder.group({
       fcn_voc_no: ['', Validators.required],
-      sales_person: ['', Validators.required],
+      sales_person: ['', [Validators.required, this.autoCompleteValidator(() => this.salesPersonOptions, 'SALESPERSON_CODE')]],
       vocdate: ['', Validators.required],
     });
 
@@ -557,7 +562,7 @@ export class AddPosComponent implements OnInit {
 
 
     this.salesReturnForm = this.formBuilder.group({
-      fcn_returns_fin_year: ['', Validators.required],
+      fcn_returns_fin_year: ['', [Validators.required, this.autoCompleteValidator(() => this.options_year)]],
       fcn_returns_branch: ['', Validators.required],
       fcn_returns_voc_type: ['', Validators.required],
       fcn_returns_voc_no: ['', Validators.required],
@@ -569,7 +574,7 @@ export class AddPosComponent implements OnInit {
 
     this.exchangeForm = this.formBuilder.group({
       fcn_exchange_division: ['', Validators.required],
-      fcn_exchange_item_code: ['', Validators.required],
+      fcn_exchange_item_code: ['', [Validators.required, this.autoCompleteValidator(() => this.exStockCodeOptions)]],
       fcn_exchange_item_desc: ['', Validators.required],
       fcn_exchange_pcs: [{ value: 0 }],
       // fcn_exchange_pcs: ['', Validators.required],
@@ -593,23 +598,28 @@ export class AddPosComponent implements OnInit {
       fcn_customer_detail_name: ['', Validators.required],
       fcn_customer_detail_fname: ['', Validators.required],
       fcn_customer_detail_mname: [''],
-      fcn_customer_detail_lname: [''],
+      fcn_customer_detail_lname: ['', Validators.required],
       fcn_cust_detail_gender: ['', Validators.required],
       fcn_cust_detail_marital_status: [''],
-      fcn_cust_detail_dob: [''],
-      fcn_cust_detail_idType: [''],
+      fcn_cust_detail_dob: ['', 
+      [Validators.required]
+    ],
+      fcn_cust_detail_idType: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
       fcn_cust_detail_phone: ['', Validators.required],
       fcn_cust_detail_phone2: [''],
       fcn_cust_detail_email: ['', [Validators.email]],
-      // fcn_cust_detail_address: ['', Validators.required],
-      fcn_cust_detail_address: [''],
-      fcn_cust_detail_country: [''],
-      fcn_cust_detail_city: [''],
-      fcn_cust_detail_nationality: ['', Validators.required],
-      fcn_cust_detail_idcard: [''],
-      fcn_cust_detail_occupation: [''],
+      fcn_cust_detail_address: ['', Validators.required],
+      // fcn_cust_detail_address: [''],
+      fcn_cust_detail_country: ['', [Validators.required, this.autoCompleteValidator(() => this.countryMaster, 'CODE')]],
+      fcn_cust_detail_city: ['', [this.autoCompleteValidator(() => this.cityMaster, 'CODE')]],
+      fcn_cust_detail_nationality: ['', [Validators.required, this.autoCompleteValidator(() => this.nationalityMaster, 'CODE')]],
+      fcn_cust_detail_idcard: ['', Validators.required],
+      fcn_cust_detail_designation: ['', Validators.required],
       fcn_cust_detail_company: [''],
-      fcn_cust_detail_state: [''],
+      fcn_cust_detail_state: ['', [this.autoCompleteValidator(() => this.stateMaster, 'CODE')]],
+
+      fcn_mob_code: ['', [Validators.required ]],
+
     });
 
     /** Start Receipt forms  */
@@ -727,6 +737,33 @@ export class AddPosComponent implements OnInit {
       }
     });
     // this.getReceiptModes();
+
+    this.customerDetailForm.get('fcn_cust_detail_idType')?.valueChanges.subscribe((val) => {
+      const res = this.idTypeOptionList.find((data: any) => data.CODE === val);
+      const validations = [Validators.required];
+      if (res) {
+        if (res?.MINDIGITS != 0)
+          validations.push(Validators.minLength(res.MINDIGITS));
+        if (res?.MAXDIGITS != 0)
+          validations.push(Validators.maxLength(res.MAXDIGITS));
+      }
+      this.addValidationsForForms(this.customerDetailForm, 'fcn_cust_detail_idcard', validations);
+
+    });
+    this.customerDataForm.get('fcn_customer_id_type')?.valueChanges.subscribe((val) => {
+      const res = this.idTypeOptionList.find((data: any) => data.CODE === val);
+      const validations = [Validators.required];
+      if (res) {
+        if (res?.MINDIGITS != 0)
+          validations.push(Validators.minLength(res.MINDIGITS));
+        if (res?.MAXDIGITS != 0)
+          validations.push(Validators.maxLength(res.MAXDIGITS));
+      }
+      this.addValidationsForForms(this.customerDataForm, 'fcn_customer_id_number', validations);
+      this.addValidationsForForms(this.customerDetailForm, 'fcn_cust_detail_idcard', validations);
+
+    });
+
   }
   // async getAllCompanyParameters() {
   //   let map = new Map();
@@ -915,8 +952,8 @@ export class AddPosComponent implements OnInit {
         this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
           this.dummyDateCheck(posCustomer.DATE_OF_BIRTH)
         );
-        this.customerDetailForm.controls.fcn_cust_detail_occupation.setValue(
-          posCustomer.OCCUPATION
+        this.customerDetailForm.controls.fcn_cust_detail_designation.setValue(
+          posCustomer.DESIGNATION
         );
         this.customerDetailForm.controls.fcn_cust_detail_company.setValue(
           posCustomer.COMPANY
@@ -1608,7 +1645,7 @@ export class AddPosComponent implements OnInit {
         "VOCDATE": new Date().toISOString(),
         "BRANCH_CODE": this.strBranchcode,
         "REC_BRANCHCODE": REC_BRANCHCODE,
-        "YEARMONTH": this.baseYear || localStorage.getItem('YEAR') ,
+        "YEARMONTH": this.baseYear || localStorage.getItem('YEAR'),
         "RECEIPT_MODE": RECEIPT_MODE,
         "CURRENCY_CODE": this.comFunc.compCurrency,
         // "CURRENCY_RATE": this.comFunc.currencyRate ?? '1',
@@ -2448,7 +2485,10 @@ export class AddPosComponent implements OnInit {
           BLOOD_GROUP: this.customerDetails?.BLOOD_GROUP || '',
           NO_OF_CHILDREN: this.customerDetails?.NO_OF_CHILDREN || 0,
           ZODIAC_SIGN: this.customerDetails?.ZODIAC_SIGN || '',
-          DESIGNATION: this.customerDetails?.DESIGNATION || '',
+          DESIGNATION: 
+          this.customerDetailForm.value.fcn_cust_detail_designation
+          // this.customerDetails?.DESIGNATION
+           || '',
           LEVELFLAG: this.customerDetails?.LEVELFLAG || 0,
           INCOMERANGE: this.customerDetails?.INCOMERANGE || '',
           LAST_UPDATED_DATE:
@@ -2537,8 +2577,8 @@ export class AddPosComponent implements OnInit {
           AUTOCREATEMST: this.customerDetails?.AUTOCREATEMST || false,
           WUPMOBILECODE: this.customerDetails?.WUPMOBILECODE || '',
           WUPMOBILENO: this.customerDetails?.WUPMOBILENO || '',
-          OCCUPATION: this.customerDetailForm.value.fcn_cust_detail_occupation
-            //  || this.customerDetails?.OCCUPATION
+          OCCUPATION:
+            this.customerDetails?.OCCUPATION
             || '',
           ShowRoomAccessibility:
             this.customerDetails?.ShowRoomAccessibility || '',
@@ -2977,8 +3017,8 @@ export class AddPosComponent implements OnInit {
             this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
               this.dummyDateCheck(result.DATE_OF_BIRTH)
             );
-            this.customerDetailForm.controls.fcn_cust_detail_occupation.setValue(
-              result.OCCUPATION
+            this.customerDetailForm.controls.fcn_cust_detail_designation.setValue(
+              result.DESIGNATION
             );
             this.customerDetailForm.controls.fcn_cust_detail_company.setValue(
               result.COMPANY
@@ -3081,6 +3121,15 @@ export class AddPosComponent implements OnInit {
         )
       );
 
+    this.mobileCountryMaster = this.countryMaster.filter((data: any) => data.MOBILECOUNTRYCODE != '');
+    this.mobileCountryMasterOptions =
+      this.customerDetailForm.controls.fcn_mob_code.valueChanges.pipe(
+        startWith(''),
+        map((value) =>
+          this._filterMasters(this.mobileCountryMaster, value, 'MOBILECOUNTRYCODE', 'DESCRIPTION')
+        )
+      );
+
     const city = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('CITY MASTER')}`;
     //this.cityMaster = city;
 
@@ -3109,6 +3158,8 @@ export class AddPosComponent implements OnInit {
     console.log(this.comFunc.idMaster);
     var data = resp.map((t: any) => t.CODE);
     this.idTypeOptions = data;
+    this.idTypeOptionList = resp;
+
     this.idTypeFilteredOptions =
       this.customerDataForm.controls.fcn_customer_id_type.valueChanges.pipe(
         startWith(''),
@@ -4669,7 +4720,7 @@ export class AddPosComponent implements OnInit {
       this.exchangeForm.reset({
         fcn_exchange_item_code: _exchangeCode,
       });
-    }else{
+    } else {
       this.getStockforExchange();
     }
   }
@@ -4679,7 +4730,7 @@ export class AddPosComponent implements OnInit {
 
     let _exchangeCode = this.exchangeForm.value.fcn_exchange_item_code;
     console.log(_exchangeCode);
-    
+
     // this.exchangeForm.reset({
     //   fcn_exchange_item_code: _exchangeCode,
     // });
@@ -4692,14 +4743,14 @@ export class AddPosComponent implements OnInit {
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         this.renderer.selectRootElement('#fcn_exchange_gross_wt').focus();
-        
-        _exchangeItem = resp.response.filter((i: any) =>  i.STOCK_CODE == _exchangeCode.toUpperCase());
-        
+
+        _exchangeItem = resp.response.filter((i: any) => i.STOCK_CODE == _exchangeCode.toUpperCase());
+
         this._exchangeItemchange = _exchangeItem[0];
         _karatCode = _exchangeItem[0].KARAT_CODE;
         _karatRateRec = this.karatRateDetails.filter(function (i: any) {
           return i.KARAT_CODE == _karatCode;
-        }); 
+        });
 
         this.exchangeForm.controls['fcn_exchange_division'].setValue(
           _exchangeItem[0].DIVISION_CODE
@@ -4779,16 +4830,29 @@ export class AddPosComponent implements OnInit {
       }
     });
   }
-  addValidationsForForms(form: FormGroup, controlsArr: string[]) {
-    controlsArr.forEach(controlName => {
-      const control = form.get(controlName);
-      if (control) {
-        control.setValidators([Validators.required]);
-        control.updateValueAndValidity();
-      }
-    });
+  // addValidationsForForms(form: FormGroup, controlsArr: string[], validations) {
+  //   controlsArr.forEach(controlName => {
+  //     const control = form.get(controlName);
+  //     if (control) {
+  //       control.setValidators([Validators.required]);
+  //       control.updateValueAndValidity();
+  //     }
+  //   });
+  // }
+
+  addValidationsForForms(form: FormGroup, ctrlName: any, validations: any) {
+    const control = form.get(ctrlName);
+    if (control) {
+      control.setValidators(validations);
+      control.updateValueAndValidity();
+    }
   }
-  
+
+  // addValidationsForForms(form: any, ctrlName: any, validations: any) {
+  //   this[form].controls[ctrlName].setValidators(validations);
+  //   this[form].controls[ctrlName].updateValueAndValidity();
+  // }
+
   // removeValidationsForforms(form: any, controlsArr: any) {
   //   controlsArr.map((data: any) => {
   //     this[form].controls[data].clearValidators();
@@ -6434,7 +6498,10 @@ export class AddPosComponent implements OnInit {
           BLOOD_GROUP: this.customerDetails?.BLOOD_GROUP || '',
           NO_OF_CHILDREN: this.customerDetails?.NO_OF_CHILDREN || 0,
           ZODIAC_SIGN: this.customerDetails?.ZODIAC_SIGN || '',
-          DESIGNATION: this.customerDetails?.DESIGNATION || '',
+          DESIGNATION: 
+          this.customerDetailForm.value.fcn_cust_detail_designation
+          // this.customerDetails?.DESIGNATION 
+          || '',
           LEVELFLAG: this.customerDetails?.LEVELFLAG || 0,
           INCOMERANGE: this.customerDetails?.INCOMERANGE || '',
           LAST_UPDATED_DATE:
@@ -6523,8 +6590,9 @@ export class AddPosComponent implements OnInit {
           AUTOCREATEMST: this.customerDetails?.AUTOCREATEMST || false,
           WUPMOBILECODE: this.customerDetails?.WUPMOBILECODE || '',
           WUPMOBILENO: this.customerDetails?.WUPMOBILENO || '',
-          OCCUPATION: this.customerDetailForm.value.fcn_cust_detail_occupation
-            // || this.customerDetails?.OCCUPATION
+          OCCUPATION:
+          //  this.customerDetailForm.value.fcn_cust_detail_designation
+             this.customerDetails?.OCCUPATION
             || '',
           ShowRoomAccessibility:
             this.customerDetails?.ShowRoomAccessibility || '',
@@ -6686,9 +6754,9 @@ export class AddPosComponent implements OnInit {
   }
 
   addNew() {
-    localStorage.setItem('AddNewFlag','1')
+    localStorage.setItem('AddNewFlag', '1')
     location.reload();
-    
+
     // if (this.router.url.includes('edit-pos')) this.router.navigateByUrl('/add-pos');
     // if (this.router.url.includes('view-pos')) this.router.navigateByUrl('/add-pos');
     // else location.reload();
@@ -6700,7 +6768,7 @@ export class AddPosComponent implements OnInit {
     //   this.router.navigate([currentUrl]);
     // });
   }
-  cancelBill(){
+  cancelBill() {
     location.reload();
   }
   backToList() {
@@ -9717,4 +9785,25 @@ export class AddPosComponent implements OnInit {
     else
       return date;
   }
+
+  autoCompleteValidator(optionsProvider: any, field: any = null) {
+    return (control: AbstractControl) => {
+      const options = optionsProvider();
+      const inputValue = control.value;
+      if (!options || !Array.isArray(options)) {
+        return null;
+      }
+      if (field == null) {
+        if (control.value && options.length > 0 && !options.includes(control.value)) {
+          return { notInOptions: true };
+        }
+      } else {
+        if (inputValue && options.length > 0 && !options.some(option => option[field] === inputValue)) {
+          return { notInOptions: true };
+        }
+      }
+      return null;
+    };
+  }
+
 }

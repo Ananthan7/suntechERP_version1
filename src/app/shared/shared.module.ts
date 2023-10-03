@@ -62,6 +62,7 @@ import {MatRadioButton, MatRadioModule} from '@angular/material/radio';
 
 import { MatCardModule } from '@angular/material/card';
 import { FocusOnLoadDirective } from './directives/focus-on-load.directive';
+import { NoEmptySpaceDirective } from './directives/no-empty-space.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -81,6 +82,7 @@ import { FocusOnLoadDirective } from './directives/focus-on-load.directive';
     DecimalInputDirective,
     DateValidationDirective,
     FocusOnLoadDirective,
+    NoEmptySpaceDirective
   ],
   imports: [
     CommonModule,
@@ -140,6 +142,7 @@ import { FocusOnLoadDirective } from './directives/focus-on-load.directive';
     NumericInputDirective,
     DateValidationDirective,
     FocusOnLoadDirective,
+    NoEmptySpaceDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,
