@@ -59,22 +59,45 @@
                                             <i class="fa fa-angle-right"></i></button>
                                     </div>
                                 </div>
-                                <dx-data-grid width="100%" #gridContainer id="gridContainer"
+                                <dx-data-grid width="100%" #gridContainer
+                                    id="gridContainer" [allowColumnReordering]="true"
+                                    [dataSource]="orderedItems"
+                                    [showColumnLines]="true"
+                                    [showRowLines]="true"
+                                    [showBorders]="true"
+                                    [columnAutoWidth]="true">
+                                    <dxo-filter-row visible="true"></dxo-filter-row>
+                                    <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
+                                    <dxo-paging [enabled]="true"
+                                        [pageSize]="pageSize"
+                                        [pageIndex]="pageIndex"></dxo-paging>
+                                    <!-- <dxo-pager [showPageSizeSelector]="true"
+                                            [allowedPageSizes]="[10, 20, 30, 40, 50, 100]"></dxo-pager> -->
+                                    <!-- <dxo-selection mode="single"></dxo-selection> -->
+                                    <dxi-column type="buttons" caption="Edit | View"
+                                        [fixed]="true" fixedPosition="left">
+                                        <dxi-button [onClick]="editRowDetails" icon="fa fa-edit"></dxi-button>
+                                        <dxi-button [onClick]="viewRowDetails" icon="fa fa-eye"></dxi-button>
+                                    </dxi-column>
+                                    <dxi-column *ngFor="let data of orderedItemsHead"
+                                        dataField="{{data}}"
+                                        caption="{{data}}" >
+                                    </dxi-column>
+                                    <dxo-summary>
+                                    </dxo-summary>
+                                </dx-data-grid>
+                                <!-- <dx-data-grid width="100%" #gridContainer id="gridContainer"
                                     [allowColumnReordering]="true" [dataSource]="orderedItems" keyExpr="Id"
                                     [showColumnLines]="true" [showRowLines]="true" [showBorders]="true"
                                     [remoteOperations]="true" [columnAutoWidth]="true">
-                                    <!-- <dxo-filter-row visible="true"></dxo-filter-row> -->
-                                    <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
                                     <dxo-paging [pageSize]="pageSize" [pageIndex]="pageIndex"></dxo-paging>
-                                    <!-- <dxo-pager [showPageSizeSelector]="true"
-                                            [allowedPageSizes]="[10, 20, 30, 40, 50, 100]"></dxo-pager> -->
+                                   
                                     <dxo-selection mode="single"></dxo-selection>
                                     <dxi-column type="buttons" caption="Edit | View" [fixed]="true"
                                         fixedPosition="left">
                                         <dxi-button [onClick]="editRowDetails" icon="fa fa-edit"></dxi-button>
                                         <dxi-button [onClick]="viewRowDetails" icon="fa fa-eye"></dxi-button>
                                     </dxi-column>
-                                    <!-- <dxi-column dataField="BRANCH_CODE"caption="Branch" alignment="center" ></dxi-column> -->
                                     <dxi-column dataField="VOCNO" caption="VocNo" alignment="left"></dxi-column>
                                     <dxi-column dataField="VOCDATE" caption="Date" alignment="left"></dxi-column>
                                     <dxi-column dataField="PARTYNAME" caption="Customer" alignment="left"></dxi-column>
@@ -83,7 +106,7 @@
                                         alignment="right"></dxi-column>
                                     <dxo-summary>
                                     </dxo-summary>
-                                </dx-data-grid>
+                                </dx-data-grid> -->
                             </div>
                         </div>
                     </div>
