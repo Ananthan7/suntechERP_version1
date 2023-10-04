@@ -21,5 +21,7 @@ export class RetailComponent implements OnInit {
     //use: to get menu title from queryparams
     this.menuTitle = this.CommonService.getTitleName()
   }
-
+  menuClicked(event:any){
+    this.menuTitle = event.MENU_MODULE
+  }
 }
