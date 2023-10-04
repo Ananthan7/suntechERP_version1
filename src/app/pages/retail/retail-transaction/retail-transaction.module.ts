@@ -12,6 +12,7 @@ import { NewPosEntryComponent } from './new-pos-entry/new-pos-entry.component';
 import { AddPaymentComponent } from './common/add-payment/add-payment.component';
 import { PrintInvoiceComponent } from './common/print-invoice/print-invoice.component';
 import { AddPosComponent } from './add-pos/add-pos.component';
+import { PosCurrencyReceiptComponent } from './pos-currency-receipt/pos-currency-receipt.component';
 
 
 
@@ -26,6 +27,7 @@ import { AddPosComponent } from './add-pos/add-pos.component';
     AddPaymentComponent,
     PrintInvoiceComponent,
     AddPosComponent,
+    PosCurrencyReceiptComponent,
   ],
   imports: [
     CommonModule,
