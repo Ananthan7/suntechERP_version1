@@ -31,8 +31,15 @@
             </div>
             <dx-data-grid id="gridContainer" [dataSource]="userList" 
                 [columnAutoWidth]="true" [showRowLines]="true"
-                [showBorders]="true">
-                <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="true">
+                [showBorders]="true" (onEditingStart)="logEvent('EditingStart')"
+                (onRowUpdated)="logEvent('RowUpdated')"
+                (onRowRemoved)="logEvent('RowRemoved')"
+                (onSaved)="logEvent('Saved')"
+                >
+                <dxo-editing mode="row" [allowUpdating]="true" 
+                [allowAdding]="true"
+                [allowDeleting]="true"
+                >
                 </dxo-editing>
                 <dxi-column dataField="slno" caption="#"> </dxi-column>
                 <dxi-column dataField="SPID" caption="SP ID">
@@ -42,7 +49,7 @@
                     <dxo-lookup [dataSource]="stateDataSource" displayExpr="Name" valueExpr="ID">
                     </dxo-lookup>
                 </dxi-column>
-                <dxi-column dataField="Inventory" caption="Module Type">
+                <dxi-column dataField="Inventory" dataType="date">
                 </dxi-column>
                 <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
             </dx-data-grid>

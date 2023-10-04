@@ -39,6 +39,10 @@ export class ValidationSplistComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  logEvent(eventName:any) {
+    console.log(eventName,'eventName');
+    
+  }
 
   saveData() {
     if (this.dataForm.invalid) {
