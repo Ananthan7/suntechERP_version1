@@ -34,7 +34,8 @@ export class HorizontaltopbarComponent implements OnInit {
   cookieValue: any;
   countryName: any;
   valueset: any;
-
+  userName: any = localStorage.getItem('username')
+  userBranch: any = localStorage.getItem('userbranch')
   /**
    * Language Listing
    */

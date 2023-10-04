@@ -1,7 +1,7 @@
-<div class="container-fluid pt-3">
+<div class="pt-3">
     <div>
         <!-- header section starts -->
-        <div class="border-bottom d-flex justify-content-between">
+        <div class="border-bottom d-flex justify-content-between ps-2 pe-2">
             <h5>Diamond Sales Order</h5>
             <button type="button" class="btn btn-close close-btn" (click)="close()">
                 <i class="feather icon-x close-icon"></i>
@@ -11,17 +11,18 @@
         <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteClicked()"></modal-header>
     </div>
     <!-- content section -->
-    <div class="card mt-1 p-2">
+    <div class="card m-1 p-2">
         <mat-tab-group>
+           <!-- Party Details section starts -->
             <mat-tab label="Party Details">
                 <div style="width: 96%;" class="p-3">
-                    <!-- form starts -->
-                    <form [formGroup]="diamondSalesOrderForm">
+                    <!-- Party Details form starts -->
+                    <form [formGroup]="PartyDetailsOrderForm">
                         <div class="row">
                             <div class="col-sm-12 col-md-4 col-lg-4">
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Voucher Type:</label>
+                                        Voucher Type :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput formControlName="voucherType" />
@@ -33,7 +34,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Voucher Date:</label>
+                                        Voucher Date :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <!-- <mat-label>Date Of Birth</mat-label> -->
@@ -47,7 +48,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">Order
-                                        Type:</label>
+                                        Type :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput readonly
@@ -61,7 +62,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Party Code:</label>
+                                        Party Code :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput 
@@ -75,7 +76,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Salesman:</label>
+                                        Salesman :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput (change)="SalesmanChange($event)"
@@ -88,7 +89,7 @@
                                 </div>
                                 <div class="row" *ngIf="false">
                                     <label class="col-sm-4 col-form-label">
-                                        Prosp Origin:</label>
+                                        Prosp Origin :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput (change)="SalesmanChange($event)"
@@ -104,7 +105,8 @@
                                 <div class="row">
                                     <section class="col-sm-4 example-section">
                                         <mat-checkbox formControlName="FixedMetal" class="example-margin"
-                                            class="col-sm-4">Fixed Metal
+                                            class="col-sm-4">
+                                            <label style="font-size: 0.9em;padding-top: 8px;">Fixed Metal</label>
                                         </mat-checkbox>
                                     </section>
                                     <span class="col-sm-8">
@@ -121,7 +123,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Party Currency:</label>
+                                        Party Currency :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput maxlength="6" formControlName="partyCurrencyType" />
@@ -136,7 +138,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Item Currency:</label>
+                                        Item Currency :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput maxlength="6" formControlName="ItemCurrency" />
@@ -151,7 +153,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Delivery Type:</label>
+                                        Delivery Type :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput maxlength="6" formControlName="VoucherType" />
@@ -163,7 +165,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Delivery On:</label>
+                                        Delivery On :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput maxlength="6" formControlName="VoucherType" />
@@ -178,7 +180,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        AMC %:</label>
+                                        AMC % :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput maxlength="6" formControlName="VoucherType" />
@@ -350,25 +352,25 @@
             </mat-tab>
         </mat-tab-group>
     </div>
-    <!-- ADD Details section  -->
-    <div class="card p-3">
+    <!-- Details section starts -->
+    <div class="card m-1 p-3">
         <mat-tab-group style="width: 100%;">
             <mat-tab label="Details">
                 <div class="col-11">
                     <div class="d-flex ps-2">
                         <div class="p-1">
                             <button type="button" mat-flat-button color="primary" (click)="addNewDetail()">
-                                Add
+                                <i class="fa fa-plus" style="font-size: 11px;"></i>
                             </button>
                         </div>
                         <div class="p-1">
                             <button type="button" mat-flat-button color="primary">
-                                Delete
+                                <i class="fa fa-trash" style="font-size: 11px;"></i>
                             </button>
                         </div>
                         <div class="p-1">
                             <button type="button" mat-flat-button color="primary">
-                                <i class="fa fa-calendar"></i>
+                                <i class="fa fa-file"></i>
                             </button>
                         </div>
                     </div>

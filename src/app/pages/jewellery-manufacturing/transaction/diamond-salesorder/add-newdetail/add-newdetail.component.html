@@ -1,7 +1,7 @@
 <div>
     <!-- header section starts -->
     <div class="border-bottom d-flex justify-content-between p-2">
-        <h5>Sales Order Details</h5>
+        <h5>Diamond Sales Order Detail</h5>
         <button type="button" class="btn btn-close close-btn" (click)="close()">
             <i class="feather icon-x close-icon"></i>
         </button>
@@ -25,18 +25,20 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput (focusout)="designCodeValidate($event)"
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 90%;">
+                                    <input type="text" matInput 
+                                        placeholder="Code"
+                                        (focusout)="designCodeValidate($event)"
                                         formControlName="designCode" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-5">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="designDescription" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="DesignCodeData"
                                     (newRowClick)="designCodeSelected($event)"></master-search>
-                            </div>
-                            <div class="col-md-4">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="designDescription" />
-                                </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -48,16 +50,16 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <mat-form-field style="width: 70%;">
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 90%;">
                                     <input type="text" matInput formControlName="StockCode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="DesignCodeData"></master-search>
                             </div>
-                            <div class="col-md-4">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-md-5">
+                                <mat-form-field style="width: 80%;">
                                     <input type="text" matInput formControlName="StockCodeDesc" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="DesignCodeData"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -70,7 +72,7 @@
                                     <input type="text" matInput formControlName="DeliveryType2" />
                                 </mat-form-field>
                             </div>
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Production Date :</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Production Date:</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
                                     <input matInput DateValidation [matDatepicker]="ProductionOn"

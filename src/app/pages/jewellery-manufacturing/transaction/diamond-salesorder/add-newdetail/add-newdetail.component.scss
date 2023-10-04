@@ -21,13 +21,13 @@ td {
   padding-left: 2px;
   font-size: 11px;
   font-weight: 600;
-  background: #d2ebfa;
+  background: #e5e6e4;
   color: #434343;
 }
 
 .textboxcorner {
   background-color: #fff;
-  padding: 1px;
+  padding: 4px;
 }
 
 .statusbox {
@@ -45,9 +45,13 @@ td {
   padding-top: 8px;
   // margin-top: 20px;
 }
-// .col-form-label{
-//   padding: 0px !important;
-// }
+.col-form-label{
+  font-size: 0.8em !important;
+  padding-top: 15px !important;
+}
+.form-check-label{
+  font-size: 0.8em !important;
+}
 .footers {
   padding-top: 150px;
 }
@@ -71,7 +75,7 @@ td {
   }
   .mat-form-field{
     height: 25px !important;
-    margin-bottom: 4px !important;
+    margin-bottom: 6px !important;
   }
   // .col-form-label{
   //   padding: 0px !important;

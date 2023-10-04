@@ -99,6 +99,7 @@ export const MENU: MenuItem[] = [
         id: 3,
         label: 'Operational',
         icon: 'settings',
+        link: '/operationals',
     },
     {
         id: 4,

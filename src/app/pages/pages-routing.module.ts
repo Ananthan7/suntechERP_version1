@@ -14,6 +14,10 @@ const routes: Routes = [
     loadChildren: () => import('../pages/modulelist/modulelist.module').then(m => m.ModulelistModule)
   },
   {
+    path: 'operationals',
+    loadChildren: () => import('../pages/operationals/operationals.module').then(m => m.OperationalsModule)
+  },
+  {
     path: 'jewellery-manufacturing',
     loadChildren: () => import('../pages/jewellery-manufacturing/jewellery-manufacturing.module').then(m => m.JewelleryManufacturingModule)
   },
