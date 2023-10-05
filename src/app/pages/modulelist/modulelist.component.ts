@@ -31,7 +31,6 @@ export class ModulelistComponent implements OnInit {
   setVoctypeMaster(){
     let branch = localStorage.getItem('userbranch')
     this.inDb.getAllData('VocTypeMaster').subscribe((data) => {
-      console.log(data,'data');
       if (data.length == 0 || data.length == 1) {
         this.indexedApiService.getVocTypeMaster(branch);
       }
