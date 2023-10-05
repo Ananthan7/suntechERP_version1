@@ -54,7 +54,7 @@ export class TransactionComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
-  //  open Jobcard in modal
+  //  open forms in modal
   openModalView(data?: any) {
     let contents;
     switch(this.menuTitle) {
@@ -75,7 +75,9 @@ export class TransactionComponent implements OnInit {
         break;
         //continue adding components using case then break
       default:
-        alert('Module Not found')
+        this.snackBar.open('No Response Found!', 'Close', {
+          duration: 3000, 
+        });
     }
     
     const modalRef: NgbModalRef = this.modalService.open(contents, {
@@ -136,10 +138,10 @@ export class TransactionComponent implements OnInit {
         // "FILTER": {
         //   "YEARMONTH": localStorage.getItem('YEAR') || '',
         //   "BRANCHCODE": this.CommonService.branchCode,
-        //   "VOCTYPE": "PCR"
+        //   "VOCTYPE": ""
         // },
         "TRANSACTION": {
-          "VOCTYPE": "PCR",
+          "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
         }
       }
     }

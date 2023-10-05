@@ -5,18 +5,11 @@
   padding: 11.5px;
   margin: 0;
 }
-.form-control {
-  border-radius: 0 !important;
-  border: none !important;
-  border-bottom: 1px solid #d4d5d6 !important;
-  background: transparent;
-  // //font-family: sans-serif;
+.col-form-label{
+  font-size: 0.8em !important;
+  padding-top: 15px !important;
 }
-.form-select {
-  border-bottom: 1px solid #d4d5d6 !important;
-  background-color: #f5f2ed00;
-  //font-family: sans-serif;
-}
+
 .cancel-button {
   border: 2px solid #012c57;
   font-weight: 500;
@@ -92,25 +85,6 @@
 .close-icon {
   color: white;
 }
-// ::ng-deep .mat-tab-list .mat-tab-labels {
-//   color: #09bdf3;
-//   background-color: #0f59b2;
-// }
-
-::ng-deep {
-    // .mat-tab-list .mat-tab-labels {
-    //     color: rgb(255, 255, 255);
-    //     background-color: #336b8b;
-    //   }
-    //   .mat-tab-list .mat-tab-label-content {
-    //     color: rgb(254, 254, 255);
-    //   }
-    // .mat-ink-bar{
-    //     color: #fff;
-    //     background-color: #fff !important;
-    // }
-}
-
 
 .box {
   padding-left: 35px;
@@ -223,5 +197,12 @@
     .cdk-overlay-container {
         position: fixed;
         z-index: 1070 !important;
+    }
+    .mat-flat-button{
+      line-height: 0px !important;
+      height: 27px !important;
+    }
+    .mat-tab-body-content{
+      overflow: hidden !important;
     }
 }

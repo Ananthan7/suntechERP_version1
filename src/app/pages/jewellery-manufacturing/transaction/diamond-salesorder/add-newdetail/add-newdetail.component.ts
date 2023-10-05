@@ -103,18 +103,34 @@ export class AddNewdetailComponent implements OnInit {
   }
   /**use: design code change fn to fetch data with design code */
   designCodeValidate(event: any) {
+    // 'GetDesignStnmtlDetailNet'
     if (event.target.value == '') return
     this.snackBar.open('Loading...')
-    let API = `DesignMaster/GetDesignMasterDetails/${event.target.value}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let API = `GetDesignStnmtlDetailNet`
+    let postData = {
+      "Design_Code": event.target.value || "N",
+      "strDesign_Stock": "N",
+      "strComponent": "N",
+      "strColorSet": "N",
+      "strMEtalColor": "N",
+      "strStockComp": ""
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,postData)
       .subscribe((result) => {
         this.snackBar.dismiss()
         if (result.response) {
-          let data = result.response
+          let data = result.Table1
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
           this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
           this.diamondSalesDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
-          this.diamondSalesDetailForm.controls.CATEGORY_CODE.setValue(data.SubCategory_Code)
+          this.diamondSalesDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
+          this.diamondSalesDetailForm.controls.COLOR.setValue(data.COLOR)
+          this.diamondSalesDetailForm.controls.KARAT_CODE.setValue(data.KARAT_CODE)
+          this.diamondSalesDetailForm.controls.PURITY.setValue(data.PURITY)
+          this.diamondSalesDetailForm.controls.SUPPLIER_CODE.setValue(data.SUPPLIER_CODE)
+          this.diamondSalesDetailForm.controls.SEQ_CODE.setValue(data.SEQ_CODE)
+          this.diamondSalesDetailForm.controls.BRAND_CODE.setValue(data.BRAND_CODE)
+          this.diamondSalesDetailForm.controls.TYPE_CODE.setValue(data.TYPE_CODE)
 
           if(data.PCS == 0){
             this.diamondSalesDetailForm.controls.Pcs.setValue(1)
@@ -136,6 +152,13 @@ export class AddNewdetailComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
  
+  selectionChanged(data: any) {
+    console.log(data,'fireddddd');
+    
+    console.log(this.tableItems);
+    
+  }
+
   close() {
     this.activeModal.close();
   }

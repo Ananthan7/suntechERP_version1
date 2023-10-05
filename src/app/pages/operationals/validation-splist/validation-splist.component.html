@@ -1,0 +1,60 @@
+<!-- tab content section starts -->
+<div class="col-md-11 col-sm-12">
+    <div class="card">
+        <div class="card-body" *ngIf="isViewForm">
+            <!-- content -->
+            <form [formGroup]="dataForm" (ngSubmit)="saveData()">
+                <div class="container pt-3">
+                    <div class="row">
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-11 col-sm-12">
+                            <!-- button section starts-->
+                            <div class="buttonsection me-5">
+                                <button type="button" class="btn btn-outline-info">
+                                    <span>Cancel</span></button>
+                                <button type="submit" *ngIf="!saveEditFlag" class="btn savebtn ms-3">
+                                    <span>Save</span></button>
+                                <button type="button" *ngIf="saveEditFlag" class="btn savebtn ms-3">
+                                    <span>Edit & Save</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div> <!-- table sectin starts -->
+        <app-loader [isLoading]="isLoading"></app-loader>
+        <div class="col-md-11 col-sm-12 p-2" *ngIf="!isViewForm">
+            <div class="row pt-2">
+                <h5>Validation SP List</h5>
+            </div>
+            <dx-data-grid id="gridContainer" [dataSource]="userList" 
+                [columnAutoWidth]="true" [showRowLines]="true"
+                [showBorders]="true" (onEditingStart)="logEvent('EditingStart')"
+                (onRowUpdated)="logEvent('RowUpdated')"
+                (onRowRemoved)="logEvent('RowRemoved')"
+                (onSaved)="logEvent('Saved')"
+                >
+                <dxo-editing mode="row" [allowUpdating]="true" 
+                [allowAdding]="true"
+                [allowDeleting]="true"
+                >
+                </dxo-editing>
+                <dxi-column dataField="slno" caption="#"> </dxi-column>
+                <dxi-column dataField="SPID" caption="SP ID">
+                </dxi-column>
+                <dxi-column dataField="SPName" caption="SP Name"> </dxi-column>
+                <dxi-column dataField="ModuleName" caption="Module Name"> </dxi-column>
+                <dxi-column dataField="ModuleTYPE" caption="Module TYPE">
+                    <dxo-lookup [dataSource]="stateDataSource" displayExpr="Name" valueExpr="ID">
+                    </dxo-lookup>
+                </dxi-column>
+                <!-- <dxi-column dataField="date" dataType="date"> -->
+                <!-- </dxi-column> -->
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            </dx-data-grid>
+        </div>
+
+    </div>
+</div>

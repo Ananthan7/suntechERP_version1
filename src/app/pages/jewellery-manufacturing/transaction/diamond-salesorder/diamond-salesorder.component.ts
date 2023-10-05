@@ -89,7 +89,7 @@ export class DiamondSalesorderComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  diamondSalesOrderForm: FormGroup = this.formBuilder.group({
+  PartyDetailsOrderForm: FormGroup = this.formBuilder.group({
     voucherType: ['', [Validators.required]],
     voucherDESC: [''],
     voucherDate: ['', [Validators.required]],
@@ -118,18 +118,18 @@ export class DiamondSalesorderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.diamondSalesOrderForm.controls.voucherDate.setValue(this.currentDate)
-    this.diamondSalesOrderForm.controls.DeliveryOnDate.setValue(this.currentDate)
-    this.diamondSalesOrderForm.controls.voucherType.setValue(this.commonService.getqueryParamVocType())
+    this.PartyDetailsOrderForm.controls.voucherDate.setValue(this.currentDate)
+    this.PartyDetailsOrderForm.controls.DeliveryOnDate.setValue(this.currentDate)
+    this.PartyDetailsOrderForm.controls.voucherType.setValue(this.commonService.getqueryParamVocType())
     this.getRateType()
   }
   getRateType() {
     let data = this.commonService.RateTypeMasterData.filter((item: any) => item.DIVISION_CODE == 'G' && item.DEFAULT_RTYPE == 1)
 
     if (data[0].WHOLESALE_RATE)
-      this.diamondSalesOrderForm.controls.wholeSaleRate.setValue(data[0].WHOLESALE_RATE)
+      this.PartyDetailsOrderForm.controls.wholeSaleRate.setValue(data[0].WHOLESALE_RATE)
     if (data[0].RATE_TYPE)
-      this.diamondSalesOrderForm.controls.rateType.setValue(data[0].RATE_TYPE)
+      this.PartyDetailsOrderForm.controls.rateType.setValue(data[0].RATE_TYPE)
   }
 
   //party Code Change
@@ -143,14 +143,14 @@ export class DiamondSalesorderComponent implements OnInit {
         if (result.response) {
           let data = result.response
           if (data.CURRENCY_CODE) {
-            this.diamondSalesOrderForm.controls.partyCurrencyType.setValue(data.CURRENCY_CODE)
-            this.diamondSalesOrderForm.controls.ItemCurrency.setValue(data.CURRENCY_CODE)
-            this.diamondSalesOrderForm.controls.BillToAccountHead.setValue(data.ACCOUNT_HEAD)
-            this.diamondSalesOrderForm.controls.BillToAddress.setValue(data.ADDRESS)
+            this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data.CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data.CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data.ACCOUNT_HEAD)
+            this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data.ADDRESS)
 
             let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data.CURRENCY_CODE)
-            this.diamondSalesOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
-            this.diamondSalesOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+            this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+            this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
           }
         } else {
           this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
@@ -174,7 +174,7 @@ export class DiamondSalesorderComponent implements OnInit {
     let dy = date.getMonth()
     if (yr.toString().length > 4) {
       let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
-      this.diamondSalesOrderForm.controls.VoucherDate.setValue(new Date(date))
+      this.PartyDetailsOrderForm.controls.VoucherDate.setValue(new Date(date))
     }
   }
   addNewDetail() {
@@ -193,7 +193,7 @@ export class DiamondSalesorderComponent implements OnInit {
       // this.updateWorkerMaster()
       return
     }
-    if (this.diamondSalesOrderForm.invalid) {
+    if (this.PartyDetailsOrderForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
@@ -397,7 +397,7 @@ export class DiamondSalesorderComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.diamondSalesOrderForm.reset()
+                this.PartyDetailsOrderForm.reset()
                 this.tableData = []
                 this.close()
               }
@@ -411,37 +411,37 @@ export class DiamondSalesorderComponent implements OnInit {
   }
 
 
-  deleteClicked() {
+  deleteClicked():void {
 
   }
   //data settings
   OrderTypeSelected(event: any) {
-    this.diamondSalesOrderForm.controls.orderType.setValue(event.CODE)
+    this.PartyDetailsOrderForm.controls.orderType.setValue(event.CODE)
   }
   OrderTypeChange(event: any) {
     this.OrderTypeData.SEARCH_VALUE = event.target.value
   }
   PartyCodeSelected(event: any) {
-    this.diamondSalesOrderForm.controls.PartyCode.setValue(event.ACCODE)
+    this.PartyDetailsOrderForm.controls.PartyCode.setValue(event.ACCODE)
     this.partyCodeChange({ target: { value: event.ACCODE } })
   }
   PartyCodeChange(event: any) {
     this.PartyCodeData.SEARCH_VALUE = event.target.value
   }
   SalesmanSelected(event: any) {
-    this.diamondSalesOrderForm.controls.Salesman.setValue(event.SALESPERSON_CODE)
+    this.PartyDetailsOrderForm.controls.Salesman.setValue(event.SALESPERSON_CODE)
   }
   rateTypeSelected(event: any) {
-    this.diamondSalesOrderForm.controls.rateType.setValue(event.RATE_TYPE)
-    this.diamondSalesOrderForm.controls.rateTypeDESC.setValue(event.DESCRIPTION)
+    this.PartyDetailsOrderForm.controls.rateType.setValue(event.RATE_TYPE)
+    this.PartyDetailsOrderForm.controls.rateTypeDESC.setValue(event.DESCRIPTION)
   }
   itemCurrencySelected(event: any) {
-    this.diamondSalesOrderForm.controls.ItemCurrency.setValue(event.CURRENCY_CODE)
-    this.diamondSalesOrderForm.controls.ItemCurrencyRate.setValue(event.CONV_RATE)
+    this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(event.CURRENCY_CODE)
+    this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(event.CONV_RATE)
   }
   partyCurrencySelected(event: any) {
-    this.diamondSalesOrderForm.controls.partyCurrencyType.setValue(event.CURRENCY_CODE)
-    this.diamondSalesOrderForm.controls.partyCurrencyRate.setValue(event.CONV_RATE)
+    this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(event.CURRENCY_CODE)
+    this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(event.CONV_RATE)
   }
   SalesmanChange(event: any) {
     this.SalesmanData.SEARCH_VALUE = event.target.value

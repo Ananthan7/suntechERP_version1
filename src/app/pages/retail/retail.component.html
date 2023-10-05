@@ -1,5 +1,6 @@
 <!-- title menu section -->
-<app-menubar *ngIf="menuTitle != ''" [menuTitle]="menuTitle"></app-menubar>
+<app-menubar *ngIf="menuTitle != ''" [menuTitle]="menuTitle"
+    (subMenuChange)="menuClicked($event)"></app-menubar>
 <!-- content section starts -->
 <div class="row d-flex justify-content-between"
     style="min-height: 100vh !important;">

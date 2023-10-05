@@ -160,7 +160,7 @@ export class MasterComponent implements OnInit {
         //   "VOCTYPE": "PCR"
         // },
         "TRANSACTION": {
-          "VOCTYPE": "PCR",
+          "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
         }
       }
     }
