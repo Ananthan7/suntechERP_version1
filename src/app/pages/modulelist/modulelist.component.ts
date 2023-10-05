@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { IndexedApiService } from 'src/app/services/indexed-api.service';
+import { IndexedDbService } from 'src/app/services/indexed-db.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
@@ -16,12 +18,24 @@ export class ModulelistComponent implements OnInit {
   subscriptions$!: Subscription;
   constructor(
     private dataService: SuntechAPIService,
+    public indexedApiService: IndexedApiService,
+    public inDb: IndexedDbService,
     private ChangeDetector: ChangeDetectorRef
   ) {
     this.getModuleList()
   }
 
   ngOnInit(): void {
+    this.setVoctypeMaster()
+  }
+  setVoctypeMaster(){
+    let branch = localStorage.getItem('userbranch')
+    this.inDb.getAllData('VocTypeMaster').subscribe((data) => {
+      console.log(data,'data');
+      if (data.length == 0 || data.length == 1) {
+        this.indexedApiService.getVocTypeMaster(branch);
+      }
+    });
   }
   /**USE: get module list from API */
   getModuleList() {
