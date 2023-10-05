@@ -1,5 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { ToastrService } from 'ngx-toastr';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-metal-issue',
@@ -8,16 +15,238 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class WaxProcessComponent implements OnInit {
 
-  columnhead:any[] = ['SRNO','VOCNO','VOCTYPE', 'VOCDATE','JOB_NO','JOB_SO ','UNQ_JOB','JOB_DE','BRANCH'];
+  columnhead:any[] = ['SRNO','Job Number','Design', 'Party','S.O','SO.Date ','Del.Date','Gross.Wt','Metal Wt','Stone.Wt','Ord.Pcs','Issue Pcs'];
+
+  @Input() content!: any; 
+  tableData: any[] = [];
+  private subscriptions: Subscription[] = [];
+    user: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
 
 
   constructor(
     private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    console.log(this.content);
+    if(this.content){
+      this.setFormValues()
+    }
   }
-  close() {
-    this.activeModal.close();
+
+  setFormValues() {
+    if(!this.content) return
+    this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
+    this.approvalMasterForm.controls.description.setValue(this.content.APPR_DESCRIPTION)
+    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/'+this.content.APPR_CODE).subscribe((data) => {
+      if (data.status == 'Success') {
+        this.tableData = data.response.approvalDetails;
+      }
+    });   
   }
+
+  approvalMasterForm: FormGroup = this.formBuilder.group({
+    code: [''],
+    description: [''],
+   
+  });
+
+
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+
+  adddata() {
+    let length = this.tableData.length;
+    let srno = length + 1;
+    let data =  {
+      "UNIQUEID": 12345,
+      "APPR_CODE": "test",
+      "SRNO": srno,
+      "USER_CODE": "",
+      "APPR_TYPE": "",
+      "APPRREQUIRED": false,
+      "ATTACH_REQ": false,
+      "ORG_MESSAGE": false,
+      "EMAIL": false,
+      "SYS_MESSAGE": false,
+      "EMAIL_ID": "test",
+      "MOBILE_NO": "1234567890"
+    };
+    this.tableData.push(data);
+}
+removedata(){
+  this.tableData.pop();
+}
+formSubmit(){
+
+  if(this.content && this.content.FLAG == 'EDIT'){
+    this.update()
+    return
+  }
+  if (this.approvalMasterForm.invalid) {
+    this.toastr.error('select all required fields')
+    return
+  }
+
+  let API = 'ApprovalMaster/InsertApprovalMaster'
+  let postData = {
+    "APPR_CODE": this.approvalMasterForm.value.code || "",
+    "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
+    "approvalDetails": this.tableData,
+    
+  }
+
+  let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    .subscribe((result) => {
+      if (result.response) {
+        if(result.status == "Success"){
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.approvalMasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+      } else {
+        this.toastr.error('Not saved')
+      }
+    }, err => alert(err))
+  this.subscriptions.push(Sub)
+}
+
+update(){
+  if (this.approvalMasterForm.invalid) {
+    this.toastr.error('select all required fields')
+    return
+  }
+
+  let API = 'ApprovalMaster/UpdateApprovalMaster/'+this.content.APPR_CODE
+  let postData = {
+    "APPR_CODE": this.approvalMasterForm.value.code || "",
+    "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
+    "MID": this.content.MID,
+    "approvalDetails": this.tableData,  
+  }
+
+  let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+    .subscribe((result) => {
+      if (result.response) {
+        if(result.status == "Success"){
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.approvalMasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+      } else {
+        this.toastr.error('Not saved')
+      }
+    }, err => alert(err))
+  this.subscriptions.push(Sub)
+}
+
+deleteRecord() {
+  if (!this.content.MID) {
+    Swal.fire({
+      title: '',
+      text: 'Please Select data to delete!',
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      if (result.value) {
+      }
+    });
+    return
+  }
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let API = 'ApprovalMaster/DeleteApprovalMaster/' + this.content.APPR_CODE
+      let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+        .subscribe((result) => {
+          if (result) {
+            if (result.status == "Success") {
+              Swal.fire({
+                title: result.message || 'Success',
+                text: '',
+                icon: 'success',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then((result: any) => {
+                if (result.value) {
+                  this.approvalMasterForm.reset()
+                  this.tableData = []
+                  this.close('reloadMainGrid')
+                }
+              });
+            } else {
+              Swal.fire({
+                title: result.message || 'Error please try again',
+                text: '',
+                icon: 'error',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then((result: any) => {
+                if (result.value) {
+                  this.approvalMasterForm.reset()
+                  this.tableData = []
+                  this.close()
+                }
+              });
+            }
+          } else {
+            this.toastr.error('Not deleted')
+          }
+        }, err => alert(err))
+      this.subscriptions.push(Sub)
+    }
+  });
+}
+
+ngOnDestroy() {
+  if (this.subscriptions.length > 0) {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+    this.subscriptions = []; // Clear the array
+  }
+}
 }
