@@ -45,8 +45,7 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router,
     public dataService: SuntechAPIService,
-    public indexedApiService: IndexedApiService,
-    public indexedDb: IndexedDbService,
+    
   ) {
     let isLayoutRTL = false;
     this.changeRtlLayout(isLayoutRTL);
@@ -61,14 +60,14 @@ export class LoginComponent implements OnInit {
     // this.getMessageBox()
   }
   /**use: to get all parameters before login, from indexedDb */
-  private setIndexedDB(): void{
-      let sub: Subscription = this.indexedDb.getAllData('compparams').subscribe((data) => {
-        if (data.length > 0) {
-          this.indexedApiService.setInitailLoadSetUp()
-        } 
-      });
-      this.subscriptions.push(sub)
-  }
+  // private setIndexedDB(): void{
+  //     let sub: Subscription = this.indexedDb.getAllData('compparams').subscribe((data) => {
+  //       if (data.length > 0) {
+  //         this.indexedApiService.setInitailLoadSetUp()
+  //       } 
+  //     });
+  //     this.subscriptions.push(sub)
+  // }
 
   private changeRtlLayout(flag: any): void {
     // if (flag) {
@@ -194,14 +193,17 @@ export class LoginComponent implements OnInit {
   signin() {
     let branch = this.dataForm.value.branch;
     let year = this.dataForm.value.year;
-
+    
     if (branch != '' && this.validateState == 2 && year != '') {
       let API = 'BranchMaster/' + branch
-      let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+      let sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((resp: any) => {
         //to unsubscribe
         this.subscriptions.push(sub)
         this.unsubscribeAll();
         if (resp.status == 'Success') {
+          console.log('fired1');
+          
           // if (resp.status == 'Success') {
           this.validateState = 3;
           localStorage.setItem('USER_PARAMETER', JSON.stringify(this.userDetails));
@@ -211,6 +213,8 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('username', this.user_name);
           localStorage.setItem('userbranch', branch);
           localStorage.setItem('YEAR', year);
+          console.log('fired2');
+          
           // this.getBranchCurrencyMaster();
           // this.router.navigate(['/']);
           setTimeout(() => {

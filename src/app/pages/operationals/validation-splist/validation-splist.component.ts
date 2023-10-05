@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -8,77 +11,143 @@ import Swal from 'sweetalert2';
   styleUrls: ['./validation-splist.component.scss']
 })
 export class ValidationSplistComponent implements OnInit {
-  groupList: any[] = []
-  userList: any[] = []
-  branchList: any[] = []
-  ReportFilterList: any[] = []
   getDate: any = new Date();
-  placeholder: string = 'select branch'
   isLoading: boolean = false;
   saveEditFlag: boolean = false;
   isViewForm: boolean = false;
-  model: any = {}
-  selectedCategories: any[] = []
   /** form validations */
-  dataForm = this.fb.group({
-    USERNAME: ['', [Validators.required]],
-    PASSWORD: ['', [Validators.required]],
-  })
-  currency: any[] = [];
-  language: any[] = [];
-  stateDataSource: any[] = [
-    { Name: 'MOD', ID: 1 },
-    { Name: 'Last 5 years', ID: 2 },
+  // dataForm = this.fb.group({
+  //   USERNAME: ['', [Validators.required]],
+  //   PASSWORD: ['', [Validators.required]],
+  // })
+  subscriptions$!: Subscription;
+  tableData: any[] = []
+
+  ModuleTypeDataSource: any[] = [
+    { SP_TYPE: "Bullion" },
+    { SP_TYPE: "Diamond Wholesale" },
+    { SP_TYPE: "Refinery" },
+    { SP_TYPE: "Diamond Manufacturing" },
+    { SP_TYPE: "Metal Manufacturing" },
+    { SP_TYPE: "Component Wise Diamond" },
+    { SP_TYPE: "Metal Wholesale" },
+    { SP_TYPE: "Payroll and HR" },
+    { SP_TYPE: "Boiling" },
+    { SP_TYPE: "Repairing" },
+    { SP_TYPE: "Catalogue" },
+    { SP_TYPE: "Fixed Asset" },
+    { SP_TYPE: "Retail" },
+    { SP_TYPE: "General" }
   ];
   constructor(
-    private fb: FormBuilder
-  ) { 
-    this.viewRowDetails = this.viewRowDetails.bind(this);
-    this.deleteModule = this.deleteModule.bind(this);
-  }
+    private fb: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
 
+  ) {
+    this.getValidationSPList()
+  }
   ngOnInit(): void {
   }
-  logEvent(eventName:any) {
-    console.log(eventName,'eventName');
-    
-  }
 
-  saveData() {
-    if (this.dataForm.invalid) {
-      Swal.fire({
-        title: 'Warning',
-        text: 'Please fill all mandatory fields marked',
-        icon: 'warning',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
+  getValidationSPList() {
+    let API = 'ValidationsLookUpMaster/GetValidationsLookUpMasterHeaderList'
+    this.subscriptions$ = this.dataService.getDynamicAPI(API)
+      .subscribe((result: any) => {
+        this.isLoading = false;
+        console.log(result);
+        if (result.status == 'Success') {
+          this.tableData = result.response
+        }
       })
-    } else {
-      let data = {
-        "MID": 0,
-        "USER_NAME": this.dataForm.value.USERNAME || '',
-        "LOGIN_PASSWORD": this.dataForm.value.PASSWORD || '',
-        "USER_LANGUAGE": this.dataForm.value.LANGUAGE.toString() || '',
-        "SYSTEM_DATE": new Date().toISOString,
-        "LOGINSTARTYEAR": this.getDate.getFullYear().toString(),
-        "GROUP_ID": this.dataForm.value.GROUP.toString() || '',
-        "GROUP_NAME": this.dataForm.value.GROUP.toString() || '',
-        "USER_IS_ACTIVE": this.dataForm.value.Status || '',
-        "BRANCH_CODE": this.dataForm.value.BRANCH.toString() || '',
-        "CURRENCY": this.dataForm.value.CURRENCY.toString() || '',
-        "PRODUCT_ATTRIBUTES": this.dataForm.value.PRODUCT_ATTRIBUTES.toString() || '',
-        "FILTERS": this.dataForm.value.FILTERS.toString() || '',
-        "TIME_PERIOD_ACCESS": this.dataForm.value.TIME_PERIOD_ACCESS || '5'
-      }
-      this.isLoading = true;
-      
+  }
+  logEvent(event: any) {
+    console.log(event, 'e');
+  }
+  onSaving(e: any) {
+    let data:any = e.data;
+    if(!data.SP_ID) {
+      this.toastr.error('Server Error', '', {
+        timeOut: 3000,
+      })
+      return
     }
+    let postData = {
+      "MID": 0,
+      "SP_ID": data.SP_ID || "",
+      "SP_NAME": data.SP_NAME || "",
+      "SP_TYPE": data.SP_TYPE || "",
+      "SP_MODULE": data.SP_MODULE || ""
+    }
+    this.isLoading = true;
+    let API = `ValidationsLookUpMaster/InsertValidationsLookUpMaster`
+    this.subscriptions$ = this.dataService.postDynamicAPI(API,postData)
+      .subscribe((result: any) => {
+        this.isLoading = false;
+        console.log(result);
+        if (result.status == 'Success') {
+          this.toastr.success(result.status || '', result.message || '', {
+            timeOut: 3000,
+          })
+        }else{
+          this.toastr.error(result.status || '', result.message || '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
+  }
 
+  /**use: update data in table */
+  updateData(e:any) {
+    let data:any = e.data;
+    this.isLoading = true;
+    let API = `ValidationsLookUpMaster/UpdateValidationsLookUpMaster/${data.MID}`
+    this.subscriptions$ = this.dataService.putDynamicAPI(API,data)
+      .subscribe((result: any) => {
+        this.isLoading = false;
+        console.log(result);
+        if (result.status == 'Success') {
+          this.toastr.success(result.status || '', result.message || '', {
+            timeOut: 3000,
+          })
+        }else{
+          this.toastr.error(result.status || '', result.message || '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
   }
-  deleteModule(e: any) {
-   
+  /**use: update data in table */
+  deleteData(e:any) {
+    let data:any = e.data;
+    this.isLoading = true;
+    let API = `ValidationsLookUpMaster/DeleteValidationsLookUpMaster/${data.MID}`
+    this.subscriptions$ = this.dataService.deleteDynamicAPI(API,data)
+      .subscribe((result: any) => {
+        this.isLoading = false;
+        console.log(result);
+        if (result.status == 'Success') {
+          this.toastr.success(result.status || '', result.message || '', {
+            timeOut: 3000,
+          })
+        }else{
+          this.toastr.error(result.status || '', result.message || '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
   }
-  viewRowDetails(e: any) {
-   
-  }
+
 }
