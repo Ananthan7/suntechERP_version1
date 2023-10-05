@@ -131,19 +131,23 @@ export class IndexedApiService {
         this.comFunc.SalespersonMasterData = data;
       }
     });
+    /** End set basic api data */
+  }
+  setVocTypeDataOnLoad(branch: any){
     this.inDb.getAllData('VocTypeMaster').subscribe((data) => {
-      if (data.length == 0) {
-        this.getVocTypeMaster();
+      console.log(data,'data');
+      
+      if (data.length == 0 || data.length == 1) {
+        this.getVocTypeMaster(branch);
       } else {
         this.comFunc.VocTypeMasterData = data;
       }
     });
-    /** End set basic api data */
   }
 
-
-  getVocTypeMaster() {
-    this.suntechApi.getDynamicAPI('VoctypeMaster/GetVocTypeMaster').subscribe((data) => {
+  getVocTypeMaster(branch:any) {
+    let API = `VoctypeMaster/GetVoctypeMasterWithBranchCode/BranchCode=${branch}`
+    this.suntechApi.getDynamicAPI(API).subscribe((data) => {
       if (data.status == 'Success') {
         this.comFunc.VocTypeMasterData = data.response;
         this.inDb.bulkInsert('VocTypeMaster', data.response);

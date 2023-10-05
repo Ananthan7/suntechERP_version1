@@ -7,20 +7,16 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { StoneIssueDetailComponent } from './stone-issue-detail/stone-issue-detail.component';
 
 @Component({
-  selector: 'app-stone-issue',
-  templateUrl: './stone-issue.component.html',
-  styleUrls: ['./stone-issue.component.scss']
+  selector: 'app-stone-issue-detail',
+  templateUrl: './stone-issue-detail.component.html',
+  styleUrls: ['./stone-issue-detail.component.scss']
 })
-export class StoneIssueComponent implements OnInit {
+export class StoneIssueDetailComponent implements OnInit {
 
-  currentFilter: any;
+  columnhead1:any[] = ['Div','Stock Code','Shape','Color','Clarity','Size','Sieve Set','Pcs'];
 
-  divisionMS: any = 'ID';
-
-  columnhead:any[] = ['SR NO','JOB NO','UNQ JOD ID', 'Design','Stock Code','Description ','Division','Carat','Rate','Amount'];
   @Input() content!: any; 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
@@ -66,12 +62,30 @@ export class StoneIssueComponent implements OnInit {
 
 
   stoneissueFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocdate:[''],
-   basecurrency:[''],
-   currency:[''],
-   worker:[''],
-    narration:[''],
+    jobnumber:[''],
+    subjobnumber:[''],
+   designcode:[''],
+   partcode:[''],
+   salesorderno:[''],
+   process:[''],
+    worker:[''],
+    stock:[''],
+    batchid:[''],
+    location:[''],
+    pieces:[''],
+    shape:[''],
+    clarity:[''],
+    karat:[''],
+    size:[''],
+    sieveset:[''],
+    unitrate:[''],
+    sieve:[''],
+    amount:[''],
+    color:[''],
+    stockbal:[''],
+    pointerwt:[''],
+    otheratt:[''],
+    remarks:[''],
   });
 
 
@@ -139,6 +153,50 @@ export class StoneIssueComponent implements OnInit {
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
+      "SRNO": 0,
+        "JOB_NUMBER": "string",
+        "JOB_DATE": "2023-10-05T11:17:33.295Z",
+        "JOB_SO_NUMBER": 0,
+        "UNQ_JOB_ID": "string",
+        "JOB_DESCRIPTION": "string",
+        "DESIGN_CODE": "string",
+        "DIVCODE": "s",
+        "STOCK_CODE": "string",
+        "STOCK_DESCRIPTION": "string",
+        "SIEVE": "string",
+        "SHAPE": "string",
+        "COLOR": "string",
+        "CLARITY": "string",
+        "SIZE": "string",
+        "JOB_PCS": 0,
+        "PCS": 0,
+        "GROSS_WT": 0,
+        "RATEFC": 0,
+        "RATELC": 0,
+        "AMOUNTFC": 0,
+        "AMOUNTLC": 0,
+        "PROCESS_CODE": "string",
+        "PROCESS_NAME": "string",
+        "WORKER_CODE": "string",
+        "WORKER_NAME": "string",
+        "UNQ_DESIGN_ID": "string",
+        "WIP_ACCODE": "string",
+        "UNIQUEID": 0,
+        "LOCTYPE_CODE": "string",
+        "PICTURE_NAME": "string",
+        "PART_CODE": "string",
+        "REPAIRJOB": 0,
+        "DT_BRANCH_CODE": "string",
+        "DT_VOCTYPE": "str",
+        "DT_VOCNO": 0,
+        "DT_YEARMONTH": "string",
+        "CONSIGNMENT": 0,
+        "SIEVE_SET": "string",
+        "SUB_STOCK_CODE": "string",
+        "D_REMARKS": "string",
+        "SIEVE_DESC": "string",
+        "EXCLUDE_TRANSFER_WT": true,
+        "OTHER_ATTR": "string"
     };
     this.tableData.push(data);
 }
@@ -159,22 +217,22 @@ removedata(){
     let API = 'JobStoneIssueMasterDJ/InsertJobStoneIssueMasterDJ'
     let postData = {
       "MID": 0,
-      "VOCTYPE": this.stoneissueFrom.value.voctype || "",
+      "VOCTYPE": "string",
       "BRANCH_CODE": "string",
       "VOCNO": 0,
-      "VOCDATE": this.stoneissueFrom.value.vocdate || "",
+      "VOCDATE": "string",
       "YEARMONTH": "string",
       "DOCTIME": "2023-10-05T09:33:19.685Z",
-      "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
+      "CURRENCY_CODE": "string",
       "CURRENCY_RATE": 0,
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_AMOUNTFC": 0,
       "TOTAL_AMOUNTLC": 0,
       "SMAN": "string",
-      "REMARKS": this.stoneissueFrom.value.narration || "",
+      "REMARKS": "string",
       "NAVSEQNO": 0,
-      "BASE_CURRENCY": this.stoneissueFrom.value.basecurrency || "",
+      "BASE_CURRENCY":  "string",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
@@ -184,20 +242,20 @@ removedata(){
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "SRNO": 0,
-      "JOB_NUMBER": "string",
+      "JOB_NUMBER": this.stoneissueFrom.value.jobnumber || "",
       "JOB_DATE": "2023-10-05T09:33:19.686Z",
-      "JOB_SO_NUMBER": 0,
+      "JOB_SO_NUMBER": this.stoneissueFrom.value.subjobnumber || "",
       "UNQ_JOB_ID": "string",
       "JOB_DESCRIPTION": "string",
-      "DESIGN_CODE": "string",
+      "DESIGN_CODE": this.stoneissueFrom.value.designcode || "",
       "DIVCODE": "s",
-      "STOCK_CODE": "string",
+      "STOCK_CODE": this.stoneissueFrom.value.stock || "",
       "STOCK_DESCRIPTION": "string",
-      "SIEVE": "string",
-      "SHAPE": "string",
-      "COLOR": "string",
-      "CLARITY": "string",
-      "SIZE": "string",
+      "SIEVE": this.stoneissueFrom.value.sieve || "",
+      "SHAPE":this.stoneissueFrom.value.shape || "",
+      "COLOR":this.stoneissueFrom.value.color || "",
+      "CLARITY": this.stoneissueFrom.value.clarity || "",
+      "SIZE": this.stoneissueFrom.value.size || "",
       "JOB_PCS": 0,
       "PCS": 0,
       "GROSS_WT": 0,
@@ -205,7 +263,7 @@ removedata(){
       "RATELC": 0,
       "AMOUNTFC": 0,
       "AMOUNTLC": 0,
-      "PROCESS_CODE": "string",
+      "PROCESS_CODE":this.stoneissueFrom.value.process || "",
       "PROCESS_NAME": "string",
       "WORKER_CODE": this.stoneissueFrom.value.worker || "",
       "WORKER_NAME": "string",
@@ -214,19 +272,19 @@ removedata(){
       "UNIQUEID": 0,
       "LOCTYPE_CODE": "string",
       "PICTURE_NAME": "string",
-      "PART_CODE": "string",
+      "PART_CODE":this.stoneissueFrom.value.partcode || "",
       "REPAIRJOB": 0,
       "DT_BRANCH_CODE": "string",
       "DT_VOCTYPE": "str",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": "string",
       "CONSIGNMENT": 0,
-      "SIEVE_SET": "string",
+      "SIEVE_SET": this.stoneissueFrom.value.partcode || "",
       "SUB_STOCK_CODE": "string",
       "D_REMARKS": "string",
       "SIEVE_DESC": "string",
       "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": "string",
+      "OTHER_ATTR": this.stoneissueFrom.value.otheratt || "",
       "approvalDetails": this.tableData,  
     }
   
@@ -448,4 +506,6 @@ removedata(){
       this.subscriptions = []; // Clear the array
     }
   }
+
+
 }

@@ -18,10 +18,10 @@ import { WaxProcessComponent } from './wax-process/wax-process.component';
 })
 export class TransactionComponent implements OnInit {
   //variables
-  menuTitle: any
-  PERMISSIONS: any
-  tableName: any
-  apiCtrl: any
+  menuTitle: any;
+  PERMISSIONS: any;
+  tableName: any;
+  apiCtrl: any;
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
   //subscription variable
