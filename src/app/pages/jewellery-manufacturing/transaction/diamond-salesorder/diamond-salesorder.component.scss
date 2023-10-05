@@ -201,8 +201,14 @@
     .mat-flat-button{
       line-height: 0px !important;
       height: 27px !important;
+      background-color: #0d4f9e;
     }
     .mat-tab-body-content{
       overflow: hidden !important;
     }
+}
+.table1{
+  resize: horizontal;
+  overflow: auto;
+  width: 50%;
 }
