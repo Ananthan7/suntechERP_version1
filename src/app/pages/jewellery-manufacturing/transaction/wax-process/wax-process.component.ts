@@ -19,6 +19,7 @@ export class WaxProcessComponent implements OnInit {
 
   @Input() content!: any; 
   tableData: any[] = [];
+  userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
     user: MasterSearchModel = {
     PAGENO: 1,
@@ -51,8 +52,15 @@ export class WaxProcessComponent implements OnInit {
 
   setFormValues() {
     if(!this.content) return
-    this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
-    this.approvalMasterForm.controls.description.setValue(this.content.APPR_DESCRIPTION)
+
+    this.waxprocessFrom.controls.code.setValue(this.content.VOCTYPE)
+    this.waxprocessFrom.controls.description.setValue(this.content.VOCNO)
+    this.waxprocessFrom.controls.description.setValue(this.content.PROCESS_CODE)
+    this.waxprocessFrom.controls.description.setValue(this.content.WORKER_CODE)
+    this.waxprocessFrom.controls.description.setValue(this.content.userName)
+    this.waxprocessFrom.controls.description.setValue(this.content.REMARKS)
+   
+
     this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/'+this.content.APPR_CODE).subscribe((data) => {
       if (data.status == 'Success') {
         this.tableData = data.response.approvalDetails;
@@ -60,10 +68,13 @@ export class WaxProcessComponent implements OnInit {
     });   
   }
 
-  approvalMasterForm: FormGroup = this.formBuilder.group({
-    code: [''],
-    description: [''],
-   
+  waxprocessFrom: FormGroup = this.formBuilder.group({
+    voctype:[''],
+    vocdate:[''],
+    vocno:[''],
+   processcode:[''],
+    workercode:[''],
+    remarks:[''],
   });
 
 
@@ -72,22 +83,82 @@ export class WaxProcessComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  ProcessCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  ProcessCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.processcode.setValue(e.Process_Code);
+
+  }
+
+  WorkerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  WorkerCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.workercode.setValue(e.WORKER_CODE);
+
+  }
+
+  EnteredCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  EnteredCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.color.setValue(e.WORKER_CODE);
+
+  }
+
   adddata() {
     let length = this.tableData.length;
     let srno = length + 1;
     let data =  {
-      "UNIQUEID": 12345,
-      "APPR_CODE": "test",
+      "UNIQUEID": 0,
+      "DT_VOCTYPE": "str",
+      "DT_BRANCH_CODE": "string",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "string",
       "SRNO": srno,
-      "USER_CODE": "",
-      "APPR_TYPE": "",
-      "APPRREQUIRED": false,
-      "ATTACH_REQ": false,
-      "ORG_MESSAGE": false,
-      "EMAIL": false,
-      "SYS_MESSAGE": false,
-      "EMAIL_ID": "test",
-      "MOBILE_NO": "1234567890"
+      "JOB_NUMBER": "string",
+      "UNQ_JOB_ID": "string",
+      "PROCESS_CODE": "string",
+      "WORKER_CODE": "string",
+      "DESIGN_CODE": "string",
+      "PARTYCODE": "string",
+      "ISSUE_PCS": 0,
+      "TOTAL_PCS": 0,
+      "UNQ_DESIGN_ID": "string",
+      "GROSS_WT": 0,
+      "METAL_WT": 0,
+      "STONE_WT": 0
     };
     this.tableData.push(data);
 }
@@ -100,17 +171,48 @@ formSubmit(){
     this.update()
     return
   }
-  if (this.approvalMasterForm.invalid) {
+  if (this.waxprocessFrom.invalid) {
     this.toastr.error('select all required fields')
     return
   }
 
-  let API = 'ApprovalMaster/InsertApprovalMaster'
+  let API = 'JobWaxIssue/InsertJobWaxIssue'
   let postData = {
-    "APPR_CODE": this.approvalMasterForm.value.code || "",
-    "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
-    "approvalDetails": this.tableData,
-    
+    "VOCTYPE": this.waxprocessFrom.value.voctype || "",
+    "VOCNO": this.waxprocessFrom.value.vocno || "",
+    "PROCESS_CODE": this.waxprocessFrom.value.processcode || "",
+    "WORKER_CODE": this.waxprocessFrom.value.workercode || "",
+    "REMARKS": this.waxprocessFrom.value.remarks || "",
+    "UNIQUEID": 0,
+    "VOCDATE": this.waxprocessFrom.value.vocdate || "",
+    "DT_VOCTYPE": "str",
+    "DT_BRANCH_CODE": "string",
+    "DT_VOCNO": 0,
+    "DT_YEARMONTH": "string",
+    "SRNO": 0,
+    "JOB_NUMBER": "string",
+    "UNQ_JOB_ID": "string",
+    "DESIGN_CODE": "string",
+    "PARTYCODE": "string",
+    "ISSUE_PCS": 0,
+    "TOTAL_PCS": 0,
+    "UNQ_DESIGN_ID": "string",
+    "GROSS_WT": 0,
+    "METAL_WT": 0,
+    "STONE_WT": 0,
+    "MID": 0,
+    "BRANCH_CODE": "string",
+    "YEARMONTH": "string",
+    "DOCTIME": "2023-10-04T10:39:08.652Z",
+    "TOTAL_GROSS_WT": 0,
+    "TOTAL_STONE_WT": 0,
+    "SMAN": "string",
+    "NAVSEQNO": 0,
+    "AUTOPOSTING": true,
+    "POSTDATE": "string",
+    "PRINT_COUNT": 0,
+    "SYSTEM_DATE": "2023-10-04T10:39:08.652Z",
+    "approvalDetails": this.tableData,  
   }
 
   let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -125,7 +227,7 @@ formSubmit(){
             confirmButtonText: 'Ok'
           }).then((result: any) => {
             if (result.value) {
-              this.approvalMasterForm.reset()
+              this.waxprocessFrom.reset()
               this.tableData = []
               this.close('reloadMainGrid')
             }
@@ -139,15 +241,15 @@ formSubmit(){
 }
 
 update(){
-  if (this.approvalMasterForm.invalid) {
+  if (this.waxprocessFrom.invalid) {
     this.toastr.error('select all required fields')
     return
   }
 
   let API = 'ApprovalMaster/UpdateApprovalMaster/'+this.content.APPR_CODE
   let postData = {
-    "APPR_CODE": this.approvalMasterForm.value.code || "",
-    "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
+    "APPR_CODE": this.waxprocessFrom.value.code || "",
+    "APPR_DESCRIPTION": this.waxprocessFrom.value.description || "",
     "MID": this.content.MID,
     "approvalDetails": this.tableData,  
   }
@@ -164,7 +266,7 @@ update(){
             confirmButtonText: 'Ok'
           }).then((result: any) => {
             if (result.value) {
-              this.approvalMasterForm.reset()
+              this.waxprocessFrom.reset()
               this.tableData = []
               this.close('reloadMainGrid')
             }
@@ -214,7 +316,7 @@ deleteRecord() {
                 confirmButtonText: 'Ok'
               }).then((result: any) => {
                 if (result.value) {
-                  this.approvalMasterForm.reset()
+                  this.waxprocessFrom.reset()
                   this.tableData = []
                   this.close('reloadMainGrid')
                 }
@@ -228,7 +330,7 @@ deleteRecord() {
                 confirmButtonText: 'Ok'
               }).then((result: any) => {
                 if (result.value) {
-                  this.approvalMasterForm.reset()
+                  this.waxprocessFrom.reset()
                   this.tableData = []
                   this.close()
                 }
