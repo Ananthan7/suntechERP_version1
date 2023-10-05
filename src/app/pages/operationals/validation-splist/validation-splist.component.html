@@ -45,12 +45,13 @@
                 <dxi-column dataField="SPID" caption="SP ID">
                 </dxi-column>
                 <dxi-column dataField="SPName" caption="SP Name"> </dxi-column>
-                <dxi-column dataField="ModuleName" caption="Module Name">
+                <dxi-column dataField="ModuleName" caption="Module Name"> </dxi-column>
+                <dxi-column dataField="ModuleTYPE" caption="Module TYPE">
                     <dxo-lookup [dataSource]="stateDataSource" displayExpr="Name" valueExpr="ID">
                     </dxo-lookup>
                 </dxi-column>
-                <dxi-column dataField="Inventory" dataType="date">
-                </dxi-column>
+                <!-- <dxi-column dataField="date" dataType="date"> -->
+                <!-- </dxi-column> -->
                 <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
             </dx-data-grid>
         </div>
