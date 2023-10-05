@@ -1,10 +1,10 @@
 <app-loader [isLoading]="isLoading"></app-loader>
 <div class="col-md-11 col-sm-12">
-    <div class="card">
+    <div class="card p-2">
+        <div class="ps-2 pt-2" style="border-bottom: 1px solid #afafaf;">
+            <h5>Validation SP List</h5>
+        </div>
         <div class="col-md-11 col-sm-12 p-2" *ngIf="!isViewForm">
-            <div class="row pt-2">
-                <h5>Validation SP List</h5>
-            </div>
             <dx-data-grid id="gridContainer" [dataSource]="tableData" 
                 [columnAutoWidth]="true" [showRowLines]="true"
                 [showBorders]="true" (onEditingStart)="logEvent('EditingStart')"
