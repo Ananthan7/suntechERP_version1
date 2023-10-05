@@ -131,6 +131,10 @@ export class IndexedApiService {
         this.comFunc.SalespersonMasterData = data;
       }
     });
+    /** End set basic api data */
+  }
+  setVocTypeData(){
+    let branch;
     this.inDb.getAllData('VocTypeMaster').subscribe((data) => {
       if (data.length == 0) {
         this.getVocTypeMaster();
@@ -138,9 +142,8 @@ export class IndexedApiService {
         this.comFunc.VocTypeMasterData = data;
       }
     });
-    /** End set basic api data */
   }
-
+  
 
   getVocTypeMaster() {
     this.suntechApi.getDynamicAPI('VoctypeMaster/GetVocTypeMaster').subscribe((data) => {
