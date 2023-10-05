@@ -16,6 +16,7 @@ import { AddNewdetailComponent } from './diamond-salesorder/add-newdetail/add-ne
 import { AddNewdiamondquotationComponent } from './diamond-quotation/add-newdiamondquotation/add-newdiamondquotation.component';
 import { WaxProcessComponent } from './wax-process/wax-process.component';
 import { MetalIssueDetailsComponent } from './metal-issue/metal-issue-details/metal-issue-details.component';
+import { StoneIssueDetailComponent } from './stone-issue/stone-issue-detail/stone-issue-detail.component';
 
 
 
@@ -28,6 +29,7 @@ import { MetalIssueDetailsComponent } from './metal-issue/metal-issue-details/me
     JobCreationComponent,
     MetalIssueComponent,
     StoneIssueComponent,
+    StoneIssueDetailComponent,
     MeltingProcessComponent,
     CADProcessingComponent,
     AddNewdetailComponent,
