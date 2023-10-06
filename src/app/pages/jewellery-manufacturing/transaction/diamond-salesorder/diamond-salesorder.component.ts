@@ -32,7 +32,30 @@ export class DiamondSalesorderComponent implements OnInit {
   indeterminate = false;
   currentDate = new Date()
   private subscriptions: Subscription[] = [];
-
+  tableItems: any = [
+    {
+      slno: 1,
+      Category: 'value',
+      Brand: 'value',
+      Inventory: 'value',
+      Forecast: 'value',
+      Management: 'value',
+      Inventory2: 'value',
+      Forecast2: 'value',
+      Management2: 'value',
+    },
+    {
+      slno: 2,
+      Category: 'value',
+      Brand: 'value',
+      Inventory: 'value',
+      Forecast: 'value',
+      Management: 'value',
+      Inventory2: 'value',
+      Forecast2: 'value',
+      Management2: 'value',
+    },
+  ]
   OrderTypeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,

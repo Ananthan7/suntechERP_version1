@@ -21,12 +21,15 @@ export class AddNewdetailComponent implements OnInit {
   currentFilter: any;
   divisionMS: any = 'ID';
   private subscriptions: Subscription[] = [];
+  column1: any[] = ['SRNO', 'DESIGN CODE', 'KARAT', 'METAL_COLOR', 'PCS', 'METAL_WT', 'GROSS_WT', 'RATEFC', 'RATECC'];
 
   columnheads: any[] = ['Div', 'Stone T', 'Comp C', 'Karat', 'PCS', 'Amount', 'Shape', 'Sieve', 'Lab.Rate', 'Wast', 'wast', 'wast', 'Lab.Amount', 'Sieve Desc', 'Size', 'Color'];
   columnhead: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
   columnheader: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
   columnheadmain: any[] = ['Stock Code', 'Stone Size', 'Stone Pcs', 'Stone Weight'];
+  
+  
   DesignCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -39,30 +42,7 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_TABLE: true,
   }
     
-  tableItems: any = [
-    {
-      slno: 1,
-      Category: 'value',
-      Brand: 'value',
-      Inventory: 'value',
-      Forecast: 'value',
-      Management: 'value',
-      Inventory2: 'value',
-      Forecast2: 'value',
-      Management2: 'value',
-    },
-    {
-      slno: 2,
-      Category: 'value',
-      Brand: 'value',
-      Inventory: 'value',
-      Forecast: 'value',
-      Management: 'value',
-      Inventory2: 'value',
-      Forecast2: 'value',
-      Management2: 'value',
-    },
-  ]
+ 
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
     designDescription: ['', [Validators.required]],
@@ -154,9 +134,6 @@ export class AddNewdetailComponent implements OnInit {
  
   selectionChanged(data: any) {
     console.log(data,'fireddddd');
-    
-    console.log(this.tableItems);
-    
   }
 
   close() {

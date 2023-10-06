@@ -46,7 +46,7 @@ td {
   // margin-top: 20px;
 }
 .col-form-label{
-  font-size: 0.8em !important;
+  font-size: 1em !important;
   padding-top: 15px !important;
 }
 .form-check-label{
@@ -63,6 +63,11 @@ td {
   border-top: 1px solid #242424;
   border-left: 1px solid #242424;
   border-right: 1px solid #242424;
+}
+.table1{
+  resize: horizontal;
+  overflow: auto;
+  width: 50%;
 }
 ::ng-deep {
   .cdk-overlay-container {

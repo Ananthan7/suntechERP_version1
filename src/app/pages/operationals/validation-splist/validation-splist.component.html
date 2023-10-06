@@ -27,10 +27,10 @@
                     <dxi-validation-rule type="required"
                     message="SP Name is required"></dxi-validation-rule>
                 </dxi-column>
-                <dxi-column dataField="SP_MODULE" caption="Module Name">
+                <dxi-column dataField="SP_MODULE" caption="Form Name">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                  </dxi-column>
-                <dxi-column dataField="SP_TYPE" caption="Module TYPE">
+                <dxi-column dataField="SP_TYPE" caption="Module Name">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                     <dxo-lookup [dataSource]="ModuleTypeDataSource" displayExpr="SP_TYPE" valueExpr="SP_TYPE">
                     </dxo-lookup>

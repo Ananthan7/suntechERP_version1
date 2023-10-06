@@ -20,8 +20,9 @@ export class ValidationSplistComponent implements OnInit {
   //   USERNAME: ['', [Validators.required]],
   //   PASSWORD: ['', [Validators.required]],
   // })
-  subscriptions$!: Subscription;
-  tableData: any[] = []
+
+  subscriptions$: Subscription[] = [];
+  tableData: any[] = [];
 
   ModuleTypeDataSource: any[] = [
     { SP_TYPE: "Bullion" },
@@ -52,7 +53,7 @@ export class ValidationSplistComponent implements OnInit {
 
   getValidationSPList() {
     let API = 'ValidationsLookUpMaster/GetValidationsLookUpMasterHeaderList'
-    this.subscriptions$ = this.dataService.getDynamicAPI(API)
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result: any) => {
         this.isLoading = false;
         console.log(result);
@@ -60,13 +61,14 @@ export class ValidationSplistComponent implements OnInit {
           this.tableData = result.response
         }
       })
+    this.subscriptions$.push(Sub)
   }
   logEvent(event: any) {
     console.log(event, 'e');
   }
   onSaving(e: any) {
-    let data:any = e.data;
-    if(!data.SP_ID) {
+    let data: any = e.data;
+    if (!data.SP_ID) {
       this.toastr.error('Server Error', '', {
         timeOut: 3000,
       })
@@ -81,7 +83,7 @@ export class ValidationSplistComponent implements OnInit {
     }
     this.isLoading = true;
     let API = `ValidationsLookUpMaster/InsertValidationsLookUpMaster`
-    this.subscriptions$ = this.dataService.postDynamicAPI(API,postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result: any) => {
         this.isLoading = false;
         console.log(result);
@@ -89,7 +91,7 @@ export class ValidationSplistComponent implements OnInit {
           this.toastr.success(result.status || '', result.message || '', {
             timeOut: 3000,
           })
-        }else{
+        } else {
           this.toastr.error(result.status || '', result.message || '', {
             timeOut: 3000,
           })
@@ -99,14 +101,15 @@ export class ValidationSplistComponent implements OnInit {
           timeOut: 3000,
         })
       })
+      this.subscriptions$.push(Sub)
   }
 
   /**use: update data in table */
-  updateData(e:any) {
-    let data:any = e.data;
+  updateData(e: any) {
+    let data: any = e.data;
     this.isLoading = true;
     let API = `ValidationsLookUpMaster/UpdateValidationsLookUpMaster/${data.MID}`
-    this.subscriptions$ = this.dataService.putDynamicAPI(API,data)
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, data)
       .subscribe((result: any) => {
         this.isLoading = false;
         console.log(result);
@@ -114,7 +117,7 @@ export class ValidationSplistComponent implements OnInit {
           this.toastr.success(result.status || '', result.message || '', {
             timeOut: 3000,
           })
-        }else{
+        } else {
           this.toastr.error(result.status || '', result.message || '', {
             timeOut: 3000,
           })
@@ -124,13 +127,14 @@ export class ValidationSplistComponent implements OnInit {
           timeOut: 3000,
         })
       })
+      this.subscriptions$.push(Sub)
   }
   /**use: update data in table */
-  deleteData(e:any) {
-    let data:any = e.data;
+  deleteData(e: any) {
+    let data: any = e.data;
     this.isLoading = true;
     let API = `ValidationsLookUpMaster/DeleteValidationsLookUpMaster/${data.MID}`
-    this.subscriptions$ = this.dataService.deleteDynamicAPI(API,data)
+    let Sub: Subscription = this.dataService.deleteDynamicAPI(API, data)
       .subscribe((result: any) => {
         this.isLoading = false;
         console.log(result);
@@ -138,7 +142,7 @@ export class ValidationSplistComponent implements OnInit {
           this.toastr.success(result.status || '', result.message || '', {
             timeOut: 3000,
           })
-        }else{
+        } else {
           this.toastr.error(result.status || '', result.message || '', {
             timeOut: 3000,
           })
@@ -148,6 +152,14 @@ export class ValidationSplistComponent implements OnInit {
           timeOut: 3000,
         })
       })
+      this.subscriptions$.push(Sub)
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptions$.length > 0) {
+      this.subscriptions$.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions$ = []; // Clear the array
+    }
   }
 
 }
