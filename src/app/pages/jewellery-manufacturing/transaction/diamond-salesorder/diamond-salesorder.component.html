@@ -353,7 +353,7 @@
         </mat-tab-group>
     </div>
     <!-- Details section starts -->
-    <div class="card m-1 p-3">
+    <div class="card m-1">
         <mat-tab-group style="width: 100%;">
             <mat-tab label="Details">
                 <div class="col-11">
@@ -409,44 +409,36 @@
                         <input type="text" matInput formControlName="VoucherDESC" />
                     </mat-form-field>
                 </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            Price Recalc
+                <div class="d-flex">
+                    <div>
+                        <button type="button" mat-flat-button  (click)="addNewDetail()">
+                            <span>Price Recalc</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            Quot
+                    <div class="ps-1">
+                        <button type="button" mat-flat-button>
+                            <span>Quot</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            MRQ Print
+                    <div class="ps-1">
+                        <button type="button" mat-flat-button>
+                            <span>MRQ Print</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            Stricker Print
+                    <div class="ps-1">
+                        <button type="button" mat-flat-button>
+                            <span>Sticker Print</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            Export
+                    <div class="ps-1">
+                        <button type="button" mat-flat-button>
+                            <span>Export</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1 sum">
-                    <div class="row">
-                        <input type="radio" /> Summary
+                    <div class="ps-1">
+                        <div class="d-flex">
+                            <input type="radio" /> Summary
+                        </div>
                     </div>
                 </div>
             </div>

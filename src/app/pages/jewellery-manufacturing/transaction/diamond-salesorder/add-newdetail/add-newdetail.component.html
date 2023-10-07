@@ -212,13 +212,13 @@
                                 <div class="col-md-12">
                                     <div class="row" style="max-width: 100%;">
                                         <div class="table1" id="resizableDiv">
-                                            <dx-data-grid #dataGrid id="gridContainer" width="auto" keyExpr="ID"
-                                                [showBorders]="true">
+                                            <dx-data-grid #dataGrid id="gridContainer" width="auto"
+                                                [showBorders]="true" [dataSource]="BOMDetailsArray">
                                                 <dxo-paging [enabled]="false"></dxo-paging>
                                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                                 </dxo-editing>
-                                                <dxo-selection mode="multiple"></dxo-selection>
-                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                                                <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
 
                                                 <dxi-column *ngFor="let data of column1" dataField="{{ data }}"
                                                     width="auto" caption="{{ data }}" [allowEditing]="true"

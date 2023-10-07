@@ -21,8 +21,8 @@ export class AddNewdetailComponent implements OnInit {
   currentFilter: any;
   divisionMS: any = 'ID';
   private subscriptions: Subscription[] = [];
-  column1: any[] = ['SRNO', 'DESIGN CODE', 'KARAT', 'METAL_COLOR', 'PCS', 'METAL_WT', 'GROSS_WT', 'RATEFC', 'RATECC'];
-
+  column1: any[] = ['SRNO', 'DIVCODE','DESIGN CODE', 'KARAT', 'METAL_COLOR', 'PCS', 'METAL_WT', 'GROSS_WT', 'RATEFC', 'RATECC'];
+  BOMDetailsArray: any[] = []
   columnheads: any[] = ['Div', 'Stone T', 'Comp C', 'Karat', 'PCS', 'Amount', 'Shape', 'Sieve', 'Lab.Rate', 'Wast', 'wast', 'wast', 'Lab.Amount', 'Sieve Desc', 'Size', 'Color'];
   columnhead: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
   columnheader: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
@@ -126,6 +126,7 @@ export class AddNewdetailComponent implements OnInit {
   designCodeValidate(event: any) {
     // 'GetDesignStnmtlDetailNet'
     if (event.target.value == '') return
+    this.reset() //reset all data
     this.snackBar.open('Loading...')
     let API = 'ExecueteSPInterface'
     let postData = {
@@ -141,10 +142,13 @@ export class AddNewdetailComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.snackBar.dismiss()
-        if (result.dynamicData) {
+        if (result.dynamicData || result.status == 'Success') {
           let data:any = result.dynamicData[0]
           data = this.commonService.arrayEmptyObjectToString(data)
           data = data[0]
+          
+          this.BOMDetailsArray = result.dynamicData[1]
+          // this.column1 = Object.keys(this.BOMDetailsArray);
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
           this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
           if (data.PCS == 0) {
@@ -152,7 +156,7 @@ export class AddNewdetailComponent implements OnInit {
           }
           this.diamondSalesDetailForm.controls.Rate.setValue(data.RATE)
           this.diamondSalesDetailForm.controls.Rate.setValue(data.METALWT)
-          this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
+          this.diamondSalesDetailForm.controls.StockCode.setValue(data.STOCK_CODE)
 
           this.summaryDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
           this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
@@ -183,6 +187,9 @@ export class AddNewdetailComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  reset(){
+    this.BOMDetailsArray = []
+  }
   selectionChanged(data: any) {
     console.log(data, 'fireddddd');
   }
