@@ -155,39 +155,6 @@ export class DiamondSalesorderComponent implements OnInit {
       this.PartyDetailsOrderForm.controls.rateType.setValue(data[0].RATE_TYPE)
   }
 
-  //party Code Change
-  partyCodeChange(event: any) {
-    if (event.target.value == '') return
-    this.snackBar.open('Loading...')
-    let API = `AccountMaster/${event.target.value}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        this.snackBar.dismiss()
-        if (result.response) {
-          let data = result.response
-          if (data.CURRENCY_CODE) {
-            this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data.CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data.CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data.ACCOUNT_HEAD)
-            this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data.ADDRESS)
-
-            let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data.CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
-            this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
-          }
-        } else {
-          this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
-            timeOut: 3000,
-          })
-        }
-      }, err => {
-        this.snackBar.dismiss()
-        this.toastr.error('Server Error', '', {
-          timeOut: 3000,
-        })
-      })
-    this.subscriptions.push(Sub)
-  }
 
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -434,9 +401,51 @@ export class DiamondSalesorderComponent implements OnInit {
   }
 
 
-  deleteClicked():void {
+  deleteClicked(): void {
 
   }
+  //party Code Change
+  partyCodeChange(event: any) {
+    if (event.target.value == '') return
+    this.snackBar.open('Loading...')
+    let postData = {
+      "SPID": "001",
+      "parameter": {
+        "ACCODE": event.target.value || "",
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface',postData)
+      .subscribe((result) => {
+        this.snackBar.dismiss()
+        if (result.status == "Success") { //
+          let data = result.dynamicData[0]
+          console.log(data,'data');
+          if (data && data[0].CURRENCY_CODE) {
+            console.log(data,'data');
+            
+            this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data[0].CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data[0].ACCOUNT_HEAD)
+            this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data[0].ADDRESS)
+
+            let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data[0].CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+            this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+          }
+        } else {
+          this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.snackBar.dismiss()
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
+    this.subscriptions.push(Sub)
+  }
+
   //data settings
   OrderTypeSelected(event: any) {
     this.PartyDetailsOrderForm.controls.orderType.setValue(event.CODE)

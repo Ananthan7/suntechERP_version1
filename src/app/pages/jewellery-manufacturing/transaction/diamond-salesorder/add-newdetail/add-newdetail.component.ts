@@ -28,8 +28,8 @@ export class AddNewdetailComponent implements OnInit {
   columnheader: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
   columnheadmain: any[] = ['Stock Code', 'Stone Size', 'Stone Pcs', 'Stone Weight'];
-  
-  
+
+
   DesignCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -41,8 +41,9 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-    
- 
+
+
+  
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
     designDescription: ['', [Validators.required]],
@@ -61,10 +62,24 @@ export class AddNewdetailComponent implements OnInit {
     Amount: ['', [Validators.required]],
     GrossWeight: ['', [Validators.required]],
     STOCK_CODE: ['', [Validators.required]],
-    CATEGORY_CODE: ['', [Validators.required]],
-
   })
-
+  summaryDetailForm: FormGroup = this.formBuilder.group({
+    CATEGORY_CODE: ['', [Validators.required]],
+    SUBCATEGORY_CODE: ['', [Validators.required]],
+    COLOR: ['', [Validators.required]],
+    KARAT_CODE: ['', [Validators.required]],
+    PURITY: ['', [Validators.required]],
+    SUPPLIER_CODE: ['', [Validators.required]],
+    SEQ_CODE: ['', [Validators.required]],
+    BRAND_CODE: ['', [Validators.required]],
+    TYPE_CODE: ['', [Validators.required]],
+    SIZE: ['', [Validators.required]],
+    SURFACEPROPERTY: ['', [Validators.required]],
+    WIDTH: ['', [Validators.required]],
+    THICKNESS: ['', [Validators.required]],
+    ENGRAVING_TEXT: ['', [Validators.required]],
+    ENGRAVING_FONT: ['', [Validators.required]],
+  })
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -75,49 +90,85 @@ export class AddNewdetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.resizeGrid()
+  }
+  resizeGrid(){
+    let resizableDiv:any = document.getElementById('resizableDiv');
+    if (resizableDiv) {
+      // Do something with the element
+      console.log(resizableDiv,'resizableDiv');
+    }
+    let isResizing:boolean = false;
+
+    resizableDiv.addEventListener('touchstart', (event:any) => {
+      isResizing = true;
+      event.preventDefault();
+    });
+
+    document.addEventListener('touchmove', (event) => {
+      if (isResizing) {
+        const touch = event.touches[0];
+        resizableDiv.style.width = touch.clientX + 'px';
+        event.preventDefault();
+      }
+    });
+
+    document.addEventListener('touchend', () => {
+      isResizing = false;
+    });
   }
   designCodeSelected(data: any) {
     this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
     this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
-    this.designCodeValidate({target: { value: data.DESIGN_CODE }})
+    this.designCodeValidate({ target: { value: data.DESIGN_CODE } })
   }
   /**use: design code change fn to fetch data with design code */
   designCodeValidate(event: any) {
     // 'GetDesignStnmtlDetailNet'
     if (event.target.value == '') return
     this.snackBar.open('Loading...')
-    let API = `GetDesignStnmtlDetailNet`
+    let API = 'ExecueteSPInterface'
     let postData = {
-      "Design_Code": event.target.value || "N",
-      "strDesign_Stock": "N",
-      "strComponent": "N",
-      "strColorSet": "N",
-      "strMEtalColor": "N",
-      "strStockComp": ""
+      "SPID": "003",
+      "parameter": {
+        "FLAG": 'VIEW',
+	      "DESIGNCODE": event.target.value || '', //TODO 'HM14437' 
+        "METAL_COLOR": '',
+        "MRG_PERC":'',
+        "ACCODE":''
+      }
     }
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.snackBar.dismiss()
-        if (result.response) {
-          let data = result.Table1
+        if (result.dynamicData) {
+          let data:any = result.dynamicData[0]
+          data = this.commonService.arrayEmptyObjectToString(data)
+          data = data[0]
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
           this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
-          this.diamondSalesDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
-          this.diamondSalesDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
-          this.diamondSalesDetailForm.controls.COLOR.setValue(data.COLOR)
-          this.diamondSalesDetailForm.controls.KARAT_CODE.setValue(data.KARAT_CODE)
-          this.diamondSalesDetailForm.controls.PURITY.setValue(data.PURITY)
-          this.diamondSalesDetailForm.controls.SUPPLIER_CODE.setValue(data.SUPPLIER_CODE)
-          this.diamondSalesDetailForm.controls.SEQ_CODE.setValue(data.SEQ_CODE)
-          this.diamondSalesDetailForm.controls.BRAND_CODE.setValue(data.BRAND_CODE)
-          this.diamondSalesDetailForm.controls.TYPE_CODE.setValue(data.TYPE_CODE)
-
-          if(data.PCS == 0){
+          if (data.PCS == 0) {
             this.diamondSalesDetailForm.controls.Pcs.setValue(1)
           }
           this.diamondSalesDetailForm.controls.Rate.setValue(data.RATE)
           this.diamondSalesDetailForm.controls.Rate.setValue(data.METALWT)
           this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
+
+          this.summaryDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
+          this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
+          this.summaryDetailForm.controls.COLOR.setValue(data.COLOR)
+          this.summaryDetailForm.controls.KARAT_CODE.setValue(data.KARAT_CODE)
+          this.summaryDetailForm.controls.PURITY.setValue(data.PURITY)
+          this.summaryDetailForm.controls.SUPPLIER_CODE.setValue(data.SUPPLIER_CODE)
+          this.summaryDetailForm.controls.SEQ_CODE.setValue(data.SEQ_CODE)
+          this.summaryDetailForm.controls.BRAND_CODE.setValue(data.BRAND_CODE)
+          this.summaryDetailForm.controls.TYPE_CODE.setValue(data.TYPE_CODE)
+          this.summaryDetailForm.controls.SIZE.setValue(data.SIZE)
+          this.summaryDetailForm.controls.SURFACEPROPERTY.setValue(data.SURFACEPROPERTY)
+          this.summaryDetailForm.controls.WIDTH.setValue(data.WIDTH)
+          this.summaryDetailForm.controls.THICKNESS.setValue(data.THICKNESS)
+          this.summaryDetailForm.controls.ENGRAVING_TEXT.setValue(data.ENGRAVING_TEXT)
+          this.summaryDetailForm.controls.ENGRAVING_FONT.setValue(data.ENGRAVING_FONT)
         } else {
           this.toastr.error('Design Code not found', result.Message ? result.Message : '', {
             timeOut: 3000,
@@ -131,9 +182,9 @@ export class AddNewdetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
- 
+
   selectionChanged(data: any) {
-    console.log(data,'fireddddd');
+    console.log(data, 'fireddddd');
   }
 
   close() {

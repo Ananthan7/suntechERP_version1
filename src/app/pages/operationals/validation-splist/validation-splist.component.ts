@@ -24,21 +24,26 @@ export class ValidationSplistComponent implements OnInit {
   subscriptions$: Subscription[] = [];
   tableData: any[] = [];
 
+  ModuleNameDataSource: any[] = [
+    { MODULE_NAME: "Bullion" },
+    { MODULE_NAME: "Diamond Wholesale" },
+    { MODULE_NAME: "Refinery" },
+    { MODULE_NAME: "Diamond Manufacturing" },
+    { MODULE_NAME: "Metal Manufacturing" },
+    { MODULE_NAME: "Component Wise Diamond" },
+    { MODULE_NAME: "Metal Wholesale" },
+    { MODULE_NAME: "Payroll and HR" },
+    { MODULE_NAME: "Boiling" },
+    { MODULE_NAME: "Repairing" },
+    { MODULE_NAME: "Catalogue" },
+    { MODULE_NAME: "Fixed Asset" },
+    { MODULE_NAME: "Retail" },
+    { MODULE_NAME: "General" }
+  ];
   ModuleTypeDataSource: any[] = [
-    { SP_TYPE: "Bullion" },
-    { SP_TYPE: "Diamond Wholesale" },
-    { SP_TYPE: "Refinery" },
-    { SP_TYPE: "Diamond Manufacturing" },
-    { SP_TYPE: "Metal Manufacturing" },
-    { SP_TYPE: "Component Wise Diamond" },
-    { SP_TYPE: "Metal Wholesale" },
-    { SP_TYPE: "Payroll and HR" },
-    { SP_TYPE: "Boiling" },
-    { SP_TYPE: "Repairing" },
-    { SP_TYPE: "Catalogue" },
-    { SP_TYPE: "Fixed Asset" },
-    { SP_TYPE: "Retail" },
-    { SP_TYPE: "General" }
+    { MODULE_TYPE: "MASTER" },
+    { MODULE_TYPE: "TRANSACTION" },
+    { MODULE_TYPE: "REPORT" },
   ];
   constructor(
     private fb: FormBuilder,
@@ -78,8 +83,12 @@ export class ValidationSplistComponent implements OnInit {
       "MID": 0,
       "SP_ID": data.SP_ID || "",
       "SP_NAME": data.SP_NAME || "",
-      "SP_TYPE": data.SP_TYPE || "",
-      "SP_MODULE": data.SP_MODULE || ""
+      "MODULE_NAME": data.MODULE_NAME || "",
+      "FORM_NAME": data.FORM_NAME || "",
+      "DB_NAME": data.DB_NAME || "",
+      "MODULE_TYPE": data.MODULE_TYPE || "",
+      "LASTUPDATEDON": new Date().toISOString(),
+      "TABLE_NAME": data.TABLE_NAME || ""
     }
     this.isLoading = true;
     let API = `ValidationsLookUpMaster/InsertValidationsLookUpMaster`
@@ -88,15 +97,19 @@ export class ValidationSplistComponent implements OnInit {
         this.isLoading = false;
         console.log(result);
         if (result.status == 'Success') {
+          this.getValidationSPList()
           this.toastr.success(result.status || '', result.message || '', {
             timeOut: 3000,
           })
         } else {
+          this.getValidationSPList()
           this.toastr.error(result.status || '', result.message || '', {
             timeOut: 3000,
           })
         }
       }, err => {
+        this.isLoading = false;
+        this.getValidationSPList()
         this.toastr.error('Server Error', '', {
           timeOut: 3000,
         })
@@ -108,21 +121,37 @@ export class ValidationSplistComponent implements OnInit {
   updateData(e: any) {
     let data: any = e.data;
     this.isLoading = true;
+
+    let postData = {
+      "MID": 0,
+      "SP_ID": data.SP_ID || "",
+      "SP_NAME": data.SP_NAME || "",
+      "MODULE_NAME": data.MODULE_NAME || "",
+      "FORM_NAME": data.FORM_NAME || "",
+      "DB_NAME": data.DB_NAME || "",
+      "MODULE_TYPE": data.MODULE_TYPE || "",
+      "LASTUPDATEDON": new Date().toISOString(),
+      "TABLE_NAME": data.TABLE_NAME || ""
+    }
     let API = `ValidationsLookUpMaster/UpdateValidationsLookUpMaster/${data.MID}`
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, data)
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result: any) => {
         this.isLoading = false;
         console.log(result);
         if (result.status == 'Success') {
+          this.getValidationSPList()
           this.toastr.success(result.status || '', result.message || '', {
             timeOut: 3000,
           })
         } else {
+          this.getValidationSPList()
           this.toastr.error(result.status || '', result.message || '', {
             timeOut: 3000,
           })
         }
       }, err => {
+        this.getValidationSPList()
+        this.isLoading = false;
         this.toastr.error('Server Error', '', {
           timeOut: 3000,
         })
@@ -148,6 +177,7 @@ export class ValidationSplistComponent implements OnInit {
           })
         }
       }, err => {
+        this.isLoading = false;
         this.toastr.error('Server Error', '', {
           timeOut: 3000,
         })

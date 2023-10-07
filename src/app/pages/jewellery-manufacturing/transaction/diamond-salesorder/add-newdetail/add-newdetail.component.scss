@@ -66,6 +66,7 @@ td {
 }
 .table1{
   resize: horizontal;
+  touch-action: none; /* Disable touch action to allow custom handling */
   overflow: auto;
   width: 50%;
 }
