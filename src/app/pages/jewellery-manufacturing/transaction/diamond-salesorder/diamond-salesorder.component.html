@@ -331,14 +331,15 @@
                                 </div>
 
                                 <div class="row">
-                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData"
+                                        [showBorders]="true">
                                         <dxo-paging [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell" [allowUpdating]="true">
                                         </dxo-editing>
                                         <dxo-selection mode="multiple"></dxo-selection>
                                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                        <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" width="auto"
+                                        <dxi-column *ngFor="let data of tableDataHead" dataField="{{ data }}" width="auto"
                                             caption="{{ data }}" [allowEditing]="true" alignment="center"
                                             backgroundcolor="#000">
                                         </dxi-column>
@@ -377,23 +378,16 @@
                 </div>
                 <!-- table sectin starts -->
                 <dx-data-grid id="gridContainer" 
-                    [dataSource]="tableItems"
-                    [showBorders]="true">
+                    [dataSource]="tableData" [showRowLines]="true"
+                    [showBorders]="true"
+                    (onSelectionChanged)="selectionChangedHandler($event)">
+                    <dxo-selection mode="single"></dxo-selection>
                     <dxo-editing mode="row" [allowUpdating]="true" [allowAdding]="false">
                     </dxo-editing>
-                    <dxi-column dataField="slno" caption="#"> </dxi-column>
-                    <dxi-column dataField="Category" caption="Category">
+                    <dxi-column *ngFor="let data of tableDataHead" dataField="{{ data }}"
+                        width="auto" caption="{{ data }}" [allowEditing]="true"
+                        alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="Brand" caption="Brand"> </dxi-column>
-                    <dxi-column [caption]="'January'" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="Inventory" caption="Inventory">
-                    </dxi-column>
-                    <dxi-column dataField="Forecast" caption="Forecast">
-                    </dxi-column>
-                    <dxi-column dataField="Management" caption="Management">
-                    </dxi-column>
-                
                     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
                 </dx-data-grid>
         </mat-tab>

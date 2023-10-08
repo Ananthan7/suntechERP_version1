@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
   styleUrls: ['./add-newdetail.component.scss']
 })
 export class AddNewdetailComponent implements OnInit {
+  @Input() content!: any; //use: To get clicked row details from master grid
 
   favoriteSeason: string = ''
   seasons: string[] = ['Metal', 'Stones'];
@@ -21,9 +22,8 @@ export class AddNewdetailComponent implements OnInit {
   currentFilter: any;
   divisionMS: any = 'ID';
   private subscriptions: Subscription[] = [];
-  column1: any[] = ['SRNO', 'DIVCODE','DESIGN CODE', 'KARAT', 'METAL_COLOR', 'PCS', 'METAL_WT', 'GROSS_WT', 'RATEFC', 'RATECC'];
   BOMDetailsArray: any[] = []
-  columnheads: any[] = ['Div', 'Stone T', 'Comp C', 'Karat', 'PCS', 'Amount', 'Shape', 'Sieve', 'Lab.Rate', 'Wast', 'wast', 'wast', 'Lab.Amount', 'Sieve Desc', 'Size', 'Color'];
+  BOMDetailsArrayHead: any[] = []
   columnhead: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
   columnheader: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
@@ -43,7 +43,7 @@ export class AddNewdetailComponent implements OnInit {
   }
 
 
-  
+
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
     designDescription: ['', [Validators.required]],
@@ -90,17 +90,26 @@ export class AddNewdetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.resizeGrid()
+    this.setInitialValues()
+    // this.resizeGrid()
   }
-  resizeGrid(){
-    let resizableDiv:any = document.getElementById('resizableDiv');
+  setInitialValues(){
+    if(this.content && this.content.length>0){
+      console.log(this.content);
+      this.BOMDetailsArray = this.content[0].detailRow
+      this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
+    }
+    
+  }
+  resizeGrid() {
+    let resizableDiv: any = document.getElementById('resizableDiv');
     if (resizableDiv) {
       // Do something with the element
-      console.log(resizableDiv,'resizableDiv');
+      console.log(resizableDiv, 'resizableDiv');
     }
-    let isResizing:boolean = false;
+    let isResizing: boolean = false;
 
-    resizableDiv.addEventListener('touchstart', (event:any) => {
+    resizableDiv.addEventListener('touchstart', (event: any) => {
       isResizing = true;
       event.preventDefault();
     });
@@ -133,21 +142,23 @@ export class AddNewdetailComponent implements OnInit {
       "SPID": "003",
       "parameter": {
         "FLAG": 'VIEW',
-	      "DESIGNCODE": event.target.value || '', //TODO 'HM14437' 
+        "DESIGNCODE": event.target.value || '', //TODO 'HM14437' 
         "METAL_COLOR": '',
-        "MRG_PERC":'',
-        "ACCODE":''
+        "MRG_PERC": '',
+        "ACCODE": ''
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.snackBar.dismiss()
         if (result.dynamicData || result.status == 'Success') {
-          let data:any = result.dynamicData[0]
+          let data: any = result.dynamicData[0]
           data = this.commonService.arrayEmptyObjectToString(data)
           data = data[0]
-          
+
           this.BOMDetailsArray = result.dynamicData[1]
+          this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
+
           // this.column1 = Object.keys(this.BOMDetailsArray);
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
           this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
@@ -186,16 +197,25 @@ export class AddNewdetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
-  reset(){
+  formSubmit() {
+    let item: any = {}
+    if (this.BOMDetailsArray.length > 0) {
+      item.BOMDetails = this.BOMDetailsArray
+    }
+    if (this.summaryDetailForm.value) {
+      item.summaryDetail = [this.summaryDetailForm.value]
+    }
+    this.close([item])
+  }
+  reset() {
     this.BOMDetailsArray = []
   }
   selectionChanged(data: any) {
     console.log(data, 'fireddddd');
   }
 
-  close() {
-    this.activeModal.close();
+  close(data?: any) {
+    this.activeModal.close(data);
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

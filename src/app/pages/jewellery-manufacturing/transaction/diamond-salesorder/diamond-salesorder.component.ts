@@ -19,43 +19,16 @@ export class DiamondSalesorderComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   divisionMS: any = 'ID';
-  tableData: any[] = [
-    { Division: 'Division', Description: 'value' },
-    { Division: 'Division', Description: 'value' },
-    { Division: 'Division', Description: 'value' },
-    { Division: 'Division', Description: 'value' },
-  ]
-  columnhead: any[] = ['Code', 'Div', 'Qty', 'Rate', 'Wts %', 'Lab type', 'Lab A/C', 'Unit', 'Shape', 'Karat'];
-  column1: any[] = ['SRNO', 'DESIGN CODE', 'KARAT', 'METAL_COLOR', 'PCS', 'METAL_WT', 'GROSS_WT', 'RATEFC', 'RATECC'];
+  detailData: any[] = [];
+  tableDataHead: any[] = [];
+  tableData: any[] = []
   checked = false;
   check = false;
   indeterminate = false;
   currentDate = new Date()
   private subscriptions: Subscription[] = [];
-  tableItems: any = [
-    {
-      slno: 1,
-      Category: 'value',
-      Brand: 'value',
-      Inventory: 'value',
-      Forecast: 'value',
-      Management: 'value',
-      Inventory2: 'value',
-      Forecast2: 'value',
-      Management2: 'value',
-    },
-    {
-      slno: 2,
-      Category: 'value',
-      Brand: 'value',
-      Inventory: 'value',
-      Forecast: 'value',
-      Management: 'value',
-      Inventory2: 'value',
-      Forecast2: 'value',
-      Management2: 'value',
-    },
-  ]
+  tableItems: any = []
+
   OrderTypeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -167,12 +140,48 @@ export class DiamondSalesorderComponent implements OnInit {
       this.PartyDetailsOrderForm.controls.VoucherDate.setValue(new Date(date))
     }
   }
-  addNewDetail() {
+  selectionChangedHandler(event: any){
+    console.log(event.selectedRowsData,'event');
+    let selectedData = event.selectedRowsData
+    let detailRow = this.detailData.filter((item:any)=> item.SRNO == selectedData[0].SRNO)
+    let allDataSelected = [
+      {
+        summaryData: selectedData,
+        detailRow: detailRow
+      }
+    ]
+    this.addNewDetail(allDataSelected)
+  }
+  addNewDetail(data?:any) {
     const modalRef: NgbModalRef = this.modalService.open(AddNewdetailComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
+    });
+    modalRef.componentInstance.content = data;
+
+    modalRef.result.then((result) => {
+      if (result) {
+        let summaryData:any[] = result[0].summaryDetail //summary details
+        summaryData.forEach((item: any,index: any)=>{
+          item.SRNO = index+1
+          this.tableData.push(item)
+        })
+        this.tableDataHead = Object.keys(this.tableData[0]);
+
+        if(result.length>0){
+          let num:number = 0
+          result.forEach((item:any,index:any)=>{
+            num = index
+            this.detailData.push({[num+1]: item})
+          })
+        }
+          //summary details
+        // this.getMasterGridData()
+      }
+    }, (reason) => {
+      // Handle modal dismissal (if needed)
     });
     // modalRef.componentInstance.content = data;
   }

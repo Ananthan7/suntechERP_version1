@@ -7,7 +7,7 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (cancelClick)="close()"></modal-header>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
 </div>
 <div class="container-fluid pt-3">
     <div class="card">
@@ -213,31 +213,32 @@
                                     <div class="row" style="max-width: 100%;">
                                         <div class="table1" id="resizableDiv">
                                             <dx-data-grid #dataGrid id="gridContainer" width="auto"
-                                                [showBorders]="true" [dataSource]="BOMDetailsArray">
+                                                [showBorders]="true" [showRowLines]="true"
+                                                [dataSource]="BOMDetailsArray">
                                                 <dxo-paging [enabled]="false"></dxo-paging>
                                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                                 </dxo-editing>
                                                 <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                                                 <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
 
-                                                <dxi-column *ngFor="let data of column1" dataField="{{ data }}"
+                                                <dxi-column *ngFor="let data of BOMDetailsArrayHead" dataField="{{ data }}"
                                                     width="auto" caption="{{ data }}" [allowEditing]="true"
-                                                    alignment="center" backgroundcolor="#000">
+                                                    alignment="center">
                                                 </dxi-column>
                                             </dx-data-grid>
                                         </div>
                                         <div class="table1" id="resizableDiv">
-                                            <dx-data-grid #dataGrid id="gridContainer" width="auto" keyExpr="ID"
+                                            <dx-data-grid #dataGrid id="gridContainer" width="auto" 
+                                                [dataSource]="BOMDetailsArray"
                                                 [showBorders]="true">
                                                 <dxo-paging [enabled]="false"></dxo-paging>
                                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                                 </dxo-editing>
-                                                <dxo-selection mode="multiple"></dxo-selection>
                                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                                <dxi-column *ngFor="let data of column1" dataField="{{ data }}"
+                                                <dxi-column *ngFor="let data of BOMDetailsArrayHead" dataField="{{ data }}"
                                                     width="auto" caption="{{ data }}" [allowEditing]="true"
-                                                    alignment="center" backgroundcolor="#000">
+                                                    alignment="center">
                                                 </dxi-column>
                                             </dx-data-grid>
                                         </div>
