@@ -11,6 +11,8 @@ import { JobCardComponent } from './job-card/job-card.component';
 import { MetalIssueComponent } from './metal-issue/metal-issue.component';
 import { WaxProcessComponent } from './wax-process/wax-process.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
+import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
+import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
 
 @Component({
   selector: 'app-transaction',
@@ -76,9 +78,15 @@ export class TransactionComponent implements OnInit {
       case 'Waxing Process Issue':
         contents = WaxProcessComponent
         break;
-        case 'Casting Tree Up (TMU)':
-          contents = CastingTreeUpComponent
-          break;
+      case 'Casting Tree Up (TMU)':
+        contents = CastingTreeUpComponent
+        break;
+      case 'Melting Issue':
+        contents = MeltingIssueComponent
+        break;  
+      case 'Process Transfer (MFG)':
+        contents = ProcessTransferComponent
+        break;  
         //continue adding components using case then break
       default:
         this.snackBar.open('No Response Found!', 'Close', {

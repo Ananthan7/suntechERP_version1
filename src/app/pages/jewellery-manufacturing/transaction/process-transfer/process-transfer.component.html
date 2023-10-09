@@ -1,0 +1,154 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Process Transfer (MFG)</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<div class="row">
+    <div class="col-md-12">
+        <form [formGroup]="processTransferFrom">
+            <div class="container-fluid pt-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h6>HO</h6>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Voc Type: </label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Voc Date :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="date" matInput />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Voc No :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="number" matInput />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Salesman : </label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                            </div>
+                            <label for="input" class="col-sm-2 col-form-label">Currency : </label>
+                            <div class="col-sm-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <h6>Post</h6>
+                        </div>
+                        <div class="row align-items-end mb-2">
+                            <div class="col-md-12">
+                                <div class="text-area">
+                                    <textarea class="border-bottom" rows="3" matInput></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row py-2 border-top">
+                    <div class="col-md-3 d-flex">
+                        <div class="p-2 bd-highlight">
+                            <button type="button" class="btn btn-primary add-btn">
+                                Add
+                            </button>
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <button type="button" class="btn btn-outline-primary del-btn">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <dx-data-grid id="gridContainer"  keyExpr="ID" [columnAutoWidth]="true"
+                            [showBorders]="true" [allowColumnReordering]="true">
+                            <dxi-column caption="">
+                                <dxi-column alignment="center" caption="SR NO" dataField="Population_Total"
+                                    format="fixedPoint">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Job Ref" dataField="Population_Urban"
+                                    format="percent">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Pcs" dataField="Population_Urban"
+                                    format="percent">
+                                </dxi-column>
+                            </dxi-column>
+                            <dxi-column alignment="center" caption="From">
+                                <dxi-column alignment="center" caption="Process" dataField="Population_Total"
+                                    format="fixedPoint">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Worker" dataField="Population_Urban"
+                                    format="percent">
+                                </dxi-column>
+                            </dxi-column>
+                            <dxi-column alignment="center" caption="To">
+                                <dxi-column alignment="center" caption="Process" dataField="Population_Total"
+                                    format="fixedPoint">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Worker" dataField="Population_Urban"
+                                    format="percent">
+                                </dxi-column>
+                            </dxi-column>
+                            <dxi-column alignment="center" caption="Metal">
+                                <dxi-column alignment="center" caption="Psc" dataField="Population_Total"
+                                    format="fixedPoint">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Weight" dataField="Population_Urban"
+                                    format="percent">
+                                </dxi-column>
+                            </dxi-column>
+                            <dxi-column alignment="center" caption="Stone">
+                                <dxi-column alignment="center" caption="Psc" dataField="Population_Total"
+                                    format="fixedPoint">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Weight" dataField="Population_Urban"
+                                    format="percent">
+                                </dxi-column>
+                            </dxi-column>
+                            <dxi-column alignment="center" caption="">
+                                <dxi-column alignment="center" caption="Loss" dataField="Population_Total"
+                                    format="fixedPoint">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Time" dataField="Population_Urban"
+                                    format="percent">
+                                </dxi-column>
+                            </dxi-column>
+
+                            <div *dxTemplate="let data of 'headerTemplate'">
+                                <div>Area, km<sup>2</sup></div>
+                            </div>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

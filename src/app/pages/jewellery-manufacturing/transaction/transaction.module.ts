@@ -21,6 +21,9 @@ import { StoneReturnComponent } from './stone-return/stone-return.component';
 import { StoneReturnDetailsComponent } from './stone-return/stone-return-details/stone-return-details.component';
 import { WaxProcessReturnComponent } from './wax-process-return/wax-process-return.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
+import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
+import { MeltingIssueDetailsComponent } from './melting-issue/melting-issue-details/melting-issue-details.component';
+import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
 
 
 
@@ -46,7 +49,9 @@ import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.compon
     StoneReturnDetailsComponent,
     WaxProcessReturnComponent,
     CastingTreeUpComponent,
-    
+    MeltingIssueComponent,
+    MeltingIssueDetailsComponent,
+    ProcessTransferComponent,
     
   ],
   imports: [
