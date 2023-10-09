@@ -148,12 +148,7 @@ export class DiamondSalesorderComponent implements OnInit {
     let detailRow = this.detailData.filter((item:any)=> item.ID == selectedData[0].SRNO)
     console.log(detailRow,'detailRow');
     
-    let allDataSelected = [
-      {
-        summaryData: selectedData,
-        detailRow: detailRow[0].DATA
-      }
-    ]
+    let allDataSelected = [ detailRow[0].DATA ]
     this.addNewDetail(allDataSelected)
   }
   totalDetailNo: number = 0;
