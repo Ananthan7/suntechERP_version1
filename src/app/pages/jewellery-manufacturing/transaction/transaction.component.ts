@@ -62,58 +62,53 @@ export class TransactionComponent implements OnInit {
     this.openModalView(str)
   }
   //  open forms in modal
- //  open Jobcard in modal
- openModalView(data?: any) {
-  let contents;
-  switch (this.menuTitle) {
-    case 'Diamond Sales Order':
-      contents = DiamondSalesorderComponent
-      break;
-    case 'Diamond Quotation':
-      contents = DiamondQuotationComponent
-      break;
-    case 'Job Card':
-      contents = JobCardComponent
-      break;
-    case 'Metal Issue (diamond Jewellery)':
-      contents = MetalIssueComponent
-      break;
-    case 'Waxing Process Issue':
-      contents = WaxProcessComponent
-      break;
-    case 'Stone Issue (diamond Jewellery)':
-      contents = StoneIssueComponent
-      break;
-    case 'CAD Process (CAD)':
-      contents = CADProcessingComponent
-      break;
-    case 'Metal Return (diamond Jewellery)':
-      contents = contents = MetalReturnComponent
-      break;
-    //continue adding components using case then break
+  //  open Jobcard in modal
+  openModalView(data?: any) {
+    let contents;
+    switch (this.menuTitle) {
+      case 'Diamond Sales Order':
+        contents = DiamondSalesorderComponent
+        break;
+      case 'Diamond Quotation':
+        contents = DiamondQuotationComponent
+        break;
+      case 'Job Card':
+        contents = JobCardComponent
+        break;
+      case 'Metal Issue (diamond Jewellery)':
+        contents = MetalIssueComponent
+        break;
+      case 'Waxing Process Issue':
+        contents = WaxProcessComponent
+        break;
       case 'Stone Issue (diamond Jewellery)':
         contents = StoneIssueComponent
         break;
-        case 'CAD Process (CAD)':
-          contents = CADProcessingComponent
-          break;
-          case 'Stone Return (diamond Jewellery)':
-            contents = StoneReturnComponent
-            break;
-          case 'Waxing Process Return':
-          contents = WaxProcessReturnComponent
-          break;
-          case 'JOB CREATION':
-            contents = JobCreationComponent
-            break;
-            case 'Casting Tree Up (TMU)':
-            contents = CastingTreeUpComponent
-            break;
+      case 'CAD Process (CAD)':
+        contents = CADProcessingComponent
+        break;
+      case 'Metal Return (diamond Jewellery)':
+        contents = contents = MetalReturnComponent
+        break;
+      //continue adding components using case then break    
+
+      case 'Stone Return (diamond Jewellery)':
+        contents = StoneReturnComponent
+        break;
+      case 'Waxing Process Return':
+        contents = WaxProcessReturnComponent
+        break;
+      case 'JOB CREATION':
+        contents = JobCreationComponent
+        break;
+      case 'Casting Tree Up (TMU)':
+        contents = CastingTreeUpComponent
+        break;
       //continue adding components using case then break
-    default:
-      alert('Module Not found')
-  }
-    
+      default:
+        alert('Module Not found')
+    }
+
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
       backdrop: 'static',//'static'
@@ -206,12 +201,12 @@ export class TransactionComponent implements OnInit {
           // this.ChangeDetector.detectChanges()
         } else {
           this.snackBar.open('No Response Found!', 'Close', {
-            duration: 3000, 
+            duration: 3000,
           });
         }
       }, err => {
         this.snackBar.open(err, 'Close', {
-          duration: 3000, 
+          duration: 3000,
         });
       });
   }
