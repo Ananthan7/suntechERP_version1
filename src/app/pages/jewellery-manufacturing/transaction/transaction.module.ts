@@ -18,6 +18,10 @@ import { WaxProcessComponent } from './wax-process/wax-process.component';
 import { MetalIssueDetailsComponent } from './metal-issue/metal-issue-details/metal-issue-details.component';
 import { StoneIssueDetailComponent } from './stone-issue/stone-issue-detail/stone-issue-detail.component';
 import { WaxProcessReturnComponent } from './wax-process-return/wax-process-return.component';
+import { MetalReturnComponent } from './metal-return/metal-return.component';
+import { StoneReturnComponent } from './stone-return/stone-return.component';
+import { JobcardComponent } from '../master/jobcard/jobcard.component';
+import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 
 
 
@@ -38,7 +42,16 @@ import { WaxProcessReturnComponent } from './wax-process-return/wax-process-retu
     AddNewdiamondquotationComponent,
     WaxProcessComponent,
     MetalIssueDetailsComponent,
-    WaxProcessReturnComponent
+    WaxProcessReturnComponent,
+    MetalReturnComponent,
+    StoneReturnComponent,
+    WaxProcessComponent,
+    WaxProcessReturnComponent,
+    JobcardComponent,
+    CastingTreeUpComponent
+    
+
+
     
   ],
   imports: [

@@ -16,6 +16,7 @@ import { MetalReturnComponent } from './metal-return/metal-return.component';
 import { StoneReturnComponent } from './stone-return/stone-return.component';
 import { WaxProcessReturnComponent } from './wax-process-return/wax-process-return.component';
 import { JobCreationComponent } from './job-creation/job-creation.component';
+import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 
 @Component({
   selector: 'app-transaction',
@@ -104,6 +105,9 @@ export class TransactionComponent implements OnInit {
           break;
           case 'JOB CREATION':
             contents = JobCreationComponent
+            break;
+            case 'Casting Tree Up (TMU)':
+            contents = CastingTreeUpComponent
             break;
       //continue adding components using case then break
     default:
