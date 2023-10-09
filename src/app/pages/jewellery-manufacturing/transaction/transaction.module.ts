@@ -17,6 +17,8 @@ import { AddNewdiamondquotationComponent } from './diamond-quotation/add-newdiam
 import { WaxProcessComponent } from './wax-process/wax-process.component';
 import { MetalIssueDetailsComponent } from './metal-issue/metal-issue-details/metal-issue-details.component';
 import { StoneIssueDetailComponent } from './stone-issue/stone-issue-detail/stone-issue-detail.component';
+import { WaxProcessReturnComponent } from './wax-process-return/wax-process-return.component';
+
 
 
 
@@ -35,7 +37,8 @@ import { StoneIssueDetailComponent } from './stone-issue/stone-issue-detail/ston
     AddNewdetailComponent,
     AddNewdiamondquotationComponent,
     WaxProcessComponent,
-    MetalIssueDetailsComponent
+    MetalIssueDetailsComponent,
+    WaxProcessReturnComponent
     
   ],
   imports: [
