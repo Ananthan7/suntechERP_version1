@@ -17,8 +17,10 @@ import { AddNewdiamondquotationComponent } from './diamond-quotation/add-newdiam
 import { WaxProcessComponent } from './wax-process/wax-process.component';
 import { MetalIssueDetailsComponent } from './metal-issue/metal-issue-details/metal-issue-details.component';
 import { StoneIssueDetailComponent } from './stone-issue/stone-issue-detail/stone-issue-detail.component';
+import { StoneReturnComponent } from './stone-return/stone-return.component';
+import { StoneReturnDetailsComponent } from './stone-return/stone-return-details/stone-return-details.component';
 import { WaxProcessReturnComponent } from './wax-process-return/wax-process-return.component';
-
+import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 
 
 
@@ -31,14 +33,20 @@ import { WaxProcessReturnComponent } from './wax-process-return/wax-process-retu
     JobCreationComponent,
     MetalIssueComponent,
     StoneIssueComponent,
-    StoneIssueDetailComponent,
     MeltingProcessComponent,
     CADProcessingComponent,
     AddNewdetailComponent,
     AddNewdiamondquotationComponent,
     WaxProcessComponent,
     MetalIssueDetailsComponent,
-    WaxProcessReturnComponent
+    StoneIssueDetailComponent,
+    StoneReturnComponent,
+    StoneReturnDetailsComponent,
+    StoneReturnComponent,
+    StoneReturnDetailsComponent,
+    WaxProcessReturnComponent,
+    CastingTreeUpComponent,
+    
     
   ],
   imports: [
