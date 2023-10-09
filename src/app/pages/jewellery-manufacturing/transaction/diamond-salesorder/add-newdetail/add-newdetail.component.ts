@@ -95,37 +95,37 @@ export class AddNewdetailComponent implements OnInit {
   }
   setInitialValues(){
     if(this.content && this.content.length>0){
-      console.log(this.content);
+      console.log(this.content,'content');
       this.BOMDetailsArray = this.content[0].detailRow
       this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
     }
     
   }
-  resizeGrid() {
-    let resizableDiv: any = document.getElementById('resizableDiv');
-    if (resizableDiv) {
-      // Do something with the element
-      console.log(resizableDiv, 'resizableDiv');
-    }
-    let isResizing: boolean = false;
+  // resizeGrid() {
+  //   let resizableDiv: any = document.getElementById('resizableDiv');
+  //   if (resizableDiv) {
+  //     // Do something with the element
+  //     console.log(resizableDiv, 'resizableDiv');
+  //   }
+  //   let isResizing: boolean = false;
 
-    resizableDiv.addEventListener('touchstart', (event: any) => {
-      isResizing = true;
-      event.preventDefault();
-    });
+  //   resizableDiv.addEventListener('touchstart', (event: any) => {
+  //     isResizing = true;
+  //     event.preventDefault();
+  //   });
 
-    document.addEventListener('touchmove', (event) => {
-      if (isResizing) {
-        const touch = event.touches[0];
-        resizableDiv.style.width = touch.clientX + 'px';
-        event.preventDefault();
-      }
-    });
+  //   document.addEventListener('touchmove', (event) => {
+  //     if (isResizing) {
+  //       const touch = event.touches[0];
+  //       resizableDiv.style.width = touch.clientX + 'px';
+  //       event.preventDefault();
+  //     }
+  //   });
 
-    document.addEventListener('touchend', () => {
-      isResizing = false;
-    });
-  }
+  //   document.addEventListener('touchend', () => {
+  //     isResizing = false;
+  //   });
+  // }
   designCodeSelected(data: any) {
     this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
     this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
