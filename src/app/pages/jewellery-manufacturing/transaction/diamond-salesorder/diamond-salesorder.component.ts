@@ -143,15 +143,20 @@ export class DiamondSalesorderComponent implements OnInit {
   selectionChangedHandler(event: any){
     console.log(event.selectedRowsData,'event');
     let selectedData = event.selectedRowsData
-    let detailRow = this.detailData.filter((item:any)=> item.SRNO == selectedData[0].SRNO)
+    console.log(this.detailData,'this.detailData');
+    
+    let detailRow = this.detailData.filter((item:any)=> item.ID == selectedData[0].SRNO)
+    console.log(detailRow,'detailRow');
+    
     let allDataSelected = [
       {
         summaryData: selectedData,
-        detailRow: detailRow
+        detailRow: detailRow[0].DATA
       }
     ]
     this.addNewDetail(allDataSelected)
   }
+  totalDetailNo: number = 0;
   addNewDetail(data?:any) {
     const modalRef: NgbModalRef = this.modalService.open(AddNewdetailComponent, {
       size: 'xl',
@@ -163,19 +168,24 @@ export class DiamondSalesorderComponent implements OnInit {
 
     modalRef.result.then((result) => {
       if (result) {
+        this.totalDetailNo += 1
+
         let summaryData:any[] = result[0].summaryDetail //summary details
         summaryData.forEach((item: any,index: any)=>{
-          item.SRNO = index+1
+          item.SRNO = this.totalDetailNo
           this.tableData.push(item)
         })
         this.tableDataHead = Object.keys(this.tableData[0]);
-
+        
         if(result.length>0){
-          let num:number = 0
           result.forEach((item:any,index:any)=>{
-            num = index
-            this.detailData.push({[num+1]: item})
+            this.detailData.push({
+              ID: this.totalDetailNo,
+              DATA: item
+            })
           })
+          console.log(this.detailData,'item');
+          
         }
           //summary details
         // this.getMasterGridData()
