@@ -10,6 +10,12 @@ import { DiamondQuotationComponent } from './diamond-quotation/diamond-quotation
 import { JobCardComponent } from './job-card/job-card.component';
 import { MetalIssueComponent } from './metal-issue/metal-issue.component';
 import { WaxProcessComponent } from './wax-process/wax-process.component';
+import { StoneIssueComponent } from './stone-issue/stone-issue.component';
+import { CADProcessingComponent } from './cad-processing/cad-processing.component';
+import { MetalReturnComponent } from './metal-return/metal-return.component';
+import { StoneReturnComponent } from './stone-return/stone-return.component';
+import { WaxProcessReturnComponent } from './wax-process-return/wax-process-return.component';
+import { JobCreationComponent } from './job-creation/job-creation.component';
 
 @Component({
   selector: 'app-transaction',
@@ -55,30 +61,54 @@ export class TransactionComponent implements OnInit {
     this.openModalView(str)
   }
   //  open forms in modal
-  openModalView(data?: any) {
-    let contents;
-    switch(this.menuTitle) {
-      case 'Diamond Sales Order':
-        contents = DiamondSalesorderComponent
+ //  open Jobcard in modal
+ openModalView(data?: any) {
+  let contents;
+  switch (this.menuTitle) {
+    case 'Diamond Sales Order':
+      contents = DiamondSalesorderComponent
+      break;
+    case 'Diamond Quotation':
+      contents = DiamondQuotationComponent
+      break;
+    case 'Job Card':
+      contents = JobCardComponent
+      break;
+    case 'Metal Issue (diamond Jewellery)':
+      contents = MetalIssueComponent
+      break;
+    case 'Waxing Process Issue':
+      contents = WaxProcessComponent
+      break;
+    case 'Stone Issue (diamond Jewellery)':
+      contents = StoneIssueComponent
+      break;
+    case 'CAD Process (CAD)':
+      contents = CADProcessingComponent
+      break;
+    case 'Metal Return (diamond Jewellery)':
+      contents = contents = MetalReturnComponent
+      break;
+    //continue adding components using case then break
+      case 'Stone Issue (diamond Jewellery)':
+        contents = StoneIssueComponent
         break;
-      case 'Diamond Quotation':
-        contents = DiamondQuotationComponent
-        break;
-      case 'Job Card':
-        contents = JobCardComponent
-        break;
-      case 'Metal Issue (diamond Jewellery)':
-        contents = MetalIssueComponent
-        break;
-      case 'Waxing Process Issue':
-        contents = WaxProcessComponent
-        break;
-        //continue adding components using case then break
-      default:
-        this.snackBar.open('No Response Found!', 'Close', {
-          duration: 3000, 
-        });
-    }
+        case 'CAD Process (CAD)':
+          contents = CADProcessingComponent
+          break;
+          case 'Stone Return (diamond Jewellery)':
+            contents = StoneReturnComponent
+            break;
+          case 'Waxing Process Return':
+          contents = WaxProcessReturnComponent
+          break;
+          case 'JOB CREATION':
+            contents = JobCreationComponent
+            break;
+      //continue adding components using case then break
+    default:
+      alert('Module Not found')
+  }
     
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
