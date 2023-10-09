@@ -10,6 +10,7 @@ import { DiamondQuotationComponent } from './diamond-quotation/diamond-quotation
 import { JobCardComponent } from './job-card/job-card.component';
 import { MetalIssueComponent } from './metal-issue/metal-issue.component';
 import { WaxProcessComponent } from './wax-process/wax-process.component';
+import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 
 @Component({
   selector: 'app-transaction',
@@ -57,6 +58,8 @@ export class TransactionComponent implements OnInit {
   //  open forms in modal
   openModalView(data?: any) {
     let contents;
+    console.log(this.menuTitle);
+    
     switch(this.menuTitle) {
       case 'Diamond Sales Order':
         contents = DiamondSalesorderComponent
@@ -73,6 +76,9 @@ export class TransactionComponent implements OnInit {
       case 'Waxing Process Issue':
         contents = WaxProcessComponent
         break;
+        case 'Casting Tree Up (TMU)':
+          contents = CastingTreeUpComponent
+          break;
         //continue adding components using case then break
       default:
         this.snackBar.open('No Response Found!', 'Close', {

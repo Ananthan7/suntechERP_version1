@@ -20,6 +20,7 @@ import { StoneIssueDetailComponent } from './stone-issue/stone-issue-detail/ston
 import { StoneReturnComponent } from './stone-return/stone-return.component';
 import { StoneReturnDetailsComponent } from './stone-return/stone-return-details/stone-return-details.component';
 import { WaxProcessReturnComponent } from './wax-process-return/wax-process-return.component';
+import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 
 
 
@@ -44,6 +45,8 @@ import { WaxProcessReturnComponent } from './wax-process-return/wax-process-retu
     StoneReturnComponent,
     StoneReturnDetailsComponent,
     WaxProcessReturnComponent,
+    CastingTreeUpComponent,
+    
     
   ],
   imports: [
