@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">CAD/Sketch Process</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Cad/Sketch Process</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -19,7 +19,7 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="vocType"  />
+                                        <input type="text" matInput formControlName="vocType" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -35,7 +35,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Voucher Date : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput formControlName="vocDate"/>
+                                    <input type="date" matInput formControlName="vocDate" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -43,27 +43,27 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Process : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="process"/>
+                                    <input type="text" matInput formControlName="process" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="processCodeData"
-                                (newRowClick)="processSelected($event)"></master-search>
+                                    (newRowClick)="processSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-6 col-form-label">Worker : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="worker"/>
+                                    <input type="text" matInput formControlName="worker" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="workerCodeData"
-                                (newRowClick)="workedSelected($event)"></master-search>
+                                    (newRowClick)="workedSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-6 col-form-label">Narration : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="narration"/>
+                                    <input type="text" matInput formControlName="narration" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label ">So Number : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="soNumber"/>
+                                    <input type="text" matInput formControlName="soNumber" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
 
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="design"/>
+                                    <input type="text" matInput formControlName="design" />
                                 </mat-form-field>
                             </div>
 
@@ -92,7 +92,7 @@
 
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput formControlName="completed"/>
+                                    <input type="date" matInput formControlName="completed" />
                                 </mat-form-field>
                             </div>
 
@@ -101,20 +101,20 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label ">To Worker : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="toWorker"/>
+                                    <input type="text" matInput formControlName="toWorker" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="workerCodeData"
-                                (newRowClick)="toWorkedSelected($event)"></master-search>
+                                    (newRowClick)="toWorkedSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5 col-form-label ">To Process : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="toProcess"/>
+                                    <input type="text" matInput formControlName="toProcess" />
                                 </mat-form-field>
-                                <master-search  [MasterSearchData]="processCodeData"
-                                (newRowClick)="toProcessSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="processCodeData"
+                                    (newRowClick)="toProcessSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Job : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="job"/>
+                                    <input type="text" matInput formControlName="job" />
                                 </mat-form-field>
                             </div>
 
@@ -132,7 +132,7 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Sub Job Id : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="subJobId"/>
+                                    <input type="text" matInput formControlName="subJobId" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -140,7 +140,7 @@
                             <label for="inputPassword" class="col-sm-8 col-form-label">Time Taken : </label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="timeTaken"/>
+                                    <input type="text" matInput formControlName="timeTaken" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -150,10 +150,10 @@
                         <div class="icons">
                             <div class="image_box"></div>
                             <div class="icons_footer">
-                                 <i class="fas fa-step-backward icon-common"></i>
-                                <i class="fas fa-caret-right icon-common"></i> 
+                                <i class="fas fa-step-backward icon-common"></i>
+                                <i class="fas fa-caret-right icon-common"></i>
                                 <span>0/10</span>
-                                <i class="fas fa-caret-right icon-common"></i> 
+                                <i class="fas fa-caret-right icon-common"></i>
                                 <i class="fas fa-step-forward"></i>
                                 <i class="fas fa-plus icon-common"></i>
                             </div>
@@ -166,6 +166,18 @@
                     </div>
                 </div>
                 <div class="row mt-3">
+                    <div class="col-md-3 d-flex mb-2">
+                        <div class="p-2 bd-highlight">
+                            <button type="button" class="btn btn-primary add-btn" (click)="openaddalloyallocation()">
+                                Add
+                            </button>
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <button type="button" class="btn btn-outline-primary del-btn">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                             <mat-tab label="Components">
@@ -187,37 +199,6 @@
                                 </div>
                             </mat-tab>
                             <mat-tab label="Components Set">
-                                <div class="row mt-2">
-                                    <div class="col-md-3 d-flex">
-                                        <!-- <div class="p-2 bd-highlight">
-                                            <button type="button" class="btn btn-primary add-btn">
-                                                Add
-                                            </button>
-                                        </div>
-                                        <div class="p-2 bd-highlight">
-                                            <button type="button" class="btn btn-outline-primary del-btn">
-                                                Delete
-                                            </button>
-                                        </div> -->
-                                        <div class="p-1">
-                                            <button type="button" mat-flat-button color="primary" >
-                                                <i class="fa fa-plus" style="font-size: 11px;"></i>
-                                            </button>
-                                        </div>
-                                        <div class="p-1">
-                                            <button type="button" mat-flat-button color="primary">
-                                                <i class="fa fa-trash" style="font-size: 11px;"></i>
-                                            </button>
-                                        </div>
-                                        <div class="p-2 bd-highlight">
-                                            <button type="button" class="btn btn-outline-primary del-btn">
-                                                <img class="image" src="../../../../../assets/images/Icons/excel_image.png"
-                                                    style="height: 20px;width: 20px;" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="row">
                                     <div class="col-md-12">
                                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
@@ -253,7 +234,7 @@
                                                             ID: </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="userId"/>
+                                                                <input type="text" matInput formControlName="userId" />
                                                             </mat-form-field>
 
                                                         </div>
@@ -263,7 +244,7 @@
                                                             class="col-sm-4 col-form-label ">Date: </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="date" matInput formControlName="date"/>
+                                                                <input type="date" matInput formControlName="date" />
                                                             </mat-form-field>
 
                                                         </div>
@@ -273,7 +254,7 @@
                                                             class="col-sm-4 col-form-label ">Copy: </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="copy"/>
+                                                                <input type="text" matInput formControlName="copy" />
                                                             </mat-form-field>
 
                                                         </div>
@@ -283,7 +264,7 @@
                                                             class="col-sm-4 col-form-label ">Type: </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="type"/>
+                                                                <input type="text" matInput formControlName="type" />
                                                             </mat-form-field>
 
                                                         </div>
@@ -304,7 +285,7 @@
                                                             class="col-sm-4 col-form-label ">Reason: </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="reason"/>
+                                                                <input type="text" matInput formControlName="reason" />
                                                             </mat-form-field>
                                                             <!-- <master-search></master-search> -->
                                                         </div>
@@ -314,7 +295,7 @@
                                                             class="col-sm-4 col-form-label ">Remarks: </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="remarks"/>
+                                                                <input type="text" matInput formControlName="remarks" />
                                                             </mat-form-field>
 
                                                         </div>
@@ -324,7 +305,8 @@
                                                             class="col-sm-4 col-form-label ">Attachments: </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="attachments"/>
+                                                                <input type="text" matInput
+                                                                    formControlName="attachments" />
                                                             </mat-form-field>
 
                                                         </div>
@@ -335,17 +317,20 @@
 
                                                         <div class="col-sm-3">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="deliveryOn"/>
+                                                                <input type="text" matInput
+                                                                    formControlName="deliveryOn" />
                                                             </mat-form-field>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="deliveryOnDays"/>
+                                                                <input type="text" matInput
+                                                                    formControlName="deliveryOnDays" />
                                                             </mat-form-field>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <mat-form-field style="width: 100%; ">
-                                                                <input type="date" matInput formControlName="deliveryOnDate"/>
+                                                                <input type="date" matInput
+                                                                    formControlName="deliveryOnDate" />
                                                             </mat-form-field>
                                                         </div>
 

@@ -27,6 +27,7 @@ import { MetalReturnDetailsComponent } from './metal-return/metal-return-details
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { MeltingIssueDetailsComponent } from './melting-issue/melting-issue-details/melting-issue-details.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
+import { ProcessTransferDetailsComponent } from './process-transfer/process-transfer-details/process-transfer-details.component';
 
 
 
@@ -56,6 +57,7 @@ import { ProcessTransferComponent } from './process-transfer/process-transfer.co
     MeltingIssueComponent,
     MeltingIssueDetailsComponent,
     ProcessTransferComponent,
+    ProcessTransferDetailsComponent
     
   ],
   imports: [
