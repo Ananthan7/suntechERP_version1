@@ -19,6 +19,7 @@ import { JobCreationComponent } from './job-creation/job-creation.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
+import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
 
 @Component({
   selector: 'app-transaction',
@@ -109,6 +110,10 @@ export class TransactionComponent implements OnInit {
       case 'Melting Issue':
         contents = MeltingIssueComponent
         break;  
+        case 'Quotation Processing':
+          contents = JewelleryAltrationComponent
+          break;
+  
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
         break;  
