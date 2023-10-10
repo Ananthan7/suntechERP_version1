@@ -13,6 +13,7 @@ import { WaxProcessComponent } from './wax-process/wax-process.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
+import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 
 @Component({
   selector: 'app-transaction',
@@ -87,6 +88,9 @@ export class TransactionComponent implements OnInit {
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
         break;  
+      case 'Production (MFG)':
+        contents = ProductionMfgComponent
+        break;
         //continue adding components using case then break
       default:
         this.snackBar.open('No Response Found!', 'Close', {

@@ -24,7 +24,7 @@ import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.compon
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { MeltingIssueDetailsComponent } from './melting-issue/melting-issue-details/melting-issue-details.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
-
+import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 
 
 @NgModule({
@@ -50,6 +50,7 @@ import { ProcessTransferComponent } from './process-transfer/process-transfer.co
     WaxProcessReturnComponent,
     CastingTreeUpComponent,
     MeltingIssueComponent,
+    ProductionMfgComponent,
     MeltingIssueDetailsComponent,
     ProcessTransferComponent,
     
