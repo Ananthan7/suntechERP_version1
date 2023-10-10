@@ -32,6 +32,8 @@ import { JewelleryAltrationDetailsComponent } from './jewellery-altration/jewell
 import { ProcessTransferDetailsComponent } from './process-transfer/process-transfer-details/process-transfer-details.component';
 import { AlloyAllocationComponent } from './cad-processing/alloy-allocation/alloy-allocation.component';
 
+import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
+import { ProductionEntryDetailsComponent } from './production-mfg/production-entry-details/production-entry-details.component';
 
 
 @NgModule({
@@ -58,12 +60,14 @@ import { AlloyAllocationComponent } from './cad-processing/alloy-allocation/allo
     AddNewdetailComponent, 
     CastingTreeUpComponent,
     MeltingIssueComponent,
+    ProductionMfgComponent,
     MeltingIssueDetailsComponent,
     ProcessTransferComponent,
     JewelleryAltrationComponent,
     JewelleryAltrationDetailsComponent,
     ProcessTransferDetailsComponent,
-    AlloyAllocationComponent
+    AlloyAllocationComponent,
+    ProductionEntryDetailsComponent
   ],
   imports: [
     CommonModule,

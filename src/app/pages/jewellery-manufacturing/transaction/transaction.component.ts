@@ -22,6 +22,7 @@ import { ProcessTransferComponent } from './process-transfer/process-transfer.co
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
 import { MeltingProcessComponent } from './melting-process/melting-process.component';
+import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 
 @Component({
   selector: 'app-transaction',
@@ -92,7 +93,7 @@ export class TransactionComponent implements OnInit {
       })
     })
   }
-  onScrollViewScrolled(event:any) {
+  onScrollViewScrolled(event: any) {
     const container = event.target;
     const scrollPosition = container.scrollTop + container.clientHeight;
     // const isAtBottom = scrollPosition >= container.scrollHeight  - 4;
@@ -100,7 +101,7 @@ export class TransactionComponent implements OnInit {
       this.nextPage();
     }
   }
-  
+
   //  open forms in modal
   openModalView(data?: any) {
     let contents;
@@ -114,7 +115,7 @@ export class TransactionComponent implements OnInit {
       case 'Job Card':
         contents = JobCardComponent
         break;
-        case 'Melting Process (MLP)':
+      case 'Melting Process (MLP)':
         contents = MeltingProcessComponent
         break;
       case 'Metal Issue (diamond Jewellery)':
@@ -148,13 +149,16 @@ export class TransactionComponent implements OnInit {
         break;
       case 'Melting Issue':
         contents = MeltingIssueComponent
-        break;  
-        case 'Quotation Processing':
-          contents = JewelleryAltrationComponent
-          break;
-  
+        break;
+      case 'Quotation Processing':
+        contents = JewelleryAltrationComponent
+        break;
+
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
+        break;
+      case 'Production (MFG)':
+        contents = ProductionMfgComponent
         break;
       //continue adding components using case then break
       default:
@@ -200,7 +204,7 @@ export class TransactionComponent implements OnInit {
       this.menuTitle = this.CommonService.getModuleName()
       this.tableName = this.CommonService.getqueryParamTable()
     }
-    this.masterGridComponent?.getMasterGridData({HEADER_TABLE: this.tableName})
+    this.masterGridComponent?.getMasterGridData({ HEADER_TABLE: this.tableName })
     return
     if (this.orderedItems.length == 0) {
       this.snackBar.open('loading...');
@@ -229,7 +233,7 @@ export class TransactionComponent implements OnInit {
         if (resp.dynamicData) {
           // resp.dynamicData[0].map((s: any, i: any) => s.id = i + 1);
           resp.dynamicData[0].forEach((obj: any, i: any) => {
-            
+
             for (const prop in obj) {
               if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
                 // Replace empty object with an empty string
@@ -239,10 +243,10 @@ export class TransactionComponent implements OnInit {
           });
           if (this.orderedItems.length > 0) {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
-            console.log(...resp.dynamicData[0],'resp.dynamicData[0]');
-            
+            console.log(...resp.dynamicData[0], 'resp.dynamicData[0]');
+
             // this.orderedItems.push(...resp.dynamicData[0]);
-            
+
           } else {
             this.orderedItems = resp.dynamicData[0];
             if (this.orderedItems.length == 10) {

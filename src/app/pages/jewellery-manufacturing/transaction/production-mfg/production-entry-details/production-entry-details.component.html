@@ -1,0 +1,328 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Production Entry Details</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()"  (cancelClick)="close()"></modal-header>
+
+<div class="row">
+    <div class="col-md-12">
+        <form [formGroup]="waxprocessFrom">
+      <div class="card-body sales-card-body p-2">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row mb-2">
+              <label for="input" class="col-sm-3 col-form-label">Job No :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+                <master-search></master-search>
+              </div>
+              <div class="col-sm-5">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-3 col-form-label">Sub Job No :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-5">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-3 col-form-label">Customer :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row mb-2">
+              <label for="input" class="col-sm-3 col-form-label">Process :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-5">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-3 col-form-label">Worker :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-5">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-3 col-form-label">Parts :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body sales-card-body p-2">
+        <mat-tab-group  [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+          <mat-tab label="Diamond Jewellery"><br>
+            <div class="row">
+              <div class="col-md-8">
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-2 col-form-label">Design :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Total PCS :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-2 col-form-label">No of Pcs :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Location :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 75%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                    <master-search></master-search>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Loss Qty :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-2 col-form-label">Gross Weight :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Stone Pcs :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Time Taken :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-2 col-form-label">Metal Weight :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Stone Weight :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Price 1 :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-2 col-form-label">Prefix :</label>
+                  <div class="col-sm-2 d-flex">
+                    <mat-form-field style="width: 50%;">
+                      <input type="text" matInput />
+                    </mat-form-field>&nbsp;
+                    <mat-form-field style="width: 50%;">
+                        <input type="text" matInput />
+                      </mat-form-field>
+                    </div>
+
+                  <label for="input" class="col-sm-2 col-form-label">Other Stone :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Price 2 :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-2 col-form-label">Cost Code :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Set Ref :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Price 3 :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                      </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-2 col-form-label">Karat :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Vender Ref :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Price 4 :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-2 col-form-label">Start Date :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="date" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">End Date :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="date" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-2 col-form-label">Price 5 :</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-2 col-form-label">Remarks :</label>
+                  <div class="col-sm-10">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="row mb-2">
+                  <label for="input" class="col-sm-3 col-form-label">Prod Pcs :</label>
+                  <div class="col-sm-3">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <label for="input" class="col-sm-3 col-form-label">Pnd Pcs :</label>
+                  <div class="col-sm-3">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row justify-content-end mb-2">
+                  <label for="input" class="col-sm-3 col-form-label">Loss % :</label>
+                  <div class="col-sm-4">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row justify-content-end mb-2">
+                  <div class="col-sm-4">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row justify-content-between">
+                  <label for="input" class="col-sm-4 col-form-label text-primary">Price Scheme</label>
+                  <div class="col-md-8">
+                    <div class="statusbox">
+  
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Metal Jewellery"><br>
+          </mat-tab>
+        </mat-tab-group>
+   
+      </div>
+    </form>
+ 
+
+  
