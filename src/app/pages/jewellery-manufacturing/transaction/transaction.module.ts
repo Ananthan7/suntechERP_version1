@@ -27,6 +27,8 @@ import { MetalReturnDetailsComponent } from './metal-return/metal-return-details
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { MeltingIssueDetailsComponent } from './melting-issue/melting-issue-details/melting-issue-details.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
+import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
+import { JewelleryAltrationDetailsComponent } from './jewellery-altration/jewellery-altration-details/jewellery-altration-details.component';
 
 
 
@@ -56,6 +58,8 @@ import { ProcessTransferComponent } from './process-transfer/process-transfer.co
     MeltingIssueComponent,
     MeltingIssueDetailsComponent,
     ProcessTransferComponent,
+    JewelleryAltrationComponent,
+    JewelleryAltrationDetailsComponent
     
   ],
   imports: [

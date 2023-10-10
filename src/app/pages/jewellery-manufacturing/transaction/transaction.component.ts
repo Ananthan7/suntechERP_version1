@@ -20,6 +20,7 @@ import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.compon
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
+import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
 
 @Component({
   selector: 'app-transaction',
@@ -143,7 +144,11 @@ export class TransactionComponent implements OnInit {
         break;
       case 'Melting Issue':
         contents = MeltingIssueComponent
-        break;
+        break;  
+        case 'Quotation Processing':
+          contents = JewelleryAltrationComponent
+          break;
+  
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
         break;
