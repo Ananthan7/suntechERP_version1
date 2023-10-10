@@ -17,6 +17,8 @@ import { StoneReturnComponent } from './stone-return/stone-return.component';
 import { WaxProcessReturnComponent } from './wax-process-return/wax-process-return.component';
 import { JobCreationComponent } from './job-creation/job-creation.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
+import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
+import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
 
 @Component({
   selector: 'app-transaction',
@@ -104,6 +106,12 @@ export class TransactionComponent implements OnInit {
       case 'Casting Tree Up (TMU)':
         contents = CastingTreeUpComponent
         break;
+      case 'Melting Issue':
+        contents = MeltingIssueComponent
+        break;  
+      case 'Process Transfer (MFG)':
+        contents = ProcessTransferComponent
+        break;  
       //continue adding components using case then break
       default:
         alert('Module Not found')
