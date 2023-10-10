@@ -23,6 +23,7 @@ import { WaxProcessReturnComponent } from './wax-process-return/wax-process-retu
 import { MetalReturnComponent } from './metal-return/metal-return.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 import { MetalReturnDetailsComponent } from './metal-return/metal-return-details/metal-return-details.component';
+import { MouldMakingComponent } from './mould-making/mould-making.component';
 
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { MeltingIssueDetailsComponent } from './melting-issue/melting-issue-details/melting-issue-details.component';
@@ -56,10 +57,11 @@ import { ProcessTransferComponent } from './process-transfer/process-transfer.co
     MeltingIssueComponent,
     MeltingIssueDetailsComponent,
     ProcessTransferComponent,
+    MouldMakingComponent
     
   ],
   imports: [
-    CommonModule,
+  CommonModule,
     TransactionRoutingModule,
     SharedModule
   ]
