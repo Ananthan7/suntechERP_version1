@@ -1319,10 +1319,10 @@
             </div>
           </div>
 
+          <!-- matTooltip="You have already saved"
+          [matTooltipDisabled]="isSaved" -->
           <div
             class="col-md-6 col-xl-6"
-            matTooltip="You have already saved"
-            [matTooltipDisabled]="isSaved"
             (click)="viewOnly || isSaved ? '' : saveOrder()"
             *ngIf="!viewOnly"
           >
