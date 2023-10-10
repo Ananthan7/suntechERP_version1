@@ -19,6 +19,7 @@ import { JobCreationComponent } from './job-creation/job-creation.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
+import { MeltingProcessComponent } from './melting-process/melting-process.component';
 
 @Component({
   selector: 'app-transaction',
@@ -76,6 +77,9 @@ export class TransactionComponent implements OnInit {
         break;
       case 'Job Card':
         contents = JobCardComponent
+        break;
+        case 'Melting Process (MLP)':
+        contents = MeltingProcessComponent
         break;
       case 'Metal Issue (diamond Jewellery)':
         contents = MetalIssueComponent
