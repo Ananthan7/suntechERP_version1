@@ -19,19 +19,15 @@ export class DiamondSalesorderComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   divisionMS: any = 'ID';
-  tableData: any[] = [
-    { Division: 'Division', Description: 'value' },
-    { Division: 'Division', Description: 'value' },
-    { Division: 'Division', Description: 'value' },
-    { Division: 'Division', Description: 'value' },
-  ]
-  columnhead: any[] = ['Code', 'Div', 'Qty', 'Rate', 'Wts %', 'Lab type', 'Lab A/C', 'Unit', 'Shape', 'Karat'];
-  column1: any[] = ['SRNO', 'DESIGN CODE', 'KARAT', 'METAL_COLOR', 'PCS', 'METAL_WT', 'GROSS_WT', 'RATEFC', 'RATECC'];
+  detailData: any[] = [];
+  tableDataHead: any[] = [];
+  tableData: any[] = []
   checked = false;
   check = false;
   indeterminate = false;
   currentDate = new Date()
   private subscriptions: Subscription[] = [];
+  tableItems: any = []
 
   OrderTypeData: MasterSearchModel = {
     PAGENO: 1,
@@ -132,39 +128,6 @@ export class DiamondSalesorderComponent implements OnInit {
       this.PartyDetailsOrderForm.controls.rateType.setValue(data[0].RATE_TYPE)
   }
 
-  //party Code Change
-  partyCodeChange(event: any) {
-    if (event.target.value == '') return
-    this.snackBar.open('Loading...')
-    let API = `AccountMaster/${event.target.value}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        this.snackBar.dismiss()
-        if (result.response) {
-          let data = result.response
-          if (data.CURRENCY_CODE) {
-            this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data.CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data.CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data.ACCOUNT_HEAD)
-            this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data.ADDRESS)
-
-            let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data.CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
-            this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
-          }
-        } else {
-          this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
-            timeOut: 3000,
-          })
-        }
-      }, err => {
-        this.snackBar.dismiss()
-        this.toastr.error('Server Error', '', {
-          timeOut: 3000,
-        })
-      })
-    this.subscriptions.push(Sub)
-  }
 
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -177,12 +140,53 @@ export class DiamondSalesorderComponent implements OnInit {
       this.PartyDetailsOrderForm.controls.VoucherDate.setValue(new Date(date))
     }
   }
-  addNewDetail() {
+  selectionChangedHandler(event: any){
+    console.log(event.selectedRowsData,'event');
+    let selectedData = event.selectedRowsData
+    console.log(this.detailData,'this.detailData');
+    
+    let detailRow = this.detailData.filter((item:any)=> item.ID == selectedData[0].SRNO)
+    console.log(detailRow,'detailRow');
+    
+    let allDataSelected = [ detailRow[0].DATA ]
+    this.addNewDetail(allDataSelected)
+  }
+  totalDetailNo: number = 0;
+  addNewDetail(data?:any) {
     const modalRef: NgbModalRef = this.modalService.open(AddNewdetailComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
+    });
+    modalRef.componentInstance.content = data;
+
+    modalRef.result.then((result) => {
+      if (result) {
+        this.totalDetailNo += 1
+
+        let summaryData:any[] = result[0].summaryDetail //summary details
+        summaryData.forEach((item: any,index: any)=>{
+          item.SRNO = this.totalDetailNo
+          this.tableData.push(item)
+        })
+        this.tableDataHead = Object.keys(this.tableData[0]);
+        
+        if(result.length>0){
+          result.forEach((item:any,index:any)=>{
+            this.detailData.push({
+              ID: this.totalDetailNo,
+              DATA: item
+            })
+          })
+          console.log(this.detailData,'item');
+          
+        }
+          //summary details
+        // this.getMasterGridData()
+      }
+    }, (reason) => {
+      // Handle modal dismissal (if needed)
     });
     // modalRef.componentInstance.content = data;
   }
@@ -411,9 +415,51 @@ export class DiamondSalesorderComponent implements OnInit {
   }
 
 
-  deleteClicked():void {
+  deleteClicked(): void {
 
   }
+  //party Code Change
+  partyCodeChange(event: any) {
+    if (event.target.value == '') return
+    this.snackBar.open('Loading...')
+    let postData = {
+      "SPID": "001",
+      "parameter": {
+        "ACCODE": event.target.value || "",
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface',postData)
+      .subscribe((result) => {
+        this.snackBar.dismiss()
+        if (result.status == "Success") { //
+          let data = result.dynamicData[0]
+          console.log(data,'data');
+          if (data && data[0].CURRENCY_CODE) {
+            console.log(data,'data');
+            
+            this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data[0].CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data[0].ACCOUNT_HEAD)
+            this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data[0].ADDRESS)
+
+            let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data[0].CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+            this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+          }
+        } else {
+          this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.snackBar.dismiss()
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
+    this.subscriptions.push(Sub)
+  }
+
   //data settings
   OrderTypeSelected(event: any) {
     this.PartyDetailsOrderForm.controls.orderType.setValue(event.CODE)

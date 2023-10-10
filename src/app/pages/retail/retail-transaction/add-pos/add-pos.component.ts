@@ -574,7 +574,8 @@ export class AddPosComponent implements OnInit {
 
     this.exchangeForm = this.formBuilder.group({
       fcn_exchange_division: ['', Validators.required],
-      fcn_exchange_item_code: ['', [Validators.required, this.autoCompleteValidator(() => this.exStockCodeOptions)]],
+      fcn_exchange_item_code: ['', [Validators.required]],
+      // fcn_exchange_item_code: ['', [Validators.required, this.autoCompleteValidator(() => this.exStockCodeOptions)]],
       fcn_exchange_item_desc: ['', Validators.required],
       fcn_exchange_pcs: [{ value: 0 }],
       // fcn_exchange_pcs: ['', Validators.required],
@@ -1373,6 +1374,8 @@ export class AddPosComponent implements OnInit {
   getMaritalStatus() {
     this.maritalStatusList = this.comFunc.getComboFilterByID('Marital Status');
     this.genderList = this.comFunc.getComboFilterByID('gender');
+    console.log('gender ', this.genderList);
+    
   }
   changeKaratRate(event: any, index: any) {
     this.karatRateDetails[index].KARAT_RATE = parseFloat(event?.target.value);

@@ -182,7 +182,9 @@ export class MasterComponent implements OnInit {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
           } else {
             this.orderedItems = resp.dynamicData[0];
-            this.nextPage()
+            if(this.orderedItems.length == 10){
+              this.nextPage()
+            }
           }
           this.orderedItemsHead = Object.keys(this.orderedItems[0]);
           this.orderedItemsHead.unshift(this.orderedItemsHead.pop())

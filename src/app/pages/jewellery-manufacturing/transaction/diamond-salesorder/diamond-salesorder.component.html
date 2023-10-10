@@ -331,14 +331,15 @@
                                 </div>
 
                                 <div class="row">
-                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData"
+                                        [showBorders]="true">
                                         <dxo-paging [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell" [allowUpdating]="true">
                                         </dxo-editing>
                                         <dxo-selection mode="multiple"></dxo-selection>
                                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                        <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" width="auto"
+                                        <dxi-column *ngFor="let data of tableDataHead" dataField="{{ data }}" width="auto"
                                             caption="{{ data }}" [allowEditing]="true" alignment="center"
                                             backgroundcolor="#000">
                                         </dxi-column>
@@ -353,60 +354,42 @@
         </mat-tab-group>
     </div>
     <!-- Details section starts -->
-    <div class="card m-1 p-3">
+    <div class="card m-1">
         <mat-tab-group style="width: 100%;">
             <mat-tab label="Details">
                 <div class="col-11">
                     <div class="d-flex ps-2">
                         <div class="p-1">
-                            <button type="button" mat-flat-button color="primary" (click)="addNewDetail()">
-                                <i class="fa fa-plus" style="font-size: 11px;"></i>
+                            <button type="button" mat-flat-button  (click)="addNewDetail()">
+                                <i class="fa fa-plus" style="font-size: 11px;color: #fff;"></i>
                             </button>
                         </div>
                         <div class="p-1">
-                            <button type="button" mat-flat-button color="primary">
-                                <i class="fa fa-trash" style="font-size: 11px;"></i>
+                            <button type="button" mat-flat-button>
+                                <i class="fa fa-trash" style="font-size: 11px;color: #fff;"></i>
                             </button>
                         </div>
                         <div class="p-1">
-                            <button type="button" mat-flat-button color="primary">
-                                <i class="fa fa-file"></i>
+                            <button type="button" mat-flat-button>
+                                <i class="fa fa-file" style="color: #fff;"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="row" style="max-width: 100%;">
-                    <div class="table1">
-                        <dx-data-grid #dataGrid id="gridContainer" 
-                            width="auto" keyExpr="ID" 
-                            [showBorders]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-    
-                            <dxi-column *ngFor="let data of column1" dataField="{{ data }}" width="auto"
-                                caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
-                        </dx-data-grid>
-                    </div>
-                    <div class="table1">
-                        <dx-data-grid #dataGrid id="gridContainer" 
-                            width="auto" keyExpr="ID" 
-                            [showBorders]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-    
-                            <dxi-column *ngFor="let data of column1" dataField="{{ data }}" width="auto"
-                                caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
-                        </dx-data-grid>
-                    </div>
-                </div>
+                <!-- table sectin starts -->
+                <dx-data-grid id="gridContainer" 
+                    [dataSource]="tableData" [showRowLines]="true"
+                    [showBorders]="true"
+                    (onSelectionChanged)="selectionChangedHandler($event)">
+                    <dxo-selection mode="single"></dxo-selection>
+                    <dxo-editing mode="row" [allowUpdating]="true" [allowAdding]="false">
+                    </dxo-editing>
+                    <dxi-column *ngFor="let data of tableDataHead" dataField="{{ data }}"
+                        width="auto" caption="{{ data }}" [allowEditing]="true"
+                        alignment="center">
+                    </dxi-column>
+                    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+                </dx-data-grid>
         </mat-tab>
             <mat-tab label></mat-tab>
         </mat-tab-group>
@@ -420,44 +403,36 @@
                         <input type="text" matInput formControlName="VoucherDESC" />
                     </mat-form-field>
                 </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            Price Recalc
+                <div class="d-flex">
+                    <div>
+                        <button type="button" mat-flat-button  (click)="addNewDetail()">
+                            <span>Price Recalc</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            Quot
+                    <div class="ps-1">
+                        <button type="button" mat-flat-button>
+                            <span>Quot</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            MRQ Print
+                    <div class="ps-1">
+                        <button type="button" mat-flat-button>
+                            <span>MRQ Print</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            Stricker Print
+                    <div class="ps-1">
+                        <button type="button" mat-flat-button>
+                            <span>Sticker Print</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1.1 btt">
-                    <div class="row lets">
-                        <button type="button" class="btn btn-outline-primary ">
-                            Export
+                    <div class="ps-1">
+                        <button type="button" mat-flat-button>
+                            <span>Export</span>
                         </button>
                     </div>
-                </div>
-                <div class="col-md-1 sum">
-                    <div class="row">
-                        <input type="radio" /> Summary
+                    <div class="ps-1">
+                        <div class="d-flex">
+                            <input type="radio" /> Summary
+                        </div>
                     </div>
                 </div>
             </div>

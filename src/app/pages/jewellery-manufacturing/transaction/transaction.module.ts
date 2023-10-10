@@ -20,7 +20,10 @@ import { StoneIssueDetailComponent } from './stone-issue/stone-issue-detail/ston
 import { StoneReturnComponent } from './stone-return/stone-return.component';
 import { StoneReturnDetailsComponent } from './stone-return/stone-return-details/stone-return-details.component';
 import { WaxProcessReturnComponent } from './wax-process-return/wax-process-return.component';
+import { MetalReturnComponent } from './metal-return/metal-return.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
+import { MetalReturnDetailsComponent } from './metal-return/metal-return-details/metal-return-details.component';
+
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { MeltingIssueDetailsComponent } from './melting-issue/melting-issue-details/melting-issue-details.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
@@ -30,24 +33,25 @@ import { ProductionMfgComponent } from './production-mfg/production-mfg.componen
 @NgModule({
   declarations: [
     TransactionComponent,
+    CADProcessingComponent,
+    CastingTreeUpComponent,
     DiamondSalesorderComponent,
     DiamondQuotationComponent,
+    AddNewdiamondquotationComponent,
     JobCardComponent,
     JobCreationComponent,
-    MetalIssueComponent,
-    StoneIssueComponent,
     MeltingProcessComponent,
-    CADProcessingComponent,
-    AddNewdetailComponent,
-    AddNewdiamondquotationComponent,
-    WaxProcessComponent,
+    MetalIssueComponent,
     MetalIssueDetailsComponent,
+    MetalReturnComponent,
+    MetalReturnDetailsComponent,
+    StoneIssueComponent,
     StoneIssueDetailComponent,
     StoneReturnComponent,
     StoneReturnDetailsComponent,
-    StoneReturnComponent,
-    StoneReturnDetailsComponent,
+    WaxProcessComponent,    
     WaxProcessReturnComponent,
+    AddNewdetailComponent, 
     CastingTreeUpComponent,
     MeltingIssueComponent,
     ProductionMfgComponent,

@@ -443,6 +443,18 @@ export class CommonServiceService {
     });
     return Math.trunc(sum);
   }
+  arrayEmptyObjectToString(dataArray:any){
+    dataArray.forEach((obj: any, i: any) => {
+      obj.Id = i + 1;
+      for (const prop in obj) {
+        if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
+          // Replace empty object with an empty string
+          obj[prop] = '';
+        }
+      }
+    });
+    return dataArray
+  }
   /**purpose: to find grossmargin percentage
    * in: GM and Revenue arrays
    * out: gm % value

@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PosCurrencyReceiptDetailsComponent } from './pos-currency-receipt-details/pos-currency-receipt-details.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-pos-currency-receipt',
@@ -14,6 +17,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService,
+    private dataService: SuntechAPIService,
   ) { }
 
   openaddposdetails() {
@@ -25,6 +31,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
     });
 
   }
+
+  posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
+
+  })
 
   formSubmit() {
 
