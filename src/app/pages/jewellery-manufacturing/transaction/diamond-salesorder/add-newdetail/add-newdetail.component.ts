@@ -96,7 +96,8 @@ export class AddNewdetailComponent implements OnInit {
   setInitialValues(){
     if(this.content && this.content.length>0){
       console.log(this.content,'content');
-      this.BOMDetailsArray = this.content[0].detailRow
+      this.BOMDetailsArray = this.content[0].BOMDetails
+      // /summaryDetail
       this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
     }
     
@@ -156,7 +157,7 @@ export class AddNewdetailComponent implements OnInit {
           data = this.commonService.arrayEmptyObjectToString(data)
           data = data[0]
 
-          this.BOMDetailsArray = result.dynamicData[1]
+          this.BOMDetailsArray = result.dynamicData[3]
           this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
 
           // this.column1 = Object.keys(this.BOMDetailsArray);
