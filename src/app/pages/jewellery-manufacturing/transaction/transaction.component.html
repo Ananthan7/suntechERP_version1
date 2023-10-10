@@ -22,6 +22,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <master-grid [tableName]="tableName"
+                                    (AddBtnClick)="openModalView()"
                                     (editRowClick)="editRowDetails($event)"
                                     (viewRowClick)="viewRowDetails($event)">
                                 </master-grid>
