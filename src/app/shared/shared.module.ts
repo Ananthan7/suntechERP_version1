@@ -63,6 +63,7 @@ import {MatRadioButton, MatRadioModule} from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { FocusOnLoadDirective } from './directives/focus-on-load.directive';
 import { NoEmptySpaceDirective } from './directives/no-empty-space.directive';
+import { MasterGridComponent } from './common/master-grid/master-grid.component';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -82,7 +83,8 @@ import { NoEmptySpaceDirective } from './directives/no-empty-space.directive';
     DecimalInputDirective,
     DateValidationDirective,
     FocusOnLoadDirective,
-    NoEmptySpaceDirective
+    NoEmptySpaceDirective,
+    MasterGridComponent
   ],
   imports: [
     CommonModule,
@@ -135,6 +137,7 @@ import { NoEmptySpaceDirective } from './directives/no-empty-space.directive';
     CardboxComponent,
     MasterFindIconComponent,
     MasterSearchComponent,
+    MasterGridComponent,
     //pipes && Directives exports
     NumberFormatterPipe,
     CamelCasePipe,

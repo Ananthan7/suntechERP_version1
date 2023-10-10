@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -19,6 +19,7 @@ import { JobCreationComponent } from './job-creation/job-creation.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
+import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 
 @Component({
   selector: 'app-transaction',
@@ -26,6 +27,7 @@ import { ProcessTransferComponent } from './process-transfer/process-transfer.co
   styleUrls: ['./transaction.component.scss']
 })
 export class TransactionComponent implements OnInit {
+  @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
   //variables
   menuTitle: any;
   PERMISSIONS: any;
@@ -33,6 +35,14 @@ export class TransactionComponent implements OnInit {
   apiCtrl: any;
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
+
+  //PAGINATION
+  totalItems: number = 1000; // Total number of items
+  pageSize: number = 10; // Number of items per page
+  pageIndex: number = 1; // Current page index
+
+  nextCall: any = 0
+
   //subscription variable
   subscriptions$!: Subscription;
   constructor(
@@ -43,13 +53,11 @@ export class TransactionComponent implements OnInit {
     // private ChangeDetector: ChangeDetectorRef,
     private route: ActivatedRoute,
   ) {
-    this.viewRowDetails = this.viewRowDetails.bind(this);
-    this.editRowDetails = this.editRowDetails.bind(this);
+    this.getMasterGridData()
   }
 
   ngOnInit(): void {
     /**USE: to get table data from API */
-    this.getMasterGridData()
     // this.openModalView()
   }
 
@@ -63,8 +71,35 @@ export class TransactionComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
+
+  onContentReady(e: any) {
+    setTimeout(() => {
+      let scroll = e.component.getScrollable();
+      scroll.on("scroll", (event: any) => {
+        console.log(event, "scrolling");
+        const container = event.scrollOffset;
+        // const scrollPosition = container.scrollTop + container.clientHeight;
+        // const isAtBottom = scrollPosition >= container.scrollHeight  - 4;
+        // if (scrollPosition >= container.scrollHeight - 1) {
+        //   console.log('fired');
+
+        if (container.top >= 310) {
+          this.nextPage()
+        }
+
+      })
+    })
+  }
+  onScrollViewScrolled(event:any) {
+    const container = event.target;
+    const scrollPosition = container.scrollTop + container.clientHeight;
+    // const isAtBottom = scrollPosition >= container.scrollHeight  - 4;
+    if (scrollPosition >= container.scrollHeight - 1) {
+      this.nextPage();
+    }
+  }
+  
   //  open forms in modal
-  //  open Jobcard in modal
   openModalView(data?: any) {
     let contents;
     switch (this.menuTitle) {
@@ -108,13 +143,15 @@ export class TransactionComponent implements OnInit {
         break;
       case 'Melting Issue':
         contents = MeltingIssueComponent
-        break;  
+        break;
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
-        break;  
+        break;
       //continue adding components using case then break
       default:
-        alert('Module Not found')
+        this.snackBar.open('Module Not Created', 'Close', {
+          duration: 3000,
+        });
     }
 
     const modalRef: NgbModalRef = this.modalService.open(contents, {
@@ -126,12 +163,6 @@ export class TransactionComponent implements OnInit {
     modalRef.componentInstance.content = data;
   }
 
-
-  //PAGINATION
-  totalItems: number = 1000; // Total number of items
-  pageSize: number = 10; // Number of items per page
-  pageIndex: number = 1; // Current page index
-
   previousPage() {
     if (this.pageIndex > 0) {
       this.pageIndex = this.pageIndex - 1;
@@ -140,7 +171,6 @@ export class TransactionComponent implements OnInit {
       }
     }
   }
-  nextCall: any = 0
   nextPage() {
     if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
       this.pageIndex = this.pageIndex + 1;
@@ -161,7 +191,8 @@ export class TransactionComponent implements OnInit {
       this.menuTitle = this.CommonService.getModuleName()
       this.tableName = this.CommonService.getqueryParamTable()
     }
-
+    this.masterGridComponent?.getMasterGridData({HEADER_TABLE: this.tableName})
+    return
     if (this.orderedItems.length == 0) {
       this.snackBar.open('loading...');
     }
@@ -189,7 +220,7 @@ export class TransactionComponent implements OnInit {
         if (resp.dynamicData) {
           // resp.dynamicData[0].map((s: any, i: any) => s.id = i + 1);
           resp.dynamicData[0].forEach((obj: any, i: any) => {
-            obj.Id = i + 1;
+            
             for (const prop in obj) {
               if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
                 // Replace empty object with an empty string
@@ -199,9 +230,13 @@ export class TransactionComponent implements OnInit {
           });
           if (this.orderedItems.length > 0) {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
+            console.log(...resp.dynamicData[0],'resp.dynamicData[0]');
+            
+            // this.orderedItems.push(...resp.dynamicData[0]);
+            
           } else {
             this.orderedItems = resp.dynamicData[0];
-            if(this.orderedItems.length == 10){
+            if (this.orderedItems.length == 10) {
               this.nextPage()
             }
           }
