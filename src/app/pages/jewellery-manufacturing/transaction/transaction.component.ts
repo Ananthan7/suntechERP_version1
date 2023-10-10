@@ -21,6 +21,7 @@ import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
+import { MeltingProcessComponent } from './melting-process/melting-process.component';
 
 @Component({
   selector: 'app-transaction',
@@ -112,6 +113,9 @@ export class TransactionComponent implements OnInit {
         break;
       case 'Job Card':
         contents = JobCardComponent
+        break;
+        case 'Melting Process (MLP)':
+        contents = MeltingProcessComponent
         break;
       case 'Metal Issue (diamond Jewellery)':
         contents = MetalIssueComponent

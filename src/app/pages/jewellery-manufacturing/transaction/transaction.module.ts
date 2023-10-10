@@ -29,6 +29,8 @@ import { MeltingIssueDetailsComponent } from './melting-issue/melting-issue-deta
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
 import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
 import { JewelleryAltrationDetailsComponent } from './jewellery-altration/jewellery-altration-details/jewellery-altration-details.component';
+import { ProcessTransferDetailsComponent } from './process-transfer/process-transfer-details/process-transfer-details.component';
+import { AlloyAllocationComponent } from './cad-processing/alloy-allocation/alloy-allocation.component';
 
 
 
@@ -59,8 +61,9 @@ import { JewelleryAltrationDetailsComponent } from './jewellery-altration/jewell
     MeltingIssueDetailsComponent,
     ProcessTransferComponent,
     JewelleryAltrationComponent,
-    JewelleryAltrationDetailsComponent
-    
+    JewelleryAltrationDetailsComponent,
+    ProcessTransferDetailsComponent,
+    AlloyAllocationComponent
   ],
   imports: [
     CommonModule,

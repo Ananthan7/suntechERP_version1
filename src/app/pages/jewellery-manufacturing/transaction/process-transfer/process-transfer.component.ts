@@ -4,6 +4,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { ProcessTransferDetailsComponent } from './process-transfer-details/process-transfer-details.component';
 
 @Component({
   selector: 'app-process-transfer',
@@ -27,7 +28,15 @@ export class ProcessTransferComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  openaddprocesstransfer() {
+    const modalRef: NgbModalRef = this.modalService.open(ProcessTransferDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
 
+  }
   openaddMeltingIssueDetails() {
     // const modalRef: NgbModalRef = this.modalService.open(, {
     //   size: 'xl',

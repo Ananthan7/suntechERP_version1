@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
+import { AlloyAllocationComponent } from './alloy-allocation/alloy-allocation.component';
 
 @Component({
   selector: 'app-cad-processing',
@@ -78,7 +79,7 @@ export class CADProcessingComponent implements OnInit {
       return
     }
 
-    let API = '/JobCadProcessDJ/InsertJobCadProcessDJ'
+    let API = 'JobCadProcessDJ/InsertJobCadProcessDJ'
     let postData ={
       "MID": 0,
       "BRANCH_CODE": "string",
@@ -333,7 +334,7 @@ export class CADProcessingComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 20,
     SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Location',
+    SEARCH_HEADING: 'process Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "process_code<> ''",
     VIEW_INPUT: true,
@@ -369,5 +370,15 @@ export class CADProcessingComponent implements OnInit {
   toWorkedSelected(e:any){
   console.log(e);
   this.cadProcessingForm.controls.toWorker.setValue(e.WORKER_CODE);
+  }
+
+  openaddalloyallocation() {
+    const modalRef: NgbModalRef = this.modalService.open(AlloyAllocationComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+
   }
 }
