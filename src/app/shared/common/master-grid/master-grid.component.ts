@@ -16,24 +16,23 @@ export class MasterGridComponent implements OnInit {
   @Output() viewRowClick = new EventEmitter<any>();
   @Output() AddBtnClick = new EventEmitter<any>();
 
-  menuTitle: any;
-  PERMISSIONS: any;
-  @Input()tableName: any;
+  @Input() tableName: any;
+  vocType: any;
+  mainVocType: any;
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
   //PAGINATION
-  totalItems: number = 1000; // Total number of items
+  totalDataCount: number = 10000; // Total number of items hardcoded 10k will reassign on API call
   pageSize: number = 10; // Number of items per page
   pageIndex: number = 1; // Current page index
 
   nextCall: any = 0
   //subscription variable
-  subscriptions$!: Subscription;
+  subscriptions$: Subscription[] = [];
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
-    // private modalService: NgbModal,
     // private ChangeDetector: ChangeDetectorRef,
   ) {
     this.viewRowDetails = this.viewRowDetails.bind(this);
@@ -42,8 +41,6 @@ export class MasterGridComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**USE: to get table data from API */
-    // this.openModalView()
   }
 
   addButtonClick() {
@@ -55,24 +52,14 @@ export class MasterGridComponent implements OnInit {
   editRowDetails(e: any) {
     this.editRowClick.emit(e);
   }
-  @HostListener('scroll', ['$event'])
-  onScrollTable(event: any) {
-    console.log(event,'event');
-    
-    const container = event.target;
-    const scrollPosition = container.scrollTop + container.clientHeight;
-    // const isAtBottom = scrollPosition >= container.scrollHeight  - 4;
-    if (scrollPosition >= container.scrollHeight - 1) {
-      // this.loadMoreData(this.currentPage);
-    }
-  }
+  /**USE: grid on scroll event */
   onContentReady(e: any) {
     setTimeout(() => {
       let scroll = e.component.getScrollable();
       scroll.on("scroll", (event: any) => {
         console.log(event, "scrolling");
         // reachedTop
-      //  this.orderedItems.length = 20
+        //  this.orderedItems.length = 20
         if (event.reachedBottom && this.orderedItems.length == 10 * this.pageIndex) {
           this.nextPage()
           return
@@ -81,17 +68,10 @@ export class MasterGridComponent implements OnInit {
       })
     })
   }
- 
-  // previousPage() {
-  //   if (this.pageIndex > 0) {
-  //     this.pageIndex = this.pageIndex - 1;
-  //     if (this.orderedItems.length > 10) {
-  //       this.orderedItems.splice(this.orderedItems.length - this.pageSize, this.pageSize);
-  //     }
-  //   }
-  // }
+
+  // next data call
   nextPage() {
-    if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
+    if ((this.pageIndex + 1) * this.pageSize < this.totalDataCount) {
       this.pageIndex = this.pageIndex + 1;
       this.getMasterGridData();
     }
@@ -102,15 +82,16 @@ export class MasterGridComponent implements OnInit {
       this.pageIndex = 1;
       this.orderedItems = [];
       this.orderedItemsHead = [];
+      console.log(data,'datadata');
+      this.vocType = data.VOCTYPE
+      this.mainVocType = data.MAIN_VOCTYPE
       this.tableName = data.HEADER_TABLE;
     } else {
       this.tableName = this.CommonService.getqueryParamTable()
+      this.vocType = this.CommonService.getqueryParamVocType()
     }
 
-    if (this.orderedItems.length == 0) {
-      this.snackBar.open('loading...');
-    }
-
+    this.snackBar.open('loading...');
     let params = {
       "PAGENO": this.pageIndex || 1,
       "RECORDS": this.pageSize || 10,
@@ -118,35 +99,32 @@ export class MasterGridComponent implements OnInit {
       "CUSTOM_PARAM": {
         "FILTER": {
           "YEARMONTH": localStorage.getItem('YEAR') || '',
-          "BRANCHCODE": this.CommonService.branchCode,
-          "VOCTYPE": this.CommonService.getqueryParamVocType() || ""
+          "BRANCH_CODE": this.CommonService.branchCode,
+          "VOCTYPE": this.vocType || ""
         },
         "TRANSACTION": {
-          "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
+          "VOCTYPE": this.vocType || "",
+          "MAIN_VOCTYPE": this.mainVocType || "",
         }
       }
     }
 
-    this.subscriptions$ = this.dataService.postDynamicAPI('TransctionMainGrid', params)
+    let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
       .subscribe((resp: any) => {
         this.snackBar.dismiss();
-        if (resp.dynamicData) {
-          // resp.dynamicData[0].map((s: any, i: any) => s.id = i + 1);
-          resp.dynamicData[0].forEach((obj: any, i: any) => {
+        if (resp.dynamicData[0].length > 0) {
+          this.totalDataCount = resp.dynamicData[0][0].COUNT || 100000
 
+          // Replace empty object with an empty string
+          resp.dynamicData[0].forEach((obj: any, i: any) => {
             for (const prop in obj) {
               if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
-                // Replace empty object with an empty string
                 obj[prop] = '';
               }
             }
           });
           if (this.orderedItems.length > 0) {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
-            console.log(...resp.dynamicData[0], 'resp.dynamicData[0]');
-
-            // this.orderedItems.push(...resp.dynamicData[0]);
-
           } else {
             this.orderedItems = resp.dynamicData[0];
             if (this.orderedItems.length == 10) {
@@ -155,27 +133,27 @@ export class MasterGridComponent implements OnInit {
           }
           this.orderedItemsHead = Object.keys(this.orderedItems[0]);
           this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
-          //change detector code
           // this.ChangeDetector.detectChanges()
         } else {
-          this.snackBar.open('No Response Found!', 'Close', {
+          this.snackBar.open('Data not available!', 'Close', {
             duration: 3000,
           });
         }
-      }, (err:any) => {
+      }, (err: any) => {
+        this.snackBar.dismiss();
         this.snackBar.open(err, 'Close', {
           duration: 3000,
         });
       });
+    this.subscriptions$.push(sub)
   }
-  //pagination change
-  handlePageIndexChanged(event: any) {
-    this.pageIndex = event.pageIndex;
-    // Load data for the new page using the updated pageIndex
-    // Update this.dataSource with the new data
-  }
+
   //unsubscriptions of streams
-  ngOnDestroy(): void {
-    this.subscriptions$.unsubscribe()
+  ngOnDestroy() {
+    if (this.subscriptions$.length > 0) {
+      this.subscriptions$.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions$ = []; // Clear the array
+    }
   }
+
 }
