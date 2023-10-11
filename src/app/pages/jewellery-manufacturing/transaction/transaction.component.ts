@@ -23,6 +23,7 @@ import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-gr
 import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
 import { MeltingProcessComponent } from './melting-process/melting-process.component';
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
+import { QuotationProcessComponent } from './quotation-process/quotation-process.component';
 
 @Component({
   selector: 'app-transaction',
@@ -160,6 +161,9 @@ export class TransactionComponent implements OnInit {
       case 'Production (MFG)':
         contents = ProductionMfgComponent
         break;
+        case 'Quotation Processing':
+          contents = QuotationProcessComponent
+          break;
       //continue adding components using case then break
       default:
         this.snackBar.open('Module Not Created', 'Close', {
