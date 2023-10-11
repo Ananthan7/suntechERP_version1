@@ -35,11 +35,6 @@ export class TransactionComponent implements OnInit {
   menuTitle: any;
   PERMISSIONS: any;
 
-  //PAGINATION
-  totalItems: number = 1000; // Total number of items
-  pageSize: number = 10; // Number of items per page
-  pageIndex: number = 1; // Current page index
-
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -51,8 +46,6 @@ export class TransactionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**USE: to get table data from API */
-    // this.openModalView()
   }
 
   viewRowDetails(e: any) {
@@ -136,6 +129,13 @@ export class TransactionComponent implements OnInit {
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
+    });
+    modalRef.result.then((result) => {
+      if (result === 'reloadMainGrid') {
+        this.getMasterGridData({HEADER_TABLE: this.CommonService.getqueryParamTable()})
+      }
+    }, (reason) => {
+      // Handle modal dismissal (if needed)
     });
     modalRef.componentInstance.content = data;
   }

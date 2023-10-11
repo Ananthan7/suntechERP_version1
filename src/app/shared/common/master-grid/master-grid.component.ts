@@ -82,8 +82,8 @@ export class MasterGridComponent implements OnInit {
       this.pageIndex = 1;
       this.orderedItems = [];
       this.orderedItemsHead = [];
-      this.vocType = data.VOCTYPE
-      this.mainVocType = data.MAIN_VOCTYPE
+      this.vocType = data.VOCTYPE;
+      this.mainVocType = data.MAIN_VOCTYPE;
       this.tableName = data.HEADER_TABLE;
     } else {
       this.tableName = this.CommonService.getqueryParamTable()
@@ -96,23 +96,43 @@ export class MasterGridComponent implements OnInit {
         duration: 3000,
       });
     }
-   
-    let params = {
-      "PAGENO": this.pageIndex || 1,
-      "RECORDS": this.pageSize || 10,
-      "TABLE_NAME": this.tableName,
-      "CUSTOM_PARAM": {
-        "FILTER": {
-          "YEARMONTH": localStorage.getItem('YEAR') || '',
-          "BRANCH_CODE": this.CommonService.branchCode,
-          "VOCTYPE": this.vocType || ""
-        },
-        "TRANSACTION": {
-          "VOCTYPE": this.vocType || "",
-          "MAIN_VOCTYPE": this.mainVocType || "",
+    let params
+    if(data?.MENU_SUB_MODULE == 'Transaction'){
+      params = {
+        "PAGENO": this.pageIndex || 1,
+        "RECORDS": this.pageSize || 10,
+        "TABLE_NAME": this.tableName,
+        "CUSTOM_PARAM": {
+          "FILTER": {
+            "YEARMONTH": localStorage.getItem('YEAR') || '',
+            "BRANCH_CODE": this.CommonService.branchCode,
+            "VOCTYPE": this.vocType || ""
+          },
+          "TRANSACTION": {
+            "VOCTYPE": this.vocType || "",
+            "MAIN_VOCTYPE": this.mainVocType || "",
+          }
+        }
+      }
+    }else{
+      params = {
+        "PAGENO": this.pageIndex || 1,
+        "RECORDS": this.pageSize || 10,
+        "TABLE_NAME": this.tableName,
+        "CUSTOM_PARAM": {
+          // "FILTER": {
+          //   "YEARMONTH": localStorage.getItem('YEAR') || '',
+          //   "BRANCH_CODE": this.CommonService.branchCode,
+          //   "VOCTYPE": this.vocType || ""
+          // },
+          "TRANSACTION": {
+            // "VOCTYPE": this.vocType || "",
+            "MAIN_VOCTYPE": this.mainVocType || "",
+          }
         }
       }
     }
+    
 
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
       .subscribe((resp: any) => {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -17,6 +17,7 @@ import { AlloyMasterComponent } from './alloy-master/alloy-master.component';
 import { PictureTypeMasterComponent } from './picture-type-master/picture-type-master.component';
 import { ApprovalMasterComponent } from './approval-master/approval-master.component';
 import { DesignMasterComponent } from './design-master/design-master.component';
+import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -24,6 +25,8 @@ import { DesignMasterComponent } from './design-master/design-master.component';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MasterComponent implements OnInit {
+  @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
+
   //variables
   menuTitle: any
   PERMISSIONS: any
@@ -98,10 +101,8 @@ export class MasterComponent implements OnInit {
     });
     modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
-        this.orderedItems = [];
-        this.orderedItemsHead = [];
-        this.pageIndex = 1;
-        this.getMasterGridData()
+        this.tableName = this.CommonService.getqueryParamTable()
+        this.getMasterGridData({HEADER_TABLE: this.tableName})
       }
     }, (reason) => {
       // Handle modal dismissal (if needed)
@@ -109,105 +110,16 @@ export class MasterComponent implements OnInit {
     modalRef.componentInstance.content = data;
   }
 
-
-  //PAGINATION
-  totalItems: number = 10000000; // Total number of items
-  pageSize: number = 10; // Number of items per page
-  pageIndex: number = 1; // Current page index
-
-  previousPage() {
-    if (this.pageIndex > 0) {
-      this.pageIndex = this.pageIndex - 1;
-      if (this.orderedItems.length > 10) {
-        this.orderedItems.splice(this.orderedItems.length - this.pageSize, this.pageSize);
-      }
-    }
-  }
-  nextPage() {
-    if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
-      this.pageIndex = this.pageIndex + 1;
-
-      this.getMasterGridData();
-    }
-  }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     if (data) {
-      this.pageIndex = 1;
-      this.orderedItems = [];
-      this.orderedItemsHead = [];
       this.menuTitle = data.MENU_CAPTION_ENG;
-      this.tableName = data.HEADER_TABLE;
       this.PERMISSIONS = data.PERMISSION;
     } else {
       this.menuTitle = this.CommonService.getModuleName()
-      this.tableName = this.CommonService.getqueryParamTable()
     }
-
-    if (this.orderedItems.length == 0) {
-      this.snackBar.open('loading...');
-    }
-
-    this.apiCtrl = 'TransctionMainGrid'
-    let params = {
-      "PAGENO": this.pageIndex || 1,
-      "RECORDS": this.pageSize || 10,
-      "TABLE_NAME": this.tableName,
-      "CUSTOM_PARAM": {
-        // "FILTER": {
-        //   "YEARMONTH": localStorage.getItem('YEAR') || '',
-        //   "BRANCHCODE": this.CommonService.branchCode,
-        //   "VOCTYPE": "PCR"
-        // },
-        "TRANSACTION": {
-          "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
-        }
-      }
-    }
-
-    this.subscriptions$ = this.dataService.postDynamicAPI(this.apiCtrl, params)
-      .subscribe((resp: any) => {
-        this.snackBar.dismiss();
-        if (resp.dynamicData) {
-          resp.dynamicData[0].forEach((obj: any, i: any) => {
-            obj.Id = i + 1;
-            for (const prop in obj) {
-              if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
-                // Replace empty object with an empty string
-                obj[prop] = '';
-              }
-            }
-          });
-          if (this.orderedItems.length > 0) {
-            this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
-          } else {
-            this.orderedItems = resp.dynamicData[0];
-            if(this.orderedItems.length == 10){
-              this.nextPage()
-            }
-          }
-          this.orderedItemsHead = Object.keys(this.orderedItems[0]);
-          this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
-          //change detector code
-          // this.ChangeDetector.detectChanges()
-        } else {
-          alert('No Response Found')
-        }
-      }, err => {
-        alert(err)
-      });
+    this.masterGridComponent?.getMasterGridData(data)
   }
-  //pagination change
-  handlePageIndexChanged(event: any) {
-    this.pageIndex = event.pageIndex;
-    // Load data for the new page using the updated pageIndex
-    // Update this.dataSource with the new data
-  }
-  //unsubscriptions of streams
-  ngOnDestroy(): void {
-    this.subscriptions$.unsubscribe()
-  }
-
   // const endTime = performance.now();
   // const duration = endTime - startTime;
   // Log the duration or perform other actions
