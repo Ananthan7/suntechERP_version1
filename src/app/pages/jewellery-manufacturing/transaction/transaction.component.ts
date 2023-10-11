@@ -34,7 +34,6 @@ export class TransactionComponent implements OnInit {
   //variables
   menuTitle: any;
   PERMISSIONS: any;
-  tableName: any;
 
   //PAGINATION
   totalItems: number = 1000; // Total number of items
@@ -143,15 +142,11 @@ export class TransactionComponent implements OnInit {
 
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
-    console.log(data,'data');
-    
     if (data) {
       this.menuTitle = data.MENU_CAPTION_ENG;
-      this.tableName = data.HEADER_TABLE;
       this.PERMISSIONS = data.PERMISSION;
     } else {
       this.menuTitle = this.CommonService.getModuleName()
-      this.tableName = this.CommonService.getqueryParamTable()
     }
     this.masterGridComponent?.getMasterGridData(data)
   }

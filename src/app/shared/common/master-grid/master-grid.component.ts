@@ -1,6 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -18,6 +17,7 @@ export class MasterGridComponent implements OnInit {
 
   @Input() tableName: any;
   vocType: any;
+  skeltonLoading: boolean = true;
   mainVocType: any;
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
@@ -82,7 +82,6 @@ export class MasterGridComponent implements OnInit {
       this.pageIndex = 1;
       this.orderedItems = [];
       this.orderedItemsHead = [];
-      console.log(data,'datadata');
       this.vocType = data.VOCTYPE
       this.mainVocType = data.MAIN_VOCTYPE
       this.tableName = data.HEADER_TABLE;
@@ -90,8 +89,14 @@ export class MasterGridComponent implements OnInit {
       this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
     }
-
-    this.snackBar.open('loading...');
+    if(this.orderedItems.length == 0){
+      this.skeltonLoading = true
+    } else {
+      this.snackBar.open('loading...', '', {
+        duration: 3000,
+      });
+    }
+   
     let params = {
       "PAGENO": this.pageIndex || 1,
       "RECORDS": this.pageSize || 10,
@@ -112,6 +117,7 @@ export class MasterGridComponent implements OnInit {
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
       .subscribe((resp: any) => {
         this.snackBar.dismiss();
+        this.skeltonLoading = false;
         if (resp.dynamicData[0].length > 0) {
           this.totalDataCount = resp.dynamicData[0][0].COUNT || 100000
 
@@ -123,6 +129,7 @@ export class MasterGridComponent implements OnInit {
               }
             }
           });
+          
           if (this.orderedItems.length > 0) {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
           } else {
@@ -132,7 +139,7 @@ export class MasterGridComponent implements OnInit {
             }
           }
           this.orderedItemsHead = Object.keys(this.orderedItems[0]);
-          this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
+          // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
           // this.ChangeDetector.detectChanges()
         } else {
           this.snackBar.open('Data not available!', 'Close', {
@@ -141,6 +148,7 @@ export class MasterGridComponent implements OnInit {
         }
       }, (err: any) => {
         this.snackBar.dismiss();
+        this.skeltonLoading = false;
         this.snackBar.open(err, 'Close', {
           duration: 3000,
         });
@@ -150,6 +158,8 @@ export class MasterGridComponent implements OnInit {
 
   //unsubscriptions of streams
   ngOnDestroy() {
+    this.snackBar.dismiss();
+    this.skeltonLoading = false;
     if (this.subscriptions$.length > 0) {
       this.subscriptions$.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions$ = []; // Clear the array
