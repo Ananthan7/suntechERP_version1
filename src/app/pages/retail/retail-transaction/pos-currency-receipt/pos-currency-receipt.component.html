@@ -25,15 +25,29 @@
                             </div>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="vocNo" />
+                                    <input type="number" matInput formControlName="vocNo" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-3 col-form-label">Vocher Date :</label>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput formControlName="vocDate" />
+                                <mat-form-field >
+                                    <!-- <mat-label></mat-label> -->
+                                    <input
+                                      matInput
+                                      [matDatepicker]="vocDate"
+                                      [max]="vocMaxDate"
+                                      name="vocDate"
+                                      formControlName="vocDate"
+                                      placeholder="DD/MM/YYYY"
+                                      DateValidation
+                                    />
+                                    <mat-datepicker-toggle
+                                      matSuffix
+                                      [for]="vocDate"
+                                    ></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -48,12 +62,12 @@
                             </div>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="partyCodeDes" />
+                                    <input type="text" matInput formControlName="partyCodeDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Party curency :</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Party currency :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="partyCurrency" />
@@ -90,7 +104,21 @@
                             </div>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput formControlName="dueDays" />
+                                        <!-- <mat-label></mat-label> -->
+                                        <input
+                                          matInput
+                                          [matDatepicker]="dueDays"
+                                          [max]="vocMaxDate"
+                                          name="dueDays"
+                                          formControlName="dueDays"
+                                          placeholder="DD/MM/YYYY"
+                                          DateValidation
+                                        />
+                                        <mat-datepicker-toggle
+                                          matSuffix
+                                          [for]="dueDays"
+                                        ></mat-datepicker-toggle>
+                                        <mat-datepicker [startAt]="currentDate" #dueDays></mat-datepicker>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -225,7 +253,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Total Tax :</label>
                                     <div class="col-md-6">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName formControlName="totalTax" />
+                                            <input type="number" matInput formControlName formControlName="totalTax" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -233,7 +261,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Total :</label>
                                     <div class="col-md-6">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="total" />
+                                            <input type="number" matInput formControlName="total" />
                                         </mat-form-field>
                                     </div>
                                 </div>

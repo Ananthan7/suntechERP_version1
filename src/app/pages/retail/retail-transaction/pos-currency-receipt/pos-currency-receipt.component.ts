@@ -17,9 +17,12 @@ import Swal from 'sweetalert2';
 })
 export class PosCurrencyReceiptComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
-  columnhead: any[] = ['Sr#','Branch','Mode','A/c Code','Account Head','Currency','Curr.Rate','VAT_E-','VAT_E-'];
+  columnhead: any[] = ['Sr#','Branch','Mode','A/c Code','Account Head','Currency','Curr.Rate','VAT_E-','VAT_E-.'];
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
+  vocMaxDate = new Date();
+  currentDate = new Date();
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -43,7 +46,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     vocNo : [''],
     vocDate : [''],
     partyCode : [''],
-    partyCodeDes : [''],  // No
+    partyCodeDesc : [''],  // No
     partyCurrency : [''],
     partyCurrencyDesc : [''],
     enteredby : [''], // No
@@ -290,7 +293,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
   partyCodeSelected(e:any){
     console.log(e);
-    this.posCurrencyReceiptForm.controls.currency.setValue(e.CURRENCY_CODE);
+    this.posCurrencyReceiptForm.controls.partyCode.setValue(e.CURRENCY_CODE);
+    this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e.DESCRIPTION);
   }
 
   userName = localStorage.getItem('username');
