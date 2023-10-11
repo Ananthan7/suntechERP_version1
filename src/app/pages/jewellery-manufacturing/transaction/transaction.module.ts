@@ -28,6 +28,7 @@ import { MouldMakingComponent } from './mould-making/mould-making.component';
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { MeltingIssueDetailsComponent } from './melting-issue/melting-issue-details/melting-issue-details.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
+import { JobClosingComponent } from './job-closing/job-closing.component';
 
 
 
@@ -57,7 +58,8 @@ import { ProcessTransferComponent } from './process-transfer/process-transfer.co
     MeltingIssueComponent,
     MeltingIssueDetailsComponent,
     ProcessTransferComponent,
-    MouldMakingComponent
+    MouldMakingComponent,
+    JobClosingComponent,
     
   ],
   imports: [

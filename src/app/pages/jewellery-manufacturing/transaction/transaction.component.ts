@@ -19,6 +19,7 @@ import { JobCreationComponent } from './job-creation/job-creation.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
+import { JobClosingComponent } from './job-closing/job-closing.component';
 
 @Component({
   selector: 'app-transaction',
@@ -112,6 +113,9 @@ export class TransactionComponent implements OnInit {
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
         break;  
+        case 'Job Closing (JBC)':
+        contents = JobClosingComponent
+        break;
       //continue adding components using case then break
       default:
         alert('Module Not found')
