@@ -34,7 +34,9 @@ import { AlloyAllocationComponent } from './cad-processing/alloy-allocation/allo
 
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 import { ProductionEntryDetailsComponent } from './production-mfg/production-entry-details/production-entry-details.component';
-
+import { JewelleryDismantlingComponent } from './jewellery-dismantling/jewellery-dismantling.component';
+import { JewelleryAssemblingComponent } from './jewellery-assembling/jewellery-assembling.component';
+import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling/jewellery-assembling-details/jewellery-assembling-details.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,10 @@ import { ProductionEntryDetailsComponent } from './production-mfg/production-ent
     JewelleryAltrationDetailsComponent,
     ProcessTransferDetailsComponent,
     AlloyAllocationComponent,
-    ProductionEntryDetailsComponent
+    ProductionEntryDetailsComponent,
+    JewelleryDismantlingComponent,
+    JewelleryAssemblingComponent,
+    JewelleryAssemblingDetailsComponent
   ],
   imports: [
     CommonModule,
