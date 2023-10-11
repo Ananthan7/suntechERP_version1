@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -55,34 +55,44 @@ export class MasterGridComponent implements OnInit {
   editRowDetails(e: any) {
     this.editRowClick.emit(e);
   }
-
+  @HostListener('scroll', ['$event'])
+  onScrollTable(event: any) {
+    console.log(event,'event');
+    
+    const container = event.target;
+    const scrollPosition = container.scrollTop + container.clientHeight;
+    // const isAtBottom = scrollPosition >= container.scrollHeight  - 4;
+    if (scrollPosition >= container.scrollHeight - 1) {
+      // this.loadMoreData(this.currentPage);
+    }
+  }
   onContentReady(e: any) {
     setTimeout(() => {
       let scroll = e.component.getScrollable();
       scroll.on("scroll", (event: any) => {
         console.log(event, "scrolling");
-        const container = event.scrollOffset;
-
-        if (container.top >= 310) {
+        // reachedTop
+      //  this.orderedItems.length = 20
+        if (event.reachedBottom && this.orderedItems.length == 10 * this.pageIndex) {
           this.nextPage()
+          return
         }
 
       })
     })
   }
  
-  previousPage() {
-    if (this.pageIndex > 0) {
-      this.pageIndex = this.pageIndex - 1;
-      if (this.orderedItems.length > 10) {
-        this.orderedItems.splice(this.orderedItems.length - this.pageSize, this.pageSize);
-      }
-    }
-  }
+  // previousPage() {
+  //   if (this.pageIndex > 0) {
+  //     this.pageIndex = this.pageIndex - 1;
+  //     if (this.orderedItems.length > 10) {
+  //       this.orderedItems.splice(this.orderedItems.length - this.pageSize, this.pageSize);
+  //     }
+  //   }
+  // }
   nextPage() {
     if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
       this.pageIndex = this.pageIndex + 1;
-
       this.getMasterGridData();
     }
   }
@@ -106,11 +116,11 @@ export class MasterGridComponent implements OnInit {
       "RECORDS": this.pageSize || 10,
       "TABLE_NAME": this.tableName,
       "CUSTOM_PARAM": {
-        // "FILTER": {
-        //   "YEARMONTH": localStorage.getItem('YEAR') || '',
-        //   "BRANCHCODE": this.CommonService.branchCode,
-        //   "VOCTYPE": ""
-        // },
+        "FILTER": {
+          "YEARMONTH": localStorage.getItem('YEAR') || '',
+          "BRANCHCODE": this.CommonService.branchCode,
+          "VOCTYPE": this.CommonService.getqueryParamVocType() || ""
+        },
         "TRANSACTION": {
           "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
         }
