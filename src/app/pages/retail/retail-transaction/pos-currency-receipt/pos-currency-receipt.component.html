@@ -55,7 +55,8 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Party Code :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="partyCode" />
+                                    <input type="text" matInput formControlName="partyCode"
+                                    (change)="partyCodeChange($event)" />
                                 </mat-form-field>
                                 <master-search  [MasterSearchData]="partyCodeData"
                                 (newRowClick)="partyCodeSelected($event)"></master-search>
@@ -70,13 +71,14 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Party currency :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="partyCurrency" />
+                                    <input type="text" matInput formControlName="partyCurrency" readonly />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <!-- <master-search [MasterSearchData]="partyCurrencyCodeData" readonly
+                                (newRowClick)="partyCurrencyCodeSelected($event)"></master-search> -->
                             </div>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="partyCurrencyDesc" />
+                                    <input type="number" matInput formControlName="partyCurrencyRate" readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -86,8 +88,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="enteredby" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="user"
-                                ></master-search>
+                                <master-search [MasterSearchData]="enteredByCode"
+                                (newRowClick)="enteredBySelected($event)"></master-search>
                             </div>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;">
@@ -131,7 +133,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="customerCode" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="customerCodeData"
+                                (newRowClick)="customerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
