@@ -1,0 +1,44 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+
+@Component({
+  selector: 'app-quotation-process',
+  templateUrl: './quotation-process.component.html',
+  styleUrls: ['./quotation-process.component.scss']
+})
+export class QuotationProcessComponent implements OnInit {
+
+  tableData: any[] = [];  
+  columnheadItemDetails:any[] = ['  ',];
+  divisionMS: any = 'ID';
+
+  constructor(private activeModal: NgbActiveModal,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+    private commonService: CommonServiceService,) { }
+
+    
+  ngOnInit(): void {
+  }
+
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+
+
+  quotationProcessFrom: FormGroup = this.formBuilder.group({
+
+  });
+
+  formSubmit(){
+
+  }
+
+}
