@@ -25,6 +25,7 @@ import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-alt
 import { MeltingProcessComponent } from './melting-process/melting-process.component';
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 import { QuotationProcessComponent } from './quotation-process/quotation-process.component';
+import { TreeDownComponent } from './tree-down/tree-down.component';
 
 @Component({
   selector: 'app-transaction',
@@ -125,6 +126,9 @@ export class TransactionComponent implements OnInit {
       case 'Quotation Processing':
         contents = QuotationProcessComponent
         break;
+        case 'Tree Making Up & Down':
+          contents = TreeDownComponent
+          break;
       //continue adding components using case then break
       default:
         this.snackBar.open('Module Not Created', 'Close', {

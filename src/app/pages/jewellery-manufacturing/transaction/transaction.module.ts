@@ -33,13 +33,15 @@ import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-alt
 import { JewelleryAltrationDetailsComponent } from './jewellery-altration/jewellery-altration-details/jewellery-altration-details.component';
 import { ProcessTransferDetailsComponent } from './process-transfer/process-transfer-details/process-transfer-details.component';
 import { AlloyAllocationComponent } from './cad-processing/alloy-allocation/alloy-allocation.component';
-
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 import { ProductionEntryDetailsComponent } from './production-mfg/production-entry-details/production-entry-details.component';
 import { QuotationProcessComponent } from './quotation-process/quotation-process.component';
 import { JewelleryDismantlingComponent } from './jewellery-dismantling/jewellery-dismantling.component';
 import { JewelleryAssemblingComponent } from './jewellery-assembling/jewellery-assembling.component';
 import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling/jewellery-assembling-details/jewellery-assembling-details.component';
+import { TreeDownComponent } from './tree-down/tree-down.component';
+import { MeltingProcessDetailsComponent } from './melting-process/melting-process-details/melting-process-details.component';
+
 
 @NgModule({
   declarations: [
@@ -70,7 +72,7 @@ import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling/jewe
     ProcessTransferComponent,
     MouldMakingComponent,
     JobClosingComponent,
-    
+    TreeDownComponent,
     JewelleryAltrationComponent,
     JewelleryAltrationDetailsComponent,
     ProcessTransferDetailsComponent,
@@ -79,7 +81,8 @@ import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling/jewe
     QuotationProcessComponent,
     JewelleryDismantlingComponent,
     JewelleryAssemblingComponent,
-    JewelleryAssemblingDetailsComponent
+    JewelleryAssemblingDetailsComponent,
+    MeltingProcessDetailsComponent,
   ],
   imports: [
   CommonModule,
