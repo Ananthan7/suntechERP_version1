@@ -24,10 +24,15 @@ import { JobClosingComponent } from './job-closing/job-closing.component';
 import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
 import { MeltingProcessComponent } from './melting-process/melting-process.component';
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
+
+import { JewelleryDismantlingComponent } from './jewellery-dismantling/jewellery-dismantling.component';
+import { JewelleryAssemblingComponent } from './jewellery-assembling/jewellery-assembling.component';
+
 import { QuotationProcessComponent } from './quotation-process/quotation-process.component';
 import { TreeDownComponent } from './tree-down/tree-down.component';
 import { MouldMakingComponent } from './mould-making/mould-making.component';
 import { LossRecoveryComponent } from './loss-recovery/loss-recovery.component';
+
 
 @Component({
   selector: 'app-transaction',
