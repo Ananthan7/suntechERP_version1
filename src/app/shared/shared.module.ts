@@ -65,6 +65,7 @@ import { FocusOnLoadDirective } from './directives/focus-on-load.directive';
 import { NoEmptySpaceDirective } from './directives/no-empty-space.directive';
 import { MasterGridComponent } from './common/master-grid/master-grid.component';
 import { MenuButtonsComponent } from './common/menu-buttons/menu-buttons.component';
+import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -86,7 +87,8 @@ import { MenuButtonsComponent } from './common/menu-buttons/menu-buttons.compone
     FocusOnLoadDirective,
     NoEmptySpaceDirective,
     MasterGridComponent,
-    MenuButtonsComponent
+    MenuButtonsComponent,
+    AllowLeadingZeroDirective
   ],
   imports: [
     CommonModule,
@@ -149,6 +151,7 @@ import { MenuButtonsComponent } from './common/menu-buttons/menu-buttons.compone
     DateValidationDirective,
     FocusOnLoadDirective,
     NoEmptySpaceDirective,
+    AllowLeadingZeroDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,
