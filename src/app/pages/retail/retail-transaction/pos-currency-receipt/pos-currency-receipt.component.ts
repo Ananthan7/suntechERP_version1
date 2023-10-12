@@ -9,6 +9,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
 
 
 @Component({
@@ -24,6 +25,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
 
+  branchCode?: String;
+  yearMonth?: String;
+  userName?: String;
+
+  customerData: any;
 
 
   enteredByCode: MasterSearchModel = {
@@ -75,6 +81,31 @@ export class PosCurrencyReceiptComponent implements OnInit {
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  }
+
+
+
+  constructor(
+    private activeModal: NgbActiveModal,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService,
+    private dataService: SuntechAPIService,
+    private snackBar: MatSnackBar,
+    private comService: CommonServiceService,
+
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+    this.userName = this.comService.userName;
+
+    this.posCurrencyReceiptForm.controls.vocDate.setValue(this.currentDate)
+    this.posCurrencyReceiptForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
+
   }
 
 
@@ -155,7 +186,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
   customerCodeSelected(e: any) {
-    // console.log(e);
+    console.log(e);
+    this.customerData = e;
     this.posCurrencyReceiptForm.controls.customerCode.setValue(e.CODE);
     this.posCurrencyReceiptForm.controls.customerName.setValue(e.NAME);
     this.posCurrencyReceiptForm.controls.moblie.setValue(e.MOBILE);
@@ -164,23 +196,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
 
-
-  constructor(
-    private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder,
-    private toastr: ToastrService,
-    private dataService: SuntechAPIService,
-    private snackBar: MatSnackBar,
-
-  ) {
-    console.log('==============content======================');
-    console.log(this.content);
-    console.log('====================================');
-   }
-
-  ngOnInit(): void {
-  }
 
   openaddposdetails() {
     const modalRef: NgbModalRef = this.modalService.open(PosCurrencyReceiptDetailsComponent, {
@@ -192,9 +207,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   }
 
+
   posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
     vocType: [''],
-    vocNo: [''],
+    vocNo: ['0'],
     vocDate: [''],
     partyCode: [''],
     partyCodeDesc: [''],  // No
@@ -208,11 +224,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
     customerName: [''],
     moblie: [''],
     email: [''],
-    partyAdress: [''],
+    partyAddress: [''],
     schemaCode: [''],
     schemaId: [''],
-    partyAmount: [''],
-    partyAmountLc: [''],
+    partyAmount: [1000], // need to remove the value
+    partyAmountLc: [1000],  // need to remove the value
     narration: [''],
     totalTax: [''],
     total: ['']
@@ -229,15 +245,17 @@ export class PosCurrencyReceiptComponent implements OnInit {
       return
     }
 
-    let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
+    let API = 'AdvanceReceipt/InsertAdvanceReceipt'
+    console.log(this.posCurrencyReceiptForm.value.vocDate);
+    
     let postData = {
       "MID": 0,
-      "BRANCH_CODE": "string",
+      "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.posCurrencyReceiptForm.value.vocType,
       "VOCNO": this.posCurrencyReceiptForm.value.vocNo,
       "VOCDATE": this.posCurrencyReceiptForm.value.vocDate,
-      "VALUE_DATE": "2023-10-10T11:05:50.756Z",
-      "YEARMONTH": "string",
+      "VALUE_DATE": this.posCurrencyReceiptForm.value.vocDate,
+      "YEARMONTH": this.yearMonth,
       "PARTYCODE": this.posCurrencyReceiptForm.value.partyCode || "",
       "PARTY_CURRENCY": this.posCurrencyReceiptForm.value.partyCurrency || "",
       "PARTY_CURR_RATE": this.posCurrencyReceiptForm.value.partyCurrencyRate || "",
@@ -246,61 +264,61 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "REMARKS": this.posCurrencyReceiptForm.value.narration || "",
       "SYSTEM_DATE": "2023-10-10T11:05:50.756Z",
       "NAVSEQNO": 0,
-      "HAWALACOMMCODE": "string",
+      "HAWALACOMMCODE": "",
       "HAWALACOMMPER": 0,
-      "FLAG_UPDATED": "s",
-      "FLAG_INPROCESS": "s",
-      "SUPINVNO": "string",
-      "SUPINVDATE": "2023-10-10T11:05:50.756Z",
-      "HHACCOUNT_HEAD": "string",
-      "SALESPERSON_CODE": "string",
+      "FLAG_UPDATED": "0",
+      "FLAG_INPROCESS": "0",
+      "SUPINVNO": "",
+      "SUPINVDATE": this.posCurrencyReceiptForm.value.vocDate,
+      "HHACCOUNT_HEAD": "",
+      "SALESPERSON_CODE": "",
       "BALANCE_FC": 0,
       "BALANCE_CC": 0,
       "AUTHORIZEDPOSTING": true,
-      "AUTOGENREF": "string",
+      "AUTOGENREF": "",
       "AUTOGENMID": 0,
-      "AUTOGENVOCTYPE": "str",
+      "AUTOGENVOCTYPE": "",
       "OUSTATUS": true,
       "OUSTATUSNEW": 0,
       "POSCUSTOMERCODE": this.posCurrencyReceiptForm.value.customerCode || "",
-      "D2DTRANSFER": "s",
-      "DRAFT_FLAG": "string",
-      "POSSCHEMEID": "string",
-      "FLAG_EDIT_ALLOW": "s",
-      "PARTY_ADDRESS": "string",
+      "D2DTRANSFER": "",
+      "DRAFT_FLAG": "0",
+      "POSSCHEMEID": "0",
+      "FLAG_EDIT_ALLOW": "",
+      "PARTY_ADDRESS": this.posCurrencyReceiptForm.value.partyAddress,
       "AUTOPOSTING": true,
-      "POSTDATE": "string",
+      "POSTDATE": this.posCurrencyReceiptForm.value.vocDate,
       "ADVRETURN": true,
-      "HTUSERNAME": "string",
+      "HTUSERNAME": this.userName,
       "GENSEQNO": 0,
-      "BASE_CURRENCY": "stri",
+      "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
       "PRINT_COUNT": 0,
       "GST_REGISTERED": true,
-      "GST_STATE_CODE": "st",
-      "GST_NUMBER": "string",
-      "GST_TYPE": "stri",
+      "GST_STATE_CODE": "",
+      "GST_NUMBER": "",
+      "GST_TYPE": "",
       "GST_TOTALFC": 0,
       "GST_TOTALCC": 0,
-      "DOC_REF": "string",
-      "REC_STATUS": "s",
+      "DOC_REF": "",
+      "REC_STATUS": "0",
       "CUSTOMER_NAME": this.posCurrencyReceiptForm.value.customerName || "",
       "CUSTOMER_MOBILE": this.posCurrencyReceiptForm.value.moblie || "",
       "CUSTOMER_EMAIL": this.posCurrencyReceiptForm.value.email || "",
-      "TDS_CODE": "string",
+      "TDS_CODE": "",
       "TDS_APPLICABLE": true,
       "TDS_TOTALFC": 0,
       "TDS_TOTALCC": 0,
-      "ADRRETURNREF": "string",
+      "ADRRETURNREF": "",
       "SCH_SCHEME_CODE": this.posCurrencyReceiptForm.value.schemaCode || "",
       "SCH_CUSTOMER_ID": this.posCurrencyReceiptForm.value.schemaId || "",
-      "REFDOCNO": "string",
-      "GIFT_CARDNO": "string",
+      "REFDOCNO": "",
+      "GIFT_CARDNO": "",
       "FROM_TOUCH": true,
-      "SL_CODE": "string",
-      "SL_DESCRIPTION": "string",
-      "OT_TRANSFER_TIME": "string",
+      "SL_CODE": "",
+      "SL_DESCRIPTION": "",
+      "OT_TRANSFER_TIME": "2023-10-10T12:05:50.756Z",
       "DUEDAYS": this.posCurrencyReceiptForm.value.dueDaysdesc || "",
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
@@ -430,5 +448,28 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
 
+  // customer master add, view
+  openCustMaster() {
+
+    const modalRef: NgbModalRef = this.modalService.open(PosCustomerMasterComponent, {
+      size: 'xl',
+      backdrop: true,
+      keyboard: false,
+      // windowClass: 'modal-full-width',
+    });
+    // modalRef.componentInstance.customerData = this.customerData;
+
+    modalRef.result.then(
+      (result) => {
+        console.log( `Closed with: ${result}`);
+      },
+      (reason) => {
+        console.log(`Dismissed ${reason}`);
+      }
+    );
+
+
+
+  }
 
 }
