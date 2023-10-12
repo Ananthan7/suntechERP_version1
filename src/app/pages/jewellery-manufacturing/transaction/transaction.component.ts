@@ -26,6 +26,7 @@ import { MeltingProcessComponent } from './melting-process/melting-process.compo
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 import { QuotationProcessComponent } from './quotation-process/quotation-process.component';
 import { TreeDownComponent } from './tree-down/tree-down.component';
+import { LossRecoveryComponent } from './loss-recovery/loss-recovery.component';
 
 @Component({
   selector: 'app-transaction',
@@ -116,8 +117,8 @@ export class TransactionComponent implements OnInit {
 
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
-        break;  
-        case 'Job Closing (JBC)':
+        break;
+      case 'Job Closing (JBC)':
         contents = JobClosingComponent
         break;
       case 'Production (MFG)':
@@ -126,9 +127,12 @@ export class TransactionComponent implements OnInit {
       case 'Quotation Processing':
         contents = QuotationProcessComponent
         break;
-        case 'Tree Making Up & Down':
-          contents = TreeDownComponent
-          break;
+      case 'Tree Making Up & Down':
+        contents = TreeDownComponent
+        break;
+      case 'PRODUCTION LOSS RECOVERY (PLR)':
+        contents = LossRecoveryComponent
+        break;
       //continue adding components using case then break
       default:
         this.snackBar.open('Module Not Created', 'Close', {
@@ -144,7 +148,7 @@ export class TransactionComponent implements OnInit {
     });
     modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
-        this.getMasterGridData({HEADER_TABLE: this.CommonService.getqueryParamTable()})
+        this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
       }
     }, (reason) => {
       // Handle modal dismissal (if needed)

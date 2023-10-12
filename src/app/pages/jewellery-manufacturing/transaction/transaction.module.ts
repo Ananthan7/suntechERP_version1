@@ -41,6 +41,7 @@ import { JewelleryAssemblingComponent } from './jewellery-assembling/jewellery-a
 import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling/jewellery-assembling-details/jewellery-assembling-details.component';
 import { TreeDownComponent } from './tree-down/tree-down.component';
 import { MeltingProcessDetailsComponent } from './melting-process/melting-process-details/melting-process-details.component';
+import { LossRecoveryComponent } from './loss-recovery/loss-recovery.component';
 
 
 @NgModule({
@@ -83,6 +84,7 @@ import { MeltingProcessDetailsComponent } from './melting-process/melting-proces
     JewelleryAssemblingComponent,
     JewelleryAssemblingDetailsComponent,
     MeltingProcessDetailsComponent,
+    LossRecoveryComponent,
   ],
   imports: [
   CommonModule,
