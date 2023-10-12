@@ -72,7 +72,7 @@ export class TransactionComponent implements OnInit {
   //  open forms in modal
   openModalView(data?: any) {
     let contents;
-    console.log(this.menuTitle, 'aaaaaaaathis.menuTitle');
+    console.log(this.menuTitle, 'this.menuTitle');
 
     switch (this.menuTitle) {
       case 'Diamond Sales Order':
