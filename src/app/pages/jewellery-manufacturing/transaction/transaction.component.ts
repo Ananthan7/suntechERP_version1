@@ -26,6 +26,7 @@ import { MeltingProcessComponent } from './melting-process/melting-process.compo
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 import { QuotationProcessComponent } from './quotation-process/quotation-process.component';
 import { TreeDownComponent } from './tree-down/tree-down.component';
+import { MouldMakingComponent } from './mould-making/mould-making.component';
 
 @Component({
   selector: 'app-transaction',
@@ -65,6 +66,8 @@ export class TransactionComponent implements OnInit {
   //  open forms in modal
   openModalView(data?: any) {
     let contents;
+    console.log(this.menuTitle,'aaaaaaaathis.menuTitle');
+    
     switch (this.menuTitle) {
       case 'Diamond Sales Order':
         contents = DiamondSalesorderComponent
@@ -126,9 +129,12 @@ export class TransactionComponent implements OnInit {
       case 'Quotation Processing':
         contents = QuotationProcessComponent
         break;
-        case 'Tree Making Up & Down':
-          contents = TreeDownComponent
-          break;
+      case 'Tree Making Up & Down':
+        contents = TreeDownComponent
+        break;
+      case 'Mould Making Process (MLM)':
+        contents = MouldMakingComponent
+        break;
       //continue adding components using case then break
       default:
         this.snackBar.open('Module Not Created', 'Close', {
