@@ -358,23 +358,10 @@
         <mat-tab-group style="width: 100%;">
             <mat-tab label="Details">
                 <div class="col-11">
-                    <div class="d-flex ps-2">
-                        <div class="p-1">
-                            <button type="button" mat-flat-button  (click)="addNewDetail()">
-                                <i class="fa fa-plus" style="font-size: 11px;color: #fff;"></i>
-                            </button>
-                        </div>
-                        <div class="p-1">
-                            <button type="button" mat-flat-button>
-                                <i class="fa fa-trash" style="font-size: 11px;color: #fff;"></i>
-                            </button>
-                        </div>
-                        <div class="p-1">
-                            <button type="button" mat-flat-button>
-                                <i class="fa fa-file" style="color: #fff;"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <menu-buttons 
+                    (addClick)="addNewDetail()"
+                    (deleteClick)="deleteClicked()"
+                    (importClick)="importClicked()"></menu-buttons>
                 </div>
                 <!-- table sectin starts -->
                 <dx-data-grid id="gridContainer" 

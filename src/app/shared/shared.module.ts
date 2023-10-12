@@ -64,6 +64,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FocusOnLoadDirective } from './directives/focus-on-load.directive';
 import { NoEmptySpaceDirective } from './directives/no-empty-space.directive';
 import { MasterGridComponent } from './common/master-grid/master-grid.component';
+import { MenuButtonsComponent } from './common/menu-buttons/menu-buttons.component';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -84,7 +85,8 @@ import { MasterGridComponent } from './common/master-grid/master-grid.component'
     DateValidationDirective,
     FocusOnLoadDirective,
     NoEmptySpaceDirective,
-    MasterGridComponent
+    MasterGridComponent,
+    MenuButtonsComponent
   ],
   imports: [
     CommonModule,
@@ -138,6 +140,7 @@ import { MasterGridComponent } from './common/master-grid/master-grid.component'
     MasterFindIconComponent,
     MasterSearchComponent,
     MasterGridComponent,
+    MenuButtonsComponent,
     //pipes && Directives exports
     NumberFormatterPipe,
     CamelCasePipe,

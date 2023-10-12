@@ -416,6 +416,10 @@ export class DiamondSalesorderComponent implements OnInit {
 
 
   deleteClicked(): void {
+    console.log('fired');
+    
+  }
+  importClicked(): void {
 
   }
   //party Code Change
