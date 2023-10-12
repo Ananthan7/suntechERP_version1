@@ -165,12 +165,25 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+  validateYear(event:any){
+    if(event.target.value == '') return;
+    let yearSelected = this.options_year.filter((item:any) => item == event.target.value)
+    if(yearSelected.length==0){
+      this.dataForm.controls.year.setValue('')
+    }
+  }
   changeBranchText(e: any) {
     e.target.value = e.target.value.toString().toUpperCase();
     this.dataForm.controls.branch.setValue(e.target.value);
   }
   /**USE: branch change function to call financial year API */
   changeBranch(e: any) {
+    if(e.target.value == '') return;
+    let optionsSelected = this.options.filter((item:any) => item == (e.target.value).toUpperCase())
+    if(optionsSelected.length==0){
+      this.dataForm.controls.branch.setValue('')
+      return
+    }
     let selectedBranch = this.dataForm.value.branch;
     if (selectedBranch != '') {
       let API = `FinancialYear?branchcode=${selectedBranch}&strusername=${this.user_name}`
