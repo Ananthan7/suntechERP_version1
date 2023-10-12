@@ -97,7 +97,7 @@ export class MasterGridComponent implements OnInit {
       });
     }
     let params
-    if(data?.MENU_SUB_MODULE == 'Transaction'){
+    if(data?.MENU_SUB_MODULE == 'Transaction' || this.vocType){
       params = {
         "PAGENO": this.pageIndex || 1,
         "RECORDS": this.pageSize || 10,

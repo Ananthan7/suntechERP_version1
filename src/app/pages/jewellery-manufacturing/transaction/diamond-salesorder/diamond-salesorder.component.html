@@ -359,9 +359,10 @@
             <mat-tab label="Details">
                 <div class="col-11">
                     <menu-buttons 
-                    (addClick)="addNewDetail()"
-                    (deleteClick)="deleteClicked()"
-                    (importClick)="importClicked()"></menu-buttons>
+                        [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="true"
+                        (addClick)="addNewDetail()" (deleteClick)="deleteClicked()"
+                        (importClick)="importClicked()">
+                    </menu-buttons>
                 </div>
                 <!-- table sectin starts -->
                 <dx-data-grid id="gridContainer" 

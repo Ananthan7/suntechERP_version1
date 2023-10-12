@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'menu-buttons',
@@ -9,7 +9,9 @@ export class MenuButtonsComponent implements OnInit {
   @Output() importClick = new EventEmitter<any>();
   @Output() deleteClick = new EventEmitter<any>();
   @Output() addClick = new EventEmitter<any>();
-
+  @Input() viewAddBtn: boolean = true;
+  @Input() viewDeleteBtn: boolean = true;
+  @Input() viewImportBtn: boolean = true;
   constructor() { }
 
   ngOnInit(): void {

@@ -328,24 +328,8 @@
         <mat-tab-group style="width: 100%;">
             <mat-tab label="Details">
                 <div class="col-11">
-                    <div class="d-flex ps-2">
-                        <div class="p-1">
-                            <button type="button" mat-flat-button color="primary" (click)="addNewDetail()"
-                                style="padding: 0px !important;">
-                                Add
-                            </button>
-                        </div>
-                        <div class="p-1">
-                            <button type="button" mat-flat-button color="primary" style="padding: 0px !important;">
-                                Delete
-                            </button>
-                        </div>
-                        <div class="p-1">
-                            <button type="button" mat-flat-button color="primary" style="padding: 0px !important;">
-                                <i class="fa fa-calendar"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <menu-buttons  (addClick)="addNewDetail()">
+                    </menu-buttons>
                 </div>
                 <div class="p-1">
                     <dx-data-grid #dataGrid id="gridContainer" width="auto" keyExpr="ID" [showBorders]="true">
