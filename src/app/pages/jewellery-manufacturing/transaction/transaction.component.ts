@@ -27,6 +27,7 @@ import { ProductionMfgComponent } from './production-mfg/production-mfg.componen
 import { QuotationProcessComponent } from './quotation-process/quotation-process.component';
 import { TreeDownComponent } from './tree-down/tree-down.component';
 import { MouldMakingComponent } from './mould-making/mould-making.component';
+import { LossRecoveryComponent } from './loss-recovery/loss-recovery.component';
 
 @Component({
   selector: 'app-transaction',
@@ -66,8 +67,8 @@ export class TransactionComponent implements OnInit {
   //  open forms in modal
   openModalView(data?: any) {
     let contents;
-    console.log(this.menuTitle,'aaaaaaaathis.menuTitle');
-    
+    console.log(this.menuTitle, 'aaaaaaaathis.menuTitle');
+
     switch (this.menuTitle) {
       case 'Diamond Sales Order':
         contents = DiamondSalesorderComponent
@@ -119,8 +120,8 @@ export class TransactionComponent implements OnInit {
 
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
-        break;  
-        case 'Job Closing (JBC)':
+        break;
+      case 'Job Closing (JBC)':
         contents = JobClosingComponent
         break;
       case 'Production (MFG)':
@@ -134,6 +135,9 @@ export class TransactionComponent implements OnInit {
         break;
       case 'Mould Making Process (MLM)':
         contents = MouldMakingComponent
+        break;
+      case 'PRODUCTION LOSS RECOVERY (PLR)':
+        contents = LossRecoveryComponent
         break;
       //continue adding components using case then break
       default:
@@ -150,7 +154,7 @@ export class TransactionComponent implements OnInit {
     });
     modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
-        this.getMasterGridData({HEADER_TABLE: this.CommonService.getqueryParamTable()})
+        this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
       }
     }, (reason) => {
       // Handle modal dismissal (if needed)
