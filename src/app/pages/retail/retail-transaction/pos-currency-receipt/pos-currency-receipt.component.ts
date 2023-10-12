@@ -68,11 +68,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Customer Master',
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'POS Customer Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -147,7 +147,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
   partyCurrencyCodeSelected(e: any) {
-    console.log(e);
+    // console.log(e);
     this.posCurrencyReceiptForm.controls.partyCurrency.setValue(e.CURRENCY_CODE);
     this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e.CURRENCY_CODE);
   }
@@ -155,9 +155,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
   customerCodeSelected(e: any) {
-    console.log(e);
-    this.posCurrencyReceiptForm.controls.customerCode.setValue(e.COUNT);
-    this.posCurrencyReceiptForm.controls.customerCodeDesc.setValue(e.COUNT);
+    // console.log(e);
+    this.posCurrencyReceiptForm.controls.customerCode.setValue(e.CODE);
+    this.posCurrencyReceiptForm.controls.customerName.setValue(e.NAME);
+    this.posCurrencyReceiptForm.controls.moblie.setValue(e.MOBILE);
+    this.posCurrencyReceiptForm.controls.email.setValue(e.EMAIL);
   }
 
 
@@ -171,7 +173,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
 
-  ) { }
+  ) {
+    console.log('==============content======================');
+    console.log(this.content);
+    console.log('====================================');
+   }
 
   ngOnInit(): void {
   }
@@ -199,7 +205,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     dueDaysdesc: [''],
     dueDays: [''], // no
     customerCode: [''],
-    customerCodeDesc: [''],
+    customerName: [''],
     moblie: [''],
     email: [''],
     partyAdress: [''],
@@ -279,7 +285,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "GST_TOTALCC": 0,
       "DOC_REF": "string",
       "REC_STATUS": "s",
-      "CUSTOMER_NAME": this.posCurrencyReceiptForm.value.customerCodeDesc || "",
+      "CUSTOMER_NAME": this.posCurrencyReceiptForm.value.customerName || "",
       "CUSTOMER_MOBILE": this.posCurrencyReceiptForm.value.moblie || "",
       "CUSTOMER_EMAIL": this.posCurrencyReceiptForm.value.email || "",
       "TDS_CODE": "string",

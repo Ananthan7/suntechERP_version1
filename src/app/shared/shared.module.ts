@@ -64,6 +64,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FocusOnLoadDirective } from './directives/focus-on-load.directive';
 import { NoEmptySpaceDirective } from './directives/no-empty-space.directive';
 import { MasterGridComponent } from './common/master-grid/master-grid.component';
+import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -84,7 +85,8 @@ import { MasterGridComponent } from './common/master-grid/master-grid.component'
     DateValidationDirective,
     FocusOnLoadDirective,
     NoEmptySpaceDirective,
-    MasterGridComponent
+    MasterGridComponent,
+    AllowLeadingZeroDirective
   ],
   imports: [
     CommonModule,
@@ -146,6 +148,7 @@ import { MasterGridComponent } from './common/master-grid/master-grid.component'
     DateValidationDirective,
     FocusOnLoadDirective,
     NoEmptySpaceDirective,
+    AllowLeadingZeroDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,
