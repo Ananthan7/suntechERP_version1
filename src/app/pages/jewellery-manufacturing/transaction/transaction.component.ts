@@ -119,9 +119,12 @@ export class TransactionComponent implements OnInit {
       case 'Melting Issue':
         contents = MeltingIssueComponent
         break;
-      case 'Quotation Processing':
+      case 'Diamond Jewellery Altration':
         contents = JewelleryAltrationComponent
         break;
+        case 'Diamond Jewellery Dismantling (mdm)':
+          contents = JewelleryDismantlingComponent
+          break;
 
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
