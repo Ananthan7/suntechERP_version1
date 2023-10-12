@@ -648,7 +648,8 @@
 </div>
 <!-- modal selections -->
 <ng-template #more_customer_detail_modal let-modal modal-lg>
-  <app-add-customer (closebtnClick)="closeModal()"></app-add-customer>
+  <!-- <app-add-customer (closebtnClick)="closeModal()"></app-add-customer> -->
+  <app-pos-customer-master (closebtnClick)="closeModal()"></app-pos-customer-master>
 </ng-template>
 <ng-template #mymodal let-modal modal-lg>
   <app-add-items (closebtnClick)="closeModal()"></app-add-items>

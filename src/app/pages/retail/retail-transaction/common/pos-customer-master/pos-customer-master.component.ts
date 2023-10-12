@@ -1,73 +1,90 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-add-customer',
-  templateUrl: './add-customer.component.html',
-  styleUrls: ['./add-customer.component.scss']
+  selector: 'app-pos-customer-master',
+  templateUrl: './pos-customer-master.component.html',
+  styleUrls: ['./pos-customer-master.component.scss']
 })
-export class AddCustomerComponent implements OnInit {
+export class PosCustomerMasterComponent implements OnInit {
+
   @Output() closebtnClick = new EventEmitter();
+  // @Input() public customerData: any;
 
   //variables
   viewOnly: boolean = false;
   isCustProcessing: boolean = false;
-  genderList: any = [];
-  maritalStatusList: any = [];
   vocMaxDate = new Date();
   currentDate = new Date(new Date());
-  fcn_returns_voc_type_val:any;
+  fcn_returns_voc_type_val: any;
 
-  nationalityMaster: any = [];
+  idTypeFilteredOptions!: Observable<any[]>;
+  idTypeOptions: any[] = [''];
+
+  maritalStatusList: any = [];
   countryMaster: any = [];
+  countryMasterOptions!: Observable<any[]>;
   stateMaster: any = [];
-  cityMaster: any = [];
-  idTypeOptions: any[] = [];
+  stateMasterOptions!: Observable<any[]>;
 
-  customerDetails:any = {}
+  mobileCountryMaster: any = [];
+  mobileCountryMasterOptions!: Observable<any[]>;
+
+  cityMaster: any = [];
+  cityMasterOptions!: Observable<any[]>;
+  nationalityMaster: any = [];
+  nationalityMasterOptions!: Observable<any[]>;
+  genderList: any = [];
+
+  customerDetails: any = {}
+
   dummyDate = '1900-01-01T00:00:00';
+  dummyDateArr = ['1900-01-01T00:00:00', '1900-01-01T00:00:00Z', '1754-01-01T00:00:00Z', '1754-01-01T00:00:00'];
+
   //formgroups
-  customerDetailForm: FormGroup;
+  customerDetailForm: FormGroup = this.formBuilder.group({
+    fcn_customer_detail_name: ['', Validators.required],
+    fcn_customer_detail_fname: ['', Validators.required],
+    fcn_customer_detail_mname: [''],
+    fcn_customer_detail_lname: ['', Validators.required],
+    fcn_cust_detail_gender: ['', Validators.required],
+    fcn_cust_detail_marital_status: [''],
+    fcn_cust_detail_dob: ['', [Validators.required]],
+    fcn_cust_detail_idType: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
+    fcn_cust_detail_phone: ['', Validators.required],
+    fcn_cust_detail_phone2: [''],
+    fcn_cust_detail_email: ['', [Validators.email]],
+    fcn_cust_detail_address: ['', Validators.required],
+    fcn_cust_detail_country: ['', [Validators.required, this.autoCompleteValidator(() => this.countryMaster, 'CODE')]],
+    fcn_cust_detail_city: ['', [this.autoCompleteValidator(() => this.cityMaster, 'CODE')]],
+    fcn_cust_detail_nationality: ['', [Validators.required, this.autoCompleteValidator(() => this.nationalityMaster, 'CODE')]],
+    fcn_cust_detail_idcard: ['', Validators.required],
+    fcn_cust_detail_designation: ['', Validators.required],
+    fcn_cust_detail_company: [''],
+    fcn_cust_detail_state: ['', [this.autoCompleteValidator(() => this.stateMaster, 'CODE')]],
+
+    fcn_mob_code: ['', [Validators.required]],
+  });
 
   constructor(
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private commonService: CommonServiceService,
+    private comService: CommonServiceService,
     private snackBar: MatSnackBar,
     private acRoute: ActivatedRoute,
   ) {
-    this.customerDetailForm = this.formBuilder.group({
-      fcn_customer_detail_name: ['', Validators.required],
-      fcn_customer_detail_fname: ['', Validators.required],
-      fcn_customer_detail_mname: [''],
-      fcn_customer_detail_lname: [''],
-      fcn_cust_detail_gender: ['', Validators.required],
-      fcn_cust_detail_marital_status: [''],
-      fcn_cust_detail_dob: [''],
-      fcn_cust_detail_idType: [''],
-      fcn_cust_detail_phone: ['', Validators.required],
-      fcn_cust_detail_phone2: [''],
-      fcn_cust_detail_email: ['', [Validators.email]],
-      // fcn_cust_detail_address: ['', Validators.required],
-      fcn_cust_detail_address: [''],
-      fcn_cust_detail_country: [''],
-      fcn_cust_detail_city: [''],
-      fcn_cust_detail_nationality: ['', Validators.required],
-      fcn_cust_detail_idcard: [''],
-      fcn_cust_detail_occupation: [''],
-      fcn_cust_detail_company: [''],
-      fcn_cust_detail_state: [''],
-    });
+    this.getDropDownData();
 
-    this.getRetailSalesMaster()
   }
 
   ngOnInit(): void {
+    this.getDropDownData();
   }
 
   onCustomerNameFocus(event: any) {
@@ -76,28 +93,34 @@ export class AddCustomerComponent implements OnInit {
   nameChange(event: any) {
 
   }
-  changeCountry(data:any){
+  changeCountry(data: any) {
 
   }
-  changeIdtype(data:any){
+  changeIdtype(data: any) {
 
   }
-  getRetailSalesMaster() {
-    let queryParams:any
-    this.acRoute.queryParams.subscribe((params) => {
-      if (params.vocNo) {
-        console.log(params,'params.............................');
-        queryParams = params;
-      }
-    });
-    // let API = `RetailSalesDataInDotnet/GetRetailSalesData/BranchCode=${queryParams.branchCode}/VocType=${queryParams.vocType}/YearMonth=${queryParams.yearMonth}/VocNo=${queryParams.vocNo}`
-    // this.dataService.getDynamicAPI(API).subscribe((result:any) => {
-
-    // })
+  getDropDownData() {
+    this.maritalStatusList = this.comService.getComboFilterByID('Marital Status');
+    this.genderList = this.comService.getComboFilterByID('gender');
+    console.log(this.genderList);
+    
   }
+
+  // getRetailSalesMaster() {
+  //   let queryParams: any
+  //   this.acRoute.queryParams.subscribe((params) => {
+  //     if (params.vocNo) {
+  //       console.log(params, 'params.............................');
+  //       queryParams = params;
+  //     }
+  //   });
+  //   // let API = `RetailSalesDataInDotnet/GetRetailSalesData/BranchCode=${queryParams.branchCode}/VocType=${queryParams.vocType}/YearMonth=${queryParams.yearMonth}/VocNo=${queryParams.vocNo}`
+  //   // this.dataService.getDynamicAPI(API).subscribe((result:any) => {
+
+  //   // })
+  // }
   //use: save customer
   customerSave() {
-    debugger
     if (!this.isCustProcessing) {
       this.isCustProcessing = true;
 
@@ -357,31 +380,31 @@ export class AddCustomerComponent implements OnInit {
           BR_CODE: this.customerDetails?.BR_CODE || '',
           SPOUSE_DATE_OF_BIRTH:
             this.customerDetails?.SPOUSE_DATE_OF_BIRTH || this.dummyDate,
-          TEL_R_CODE: `${this.commonService.emptyToZero(
+          TEL_R_CODE: `${this.comService.emptyToZero(
             this.customerDetails?.TEL_R_CODE
           )}`,
-          TEL_O_CODE: `${this.commonService.emptyToZero(
+          TEL_O_CODE: `${this.comService.emptyToZero(
             this.customerDetails?.TEL_O_CODE
           )}`,
-          GST_NUMBER: `${this.commonService.emptyToZero(
+          GST_NUMBER: `${this.comService.emptyToZero(
             this.customerDetails?.GST_NUMBER
           )}`,
-          VAT_NUMBER: `${this.commonService.emptyToZero(
+          VAT_NUMBER: `${this.comService.emptyToZero(
             this.customerDetails?.VAT_NUMBER
           )}`,
-          PARENT_CODE: `${this.commonService.emptyToZero(
+          PARENT_CODE: `${this.comService.emptyToZero(
             this.customerDetails?.PARENT_CODE
           )}`,
-          REFERED_BY: `${this.commonService.emptyToZero(
+          REFERED_BY: `${this.comService.emptyToZero(
             this.customerDetails?.REFERED_BY
           )}`,
           CREDIT_LIMIT: this.customerDetails?.CREDIT_LIMIT || 0,
           CREDIT_LIMIT_STATUS:
             this.customerDetails?.CREDIT_LIMIT_STATUS || false,
           PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
-          VOCTYPE:  '', //todo
-          YEARMONTH:  '',//todo
-          VOCNO:  '',//todo
+          VOCTYPE: '', //todo
+          YEARMONTH: '',//todo
+          VOCNO: '',//todo
           VOCDATE: '',//todo
           // new values - poscustomer
           'OT_TRANSFER_TIME': this.customerDetails?.OT_TRANSFER_TIME || '',
@@ -396,7 +419,7 @@ export class AddCustomerComponent implements OnInit {
           'TYPE_DESC': this.customerDetails?.TYPE_DESC || '',
 
 
-          "BRANCH_CODE": this.commonService.branchCode || '',
+          "BRANCH_CODE": this.comService.branchCode || '',
           "DETAILS_JOHARA": this.customerDetails?.DETAILS_JOHARA || '',
           "DETAILS_FARAH": this.customerDetails?.DETAILS_FARAH || '',
           "DETAILS_JAWAHERALSHARQ": this.customerDetails?.DETAILS_JAWAHERALSHARQ || '',
@@ -426,11 +449,11 @@ export class AddCustomerComponent implements OnInit {
             ? 'updatePosCustomer'
             : 'insertPosCustomer';
 
-        this.dataService.postDynamicAPI(apiCtrl,posCustomer).subscribe((data:any) => {
+        this.dataService.postDynamicAPI(apiCtrl, posCustomer).subscribe((data: any) => {
           this.isCustProcessing = false;
 
           if (data.status == 'Success') {
-            this.customerDetails =  data.response;
+            this.customerDetails = data.response;
             // this.customerDataForm.controls['fcn_customer_name'].setValue(
             //   this.customerDetails.NAME
             // );
@@ -489,7 +512,7 @@ export class AddCustomerComponent implements OnInit {
             // this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
             //   this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
             // );
-            
+
             this.snackBar.open('Customer details saved successfully', '', {
               duration: 1000 // time in milliseconds
             });
@@ -513,7 +536,29 @@ export class AddCustomerComponent implements OnInit {
       }
     }
   }
-  
+
+
+  autoCompleteValidator(optionsProvider: any, field: any = null) {
+    return (control: AbstractControl) => {
+      const options = optionsProvider();
+      const inputValue = control.value;
+      if (!options || !Array.isArray(options)) {
+        return null;
+      }
+      if (field == null) {
+        if (control.value && options.length > 0 && !options.includes(control.value)) {
+          return { notInOptions: true };
+        }
+      } else {
+        if (inputValue && options.length > 0 && !options.some(option => option[field] === inputValue)) {
+          return { notInOptions: true };
+        }
+      }
+      return null;
+    };
+  }
+
+
   /**USE: close modal window */
   close() {
     this.closebtnClick.emit()

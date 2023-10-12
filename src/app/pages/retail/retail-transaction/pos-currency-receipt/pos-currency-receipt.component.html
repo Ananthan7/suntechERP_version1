@@ -148,7 +148,6 @@
                   <input
                     matInput
                     [matDatepicker]="dueDays"
-                    [max]="vocMaxDate"
                     name="dueDays"
                     formControlName="dueDays"
                     placeholder="DD/MM/YYYY"
@@ -190,6 +189,7 @@
                   <button
                     type="button"
                     class="btn btn-primary metal-issue-add-btn"
+                    (click)="openCustMaster()"
                   >
                     New Customer
                   </button>
@@ -226,7 +226,7 @@
               >
               <div class="col-md-9">
                 <mat-form-field style="width: 100%">
-                  <input type="text" matInput formControlName="partyAdress" />
+                  <input type="text" matInput formControlName="partyAddress" />
                 </mat-form-field>
               </div>
             </div>

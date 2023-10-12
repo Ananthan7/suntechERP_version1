@@ -86,7 +86,7 @@ import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.direc
     FocusOnLoadDirective,
     NoEmptySpaceDirective,
     MasterGridComponent,
-    AllowLeadingZeroDirective
+    AllowLeadingZeroDirective,
   ],
   imports: [
     CommonModule,
