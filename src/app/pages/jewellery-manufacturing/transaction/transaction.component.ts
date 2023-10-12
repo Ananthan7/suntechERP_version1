@@ -72,7 +72,7 @@ export class TransactionComponent implements OnInit {
   //  open forms in modal
   openModalView(data?: any) {
     let contents;
-    console.log(this.menuTitle, 'aaaaaaaathis.menuTitle');
+    console.log(this.menuTitle, 'this.menuTitle');
 
     switch (this.menuTitle) {
       case 'Diamond Sales Order':
@@ -119,9 +119,12 @@ export class TransactionComponent implements OnInit {
       case 'Melting Issue':
         contents = MeltingIssueComponent
         break;
-      case 'Quotation Processing':
+      case 'Diamond Jewellery Altration':
         contents = JewelleryAltrationComponent
         break;
+        case 'Diamond Jewellery Dismantling (mdm)':
+          contents = JewelleryDismantlingComponent
+          break;
 
       case 'Process Transfer (MFG)':
         contents = ProcessTransferComponent
