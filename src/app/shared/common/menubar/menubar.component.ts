@@ -35,7 +35,6 @@ export class MenubarComponent implements OnInit {
     this.branchCode = this.CommonService.branchCode
     this.subMenuName = this.CommonService.getModuleName()
     this.menuTitle = this.CommonService.getTitleName()
-    console.log(this.menuTitle,'this.menuTitle');
     
     this.getSubmenuList(this.menuTitle);
   }
@@ -72,6 +71,18 @@ export class MenubarComponent implements OnInit {
           }
           return 0;
         });
+
+        this.groupedMenuData.forEach((item:any)=>{
+          item.submenus.sort((a:any, b:any) => {
+            const nameA = a.MENU_CAPTION_ENG.toLowerCase();
+            const nameB = b.MENU_CAPTION_ENG.toLowerCase();
+          
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+            return 0;
+          });
+          
+        })
         this.ChangeDetector.detectChanges()
       }
     })
