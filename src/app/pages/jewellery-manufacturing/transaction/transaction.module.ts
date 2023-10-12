@@ -23,10 +23,12 @@ import { WaxProcessReturnComponent } from './wax-process-return/wax-process-retu
 import { MetalReturnComponent } from './metal-return/metal-return.component';
 import { CastingTreeUpComponent } from './casting-tree-up/casting-tree-up.component';
 import { MetalReturnDetailsComponent } from './metal-return/metal-return-details/metal-return-details.component';
+import { MouldMakingComponent } from './mould-making/mould-making.component';
 
 import { MeltingIssueComponent } from './melting-issue/melting-issue.component';
 import { MeltingIssueDetailsComponent } from './melting-issue/melting-issue-details/melting-issue-details.component';
 import { ProcessTransferComponent } from './process-transfer/process-transfer.component';
+import { JobClosingComponent } from './job-closing/job-closing.component';
 import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
 import { JewelleryAltrationDetailsComponent } from './jewellery-altration/jewellery-altration-details/jewellery-altration-details.component';
 import { ProcessTransferDetailsComponent } from './process-transfer/process-transfer-details/process-transfer-details.component';
@@ -34,6 +36,7 @@ import { AlloyAllocationComponent } from './cad-processing/alloy-allocation/allo
 
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 import { ProductionEntryDetailsComponent } from './production-mfg/production-entry-details/production-entry-details.component';
+import { QuotationProcessComponent } from './quotation-process/quotation-process.component';
 import { JewelleryDismantlingComponent } from './jewellery-dismantling/jewellery-dismantling.component';
 import { JewelleryAssemblingComponent } from './jewellery-assembling/jewellery-assembling.component';
 import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling/jewellery-assembling-details/jewellery-assembling-details.component';
@@ -65,17 +68,21 @@ import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling/jewe
     ProductionMfgComponent,
     MeltingIssueDetailsComponent,
     ProcessTransferComponent,
+    MouldMakingComponent,
+    JobClosingComponent,
+    
     JewelleryAltrationComponent,
     JewelleryAltrationDetailsComponent,
     ProcessTransferDetailsComponent,
     AlloyAllocationComponent,
     ProductionEntryDetailsComponent,
+    QuotationProcessComponent,
     JewelleryDismantlingComponent,
     JewelleryAssemblingComponent,
     JewelleryAssemblingDetailsComponent
   ],
   imports: [
-    CommonModule,
+  CommonModule,
     TransactionRoutingModule,
     SharedModule
   ]

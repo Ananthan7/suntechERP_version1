@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -17,16 +18,163 @@ import Swal from 'sweetalert2';
 })
 export class PosCurrencyReceiptComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
-  columnhead: any[] = ['Sr#','Branch','Mode','A/c Code','Account Head','Currency','Curr.Rate','VAT_E-','VAT_E-'];
+  columnhead: any[] = ['Sr#', 'Branch', 'Mode', 'A/c Code', 'Account Head', 'Currency', 'Curr.Rate', 'VAT_E-', 'VAT_E-.'];
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
+  vocMaxDate = new Date();
+  currentDate = new Date();
+
+
+
+  enteredByCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: '',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+
+  partyCurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 9,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Party Currency',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  partyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 6,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Party Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Customer Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  enteredBySelected(e: any) {
+    console.log(e);
+    this.posCurrencyReceiptForm.controls.enteredby.setValue(e.SALESPERSON_CODE);
+    this.posCurrencyReceiptForm.controls.enteredbyuser.setValue(e.DESCRIPTION);
+  }
+
+  // PartyCodeChange(event: any) {
+  //   this.PartyCodeData.SEARCH_VALUE = event.target.value
+  // }
+
+  partyCodeSelected(e: any) {
+    console.log(e);
+    this.posCurrencyReceiptForm.controls.partyCode.setValue(e.ACCODE);
+    this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e['ACCOUNT HEAD']);
+    this.partyCodeChange({ target: { value: e.ACCODE } })
+
+  }
+  //party Code Change
+  partyCodeChange(event: any) {
+    if (event.target.value == '') return
+    this.snackBar.open('Loading...')
+    // this.PartyCodeData.SEARCH_VALUE = event.target.value
+    let postData = {
+      "SPID": "001",
+      "parameter": {
+        "ACCODE": event.target.value || "",
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.snackBar.dismiss()
+        if (result.status == "Success") { //
+          if (result.dynamicData.length > 0) {
+
+            let data = result.dynamicData[0]
+            console.log('data', data);
+
+            if (data && data[0].CURRENCY_CODE) {
+
+              this.posCurrencyReceiptForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE)
+              this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
+
+              // this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
+              // this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data[0].CURRENCY_CODE)
+              // this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data[0].ACCOUNT_HEAD)
+              // this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data[0].ADDRESS)
+
+              // let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data[0].CURRENCY_CODE)
+              // this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+              // this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+            }
+          }
+
+        } else {
+          this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.snackBar.dismiss()
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
+    this.subscriptions.push(Sub)
+  }
+
+
+  partyCurrencyCodeSelected(e: any) {
+    console.log(e);
+    this.posCurrencyReceiptForm.controls.partyCurrency.setValue(e.CURRENCY_CODE);
+    this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e.CURRENCY_CODE);
+  }
+
+
+
+  customerCodeSelected(e: any) {
+    console.log(e);
+    this.posCurrencyReceiptForm.controls.customerCode.setValue(e.COUNT);
+    this.posCurrencyReceiptForm.controls.customerCodeDesc.setValue(e.COUNT);
+  }
+
+
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
+    private snackBar: MatSnackBar,
+
   ) { }
+
+  ngOnInit(): void {
+  }
 
   openaddposdetails() {
     const modalRef: NgbModalRef = this.modalService.open(PosCurrencyReceiptDetailsComponent, {
@@ -39,29 +187,29 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
   posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
-    vocType : [''],
-    vocNo : [''],
-    vocDate : [''],
-    partyCode : [''],
-    partyCodeDes : [''],  // No
-    partyCurrency : [''],
-    partyCurrencyDesc : [''],
-    enteredby : [''], // No
-    enteredbyuser : [''], // No
-    dueDaysdesc : [''],
-    dueDays : [''], // no
-    customerCode : [''],
-    customerCodeDesc : [''],
-    moblie : [''],
-    email : [''],
-    partyAdress : [''],
-    schemaCode : [''],
-    schemaId : [''],
-    partyAmount : [''],
-    partyAmountLc : [''],
-    narration : [''],
-    totalTax : [''],
-    total : ['']
+    vocType: [''],
+    vocNo: [''],
+    vocDate: [''],
+    partyCode: [''],
+    partyCodeDesc: [''],  // No
+    partyCurrency: [''],
+    partyCurrencyRate: [''],
+    enteredby: [''], // No
+    enteredbyuser: [''], // No
+    dueDaysdesc: [''],
+    dueDays: [''], // no
+    customerCode: [''],
+    customerCodeDesc: [''],
+    moblie: [''],
+    email: [''],
+    partyAdress: [''],
+    schemaCode: [''],
+    schemaId: [''],
+    partyAmount: [''],
+    partyAmountLc: [''],
+    narration: [''],
+    totalTax: [''],
+    total: ['']
   })
 
   formSubmit() {
@@ -86,7 +234,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "YEARMONTH": "string",
       "PARTYCODE": this.posCurrencyReceiptForm.value.partyCode || "",
       "PARTY_CURRENCY": this.posCurrencyReceiptForm.value.partyCurrency || "",
-      "PARTY_CURR_RATE": this.posCurrencyReceiptForm.value.partyCurrencyDesc || "",
+      "PARTY_CURR_RATE": this.posCurrencyReceiptForm.value.partyCurrencyRate || "",
       "TOTAL_AMOUNTFC": this.posCurrencyReceiptForm.value.partyAmount || "",
       "TOTAL_AMOUNTCC": this.posCurrencyReceiptForm.value.partyAmountLc || "",
       "REMARKS": this.posCurrencyReceiptForm.value.narration || "",
@@ -108,7 +256,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "AUTOGENVOCTYPE": "str",
       "OUSTATUS": true,
       "OUSTATUSNEW": 0,
-      "POSCUSTOMERCODE":  this.posCurrencyReceiptForm.value.customerCode || "",
+      "POSCUSTOMERCODE": this.posCurrencyReceiptForm.value.customerCode || "",
       "D2DTRANSFER": "s",
       "DRAFT_FLAG": "string",
       "POSSCHEMEID": "string",
@@ -264,7 +412,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   }
 
-  update(){
+  update() {
 
 
   }
@@ -274,44 +422,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     // this.activeModal.close();
     this.activeModal.close(data);
   }
-  ngOnInit(): void {
-  }
 
-  partyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 8,
-    SEARCH_FIELD: 'currency',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  partyCodeSelected(e:any){
-    console.log(e);
-    this.posCurrencyReceiptForm.controls.currency.setValue(e.CURRENCY_CODE);
-  }
 
-  userName = localStorage.getItem('username');
-  user: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'User',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
 
-  userDataSelected(data: any,value: any) {
-    console.log(value);
-    console.log(data);
-   
-    this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
-    //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
-  }
 }
