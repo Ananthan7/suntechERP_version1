@@ -23,7 +23,8 @@ import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-gr
 import { JewelleryAltrationComponent } from './jewellery-altration/jewellery-altration.component';
 import { MeltingProcessComponent } from './melting-process/melting-process.component';
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
-
+import { JewelleryDismantlingComponent } from './jewellery-dismantling/jewellery-dismantling.component';
+import { JewelleryAssemblingComponent } from './jewellery-assembling/jewellery-assembling.component';
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
