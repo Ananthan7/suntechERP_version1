@@ -110,9 +110,9 @@ export class TransactionComponent implements OnInit {
       case 'Waxing Process Return':
         contents = WaxProcessReturnComponent
         break;
-      case 'JOB CREATION':
-        contents = JobCreationComponent
-        break;
+        case 'Job Creation':
+          contents = JobCreationComponent
+          break;
       case 'Casting Tree Up (TMU)':
         contents = CastingTreeUpComponent
         break;
