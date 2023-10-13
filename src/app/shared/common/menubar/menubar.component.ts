@@ -11,7 +11,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 })
 export class MenubarComponent implements OnInit {
   @Input() menuTitle = '';
-  @Output() subMenuChange = new EventEmitter()
+  @Output() subMenuChange = new EventEmitter<any>()
 
   subMenuName: any;
   subMenuList: any;
@@ -90,7 +90,7 @@ export class MenubarComponent implements OnInit {
 
   pageRoutes(path: any, obj: any,submenu:any) {
     this.subMenuChange.emit(submenu);
-
+    
     let navigationExtras: NavigationExtras = {
       queryParams: obj
     };

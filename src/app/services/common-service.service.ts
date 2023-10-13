@@ -17,6 +17,7 @@ export class CommonServiceService {
   yearSelected: any = localStorage.getItem('YEAR');
   menuTitle: any;
   menuName: any;
+  componentName: any;
   queryParamAPI: any;
   //POS datas
   //service for ADD POS starts
@@ -250,6 +251,13 @@ export class CommonServiceService {
       this.menuName = data.subMenuName;
     });
     return this.menuName
+  }
+  //use: to get menu ModuleName from queryParams
+  getFormComponentName() {
+    this.route.queryParams.subscribe((data: any) => {
+      this.componentName = data.component;
+    });
+    return this.componentName
   }
   //use: to get menu title from queryParams
   getTitleName() {

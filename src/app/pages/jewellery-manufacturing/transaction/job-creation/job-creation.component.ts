@@ -14,14 +14,22 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./job-creation.component.scss']
 })
 export class JobCreationComponent implements OnInit {
+  //variables
+  modalReference: any;
+  closeResult: any;
+  pageTitle: any;
+  currentFilter: any;
+  showFilterRow: boolean = false;
+  showHeaderFilter: boolean = false;
+  divisionMS: any = 'ID';
+  itemList: any[] = []
 
-  divisionMS: any;
-  columnheadIncome:any[] = ['','','','','','','', '',''];
-  @Input() content!: any; 
+  columnheadIncome: any[] = ['', '', '', '', '', '', '', '', ''];
+  @Input() content!: any;
   tableData: any[] = [];
- 
+
   private subscriptions: Subscription[] = [];
-   
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -34,24 +42,25 @@ export class JobCreationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
   jobcreationFrom: FormGroup = this.formBuilder.group({
-   
+
   });
 
-  
-removedata(){
-  this.tableData.pop();
-}
-  formSubmit(){
-  
+
+  removedata() {
+    this.tableData.pop();
+  }
+  formSubmit() {
+
   }
 
 
 
- 
+
 }
