@@ -35,6 +35,22 @@ export class MeltingIssueComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
+  jobnoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'jobno',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  jobnoCodeSelected(e:any){
+    console.log(e);
+    this.meltingIssueFrom.controls.jobno.setValue(e.PREFIX_CODE);
+  }
+
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -83,21 +99,7 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.meltingtype.setValue(e['Karat Code']);
   }
 
- jobnoCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 14,
-    SEARCH_FIELD: 'jobno',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "PREFIX_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  jobnoCodeSelected(e:any){
-    console.log(e);
-    this.meltingIssueFrom.controls.jobno.setValue(e.PREFIX_CODE);
-  }
+ 
 
   timeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -122,12 +124,7 @@ export class MeltingIssueComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,) { }
   ngOnInit(): void {
-  }
-
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
+  } 
 
   openaddMeltingIssueDetails() {
     const modalRef: NgbModalRef = this.modalService.open(MeltingIssueDetailsComponent, {
@@ -526,5 +523,10 @@ export class MeltingIssueComponent implements OnInit {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions = []; // Clear the array
     }
+  }
+
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
   }
 }
