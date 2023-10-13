@@ -1,0 +1,76 @@
+.pos-sales-modalheader,
+.pos-sales-modalbody,
+.metal-sales-card,
+.card-body {
+  background-color: white !important;
+  font-family: Poppins;
+  padding: 10px;
+}
+.pos-modaltitle {
+  font-family: Poppins;
+  color: black;
+}
+.w-100 {
+  margin: 5px !important;
+}
+
+.btn-primary {
+  background-color: #0d4f9e !important;
+  border-color: #0d4f9e !important;
+  font-size: 12px;
+  padding: 6px 15px 6px 15px !important;
+  border-radius: 5px !important;
+}
+
+.btn-outline-primary {
+  font-size: 12px;
+  padding: 6px 15px 6px 15px !important;
+}
+
+.ribbon-button {
+  height: auto;
+  min-height: 64px;
+  width: auto;
+  padding: 11.5px;
+  margin: 0;
+}
+
+.excel-row {
+  margin-left: 90px;
+}
+
+.icon-common {
+  color: #012c57;
+}
+
+.first-row {
+  border-right: 1px solid #d5f2ff;
+  border-width: 4px;
+}
+
+.bg-lighted {
+  background: #f5f2ed;
+  box-shadow: 0px 10px 25px 0px rgba(0, 0, 0, 0.09);
+}
+
+.btn_print {
+  color: #f5f2ed !important;
+  border-color: #3599cc;
+  background-color: #3599cc !important;
+  font-size: 12px;
+  padding: 2px 10px 2px 10px;
+
+}
+.form-control {
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid #cececf !important;
+  background: transparent;
+}
+
+.cancel-button {
+  border-radius: 10px !important;
+}
+.rounded-pill{
+    height: 26px;
+}
