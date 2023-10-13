@@ -84,7 +84,7 @@ export class TransactionComponent implements OnInit {
       case 'Job Card':
         contents = JobCardComponent
         break;
-      case 'Melting Process (MLP)':
+      case 'Melting Process':
         contents = MeltingProcessComponent
         break;
       case 'Metal Issue (diamond Jewellery)':
