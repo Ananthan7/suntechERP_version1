@@ -39,8 +39,6 @@ export class JobCreationComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-
-
   jobcreationFrom: FormGroup = this.formBuilder.group({
    
   });
@@ -50,8 +48,7 @@ removedata(){
   this.tableData.pop();
 }
   formSubmit(){
-
-   
+  
   }
 
 
