@@ -529,4 +529,12 @@ export class MeltingIssueComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  deleteClicked(): void {
+    console.log('fired');
+    
+  }
+  importClicked(): void {
+
+  }
 }
