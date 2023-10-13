@@ -29,6 +29,7 @@ export class MasterComponent implements OnInit {
 
   //variables
   menuTitle: any
+  componentName: any
   PERMISSIONS: any
   tableName: any
   apiCtrl: any
@@ -50,8 +51,8 @@ export class MasterComponent implements OnInit {
 
   ngOnInit(): void {
     /**USE: to get table data from API */
-    this.getMasterGridData()
-    // this.openModalView()
+    this.menuTitle = this.CommonService.getModuleName()
+    this.componentName = this.CommonService.getFormComponentName()
   }
 
   viewRowDetails(e: any) {
@@ -67,30 +68,51 @@ export class MasterComponent implements OnInit {
   //  open Jobcard in modal
   openModalView(data?: any) {
     let contents;
-    if (this.menuTitle == 'Job Card') {
-      contents = JobcardComponent
-    } else if (this.menuTitle == 'Worker Master') {
-      contents = WorkerMasterComponent
-    } else if (this.menuTitle == 'Department Master') {
-      contents = DepartmentMasterComponent
-    } else if (this.menuTitle == 'Process Master') {
-      contents = ProcessMasterComponent
-    } else if (this.menuTitle == 'Sequance Master') {
-      contents = SequenceMasterComponent
-    } else if (this.menuTitle == 'Stone Pricing Master') {
-      contents = StonePricingMasterComponent
-    } else if (this.menuTitle == 'Labour Charge Master') {
-      contents = LabourChargeMasterComponent
-    } else if (this.menuTitle == 'Melting Type') {
-      contents = MeltingTypeComponent
-    } else if (this.menuTitle == 'Alloy Master') {
-      contents = AlloyMasterComponent
-    } else if (this.menuTitle == 'PictureType Master') {
-      contents = PictureTypeMasterComponent
-    } else if (this.menuTitle == 'Approval Master') {
-      contents = ApprovalMasterComponent
-    } else if (this.menuTitle == 'Design Master (mfg)') {
-      contents = DesignMasterComponent
+
+    switch (this.componentName) {
+      case 'JobcardComponent':
+        contents = JobcardComponent
+        break;
+      case 'WorkerMasterComponent':
+        contents = WorkerMasterComponent
+        break;
+      case 'DepartmentMasterComponent':
+        contents = DepartmentMasterComponent
+        break;
+      case 'ProcessMasterComponent':
+        contents = ProcessMasterComponent
+        break;
+      case 'SequenceMasterComponent':
+        contents = SequenceMasterComponent
+        break;
+      case 'StonePricingMasterComponent':
+        contents = StonePricingMasterComponent
+        break;
+      case 'LabourChargeMasterComponent':
+        contents = LabourChargeMasterComponent
+        break;
+      case 'MeltingTypeComponent':
+        contents = MeltingTypeComponent
+        break;
+      //continue adding components using case then break    
+
+      case 'AlloyMasterComponent':
+        contents = AlloyMasterComponent
+        break;
+      case 'PictureTypeMasterComponent':
+        contents = PictureTypeMasterComponent
+        break;
+      case 'ApprovalMasterComponent':
+        contents = ApprovalMasterComponent
+        break;
+      case 'DesignMasterComponent':
+        contents = DesignMasterComponent
+        break;
+      //continue adding components using case then break
+      default:
+        this.snackBar.open('Module Not Created', 'Close', {
+          duration: 3000,
+        });
     }
 
     const modalRef: NgbModalRef = this.modalService.open(contents, {
@@ -115,8 +137,10 @@ export class MasterComponent implements OnInit {
     if (data) {
       this.menuTitle = data.MENU_CAPTION_ENG;
       this.PERMISSIONS = data.PERMISSION;
+      this.componentName = data.ANG_WEB_FORM_NAME;
     } else {
       this.menuTitle = this.CommonService.getModuleName()
+      this.componentName = this.CommonService.getFormComponentName()
     }
     this.masterGridComponent?.getMasterGridData(data)
   }
