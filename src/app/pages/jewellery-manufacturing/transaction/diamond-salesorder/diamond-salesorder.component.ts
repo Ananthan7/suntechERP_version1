@@ -154,6 +154,7 @@ export class DiamondSalesorderComponent implements OnInit {
       this.toastr.error('PartyCode not found', '', {
         timeOut: 3000,
       })
+      return
     }
     const modalRef: NgbModalRef = this.modalService.open(AddNewdetailComponent, {
       size: 'xl',

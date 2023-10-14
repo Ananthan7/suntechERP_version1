@@ -206,11 +206,14 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12 p-2">
+                    <!-- Tab section starts -->
                     <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+                        <!-- BOM Details Tab section starts -->
                         <mat-tab label="BOM Details" *ngIf="isViewBOMTab">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="row" style="max-width: 100%;">
+                                        <!-- bom details data grid -->
                                         <div class="table1" id="resizableDiv">
                                             <dx-data-grid #dataGrid id="gridContainer" 
                                                 width="auto" [showBorders]="true"
@@ -237,6 +240,7 @@
                                                 </div>
                                             </dx-data-grid>
                                         </div>
+                                        <!-- grouped data grid -->
                                         <div class="table2" id="resizableDiv">
                                             <dx-data-grid #dataGrid id="gridContainer" width="auto"
                                                 [dataSource]="groupedBOMDetails" [showRowLines]="true"
@@ -257,7 +261,9 @@
                                 </div>
                             </div>
                         </mat-tab>
+                        <!-- Parts/ Components Details Tab section starts -->
                         <mat-tab label="Parts/ Components Details" *ngIf="isViewComponentsTab">
+                            <!-- Parts details grid -->
                             <div class="row">
                                 <div class="col-md-12">
                                     <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [dataSource]="gridParts"
@@ -275,6 +281,7 @@
                                     </dx-data-grid>
                                 </div>
                             </div>
+                            <!-- Component details grid -->
                             <div class="row mt-2">
                                 <div class="col-md-12">
                                     <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
@@ -293,6 +300,7 @@
                                 </div>
                             </div>
                         </mat-tab>
+                        <!-- Summary Details Tab section starts -->
                         <mat-tab label="Summary">
                             <form [formGroup]="summaryDetailForm" *ngIf="isViewSummaryTab">
                                 <div class="row mt-2">
@@ -571,6 +579,7 @@
                                 </div>
                             </form>
                         </mat-tab>
+                        <!-- Design Details Tab section starts -->
                         <mat-tab label="Design Details" *ngIf="isViewDesignTab">
                             <div class="row mt-2">
                                 <div class="col-md-4">

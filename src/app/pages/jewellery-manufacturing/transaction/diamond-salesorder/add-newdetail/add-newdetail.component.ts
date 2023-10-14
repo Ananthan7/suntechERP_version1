@@ -121,9 +121,7 @@ export class AddNewdetailComponent implements OnInit {
   
   setInitialValues() {
     if (this.content && this.content.length > 0) {
-      console.log(this.content, 'content');
       this.BOMDetailsArray = this.content[0].BOMDetails
-      // /summaryDetail
       // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
       this.groupBomDetailsData({})
     }
@@ -280,7 +278,7 @@ export class AddNewdetailComponent implements OnInit {
       item.BOMDetails = this.BOMDetailsArray
     }
     if (this.summaryDetailForm.value) {
-      item.summaryDetail = [this.summaryDetailForm.value]
+      item.summaryDetail = [{...this.diamondSalesDetailForm.value,...this.summaryDetailForm.value}]
     }
     this.close([item])
   }
