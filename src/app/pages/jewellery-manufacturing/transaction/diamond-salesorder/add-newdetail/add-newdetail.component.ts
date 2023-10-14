@@ -21,15 +21,42 @@ export class AddNewdetailComponent implements OnInit {
   season2: string[] = ['Metal', 'Stones', 'Total'];
   currentFilter: any;
   divisionMS: any = 'ID';
-  private subscriptions: Subscription[] = [];
-  BOMDetailsArray: any[] = []
-  BOMDetailsArrayHead: any[] = []
+  isViewComponentsTab: boolean = false;
+  isViewBOMTab: boolean = true;
+  isViewSummaryTab: boolean = true;
+  isViewDesignTab: boolean = false;
+
+  BOMDetailsArray: any[] = [];
+  groupedBOMDetails: any[] = [];
+  groupedBOMDetailsHead: any[] = [];
+  gridComponents: any[] = [];
+  gridComponentsHead: any[] = [];
+  gridParts: any[] = [];
+  gridPartsHead: any[] = [];
+
+  BOMDetailsArrayHead: any[] = ['DIVCODE', 'STONE_TYPE', 'COMP_CODE',
+    'KARAT_CODE', 'PCS', 'GROSS_WT', 'RATELC', 'AMOUNTFC', 'SHAPE', 'SIEVE',
+    'LABRATEFC', 'WASTAGE_PER', 'WASTAGE_WT', 'WASTAGE_AMTFC', 'LABAMOUNTFC',
+    'SIEVE_DESC', 'SIZE_FORM', 'COLOR', 'CLARITY', 'STOCK_CODE', 'PROCESS_TYPE',
+    'PROD_VARIANCE', 'PURITY']
   columnhead: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
   columnheader: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
   columnheadmain: any[] = ['Stock Code', 'Stone Size', 'Stone Pcs', 'Stone Weight'];
+  colorCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
 
-
+  private subscriptions: Subscription[] = [];
   DesignCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -41,8 +68,6 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
 
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
@@ -93,40 +118,61 @@ export class AddNewdetailComponent implements OnInit {
     this.setInitialValues()
     // this.resizeGrid()
   }
-  setInitialValues(){
-    if(this.content && this.content.length>0){
-      console.log(this.content,'content');
+  
+  setInitialValues() {
+    if (this.content && this.content.length > 0) {
+      console.log(this.content, 'content');
       this.BOMDetailsArray = this.content[0].BOMDetails
       // /summaryDetail
-      this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
+      // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
+      this.groupBomDetailsData({})
     }
-    
   }
-  // resizeGrid() {
-  //   let resizableDiv: any = document.getElementById('resizableDiv');
-  //   if (resizableDiv) {
-  //     // Do something with the element
-  //     console.log(resizableDiv, 'resizableDiv');
-  //   }
-  //   let isResizing: boolean = false;
-
-  //   resizableDiv.addEventListener('touchstart', (event: any) => {
-  //     isResizing = true;
-  //     event.preventDefault();
-  //   });
-
-  //   document.addEventListener('touchmove', (event) => {
-  //     if (isResizing) {
-  //       const touch = event.touches[0];
-  //       resizableDiv.style.width = touch.clientX + 'px';
-  //       event.preventDefault();
-  //     }
-  //   });
-
-  //   document.addEventListener('touchend', () => {
-  //     isResizing = false;
-  //   });
-  // }
+  isAllowRowEdit(data:any): boolean{
+    if(data == 'PCS' || data == 'GROSS_WT' || data == 'LABRATELC'
+    ){
+      return true
+    }else {
+      return false
+    }
+  }
+  colorcodeSelect(data:any): string{
+    if(data == 'COLOR'){
+      return 'colorcode'
+    }else {
+      return ''
+    }
+  }
+  userDataSelected(event:any,value:any){
+    this.BOMDetailsArray[value.data.SRNO - 1].COLOR = event.CODE;
+  }
+  groupBomDetailsData(event:any){
+    // let data = event.data
+    let result: any[] = []
+    this.BOMDetailsArray.reduce(function (res: any, value: any) {
+      if (!res[value.DIVCODE]) {
+        res[value.DIVCODE] = {
+          DIVCODE: value.DIVCODE,
+          PCS: 0,
+          WEIGHT: 0,
+          WEIGHT_GMS: 0,
+          AMOUNT_FC: 0,
+          LABAMOUNTFC: 0,
+          WASTAGE_AMTFC: 0
+        };
+        result.push(res[value.DIVCODE])
+      }
+      res[value.DIVCODE].PCS += value.PCS;
+      res[value.DIVCODE].WEIGHT += value.GROSS_WT;
+      res[value.DIVCODE].WEIGHT_GMS += value.GROSS_WT;
+      res[value.DIVCODE].AMOUNT_FC += value.AMOUNTFC;
+      res[value.DIVCODE].LABAMOUNTFC += value.LABAMOUNTFC;
+      res[value.DIVCODE].WASTAGE_AMTFC += value.WASTAGE_AMTFC;
+      return res;
+    }, {});
+    this.groupedBOMDetails = result
+    this.groupedBOMDetailsHead = Object.keys(this.groupedBOMDetails[0]);
+  }
   designCodeSelected(data: any) {
     this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
     this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
@@ -153,12 +199,42 @@ export class AddNewdetailComponent implements OnInit {
       .subscribe((result) => {
         this.snackBar.dismiss()
         if (result.dynamicData || result.status == 'Success') {
-          let data: any = result.dynamicData[0]
-          data = this.commonService.arrayEmptyObjectToString(data)
-          data = data[0]
-
-          this.BOMDetailsArray = result.dynamicData[3]
-          this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
+          let data: any;
+          //Summary details data
+          if(result.dynamicData[0].length>0){
+            this.isViewSummaryTab = true;
+            data = result.dynamicData[0]
+            data = this.commonService.arrayEmptyObjectToString(data)
+            data = data[0]
+          } else {
+            this.toastr.error('Summary details not found','', {
+              timeOut: 3000,
+            })
+          }
+          // Parts / Components details data
+          if (result.dynamicData[1].length > 0) {
+            this.isViewComponentsTab = true;
+            this.gridComponents = result.dynamicData[1]
+            this.gridComponentsHead = Object.keys(this.gridComponents[0]);
+          } else {
+            this.isViewComponentsTab = false;
+          }
+          if (result.dynamicData[2].length > 0) {
+            this.isViewComponentsTab = true;
+            this.gridParts = result.dynamicData[2]
+            this.gridParts = Object.keys(this.gridParts[0]);
+          } else {
+            this.isViewComponentsTab = false;
+          }
+          //BOM Details data
+          if (result.dynamicData[3].length > 0) {
+            this.isViewBOMTab = true;
+            this.BOMDetailsArray = result.dynamicData[3]
+            this.groupBomDetailsData({})
+          } else {
+            this.isViewBOMTab = false;
+          }
+          // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
 
           // this.column1 = Object.keys(this.BOMDetailsArray);
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)

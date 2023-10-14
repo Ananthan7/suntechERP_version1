@@ -68,7 +68,13 @@ td {
   resize: horizontal;
   touch-action: none; /* Disable touch action to allow custom handling */
   overflow: auto;
-  width: 50%;
+  width: 70%;
+}
+.table2{
+  resize: horizontal;
+  touch-action: none; /* Disable touch action to allow custom handling */
+  overflow: auto;
+  width: 30%;
 }
 ::ng-deep {
   .cdk-overlay-container {
@@ -83,7 +89,7 @@ td {
     height: 25px !important;
     margin-bottom: 6px !important;
   }
-  // .col-form-label{
-  //   padding: 0px !important;
-  // }
+  .dx-datagrid .dx-header-row {
+    font-size: 12px; /* Adjust the font size to your preference */
+  }
 }

@@ -207,38 +207,48 @@
             <div class="row">
                 <div class="col-md-12 p-2">
                     <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-                        <mat-tab label="BOM Details">
+                        <mat-tab label="BOM Details" *ngIf="isViewBOMTab">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="row" style="max-width: 100%;">
                                         <div class="table1" id="resizableDiv">
-                                            <dx-data-grid #dataGrid id="gridContainer" width="auto"
-                                                [showBorders]="true" [showRowLines]="true"
-                                                [dataSource]="BOMDetailsArray">
-                                                <dxo-paging [enabled]="false"></dxo-paging>
+                                            <dx-data-grid #dataGrid id="gridContainer" 
+                                                width="auto" [showBorders]="true"
+                                                [showRowLines]="true" [dataSource]="BOMDetailsArray"
+                                                (onRowUpdated)="groupBomDetailsData($event)">
                                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                                 </dxo-editing>
-                                                <!-- <dxo-selection mode="multiple"></dxo-selection> -->
-                                                <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
 
-                                                <dxi-column *ngFor="let data of BOMDetailsArrayHead" dataField="{{ data }}"
-                                                    width="auto" caption="{{ data }}" [allowEditing]="true"
-                                                    alignment="center">
+                                                <dxi-column width="auto" *ngFor="let data of BOMDetailsArrayHead"
+                                                    dataField="{{ data }}" caption="{{ data }}"
+                                                    [allowEditing]="isAllowRowEdit(data)" 
+                                                    alignment="center" [cellTemplate]="colorcodeSelect(data)">
                                                 </dxi-column>
+                                                <div *dxTemplate="let data of 'colorcode'">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div>
+                                                            <a href="javascript:void(0)" class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                        </div>
+                                                        <master-search [MasterSearchData]="colorCode"
+                                                            (newRowClick)="userDataSelected($event,data)">
+                                                        </master-search>
+                                                    </div>
+                                                </div>
                                             </dx-data-grid>
                                         </div>
-                                        <div class="table1" id="resizableDiv">
-                                            <dx-data-grid #dataGrid id="gridContainer" width="auto" 
-                                                [dataSource]="BOMDetailsArray" [showRowLines]="true"
+                                        <div class="table2" id="resizableDiv">
+                                            <dx-data-grid #dataGrid id="gridContainer" width="auto"
+                                                [dataSource]="groupedBOMDetails" [showRowLines]="true"
                                                 [showBorders]="true">
                                                 <dxo-paging [enabled]="false"></dxo-paging>
                                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                                 </dxo-editing>
                                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                                <dxi-column *ngFor="let data of BOMDetailsArrayHead" dataField="{{ data }}"
-                                                    width="auto" caption="{{ data }}" [allowEditing]="true"
-                                                    alignment="center">
+                                                <dxi-column *ngFor="let data of groupedBOMDetailsHead"
+                                                    dataField="{{ data }}" width="auto" caption="{{ data }}"
+                                                    [allowEditing]="true" alignment="center">
                                                 </dxi-column>
                                             </dx-data-grid>
                                         </div>
@@ -247,18 +257,19 @@
                                 </div>
                             </div>
                         </mat-tab>
-                        <mat-tab label="Parts/ Components Details">
+                        <mat-tab label="Parts/ Components Details" *ngIf="isViewComponentsTab">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [dataSource]="gridParts"
+                                        [showBorders]="true">
                                         <dxo-paging [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell" [allowUpdating]="true">
                                         </dxo-editing>
                                         <dxo-selection mode="multiple"></dxo-selection>
                                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                        <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" width="auto"
-                                            caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                        <dxi-column *ngFor="let data of gridPartsHead" dataField="{{ data }}"
+                                            width="auto" caption="{{ data }}" [allowEditing]="true" alignment="center"
                                             backgroundcolor="#000">
                                         </dxi-column>
                                     </dx-data-grid>
@@ -266,14 +277,15 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-12">
-                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                                        [dataSource]="gridComponents" [showBorders]="true">
                                         <dxo-paging [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell" [allowUpdating]="true">
                                         </dxo-editing>
                                         <dxo-selection mode="multiple"></dxo-selection>
                                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                        <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}"
+                                        <dxi-column *ngFor="let data of gridComponentsHead" dataField="{{ data }}"
                                             width="auto" caption="{{ data }}" [allowEditing]="true" alignment="center"
                                             backgroundcolor="#000">
                                         </dxi-column>
@@ -282,7 +294,7 @@
                             </div>
                         </mat-tab>
                         <mat-tab label="Summary">
-                            <form [formGroup]="summaryDetailForm">
+                            <form [formGroup]="summaryDetailForm" *ngIf="isViewSummaryTab">
                                 <div class="row mt-2">
                                     <div class="col-md-5">
                                         <div class="row">
@@ -559,7 +571,7 @@
                                 </div>
                             </form>
                         </mat-tab>
-                        <mat-tab label="Design Details">
+                        <mat-tab label="Design Details" *ngIf="isViewDesignTab">
                             <div class="row mt-2">
                                 <div class="col-md-4">
                                     <div class="size_box">
