@@ -84,7 +84,7 @@ export class DiamondSalesorderComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
+  /**USE: main form party details */
   PartyDetailsOrderForm: FormGroup = this.formBuilder.group({
     voucherType: ['', [Validators.required]],
     voucherDESC: [''],
@@ -166,7 +166,7 @@ export class DiamondSalesorderComponent implements OnInit {
 
     modalRef.result.then((result) => {
       if (result) {
-        this.setValuesToHeaderGrid(result)
+        this.setValuesToHeaderGrid(result) //USE: set Values To Detail table
       }
     }, (reason) => {
       // Handle modal dismissal (if needed)
@@ -187,7 +187,7 @@ export class DiamondSalesorderComponent implements OnInit {
       this.tableData.push(item)
     })
     this.tableDataHead = Object.keys(this.tableData[0]);
-
+    
     if (result.length > 0) {
       result.forEach((item: any, index: any) => {
         this.detailData.push({

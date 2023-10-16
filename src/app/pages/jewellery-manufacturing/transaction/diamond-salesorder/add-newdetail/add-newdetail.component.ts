@@ -20,7 +20,9 @@ export class AddNewdetailComponent implements OnInit {
   seasons: string[] = ['Metal', 'Stones'];
   season2: string[] = ['Metal', 'Stones', 'Total'];
   currentFilter: any;
-  divisionMS: any = 'ID';
+  divisionMS: string = 'ID';
+  codeSearchFlag: string = 'ALL';
+
   isViewComponentsTab: boolean = false;
   isViewBOMTab: boolean = true;
   isViewSummaryTab: boolean = true;
@@ -39,10 +41,11 @@ export class AddNewdetailComponent implements OnInit {
     'LABRATEFC', 'WASTAGE_PER', 'WASTAGE_WT', 'WASTAGE_AMTFC', 'LABAMOUNTFC',
     'SIEVE_DESC', 'SIZE_FORM', 'COLOR', 'CLARITY', 'STOCK_CODE', 'PROCESS_TYPE',
     'PROD_VARIANCE', 'PURITY']
-  columnhead: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
-  columnheader: any[] = ['', '', '', '', '', '', '', '', '', '', '', '', ''];
+
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
   columnheadmain: any[] = ['Stock Code', 'Stone Size', 'Stone Pcs', 'Stone Weight'];
+  private subscriptions: Subscription[] = [];
+/**USE: color Code lookup model*/
   colorCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -55,8 +58,7 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-
-  private subscriptions: Subscription[] = [];
+/**USE: Design Code lookup model*/
   DesignCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -68,26 +70,27 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
+  /**USE: details main form group*/
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
-    designDescription: ['', [Validators.required]],
+    designDescription: [''],
     StockCode: [''],
-    StockCodeDesc: ['', [Validators.required]],
+    StockCodeDesc: [''],
     DeliveryType: ['', [Validators.required]],
     DeliveryType2: ['', [Validators.required]],
     ProductionDate: ['', [Validators.required]],
     DeliveryOnDate: ['', [Validators.required]],
     Remarks: [''],
     StockBOM: [false, [Validators.required]],
-    Pcs: ['', [Validators.required]],
-    MetalWeight: ['', [Validators.required]],
-    Rate: ['', [Validators.required]],
-    StoneWeight: ['', [Validators.required]],
-    Amount: ['', [Validators.required]],
-    GrossWeight: ['', [Validators.required]],
+    PCS: ['', [Validators.required]],
+    METAL_WT: ['', [Validators.required]],
+    RATEFC: ['', [Validators.required]],
+    STONE_WT: ['', [Validators.required]],
+    AMOUNT: ['', [Validators.required]],
+    GROSS_WT: ['', [Validators.required]],
     STOCK_CODE: ['', [Validators.required]],
   })
+  /**USE:  first sub form group for summary details tab*/
   summaryDetailForm: FormGroup = this.formBuilder.group({
     CATEGORY_CODE: ['', [Validators.required]],
     SUBCATEGORY_CODE: ['', [Validators.required]],
@@ -116,9 +119,8 @@ export class AddNewdetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.setInitialValues()
-    // this.resizeGrid()
   }
-  
+  /**USE: first setup if already added */
   setInitialValues() {
     if (this.content && this.content.length > 0) {
       this.BOMDetailsArray = this.content[0].BOMDetails
@@ -126,6 +128,7 @@ export class AddNewdetailComponent implements OnInit {
       this.groupBomDetailsData({})
     }
   }
+  /**USE: Allow Row Edit */
   isAllowRowEdit(data:any): boolean{
     if(data == 'PCS' || data == 'GROSS_WT' || data == 'LABRATELC'
     ){
@@ -134,6 +137,7 @@ export class AddNewdetailComponent implements OnInit {
       return false
     }
   }
+  /**USE: color code Select data */
   colorcodeSelect(data:any): string{
     if(data == 'COLOR'){
       return 'colorcode'
@@ -144,6 +148,7 @@ export class AddNewdetailComponent implements OnInit {
   userDataSelected(event:any,value:any){
     this.BOMDetailsArray[value.data.SRNO - 1].COLOR = event.CODE;
   }
+  /**USE: group BOM Details Data */
   groupBomDetailsData(event:any){
     // let data = event.data
     let result: any[] = []
@@ -171,10 +176,18 @@ export class AddNewdetailComponent implements OnInit {
     this.groupedBOMDetails = result
     this.groupedBOMDetailsHead = Object.keys(this.groupedBOMDetails[0]);
   }
+  /**USE: design Code Selection */
   designCodeSelected(data: any) {
-    this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
-    this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
-    this.designCodeValidate({ target: { value: data.DESIGN_CODE } })
+    if(data.DESIGN_CODE){
+      this.codeSearchFlag = 'DESIGN'
+      this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
+      this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
+      this.designCodeValidate({ target: { value: data.DESIGN_CODE } })
+    }else{
+      this.toastr.error('Design Code not found','', {
+        timeOut: 3000,
+      })
+    }
   }
   /**use: design code change fn to fetch data with design code */
   designCodeValidate(event: any) {
@@ -238,11 +251,11 @@ export class AddNewdetailComponent implements OnInit {
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
           this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
           if (data.PCS == 0) {
-            this.diamondSalesDetailForm.controls.Pcs.setValue(1)
+            this.diamondSalesDetailForm.controls.PCS.setValue(1)
           }
-          this.diamondSalesDetailForm.controls.Rate.setValue(data.RATE)
-          this.diamondSalesDetailForm.controls.Rate.setValue(data.METALWT)
-          this.diamondSalesDetailForm.controls.StockCode.setValue(data.STOCK_CODE)
+          this.diamondSalesDetailForm.controls.RATEFC.setValue(data.RATE)
+          this.diamondSalesDetailForm.controls.METAL_WT.setValue(data.METALWT)
+          this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
 
           this.summaryDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
           this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
@@ -272,6 +285,7 @@ export class AddNewdetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  /**USE: final form save */
   formSubmit() {
     let item: any = {}
     if (this.BOMDetailsArray.length > 0) {
@@ -280,15 +294,17 @@ export class AddNewdetailComponent implements OnInit {
     if (this.summaryDetailForm.value) {
       item.summaryDetail = [{...this.diamondSalesDetailForm.value,...this.summaryDetailForm.value}]
     }
-    this.close([item])
+    
+    this.close([item])//USE: passing Detail data to header screen on close
   }
+  /**USE: reset All data with this function to reuse as needed */
   reset() {
     this.BOMDetailsArray = []
   }
   selectionChanged(data: any) {
     console.log(data, 'fireddddd');
   }
-
+  /**USE: close activeModal */
   close(data?: any) {
     this.activeModal.close(data);
   }

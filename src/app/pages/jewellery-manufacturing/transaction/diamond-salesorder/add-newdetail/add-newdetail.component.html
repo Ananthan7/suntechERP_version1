@@ -30,12 +30,16 @@
                             <div class="col-md-3">
                                 <mat-form-field style="width: 90%;">
                                     <input type="text" matInput placeholder="Code"
-                                        (focusout)="designCodeValidate($event)" formControlName="designCode" />
+                                        (focusout)="designCodeValidate($event)" 
+                                        [readonly]="codeSearchFlag == 'STOCK'"
+                                        formControlName="designCode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput readonly formControlName="designDescription" />
+                                    <input type="text" matInput 
+                                    [readonly]="codeSearchFlag == 'STOCK'"
+                                    formControlName="designDescription" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="DesignCodeData"
                                     (newRowClick)="designCodeSelected($event)"></master-search>
@@ -52,12 +56,15 @@
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 90%;">
-                                    <input type="text" matInput formControlName="StockCode" />
+                                    <input type="text" matInput formControlName="StockCode" 
+                                        [readonly]="codeSearchFlag == 'DESIGN'"/>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" readonly matInput formControlName="StockCodeDesc" />
+                                    <input type="text" matInput 
+                                    [readonly]="codeSearchFlag == 'DESIGN'"
+                                    formControlName="StockCodeDesc" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="DesignCodeData"></master-search>
                             </div>
@@ -147,7 +154,7 @@
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Metal Weight :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="MetalWeight" />
+                                        <input type="text" matInput formControlName="METAL_WT" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -155,13 +162,13 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Rate :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="Rate" />
+                                        <input type="text" matInput formControlName="RATEFC" />
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Stone Weight :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="StoneWeight" />
+                                        <input type="text" matInput formControlName="STONE_WT" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -169,13 +176,13 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Amount :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="Amount" />
+                                        <input type="text" matInput formControlName="AMOUNT" />
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Gross Weight :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="GrossWeight" />
+                                        <input type="text" matInput formControlName="GROSS_WT" />
                                     </mat-form-field>
                                 </div>
                             </div>

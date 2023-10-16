@@ -13,7 +13,7 @@
     <!-- content section -->
     <div class="card m-1 p-2">
         <mat-tab-group>
-           <!-- Party Details section starts -->
+            <!-- Party Details section starts -->
             <mat-tab label="Party Details">
                 <div style="width: 96%;" class="p-3">
                     <!-- Party Details form starts -->
@@ -51,8 +51,7 @@
                                         Type :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
-                                            <input type="text" matInput readonly
-                                                (change)="OrderTypeChange($event)"
+                                            <input type="text" matInput readonly (change)="OrderTypeChange($event)"
                                                 formControlName="orderType" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="OrderTypeData"
@@ -65,8 +64,7 @@
                                         Party Code :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
-                                            <input type="text" matInput 
-                                                readonly (change)="PartyCodeChange($event)"
+                                            <input type="text" matInput readonly (change)="PartyCodeChange($event)"
                                                 formControlName="PartyCode" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="PartyCodeData"
@@ -79,8 +77,8 @@
                                         Salesman :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
-                                            <input type="text" matInput (change)="SalesmanChange($event)"
-                                                readonly formControlName="Salesman" />
+                                            <input type="text" matInput (change)="SalesmanChange($event)" readonly
+                                                formControlName="Salesman" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="SalesmanData"
                                             (newRowClick)="SalesmanSelected($event)">
@@ -92,8 +90,8 @@
                                         Prosp Origin :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
-                                            <input type="text" matInput (change)="SalesmanChange($event)"
-                                                readonly formControlName="Salesman" />
+                                            <input type="text" matInput (change)="SalesmanChange($event)" readonly
+                                                formControlName="Salesman" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="OrderTypeData"
                                             (newRowClick)="SalesmanSelected($event)">
@@ -126,13 +124,14 @@
                                         Party Currency :</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
-                                            <input type="text" matInput maxlength="6" formControlName="partyCurrencyType" />
+                                            <input type="text" matInput maxlength="6"
+                                                formControlName="partyCurrencyType" />
                                         </mat-form-field>
                                         <mat-form-field style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput formControlName="partyCurrencyRate" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="currencyMasterData"
-                                        (newRowClick)="partyCurrencySelected($event)">
+                                            (newRowClick)="partyCurrencySelected($event)">
                                         </master-search>
                                     </span>
                                 </div>
@@ -147,7 +146,7 @@
                                             <input type="text" matInput formControlName="ItemCurrencyRate" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="currencyMasterData"
-                                        (newRowClick)="itemCurrencySelected($event)">
+                                            (newRowClick)="itemCurrencySelected($event)">
                                         </master-search>
                                     </span>
                                 </div>
@@ -178,7 +177,7 @@
                                         </mat-form-field>
                                     </span>
                                 </div>
-                                <div class="row">
+                                <div class="row" *ngIf="false">
                                     <label class="col-sm-4 col-form-label">
                                         AMC % :</label>
                                     <span class="col-sm-8">
@@ -198,10 +197,11 @@
                                                 <mat-tab label="Bill To">
                                                     <div class="col-11">
                                                         <mat-form-field style="width: 100%; margin-left: 7px;">
-                                                            <input type="text" matInput formControlName="BillToAccountHead" />
+                                                            <input type="text" matInput
+                                                                formControlName="BillToAccountHead" />
                                                         </mat-form-field>
                                                         <textarea style="width: 100%;height: 120px; margin-left: 7px;"
-                                                        formControlName="BillToAddress">
+                                                            formControlName="BillToAddress">
                                                         </textarea>
                                                     </div>
                                                 </mat-tab>
@@ -339,8 +339,8 @@
                                         <dxo-selection mode="multiple"></dxo-selection>
                                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                        <dxi-column *ngFor="let data of tableDataHead" dataField="{{ data }}" width="auto"
-                                            caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                        <dxi-column *ngFor="let data of tableDataHead" dataField="{{ data }}"
+                                            width="auto" caption="{{ data }}" [allowEditing]="true" alignment="center"
                                             backgroundcolor="#000">
                                         </dxi-column>
                                     </dx-data-grid>
@@ -357,29 +357,60 @@
     <div class="card m-1">
         <mat-tab-group style="width: 100%;">
             <mat-tab label="Details">
-                <div class="col-11">
-                    <menu-buttons 
-                        [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="true"
-                        (addClick)="addNewDetail()" (deleteClick)="deleteClicked()"
-                        (importClick)="importClicked()">
-                    </menu-buttons>
+                <div class="p-2">
+                    <div class="col-11">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="true"
+                            (addClick)="addNewDetail()" (deleteClick)="deleteClicked()" (importClick)="importClicked()">
+                        </menu-buttons>
+                    </div>
+                    <!-- table sectin starts -->
+                    <dx-data-grid id="gridContainer" [dataSource]="tableData" [showRowLines]="true" [showBorders]="true"
+                        (onSelectionChanged)="selectionChangedHandler($event)">
+                        <dxo-selection mode="single"></dxo-selection>
+                       
+                        <!-- <dxi-column *ngFor="let data of tableDataHead" 
+                            dataField="{{ data }}" width="auto"
+                            caption="{{ data }}" [allowEditing]="true" alignment="center">
+                        </dxi-column> -->
+                        <dxi-column caption="SRNO" dataField="SRNO" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="DESIGN CODE" dataField="designCode" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="KARAT" dataField="KARAT_CODE" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="METAL COLOR" dataField="COLOR" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="PCS" dataField="PCS" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="METAL WT" dataField="METAL_WT" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="STONE WT" dataField="STONE_WT" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="GROSS WT" dataField="GROSS_WT" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="RATE FC" dataField="RATEFC" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="RATE CC" dataField="RATEFC" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="VALUE FC" dataField="RATEFC" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="VALUE CC" dataField="RATEFC" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="NETVALUE FC" dataField="RATEFC" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="NETVALUE CC" dataField="RATEFC" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="DELIVERY TYPE" dataField="KARAT_CODE" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="DELIVERY DAYS" dataField="KARAT_CODE" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxi-column  caption="PURITY" dataField="PURITY" width="auto" alignment="center">
+                        </dxi-column>
+                        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+                    </dx-data-grid>
                 </div>
-                <!-- table sectin starts -->
-                <dx-data-grid id="gridContainer" 
-                    [dataSource]="tableData" [showRowLines]="true"
-                    [showBorders]="true"
-                    (onSelectionChanged)="selectionChangedHandler($event)">
-                    <dxo-selection mode="single"></dxo-selection>
-                    <dxo-editing mode="row" [allowUpdating]="true" [allowAdding]="false">
-                    </dxo-editing>
-                    <dxi-column *ngFor="let data of tableDataHead" dataField="{{ data }}"
-                        width="auto" caption="{{ data }}" [allowEditing]="true"
-                        alignment="center">
-                    </dxi-column>
-                    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
-                </dx-data-grid>
-        </mat-tab>
-            <mat-tab label></mat-tab>
+            </mat-tab>
+            <!-- <mat-tab label></mat-tab> -->
         </mat-tab-group>
 
         <div class="col-md-11 top">
@@ -393,7 +424,7 @@
                 </div>
                 <div class="d-flex">
                     <div>
-                        <button type="button" mat-flat-button  (click)="addNewDetail()">
+                        <button type="button" mat-flat-button (click)="addNewDetail()">
                             <span>Price Recalc</span>
                         </button>
                     </div>

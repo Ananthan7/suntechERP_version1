@@ -78,6 +78,9 @@
 
 
 ::ng-deep {
+  .dx-datagrid .dx-header-row {
+    font-size: 13px;
+  }
   body[data-layout-mode="dark"] {
     #gridContainer {
       td,
