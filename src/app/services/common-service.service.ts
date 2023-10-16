@@ -182,6 +182,16 @@ export class CommonServiceService {
       }
     });
   }
+  //**USE: common fuction to get all company parameter values */
+  getCompanyParamValue(parameter: string){
+    let paramValue: string = ''
+    this.allCompanyParams.map((data: any) => {
+      if (data.PARAMETER == parameter) {
+        paramValue = data.PARAM_VALUE;
+      }
+    })
+    return paramValue
+  }
   // Get Combo filter(selectbox) data by id
   getComboFilterByID(type: any) {
     type = type.trim();

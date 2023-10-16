@@ -450,9 +450,11 @@ export class DiamondSalesorderComponent implements OnInit {
             this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data[0].ACCOUNT_HEAD)
             this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data[0].ADDRESS)
 
-            let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data[0].CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
-            this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+            // let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data[0].CURRENCY_CODE)
+            let currencyRate = this.commonService.getCurrRate(data[0].CURRENCY_CODE)
+            currencyRate = this.commonService.transformDecimalVB(this.commonService.amtDecimals,currencyRate)
+            this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
+            this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyRate)
           }
         } else {
           this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {

@@ -22,6 +22,7 @@ export class AddNewdetailComponent implements OnInit {
   currentFilter: any;
   divisionMS: string = 'ID';
   codeSearchFlag: string = 'ALL';
+  currentDate = new Date()
 
   isViewComponentsTab: boolean = false;
   isViewBOMTab: boolean = true;
@@ -45,7 +46,7 @@ export class AddNewdetailComponent implements OnInit {
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
   columnheadmain: any[] = ['Stock Code', 'Stone Size', 'Stone Pcs', 'Stone Weight'];
   private subscriptions: Subscription[] = [];
-/**USE: color Code lookup model*/
+  /**USE: color Code lookup model*/
   colorCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -58,7 +59,7 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-/**USE: Design Code lookup model*/
+  /**USE: Design Code lookup model*/
   DesignCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -78,8 +79,8 @@ export class AddNewdetailComponent implements OnInit {
     StockCodeDesc: [''],
     DeliveryType: ['', [Validators.required]],
     DeliveryType2: ['', [Validators.required]],
-    ProductionDate: ['', [Validators.required]],
-    DeliveryOnDate: ['', [Validators.required]],
+    ProductionDate: [this.currentDate, [Validators.required]],
+    DeliveryOnDate: [this.currentDate, [Validators.required]],
     Remarks: [''],
     StockBOM: [false, [Validators.required]],
     PCS: ['', [Validators.required]],
@@ -129,27 +130,27 @@ export class AddNewdetailComponent implements OnInit {
     }
   }
   /**USE: Allow Row Edit */
-  isAllowRowEdit(data:any): boolean{
-    if(data == 'PCS' || data == 'GROSS_WT' || data == 'LABRATELC'
-    ){
+  isAllowRowEdit(data: any): boolean {
+    if (data == 'PCS' || data == 'GROSS_WT' || data == 'LABRATELC'
+    ) {
       return true
-    }else {
+    } else {
       return false
     }
   }
   /**USE: color code Select data */
-  colorcodeSelect(data:any): string{
-    if(data == 'COLOR'){
+  colorcodeSelect(data: any): string {
+    if (data == 'COLOR') {
       return 'colorcode'
-    }else {
+    } else {
       return ''
     }
   }
-  userDataSelected(event:any,value:any){
+  userDataSelected(event: any, value: any) {
     this.BOMDetailsArray[value.data.SRNO - 1].COLOR = event.CODE;
   }
   /**USE: group BOM Details Data */
-  groupBomDetailsData(event:any){
+  groupBomDetailsData(event: any) {
     // let data = event.data
     let result: any[] = []
     this.BOMDetailsArray.reduce(function (res: any, value: any) {
@@ -178,13 +179,13 @@ export class AddNewdetailComponent implements OnInit {
   }
   /**USE: design Code Selection */
   designCodeSelected(data: any) {
-    if(data.DESIGN_CODE){
+    if (data.DESIGN_CODE) {
       this.codeSearchFlag = 'DESIGN'
       this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
       this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
       this.designCodeValidate({ target: { value: data.DESIGN_CODE } })
-    }else{
-      this.toastr.error('Design Code not found','', {
+    } else {
+      this.toastr.error('Design Code not found', '', {
         timeOut: 3000,
       })
     }
@@ -212,13 +213,13 @@ export class AddNewdetailComponent implements OnInit {
         if (result.dynamicData || result.status == 'Success') {
           let data: any;
           //Summary details data
-          if(result.dynamicData[0].length>0){
+          if (result.dynamicData[0].length > 0) {
             this.isViewSummaryTab = true;
             data = result.dynamicData[0]
             data = this.commonService.arrayEmptyObjectToString(data)
             data = data[0]
           } else {
-            this.toastr.error('Summary details not found','', {
+            this.toastr.error('Summary details not found', '', {
               timeOut: 3000,
             })
           }
@@ -272,6 +273,8 @@ export class AddNewdetailComponent implements OnInit {
           this.summaryDetailForm.controls.THICKNESS.setValue(data.THICKNESS)
           this.summaryDetailForm.controls.ENGRAVING_TEXT.setValue(data.ENGRAVING_TEXT)
           this.summaryDetailForm.controls.ENGRAVING_FONT.setValue(data.ENGRAVING_FONT)
+
+          this.calculateTotal({})
         } else {
           this.toastr.error('Design Code not found', result.Message ? result.Message : '', {
             timeOut: 3000,
@@ -285,6 +288,53 @@ export class AddNewdetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  //**USE: calculate total on value change */
+  calculateTotal(event: any) {
+    // if(event.target.value == '') return;
+    let dblStone_Wt: number = 0; let dblMetal_Wt: number = 0;
+    let dblAmount: number = 0; let dblTotLabour: number = 0; let dblTotRate: number = 0;
+    let dblDisc_Amt: number = 0; let dblDuty_Amt: number = 0;
+    let dblLoad_Amt: number = 0; let dblMargin_Amt: number = 0;
+    let dblDia_Amt: number = 0; let dblGold_Loss_Amt: number = 0;
+    let dblMarkup_Amt: number = 0; let dblMetal_Amt: number = 0;
+    let dblLab_amount: number = 0; let dblSetting_Amount: number = 0;
+    let dblSetting: number = 0; let dblPolish: number = 0;
+    let dblRhodium: number = 0; let dblLabour: number = 0;
+    let dblMisc: number = 0; let dblWastageAmt: number = 0;
+
+    console.log(this.BOMDetailsArray,'this.BOMDetailsArray');
+    
+    this.BOMDetailsArray.forEach((item: any) => {
+      if (item.MetalStone.toString().trim() == "M") {
+        dblMetal_Wt += this.commonService.emptyToZero(item["Weight"]);
+        dblMetal_Amt += this.commonService.emptyToZero(item["AmountFC"]);
+        dblLab_amount += this.commonService.emptyToZero(item["LabAmountFC"]);
+        dblWastageAmt += this.commonService.emptyToZero(item["WastageAmtFC"]);
+      } else {
+        if (item["Division"].toString().trim() == "Z") {
+          dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item["Weight"])) * 5;
+        }
+        else {
+          dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item["Weight"]));
+        }
+        dblSetting_Amount += this.commonService.emptyToZero(item["LabAmountFC"]);
+        if (item["Division"].toString().trim() == "L") {
+          dblDia_Amt += this.commonService.emptyToZero(item["AmountFC"].ToString());
+        }
+      }
+      dblAmount += this.commonService.emptyToZero(item["AmountFC"].ToString());
+    })
+
+    let TotGross_Wt: number = (this.diamondSalesDetailForm.value.GROSS_WT + (this.diamondSalesDetailForm.value.STONE_WT / 5)) * event.target.value;
+    let TotMetal_Wt: number = this.diamondSalesDetailForm.value.METAL_WT * event.target.value;
+    let TotStone_Wt: number = (this.diamondSalesDetailForm.value.STONE_WT * event.target.value);
+
+    if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
+    if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
+    if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
+    // let Charge4FC = dblLab_amount;
+    // let Charge1FC = dblSetting_Amount;
+  }
   /**USE: final form save */
   formSubmit() {
     let item: any = {}
@@ -292,9 +342,9 @@ export class AddNewdetailComponent implements OnInit {
       item.BOMDetails = this.BOMDetailsArray
     }
     if (this.summaryDetailForm.value) {
-      item.summaryDetail = [{...this.diamondSalesDetailForm.value,...this.summaryDetailForm.value}]
+      item.summaryDetail = [{ ...this.diamondSalesDetailForm.value, ...this.summaryDetailForm.value }]
     }
-    
+
     this.close([item])//USE: passing Detail data to header screen on close
   }
   /**USE: reset All data with this function to reuse as needed */

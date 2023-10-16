@@ -10,7 +10,7 @@
     <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
 </div>
 <div class="container-fluid pt-3">
-    <div class="card">
+    <div class="card" style="margin-bottom: 2px !important;">
         <div class="card-body">
             <form [formGroup]="diamondSalesDetailForm">
                 <div class="row">
@@ -148,7 +148,7 @@
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Pcs :</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="Pcs" />
+                                        <input type="text" matInput formControlName="PCS" />
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Metal Weight :</label>
@@ -209,10 +209,9 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-12 p-2">
+    <div class="card" >
+        <div class="card-body" style="padding: 3px;">
+                <div class="col-md-12 ps-2 pe-2">
                     <!-- Tab section starts -->
                     <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                         <!-- BOM Details Tab section starts -->
@@ -740,7 +739,6 @@
 
                     </mat-tab-group>
                 </div>
-            </div>
         </div>
     </div>
 </div>
