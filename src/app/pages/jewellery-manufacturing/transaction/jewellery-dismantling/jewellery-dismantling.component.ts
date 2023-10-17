@@ -32,6 +32,11 @@ export class JewelleryDismantlingComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  userDataSelected(value: any) {
+    console.log(value);
+       this.jewellerydismantlingFrom.controls.userName.setValue(value.UsersName);
+  }
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -51,7 +56,7 @@ export class JewelleryDismantlingComponent implements OnInit {
 
 
 
-  waxprocessFrom: FormGroup = this.formBuilder.group({
+  jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
     vocno:[''],
    process:[''],
@@ -61,42 +66,6 @@ export class JewelleryDismantlingComponent implements OnInit {
    waxcode:[''],
     remark:[''],
   });
-
-
-
- CurrencyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 8,
-    SEARCH_FIELD: 'currency',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  CurrencyCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.currency.setValue(e.CURRENCY_CODE);
-  }
-
-
-
-  WorkerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'worker',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  WorkerCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.worker.setValue(e.WORKER_CODE);
-  }
 
   adddata() {
     let length = this.tableData.length;
@@ -162,61 +131,14 @@ removedata(){
       this.update()
       return
     }
-    if (this.waxprocessFrom.invalid) {
+    if (this.jewellerydismantlingFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
   
     let API = 'JobWaxReturn/InsertJobWaxReturn'
     let postData = {
-      "MID": 0,
-      "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-      "BRANCH_CODE": "string",
-      "VOCNO":  this.waxprocessFrom.value.vocno || "",
-      "VOCDATE":  this.waxprocessFrom.value.worker || "",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-07T08:43:49.448Z",
-      "PROCESS_CODE":  this.waxprocessFrom.value.process || "",
-      "WORKER_CODE":  this.waxprocessFrom.value.worker || "",
-      "SMAN": "string",
-      "REMARKS": this.waxprocessFrom.value.remark || "",
-      "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "PRINT_COUNT": 0,
-      "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
-      "TO_WORKER_CODE":  this.waxprocessFrom.value.toworker || "",
-      "DIVISION_CODE": "s",
-      "STOCK_CODE": "string",
-      "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-      "HTUSERNAME": "string",
-      "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "RETURN_PCS": 0,
-      "ISSUE_VOCTYPE": "str",
-      "ISSUE_BRANCH_CODE": "string",
-      "ISSUE_VOCNO": 0,
-      "ISSUE_YEARMONTH": "string",
-      "IS_AUTHORISE": true,
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "WAX_WT":  this.waxprocessFrom.value.waxcode || "",
-      "JOB_PCS": 0,
-      "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
+      
       "approvalDetails": this.tableData,  
     }
   
@@ -232,7 +154,7 @@ removedata(){
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.waxprocessFrom.reset()
+                this.jewellerydismantlingFrom.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -249,15 +171,7 @@ removedata(){
     if(!this.content) return
     console.log(this.content);
     
-    this.waxprocessFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.waxprocessFrom.controls.vocno.setValue(this.content.VOCNO)
-    this.waxprocessFrom.controls.vocdate.setValue(this.content.VOCDATE)
-    this.waxprocessFrom.controls.process.setValue(this.content.PROCESS_CODE)
-    this.waxprocessFrom.controls.worker.setValue(this.content.WORKER_CODE)
-    this.waxprocessFrom.controls.toworker.setValue(this.content.TO_WORKER_CODE)
-    this.waxprocessFrom.controls.toprocess.setValue(this.content.TO_PROCESS_CODE)
-    this.waxprocessFrom.controls.waxcode.setValue(this.content.WAX_WT)
-    this.waxprocessFrom.controls.remark.setValue(this.content.REMARKS)
+  
 
     
 
@@ -265,61 +179,14 @@ removedata(){
 
 
   update(){
-    if (this.waxprocessFrom.invalid) {
+    if (this.jewellerydismantlingFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
   
-    let API = 'JobWaxReturn/UpdateJobWaxReturn/'+ this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.vocdate
+    let API = 'JobWaxReturn/UpdateJobWaxReturn/'+ this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.vocdate
     let postData = {
-      "MID": 0,
-      "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-      "BRANCH_CODE": "string",
-      "VOCNO":  this.waxprocessFrom.value.vocno || "",
-      "VOCDATE":  this.waxprocessFrom.value.worker || "",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-07T08:43:49.448Z",
-      "PROCESS_CODE":  this.waxprocessFrom.value.process || "",
-      "WORKER_CODE":  this.waxprocessFrom.value.worker || "",
-      "SMAN": "string",
-      "REMARKS": this.waxprocessFrom.value.remark || "",
-      "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "PRINT_COUNT": 0,
-      "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
-      "TO_WORKER_CODE":  this.waxprocessFrom.value.toworker || "",
-      "DIVISION_CODE": "s",
-      "STOCK_CODE": "string",
-      "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-      "HTUSERNAME": "string",
-      "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "RETURN_PCS": 0,
-      "ISSUE_VOCTYPE": "str",
-      "ISSUE_BRANCH_CODE": "string",
-      "ISSUE_VOCNO": 0,
-      "ISSUE_YEARMONTH": "string",
-      "IS_AUTHORISE": true,
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "WAX_WT":  this.waxprocessFrom.value.waxcode || "",
-      "JOB_PCS": 0,
-      "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
+    
       "approvalDetails": this.tableData,  
     }
   
@@ -335,7 +202,7 @@ removedata(){
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.waxprocessFrom.reset()
+                this.jewellerydismantlingFrom.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -372,7 +239,7 @@ removedata(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobWaxReturn/DeleteJobWaxReturn/' + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.vocdate
+        let API = 'JobWaxReturn/DeleteJobWaxReturn/' + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.vocdate
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -385,7 +252,7 @@ removedata(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.waxprocessFrom.reset()
+                    this.jewellerydismantlingFrom.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -399,7 +266,7 @@ removedata(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.waxprocessFrom.reset()
+                    this.jewellerydismantlingFrom.reset()
                     this.tableData = []
                     this.close()
                   }

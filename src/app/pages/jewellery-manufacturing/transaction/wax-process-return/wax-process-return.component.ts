@@ -34,6 +34,63 @@ export class WaxProcessReturnComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  userDataSelected(value: any) {
+    console.log(value);
+       this.waxprocessFrom.controls.userName.setValue(value.UsersName);
+  }
+  ProcessCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  ProcessCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.processcode.setValue(e.Process_Code);
+
+  }
+
+  WorkerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  WorkerCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.workercode.setValue(e.WORKER_CODE);
+
+  }
+
+  WaxCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID:  3,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  WaxCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.waxcode.setValue(e.STOCK_CODE);
+
+  }
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -64,41 +121,6 @@ export class WaxProcessReturnComponent implements OnInit {
     remark:[''],
   });
 
-
-
- CurrencyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 8,
-    SEARCH_FIELD: 'currency',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  CurrencyCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.currency.setValue(e.CURRENCY_CODE);
-  }
-
-
-
-  WorkerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'worker',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  WorkerCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.worker.setValue(e.WORKER_CODE);
-  }
 
   adddata() {
     let length = this.tableData.length;
