@@ -28,7 +28,7 @@ export class CommonServiceService {
   basePartyCode: any
   compCurrency: any
   popMetalValueOnNet: any
-
+  decimalQtyFormat: any;
   public allMessageBoxData: any;
   public allCompanyParams: any;
   public baseUsername: any;
@@ -57,6 +57,57 @@ export class CommonServiceService {
     private _decimalPipe: DecimalPipe,
   ) {
   }
+
+  /**USE: To format the value to limit decimal place from branch master data */ 
+  decimalQuantityFormat(value: any, flag: string) {
+    if (flag == 'AMOUNT') {
+      this.decimalQtyFormat = this.allbranchMaster?.BAMTDECIMALS
+    } else if (flag == 'METAL') {
+      this.decimalQtyFormat = this.allbranchMaster?.BMQTYDECIMALS
+    } else if (flag == 'STONE') {
+      this.decimalQtyFormat = this.allbranchMaster?.BSQTYDECIMALS
+    }
+
+    let str = ''
+    let x = 1
+    while (x <= this.decimalQtyFormat) {
+      str += '0'
+      x++;
+    }
+
+    if (value == '' || value == 0) {
+      value = `${0}.${str}`;
+    }
+    // Split the value into integer and fractional parts
+    const parts = value.toString().split('.');
+    let integerPart = parts[0];
+    let fractionalPart = parts[1];
+
+
+    if (!fractionalPart) {
+      fractionalPart = ''
+      fractionalPart += str;
+    }
+    // Limit the fractional part to 3 decimal places
+    if (fractionalPart.length > this.decimalQtyFormat) {
+      fractionalPart = fractionalPart.slice(0, this.decimalQtyFormat);
+    }
+    let strzero = ''
+    let count = 1
+    let addedzero = (this.decimalQtyFormat) - (fractionalPart.length)
+    while (count <= addedzero) {
+      strzero += '0'
+      count++;
+    }
+    if (fractionalPart && this.decimalQtyFormat > fractionalPart.length) {
+      fractionalPart += strzero;
+    }
+    // Reconstruct the value and set it back to the input field
+    value = `${integerPart}.${fractionalPart}`;
+    // this.el.nativeElement.value = value;
+    return value
+  }
+
   //common Number validation
   isNumeric(event: any) {
     var keyCode = event.which ? event.which : event.keyCode;
@@ -154,7 +205,7 @@ export class CommonServiceService {
 
   setCompParaValues() {
     this.allCompanyParams.map((data: any) => {
-      
+
       if (data.PARAMETER == 'AMTFORMAT')
         this.amtFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'MQTYFORMAT')
@@ -183,7 +234,7 @@ export class CommonServiceService {
     });
   }
   //**USE: common fuction to get all company parameter values */
-  getCompanyParamValue(parameter: string){
+  getCompanyParamValue(parameter: string) {
     let paramValue: string = ''
     this.allCompanyParams.map((data: any) => {
       if (data.PARAMETER == parameter) {
@@ -461,7 +512,7 @@ export class CommonServiceService {
     });
     return Math.trunc(sum);
   }
-  arrayEmptyObjectToString(dataArray:any){
+  arrayEmptyObjectToString(dataArray: any) {
     dataArray.forEach((obj: any, i: any) => {
       obj.Id = i + 1;
       for (const prop in obj) {

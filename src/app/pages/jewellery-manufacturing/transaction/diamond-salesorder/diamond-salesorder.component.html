@@ -24,7 +24,7 @@
                             <div class="col-sm-12 col-md-4 col-lg-4">
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Voucher Type :</label>
+                                        Voucher Type</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput
@@ -33,14 +33,14 @@
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="number" maxlength="6"
-                                                matInput
-                                                formControlName="voucherDESC" />
+                                                matInput class="text-right"
+                                                formControlName="voucherNo" />
                                         </mat-form-field>
                                     </span>
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Voucher Date :</label>
+                                        Voucher Date</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <!-- <mat-label>Date Of Birth</mat-label> -->
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">Order
-                                        Type :</label>
+                                        Type</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput readonly
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Party Code :</label>
+                                        Party Code</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput readonly
@@ -87,13 +87,13 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Salesman :</label>
+                                        Salesman</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput
                                                 (change)="SalesmanChange($event)"
                                                 readonly
-                                                formControlName="Salesman" />
+                                                formControlName="SalesmanCode" />
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="SalesmanData"
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="row" *ngIf="false">
                                     <label class="col-sm-4 col-form-label">
-                                        Prosp Origin :</label>
+                                        Prosp Origin</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 150px">
                                             <input type="text" matInput
@@ -139,6 +139,7 @@
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput
+                                                class="text-right"
                                                 formControlName="wholeSaleRate" />
                                         </mat-form-field>
                                         <master-search
@@ -149,7 +150,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Party Currency :</label>
+                                        Party Currency</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput
@@ -159,6 +160,7 @@
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput
+                                                class="text-right"
                                                 formControlName="partyCurrencyRate" />
                                         </mat-form-field>
                                         <master-search
@@ -169,7 +171,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Item Currency :</label>
+                                        Item Currency</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput
@@ -179,6 +181,7 @@
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput
+                                                class="text-right"
                                                 formControlName="ItemCurrencyRate" />
                                         </mat-form-field>
                                         <master-search
@@ -189,7 +192,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Delivery Type :</label>
+                                        Delivery Type</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput
@@ -205,7 +208,7 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label">
-                                        Delivery On :</label>
+                                        Delivery On</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput
@@ -226,7 +229,7 @@
                                 </div>
                                 <div class="row" *ngIf="false">
                                     <label class="col-sm-4 col-form-label">
-                                        AMC % :</label>
+                                        AMC %</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput
@@ -261,7 +264,7 @@
                                                         <div class="row">
                                                             <label
                                                                 class="col-sm-4 col-form-label">
-                                                                Proposal :</label>
+                                                                Proposal</label>
                                                             <span
                                                                 class="col-sm-7">
                                                                 <mat-form-field>
@@ -269,14 +272,14 @@
                                                                         type="text"
                                                                         matInput
                                                                         maxlength="6"
-                                                                        formControlName="VoucherType" />
+                                                                        formControlName="Proposal" />
                                                                 </mat-form-field>
                                                             </span>
                                                         </div>
                                                         <div class="row">
                                                             <label
                                                                 class="col-sm-4 col-form-label">
-                                                                Bussiness Type :</label>
+                                                                Bussiness Type:</label>
                                                             <span
                                                                 class="col-sm-7">
                                                                 <mat-form-field>
@@ -284,14 +287,14 @@
                                                                         type="text"
                                                                         matInput
                                                                         maxlength="6"
-                                                                        formControlName="VoucherType" />
+                                                                        formControlName="BussinessType" />
                                                                 </mat-form-field>
                                                             </span>
                                                         </div>
                                                         <div class="row">
                                                             <label
                                                                 class="col-sm-4 col-form-label">
-                                                                Language :</label>
+                                                                Language</label>
                                                             <span
                                                                 class="col-sm-7">
                                                                 <mat-form-field>
@@ -299,14 +302,14 @@
                                                                         type="text"
                                                                         matInput
                                                                         maxlength="6"
-                                                                        formControlName="VoucherType" />
+                                                                        formControlName="Language" />
                                                                 </mat-form-field>
                                                             </span>
                                                         </div>
                                                         <div class="row">
                                                             <label
                                                                 class="col-sm-4 col-form-label">
-                                                                Referred By :</label>
+                                                                Referred By</label>
                                                             <span
                                                                 class="col-sm-7">
                                                                 <mat-form-field>
@@ -314,7 +317,7 @@
                                                                         type="text"
                                                                         matInput
                                                                         maxlength="6"
-                                                                        formControlName="VoucherType" />
+                                                                        formControlName="ReferredBy" />
                                                                 </mat-form-field>
                                                             </span>
                                                         </div>
@@ -322,27 +325,45 @@
                                                 </mat-tab>
                                                 <mat-tab
                                                     label="Terms & Condition">
-                                                    <div class="col-11">
-                                                        <textarea
-                                                            style="width: 100%;height: 120px; margin-left: 7px;">
-                                                        </textarea>
-                                                        <mat-form-field
-                                                            style="width: 100%; margin-left: 7px;">
-                                                            <input type="text"
-                                                                matInput
-                                                                formControlName="VoucherDESC" />
-                                                        </mat-form-field>
+                                                    <div class="row">
+                                                        <label
+                                                            class="col-sm-4 col-form-label">
+                                                            Payment Terms</label>
+                                                        <span
+                                                            class="col-sm-7">
+                                                            <textarea
+                                                                formControlName="NotesTerms"
+                                                                style="width: 100%;height: 120px; margin-left: 7px;">
+                                                            </textarea>
+                                                        </span>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label
+                                                            class="col-sm-4 col-form-label">
+                                                            Payment Terms</label>
+                                                        <span
+                                                            class="col-sm-7 p-1">
+                                                            <mat-form-field>
+                                                                <input
+                                                                    type="text"
+                                                                    matInput
+                                                                    maxlength="6"
+                                                                    formControlName="PaymentTerms" />
+                                                            </mat-form-field>
+                                                        </span>
                                                     </div>
                                                 </mat-tab>
                                                 <mat-tab label="Ship To">
                                                     <div class="col-11">
-                                                        <mat-form-field
+                                                        <div class="row p-1">
+                                                            <mat-form-field
                                                             style="width: 100%; margin-left: 7px;">
                                                             <input type="text"
                                                                 matInput
-                                                                formControlName="VoucherDESC" />
+                                                                formControlName="ShipTo" />
                                                         </mat-form-field>
-                                                        <textarea
+                                                        </div>
+                                                        <textarea formControlName="ShipToDesc"
                                                             style="width: 100%;height: 120px; margin-left: 7px;">
                                                         </textarea>
                                                     </div>
@@ -539,7 +560,7 @@
             <div class="d-flex flex-coloumn">
                 <div class="col-md-4">
                     <label class="col-form-label rem">
-                        Narration :</label>
+                        Narration</label>
                     <mat-form-field class="col-sm-6">
                         <input type="text" matInput
                             formControlName="VoucherDESC" />
