@@ -1,10 +1,10 @@
 <app-loader [isLoading]="isLoading"></app-loader>
-<div class="col-md-11 col-sm-12">
+<div class="col-md-12 col-sm-12">
     <div class="card p-2">
         <div class="ps-2 pt-2" style="border-bottom: 1px solid #afafaf;">
             <h5>Validation SP List</h5>
         </div>
-        <div class="col-md-11 col-sm-12 p-2" *ngIf="!isViewForm">
+        <div class="col-md-12 col-sm-12 p-2" *ngIf="!isViewForm">
             <dx-data-grid id="gridContainer" [dataSource]="tableData" 
                 [columnAutoWidth]="true" [showRowLines]="true" height="400"
                 [showBorders]="true" (onEditingStart)="logEvent('EditingStart')"
@@ -33,17 +33,17 @@
                 <dxi-column dataField="FORM_NAME" caption="Form Name">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dxi-column>
-                <dxi-column dataField="MODULE_NAME" width="150" caption="Module Name">
+                <dxi-column dataField="MODULE_NAME" width="180" caption="Module Name">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                     <dxo-lookup [dataSource]="ModuleNameDataSource" displayExpr="MODULE_NAME" valueExpr="MODULE_NAME">
                     </dxo-lookup>
                 </dxi-column>
-                <dxi-column dataField="MODULE_TYPE" width="100" caption="Module Type">
+                <dxi-column dataField="MODULE_TYPE" width="110" caption="Module Type">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                     <dxo-lookup [dataSource]="ModuleTypeDataSource" displayExpr="MODULE_TYPE" valueExpr="MODULE_TYPE">
                     </dxo-lookup>
                 </dxi-column>
-                <dxi-column dataField="TABLE_NAME" width="150" caption="Table">
+                <dxi-column dataField="TABLE_NAME" width="270" caption="Table">
                 </dxi-column>
                 <!-- <dxi-column dataField="date" dataType="date"> -->
                 <!-- </dxi-column> -->
