@@ -602,9 +602,9 @@ export class AddPosComponent implements OnInit {
       fcn_customer_detail_lname: ['', Validators.required],
       fcn_cust_detail_gender: ['', Validators.required],
       fcn_cust_detail_marital_status: [''],
-      fcn_cust_detail_dob: ['', 
-      [Validators.required]
-    ],
+      fcn_cust_detail_dob: ['',
+        [Validators.required]
+      ],
       fcn_cust_detail_idType: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
       fcn_cust_detail_phone: ['', Validators.required],
       fcn_cust_detail_phone2: [''],
@@ -619,7 +619,7 @@ export class AddPosComponent implements OnInit {
       fcn_cust_detail_company: [''],
       fcn_cust_detail_state: ['', [this.autoCompleteValidator(() => this.stateMaster, 'CODE')]],
 
-      fcn_mob_code: ['', [Validators.required ]],
+      fcn_mob_code: ['', [Validators.required]],
 
     });
 
@@ -1375,7 +1375,7 @@ export class AddPosComponent implements OnInit {
     this.maritalStatusList = this.comFunc.getComboFilterByID('Marital Status');
     this.genderList = this.comFunc.getComboFilterByID('gender');
     console.log('gender ', this.genderList);
-    
+
   }
   changeKaratRate(event: any, index: any) {
     this.karatRateDetails[index].KARAT_RATE = parseFloat(event?.target.value);
@@ -1760,8 +1760,8 @@ export class AddPosComponent implements OnInit {
     }
 
   }
-  close() {
-    this.modalService.dismissAll();
+  close(data: any = null) {
+    this.modalService.dismissAll(data);
   }
   removePayments(index: any) {
     this.openDialog('Warning', 'Are you sure want to remove this record?', false, true);
@@ -2488,10 +2488,10 @@ export class AddPosComponent implements OnInit {
           BLOOD_GROUP: this.customerDetails?.BLOOD_GROUP || '',
           NO_OF_CHILDREN: this.customerDetails?.NO_OF_CHILDREN || 0,
           ZODIAC_SIGN: this.customerDetails?.ZODIAC_SIGN || '',
-          DESIGNATION: 
-          this.customerDetailForm.value.fcn_cust_detail_designation
-          // this.customerDetails?.DESIGNATION
-           || '',
+          DESIGNATION:
+            this.customerDetailForm.value.fcn_cust_detail_designation
+            // this.customerDetails?.DESIGNATION
+            || '',
           LEVELFLAG: this.customerDetails?.LEVELFLAG || 0,
           INCOMERANGE: this.customerDetails?.INCOMERANGE || '',
           LAST_UPDATED_DATE:
@@ -6501,10 +6501,10 @@ export class AddPosComponent implements OnInit {
           BLOOD_GROUP: this.customerDetails?.BLOOD_GROUP || '',
           NO_OF_CHILDREN: this.customerDetails?.NO_OF_CHILDREN || 0,
           ZODIAC_SIGN: this.customerDetails?.ZODIAC_SIGN || '',
-          DESIGNATION: 
-          this.customerDetailForm.value.fcn_cust_detail_designation
-          // this.customerDetails?.DESIGNATION 
-          || '',
+          DESIGNATION:
+            this.customerDetailForm.value.fcn_cust_detail_designation
+            // this.customerDetails?.DESIGNATION 
+            || '',
           LEVELFLAG: this.customerDetails?.LEVELFLAG || 0,
           INCOMERANGE: this.customerDetails?.INCOMERANGE || '',
           LAST_UPDATED_DATE:
@@ -6594,8 +6594,8 @@ export class AddPosComponent implements OnInit {
           WUPMOBILECODE: this.customerDetails?.WUPMOBILECODE || '',
           WUPMOBILENO: this.customerDetails?.WUPMOBILENO || '',
           OCCUPATION:
-          //  this.customerDetailForm.value.fcn_cust_detail_designation
-             this.customerDetails?.OCCUPATION
+            //  this.customerDetailForm.value.fcn_cust_detail_designation
+            this.customerDetails?.OCCUPATION
             || '',
           ShowRoomAccessibility:
             this.customerDetails?.ShowRoomAccessibility || '',
@@ -6685,6 +6685,8 @@ export class AddPosComponent implements OnInit {
               if (res != null) {
                 if (res.status == 'SUCCESS') {
                   this.snackBar.open('POS Updated Successfully', 'OK');
+                  this.close('reloadMainGrid');
+
                 } else {
                   this.isSaved = false;
                   this.snackBar.open(res.message, 'OK');
@@ -6706,6 +6708,8 @@ export class AddPosComponent implements OnInit {
             // try {
             if (res != null) {
               if (res.status == 'SUCCESS') {
+                this.close('reloadMainGrid');
+
                 this.snackBar.open('POS Saved', 'OK');
                 setTimeout(() => {
                   // location.reload();
@@ -7598,6 +7602,7 @@ export class AddPosComponent implements OnInit {
       this.exchangeForm.controls.fcn_exchange_making_amt.setValue(
         this.zeroAmtVal
       );
+      this.setExchangeMakingAmt();
     }
   }
 

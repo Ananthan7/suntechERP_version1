@@ -38,7 +38,7 @@ export class RetailTransactionComponent implements OnInit {
       localStorage.removeItem('AddNewFlag')
     }
   }
- 
+
 
   viewRowDetails(e: any) {
     let str = e.row.data;
@@ -72,22 +72,31 @@ export class RetailTransactionComponent implements OnInit {
     }
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
-      backdrop: 'static',
+      backdrop: true,
       keyboard: false,
       windowClass: 'modal-full-width'
     });
     modalRef.result.then((result) => {
+      console.log('result', result);
+
       if (result === 'reloadMainGrid') {
-        this.getMasterGridData({HEADER_TABLE: this.CommonService.getqueryParamTable()})
+        this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
       }
+
     }, (reason) => {
+      // console.log('reason', reason);
+      if (reason === 'reloadMainGrid') {
+        this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
+      }
       // Handle modal dismissal (if needed)
     });
+
+
     modalRef.componentInstance.content = data;
   }
 
-   /**USE: to get table data from API */
-   getMasterGridData(data?: any) {
+  /**USE: to get table data from API */
+  getMasterGridData(data?: any) {
     if (data) {
       this.menuTitle = data.MENU_CAPTION_ENG;
       this.PERMISSIONS = data.PERMISSION;
