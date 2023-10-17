@@ -66,13 +66,11 @@ td {
 }
 .table1{
   resize: horizontal;
-  touch-action: none; /* Disable touch action to allow custom handling */
   overflow: auto;
   width: 70%;
 }
 .table2{
   resize: horizontal;
-  touch-action: none; /* Disable touch action to allow custom handling */
   overflow: auto;
   width: 30%;
 }
@@ -92,5 +90,15 @@ td {
   }
   .dx-datagrid .dx-header-row {
     font-size: 12px; /* Adjust the font size to your preference */
+  }
+  .dx-resizable-handle::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border: none;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.24);
   }
 }

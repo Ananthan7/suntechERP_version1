@@ -276,11 +276,19 @@
                             <div class="col-md-12">
                                 <div class="row" style="max-width: 100%;">
                                     <!-- bom details data grid -->
-                                    <div class="table1" id="resizableDiv">
+                                    <!-- <div class="table1"> -->
+                                    <dx-resizable
+                                        id="gridContainer"
+                                        [width]="850"
+                                        [minHeight]="150"
+                                        [maxHeight]="370"
+                                        [keepAspectRatio]="true"
+                                        handles="right" >
                                         <dx-data-grid #dataGrid
                                             id="gridContainer"
+                                            [allowColumnResizing]="true"
                                             width="auto" [showBorders]="true"
-                                            [showRowLines]="true"
+                                            [showRowLines]="true" height="300"
                                             [dataSource]="BOMDetailsArray"
                                             (onRowUpdated)="groupBomDetailsData($event)">
                                             <dxo-editing mode="cell"
@@ -312,13 +320,20 @@
                                                 </div>
                                             </div>
                                         </dx-data-grid>
-                                    </div>
+                                    </dx-resizable>
                                     <!-- grouped data grid -->
-                                    <div class="table2" id="resizableDiv">
+                                    <dx-resizable
+                                        id="gridContainer"
+                                        [width]="400"
+                                        [minHeight]="150"
+                                        [maxHeight]="370"
+                                        [keepAspectRatio]="true"
+                                        handles="right" >
                                         <dx-data-grid #dataGrid
                                             id="gridContainer" width="auto"
                                             [dataSource]="groupedBOMDetails"
                                             [showRowLines]="true"
+                                            [allowColumnResizing]="true"
                                             [showBorders]="true">
                                             <dxo-paging [enabled]="false"></dxo-paging>
                                             <dxo-editing mode="cell"
@@ -335,7 +350,7 @@
                                                 alignment="center">
                                             </dxi-column>
                                         </dx-data-grid>
-                                    </div>
+                                    </dx-resizable>
                                 </div>
 
                             </div>
