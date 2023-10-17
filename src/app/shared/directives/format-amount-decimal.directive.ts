@@ -1,18 +1,17 @@
-import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Directive({
   selector: '[AmountDecimalInput]'
 })
 export class AmountDecimalDirective {
-  private specialKeys: Array<string> = ['Backspace', 'Tab', 'End', 'Home', '-', 'ArrowLeft', 'ArrowRight', 'Del', 'Delete'];
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
     private commonService: CommonServiceService,
   ) {
   }
-
+ 
   @HostListener('input', ['$event']) onInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value;
