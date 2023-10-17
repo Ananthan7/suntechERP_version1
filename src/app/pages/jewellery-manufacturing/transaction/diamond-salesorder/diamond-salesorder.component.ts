@@ -84,7 +84,7 @@ export class DiamondSalesorderComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
+  /**USE: main form party details */
   PartyDetailsOrderForm: FormGroup = this.formBuilder.group({
     voucherType: ['', [Validators.required]],
     voucherDESC: [''],
@@ -140,19 +140,22 @@ export class DiamondSalesorderComponent implements OnInit {
       this.PartyDetailsOrderForm.controls.VoucherDate.setValue(new Date(date))
     }
   }
-  selectionChangedHandler(event: any){
-    console.log(event.selectedRowsData,'event');
+  selectionChangedHandler(event: any) {
     let selectedData = event.selectedRowsData
-    console.log(this.detailData,'this.detailData');
-    
-    let detailRow = this.detailData.filter((item:any)=> item.ID == selectedData[0].SRNO)
-    console.log(detailRow,'detailRow');
-    
-    let allDataSelected = [ detailRow[0].DATA ]
+
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData[0].SRNO)
+
+    let allDataSelected = [detailRow[0].DATA]
     this.addNewDetail(allDataSelected)
   }
   totalDetailNo: number = 0;
-  addNewDetail(data?:any) {
+  addNewDetail(data?: any) {
+    if(this.PartyDetailsOrderForm.value.PartyCode == ''){
+      this.toastr.error('PartyCode not found', '', {
+        timeOut: 3000,
+      })
+      return
+    }
     const modalRef: NgbModalRef = this.modalService.open(AddNewdetailComponent, {
       size: 'xl',
       backdrop: true,//'static'
@@ -163,35 +166,39 @@ export class DiamondSalesorderComponent implements OnInit {
 
     modalRef.result.then((result) => {
       if (result) {
-        this.totalDetailNo += 1
-
-        let summaryData:any[] = result[0].summaryDetail //summary details
-        summaryData.forEach((item: any,index: any)=>{
-          item.SRNO = this.totalDetailNo
-          this.tableData.push(item)
-        })
-        this.tableDataHead = Object.keys(this.tableData[0]);
-        
-        if(result.length>0){
-          result.forEach((item:any,index:any)=>{
-            this.detailData.push({
-              ID: this.totalDetailNo,
-              DATA: item
-            })
-          })
-          console.log(this.detailData,'item');
-          
-        }
-          //summary details
-        // this.getMasterGridData()
+        this.setValuesToHeaderGrid(result) //USE: set Values To Detail table
       }
     }, (reason) => {
       // Handle modal dismissal (if needed)
     });
     // modalRef.componentInstance.content = data;
   }
+  private setValuesToHeaderGrid(result: any):void {
+    console.log(result, 'summaryData');
+    this.totalDetailNo += 1
+    //summary details
+    let summaryData: any[] = result[0].summaryDetail
+
+    summaryData.forEach((item: any, index: any) => {
+      if (item.CATEGORY_CODE == '') {
+        return
+      }
+      item.SRNO = this.totalDetailNo
+      this.tableData.push(item)
+    })
+    this.tableDataHead = Object.keys(this.tableData[0]);
+    
+    if (result.length > 0) {
+      result.forEach((item: any, index: any) => {
+        this.detailData.push({
+          ID: this.totalDetailNo,
+          DATA: item
+        })
+      })
+    }
+  }
   /**USE:  final save API call*/
-  formSubmit() {
+  formSubmit():void {
     if (this.content && this.content.FLAG == 'EDIT') {
       // this.selectProcess()
       // this.updateWorkerMaster()
@@ -416,8 +423,7 @@ export class DiamondSalesorderComponent implements OnInit {
 
 
   deleteClicked(): void {
-    console.log('fired');
-    
+    this.tableData = []
   }
   importClicked(): void {
 
@@ -432,23 +438,23 @@ export class DiamondSalesorderComponent implements OnInit {
         "ACCODE": event.target.value || "",
       }
     }
-    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface',postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.snackBar.dismiss()
         if (result.status == "Success") { //
           let data = result.dynamicData[0]
-          console.log(data,'data');
           if (data && data[0].CURRENCY_CODE) {
-            console.log(data,'data');
-            
+
             this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
             this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data[0].CURRENCY_CODE)
             this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data[0].ACCOUNT_HEAD)
             this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data[0].ADDRESS)
 
-            let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data[0].CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyArr[0].CONV_RATE)
-            this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyArr[0].CONV_RATE)
+            // let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data[0].CURRENCY_CODE)
+            let currencyRate = this.commonService.getCurrRate(data[0].CURRENCY_CODE)
+            currencyRate = this.commonService.transformDecimalVB(this.commonService.amtDecimals,currencyRate)
+            this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
+            this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyRate)
           }
         } else {
           this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {

@@ -6,13 +6,13 @@
         </div>
         <div class="col-md-11 col-sm-12 p-2" *ngIf="!isViewForm">
             <dx-data-grid id="gridContainer" [dataSource]="tableData" 
-                [columnAutoWidth]="true" [showRowLines]="true"
+                [columnAutoWidth]="true" [showRowLines]="true" height="400"
                 [showBorders]="true" (onEditingStart)="logEvent('EditingStart')"
                 (onRowInserted)="onSaving($event)"
                 (onRowUpdated)="updateData($event)"
                 (onRowRemoved)="deleteData($event)"
                 >
-                <dxo-paging [pageSize]="10"> </dxo-paging>
+                <!-- <dxo-paging [pageSize]="10"> </dxo-paging> -->
                 <dxo-search-panel [visible]="true"></dxo-search-panel>
                 <dxo-editing mode="row" [allowUpdating]="true" 
                 [allowAdding]="true"
@@ -33,17 +33,17 @@
                 <dxi-column dataField="FORM_NAME" caption="Form Name">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dxi-column>
-                <dxi-column dataField="MODULE_NAME" caption="Module Name">
+                <dxi-column dataField="MODULE_NAME" width="150" caption="Module Name">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                     <dxo-lookup [dataSource]="ModuleNameDataSource" displayExpr="MODULE_NAME" valueExpr="MODULE_NAME">
                     </dxo-lookup>
                 </dxi-column>
-                <dxi-column dataField="MODULE_TYPE" caption="Module Type">
+                <dxi-column dataField="MODULE_TYPE" width="100" caption="Module Type">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                     <dxo-lookup [dataSource]="ModuleTypeDataSource" displayExpr="MODULE_TYPE" valueExpr="MODULE_TYPE">
                     </dxo-lookup>
                 </dxi-column>
-                <dxi-column dataField="TABLE_NAME" caption="Table">
+                <dxi-column dataField="TABLE_NAME" width="150" caption="Table">
                 </dxi-column>
                 <!-- <dxi-column dataField="date" dataType="date"> -->
                 <!-- </dxi-column> -->

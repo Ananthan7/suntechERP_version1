@@ -43,6 +43,7 @@ export class TransactionComponent implements OnInit {
   @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
   //variables
   menuTitle: any;
+  componentName: any;
   PERMISSIONS: any;
 
   constructor(
@@ -52,7 +53,9 @@ export class TransactionComponent implements OnInit {
     private modalService: NgbModal,
     // private ChangeDetector: ChangeDetectorRef,
   ) {
-    this.getMasterGridData()
+    this.menuTitle = this.CommonService.getModuleName()
+    this.componentName = this.CommonService.getFormComponentName()
+    // this.getMasterGridData()
   }
 
   ngOnInit(): void {
@@ -74,77 +77,73 @@ export class TransactionComponent implements OnInit {
     let contents;
     console.log(this.menuTitle, 'this.menuTitle');
 
-    switch (this.menuTitle) {
-      case 'Diamond Sales Order':
+    switch (this.componentName) {
+      case 'DiamondSalesorderComponent':
         contents = DiamondSalesorderComponent
         break;
-      case 'Diamond Quotation':
+      case 'DiamondQuotationComponent':
         contents = DiamondQuotationComponent
         break;
-      case 'Job Card':
-        contents = JobCardComponent
-        break;
-      case 'Melting Process (MLP)':
+      case 'MeltingProcessComponent':
         contents = MeltingProcessComponent
         break;
-      case 'Metal Issue (diamond Jewellery)':
+      case 'MetalIssueComponent':
         contents = MetalIssueComponent
         break;
-      case 'Waxing Process Issue':
+      case 'WaxProcessComponent':
         contents = WaxProcessComponent
         break;
-      case 'Stone Issue (diamond Jewellery)':
+      case 'StoneIssueComponent':
         contents = StoneIssueComponent
         break;
-      case 'CAD Process (CAD)':
+      case 'CADProcessingComponent':
         contents = CADProcessingComponent
         break;
-      case 'Metal Return (diamond Jewellery)':
+      case 'MetalReturnComponent':
         contents = MetalReturnComponent
         break;
       //continue adding components using case then break    
 
-      case 'Stone Return (diamond Jewellery)':
+      case 'StoneReturnComponent':
         contents = StoneReturnComponent
         break;
-      case 'Waxing Process Return':
+      case 'WaxProcessReturnComponent':
         contents = WaxProcessReturnComponent
         break;
-        case 'Job Creation':
-          contents = JobCreationComponent
-          break;
-      case 'Casting Tree Up (TMU)':
+      case 'JobCreationComponent':
+        contents = JobCreationComponent
+        break;
+      case 'CastingTreeUpComponent':
         contents = CastingTreeUpComponent
         break;
-      case 'Melting Issue':
+      case 'MeltingIssueComponent':
         contents = MeltingIssueComponent
         break;
-      case 'Diamond Jewellery Altration':
+      case 'JewelleryAltrationComponent':
         contents = JewelleryAltrationComponent
         break;
-        case 'Diamond Jewellery Dismantling (mdm)':
-          contents = JewelleryDismantlingComponent
-          break;
-
-      case 'Process Transfer (MFG)':
+      case 'JewelleryDismantlingComponent':
+        contents = JewelleryDismantlingComponent
+        break;
+      case 'ProcessTransferComponent':
         contents = ProcessTransferComponent
         break;
-      case 'Job Closing (JBC)':
+      case 'JobClosingComponent':
         contents = JobClosingComponent
         break;
-      case 'Production (MFG)':
+      case 'ProductionMfgComponent':
         contents = ProductionMfgComponent
         break;
-      case 'Quotation Processing':
+      case 'QuotationProcessComponent':
         contents = QuotationProcessComponent
         break;
-      case 'Tree Making Up & Down':
+      case 'TreeDownComponent':
         contents = TreeDownComponent
         break;
-      case 'Mould Making Process (MLM)':
+      case 'MouldMakingComponent':
         contents = MouldMakingComponent
         break;
-      case 'PRODUCTION LOSS RECOVERY (PLR)':
+      case 'LossRecoveryComponent':
         contents = LossRecoveryComponent
         break;
       //continue adding components using case then break
@@ -167,16 +166,19 @@ export class TransactionComponent implements OnInit {
     }, (reason) => {
       // Handle modal dismissal (if needed)
     });
-    modalRef.componentInstance.content = data;
+    modalRef.componentInstance.content = data || {};
   }
 
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
+    console.log(data,'data');
     if (data) {
       this.menuTitle = data.MENU_CAPTION_ENG;
       this.PERMISSIONS = data.PERMISSION;
+      this.componentName = data.ANG_WEB_FORM_NAME;
     } else {
       this.menuTitle = this.CommonService.getModuleName()
+      this.componentName = this.CommonService.getFormComponentName()
     }
     this.masterGridComponent?.getMasterGridData(data)
   }

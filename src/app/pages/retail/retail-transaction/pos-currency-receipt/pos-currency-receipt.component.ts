@@ -9,7 +9,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
+ import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
 
 
 @Component({

@@ -8,7 +8,11 @@ import { MeltingProcessDetailsComponent } from './melting-process-details/meltin
   styleUrls: ['./melting-process.component.scss']
 })
 export class MeltingProcessComponent implements OnInit {
-  columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Wt.','Metal Wt','Stone Wt','RCVD Gross Weight','RCVD Metal Weight','Process code','Worker Code',];
+  columnhead:any[] = ['Sr #', 'Div','Job No','Stock Code','Stock Desc','Process','Worker','Pcs','Gross Wt','Stone Wt','Net Wt','Purity','Pure Wt','Balance Wt','Balance Pure'];
+  columnhead1:any[] = ['R to Stock','Stock Code','Gross Wt','Purity', 'Pure Wt','Location'];
+  columnhead2:any[] = ['R to Scrap','Stock Code','Gross Wt','Purity', 'Pure Wt','Location','Loss','Pure Wt','Bal Gross','Bal Pure'];
+  column:any[] = ['Sr','So No','Party Code', 'Party Name','Job No','job Desc','Design Code','UNQ Design ID','Process','Worker',' Req Metal','Stone Wt','Recd Gross Wt','Metal Allocated','Allocated Pure Wt','Job Pcs'];
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,

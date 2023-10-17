@@ -1,13 +1,13 @@
 .auth-wrapper-bg {
   height: 100vh !important;
   width: 100vw !important;
-  background: url('/assets/images/loginbg.png');
+  background: url("/assets/images/loginbg.png");
 }
-.auth-side-form{
+.auth-side-form {
   background-color: #fff;
   height: 100vh;
 }
-.auth-content{
+.auth-content {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -29,3 +29,16 @@
   width: 100%;
 }
 
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 600px) {
+  .description{
+    font-size: 8px;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .description{
+    font-size: 20px;
+  }
+}

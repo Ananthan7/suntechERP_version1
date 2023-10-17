@@ -8,11 +8,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header
-  (saveClick)="formSubmit()"
-  (cancelClick)="close()"
-  (deleteClick)="deleteWorkerMaster()"
-></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteWorkerMaster()"></modal-header>
 <!-- content section -->
 <div class="container-fluid">
   <!-- form starts -->
@@ -22,9 +18,7 @@
         <div class="row border-bottom">
           <div class="col-md-5">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >vocher Type :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">vocher Type :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput formControlName="vocType" />
@@ -37,49 +31,25 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Vocher Date :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Vocher Date :</label>
               <div class="col-md-4">
                 <mat-form-field>
                   <!-- <mat-label></mat-label> -->
-                  <input
-                    matInput
-                    [matDatepicker]="vocDate"
-                    [max]="vocMaxDate"
-                    name="vocDate"
-                    formControlName="vocDate"
-                    placeholder="DD/MM/YYYY"
-                    DateValidation
-                  />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="vocDate"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker
-                    [startAt]="currentDate"
-                    #vocDate
-                  ></mat-datepicker>
+                  <input matInput [matDatepicker]="vocDate" [max]="vocMaxDate" name="vocDate" formControlName="vocDate"
+                    placeholder="DD/MM/YYYY" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Party Code :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Party Code :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 70%">
-                  <input
-                    type="text"
-                    matInput
-                    formControlName="partyCode"
-                    (change)="partyCodeChange($event)"
-                  />
+                  <input type="text" matInput formControlName="partyCode" (change)="partyCodeChange($event)" />
                 </mat-form-field>
-                <master-search
-                  [MasterSearchData]="partyCodeData"
-                  (newRowClick)="partyCodeSelected($event)"
-                ></master-search>
+                <master-search [MasterSearchData]="partyCodeData"
+                  (newRowClick)="partyCodeSelected($event)"></master-search>
               </div>
               <div class="col-md-5">
                 <mat-form-field style="width: 100%">
@@ -88,44 +58,28 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Party currency :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Party currency :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 70%">
-                  <input
-                    type="text"
-                    matInput
-                    formControlName="partyCurrency"
-                    readonly
-                  />
+                  <input type="text" matInput formControlName="partyCurrency" readonly />
                 </mat-form-field>
                 <!-- <master-search [MasterSearchData]="partyCurrencyCodeData" readonly
                                 (newRowClick)="partyCurrencyCodeSelected($event)"></master-search> -->
               </div>
               <div class="col-md-5">
                 <mat-form-field style="width: 100%">
-                  <input
-                    type="number"
-                    matInput
-                    formControlName="partyCurrencyRate"
-                    readonly
-                  />
+                  <input type="number" matInput formControlName="partyCurrencyRate" readonly />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Entered By :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Entered By :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 70%">
                   <input type="text" matInput formControlName="enteredby" />
                 </mat-form-field>
-                <master-search
-                  [MasterSearchData]="enteredByCode"
-                  (newRowClick)="enteredBySelected($event)"
-                ></master-search>
+                <master-search [MasterSearchData]="enteredByCode"
+                  (newRowClick)="enteredBySelected($event)"></master-search>
               </div>
               <div class="col-md-5">
                 <mat-form-field style="width: 100%">
@@ -134,9 +88,7 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Due Days :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Due Days :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput formControlName="dueDaysdesc" />
@@ -145,39 +97,23 @@
               <div class="col-md-5">
                 <mat-form-field style="width: 100%">
                   <!-- <mat-label></mat-label> -->
-                  <input
-                    matInput
-                    [matDatepicker]="dueDays"
-                    name="dueDays"
-                    formControlName="dueDays"
-                    placeholder="DD/MM/YYYY"
-                    DateValidation
-                  />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="dueDays"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker
-                    [startAt]="currentDate"
-                    #dueDays
-                  ></mat-datepicker>
+                  <input matInput [matDatepicker]="dueDays" name="dueDays" formControlName="dueDays"
+                    placeholder="DD/MM/YYYY" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="dueDays"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #dueDays></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Customer Code :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Customer Code :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 70%">
                   <input type="text" matInput formControlName="customerCode" />
                 </mat-form-field>
-                <master-search
-                  [MasterSearchData]="customerCodeData"
-                  (newRowClick)="customerCodeSelected($event)"
-                ></master-search>
+                <master-search [MasterSearchData]="customerCodeData"
+                  (newRowClick)="customerCodeSelected($event)"></master-search>
               </div>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%">
@@ -186,34 +122,20 @@
               </div>
               <div class="col-md-3">
                 <div class="p-2 bd-highlight">
-                  <button
-                    type="button"
-                    class="btn btn-primary metal-issue-add-btn"
-                    (click)="openCustMaster()"
-                  >
+                  <button type="button" class="btn btn-primary metal-issue-add-btn" (click)="openCustMaster()">
                     New Customer
                   </button>
                 </div>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Moblie :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Moblie :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%">
-                  <input
-                    matInput
-                    type="text"
-                    formControlName="moblie"
-                    inputmode="numeric"
-                    appAllowLeadingZero
-                  />
+                  <input matInput type="text" formControlName="moblie" inputmode="numeric" appAllowLeadingZero />
                 </mat-form-field>
               </div>
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Email :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Email :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%">
                   <input type="email" matInput formControlName="email" />
@@ -221,9 +143,7 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Party Address :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Party Address :</label>
               <div class="col-md-9">
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput formControlName="partyAddress" />
@@ -231,17 +151,13 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Scheme Code :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Scheme Code :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput formControlName="schemaCode" />
                 </mat-form-field>
               </div>
-              <label for="inputPassword" class="col-sm-3 col-form-label"
-                >Scheme Id :</label
-              >
+              <label for="inputPassword" class="col-sm-3 col-form-label">Scheme Id :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput formControlName="schemaId" />
@@ -255,44 +171,27 @@
             <div class="row justify-content-between">
               <div class="col-sm-3 d-flex">
                 <div class="p-2 bd-highlight">
-                  <button
-                    type="button"
-                    class="btn btn-primary metal-issue-add-btn"
-                    (click)="openaddposdetails()"
-                  >
+                  <button type="button" class="btn btn-primary metal-issue-add-btn" (click)="openaddposdetails()">
                     Add
                   </button>
                 </div>
                 <div class="p-2 bd-highlight">
-                  <button
-                    type="button"
-                    class="btn btn-outline-primary metal-issue-del-btn"
-                  >
+                  <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
                     Delete
                   </button>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="row mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label"
-                    >Party Amount :</label
-                  >
+                  <label for="inputPassword" class="col-sm-4 col-form-label">Party Amount :</label>
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%">
-                      <input
-                        type="text"
-                        matInput
-                        formControlName="partyAmount"
-                      />
+                      <input type="text" matInput formControlName="partyAmount" />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%">
-                      <input
-                        type="text"
-                        matInput
-                        formControlName="partyAmountLc"
-                      />
+                      <input type="text" matInput formControlName="partyAmountLc" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -300,26 +199,15 @@
             </div>
             <div class="row mb-2">
               <div class="col-md-12">
-                <dx-data-grid
-                  #dataGrid
-                  id="gridContainer"
-                  keyExpr="ID"
-                  [showBorders]="true"
-                >
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                  <dxi-column
-                    *ngFor="let data of columnhead"
-                    dataField="{{ data }}"
-                    caption="{{ data }}"
-                    [allowEditing]="true"
-                    alignment="center"
-                    backgroundcolor="#000"
-                  >
+                  <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
                   </dxi-column>
                 </dx-data-grid>
               </div>
@@ -327,9 +215,7 @@
             <div class="row my-2 justify-content-between align-items-center">
               <div class="col-md-4">
                 <div class="row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label"
-                    >Narration :</label
-                  >
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Narration :</label>
                   <div class="col-md-9">
                     <mat-form-field style="width: 100%">
                       <input type="text" matInput formControlName="narration" />
@@ -339,24 +225,15 @@
               </div>
               <div class="col-md-3">
                 <div class="row">
-                  <label for="inputPassword" class="col-sm-4 col-form-label"
-                    >Total Tax :</label
-                  >
+                  <label for="inputPassword" class="col-sm-4 col-form-label">Total Tax :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input
-                        type="number"
-                        matInput
-                        formControlName
-                        formControlName="totalTax"
-                      />
+                      <input type="number" matInput formControlName formControlName="totalTax" />
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row">
-                  <label for="inputPassword" class="col-sm-4 col-form-label"
-                    >Total :</label
-                  >
+                  <label for="inputPassword" class="col-sm-4 col-form-label">Total :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
                       <input type="number" matInput formControlName="total" />
