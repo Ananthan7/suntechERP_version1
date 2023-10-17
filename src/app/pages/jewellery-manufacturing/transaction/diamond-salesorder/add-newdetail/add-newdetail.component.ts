@@ -138,6 +138,15 @@ export class AddNewdetailComponent implements OnInit {
       return false
     }
   }
+  /**USE: Allow Row Edit */
+  addAlignment(data: any): string {
+    if (data == 'DIVCODE' || data == 'STONE_TYPE' || data == 'COMP_CODE'
+    || data == 'KARAT_CODE' || data == 'SHAPE' || data == 'STOCK_CODE') {
+      return 'center'
+    } else {
+      return 'right'
+    }
+  }
   /**USE: color code Select data */
   colorcodeSelect(data: any): string {
     if (data == 'COLOR') {
@@ -324,19 +333,13 @@ export class AddNewdetailComponent implements OnInit {
       dblAmount += this.commonService.emptyToZero(item.AMOUNTFC);
     })
     
-    let TotGross_Wt: any = (dblMetal_Wt + (dblStone_Wt / 5)) * this.diamondSalesDetailForm.value.PCS;
     let TotMetal_Wt: any = dblMetal_Wt * this.diamondSalesDetailForm.value.PCS;
     let TotStone_Wt: any = (dblStone_Wt * this.diamondSalesDetailForm.value.PCS);
-    // console.log(this.commonService.getCompanyParamValue('SQTYDECIMALS'),'this.commonService.mQtyDecimals');
-    // console.log(this.commonService.getCompanyParamValue('MQTYDECIMALS'),'this.commonService.mQtyDecimals');
-    // console.log(this.commonService.getCompanyParamValue('AMTDECIMALS'),'this.commonService.mQtyDecimals');
-    console.log(TotMetal_Wt);
-    console.log(dblStone_Wt);
-    TotGross_Wt = this.formatValue(TotGross_Wt)
-    TotMetal_Wt = this.formatValue(TotMetal_Wt)
-    TotStone_Wt = this.formatValue(TotStone_Wt)
-    console.log(TotMetal_Wt);
-    console.log(dblStone_Wt);
+    let TotGross_Wt: any = (dblMetal_Wt + (dblStone_Wt / 5)) * this.diamondSalesDetailForm.value.PCS;
+    
+    TotMetal_Wt = this.commonService.decimalQuantityFormat(TotMetal_Wt,'METAL')
+    TotStone_Wt = this.commonService.decimalQuantityFormat(TotStone_Wt,'STONE')
+    TotGross_Wt = this.commonService.decimalQuantityFormat(TotGross_Wt,'METAL')
     
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
@@ -345,16 +348,6 @@ export class AddNewdetailComponent implements OnInit {
     if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
     if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
    
-  }
-  
-  // Function to format the value to 2 decimal places
-  formatValue(yourValue:any) {
-    if (yourValue !== undefined && yourValue !== null) {
-      yourValue = parseFloat(yourValue.toFixed(2));
-    }else{
-      yourValue = 0
-    }
-    return yourValue
   }
 
   /**USE: final form save */

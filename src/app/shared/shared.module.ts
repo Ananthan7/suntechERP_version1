@@ -156,6 +156,8 @@ import { StoneDecimalDirective } from './directives/format-stone-decimal.directi
     NoEmptySpaceDirective,
     AllowLeadingZeroDirective,
     AmountDecimalDirective,
+    MetalDecimalDirective,
+    StoneDecimalDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,
