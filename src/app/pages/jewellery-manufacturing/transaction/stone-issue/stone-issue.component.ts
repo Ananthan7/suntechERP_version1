@@ -37,6 +37,45 @@ export class StoneIssueComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  userDataSelected(value: any) {
+    console.log(value);
+       this.stoneissueFrom.controls.userName.setValue(value.UsersName);
+  }
+  
+  CurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'currency',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  CurrencyCodeSelected(e:any){
+    console.log(e);
+    this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE);
+  }
+
+
+
+  WorkerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'worker',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  WorkerCodeSelected(e:any){
+    console.log(e);
+    this.stoneissueFrom.controls.worker.setValue(e.WORKER_CODE);
+  }
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -76,40 +115,7 @@ export class StoneIssueComponent implements OnInit {
 
 
 
- CurrencyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 8,
-    SEARCH_FIELD: 'currency',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  CurrencyCodeSelected(e:any){
-    console.log(e);
-    this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE);
-  }
-
-
-
-  WorkerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'worker',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  WorkerCodeSelected(e:any){
-    console.log(e);
-    this.stoneissueFrom.controls.worker.setValue(e.WORKER_CODE);
-  }
-
+ 
   adddata() {
     let length = this.tableData.length;
     let srno = length + 1;
