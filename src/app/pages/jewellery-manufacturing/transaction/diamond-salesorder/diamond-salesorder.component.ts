@@ -18,7 +18,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class DiamondSalesorderComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
-  divisionMS: any = 'ID';
+  divisionMS: string = 'ID';
   detailData: any[] = [];
   tableDataHead: any[] = [];
   tableData: any[] = []
@@ -28,6 +28,7 @@ export class DiamondSalesorderComponent implements OnInit {
   currentDate = new Date()
   private subscriptions: Subscription[] = [];
   tableItems: any = []
+  totalDetailNo: number = 0;
 
   OrderTypeData: MasterSearchModel = {
     PAGENO: 1,
@@ -87,11 +88,12 @@ export class DiamondSalesorderComponent implements OnInit {
   /**USE: main form party details */
   PartyDetailsOrderForm: FormGroup = this.formBuilder.group({
     voucherType: ['', [Validators.required]],
+    voucherNo: [''],
     voucherDESC: [''],
     voucherDate: ['', [Validators.required]],
     orderType: ['', [Validators.required]],
     PartyCode: ['', [Validators.required]],
-    Salesman: ['', [Validators.required]],
+    SalesmanCode: ['', [Validators.required]],
     FixedMetal: [false,],
     rateType: ['', [Validators.required]],
     wholeSaleRate: ['', [Validators.required]],
@@ -102,6 +104,14 @@ export class DiamondSalesorderComponent implements OnInit {
     BillToAccountHead: [''],
     BillToAddress: [''],
     DeliveryOnDate: [''],
+    Proposal: [''],
+    BussinessType: [''],
+    Language: [''],
+    ReferredBy: [''],
+    NotesTerms: [''],
+    PaymentTerms: [''],
+    ShipTo: [''],
+    ShipToDesc: [''],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -128,7 +138,6 @@ export class DiamondSalesorderComponent implements OnInit {
       this.PartyDetailsOrderForm.controls.rateType.setValue(data[0].RATE_TYPE)
   }
 
-
   formatDate(event: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue)
@@ -148,7 +157,6 @@ export class DiamondSalesorderComponent implements OnInit {
     let allDataSelected = [detailRow[0].DATA]
     this.addNewDetail(allDataSelected)
   }
-  totalDetailNo: number = 0;
   addNewDetail(data?: any) {
     if(this.PartyDetailsOrderForm.value.PartyCode == ''){
       this.toastr.error('PartyCode not found', '', {
@@ -211,20 +219,20 @@ export class DiamondSalesorderComponent implements OnInit {
 
     let postData = {
       "MID": 0,
-      "BRANCH_CODE": "",
-      "VOCTYPE": "str",
-      "VOCNO": 0,
-      "VOCDATE": "2023-09-14T14:56:43.961Z",
+      "BRANCH_CODE": this.commonService.branchCode || "",
+      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
+      "VOCNO": this.PartyDetailsOrderForm.value.voucherNo || 0,
+      "VOCDATE": this.commonService.formatDDMMYY(this.PartyDetailsOrderForm.value.voucherDate) || "",
       "EXP_PROD_START_DATE": "2023-09-14T14:56:43.961Z",
-      "DELIVERY_DATE": "2023-09-14T14:56:43.961Z",
-      "YEARMONTH": "",
-      "PARTYCODE": "",
-      "PARTY_CURRENCY": "stri",
-      "PARTY_CURR_RATE": 0,
-      "ITEM_CURRENCY": "stri",
-      "ITEM_CURR_RATE": 0,
-      "VALUE_DATE": "2023-09-14T14:56:43.961Z",
-      "SALESPERSON_CODE": "",
+      "DELIVERY_DATE": this.commonService.formatDDMMYY(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
+      "YEARMONTH": this.commonService.yearSelected || "",
+      "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode || "",
+      "PARTY_CURRENCY": this.PartyDetailsOrderForm.value.partyCurrencyType || "",
+      "PARTY_CURR_RATE":  this.PartyDetailsOrderForm.value.partyCurrencyRate || 0,
+      "ITEM_CURRENCY":  this.PartyDetailsOrderForm.value.ItemCurrency || "",
+      "ITEM_CURR_RATE":  this.PartyDetailsOrderForm.value.ItemCurrencyRate || 0,
+      "VALUE_DATE": this.commonService.formatDDMMYY(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
+      "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode || "",
       "METAL_RATE_TYPE": "",
       "METAL_RATE": 0,
       "METAL_GRAM_RATE": 0,
@@ -285,7 +293,7 @@ export class DiamondSalesorderComponent implements OnInit {
           "DELIVERY_DATE": "2023-09-14T14:56:43.961Z",
           "PARTYCODE": "",
           "DESIGN_CODE": "",
-          "KARAT": "stri",
+          "KARAT": "",
           "METAL_COLOR": "",
           "PCS": 0,
           "METAL_WT": 0,
@@ -485,7 +493,7 @@ export class DiamondSalesorderComponent implements OnInit {
     this.PartyCodeData.SEARCH_VALUE = event.target.value
   }
   SalesmanSelected(event: any) {
-    this.PartyDetailsOrderForm.controls.Salesman.setValue(event.SALESPERSON_CODE)
+    this.PartyDetailsOrderForm.controls.SalesmanCode.setValue(event.SALESPERSON_CODE)
   }
   rateTypeSelected(event: any) {
     this.PartyDetailsOrderForm.controls.rateType.setValue(event.RATE_TYPE)

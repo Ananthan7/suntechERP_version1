@@ -138,6 +138,15 @@ export class AddNewdetailComponent implements OnInit {
       return false
     }
   }
+  /**USE: Allow Row Edit */
+  addAlignment(data: any): string {
+    if (data == 'DIVCODE' || data == 'STONE_TYPE' || data == 'COMP_CODE'
+    || data == 'KARAT_CODE' || data == 'SHAPE' || data == 'STOCK_CODE') {
+      return 'center'
+    } else {
+      return 'right'
+    }
+  }
   /**USE: color code Select data */
   colorcodeSelect(data: any): string {
     if (data == 'COLOR') {
@@ -248,12 +257,11 @@ export class AddNewdetailComponent implements OnInit {
           }
           // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
 
-          // this.column1 = Object.keys(this.BOMDetailsArray);
+          this.diamondSalesDetailForm.controls.PCS.setValue(1)
+          
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
           this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
-          if (data.PCS == 0) {
-            this.diamondSalesDetailForm.controls.PCS.setValue(1)
-          }
+            
           this.diamondSalesDetailForm.controls.RATEFC.setValue(data.RATE)
           this.diamondSalesDetailForm.controls.METAL_WT.setValue(data.METALWT)
           this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
@@ -291,7 +299,7 @@ export class AddNewdetailComponent implements OnInit {
   //**USE: calculate total on value change */
   calculateTotal(event: any) {
     // if(event.target.value == '') return;
-    let dblStone_Wt: number = 0; let dblMetal_Wt: number = 0;
+    let dblStone_Wt: any = 0; let dblMetal_Wt: number = 0;
     let dblAmount: number = 0; let dblTotLabour: number = 0; let dblTotRate: number = 0;
     let dblDisc_Amt: number = 0; let dblDuty_Amt: number = 0;
     let dblLoad_Amt: number = 0; let dblMargin_Amt: number = 0;
@@ -305,36 +313,43 @@ export class AddNewdetailComponent implements OnInit {
     console.log(this.BOMDetailsArray,'this.BOMDetailsArray');
     
     this.BOMDetailsArray.forEach((item: any) => {
-      if (item.MetalStone.toString().trim() == "M") {
-        dblMetal_Wt += this.commonService.emptyToZero(item["Weight"]);
-        dblMetal_Amt += this.commonService.emptyToZero(item["AmountFC"]);
-        dblLab_amount += this.commonService.emptyToZero(item["LabAmountFC"]);
-        dblWastageAmt += this.commonService.emptyToZero(item["WastageAmtFC"]);
+      if (item.METALSTONE == "M") {
+        dblMetal_Wt += this.commonService.emptyToZero(item.GROSS_WT);
+        dblMetal_Amt += this.commonService.emptyToZero(item.AMOUNTFC);
+        dblLab_amount += this.commonService.emptyToZero(item.LABAMOUNTFC);
+        dblWastageAmt += this.commonService.emptyToZero(item.WASTAGE_AMTFC);
       } else {
-        if (item["Division"].toString().trim() == "Z") {
-          dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item["Weight"])) * 5;
+        if (item.METALSTONE == "Z") {
+          dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item.GROSS_WT)) * 5;
         }
         else {
-          dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item["Weight"]));
+          dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item.GROSS_WT));
         }
-        dblSetting_Amount += this.commonService.emptyToZero(item["LabAmountFC"]);
-        if (item["Division"].toString().trim() == "L") {
-          dblDia_Amt += this.commonService.emptyToZero(item["AmountFC"].ToString());
+        dblSetting_Amount += this.commonService.emptyToZero(item.LABAMOUNTFC);
+        if (item.METALSTONE == "L") {
+          dblDia_Amt += this.commonService.emptyToZero(item.AMOUNTFC);
         }
       }
-      dblAmount += this.commonService.emptyToZero(item["AmountFC"].ToString());
+      dblAmount += this.commonService.emptyToZero(item.AMOUNTFC);
     })
-
-    let TotGross_Wt: number = (this.diamondSalesDetailForm.value.GROSS_WT + (this.diamondSalesDetailForm.value.STONE_WT / 5)) * event.target.value;
-    let TotMetal_Wt: number = this.diamondSalesDetailForm.value.METAL_WT * event.target.value;
-    let TotStone_Wt: number = (this.diamondSalesDetailForm.value.STONE_WT * event.target.value);
-
+    
+    let TotMetal_Wt: any = dblMetal_Wt * this.diamondSalesDetailForm.value.PCS;
+    let TotStone_Wt: any = (dblStone_Wt * this.diamondSalesDetailForm.value.PCS);
+    let TotGross_Wt: any = (dblMetal_Wt + (dblStone_Wt / 5)) * this.diamondSalesDetailForm.value.PCS;
+    
+    TotMetal_Wt = this.commonService.decimalQuantityFormat(TotMetal_Wt,'METAL')
+    TotStone_Wt = this.commonService.decimalQuantityFormat(TotStone_Wt,'STONE')
+    TotGross_Wt = this.commonService.decimalQuantityFormat(TotGross_Wt,'METAL')
+    
+    let txtCharge4FC: number = dblLab_amount;
+    let txtCharge1FC: number = dblSetting_Amount;
+    
     if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
     if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
     if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
-    // let Charge4FC = dblLab_amount;
-    // let Charge1FC = dblSetting_Amount;
+   
   }
+
   /**USE: final form save */
   formSubmit() {
     let item: any = {}

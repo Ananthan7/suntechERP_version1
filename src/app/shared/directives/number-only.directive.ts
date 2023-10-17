@@ -1,7 +1,7 @@
 import { Directive, HostListener, ElementRef } from '@angular/core';
 
 @Directive({
-  selector: '[numericInput]'
+  selector: '[NumberOnly]'
 })
 export class NumericInputDirective {
 
