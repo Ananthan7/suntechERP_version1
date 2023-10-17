@@ -66,6 +66,7 @@ import { NoEmptySpaceDirective } from './directives/no-empty-space.directive';
 import { MasterGridComponent } from './common/master-grid/master-grid.component';
 import { MenuButtonsComponent } from './common/menu-buttons/menu-buttons.component';
 import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.directive';
+import { AmountDecimalDirective } from './directives/amount-decimal.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -88,7 +89,8 @@ import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.direc
     NoEmptySpaceDirective,
     MasterGridComponent,
     MenuButtonsComponent,
-    AllowLeadingZeroDirective
+    AllowLeadingZeroDirective,
+    AmountDecimalDirective
   ],
   imports: [
     CommonModule,
@@ -152,6 +154,7 @@ import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.direc
     FocusOnLoadDirective,
     NoEmptySpaceDirective,
     AllowLeadingZeroDirective,
+    AmountDecimalDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,

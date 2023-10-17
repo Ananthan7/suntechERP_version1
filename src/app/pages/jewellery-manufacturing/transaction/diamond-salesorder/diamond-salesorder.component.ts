@@ -293,7 +293,7 @@ export class DiamondSalesorderComponent implements OnInit {
           "DELIVERY_DATE": "2023-09-14T14:56:43.961Z",
           "PARTYCODE": "",
           "DESIGN_CODE": "",
-          "KARAT": "stri",
+          "KARAT": "",
           "METAL_COLOR": "",
           "PCS": 0,
           "METAL_WT": 0,

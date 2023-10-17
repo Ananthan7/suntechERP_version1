@@ -290,7 +290,7 @@ export class AddNewdetailComponent implements OnInit {
   //**USE: calculate total on value change */
   calculateTotal(event: any) {
     // if(event.target.value == '') return;
-    let dblStone_Wt: number = 0; let dblMetal_Wt: number = 0;
+    let dblStone_Wt: any = 0; let dblMetal_Wt: number = 0;
     let dblAmount: number = 0; let dblTotLabour: number = 0; let dblTotRate: number = 0;
     let dblDisc_Amt: number = 0; let dblDuty_Amt: number = 0;
     let dblLoad_Amt: number = 0; let dblMargin_Amt: number = 0;
@@ -323,10 +323,21 @@ export class AddNewdetailComponent implements OnInit {
       }
       dblAmount += this.commonService.emptyToZero(item.AMOUNTFC);
     })
-
-    let TotGross_Wt: number = (dblMetal_Wt + (dblStone_Wt / 5)) * this.diamondSalesDetailForm.value.PCS;
-    let TotMetal_Wt: number = dblMetal_Wt * this.diamondSalesDetailForm.value.PCS;
-    let TotStone_Wt: number = (dblStone_Wt * this.diamondSalesDetailForm.value.PCS);
+    
+    let TotGross_Wt: any = (dblMetal_Wt + (dblStone_Wt / 5)) * this.diamondSalesDetailForm.value.PCS;
+    let TotMetal_Wt: any = dblMetal_Wt * this.diamondSalesDetailForm.value.PCS;
+    let TotStone_Wt: any = (dblStone_Wt * this.diamondSalesDetailForm.value.PCS);
+    // console.log(this.commonService.getCompanyParamValue('SQTYDECIMALS'),'this.commonService.mQtyDecimals');
+    // console.log(this.commonService.getCompanyParamValue('MQTYDECIMALS'),'this.commonService.mQtyDecimals');
+    // console.log(this.commonService.getCompanyParamValue('AMTDECIMALS'),'this.commonService.mQtyDecimals');
+    console.log(TotMetal_Wt);
+    console.log(dblStone_Wt);
+    TotGross_Wt = this.formatValue(TotGross_Wt)
+    TotMetal_Wt = this.formatValue(TotMetal_Wt)
+    TotStone_Wt = this.formatValue(TotStone_Wt)
+    console.log(TotMetal_Wt);
+    console.log(dblStone_Wt);
+    
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
     
@@ -335,6 +346,17 @@ export class AddNewdetailComponent implements OnInit {
     if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
    
   }
+  
+  // Function to format the value to 2 decimal places
+  formatValue(yourValue:any) {
+    if (yourValue !== undefined && yourValue !== null) {
+      yourValue = parseFloat(yourValue.toFixed(2));
+    }else{
+      yourValue = 0
+    }
+    return yourValue
+  }
+
   /**USE: final form save */
   formSubmit() {
     let item: any = {}
