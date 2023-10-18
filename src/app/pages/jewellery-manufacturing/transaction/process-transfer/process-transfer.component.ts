@@ -47,10 +47,6 @@ export class ProcessTransferComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
   }
 
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
   openaddprocesstransfer() {
     const modalRef: NgbModalRef = this.modalService.open(ProcessTransferDetailsComponent, {
       size: 'xl',
@@ -58,17 +54,7 @@ export class ProcessTransferComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-
-  }
-  // openaddMeltingIssueDetails() {
-  //   // const modalRef: NgbModalRef = this.modalService.open(, {
-  //   //   size: 'xl',
-  //   //   backdrop: true,//'static'
-  //   //   keyboard: false,
-  //   //   windowClass: 'modal-full-width',
-  //   // });
-
-  // }
+  } 
 
   processTransferFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
@@ -78,10 +64,7 @@ export class ProcessTransferComponent implements OnInit {
     currency:[''],
     currencyrate:[''],
   });
-
-  removedata(){
-    this.tableData.pop();
-  }
+ 
     formSubmit(){
   
       if(this.content && this.content.FLAG == 'EDIT'){
@@ -348,8 +331,7 @@ export class ProcessTransferComponent implements OnInit {
       this.processTransferFrom.controls.salesman.setValue(this.content.SMAN)
       this.processTransferFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
       this.processTransferFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
-    }
-  
+    }  
   
     update(){
       if (this.processTransferFrom.invalid) {
@@ -674,6 +656,15 @@ export class ProcessTransferComponent implements OnInit {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
         this.subscriptions = []; // Clear the array
       }
+    }
+
+    close(data?: any) {
+      //TODO reset forms and data before closing
+      this.activeModal.close(data);
+    }
+
+    removedata(){
+      this.tableData.pop();
     }
 
 }
