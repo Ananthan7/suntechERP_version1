@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -23,7 +23,9 @@ export class AddNewdetailComponent implements OnInit {
   divisionMS: string = 'ID';
   codeSearchFlag: string = 'ALL';
   currentDate = new Date()
-
+  firstTableWidth:any;
+  secondTableWidth:any;
+  
   isViewComponentsTab: boolean = false;
   isViewBOMTab: boolean = true;
   isViewSummaryTab: boolean = true;
@@ -40,7 +42,7 @@ export class AddNewdetailComponent implements OnInit {
   BOMDetailsArrayHead: any[] = ['DIVCODE', 'STONE_TYPE', 'COMP_CODE',
     'KARAT_CODE', 'PCS', 'GROSS_WT', 'RATELC', 'AMOUNTFC', 'SHAPE', 'SIEVE',
     'LABRATEFC', 'WASTAGE_PER', 'WASTAGE_WT', 'WASTAGE_AMTFC', 'LABAMOUNTFC',
-    'SIEVE_DESC', 'SIZE_FORM', 'COLOR', 'CLARITY', 'STOCK_CODE', 'PROCESS_TYPE',
+    'SIEVE_DESC','SIEVE', 'SIZE_FORM', 'COLOR', 'CLARITY', 'STOCK_CODE', 'PROCESS_TYPE',
     'PROD_VARIANCE', 'PURITY']
 
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
@@ -120,6 +122,28 @@ export class AddNewdetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.setInitialValues()
+    this.handleResize()
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    // Call a method to handle the resize event
+    this.handleResize();
+  }
+  
+  private handleResize() {
+    // Access screen size here using window.innerWidth and window.innerHeight
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    if(screenWidth > 1200 ){
+      this.firstTableWidth = 800
+      this.secondTableWidth = 450
+    }else if(screenWidth >= 768 && screenWidth < 1200){
+      this.firstTableWidth = 700
+      this.secondTableWidth = 350
+    }
+    // Do something with the screen size
+    console.log('Screen width:', screenWidth);
+    console.log('Screen height:', screenHeight);
   }
   /**USE: first setup if already added */
   setInitialValues() {
@@ -157,6 +181,9 @@ export class AddNewdetailComponent implements OnInit {
   }
   userDataSelected(event: any, value: any) {
     this.BOMDetailsArray[value.data.SRNO - 1].COLOR = event.CODE;
+  }
+  processTypeSelected(event: any, value: any) {
+    this.BOMDetailsArray[value.data.SRNO - 1].PROCESS_TYPE = event.PROCESS_TYPE;
   }
   /**USE: group BOM Details Data */
   groupBomDetailsData(event: any) {

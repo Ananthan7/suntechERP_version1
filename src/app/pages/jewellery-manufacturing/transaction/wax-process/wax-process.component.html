@@ -66,9 +66,9 @@
                           <mat-form-field style="width: 70%;">
                             <input type="text" matInput  formControlName=""/>
                           </mat-form-field>
-                          <master-search [MasterSearchData]="ProcessCodeData"
-                          (newRowClick)="ProcessCodeSelected($event)">
-                          </master-search>
+                          <master-search [MasterSearchData]="user"
+                          (newRowClick)="userDataSelected($event)">
+                      </master-search>
                         </div>
                       </div>
                     </div>

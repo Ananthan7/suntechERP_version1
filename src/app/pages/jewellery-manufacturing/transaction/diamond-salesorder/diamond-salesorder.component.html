@@ -489,6 +489,7 @@
                     <!-- table sectin starts -->
                     <dx-data-grid id="gridContainer" [dataSource]="tableData"
                         [showRowLines]="true" [showBorders]="true"
+                        [allowColumnResizing]="true"
                         (onSelectionChanged)="selectionChangedHandler($event)">
                         <dxo-selection mode="single"></dxo-selection>
 
