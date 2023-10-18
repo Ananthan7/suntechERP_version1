@@ -57,7 +57,6 @@ export class MasterGridComponent implements OnInit {
     setTimeout(() => {
       let scroll = e.component.getScrollable();
       scroll.on("scroll", (event: any) => {
-        console.log(event, "scrolling");
         // reachedTop
         //  this.orderedItems.length = 20
         if (event.reachedBottom && this.orderedItems.length == 10 * this.pageIndex) {

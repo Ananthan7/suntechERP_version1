@@ -75,8 +75,6 @@ export class TransactionComponent implements OnInit {
   //  open forms in modal
   openModalView(data?: any) {
     let contents;
-    console.log(this.menuTitle, 'this.menuTitle');
-
     switch (this.componentName) {
       case 'DiamondSalesorderComponent':
         contents = DiamondSalesorderComponent

@@ -6,7 +6,9 @@
         </div>
         <div class="col-md-12 col-sm-12 p-2" *ngIf="!isViewForm">
             <dx-data-grid id="gridContainer" [dataSource]="tableData" 
-                [columnAutoWidth]="true" [showRowLines]="true" height="400"
+                [allowColumnResizing]="true"
+                height="400"
+                [columnAutoWidth]="true" [showRowLines]="true" 
                 [showBorders]="true" (onEditingStart)="logEvent('EditingStart')"
                 (onRowInserted)="onSaving($event)"
                 (onRowUpdated)="updateData($event)"

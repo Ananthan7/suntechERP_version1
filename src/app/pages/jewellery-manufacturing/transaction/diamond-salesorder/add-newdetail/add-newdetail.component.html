@@ -276,27 +276,131 @@
                             <div class="col-md-12">
                                 <div class="row" style="max-width: 100%;">
                                     <!-- bom details data grid -->
-                                    <div class="table1" id="resizableDiv">
+                                    <dx-resizable id="gridContainer"
+                                        [width]="firstTableWidth"
+                                        [height]="300"
+                                        [keepAspectRatio]="false"
+                                        handles="right">
                                         <dx-data-grid #dataGrid
                                             id="gridContainer"
+                                            [allowColumnResizing]="true"
                                             width="auto" [showBorders]="true"
-                                            [showRowLines]="true"
+                                            [showRowLines]="true" height="300"
                                             [dataSource]="BOMDetailsArray"
                                             (onRowUpdated)="groupBomDetailsData($event)">
                                             <dxo-editing mode="cell"
                                                 [allowUpdating]="true">
                                             </dxo-editing>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="DIVCODE"
+                                                caption="Div." alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="STONE_TYPE"
+                                                caption="Stone Type"
+                                                alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="COMP_CODE"
+                                                caption="Company Code"
+                                                alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="KARAT_CODE"
+                                                caption="Karat" alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="true"
+                                                dataField="PCS"
+                                                caption="Pcs" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="true"
+                                                dataField="GROSS_WT"
+                                                caption="Weight/Carat" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="true"
+                                                dataField="RATELC"
+                                                caption="Rate" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="AMOUNTFC"
+                                                caption="Amount" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="SHAPE"
+                                                caption="Shape" alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="SIEVE"
+                                                caption="Sieve" alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="true"
+                                                dataField="LABRATEFC"
+                                                caption="Lab Rate" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="WASTAGE_PER"
+                                                caption="Wastage %" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="WASTAGE_WT"
+                                                caption="Wastage Weight" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="WASTAGE_AMTFC"
+                                                caption="Wastage Amount" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="LABAMOUNTFC"
+                                                caption="Lab Amount" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="SIEVE_DESC"
+                                                caption="Sieve Desc" alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="SIEVE"
+                                                caption="Sieve" alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="SIZE_FORM"
+                                                caption="Size" alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="COLOR"
+                                                caption="Color" alignment="left"
+                                                cellTemplate="colorcode">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="CLARITY"
+                                                caption="Clarity" alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="STOCK_CODE"
+                                                caption="Stock Code" alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="PROCESS_TYPE"
+                                                cellTemplate="processTypes"
+                                                caption="Process" alignment="left">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="true"
+                                                dataField="PROD_VARIANCE"
+                                                caption="Variance" alignment="right">
+                                            </dxi-column>
+                                            <dxi-column width="auto" [allowEditing]="false"
+                                                dataField="PURITY"
+                                                caption="Purity" alignment="right">
+                                            </dxi-column>
 
-                                            <dxi-column width="auto"
+                                            <!-- <dxi-column width="auto"
                                                 *ngFor="let data of BOMDetailsArrayHead"
                                                 dataField="{{ data }}"
                                                 caption="{{ data }}"
                                                 [allowEditing]="isAllowRowEdit(data)"
                                                 [alignment]="addAlignment(data)"
                                                 [cellTemplate]="colorcodeSelect(data)">
-                                            </dxi-column>
-                                            <div
-                                                *dxTemplate="let data of 'colorcode'">
+                                            </dxi-column> -->
+                                            <div *dxTemplate="let data of 'colorcode'">
                                                 <div
                                                     class="d-flex justify-content-between">
                                                     <div>
@@ -311,14 +415,35 @@
                                                     </master-search>
                                                 </div>
                                             </div>
+                                            <div *dxTemplate="let data of 'processTypes'">
+                                                <div
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        [MasterSearchData]="colorCode"
+                                                        (newRowClick)="processTypeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
                                         </dx-data-grid>
-                                    </div>
+                                    </dx-resizable>
+                                    &nbsp;
                                     <!-- grouped data grid -->
-                                    <div class="table2" id="resizableDiv">
+                                    <dx-resizable id="gridContainer"
+                                        [width]="secondTableWidth"
+                                        [height]="150"
+                                        [keepAspectRatio]="true"
+                                        handles="right">
                                         <dx-data-grid #dataGrid
                                             id="gridContainer" width="auto"
                                             [dataSource]="groupedBOMDetails"
                                             [showRowLines]="true"
+                                            [allowColumnResizing]="true"
                                             [showBorders]="true">
                                             <dxo-paging [enabled]="false"></dxo-paging>
                                             <dxo-editing mode="cell"
@@ -335,7 +460,7 @@
                                                 alignment="center">
                                             </dxi-column>
                                         </dx-data-grid>
-                                    </div>
+                                    </dx-resizable>
                                 </div>
 
                             </div>
