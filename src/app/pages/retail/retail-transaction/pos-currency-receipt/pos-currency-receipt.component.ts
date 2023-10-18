@@ -19,9 +19,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class PosCurrencyReceiptComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
-  columnhead: any[] = ['Sr#', 'Branch', 'Mode', 'A/c Code', 'Account Head', 'Currency', 'Curr.Rate', 'VAT_E-', 'VAT_E-.'];
-  tableData: any[] = [];
+  // columnhead: any[] = ['Sr#', 'Branch', 'Mode', 'A/c Code', 'Account Head', '', 'Curr.Rate', 'VAT_E_', 'VAT_E_'];
+  columnsList: any[] = [
+ {title:'branch', field:'BRANCH_CODE'},
+ {title:'Mode', field:'MODE'},
+ {title:'A/c Code', field:'ACCODE'},
+ {title:'Account Head', field:'HDACCOUNT_HEAD'},
+ {title:'Currency', field:'CURRENCY_CODE'},
+ {title:'Curr.Rate', field:'CURRENCY_RATE'},
+ {title:'VAT_E_', field:''},
+ {title:'VAT_E_.', field:''},
+];
+
+  posCurrencyDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
+
   vocMaxDate = new Date();
   currentDate = new Date();
 
@@ -204,6 +216,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+  
+    modalRef.result.then((postData) => {
+      if (postData) {
+        console.log('Data from modal:', postData);
+        this.posCurrencyDetailsData.push(postData);        
+      }
+    });
 
   }
 
@@ -323,89 +342,90 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "WOOCOMCARDID": "string",
-      "currencyReceiptDetails": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "BRANCH_CODE": "string",
-          "RECPAY_TYPE": "string",
-          "MODE": "string",
-          "ACCODE": "string",
-          "CURRENCY_CODE": "stri",
-          "CURRENCY_RATE": 0,
-          "AMOUNTFC": 0,
-          "AMOUNTCC": 0,
-          "HEADER_AMOUNT": 0,
-          "CHEQUE_NO": "string",
-          "CHEQUE_DATE": "2023-10-10T11:05:50.756Z",
-          "CHEQUE_BANK": "string",
-          "REMARKS": "string",
-          "BANKCODE": "string",
-          "PDCYN": "s",
-          "HDACCOUNT_HEAD": "string",
-          "MODEDESC": "string",
-          "D_POSSCHEMEID": "string",
-          "D_POSSCHEMEUNITS": 0,
-          "CARD_NO": "string",
-          "CARD_HOLDER": "string",
-          "CARD_EXPIRY": "2023-10-10T11:05:50.756Z",
-          "PCRMID": 0,
-          "BASE_CONV_RATE": 0,
-          "SUBLEDJER_CODE": "string",
-          "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "str",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "string",
-          "TOTAL_AMOUNTFC": 0,
-          "TOTAL_AMOUNTCC": 0,
-          "CGST_PER": 0,
-          "CGST_AMOUNTFC": 0,
-          "CGST_AMOUNTCC": 0,
-          "SGST_PER": 0,
-          "SGST_AMOUNTFC": 0,
-          "SGST_AMOUNTCC": 0,
-          "IGST_PER": 0,
-          "IGST_AMOUNTFC": 0,
-          "IGST_AMOUNTCC": 0,
-          "CGST_ACCODE": "string",
-          "SGST_ACCODE": "string",
-          "IGST_ACCODE": "string",
-          "GST_HEADER_AMOUNT": 0,
-          "GST_NUMBER": "string",
-          "INVOICE_NUMBER": "string",
-          "INVOICE_DATE": "2023-10-10T11:05:50.756Z",
-          "DT_GST_STATE_CODE": "st",
-          "DT_GST_TYPE": "stri",
-          "DT_GST_CODE": "string",
-          "DT_GST_GROUP": "s",
-          "CGST_CTRLACCODE": "string",
-          "SGST_CTRLACCODE": "string",
-          "IGST_CTRLACCODE": "string",
-          "HSN_CODE": "string",
-          "MIDPCR": 0,
-          "INCLUSIVE": true,
-          "COMM_PER": 0,
-          "COMM_AMOUNTCC": 0,
-          "COMM_AMOUNTFC": 0,
-          "COMM_TAXPER": 0,
-          "COMM_TAXAMOUNTCC": 0,
-          "COMM_TAXAMOUNTFC": 0,
-          "DT_TDS_CODE": "string",
-          "TDS_PER": 0,
-          "TDS_AMOUNTFC": 0,
-          "TDS_AMOUNTCC": 0,
-          "PDC_WALLETAC": "string",
-          "WALLET_YN": "s",
-          "SL_CODE": "string",
-          "SL_DESCRIPTION": "string",
-          "OT_TRANSFER_TIME": "string",
-          "VAT_EXPENSE_CODE": "string",
-          "VAT_EXPENSE_CODE_DESC": "string",
-          "AMLVALIDID": "string",
-          "AMLSOURCEOFFUNDS": "string",
-          "AMLTRANSACTION_TYPE": "string"
-        }
-      ]
+      "currencyReceiptDetails": this.posCurrencyDetailsData ,
+      // [
+      //   {
+      //     "UNIQUEID": 0,
+      //     "SRNO": 0,
+      //     "BRANCH_CODE": "string",
+      //     "RECPAY_TYPE": "string",
+      //     "MODE": "string",
+      //     "ACCODE": "string",
+      //     "CURRENCY_CODE": "stri",
+      //     "CURRENCY_RATE": 0,
+      //     "AMOUNTFC": 0,
+      //     "AMOUNTCC": 0,
+      //     "HEADER_AMOUNT": 0,
+      //     "CHEQUE_NO": "string",
+      //     "CHEQUE_DATE": "2023-10-10T11:05:50.756Z",
+      //     "CHEQUE_BANK": "string",
+      //     "REMARKS": "string",
+      //     "BANKCODE": "string",
+      //     "PDCYN": "s",
+      //     "HDACCOUNT_HEAD": "string",
+      //     "MODEDESC": "string",
+      //     "D_POSSCHEMEID": "string",
+      //     "D_POSSCHEMEUNITS": 0,
+      //     "CARD_NO": "string",
+      //     "CARD_HOLDER": "string",
+      //     "CARD_EXPIRY": "2023-10-10T11:05:50.756Z",
+      //     "PCRMID": 0,
+      //     "BASE_CONV_RATE": 0,
+      //     "SUBLEDJER_CODE": "string",
+      //     "DT_BRANCH_CODE": "string",
+      //     "DT_VOCTYPE": "str",
+      //     "DT_VOCNO": 0,
+      //     "DT_YEARMONTH": "string",
+      //     "TOTAL_AMOUNTFC": 0,
+      //     "TOTAL_AMOUNTCC": 0,
+      //     "CGST_PER": 0,
+      //     "CGST_AMOUNTFC": 0,
+      //     "CGST_AMOUNTCC": 0,
+      //     "SGST_PER": 0,
+      //     "SGST_AMOUNTFC": 0,
+      //     "SGST_AMOUNTCC": 0,
+      //     "IGST_PER": 0,
+      //     "IGST_AMOUNTFC": 0,
+      //     "IGST_AMOUNTCC": 0,
+      //     "CGST_ACCODE": "string",
+      //     "SGST_ACCODE": "string",
+      //     "IGST_ACCODE": "string",
+      //     "GST_HEADER_AMOUNT": 0,
+      //     "GST_NUMBER": "string",
+      //     "INVOICE_NUMBER": "string",
+      //     "INVOICE_DATE": "2023-10-10T11:05:50.756Z",
+      //     "DT_GST_STATE_CODE": "st",
+      //     "DT_GST_TYPE": "stri",
+      //     "DT_GST_CODE": "string",
+      //     "DT_GST_GROUP": "s",
+      //     "CGST_CTRLACCODE": "string",
+      //     "SGST_CTRLACCODE": "string",
+      //     "IGST_CTRLACCODE": "string",
+      //     "HSN_CODE": "string",
+      //     "MIDPCR": 0,
+      //     "INCLUSIVE": true,
+      //     "COMM_PER": 0,
+      //     "COMM_AMOUNTCC": 0,
+      //     "COMM_AMOUNTFC": 0,
+      //     "COMM_TAXPER": 0,
+      //     "COMM_TAXAMOUNTCC": 0,
+      //     "COMM_TAXAMOUNTFC": 0,
+      //     "DT_TDS_CODE": "string",
+      //     "TDS_PER": 0,
+      //     "TDS_AMOUNTFC": 0,
+      //     "TDS_AMOUNTCC": 0,
+      //     "PDC_WALLETAC": "string",
+      //     "WALLET_YN": "s",
+      //     "SL_CODE": "string",
+      //     "SL_DESCRIPTION": "string",
+      //     "OT_TRANSFER_TIME": "string",
+      //     "VAT_EXPENSE_CODE": "string",
+      //     "VAT_EXPENSE_CODE_DESC": "string",
+      //     "AMLVALIDID": "string",
+      //     "AMLSOURCEOFFUNDS": "string",
+      //     "AMLTRANSACTION_TYPE": "string"
+      //   }
+      // ]
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -421,7 +441,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.posCurrencyReceiptForm.reset()
-                this.tableData = []
+                // this.tableData = []
                 this.close('reloadMainGrid')
               }
             });
@@ -445,6 +465,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   close(data?: any) {
     // this.activeModal.close();
     this.activeModal.close(data);
+
   }
 
 

@@ -36,6 +36,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
+ 
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -54,13 +57,38 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
    
   }
 
+  vatDetails(event: any) {
+    if (event.target.value == '') return
+    this.snackBar.open('Loading...')
+    // this.PartyCodeData.SEARCH_VALUE = event.target.value
+    let vatData =  {
+      "SPID": "013",
+      "parameter": {
+        'strBranchCode': '',
+        'strAccode': "", 
+        'strVocType': '', 
+        'strDate': ''
+      }
+    };    
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface',vatData)
+      .subscribe((result) => {
+        this.snackBar.dismiss()
+          if (result.dynamicData.length > 0) {
+            let data = result.dynamicData[0]
+            console.log('vatData', data);
+          }
+        }
+      )
+    }
+  
+
   posCurrencyReceiptDetailsForm: FormGroup = this.formBuilder.group({
     branch: [""],
     modeOfSelect: [""],
     modeOfSearch: [""], // Not Declaration 
     modeDesc: [""],
-    debitAmount: [""], // Not Declaration
-    debitAmountDesc: [""],// Not Declaration
+    debitAmount: [""], 
+    debitAmountDesc: [""],
     currencyRate: [""],
     currencyCode: [""],
     amountFc: [""],
@@ -75,13 +103,24 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     totalFc: [""],
     totalLc: [""],
     headerVatAmt: [""],
+    creditCardNumber : [""],
+    creditCardName : [""],
+    creditCardDate : [""],
+    ttNo : [""],
+    ttDrawnBank : [""],
+    ttDepositBank : [""],
+    chequeNumber : [""],
+    chequeDrawnBank : [""],
+    chequeDepositBank : [""],
+    chequeDate : [""],
+
   });
 
   debitAmountSelected(e: any) {
     console.log(e);
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
     this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e['ACCOUNT HEAD']);
-    this.DebitamountChange({ target: { value: e.ACCODE } })
+    this.DebitamountChange({ target: { value: e.ACCODE } });
   }
 
     //party Code Change
@@ -104,9 +143,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
               let data = result.dynamicData[0]
               console.log('data', data);
   
-              if (data && data[0].CURRENCY_CODE) { 
-                console.log('dataOne : ',data);
-                              
+              if (data && data[0].CURRENCY_CODE) {                               
                 this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(data[0].CURRENCY_CODE)
                 console.log(data[0].CURRENCY_CODE);                
                 this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(data[0].CONV_RATE)
@@ -127,6 +164,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       this.subscriptions.push(Sub)
     }
   
+   
 
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
@@ -147,25 +185,25 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           "BRANCH_CODE": this.branchCode,
           "RECPAY_TYPE": "",
           "MODE": this.posCurrencyReceiptDetailsForm.value.modeOfSelect,
-          "ACCODE": "",
+          "ACCODE": this.posCurrencyReceiptDetailsForm.value.debitAmount,
           "CURRENCY_CODE": this.posCurrencyReceiptDetailsForm.value.currencyCode,
           "CURRENCY_RATE": this.posCurrencyReceiptDetailsForm.value.currrencyRate,
           "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
           "AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.amountCc,
           "HEADER_AMOUNT": 0,
-          "CHEQUE_NO": "",
-          "CHEQUE_DATE": "2023-10-13T06:50:01.122Z",
+          "CHEQUE_NO": this.posCurrencyReceiptDetailsForm.value.chequeNumber,
+          "CHEQUE_DATE": this.posCurrencyReceiptDetailsForm.value.chequeDate,
           "CHEQUE_BANK": "",
           "REMARKS": this.posCurrencyReceiptDetailsForm.value.remarks,
           "BANKCODE": "",
           "PDCYN": "s",
-          "HDACCOUNT_HEAD": "",
+          "HDACCOUNT_HEAD": this.posCurrencyReceiptDetailsForm.value.debitAmountDesc,
           "MODEDESC": this.posCurrencyReceiptDetailsForm.value.modeDesc,
           "D_POSSCHEMEID": "",
           "D_POSSCHEMEUNITS": 0,
-          "CARD_NO": "",
-          "CARD_HOLDER": "",
-          "CARD_EXPIRY": "2023-10-13T06:50:01.122Z",
+          "CARD_NO": this.posCurrencyReceiptDetailsForm.value.creditCardNumber,
+          "CARD_HOLDER": this.posCurrencyReceiptDetailsForm.value.creditCardNumber,
+          "CARD_EXPIRY": this.posCurrencyReceiptDetailsForm.value.creditCardDate,
           "PCRMID": 0,
           "BASE_CONV_RATE": 0,
           "SUBLEDJER_CODE": "",
@@ -223,33 +261,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           "AMLTRANSACTION_TYPE": ""
     };
 
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.posCurrencyReceiptDetailsForm.reset();
-                  this.tableData = [];
-                  this.close("reloadMainGrid");
-                }
-              });
-            }
-          } else {
-            this.toastr.error("Not saved");
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
+    this.close(postData);
+          
   }
   deleteWorkerMaster() {}
 
