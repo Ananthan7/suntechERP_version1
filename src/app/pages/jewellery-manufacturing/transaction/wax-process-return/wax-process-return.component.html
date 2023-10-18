@@ -1,17 +1,18 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Stone Issue </h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Wax Process Return </h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()"  (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 
-<div class="row">
-    <div class="col-md-12">
-        <form [formGroup]="waxprocessFrom">
-      <div class="card-body sales-card-body p-2">
+
+<div class="container-fluid">
+  <form [formGroup]="waxprocessFrom">
+    <div class="row">
+      <div class="col-md-12">
         <div class="row mb-3">
           <div class="col-6">
             <h6>HO</h6>
@@ -20,7 +21,7 @@
             <h6>Posted</h6>
           </div>
         </div>
-  
+
         <div class="row m-2">
           <div class="col-md-6">
             <div class="row mb-1">
@@ -47,72 +48,71 @@
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-3 col-form-label">Process :</label>
               <div class="col-md-3">
-                  <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="process" />
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
-                  </master-search>
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput formControlName="process" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                </master-search>
               </div>
               <label for="inputPassword" class="col-sm-3 col-form-label">To Process :</label>
               <div class="col-md-3">
-                  <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="toprocess" />
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
-                  </master-search>
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput formControlName="toprocess" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                </master-search>
               </div>
             </div>
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-3 col-form-label">Worker :</label>
               <div class="col-md-3">
-                  <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="worker" />
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
-                  </master-search>
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput formControlName="worker" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                </master-search>
               </div>
               <label for="inputPassword" class="col-sm-3 col-form-label">To Worker :</label>
               <div class="col-md-3">
-                  <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="toworker" />
-                  </mat-form-field>
-                  < <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
-                  </master-search>
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput formControlName="toworker" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                </master-search>
               </div>
             </div>
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-3 col-form-label">Entered By :</label>
               <div class="col-md-3">
-                  <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="vocno" />
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="user"
-                  (newRowClick)="userDataSelected($event)">
-              </master-search>
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput formControlName="vocno" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)">
+                </master-search>
               </div>
               <label for="inputPassword" class="col-sm-3 col-form-label">Wax Code :</label>
               <div class="col-md-3">
-                  <mat-form-field style="width: 70%;">
-                    <input type="text" matInput formControlName="waxcode" />
-                  </mat-form-field>
-                  <master-search></master-search>
+                <mat-form-field style="width: 70%;">
+                  <input type="text" matInput formControlName="waxcode" />
+                </mat-form-field>
+                <master-search></master-search>
               </div>
-             
+
             </div>
           </div>
-         
-             <div class="col-md-2 pt-5">
-                <div class="row mb-1 p-t1">
-                    <div class="col-md-5">
-                        <mat-form-field style="width: 90%;">
-                          <input type="text" matInput formControlName="vocno" />
-                        </mat-form-field>
-                    </div>
-                </div>
-             </div>
-        
+
+          <div class="col-md-2 pt-5">
+            <div class="row mb-1 p-t1">
+              <div class="col-md-5">
+                <mat-form-field style="width: 90%;">
+                  <input type="text" matInput formControlName="vocno" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
         </div>
-  
+
         <div class="row m-2">
           <div class="col-md-12">
             <div class="row">
@@ -124,10 +124,10 @@
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
                   <dxi-column dataField="">
-  
+
                   </dxi-column>
                   <dx-check-box [value]="true" [elementAttr]="{ 'aria-label': 'Checked' }"></dx-check-box>
-                  <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"  caption="{{ data }}"
+                  <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                     [allowEditing]="true" alignment="center" backgroundcolor="#000">
                   </dxi-column>
                 </dx-data-grid>
@@ -135,8 +135,8 @@
             </div>
           </div>
         </div>
-  
-  
+
+
         <div class="row m-2">
           <div class="col-md-6">
             <div class=" row">
@@ -150,6 +150,6 @@
           </div>
         </div>
       </div>
- 
-
-  
+    </div>
+  </form>
+</div>
