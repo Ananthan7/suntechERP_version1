@@ -23,13 +23,18 @@ export class AddNewdetailComponent implements OnInit {
   divisionMS: string = 'ID';
   codeSearchFlag: string = 'ALL';
   currentDate = new Date()
-  firstTableWidth:any;
-  secondTableWidth:any;
-  
+  firstTableWidth: any;
+  secondTableWidth: any;
+  intLabType: number = this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE')
+
   isViewComponentsTab: boolean = false;
   isViewBOMTab: boolean = true;
   isViewSummaryTab: boolean = true;
   isViewDesignTab: boolean = false;
+  viewFlag: any = {
+    ItemRateFC: true,
+    AmountValueFC: true
+  };
 
   BOMDetailsArray: any[] = [];
   groupedBOMDetails: any[] = [];
@@ -42,7 +47,7 @@ export class AddNewdetailComponent implements OnInit {
   BOMDetailsArrayHead: any[] = ['DIVCODE', 'STONE_TYPE', 'COMP_CODE',
     'KARAT_CODE', 'PCS', 'GROSS_WT', 'RATELC', 'AMOUNTFC', 'SHAPE', 'SIEVE',
     'LABRATEFC', 'WASTAGE_PER', 'WASTAGE_WT', 'WASTAGE_AMTFC', 'LABAMOUNTFC',
-    'SIEVE_DESC','SIEVE', 'SIZE_FORM', 'COLOR', 'CLARITY', 'STOCK_CODE', 'PROCESS_TYPE',
+    'SIEVE_DESC', 'SIEVE', 'SIZE_FORM', 'COLOR', 'CLARITY', 'STOCK_CODE', 'PROCESS_TYPE',
     'PROD_VARIANCE', 'PURITY']
 
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
@@ -110,6 +115,20 @@ export class AddNewdetailComponent implements OnInit {
     THICKNESS: ['', [Validators.required]],
     ENGRAVING_TEXT: ['', [Validators.required]],
     ENGRAVING_FONT: ['', [Validators.required]],
+    SCREW_FIELD: ['', [Validators.required]],
+    SETTING: ['', [Validators.required]],
+    POLISHING: ['', [Validators.required]],
+    RHODIUM: ['', [Validators.required]],
+    LABOUR: ['', [Validators.required]],
+    Misc: ['', [Validators.required]],
+    Total_Labour: ['', [Validators.required]],
+    Wastage: ['', [Validators.required]],
+    WastagePercentage: ['', [Validators.required]],
+    MarkupPercentage: ['', [Validators.required]],
+    DutyPercentage: ['', [Validators.required]],
+    MarginPercentage: ['', [Validators.required]],
+    LoadingPercentage: ['', [Validators.required]],
+    DiscountPercentage: ['', [Validators.required]],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -129,21 +148,18 @@ export class AddNewdetailComponent implements OnInit {
     // Call a method to handle the resize event
     this.handleResize();
   }
-  
+
   private handleResize() {
     // Access screen size here using window.innerWidth and window.innerHeight
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    if(screenWidth > 1200 ){
+    if (screenWidth > 1200) {
       this.firstTableWidth = 800
       this.secondTableWidth = 450
-    }else if(screenWidth >= 768 && screenWidth < 1200){
+    } else if (screenWidth >= 768 && screenWidth < 1200) {
       this.firstTableWidth = 700
       this.secondTableWidth = 350
     }
-    // Do something with the screen size
-    console.log('Screen width:', screenWidth);
-    console.log('Screen height:', screenHeight);
   }
   /**USE: first setup if already added */
   setInitialValues() {
@@ -165,7 +181,7 @@ export class AddNewdetailComponent implements OnInit {
   /**USE: Allow Row Edit */
   addAlignment(data: any): string {
     if (data == 'DIVCODE' || data == 'STONE_TYPE' || data == 'COMP_CODE'
-    || data == 'KARAT_CODE' || data == 'SHAPE' || data == 'STOCK_CODE') {
+      || data == 'KARAT_CODE' || data == 'SHAPE' || data == 'STOCK_CODE') {
       return 'center'
     } else {
       return 'right'
@@ -189,7 +205,7 @@ export class AddNewdetailComponent implements OnInit {
   groupBomDetailsData(event: any) {
     // let data = event.data
     let result: any[] = []
-    this.BOMDetailsArray.reduce(function (res: any, value: any) {
+    this.BOMDetailsArray.reduce((res: any, value: any) => {
       if (!res[value.DIVCODE]) {
         res[value.DIVCODE] = {
           DIVCODE: value.DIVCODE,
@@ -285,10 +301,10 @@ export class AddNewdetailComponent implements OnInit {
           // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
 
           this.diamondSalesDetailForm.controls.PCS.setValue(1)
-          
+
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
           this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
-            
+
           this.diamondSalesDetailForm.controls.RATEFC.setValue(data.RATE)
           this.diamondSalesDetailForm.controls.METAL_WT.setValue(data.METALWT)
           this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
@@ -337,8 +353,8 @@ export class AddNewdetailComponent implements OnInit {
     let dblRhodium: number = 0; let dblLabour: number = 0;
     let dblMisc: number = 0; let dblWastageAmt: number = 0;
 
-    console.log(this.BOMDetailsArray,'this.BOMDetailsArray');
-    
+    console.log(this.BOMDetailsArray, 'this.BOMDetailsArray');
+
     this.BOMDetailsArray.forEach((item: any) => {
       if (item.METALSTONE == "M") {
         dblMetal_Wt += this.commonService.emptyToZero(item.GROSS_WT);
@@ -348,8 +364,7 @@ export class AddNewdetailComponent implements OnInit {
       } else {
         if (item.METALSTONE == "Z") {
           dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item.GROSS_WT)) * 5;
-        }
-        else {
+        } else {
           dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item.GROSS_WT));
         }
         dblSetting_Amount += this.commonService.emptyToZero(item.LABAMOUNTFC);
@@ -359,24 +374,103 @@ export class AddNewdetailComponent implements OnInit {
       }
       dblAmount += this.commonService.emptyToZero(item.AMOUNTFC);
     })
-    
+
     let TotMetal_Wt: any = dblMetal_Wt * this.diamondSalesDetailForm.value.PCS;
     let TotStone_Wt: any = (dblStone_Wt * this.diamondSalesDetailForm.value.PCS);
     let TotGross_Wt: any = (dblMetal_Wt + (dblStone_Wt / 5)) * this.diamondSalesDetailForm.value.PCS;
-    
-    TotMetal_Wt = this.commonService.decimalQuantityFormat(TotMetal_Wt,'METAL')
-    TotStone_Wt = this.commonService.decimalQuantityFormat(TotStone_Wt,'STONE')
-    TotGross_Wt = this.commonService.decimalQuantityFormat(TotGross_Wt,'METAL')
-    
+
+    TotMetal_Wt = this.commonService.decimalQuantityFormat(TotMetal_Wt, 'METAL')
+    TotStone_Wt = this.commonService.decimalQuantityFormat(TotStone_Wt, 'STONE')
+    TotGross_Wt = this.commonService.decimalQuantityFormat(TotGross_Wt, 'METAL')
+
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
+    //todo
+    let txtCharge2FC: number = 0;
+    let txtCharge3FC: number = 0;
+    let txtCharge5FC: number = 0;
+    console.log(txtCharge4FC,'txtCharge4FC');
+    console.log(txtCharge1FC,'txtCharge1FC');
     
     if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
     if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
     if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
-   
-  }
 
+    // labourchargetype checking
+    if (this.intLabType == 4) {
+      //TODO labour details grid calculation
+    } else {
+      if (this.intLabType == 2) {
+        //  dblTotLabour = this.commonService.emptyToZero(txtTotalLabour);
+      } else {
+        dblTotLabour = txtCharge1FC + txtCharge2FC;
+        dblTotLabour += txtCharge3FC + txtCharge4FC + txtCharge5FC;
+        this.summaryDetailForm.controls.Total_Labour.setValue(dblTotLabour)
+      }
+    }
+    // if (this.content.FixedMetal && this.content.FixedMetal == true) dblAmount -= dblMetal_Amt;
+    dblTotRate = this.commonService.decimalQuantityFormat(dblAmount + dblTotLabour,'AMOUNT');
+    this.diamondSalesDetailForm.controls.RATEFC.setValue(dblTotRate)
+    this.diamondSalesDetailForm.controls.AMOUNT.setValue(this.diamondSalesDetailForm.value.PCS * dblTotRate)
+
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarkupPercentage > 0)) {
+      dblMarkup_Amt = (dblDia_Amt * this.summaryDetailForm.value.MarkupPercentage) / 100;
+      dblTotRate += dblMarkup_Amt;
+    }
+    
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.WastagePercentage) > 0 && dblWastageAmt == 0) {
+      dblGold_Loss_Amt = (dblMetal_Amt * this.summaryDetailForm.value.WastagePercentage) / 100;
+      dblTotRate += dblGold_Loss_Amt;
+    }
+    // else {
+    //   dblGold_Loss_Amt = dblWastageAmt;
+    //   dblTotRate += dblGold_Loss_Amt;
+    // }
+
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.DutyPercentage > 0)) {
+      dblDuty_Amt = (dblTotRate * this.summaryDetailForm.value.DutyPercentage) / 100;
+      dblTotRate += dblDuty_Amt;
+    }
+
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarginPercentage > 0)) {
+      dblMargin_Amt = (dblTotRate * this.summaryDetailForm.value.MarginPercentage) / 100;
+      dblTotRate += dblMargin_Amt;
+    }
+
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.LoadingPercentage > 0)) {
+      dblLoad_Amt = (dblTotRate * this.summaryDetailForm.value.LoadingPercentage) / 100;
+      dblTotRate += dblLoad_Amt;
+    }
+
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.LoadingPercentage > 0)) {
+      dblDisc_Amt = (dblTotRate * this.summaryDetailForm.value.LoadingPercentage) / 100;
+      dblTotRate -= dblDisc_Amt;
+    }
+
+    // txtMarkup_Amt = dblMarkup_Amt.ToString();
+    // txtGold_loss_Amt = dblGold_Loss_Amt.ToString();
+    // txtDuty_Amt = dblDuty_Amt.ToString();
+    // txtMargin_Amt = dblMargin_Amt.ToString();
+    // txtLoad_Amt = dblLoad_Amt.ToString();
+    // txtDISCAMTFC = dblDisc_Amt.ToString();
+    let txtItemRateFC = dblTotRate;
+
+    console.log(txtItemRateFC,'final');
+    
+    this.diamondSalesDetailForm.controls.RATEFC.setValue(txtItemRateFC)
+    let txtValueFC = (this.diamondSalesDetailForm.value.PCS * dblTotRate);
+    this.diamondSalesDetailForm.controls.AMOUNT.setValue(txtValueFC)
+
+    if (dblTotRate > 0) {
+      this.viewFlag.ItemRateFC = false;
+      this.viewFlag.AmountValueFC = false;
+    }
+  }
+  calculateRateAmount(event:any){
+    this.diamondSalesDetailForm.controls.AMOUNT.setValue(
+      this.diamondSalesDetailForm.value.RATEFC * event.target.value
+    )
+  }
   /**USE: final form save */
   formSubmit() {
     let item: any = {}

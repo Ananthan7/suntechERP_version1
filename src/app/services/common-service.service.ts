@@ -235,7 +235,7 @@ export class CommonServiceService {
   }
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
-    let paramValue: string = ''
+    let paramValue: any;
     this.allCompanyParams.map((data: any) => {
       if (data.PARAMETER == parameter) {
         paramValue = data.PARAM_VALUE;
