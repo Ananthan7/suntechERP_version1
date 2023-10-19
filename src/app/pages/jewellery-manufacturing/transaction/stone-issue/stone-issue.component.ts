@@ -41,7 +41,7 @@ export class StoneIssueComponent implements OnInit {
     console.log(value);
        this.stoneissueFrom.controls.userName.setValue(value.UsersName);
   }
-  
+
   CurrencyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -106,16 +106,21 @@ export class StoneIssueComponent implements OnInit {
 
   stoneissueFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
+    vocno:[''],
     vocdate:[''],
    basecurrency:[''],
+   basecurrencyrate:[''],
    currency:[''],
+   currencyrate:[''],
    worker:[''],
+   workername:[''],
     narration:[''],
   });
 
 
 
- 
+
+
   adddata() {
     let length = this.tableData.length;
     let srno = length + 1;
@@ -167,12 +172,12 @@ removedata(){
       "MID": 0,
       "VOCTYPE": this.stoneissueFrom.value.voctype || "",
       "BRANCH_CODE": "string",
-      "VOCNO": 0,
+      "VOCNO": this.stoneissueFrom.value.vocno || "",
       "VOCDATE": this.stoneissueFrom.value.vocdate || "",
       "YEARMONTH": "string",
       "DOCTIME": "2023-10-05T09:33:19.685Z",
       "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
-      "CURRENCY_RATE": 0,
+      "CURRENCY_RATE": this.stoneissueFrom.value.currencyrate || "",
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_AMOUNTFC": 0,
@@ -181,7 +186,7 @@ removedata(){
       "REMARKS": this.stoneissueFrom.value.narration || "",
       "NAVSEQNO": 0,
       "BASE_CURRENCY": this.stoneissueFrom.value.basecurrency || "",
-      "BASE_CURR_RATE": 0,
+      "BASE_CURR_RATE": this.stoneissueFrom.value.basecurrencyrate || "",
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "string",
@@ -214,7 +219,7 @@ removedata(){
       "PROCESS_CODE": "string",
       "PROCESS_NAME": "string",
       "WORKER_CODE": this.stoneissueFrom.value.worker || "",
-      "WORKER_NAME": "string",
+      "WORKER_NAME": this.stoneissueFrom.value.workername || "",
       "UNQ_DESIGN_ID": "string",
       "WIP_ACCODE": "string",
       "UNIQUEID": 0,
@@ -265,12 +270,16 @@ removedata(){
     if(!this.content) return
     console.log(this.content);
     
-    this.stoneissueFrom.controls.code.setValue(this.content.VOCTYPE)
-    this.stoneissueFrom.controls.description.setValue(this.content.VOCDATE)
-    this.stoneissueFrom.controls.description.setValue(this.content.BASE_CURRENCY)
-    this.stoneissueFrom.controls.description.setValue(this.content.CURRENCY_CODE)
-    this.stoneissueFrom.controls.description.setValue(this.content.WORKER_CODE)
-    this.stoneissueFrom.controls.description.setValue(this.content.REMARKS)
+    this.stoneissueFrom.controls.voctype.setValue(this.content.VOCTYPE)
+    this.stoneissueFrom.controls.vocno.setValue(this.content.VOCNO)
+    this.stoneissueFrom.controls.vocdate.setValue(this.content.VOCDATE)
+    this.stoneissueFrom.controls.basecurrency.setValue(this.content.BASE_CURRENCY)
+    this.stoneissueFrom.controls.basecurrencyrate.setValue(this.content.BASE_CURR_RATE)
+    this.stoneissueFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.stoneissueFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
+    this.stoneissueFrom.controls.worker.setValue(this.content.WORKER_CODE)
+    this.stoneissueFrom.controls.workername.setValue(this.content.WORKER_NAME)
+    this.stoneissueFrom.controls.narration.setValue(this.content.REMARKS)
 
     
 
@@ -283,17 +292,17 @@ removedata(){
       return
     }
   
-    let API = 'JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/'+ this.stoneissueFrom.value.voctype + this.stoneissueFrom.value.vocdate
+    let API = 'JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/'+ this.stoneissueFrom.value.voctype + this.stoneissueFrom.value.vocno + this.stoneissueFrom.value.vocdate
     let postData = {
       "MID": 0,
       "VOCTYPE": this.stoneissueFrom.value.voctype || "",
       "BRANCH_CODE": "string",
-      "VOCNO": 0,
+      "VOCNO": this.stoneissueFrom.value.vocno || "",
       "VOCDATE": this.stoneissueFrom.value.vocdate || "",
       "YEARMONTH": "string",
       "DOCTIME": "2023-10-05T09:33:19.685Z",
       "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
-      "CURRENCY_RATE": 0,
+      "CURRENCY_RATE": this.stoneissueFrom.value.currencyrate || "",
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_AMOUNTFC": 0,
@@ -302,7 +311,7 @@ removedata(){
       "REMARKS": this.stoneissueFrom.value.narration || "",
       "NAVSEQNO": 0,
       "BASE_CURRENCY": this.stoneissueFrom.value.basecurrency || "",
-      "BASE_CURR_RATE": 0,
+      "BASE_CURR_RATE": this.stoneissueFrom.value.basecurrencyrate || "",
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "string",
@@ -335,7 +344,7 @@ removedata(){
       "PROCESS_CODE": "string",
       "PROCESS_NAME": "string",
       "WORKER_CODE": this.stoneissueFrom.value.worker || "",
-      "WORKER_NAME": "string",
+      "WORKER_NAME": this.stoneissueFrom.value.workername || "",
       "UNQ_DESIGN_ID": "string",
       "WIP_ACCODE": "string",
       "UNIQUEID": 0,
@@ -406,7 +415,7 @@ removedata(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobStoneIssueMasterDJ/DeleteJobStoneIssueMasterDJ/' + this.stoneissueFrom.value.voctype + this.stoneissueFrom.value.vocdate
+        let API = 'JobStoneIssueMasterDJ/DeleteJobStoneIssueMasterDJ/' + this.stoneissueFrom.value.voctype + this.stoneissueFrom.value.vocno + this.stoneissueFrom.value.vocdate
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

@@ -91,6 +91,7 @@ export class WaxProcessReturnComponent implements OnInit {
     this.waxprocessFrom.controls.waxcode.setValue(e.STOCK_CODE);
 
   }
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -120,6 +121,9 @@ export class WaxProcessReturnComponent implements OnInit {
    waxcode:[''],
     remark:[''],
   });
+
+
+
 
 
   adddata() {

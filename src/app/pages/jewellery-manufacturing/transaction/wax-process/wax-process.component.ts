@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -21,6 +21,7 @@ export class WaxProcessComponent implements OnInit {
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
+
     user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -33,11 +34,14 @@ export class WaxProcessComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+
   userDataSelected(value: any) {
     console.log(value);
        this.waxprocessFrom.controls.userName.setValue(value.UsersName);
   }
-  ProcessCodeData: MasterSearchModel = {
+
+
+ ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 20,
@@ -48,11 +52,9 @@ export class WaxProcessComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   ProcessCodeSelected(e:any){
     console.log(e);
     this.waxprocessFrom.controls.processcode.setValue(e.Process_Code);
-
   }
 
   WorkerCodeData: MasterSearchModel = {
@@ -66,17 +68,16 @@ export class WaxProcessComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   WorkerCodeSelected(e:any){
     console.log(e);
     this.waxprocessFrom.controls.workercode.setValue(e.WORKER_CODE);
-
   }
 
-
+  
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private modalService: NgbModal,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
@@ -88,6 +89,8 @@ export class WaxProcessComponent implements OnInit {
       this.setFormValues()
     }
   }
+
+
 
   setFormValues() {
     if(!this.content) return
@@ -122,7 +125,7 @@ export class WaxProcessComponent implements OnInit {
     this.activeModal.close(data);
   }
 
- 
+
 
   adddata() {
     let length = this.tableData.length;

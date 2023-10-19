@@ -34,6 +34,75 @@ export class MouldMakingComponent implements OnInit {
   VIEW_TABLE: true,
   LOAD_ONCLICK: true,
 }
+userDataSelected(value: any) {
+  console.log(value);
+     this.mouldMakingForm.controls.enteredby.setValue(value.UsersName);
+}
+
+ProcessCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 20,
+  SEARCH_FIELD: 'process_code',
+  SEARCH_HEADING: 'Button Color',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "PROCESS_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+ProcessCodeSelected(e:any){
+  console.log(e);
+  this.mouldMakingForm.controls.process.setValue(e.Process_Code);
+}
+
+WorkerCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 19,
+  SEARCH_FIELD: 'WORKER_CODE',
+  SEARCH_HEADING: 'Button Color',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "WORKER_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+WorkerCodeSelected(e:any){
+  console.log(e);
+  this.mouldMakingForm.controls.worker.setValue(e.WORKER_CODE);
+}
+
+jobnoCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 46,
+  SEARCH_FIELD: 'job_number',
+  SEARCH_HEADING: 'Button Color',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "job_number<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+jobnoCodeSelected(e:any){
+  console.log(e);
+  this.mouldMakingForm.controls.jobNumber.setValue(e.job_number);
+}
+
+mouldCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 3,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'Button Color',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+mouldCodeSelected(e:any){
+  console.log(e);
+  this.mouldMakingForm.controls.mouldtype.setValue(e.CODE);
+}
+
  constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,

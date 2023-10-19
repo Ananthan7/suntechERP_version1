@@ -20,6 +20,71 @@ export class MetalReturnDetailsComponent implements OnInit {
   divisionMS: any = 'ID';
   tableData: any[] = [];
   columnhead: any[] = [''];
+
+  ProcessCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  ProcessCodeSelected(e:any){
+    console.log(e);
+    this.metalReturnDetailsForm.controls.processCode.setValue(e.Process_Code);
+  }
+
+  WorkerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  WorkerCodeSelected(e:any){
+    console.log(e);
+    this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
+  }
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  locationCodeSelected(e:any){
+    console.log(e);
+    this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
+  }
+
+  jobnoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  jobnoCodeSelected(e:any){
+    console.log(e);
+    this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
+  }
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -405,54 +470,5 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.PREFIX_CODE);
   }
 
-  processCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  processSelected(e:any){
-    console.log(e);
-    this.metalReturnDetailsForm.controls.processCode.setValue(e.Process_Code);
-  }
-
-  workerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'WORKER_CODE ',
-    SEARCH_HEADING: 'WORKER CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  workerSelected(e:any){
-    console.log(e);
-    this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
-  }
-
-  locationCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Location',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  locationSelected(e:any){
-    console.log(e);
-    this.metalReturnDetailsForm.controls.location.setValue(e.COUNT);
-  }
+ 
 }
