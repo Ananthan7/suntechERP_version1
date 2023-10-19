@@ -35,33 +35,33 @@ export class MeltingIssueDetailsComponent implements OnInit {
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 14,
-    SEARCH_FIELD: 'jobno',
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Button Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PREFIX_CODE<> ''",
+    WHERECONDITION: "job_number<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   jobnoCodeSelected(e:any){
     console.log(e);
-    this.meltingIssuedetailsFrom.controls.jobno.setValue(e.PREFIX_CODE);
+    this.meltingIssuedetailsFrom.controls.jobno.setValue(e.job_number);
   }
 
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'time',
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
     SEARCH_HEADING: 'Button Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "LOCATION_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   locationCodeSelected(e:any){
     console.log(e);
-    this.meltingIssuedetailsFrom.controls.time.setValue(e.CODE);
+    this.meltingIssuedetailsFrom.controls.location.setValue(e.LOCATION_CODE);
   }
 
 

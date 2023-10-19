@@ -17,6 +17,23 @@ export class MetalIssueDetailsComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   tableData: any[] = [];
   columnhead: any[] = ['Div', 'Stock Code', 'Karat', 'Color', 'Req.Pcs', 'Req.Wt ', 'Issued Pcs', 'Issued Wt', 'Bal.pcs', 'Bal.Wt'];
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  locationCodeSelected(e:any){
+    console.log(e);
+    this.metalIssueDetailsForm.controls.location.setValue(e.LOCATION_CODE);
+  }
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -510,22 +527,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     });
   }
 
-  locationCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Location',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  locationSelected(e:any){
-    console.log(e);
-    this.metalIssueDetailsForm.controls.location.setValue(e.COUNT);
-  }
+ 
 
 
 }

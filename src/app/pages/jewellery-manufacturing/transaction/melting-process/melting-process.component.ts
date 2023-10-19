@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MeltingProcessDetailsComponent } from './melting-process-details/melting-process-details.component';
 @Component({
@@ -16,6 +17,38 @@ export class MeltingProcessComponent implements OnInit {
   columnhead1:any[] = ['R to Stock','Stock Code','Gross Wt','Purity', 'Pure Wt','Location'];
   columnhead2:any[] = ['R to Scrap','Stock Code','Gross Wt','Purity', 'Pure Wt','Location','Loss','Pure Wt','Bal Gross','Bal Pure'];
   column:any[] = ['Sr','So No','Party Code', 'Party Name','Job No','job Desc','Design Code','UNQ Design ID','Process','Worker',' Req Metal','Stone Wt','Recd Gross Wt','Metal Allocated','Allocated Pure Wt','Job Pcs'];
+
+ MeltingCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 94,
+    SEARCH_FIELD: 'Melting Type',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Melting Type<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  MeltingCodeSelected(e:any){
+    console.log(e);
+    this.meltingIssueFrom.controls.meltingType.setValue(e['Melting Type']);
+  }
+
+  timeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'time',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  timeCodeSelected(e:any){
+    console.log(e);
+    this.meltingIssueFrom.controls.time.setValue(e.CODE);
+  }
 
   constructor(
     private activeModal: NgbActiveModal,

@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Tree Making Up & Down</h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Tree Down </h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
@@ -62,7 +62,8 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput />
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                </master-search>
               </div>
             </div>
           </div>
@@ -73,7 +74,9 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput />
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="cylinderCodeData"
+                (newRowClick)="cylinderCodeSelected($event)">
+            </master-search>
               </div>
             </div>
           </div>
@@ -119,7 +122,8 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput />
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                </master-search>
               </div>
             </div>
           </div>
@@ -160,7 +164,8 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput />
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                </master-search>
               </div>
             </div>
           </div>
@@ -173,7 +178,9 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput />
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="user"
+                (newRowClick)="userDataSelected($event)">
+            </master-search>
               </div>
             </div>
           </div>
@@ -184,7 +191,9 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput />
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="karatCodeData"
+                (newRowClick)="karatCodeSelected($event)">
+            </master-search>
               </div>
             </div>
           </div>
@@ -216,7 +225,8 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput />
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                </master-search>
               </div>
             </div>
           </div>
@@ -232,7 +242,9 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput />
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="colorCodeData"
+                (newRowClick)="colorCodeSelected($event)">
+            </master-search>
               </div>
             </div>
           </div>

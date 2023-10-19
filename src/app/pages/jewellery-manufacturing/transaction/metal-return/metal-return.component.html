@@ -55,7 +55,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="process"  />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                                </master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -64,7 +65,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="worker" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                                </master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -73,7 +75,8 @@
                                 <mat-form-field style="width: 70%" formControlName="location">
                                     <input type="text" matInput />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="locationCodeData"
+                                          (newRowClick)="locationCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
@@ -99,6 +102,16 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-3 d-flex">
+                        <!-- <div class="p-2 bd-highlight">
+                            <button type="button" class="btn btn-primary add-btn"  (click)="openaddmetalreturn ()">
+                                Add
+                            </button>
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <button type="button" class="btn btn-outline-primary del-btn">
+                                Delete
+                            </button>
+                        </div> -->
                         <div class="p-1">
                             <button type="button" mat-flat-button color="primary"  (click)="openaddmetalreturn ()">
                               <i class="fa fa-plus" style="font-size: 11px;"></i>
