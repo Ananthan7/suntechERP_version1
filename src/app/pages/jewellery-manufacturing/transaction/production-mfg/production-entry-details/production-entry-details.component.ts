@@ -6,12 +6,8 @@ import { ToastrService } from "ngx-toastr";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
-import {
-  NgbActiveModal,
-  NgbModal,
-  NgbModalRef,
-} from "@ng-bootstrap/ng-bootstrap";
-import { ProcationSubDetailsComponent } from "../procation-sub-details/procation-sub-details.component";
+import {  NgbActiveModal,  NgbModal,  NgbModalRef,} from "@ng-bootstrap/ng-bootstrap";
+import { ProducationSubDetailsComponent } from "../producation-sub-details/producation-sub-details.component";
 
 @Component({
   selector: "app-production-entry-details",
@@ -22,10 +18,12 @@ export class ProductionEntryDetailsComponent implements OnInit {
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
   columnheadBottom: any[] = [""];
+  producationSubDetailData : any[] = [''];
   @Input() content!: any;
-  tableData: any[] = [];
   userName = localStorage.getItem("username");
   branchCode?: String;
+  vocMaxDate = new Date();
+  currentDate = new Date();
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -41,7 +39,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     LOAD_ONCLICK: true,
   };
 
-<<<<<<< HEAD
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -66,40 +63,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
-=======
-  locationCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 11,
-    SEARCH_FIELD: 'LOCATION_CODE',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "LOCATION_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  locationCodeSelected(e:any){
-    console.log(e);
-    this.productiondetailsFrom.controls.location.setValue(e.LOCATION_CODE);
-  }
-
-  jobnoCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 46,
-    SEARCH_FIELD: 'job_number',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  jobnoCodeSelected(e:any){
-    console.log(e);
-    this.productiondetailsFrom.controls.jobNumber.setValue(e.job_number);
-  }
-  
->>>>>>> c6178b517ce86355c35a36bc35129e821cb18316
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -118,10 +81,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-<<<<<<< HEAD
   opennewdetails() {
     const modalRef: NgbModalRef = this.modalService.open(
-      ProcationSubDetailsComponent,
+      ProducationSubDetailsComponent,
       {
         size: "xl",
         backdrop: true, //'static'
@@ -129,6 +91,12 @@ export class ProductionEntryDetailsComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
+    modalRef.result.then((postData) => {
+      if (postData) {
+        console.log('Data from modal:', postData);
+        this.producationSubDetailData.push(postData);        
+      }
+    });
   }
 
   jobnoCodeSelected(e: any) {
@@ -141,9 +109,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     console.log(e);
     this.productiondetailsFrom.controls.location.setValue(e.COUNT);
   }
-=======
- 
->>>>>>> c6178b517ce86355c35a36bc35129e821cb18316
 
   productiondetailsFrom: FormGroup = this.formBuilder.group({
     jobno : [''],
@@ -156,7 +121,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
     processname : [''],
     worker : [''],
     workername : [''],
-    partsName : [''],
+    partsName : [''],    
+    parts : [''],
     design : [''],
     designCode :[''],
     totalpcs : [''],
@@ -226,7 +192,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
 
   removedata() {
-    this.tableData.pop();
+    
   }
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
@@ -368,33 +334,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "BARCODEDPCS": 0
     }
 
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.productiondetailsFrom.reset();
-                  this.tableData = [];
-                  this.close("reloadMainGrid");
-                }
-              });
-            }
-          } else {
-            this.toastr.error("Not saved");
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
+    this.close({postData, jobProducationSubDetails: [this.producationSubDetailData]});
   }
 
   setFormValues() {
@@ -408,7 +348,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     }
 
     let API =
-      "JobProductionMaster/UpdateJobProductionMaster/"+this.productiondetailsFrom.value.branchCode + this.productiondetailsFrom.value.voctype + this.productiondetailsFrom.value.vocno + this.productiondetailsFrom.value.vocdate;
+      "JobProductionMaster/UpdateJobProductionMaster/";
     let postData = {
 
     }
@@ -427,7 +367,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
               }).then((result: any) => {
                 if (result.value) {
                   this.productiondetailsFrom.reset();
-                  this.tableData = [];
                   this.close("reloadMainGrid");
                 }
               });
@@ -486,7 +425,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
                   }).then((result: any) => {
                     if (result.value) {
                       this.productiondetailsFrom.reset();
-                      this.tableData = [];
                       this.close("reloadMainGrid");
                     }
                   });
@@ -500,7 +438,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
                   }).then((result: any) => {
                     if (result.value) {
                       this.productiondetailsFrom.reset();
-                      this.tableData = [];
                       this.close();
                     }
                   });

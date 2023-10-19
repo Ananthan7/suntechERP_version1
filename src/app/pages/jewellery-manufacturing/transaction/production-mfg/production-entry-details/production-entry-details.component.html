@@ -25,12 +25,13 @@
               <input type="text" matInput formControlName="jobnoDesc" />
             </mat-form-field> -->
             <mat-form-field style="width: 100%">
-              <input matInput DateValidation (dateChange)="formatDate($event)" [matDatepicker]="dob"
-                formControlName="jobDate" placeholder="DD/MM/YYYY" />
-              <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-              <mat-datepicker #dob></mat-datepicker>
+              <input matInput [matDatepicker]="jobDate" name="jobDate" formControlName="jobDate"
+                placeholder="YYYY/MM/DD" DateValidation />
+              <mat-datepicker-toggle matSuffix [for]="jobDate"></mat-datepicker-toggle>
+              <mat-datepicker [startAt]="currentDate" #jobDate></mat-datepicker>
             </mat-form-field>
           </div>
+
         </div>
         <div class="row mb-2">
           <label for="input" class="col-sm-3 col-form-label">Sub Job No :</label>
@@ -264,13 +265,12 @@
                 <div class="col-sm-2">
                   <!-- <mat-form-field style="width: 100%;">
                     <input type="date" matInput formControlName="startdate" />
-                  </mat-form-field> -->
-                  <mat-form-field style="width: 100px">
-                    <!-- <mat-label>Date Of Birth</mat-label> -->
-                    <input matInput DateValidation (dateChange)="formatDate($event)" [matDatepicker]="dob"
-                      formControlName="startdate" placeholder="DD/MM/YYYY" />
-                    <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                    <mat-datepicker #dob></mat-datepicker>
+                  </mat-form-field> -->>
+                  <mat-form-field style="width: 100%">
+                    <input matInput [matDatepicker]="startdate" name="startdate" formControlName="startdate"
+                      placeholder="YYYY/MM/DD" DateValidation />
+                    <mat-datepicker-toggle matSuffix [for]="startdate"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" #startdate></mat-datepicker>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">End Date :</label>
@@ -278,12 +278,11 @@
                   <!-- <mat-form-field style="width: 100%;">
                     <input type="date" matInput formControlName="enddate" />
                   </mat-form-field> -->
-                  <mat-form-field style="width: 100px">
-                    <!-- <mat-label>Date Of Birth</mat-label> -->
-                    <input matInput DateValidation (dateChange)="formatDate($event)" [matDatepicker]="dob"
-                      formControlName="endDate" placeholder="DD/MM/YYYY" />
-                    <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                    <mat-datepicker #dob></mat-datepicker>
+                  <mat-form-field style="width: 100%">
+                    <input matInput [matDatepicker]="endDate" name="endDate" formControlName="startdate"
+                      placeholder="YYYY/MM/DD" DateValidation />
+                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" #endDate></mat-datepicker>
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Price 5 :</label>

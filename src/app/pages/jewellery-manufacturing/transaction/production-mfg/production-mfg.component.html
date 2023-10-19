@@ -37,16 +37,14 @@
             <div class="row mb-2">
               <label for="inputPassword" class="col-sm-4 col-form-label">Voc Date :</label>
               <div class="col-md-8">
-                <!-- <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="vocdate" />
+                 <mat-form-field style="width: 100%;">
+                 <!-- <input type="date" matInput formControlName="vocdate" />
                 </mat-form-field> -->
-                <mat-form-field style="width: 100%">
-                  <input matInput DateValidation (dateChange)="formatDate($event)"
-                      [matDatepicker]="dob" formControlName="startdate"
-                      placeholder="DD/MM/YYYY" />
-                  <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                  <mat-datepicker #dob></mat-datepicker>
-              </mat-form-field>
+                <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
+                placeholder="YYYY/MM/DD" DateValidation />
+              <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+              <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+            </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
@@ -122,7 +120,7 @@
                   </div>
                 </div>
                 <div class="row mb-2">
-                  <label for="inputPassword" class="col-sm-5 col-form-label">Currency :</label>
+                  <label for="inputPassword" class="col-sm-5 col-form-label">Base Currency :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="basecurrencyrate" />
