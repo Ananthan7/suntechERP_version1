@@ -17,6 +17,7 @@ import { ApprovalMasterComponent } from './approval-master/approval-master.compo
 import { PictureTypeMasterComponent } from './picture-type-master/picture-type-master.component';
 import { DesignMasterComponent } from './design-master/design-master.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { ProducationSubDetailsComponent } from '../transaction/production-mfg/producation-sub-details/producation-sub-details.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MeltingTypeComponent,
     ApprovalMasterComponent,
     PictureTypeMasterComponent,
-    DesignMasterComponent
+    DesignMasterComponent,
+    ProducationSubDetailsComponent
     
   ],
   imports: [
