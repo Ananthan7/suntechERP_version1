@@ -23,9 +23,10 @@ export class AddNewdetailComponent implements OnInit {
   divisionMS: string = 'ID';
   codeSearchFlag: string = 'ALL';
   currentDate = new Date()
-  firstTableWidth:any;
-  secondTableWidth:any;
-  
+  firstTableWidth: any;
+  secondTableWidth: any;
+  intLabType: number = this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE')
+
   isViewComponentsTab: boolean = false;
   isViewBOMTab: boolean = true;
   isViewSummaryTab: boolean = true;
@@ -42,7 +43,7 @@ export class AddNewdetailComponent implements OnInit {
   BOMDetailsArrayHead: any[] = ['DIVCODE', 'STONE_TYPE', 'COMP_CODE',
     'KARAT_CODE', 'PCS', 'GROSS_WT', 'RATELC', 'AMOUNTFC', 'SHAPE', 'SIEVE',
     'LABRATEFC', 'WASTAGE_PER', 'WASTAGE_WT', 'WASTAGE_AMTFC', 'LABAMOUNTFC',
-    'SIEVE_DESC','SIEVE', 'SIZE_FORM', 'COLOR', 'CLARITY', 'STOCK_CODE', 'PROCESS_TYPE',
+    'SIEVE_DESC', 'SIEVE', 'SIZE_FORM', 'COLOR', 'CLARITY', 'STOCK_CODE', 'PROCESS_TYPE',
     'PROD_VARIANCE', 'PURITY']
 
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
@@ -129,15 +130,15 @@ export class AddNewdetailComponent implements OnInit {
     // Call a method to handle the resize event
     this.handleResize();
   }
-  
+
   private handleResize() {
     // Access screen size here using window.innerWidth and window.innerHeight
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    if(screenWidth > 1200 ){
+    if (screenWidth > 1200) {
       this.firstTableWidth = 800
       this.secondTableWidth = 450
-    }else if(screenWidth >= 768 && screenWidth < 1200){
+    } else if (screenWidth >= 768 && screenWidth < 1200) {
       this.firstTableWidth = 700
       this.secondTableWidth = 350
     }
@@ -165,7 +166,7 @@ export class AddNewdetailComponent implements OnInit {
   /**USE: Allow Row Edit */
   addAlignment(data: any): string {
     if (data == 'DIVCODE' || data == 'STONE_TYPE' || data == 'COMP_CODE'
-    || data == 'KARAT_CODE' || data == 'SHAPE' || data == 'STOCK_CODE') {
+      || data == 'KARAT_CODE' || data == 'SHAPE' || data == 'STOCK_CODE') {
       return 'center'
     } else {
       return 'right'
@@ -189,7 +190,7 @@ export class AddNewdetailComponent implements OnInit {
   groupBomDetailsData(event: any) {
     // let data = event.data
     let result: any[] = []
-    this.BOMDetailsArray.reduce(function (res: any, value: any) {
+    this.BOMDetailsArray.reduce((res: any, value: any) => {
       if (!res[value.DIVCODE]) {
         res[value.DIVCODE] = {
           DIVCODE: value.DIVCODE,
@@ -285,10 +286,10 @@ export class AddNewdetailComponent implements OnInit {
           // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
 
           this.diamondSalesDetailForm.controls.PCS.setValue(1)
-          
+
           this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
           this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
-            
+
           this.diamondSalesDetailForm.controls.RATEFC.setValue(data.RATE)
           this.diamondSalesDetailForm.controls.METAL_WT.setValue(data.METALWT)
           this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
@@ -337,8 +338,8 @@ export class AddNewdetailComponent implements OnInit {
     let dblRhodium: number = 0; let dblLabour: number = 0;
     let dblMisc: number = 0; let dblWastageAmt: number = 0;
 
-    console.log(this.BOMDetailsArray,'this.BOMDetailsArray');
-    
+    console.log(this.BOMDetailsArray, 'this.BOMDetailsArray');
+
     this.BOMDetailsArray.forEach((item: any) => {
       if (item.METALSTONE == "M") {
         dblMetal_Wt += this.commonService.emptyToZero(item.GROSS_WT);
@@ -348,8 +349,7 @@ export class AddNewdetailComponent implements OnInit {
       } else {
         if (item.METALSTONE == "Z") {
           dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item.GROSS_WT)) * 5;
-        }
-        else {
+        } else {
           dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item.GROSS_WT));
         }
         dblSetting_Amount += this.commonService.emptyToZero(item.LABAMOUNTFC);
@@ -359,22 +359,34 @@ export class AddNewdetailComponent implements OnInit {
       }
       dblAmount += this.commonService.emptyToZero(item.AMOUNTFC);
     })
-    
+
     let TotMetal_Wt: any = dblMetal_Wt * this.diamondSalesDetailForm.value.PCS;
     let TotStone_Wt: any = (dblStone_Wt * this.diamondSalesDetailForm.value.PCS);
     let TotGross_Wt: any = (dblMetal_Wt + (dblStone_Wt / 5)) * this.diamondSalesDetailForm.value.PCS;
-    
-    TotMetal_Wt = this.commonService.decimalQuantityFormat(TotMetal_Wt,'METAL')
-    TotStone_Wt = this.commonService.decimalQuantityFormat(TotStone_Wt,'STONE')
-    TotGross_Wt = this.commonService.decimalQuantityFormat(TotGross_Wt,'METAL')
-    
+
+    TotMetal_Wt = this.commonService.decimalQuantityFormat(TotMetal_Wt, 'METAL')
+    TotStone_Wt = this.commonService.decimalQuantityFormat(TotStone_Wt, 'STONE')
+    TotGross_Wt = this.commonService.decimalQuantityFormat(TotGross_Wt, 'METAL')
+
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
-    
+
     if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
     if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
     if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
-   
+
+    if (this.intLabType == 4) {
+      //TODO labour details grid calculation
+    } else {
+      if (this.intLabType == 2) {
+        //  dblTotLabour = this.commonService.emptyToZero(txtTotalLabour);
+      } else {
+        // dblTotLabour = objSqlObjectTrans.Empty2zero(txtCharge1FC.Text.ToString()) + objSqlObjectTrans.Empty2zero(txtCharge2FC.Text.ToString());
+        // dblTotLabour += objSqlObjectTrans.Empty2zero(txtCharge3FC.Text.ToString()) + objSqlObjectTrans.Empty2zero(txtCharge4FC.Text.ToString()) + objSqlObjectTrans.Empty2zero(txtCharge5FC.Text.ToString());
+        // txtTotalLabour.Text = dblTotLabour.ToString();
+      }
+    }
+
   }
 
   /**USE: final form save */

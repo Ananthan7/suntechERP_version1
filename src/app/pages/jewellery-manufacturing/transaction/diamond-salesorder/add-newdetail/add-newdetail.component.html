@@ -18,7 +18,7 @@
                         <div class="row mb-1">
                             <!-- TODO stockcode is selected disable designcode 
                             and design code is selected disable stockcode -->
-                            <div class="col-md-4">
+                            <div class="col-md-4" style="width: 25% !important;">
                                 <div class="form-check pt-2">
                                     <input class="form-check-input" type="radio"
                                         name="flexRadioDefault"
@@ -38,7 +38,7 @@
                                         formControlName="designCode" />
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
                                         [readonly]="codeSearchFlag == 'STOCK'"
@@ -50,7 +50,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <div class="col-md-4">
+                            <div class="col-md-4" style="width: 25% !important;">
                                 <div class="form-check  pt-2">
                                     <input class="form-check-input" type="radio"
                                         name="flexRadioDefault" id="stockCode">
@@ -67,7 +67,7 @@
                                         [readonly]="codeSearchFlag == 'DESIGN'" />
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
                                         [readonly]="codeSearchFlag == 'DESIGN'"
@@ -94,7 +94,7 @@
                             <label for="inputPassword"
                                 class="col-sm-3 col-form-label">Production Date</label>
                             <div class="col-md-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 80%;">
                                     <input matInput DateValidation
                                         [matDatepicker]="ProductionOn"
                                         formControlName="ProductionDate" />
@@ -107,7 +107,7 @@
                         <div class="row mb-1">
                             <label for="inputPassword"
                                 class="col-sm-3 col-form-label">Delivery On</label>
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
                                     <input matInput DateValidation
                                         [matDatepicker]="DeliveryOn"
@@ -121,7 +121,7 @@
                         <div class="row mb-1">
                             <label for="inputPassword"
                                 class="col-sm-3 col-form-label">Remarks</label>
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="Remarks" />
@@ -140,14 +140,14 @@
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword"
-                                    class="col-sm-2 col-form-label">Cost :</label>
+                                    class="col-sm-2 col-form-label">Cost</label>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput />
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword"
-                                    class="col-sm-2 col-form-label">Account :</label>
+                                    class="col-sm-2 col-form-label">Account</label>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput />
@@ -172,7 +172,7 @@
                         <div class="p-2" style="border: 1px solid #c2c2c2;">
                             <div class="row">
                                 <label for="inputPassword"
-                                    class="col-sm-2 col-form-label">Pcs :</label>
+                                    class="col-sm-2 col-form-label">Pcs</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
@@ -182,7 +182,7 @@
                                 </div>
                                 <label for="inputPassword"
                                     class="col-sm-3 col-form-label">Metal Weight
-                                    :</label>
+                                </label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" AmountDecimalInput
@@ -194,7 +194,7 @@
                             </div>
                             <div class="row">
                                 <label for="inputPassword"
-                                    class="col-sm-2 col-form-label">Rate :</label>
+                                    class="col-sm-2 col-form-label">Rate</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
@@ -203,8 +203,7 @@
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword"
-                                    class="col-sm-3 col-form-label">Stone Weight
-                                    :</label>
+                                    class="col-sm-3 col-form-label">Stone Weight</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" StoneDecimalInput
@@ -216,7 +215,7 @@
                             </div>
                             <div class="row">
                                 <label for="inputPassword"
-                                    class="col-sm-2 col-form-label">Amount :</label>
+                                    class="col-sm-2 col-form-label">Amount</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
@@ -225,8 +224,7 @@
                                     </mat-form-field>
                                 </div>
                                 <label for="inputPassword"
-                                    class="col-sm-3 col-form-label">Gross Weight
-                                    :</label>
+                                    class="col-sm-3 col-form-label">Gross Weight</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
