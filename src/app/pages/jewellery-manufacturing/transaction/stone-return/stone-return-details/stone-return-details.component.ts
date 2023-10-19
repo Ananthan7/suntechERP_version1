@@ -18,6 +18,8 @@ export class StoneReturnDetailsComponent implements OnInit {
   @Input() content!: any;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
+  branchCode?: String;
+  yearMonth?: String;
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -37,10 +39,12 @@ export class StoneReturnDetailsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
   }
 
   close(data?: any) {
@@ -96,40 +100,18 @@ export class StoneReturnDetailsComponent implements OnInit {
 
     let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
     let postData = {
-      "MID": 0,
-      "VOCTYPE": "str",
-      "BRANCH_CODE": "string",
-      "VOCNO": 0,
-      "VOCDATE": "2023-10-06T10:14:55.770Z",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-06T10:14:55.770Z",
-      "CURRENCY_CODE": "stri",
-      "CURRENCY_RATE": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_GROSS_WT": 0,
-      "TOTAL_AMOUNTFC": 0,
-      "TOTAL_AMOUNTLC": 0,
-      "SMAN": "string",
-      "REMARKS": "string",
-      "NAVSEQNO": 0,
-      "BASE_CURRENCY": "stri",
-      "BASE_CURR_RATE": 0,
-      "BASE_CONV_RATE": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "SYSTEM_DATE": "2023-10-06T10:14:55.770Z",
-      "PRINT_COUNT": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "HTUSERNAME": "string",
       "SRNO": 0,
+      "VOCNO": 0,
+      "VOCTYPE": "",
+      "VOCDATE": "2023-10-19T06:15:23.037Z",
       "JOB_NUMBER": this.stonereturndetailsFrom.value.jobno || "",
       "JOB_DATE": this.stonereturndetailsFrom.value.jobdate || "",
       "JOB_SO_NUMBER": this.stonereturndetailsFrom.value.subjobno || "",
-      "UNQ_JOB_ID": "string",
-      "JOB_DESCRIPTION": "string",
+      "UNQ_JOB_ID": "",
+      "JOB_DESCRIPTION": "",
+      "BRANCH_CODE": this.branchCode,
       "DESIGN_CODE": this.stonereturndetailsFrom.value.designcode || "",
-      "DIVCODE": "s",
+      "DIVCODE": "",
       "STOCK_CODE": this.stonereturndetailsFrom.value.stock || "",
       "STOCK_DESCRIPTION": this.stonereturndetailsFrom.value.stockdes || "",
       "SIEVE": this.stonereturndetailsFrom.value.sieve || "",
@@ -139,6 +121,8 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SIZE": this.stonereturndetailsFrom.value.size || "",
       "PCS": 0,
       "GROSS_WT": 0,
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
       "RATEFC": 0,
       "RATELC": 0,
       "AMOUNTFC": 0,
@@ -147,26 +131,35 @@ export class StoneReturnDetailsComponent implements OnInit {
       "PROCESS_NAME": this.stonereturndetailsFrom.value.processname || "",
       "WORKER_CODE": this.stonereturndetailsFrom.value.worker || "",
       "WORKER_NAME": this.stonereturndetailsFrom.value.workername || "",
-      "UNQ_DESIGN_ID": "string",
-      "WIP_ACCODE": "string",
+      "UNQ_DESIGN_ID": "",
+      "WIP_ACCODE": "",
       "UNIQUEID": 0,
-      "LOCTYPE_CODE": "string",
-      "STOCK_CODE_BRK": "string",
+      "LOCTYPE_CODE":this.stonereturndetailsFrom.value.location || "",
+      "STOCK_CODE_BRK": "",
       "WASTAGE_QTY": 0,
       "WASTAGE_PER": 0,
       "WASTAGE_AMT": 0,
+      "NAVSEQNO": 0,
+      "YEARMONTH": "",
+      "DOCTIME": "",
+      "SMAN": "",
+      "REMARKS": "",
+      "TOTAL_PCS": 0,
+      "TOTAL_GROSS_WT": 0,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
       "ISBROCKEN": 0,
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
+      "BASE_CONV_RATE": 0,
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
       "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "RET_TO_DESC": "string",
-      "PICTURE_NAME": "string",
-      "RET_TO": "string",
+      "DT_YEARMONTH": this.yearMonth,
+      "RET_TO_DESC": "",
+      "PICTURE_NAME": "",
+      "RET_TO": "",
       "ISMISSING": 0,
-      "SIEVE_SET": this.stonereturndetailsFrom.value.sieveset || "",
-      "SUB_STOCK_CODE": "string",
-      "approvalDetails": this.tableData,
+      "SIEVE_SET":  this.stonereturndetailsFrom.value.sieveset || "",
+      "SUB_STOCK_CODE": ""
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -217,12 +210,10 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.stonereturndetailsFrom.controls.color.setValue(this.content.COLOR)
     this.stonereturndetailsFrom.controls.clarity.setValue(this.content.CLARITY)
     this.stonereturndetailsFrom.controls.unitrate.setValue(this.content.REMARKS)
+    this.stonereturndetailsFrom.controls.location.setValue(this.content.LOCTYPE_CODE)
     this.stonereturndetailsFrom.controls.shape.setValue(this.content.SHAPE)
     this.stonereturndetailsFrom.controls.sieveset.setValue(this.content.SIEVE_SET)
     this.stonereturndetailsFrom.controls.amount.setValue(this.content.REMARKS)
-
-
-
   }
 
 
@@ -232,42 +223,20 @@ export class StoneReturnDetailsComponent implements OnInit {
       return
     }
 
-    let API = 'JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/' + this.stonereturndetailsFrom.value.voctype + this.stonereturndetailsFrom.value.vocno + this.stonereturndetailsFrom.value.vocdate
+    let API = 'JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/' + this.stonereturndetailsFrom.value.branchCode + this.stonereturndetailsFrom.value.voctype + this.stonereturndetailsFrom.value.vocno + this.stonereturndetailsFrom.value.yearMonth
     let postData = {
-      "MID": 0,
-      "VOCTYPE": "str",
-      "BRANCH_CODE": "string",
-      "VOCNO": 0,
-      "VOCDATE": "2023-10-06T10:14:55.770Z",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-06T10:14:55.770Z",
-      "CURRENCY_CODE": "stri",
-      "CURRENCY_RATE": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_GROSS_WT": 0,
-      "TOTAL_AMOUNTFC": 0,
-      "TOTAL_AMOUNTLC": 0,
-      "SMAN": "string",
-      "REMARKS": "string",
-      "NAVSEQNO": 0,
-      "BASE_CURRENCY": "stri",
-      "BASE_CURR_RATE": 0,
-      "BASE_CONV_RATE": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "SYSTEM_DATE": "2023-10-06T10:14:55.770Z",
-      "PRINT_COUNT": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "HTUSERNAME": "string",
       "SRNO": 0,
+      "VOCNO": 0,
+      "VOCTYPE": "",
+      "VOCDATE": "2023-10-19T06:15:23.037Z",
       "JOB_NUMBER": this.stonereturndetailsFrom.value.jobno || "",
       "JOB_DATE": this.stonereturndetailsFrom.value.jobdate || "",
       "JOB_SO_NUMBER": this.stonereturndetailsFrom.value.subjobno || "",
-      "UNQ_JOB_ID": "string",
-      "JOB_DESCRIPTION": "string",
+      "UNQ_JOB_ID": "",
+      "JOB_DESCRIPTION": "",
+      "BRANCH_CODE": this.branchCode,
       "DESIGN_CODE": this.stonereturndetailsFrom.value.designcode || "",
-      "DIVCODE": "s",
+      "DIVCODE": "",
       "STOCK_CODE": this.stonereturndetailsFrom.value.stock || "",
       "STOCK_DESCRIPTION": this.stonereturndetailsFrom.value.stockdes || "",
       "SIEVE": this.stonereturndetailsFrom.value.sieve || "",
@@ -277,6 +246,8 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SIZE": this.stonereturndetailsFrom.value.size || "",
       "PCS": 0,
       "GROSS_WT": 0,
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
       "RATEFC": 0,
       "RATELC": 0,
       "AMOUNTFC": 0,
@@ -285,26 +256,35 @@ export class StoneReturnDetailsComponent implements OnInit {
       "PROCESS_NAME": this.stonereturndetailsFrom.value.processname || "",
       "WORKER_CODE": this.stonereturndetailsFrom.value.worker || "",
       "WORKER_NAME": this.stonereturndetailsFrom.value.workername || "",
-      "UNQ_DESIGN_ID": "string",
-      "WIP_ACCODE": "string",
+      "UNQ_DESIGN_ID": "",
+      "WIP_ACCODE": "",
       "UNIQUEID": 0,
-      "LOCTYPE_CODE": "string",
-      "STOCK_CODE_BRK": "string",
+      "LOCTYPE_CODE":this.stonereturndetailsFrom.value.location || "",
+      "STOCK_CODE_BRK": "",
       "WASTAGE_QTY": 0,
       "WASTAGE_PER": 0,
       "WASTAGE_AMT": 0,
+      "NAVSEQNO": 0,
+      "YEARMONTH": "",
+      "DOCTIME": "",
+      "SMAN": "",
+      "REMARKS": "",
+      "TOTAL_PCS": 0,
+      "TOTAL_GROSS_WT": 0,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
       "ISBROCKEN": 0,
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
+      "BASE_CONV_RATE": 0,
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
       "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "RET_TO_DESC": "string",
-      "PICTURE_NAME": "string",
-      "RET_TO": "string",
+      "DT_YEARMONTH": this.yearMonth,
+      "RET_TO_DESC": "",
+      "PICTURE_NAME": "",
+      "RET_TO": "",
       "ISMISSING": 0,
-      "SIEVE_SET": this.stonereturndetailsFrom.value.sieveset || "",
-      "SUB_STOCK_CODE": "string",
-      "approvalDetails": this.tableData,
+      "SIEVE_SET":  this.stonereturndetailsFrom.value.sieveset || "",
+      "SUB_STOCK_CODE": ""
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -356,7 +336,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobStoneReturnMasterDJ/DeleteJobStoneReturnMasterDJ/' + this.stonereturndetailsFrom.value.voctype + this.stonereturndetailsFrom.value.vocno + this.stonereturndetailsFrom.value.vocdate
+        let API = 'JobStoneReturnMasterDJ/DeleteJobStoneReturnMasterDJ/' + this.stonereturndetailsFrom.value.branchCode + this.stonereturndetailsFrom.value.voctype + this.stonereturndetailsFrom.value.vocno + this.stonereturndetailsFrom.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

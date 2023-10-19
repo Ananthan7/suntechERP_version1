@@ -20,6 +20,7 @@ export class MouldMakingComponent implements OnInit {
   userName = localStorage.getItem('username');
   columnheads : any[] = ['Stock Code','Description','Psc','Gross Weight','Rate','Amount','Location'];
   branchCode?: String;
+  yearMonth?: String;
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -34,10 +35,7 @@ export class MouldMakingComponent implements OnInit {
   VIEW_TABLE: true,
   LOAD_ONCLICK: true,
 }
-userDataSelected(value: any) {
-  console.log(value);
-     this.mouldMakingForm.controls.enteredby.setValue(value.UsersName);
-}
+
 
 ProcessCodeData: MasterSearchModel = {
   PAGENO: 1,
@@ -50,10 +48,7 @@ ProcessCodeData: MasterSearchModel = {
   VIEW_INPUT: true,
   VIEW_TABLE: true,
 }
-ProcessCodeSelected(e:any){
-  console.log(e);
-  this.mouldMakingForm.controls.process.setValue(e.Process_Code);
-}
+
 
 WorkerCodeData: MasterSearchModel = {
   PAGENO: 1,
@@ -66,10 +61,7 @@ WorkerCodeData: MasterSearchModel = {
   VIEW_INPUT: true,
   VIEW_TABLE: true,
 }
-WorkerCodeSelected(e:any){
-  console.log(e);
-  this.mouldMakingForm.controls.worker.setValue(e.WORKER_CODE);
-}
+
 
 jobnoCodeData: MasterSearchModel = {
   PAGENO: 1,
@@ -82,10 +74,7 @@ jobnoCodeData: MasterSearchModel = {
   VIEW_INPUT: true,
   VIEW_TABLE: true,
 }
-jobnoCodeSelected(e:any){
-  console.log(e);
-  this.mouldMakingForm.controls.jobNumber.setValue(e.job_number);
-}
+
 
 mouldCodeData: MasterSearchModel = {
   PAGENO: 1,
@@ -98,10 +87,7 @@ mouldCodeData: MasterSearchModel = {
   VIEW_INPUT: true,
   VIEW_TABLE: true,
 }
-mouldCodeSelected(e:any){
-  console.log(e);
-  this.mouldMakingForm.controls.mouldtype.setValue(e.CODE);
-}
+
 
  constructor(
     private activeModal: NgbActiveModal,
@@ -114,12 +100,39 @@ mouldCodeSelected(e:any){
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+  }
+
+  userDataSelected(value: any) {
+    console.log(value);
+       this.mouldMakingForm.controls.enteredby.setValue(value.UsersName);
+  }
+
+  ProcessCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.process.setValue(e.Process_Code);
+  }
+  
+  WorkerCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.worker.setValue(e.WORKER_CODE);
+  }
+
+  jobnoCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.jobNumber.setValue(e.job_number);
+  }
+
+  mouldCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.mouldtype.setValue(e.CODE);
   }
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  
   mouldMakingForm: FormGroup = this.formBuilder.group({
     voctype:[''],
     vocdate:[''],
@@ -153,29 +166,29 @@ mouldCodeSelected(e:any){
   
     let API = 'JobMouldHeaderDJ/InsertJobMouldHeaderDJ'
     let postData = {
-      "MID": 0,
-      "BRANCH_CODE":  this.branchCode,
-      "VOCTYPE":this.mouldMakingForm.value.voctype || "",
+     "MID": 0,
+     "BRANCH_CODE":  this.branchCode,
+     "VOCTYPE":this.mouldMakingForm.value.voctype || "",
       "VOCNO": 0,
       "VOCDATE": this.mouldMakingForm.value.vocdate || "",
-      "YEARMONTH": "string",
+      "YEARMONTH": this.yearMonth,
       "JOB_NUMBER": this.mouldMakingForm.value.jobno || "",
       "JOB_DESCRIPTION": this.mouldMakingForm.value.job || "",
       "DESIGN_CODE": this.mouldMakingForm.value.designcode || "",
       "MOULD_NUMBER": this.mouldMakingForm.value.mouldno || "",
-      "MOULD_LOCATION": "string",
+      "MOULD_LOCATION": this.mouldMakingForm.value.location || "",
       "MOULD_TYPE":this.mouldMakingForm.value.mouldtype || "",
-      "UNQ_JOB_ID": "string",
-      "UNQ_DESIGN_ID": "string",
+      "UNQ_JOB_ID": "",
+      "UNQ_DESIGN_ID": "",
       "JOB_SO_MID": 0,
       "JOB_SO_NUMBER": 0,
       "PARTYCODE":this.mouldMakingForm.value.noofparts || "",
-      "PARTY_CURRENCY": "stri",
+      "PARTY_CURRENCY": "",
       "PARTY_CURR_RATE": 0,
       "ITEM_CURRENCY": this.mouldMakingForm.value.itemcurrency || "",
       "ITEM_CURR_RATE": this.mouldMakingForm.value.itemcurrencyrate || "",
-      "VALUE_DATE": "2023-10-16T10:38:33.131Z",
-      "SALESPERSON_CODE": "string",
+      "VALUE_DATE": "2023-10-19T08:59:58.514Z",
+      "SALESPERSON_CODE": "",
       "TOTAL_PCS": 0,
       "TOTAL_GRWT": 0,
       "TOTAL_DISCAMTFC": 0,
@@ -191,31 +204,33 @@ mouldCodeSelected(e:any){
       "GROSS_VALUE_FC": 0,
       "GROSS_VALUE_CC": 0,
       "REMARKS": this.mouldMakingForm.value.narration || "",
-      "SYSTEM_DATE": "2023-10-16T10:38:33.131Z",
+      "SYSTEM_DATE": "2023-10-19T08:59:58.514Z",
       "CONSIGNMENTID": 0,
       "ROUND_VALUE_CC": 0,
       "NAVSEQNO": 0,
       "SUPINVNO": "string",
-      "SUPINVDATE": "2023-10-16T10:38:33.131Z",
-      "PAYMENTREMARKS": "string",
-      "HHACCOUNT_HEAD": "string",
-      "D2DTRANSFER": "s",
-      "BASE_CURRENCY": "stri",
+      "SUPINVDATE": "2023-10-19T08:59:58.514Z",
+      "PAYMENTREMARKS": "",
+      "HHACCOUNT_HEAD": "",
+      "D2DTRANSFER": "",
+      "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
-      "POSTDATE": "string",
+      "POSTDATE": "",
       "PRINT_COUNT": 0,
-      "DOC_REF": "string",
-      "PICTURE_NAME": "string",
+      "DOC_REF": "",
+      "PICTURE_NAME": "",
       "FROM_WORKER_CODE":this.mouldMakingForm.value.fromworker || "",
       "TO_WORKER_CODE": this.mouldMakingForm.value.toworker || "",
       "FROM_PROCESS_CODE":this.mouldMakingForm.value.fromprocess || "",
       "TO_PROCESS_CODE": this.mouldMakingForm.value.toprocess || "",
       "PARTS": 0,
+  "Details": [
+    {
       "UNIQUEID": 0,
       "SRNO": 0,
-      "STOCK_CODE": "string",
+      "STOCK_CODE": "",
       "PCS": 0,
       "GRWT": 0,
       "RATEFC": 0,
@@ -227,18 +242,21 @@ mouldCodeSelected(e:any){
       "DISCAMTCC": 0,
       "NETVALUEFC": 0,
       "NETVALUECC": 0,
-      "LOCTYPE_CODE": this.mouldMakingForm.value.location || "",
-      "STOCK_DOCDESC": "string",
-      "DETDIVISION": "s",
-      "DIVISION_CODE": "s",
-      "DETLINEREMARKS": "string",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
+      "LOCTYPE_CODE": "",
+      "STOCK_DOCDESC": "",
+      "DETDIVISION": "",
+      "BASE_CONV_RATE": 0,
+      "DIVISION_CODE": "",
+      "POSTDATE": "",
+      "DETLINEREMARKS": "",
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
       "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
+      "DT_YEARMONTH": "",
       "TOTAL_AMOUNTCC": 0,
-      "TOTAL_AMOUNTFC": 0,
-      "approvalDetails": this.tableData,  
+      "TOTAL_AMOUNTFC": 0
+    }
+  ]
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -295,31 +313,31 @@ mouldCodeSelected(e:any){
       return
     }
   
-    let API = 'JobMouldHeaderDJ/UpdateJobMouldHeaderDJ/'+ this.mouldMakingForm.value.branchCode + this.mouldMakingForm.value.voctype + this.mouldMakingForm.value.vocno + this.mouldMakingForm.value.vocdate
+    let API = 'JobMouldHeaderDJ/UpdateJobMouldHeaderDJ/'+ this.mouldMakingForm.value.branchCode + this.mouldMakingForm.value.voctype + this.mouldMakingForm.value.vocno + this.mouldMakingForm.value.yearMonth
     let postData = {
       "MID": 0,
-      "BRANCH_CODE":  this.branchCode,
-      "VOCTYPE":this.mouldMakingForm.value.voctype || "",
+     "BRANCH_CODE":  this.branchCode,
+     "VOCTYPE":this.mouldMakingForm.value.voctype || "",
       "VOCNO": 0,
       "VOCDATE": this.mouldMakingForm.value.vocdate || "",
-      "YEARMONTH": "string",
+      "YEARMONTH": this.yearMonth,
       "JOB_NUMBER": this.mouldMakingForm.value.jobno || "",
       "JOB_DESCRIPTION": this.mouldMakingForm.value.job || "",
       "DESIGN_CODE": this.mouldMakingForm.value.designcode || "",
       "MOULD_NUMBER": this.mouldMakingForm.value.mouldno || "",
-      "MOULD_LOCATION": "string",
+      "MOULD_LOCATION": this.mouldMakingForm.value.location || "",
       "MOULD_TYPE":this.mouldMakingForm.value.mouldtype || "",
-      "UNQ_JOB_ID": "string",
-      "UNQ_DESIGN_ID": "string",
+      "UNQ_JOB_ID": "",
+      "UNQ_DESIGN_ID": "",
       "JOB_SO_MID": 0,
       "JOB_SO_NUMBER": 0,
       "PARTYCODE":this.mouldMakingForm.value.noofparts || "",
-      "PARTY_CURRENCY": "stri",
+      "PARTY_CURRENCY": "",
       "PARTY_CURR_RATE": 0,
       "ITEM_CURRENCY": this.mouldMakingForm.value.itemcurrency || "",
       "ITEM_CURR_RATE": this.mouldMakingForm.value.itemcurrencyrate || "",
-      "VALUE_DATE": "2023-10-16T10:38:33.131Z",
-      "SALESPERSON_CODE": "string",
+      "VALUE_DATE": "2023-10-19T08:59:58.514Z",
+      "SALESPERSON_CODE": "",
       "TOTAL_PCS": 0,
       "TOTAL_GRWT": 0,
       "TOTAL_DISCAMTFC": 0,
@@ -335,31 +353,33 @@ mouldCodeSelected(e:any){
       "GROSS_VALUE_FC": 0,
       "GROSS_VALUE_CC": 0,
       "REMARKS": this.mouldMakingForm.value.narration || "",
-      "SYSTEM_DATE": "2023-10-16T10:38:33.131Z",
+      "SYSTEM_DATE": "2023-10-19T08:59:58.514Z",
       "CONSIGNMENTID": 0,
       "ROUND_VALUE_CC": 0,
       "NAVSEQNO": 0,
-      "SUPINVNO": "string",
-      "SUPINVDATE": "2023-10-16T10:38:33.131Z",
-      "PAYMENTREMARKS": "string",
-      "HHACCOUNT_HEAD": "string",
+      "SUPINVNO": "",
+      "SUPINVDATE": "2023-10-19T08:59:58.514Z",
+      "PAYMENTREMARKS": "",
+      "HHACCOUNT_HEAD": "",
       "D2DTRANSFER": "s",
-      "BASE_CURRENCY": "stri",
+      "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
-      "POSTDATE": "string",
+      "POSTDATE": "",
       "PRINT_COUNT": 0,
-      "DOC_REF": "string",
-      "PICTURE_NAME": "string",
+      "DOC_REF": "",
+      "PICTURE_NAME": "",
       "FROM_WORKER_CODE":this.mouldMakingForm.value.fromworker || "",
       "TO_WORKER_CODE": this.mouldMakingForm.value.toworker || "",
       "FROM_PROCESS_CODE":this.mouldMakingForm.value.fromprocess || "",
       "TO_PROCESS_CODE": this.mouldMakingForm.value.toprocess || "",
       "PARTS": 0,
+  "Details": [
+    {
       "UNIQUEID": 0,
       "SRNO": 0,
-      "STOCK_CODE": "string",
+      "STOCK_CODE": "",
       "PCS": 0,
       "GRWT": 0,
       "RATEFC": 0,
@@ -371,18 +391,21 @@ mouldCodeSelected(e:any){
       "DISCAMTCC": 0,
       "NETVALUEFC": 0,
       "NETVALUECC": 0,
-      "LOCTYPE_CODE": this.mouldMakingForm.value.location || "",
-      "STOCK_DOCDESC": "string",
+      "LOCTYPE_CODE": "",
+      "STOCK_DOCDESC": "",
       "DETDIVISION": "s",
-      "DIVISION_CODE": "s",
-      "DETLINEREMARKS": "string",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
+      "BASE_CONV_RATE": 0,
+      "DIVISION_CODE": "",
+      "POSTDATE": "",
+      "DETLINEREMARKS": "",
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
       "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
+      "DT_YEARMONTH": "",
       "TOTAL_AMOUNTCC": 0,
-      "TOTAL_AMOUNTFC": 0, 
-      "approvalDetails": this.tableData,  
+      "TOTAL_AMOUNTFC": 0
+    }
+  ]
     }
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -434,7 +457,7 @@ mouldCodeSelected(e:any){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobMouldHeaderDJ/DeleteJobMouldHeaderDJ/' + this.mouldMakingForm.value.branchCode + this.mouldMakingForm.value.voctype + this.mouldMakingForm.value.vocno + this.mouldMakingForm.value.vocdate
+        let API = 'JobMouldHeaderDJ/DeleteJobMouldHeaderDJ/' + this.mouldMakingForm.value.branchCode + this.mouldMakingForm.value.voctype + this.mouldMakingForm.value.vocno + this.mouldMakingForm.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

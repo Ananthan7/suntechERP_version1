@@ -24,6 +24,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
+  yearMonth?: String;
   private subscriptions: Subscription[] = [];
     user: MasterSearchModel = {
     PAGENO: 1,
@@ -65,6 +66,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
   }
 
   close(data?: any) {
@@ -142,153 +144,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   });
 
 
-  adddata() {
-    let length = this.tableData.length;
-    let srno = length + 1;
-    let data =  {
-      "MID": 0,
-      "BRANCH_CODE": "string",
-      "VOCTYPE": "str",
-      "VOCNO": 0,
-      "VOCDATE": "2023-10-14T08:59:56.964Z",
-      "YEARMONTH": "string",
-      "SMAN": "string",
-      "LOSS_ACCODE": "string",
-      "CURRENCY_CODE": "stri",
-      "CC_RATE": 0,
-      "MET_RATE_TYPE": "string",
-      "METAL_RATE": 0,
-      "NAVSEQNO": 0,
-      "TOTALPCS": 0,
-      "TOTAL_LAB_CHARGECC": 0,
-      "TOTAL_LAB_CHARGEFC": 0,
-      "TOTAL_COST_OLDCC": 0,
-      "TOTAL_COST_OLDFC": 0,
-      "TOTAL_COST_NEWCC": 0,
-      "TOTAL_COST_NEWFC": 0,
-      "REMARKS": "string",
-      "PRINT_COUNT": 0,
-      "POSTDATE": "string",
-      "AUTOPOSTING": true,
-      "HTUSERNAME": "string",
-      "REMARKS_DETAIL": "string",
-      "GENSEQNO": 0,
-      "UNIQUEID": 0,
-      "SRNO": 0,
-      "STOCK_CODE": "string",
-      "DESCRIPTION": "string",
-      "PCS": 0,
-      "COSTFC": 0,
-      "COSTCC": 0,
-      "COSTFCNEW": 0,
-      "COSTCCNEW": 0,
-      "METALWT": 0,
-      "PUREWT": 0,
-      "STONEWT": 0,
-      "GROSSWT": 0,
-      "METAL_AMTFC": 0,
-      "METAL_AMTCC": 0,
-      "STONE_AMTFC": 0,
-      "STONE_AMTCC": 0,
-      "METALWT_NEW": 0,
-      "PUREWT_NEW": 0,
-      "STONEWT_NEW": 0,
-      "GROSSWT_NEW": 0,
-      "METAL_AMTFCNEW": 0,
-      "METAL_AMTCCNEW": 0,
-      "STONE_AMTFCNEW": 0,
-      "STONE_AMTCCNEW": 0,
-      "SET_ACCODE": "string",
-      "SET_AMTFC": 0,
-      "SET_AMTCC": 0,
-      "SET_AMTFCNEW": 0,
-      "SET_AMTCCNEW": 0,
-      "POL_ACCODE": "string",
-      "POL_AMTFC": 0,
-      "POL_AMTCC": 0,
-      "POL_AMTFCNEW": 0,
-      "POL_AMTCCNEW": 0,
-      "RHO_ACCODE": "string",
-      "RHO_AMTFC": 0,
-      "RHO_AMTCC": 0,
-      "RHO_AMTFCNEW": 0,
-      "RHO_AMTCCNEW": 0,
-      "MKG_ACCODE": "string",
-      "MKG_AMTFC": 0,
-      "MKG_AMTCC": 0,
-      "MKG_AMTFCNEW": 0,
-      "MKG_AMTCCNEW": 0,
-      "MIS_ACCODE": "string",
-      "MIS_AMTFC": 0,
-      "MIS_AMTCC": 0,
-      "MIS_AMTFCNEW": 0,
-      "MIS_AMTCCNEW": 0,
-      "TOTALLAB_AMTFC": 0,
-      "TOTALLAB_AMTCC": 0,
-      "TOTALLAB_AMTFCNEW": 0,
-      "TOTALLAB_AMTCCNEW": 0,
-      "MFGVOC_REF": "string",
-      "MFGVOC_DATE": "2023-10-14T08:59:56.964Z",
-      "COST_CODE": "string",
-      "STOCK_FCCOST": 0,
-      "STOCK_LCCOST": 0,
-      "PRICE1PER": "string",
-      "PRICE2PER": "string",
-      "PRICE3PER": "string",
-      "PRICE4PER": "string",
-      "PRICE5PER": "string",
-      "PRICE1FC": 0,
-      "PRICE1LC": 0,
-      "PRICE2FC": 0,
-      "PRICE2LC": 0,
-      "PRICE3FC": 0,
-      "PRICE3LC": 0,
-      "PRICE4FC": 0,
-      "PRICE4LC": 0,
-      "PRICE5FC": 0,
-      "PRICE5LC": 0,
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "PLAT_ACCODE": "string",
-      "CERT_ACCODE": "string",
-      "PLAT_CHARGESFC": 0,
-      "PLAT_CHARGESCC": 0,
-      "CERT_CHARGESFC": 0,
-      "CERT_CHARGESCC": 0,
-      "PLAT_CHARGESFCNEW": 0,
-      "PLAT_CHARGESCCNEW": 0,
-      "CERT_CHARGESFCNEW": 0,
-      "CERT_CHARGESCCNEW": 0,
-      "COLOR": "string",
-      "TAG_LINES": "string",
-      "REFMID": 0,
-      "MAINCODE": "string",
-      "SLNO": 0,
-      "METALSTONE": "s",
-      "DIVISION": "s",
-      "DET_STOCK_CODE": "string",
-      "RET_STOCK_CODE": "string",
-      "KARAT_CODE": "stri",
-      "PURITY": 0,
-      "WEIGHT": 0,
-      "RATEFC": 0,
-      "RATECC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTCC": 0,
-      "REMOVED": 0,
-      "NEWENTRY": 0,
-      "LOC_TYPE": "string",
-      "SHAPE": "string",
-      "SIEVE": "string",
-      "STONE_TYPE": "string",
-      "CLARITY": "string",
-      "SIZE": "string",
-      "SIEVE_SET": "string"
-    };
-    this.tableData.push(data);
-}
+
 removedata(){
   this.tableData.pop();
 }
@@ -305,33 +161,6 @@ formSubmit(){
 
   let API = 'DiamondJewelAlteration/InsertDiamondJewelAlteration'
   let postData = {
-    "MID": 0,
-    "BRANCH_CODE": "string",
-    "VOCTYPE": "str",
-    "VOCNO": 0,
-    "VOCDATE": "2023-10-14T08:59:56.964Z",
-    "YEARMONTH": "string",
-    "SMAN": "string",
-    "LOSS_ACCODE": "string",
-    "CURRENCY_CODE": "stri",
-    "CC_RATE": 0,
-    "MET_RATE_TYPE": "string",
-    "METAL_RATE": 0,
-    "NAVSEQNO": 0,
-    "TOTALPCS": 0,
-    "TOTAL_LAB_CHARGECC": 0,
-    "TOTAL_LAB_CHARGEFC": 0,
-    "TOTAL_COST_OLDCC":0,
-    "TOTAL_COST_OLDFC": 0,
-    "TOTAL_COST_NEWCC": 0,
-    "TOTAL_COST_NEWFC": 0,
-    "REMARKS": this.jewelleryaltrationdetailsFrom.value.remarks || "",
-    "PRINT_COUNT": 0,
-    "POSTDATE": "string",
-    "AUTOPOSTING": true,
-    "HTUSERNAME": "string",
-    "REMARKS_DETAIL": "string",
-    "GENSEQNO": 0,
     "UNIQUEID": 0,
     "SRNO": 0,
     "STOCK_CODE": this.jewelleryaltrationdetailsFrom.value.stockcode || "",
@@ -387,8 +216,10 @@ formSubmit(){
     "TOTALLAB_AMTFCNEW": 0,
     "TOTALLAB_AMTCCNEW": 0,
     "MFGVOC_REF": "string",
-    "MFGVOC_DATE": "2023-10-14T08:59:56.964Z",
+    "MFGVOC_DATE": "2023-10-19T10:00:12.767Z",
+    "LOSS_ACCODE": "string",
     "COST_CODE": this.jewelleryaltrationdetailsFrom.value.costcode || "",
+    "REMARKS_DETAIL": "string",
     "STOCK_FCCOST": 0,
     "STOCK_LCCOST": 0,
     "PRICE1PER": this.jewelleryaltrationdetailsFrom.value.price1PER || "",
@@ -406,10 +237,12 @@ formSubmit(){
     "PRICE4LC": this.jewelleryaltrationdetailsFrom.value.price4LC || "",
     "PRICE5FC": this.jewelleryaltrationdetailsFrom.value.price5FC || "",
     "PRICE5LC": this.jewelleryaltrationdetailsFrom.value.price5LC || "",
-    "DT_BRANCH_CODE": "string",
+    "CURRENCY_CODE": "stri",
+    "CC_RATE": 0,
+    "DT_BRANCH_CODE": this.branchCode,
     "DT_VOCTYPE": "str",
     "DT_VOCNO": 0,
-    "DT_YEARMONTH": "string",
+    "DT_YEARMONTH": this.yearMonth,
     "PLAT_ACCODE":this.jewelleryaltrationdetailsFrom.value.platecharges || "",
     "CERT_ACCODE": this.jewelleryaltrationdetailsFrom.value.certcharges || "",
     "PLAT_CHARGESFC": this.jewelleryaltrationdetailsFrom.value.platechargesFC || "",
@@ -421,7 +254,9 @@ formSubmit(){
     "CERT_CHARGESFCNEW": 0,
     "CERT_CHARGESCCNEW": 0,
     "COLOR": this.jewelleryaltrationdetailsFrom.value.metalcolor || "",
-    "TAG_LINES": "string",
+  "TAG_LINES": "string",
+"DetailComponents": [
+  {
     "REFMID": this.jewelleryaltrationdetailsFrom.value.refvoc || "",
     "MAINCODE": "string",
     "SLNO": 0,
@@ -431,7 +266,9 @@ formSubmit(){
     "RET_STOCK_CODE": "string",
     "KARAT_CODE": this.jewelleryaltrationdetailsFrom.value.karat || "",
     "PURITY": 0,
+    "PCS": 0,
     "WEIGHT": 0,
+    "PUREWT": 0,
     "RATEFC": 0,
     "RATECC": 0,
     "AMOUNTFC": 0,
@@ -439,13 +276,15 @@ formSubmit(){
     "REMOVED": 0,
     "NEWENTRY": 0,
     "LOC_TYPE": "string",
+    "COLOR": "string",
     "SHAPE": "string",
     "SIEVE": "string",
     "STONE_TYPE": "string",
     "CLARITY": "string",
     "SIZE": "string",
-    "SIEVE_SET": "string",
-    "approvalDetails": this.tableData,  
+    "SIEVE_SET": "string"
+  }
+]
   }
 
   let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -546,35 +385,8 @@ update(){
     return
   }
 
-  let API = 'DiamondJewelAlteration/UpdateDiamondJewelAlteration/'+ this.jewelleryaltrationdetailsFrom.value.branchCode  + this.jewelleryaltrationdetailsFrom.value.voctype + this.jewelleryaltrationdetailsFrom.value.vocno + this.jewelleryaltrationdetailsFrom.value.vocdate
+  let API = 'DiamondJewelAlteration/UpdateDiamondJewelAlteration/'+ this.jewelleryaltrationdetailsFrom.value.branchCode  + this.jewelleryaltrationdetailsFrom.value.voctype + this.jewelleryaltrationdetailsFrom.value.vocno + this.jewelleryaltrationdetailsFrom.value.yearMonth
   let postData = {
-    "MID": 0,
-    "BRANCH_CODE": "string",
-    "VOCTYPE": "str",
-    "VOCNO": 0,
-    "VOCDATE": "2023-10-14T08:59:56.964Z",
-    "YEARMONTH": "string",
-    "SMAN": "string",
-    "LOSS_ACCODE": "string",
-    "CURRENCY_CODE": "stri",
-    "CC_RATE": 0,
-    "MET_RATE_TYPE": "string",
-    "METAL_RATE": 0,
-    "NAVSEQNO": 0,
-    "TOTALPCS": 0,
-    "TOTAL_LAB_CHARGECC": 0,
-    "TOTAL_LAB_CHARGEFC": 0,
-    "TOTAL_COST_OLDCC":0,
-    "TOTAL_COST_OLDFC": 0,
-    "TOTAL_COST_NEWCC": 0,
-    "TOTAL_COST_NEWFC": 0,
-    "REMARKS": this.jewelleryaltrationdetailsFrom.value.remarks || "",
-    "PRINT_COUNT": 0,
-    "POSTDATE": "string",
-    "AUTOPOSTING": true,
-    "HTUSERNAME": "string",
-    "REMARKS_DETAIL": "string",
-    "GENSEQNO": 0,
     "UNIQUEID": 0,
     "SRNO": 0,
     "STOCK_CODE": this.jewelleryaltrationdetailsFrom.value.stockcode || "",
@@ -630,8 +442,10 @@ update(){
     "TOTALLAB_AMTFCNEW": 0,
     "TOTALLAB_AMTCCNEW": 0,
     "MFGVOC_REF": "string",
-    "MFGVOC_DATE": "2023-10-14T08:59:56.964Z",
+    "MFGVOC_DATE": "2023-10-19T10:00:12.767Z",
+    "LOSS_ACCODE": "string",
     "COST_CODE": this.jewelleryaltrationdetailsFrom.value.costcode || "",
+    "REMARKS_DETAIL": "string",
     "STOCK_FCCOST": 0,
     "STOCK_LCCOST": 0,
     "PRICE1PER": this.jewelleryaltrationdetailsFrom.value.price1PER || "",
@@ -649,10 +463,12 @@ update(){
     "PRICE4LC": this.jewelleryaltrationdetailsFrom.value.price4LC || "",
     "PRICE5FC": this.jewelleryaltrationdetailsFrom.value.price5FC || "",
     "PRICE5LC": this.jewelleryaltrationdetailsFrom.value.price5LC || "",
-    "DT_BRANCH_CODE": "string",
+    "CURRENCY_CODE": "stri",
+    "CC_RATE": 0,
+    "DT_BRANCH_CODE": this.branchCode,
     "DT_VOCTYPE": "str",
     "DT_VOCNO": 0,
-    "DT_YEARMONTH": "string",
+    "DT_YEARMONTH":  this.yearMonth,
     "PLAT_ACCODE":this.jewelleryaltrationdetailsFrom.value.platecharges || "",
     "CERT_ACCODE": this.jewelleryaltrationdetailsFrom.value.certcharges || "",
     "PLAT_CHARGESFC": this.jewelleryaltrationdetailsFrom.value.platechargesFC || "",
@@ -664,7 +480,9 @@ update(){
     "CERT_CHARGESFCNEW": 0,
     "CERT_CHARGESCCNEW": 0,
     "COLOR": this.jewelleryaltrationdetailsFrom.value.metalcolor || "",
-    "TAG_LINES": "string",
+  "TAG_LINES": "string",
+"DetailComponents": [
+  {
     "REFMID": this.jewelleryaltrationdetailsFrom.value.refvoc || "",
     "MAINCODE": "string",
     "SLNO": 0,
@@ -674,7 +492,9 @@ update(){
     "RET_STOCK_CODE": "string",
     "KARAT_CODE": this.jewelleryaltrationdetailsFrom.value.karat || "",
     "PURITY": 0,
+    "PCS": 0,
     "WEIGHT": 0,
+    "PUREWT": 0,
     "RATEFC": 0,
     "RATECC": 0,
     "AMOUNTFC": 0,
@@ -682,13 +502,15 @@ update(){
     "REMOVED": 0,
     "NEWENTRY": 0,
     "LOC_TYPE": "string",
+    "COLOR": "string",
     "SHAPE": "string",
     "SIEVE": "string",
     "STONE_TYPE": "string",
     "CLARITY": "string",
     "SIZE": "string",
-    "SIEVE_SET": "string",
-    "approvalDetails": this.tableData,  
+    "SIEVE_SET": "string"
+  }
+]
   }
 
   let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -740,7 +562,7 @@ deleteRecord() {
     confirmButtonText: 'Yes, delete!'
   }).then((result) => {
     if (result.isConfirmed) {
-      let API = 'DiamondJewelAlteration/DeleteDiamondJewelAlteration/' + this.jewelleryaltrationdetailsFrom.value.branchCode  + this.jewelleryaltrationdetailsFrom.value.voctype + this.jewelleryaltrationdetailsFrom.value.vocno + this.jewelleryaltrationdetailsFrom.value.vocdate
+      let API = 'DiamondJewelAlteration/DeleteDiamondJewelAlteration/' + this.jewelleryaltrationdetailsFrom.value.branchCode  + this.jewelleryaltrationdetailsFrom.value.voctype + this.jewelleryaltrationdetailsFrom.value.vocno + this.jewelleryaltrationdetailsFrom.value.yearMonth
       let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
         .subscribe((result) => {
           if (result) {
