@@ -8,7 +8,7 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="row">
     <div class="col-md-12">
-        <form  [formGroup]="processTransferForm">
+        <form  [formGroup]="processTransferdetailsForm">
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="col-md-6">
@@ -34,12 +34,12 @@
                           <label for="inputPassword" class="col-sm-3 col-form-label">Job No :</label>
                           <div class="col-sm-3">
                             <mat-form-field style="width: 100%;">
-                              <input type="text" matInput />
+                              <input type="text" matInput formControlName="jobno" />
                             </mat-form-field>
                           </div>
                           <div class="col-sm-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput/>
+                                <input type="text" matInput formControlName="jobdes"/>
                             </mat-form-field>
                           </div>
                           
@@ -48,12 +48,12 @@
                           <label for="inputPassword" class="col-sm-3 col-form-label">Sub Job No : </label>
                           <div class="col-sm-3">
                             <mat-form-field style="width: 100%;">
-                              <input type="text" matInput />
+                              <input type="text" matInput formControlName="subjobno" />
                             </mat-form-field>
                           </div>
                           <div class="col-sm-3">
                             <mat-form-field style="width: 100%;">
-                              <input type="text" matInput />
+                              <input type="text" matInput formControlName="subjobno" />
                             </mat-form-field>
                           </div><br>
                           <label for="inputPassword" class="col-sm-3 col-form-label"><b>Issue Ref # </b></label>
@@ -65,7 +65,7 @@
                           <label for="inputPassword" class="col-sm-4 col-form-label">Approved By :</label>
                           <div class="col-sm-6">
                             <mat-form-field style="width: 100%;">
-                              <input type="text" matInput />
+                              <input type="text" matInput formControlName="approvedby" />
                             </mat-form-field>
                           </div>
                         </div>
@@ -73,7 +73,7 @@
                           <label for="inputPassword" class="col-sm-4 col-form-label">Approved Date :</label>
                           <div class="col-sm-6">
                             <mat-form-field style="width: 100%;">
-                              <input type="date" matInput />
+                              <input type="date" matInput formControlName="approveddate" />
                             </mat-form-field>
                           </div>
                         </div>
@@ -268,7 +268,7 @@
                         <label for="input" class="col-sm-4 col-form-label">Start Date</label>
                         <div class="col-sm-7">
                           <mat-form-field style="width: 100%;">
-                            <input type="date" matInput />
+                            <input type="date" matInput formControlName="startdate" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -276,7 +276,7 @@
                         <label for="input" class="col-sm-4 col-form-label">End Date</label>
                         <div class="col-sm-7">
                           <mat-form-field style="width: 100%;">
-                            <input type="date" matInput />
+                            <input type="date" matInput formControlName="enddate" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -287,7 +287,7 @@
                         <div class="col-sm-7">
                           <mat-form-field>
                             <mat-select>
-                                  <input type="time" matInput />
+                                  <input type="time" matInput formControlName="stdtime" />
                             </mat-select>
                           </mat-form-field>
                         </div>
@@ -316,12 +316,12 @@
                         <label for="input" class="col-sm-4 col-form-label">Variance %</label>
                         <div class="col-sm-4">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="variance" />
                           </mat-form-field>
                         </div>
                         <div class="col-sm-4">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="variance" />
                           </mat-form-field>
                         </div>
                       </div>

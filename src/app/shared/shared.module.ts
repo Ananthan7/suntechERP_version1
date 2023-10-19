@@ -52,9 +52,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MasterFindIconComponent } from './common/master-find-icon/master-find-icon.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { MasterSearchComponent } from './common/master-search/master-search.component';
-import { AppDecimalInputDirective } from './directives/app-decimal-input.directive';
-import { NumericInputDirective } from './directives/numeric-input.directive';
-import { DecimalInputDirective } from './directives/decimal-input.directive';
+import { NumericInputDirective } from './directives/number-only.directive';
+import { DecimalInputDirective } from './directives/number-with-decimal.directive';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatTableModule} from '@angular/material/table';
 import { DateValidationDirective } from './directives/date-validation.directive';
@@ -66,6 +65,9 @@ import { NoEmptySpaceDirective } from './directives/no-empty-space.directive';
 import { MasterGridComponent } from './common/master-grid/master-grid.component';
 import { MenuButtonsComponent } from './common/menu-buttons/menu-buttons.component';
 import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.directive';
+import { AmountDecimalDirective } from './directives/format-amount-decimal.directive';
+import { MetalDecimalDirective } from './directives/format-metal-decimal.directive';
+import { StoneDecimalDirective } from './directives/format-stone-decimal.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -80,7 +82,6 @@ import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.direc
     CardboxComponent,
     MasterFindIconComponent,
     MasterSearchComponent,
-    AppDecimalInputDirective,
     NumericInputDirective,
     DecimalInputDirective,
     DateValidationDirective,
@@ -88,7 +89,10 @@ import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.direc
     NoEmptySpaceDirective,
     MasterGridComponent,
     MenuButtonsComponent,
-    AllowLeadingZeroDirective
+    AllowLeadingZeroDirective,
+    AmountDecimalDirective,
+    MetalDecimalDirective,
+    StoneDecimalDirective
   ],
   imports: [
     CommonModule,
@@ -146,12 +150,14 @@ import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.direc
     //pipes && Directives exports
     NumberFormatterPipe,
     CamelCasePipe,
-    AppDecimalInputDirective,
     NumericInputDirective,
     DateValidationDirective,
     FocusOnLoadDirective,
     NoEmptySpaceDirective,
     AllowLeadingZeroDirective,
+    AmountDecimalDirective,
+    MetalDecimalDirective,
+    StoneDecimalDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,

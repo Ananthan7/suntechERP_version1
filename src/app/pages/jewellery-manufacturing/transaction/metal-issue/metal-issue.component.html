@@ -49,8 +49,15 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
                                         Date:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="date" matInput  formControlName="vocDate"/>
+                                        <mat-form-field style="width: 150px">
+                                            <!-- <mat-label>Date Of Birth</mat-label> -->
+                                            <input matInput DateValidation                    
+                                                [matDatepicker]="dob"
+                                                formControlName="voucherDate"
+                                                placeholder="DD/MM/YYYY" />
+                                            <mat-datepicker-toggle matSuffix
+                                                [for]="dob"></mat-datepicker-toggle>
+                                            <mat-datepicker #dob></mat-datepicker>
                                         </mat-form-field>
                                     </div>
                                 </div>
