@@ -31,6 +31,10 @@ export class AddNewdetailComponent implements OnInit {
   isViewBOMTab: boolean = true;
   isViewSummaryTab: boolean = true;
   isViewDesignTab: boolean = false;
+  viewFlag: any = {
+    ItemRateFC: true,
+    AmountValueFC: true
+  };
 
   BOMDetailsArray: any[] = [];
   groupedBOMDetails: any[] = [];
@@ -111,6 +115,20 @@ export class AddNewdetailComponent implements OnInit {
     THICKNESS: ['', [Validators.required]],
     ENGRAVING_TEXT: ['', [Validators.required]],
     ENGRAVING_FONT: ['', [Validators.required]],
+    SCREW_FIELD: ['', [Validators.required]],
+    SETTING: ['', [Validators.required]],
+    POLISHING: ['', [Validators.required]],
+    RHODIUM: ['', [Validators.required]],
+    LABOUR: ['', [Validators.required]],
+    Misc: ['', [Validators.required]],
+    Total_Labour: ['', [Validators.required]],
+    Wastage: ['', [Validators.required]],
+    WastagePercentage: ['', [Validators.required]],
+    MarkupPercentage: ['', [Validators.required]],
+    DutyPercentage: ['', [Validators.required]],
+    MarginPercentage: ['', [Validators.required]],
+    LoadingPercentage: ['', [Validators.required]],
+    DiscountPercentage: ['', [Validators.required]],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -142,9 +160,6 @@ export class AddNewdetailComponent implements OnInit {
       this.firstTableWidth = 700
       this.secondTableWidth = 350
     }
-    // Do something with the screen size
-    console.log('Screen width:', screenWidth);
-    console.log('Screen height:', screenHeight);
   }
   /**USE: first setup if already added */
   setInitialValues() {
@@ -370,25 +385,92 @@ export class AddNewdetailComponent implements OnInit {
 
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
-
+    //todo
+    let txtCharge2FC: number = 0;
+    let txtCharge3FC: number = 0;
+    let txtCharge5FC: number = 0;
+    console.log(txtCharge4FC,'txtCharge4FC');
+    console.log(txtCharge1FC,'txtCharge1FC');
+    
     if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
     if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
     if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
 
+    // labourchargetype checking
     if (this.intLabType == 4) {
       //TODO labour details grid calculation
     } else {
       if (this.intLabType == 2) {
         //  dblTotLabour = this.commonService.emptyToZero(txtTotalLabour);
       } else {
-        // dblTotLabour = objSqlObjectTrans.Empty2zero(txtCharge1FC.Text.ToString()) + objSqlObjectTrans.Empty2zero(txtCharge2FC.Text.ToString());
-        // dblTotLabour += objSqlObjectTrans.Empty2zero(txtCharge3FC.Text.ToString()) + objSqlObjectTrans.Empty2zero(txtCharge4FC.Text.ToString()) + objSqlObjectTrans.Empty2zero(txtCharge5FC.Text.ToString());
-        // txtTotalLabour.Text = dblTotLabour.ToString();
+        dblTotLabour = txtCharge1FC + txtCharge2FC;
+        dblTotLabour += txtCharge3FC + txtCharge4FC + txtCharge5FC;
+        this.summaryDetailForm.controls.Total_Labour.setValue(dblTotLabour)
       }
     }
+    // if (this.content.FixedMetal && this.content.FixedMetal == true) dblAmount -= dblMetal_Amt;
+    dblTotRate = this.commonService.decimalQuantityFormat(dblAmount + dblTotLabour,'AMOUNT');
+    this.diamondSalesDetailForm.controls.RATEFC.setValue(dblTotRate)
+    this.diamondSalesDetailForm.controls.AMOUNT.setValue(this.diamondSalesDetailForm.value.PCS * dblTotRate)
 
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarkupPercentage > 0)) {
+      dblMarkup_Amt = (dblDia_Amt * this.summaryDetailForm.value.MarkupPercentage) / 100;
+      dblTotRate += dblMarkup_Amt;
+    }
+    
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.WastagePercentage) > 0 && dblWastageAmt == 0) {
+      dblGold_Loss_Amt = (dblMetal_Amt * this.summaryDetailForm.value.WastagePercentage) / 100;
+      dblTotRate += dblGold_Loss_Amt;
+    }
+    // else {
+    //   dblGold_Loss_Amt = dblWastageAmt;
+    //   dblTotRate += dblGold_Loss_Amt;
+    // }
+
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.DutyPercentage > 0)) {
+      dblDuty_Amt = (dblTotRate * this.summaryDetailForm.value.DutyPercentage) / 100;
+      dblTotRate += dblDuty_Amt;
+    }
+
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarginPercentage > 0)) {
+      dblMargin_Amt = (dblTotRate * this.summaryDetailForm.value.MarginPercentage) / 100;
+      dblTotRate += dblMargin_Amt;
+    }
+
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.LoadingPercentage > 0)) {
+      dblLoad_Amt = (dblTotRate * this.summaryDetailForm.value.LoadingPercentage) / 100;
+      dblTotRate += dblLoad_Amt;
+    }
+
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.LoadingPercentage > 0)) {
+      dblDisc_Amt = (dblTotRate * this.summaryDetailForm.value.LoadingPercentage) / 100;
+      dblTotRate -= dblDisc_Amt;
+    }
+
+    // txtMarkup_Amt = dblMarkup_Amt.ToString();
+    // txtGold_loss_Amt = dblGold_Loss_Amt.ToString();
+    // txtDuty_Amt = dblDuty_Amt.ToString();
+    // txtMargin_Amt = dblMargin_Amt.ToString();
+    // txtLoad_Amt = dblLoad_Amt.ToString();
+    // txtDISCAMTFC = dblDisc_Amt.ToString();
+    let txtItemRateFC = dblTotRate;
+
+    console.log(txtItemRateFC,'final');
+    
+    this.diamondSalesDetailForm.controls.RATEFC.setValue(txtItemRateFC)
+    let txtValueFC = (this.diamondSalesDetailForm.value.PCS * dblTotRate);
+    this.diamondSalesDetailForm.controls.AMOUNT.setValue(txtValueFC)
+
+    if (dblTotRate > 0) {
+      this.viewFlag.ItemRateFC = false;
+      this.viewFlag.AmountValueFC = false;
+    }
   }
-
+  calculateRateAmount(event:any){
+    this.diamondSalesDetailForm.controls.AMOUNT.setValue(
+      this.diamondSalesDetailForm.value.RATEFC * event.target.value
+    )
+  }
   /**USE: final form save */
   formSubmit() {
     let item: any = {}

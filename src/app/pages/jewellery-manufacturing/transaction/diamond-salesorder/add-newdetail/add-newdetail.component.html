@@ -177,6 +177,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
                                             formControlName="PCS"
+                                            (change)="calculateRateAmount($event)"
                                             class="text-right" />
                                     </mat-form-field>
                                 </div>
@@ -197,7 +198,8 @@
                                     class="col-sm-2 col-form-label">Rate</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput
+                                        <input type="text" matInput AmountDecimalInput
+                                            [disabled]="viewFlag.ItemRateFC"
                                             formControlName="RATEFC"
                                             class="text-right" />
                                     </mat-form-field>
@@ -207,7 +209,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" StoneDecimalInput
-                                            matInput
+                                            matInput [disabled]="viewFlag.ItemRateFC"
                                             class="text-right"
                                             formControlName="STONE_WT" />
                                     </mat-form-field>
@@ -218,7 +220,7 @@
                                     class="col-sm-2 col-form-label">Amount</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput
+                                        <input type="text" matInput AmountDecimalInput
                                             formControlName="AMOUNT"
                                             class="text-right" />
                                     </mat-form-field>
@@ -668,17 +670,10 @@
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput
-                                                    formControlName="COLOR" />
+                                                    formControlName="SCREW_FIELD" />
                                             </mat-form-field>
                                         </div>
                                     </div>
-                                    <!-- <div class="row justify-content-center">
-                                        <div class="col-md-8">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput />
-                                            </mat-form-field>
-                                        </div>
-                                    </div> -->
                                 </div>
                                 <div class="col-md-7">
                                     <div class="row">
@@ -695,7 +690,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="SETTING"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -705,7 +700,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="POLISHING"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -715,7 +710,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="RHODIUM"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -725,7 +720,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="LABOUR"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -735,7 +730,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="Misc"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -746,7 +741,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="Total_Labour"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -765,7 +760,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="Wastage"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -775,7 +770,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="MarkupPercentage"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -785,7 +780,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="DutyPercentage"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -795,7 +790,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="MarginPercentage"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -805,7 +800,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="LoadingPercentage"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -816,7 +811,7 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput />
+                                                                matInput formControlName="DiscountPercentage"/>
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
