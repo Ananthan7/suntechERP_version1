@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -16,11 +16,15 @@ import Swal from 'sweetalert2';
 export class WaxProcessComponent implements OnInit {
 
   columnhead:any[] = ['SRNO','Job Number','Design', 'Party','S.O','SO.Date ','Del.Date','Gross.Wt','Metal Wt','Stone.Wt','Ord.Pcs','Issue Pcs'];
-
+  branchCode?: String;
+  yearMonth?: String;
   @Input() content!: any; 
   tableData: any[] = [];
-  userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
+  vocMaxDate = new Date();
+  currentDate = new Date();
+  
+  userName = localStorage.getItem('username');
     user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -33,11 +37,10 @@ export class WaxProcessComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  userDataSelected(value: any) {
-    console.log(value);
-       this.waxprocessFrom.controls.userName.setValue(value.UsersName);
-  }
-  ProcessCodeData: MasterSearchModel = {
+
+
+
+ ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 20,
@@ -49,11 +52,6 @@ export class WaxProcessComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  ProcessCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.processcode.setValue(e.Process_Code);
-
-  }
 
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -67,91 +65,60 @@ export class WaxProcessComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  WorkerCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.workercode.setValue(e.WORKER_CODE);
 
-  }
-
-
+  
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private modalService: NgbModal,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
-    console.log(this.content);
-    if(this.content){
-      this.setFormValues()
-    }
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
   }
 
-  setFormValues() {
-    if(!this.content) return
 
-    this.waxprocessFrom.controls.code.setValue(this.content.VOCTYPE)
-    this.waxprocessFrom.controls.description.setValue(this.content.VOCNO)
-    this.waxprocessFrom.controls.description.setValue(this.content.PROCESS_CODE)
-    this.waxprocessFrom.controls.description.setValue(this.content.WORKER_CODE)
-    this.waxprocessFrom.controls.description.setValue(this.content.userName)
-    this.waxprocessFrom.controls.description.setValue(this.content.REMARKS)
-   
-
-    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/'+this.content.APPR_CODE).subscribe((data) => {
-      if (data.status == 'Success') {
-        this.tableData = data.response.approvalDetails;
-      }
-    });   
-  }
 
   waxprocessFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
     vocdate:[''],
     vocno:[''],
-   processcode:[''],
+    processcode:[''],
     workercode:[''],
+    enteredBy : [''],
     remarks:[''],
   });
 
+  userDataSelected(value: any) {
+    console.log(value);
+       this.waxprocessFrom.controls.enteredBy.setValue(value.UsersName);
+  }
+
+  ProcessCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.processcode.setValue(e.Process_Code);
+
+  }
+
+  
+  WorkerCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.workercode.setValue(e.WORKER_CODE);
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
- 
 
-  adddata() {
-    let length = this.tableData.length;
-    let srno = length + 1;
-    let data =  {
-      "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "SRNO": srno,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "PROCESS_CODE": "string",
-      "WORKER_CODE": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "TOTAL_PCS": 0,
-      "UNQ_DESIGN_ID": "string",
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0
-    };
-    this.tableData.push(data);
-}
-removedata(){
-  this.tableData.pop();
-}
+
+  
+
 formSubmit(){
 
   if(this.content && this.content.FLAG == 'EDIT'){
@@ -165,42 +132,48 @@ formSubmit(){
 
   let API = 'JobWaxIssue/InsertJobWaxIssue'
   let postData = {
-    "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-    "VOCNO": this.waxprocessFrom.value.vocno || "",
-    "PROCESS_CODE": this.waxprocessFrom.value.processcode || "",
-    "WORKER_CODE": this.waxprocessFrom.value.workercode || "",
-    "REMARKS": this.waxprocessFrom.value.remarks || "",
-    "UNIQUEID": 0,
-    "VOCDATE": this.waxprocessFrom.value.vocdate || "",
-    "DT_VOCTYPE": "str",
-    "DT_BRANCH_CODE": "string",
-    "DT_VOCNO": 0,
-    "DT_YEARMONTH": "string",
-    "SRNO": 0,
-    "JOB_NUMBER": "string",
-    "UNQ_JOB_ID": "string",
-    "DESIGN_CODE": "string",
-    "PARTYCODE": "string",
-    "ISSUE_PCS": 0,
-    "TOTAL_PCS": 0,
-    "UNQ_DESIGN_ID": "string",
-    "GROSS_WT": 0,
-    "METAL_WT": 0,
-    "STONE_WT": 0,
-    "MID": 0,
-    "BRANCH_CODE": "string",
-    "YEARMONTH": "string",
-    "DOCTIME": "2023-10-04T10:39:08.652Z",
-    "TOTAL_GROSS_WT": 0,
-    "TOTAL_STONE_WT": 0,
-    "SMAN": "string",
-    "NAVSEQNO": 0,
-    "AUTOPOSTING": true,
-    "POSTDATE": "string",
-    "PRINT_COUNT": 0,
-    "SYSTEM_DATE": "2023-10-04T10:39:08.652Z",
-    "approvalDetails": this.tableData,  
-  }
+  "MID": 0,
+  "VOCTYPE": this.waxprocessFrom.value.voctype,
+  "BRANCH_CODE": this.branchCode,
+  "VOCNO": this.waxprocessFrom.value.vocno,
+  "VOCDATE": this.waxprocessFrom.value.vocdate,
+  "YEARMONTH": this.yearMonth,
+  "DOCTIME": "2023-10-20T10:24:24.037Z",
+  "PROCESS_CODE": this.waxprocessFrom.value.processcode,
+  "WORKER_CODE": this.waxprocessFrom.value.workercode,
+  "TOTAL_PCS": 0,
+  "TOTAL_GROSS_WT": 0,
+  "TOTAL_STONE_WT": 0,
+  "SMAN": this.waxprocessFrom.value.enteredBy,
+  "REMARKS": this.waxprocessFrom.value.remarks,
+  "NAVSEQNO": 0,
+  "AUTOPOSTING": true,
+  "POSTDATE": "",
+  "PRINT_COUNT": 0,
+  "SYSTEM_DATE": "2023-10-20T10:24:24.037Z",
+  "Details": [
+    {
+      "UNIQUEID": 0,
+      "DT_VOCTYPE": "str",
+      "DT_BRANCH_CODE": this.branchCode,
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": this.yearMonth,
+      "SRNO": 0,
+      "JOB_NUMBER": "str",
+      "UNQ_JOB_ID": "",
+      "PROCESS_CODE": "",
+      "WORKER_CODE": "",
+      "DESIGN_CODE": "",
+      "PARTYCODE": "",
+      "ISSUE_PCS": 0,
+      "TOTAL_PCS": 0,
+      "UNQ_DESIGN_ID": "",
+      "GROSS_WT": 0,
+      "METAL_WT": 0,
+      "STONE_WT": 0
+    }
+  ]
+}
 
   let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
     .subscribe((result) => {
