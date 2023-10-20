@@ -25,6 +25,7 @@ export class AddNewdetailComponent implements OnInit {
   currentDate = new Date()
   firstTableWidth: any;
   secondTableWidth: any;
+  headerDetails:any;
   intLabType: number = this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE')
 
   isViewComponentsTab: boolean = false;
@@ -163,7 +164,13 @@ export class AddNewdetailComponent implements OnInit {
   }
   /**USE: first setup if already added */
   setInitialValues() {
-    if (this.content && this.content.length > 0) {
+    if (this.content[0] && this.content[0].headerDetails) {
+      this.headerDetails = this.content[0].headerDetails
+      console.log(this.headerDetails);
+      
+    }
+   
+    if (this.content[0] && this.content[0].BOMDetails) {
       this.BOMDetailsArray = this.content[0].BOMDetails
       // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
       this.groupBomDetailsData({})
@@ -389,8 +396,6 @@ export class AddNewdetailComponent implements OnInit {
     let txtCharge2FC: number = 0;
     let txtCharge3FC: number = 0;
     let txtCharge5FC: number = 0;
-    console.log(txtCharge4FC,'txtCharge4FC');
-    console.log(txtCharge1FC,'txtCharge1FC');
     
     if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
     if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);

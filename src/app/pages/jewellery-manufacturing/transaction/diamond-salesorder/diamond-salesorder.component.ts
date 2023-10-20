@@ -158,6 +158,12 @@ export class DiamondSalesorderComponent implements OnInit {
     this.addNewDetail(allDataSelected)
   }
   addNewDetail(data?: any) {
+    if(data){
+      data[0].headerDetails = this.PartyDetailsOrderForm.value;
+    }else{
+      data = [{headerDetails: this.PartyDetailsOrderForm.value}]
+    }
+
     if(this.PartyDetailsOrderForm.value.PartyCode == ''){
       this.toastr.error('PartyCode not found', '', {
         timeOut: 3000,
