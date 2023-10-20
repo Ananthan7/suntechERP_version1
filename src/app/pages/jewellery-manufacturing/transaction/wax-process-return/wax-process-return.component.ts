@@ -21,6 +21,11 @@ export class WaxProcessReturnComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
+  branchCode?: String;
+  yearMonth?: String;
+  vocMaxDate = new Date();
+  currentDate = new Date();
+  
   private subscriptions: Subscription[] = [];
     user: MasterSearchModel = {
     PAGENO: 1,
@@ -34,10 +39,7 @@ export class WaxProcessReturnComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  userDataSelected(value: any) {
-    console.log(value);
-       this.waxprocessFrom.controls.userName.setValue(value.UsersName);
-  }
+
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -50,11 +52,7 @@ export class WaxProcessReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  ProcessCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.processcode.setValue(e.Process_Code);
-
-  }
+ 
 
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -68,11 +66,7 @@ export class WaxProcessReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  WorkerCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.workercode.setValue(e.WORKER_CODE);
-
-  }
+ 
 
   WaxCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -86,21 +80,54 @@ export class WaxProcessReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  WaxCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.waxcode.setValue(e.STOCK_CODE);
+  waxprocessFrom: FormGroup = this.formBuilder.group({
+    voctype:[''],
+    vocDate : [''],
+    vocno:[''],
+    enteredBy : [''],
+    process:[''],
+    worker:[''],
+    toworker:[''],
+    toprocess:[''],
+    waxcode:[''],
+    remark:[''],
+   });
 
-  }
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+  }
+
+  userDataSelected(value: any) {
+    console.log(value);
+       this.waxprocessFrom.controls.enteredBy.setValue(value.UsersName);
+  }
+
+  WorkerCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.worker.setValue(e.WORKER_CODE);
+    this.waxprocessFrom.controls.toworker.setValue(e.WORKER_CODE);
+  }
+
+  WaxCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.waxcode.setValue(e.STOCK_CODE);
+  }
+
+  ProcessCodeSelected(e:any){
+    console.log(e);
+    this.waxprocessFrom.controls.process.setValue(e.Process_Code);
+    this.waxprocessFrom.controls.toprocess.setValue(e.Process_Code);
   }
 
   close(data?: any) {
@@ -108,78 +135,10 @@ export class WaxProcessReturnComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+    removedata(){
+      this.tableData.pop();
+    }
 
-
-  waxprocessFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocno:[''],
-   process:[''],
-   worker:[''],
-   toworker:[''],
-   toprocess:[''],
-   waxcode:[''],
-    remark:[''],
-  });
-
-
-  adddata() {
-    let length = this.tableData.length;
-    let srno = length + 1;
-    let data =  {
-      "MID": 0,
-      "VOCTYPE": "str",
-      "BRANCH_CODE": "string",
-      "VOCNO": 0,
-      "VOCDATE": "2023-10-07T08:43:49.448Z",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-07T08:43:49.448Z",
-      "PROCESS_CODE": "string",
-      "WORKER_CODE": "string",
-      "SMAN": "string",
-      "REMARKS": "string",
-      "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "PRINT_COUNT": 0,
-      "TO_PROCESS_CODE": "string",
-      "TO_WORKER_CODE": "string",
-      "DIVISION_CODE": "s",
-      "STOCK_CODE": "string",
-      "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-      "HTUSERNAME": "string",
-      "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "RETURN_PCS": 0,
-      "ISSUE_VOCTYPE": "str",
-      "ISSUE_BRANCH_CODE": "string",
-      "ISSUE_VOCNO": 0,
-      "ISSUE_YEARMONTH": "string",
-      "IS_AUTHORISE": true,
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "WAX_WT": 0,
-      "JOB_PCS": 0,
-      "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
-    };
-    this.tableData.push(data);
-}
-removedata(){
-  this.tableData.pop();
-}
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -193,55 +152,62 @@ removedata(){
   
     let API = 'JobWaxReturn/InsertJobWaxReturn'
     let postData = {
-      "MID": 0,
-      "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-      "BRANCH_CODE": "string",
-      "VOCNO":  this.waxprocessFrom.value.vocno || "",
-      "VOCDATE":  this.waxprocessFrom.value.worker || "",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-07T08:43:49.448Z",
-      "PROCESS_CODE":  this.waxprocessFrom.value.process || "",
-      "WORKER_CODE":  this.waxprocessFrom.value.worker || "",
-      "SMAN": "string",
-      "REMARKS": this.waxprocessFrom.value.remark || "",
-      "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "PRINT_COUNT": 0,
-      "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
-      "TO_WORKER_CODE":  this.waxprocessFrom.value.toworker || "",
-      "DIVISION_CODE": "s",
-      "STOCK_CODE": "string",
-      "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-      "HTUSERNAME": "string",
-      "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "RETURN_PCS": 0,
-      "ISSUE_VOCTYPE": "str",
-      "ISSUE_BRANCH_CODE": "string",
-      "ISSUE_VOCNO": 0,
-      "ISSUE_YEARMONTH": "string",
-      "IS_AUTHORISE": true,
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "WAX_WT":  this.waxprocessFrom.value.waxcode || "",
-      "JOB_PCS": 0,
-      "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
-      "approvalDetails": this.tableData,  
+        "MID": 0,
+        "VOCTYPE": this.waxprocessFrom.value.voctype || "",
+        "BRANCH_CODE": this.branchCode,
+        "VOCNO": this.waxprocessFrom.value.vocno || "",
+        "VOCDATE": this.waxprocessFrom.value.vocDate || "",
+        "YEARMONTH": this.yearMonth,
+        "DOCTIME": "2023-10-19T05:34:05.288Z",
+        "PROCESS_CODE": this.waxprocessFrom.value.process || "",
+        "WORKER_CODE": this.waxprocessFrom.value.worker || "",
+        "SMAN": "",
+        "REMARKS": this.waxprocessFrom.value.remark || "",
+        "NAVSEQNO": 0,
+        "AUTOPOSTING": true,
+        "POSTDATE": "",
+        "PRINT_COUNT": 0,
+        "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
+        "TO_WORKER_CODE": this.waxprocessFrom.value.toworker || "",
+        "DIVISION_CODE": "",
+        "STOCK_CODE": "",
+        "SYSTEM_DATE": "2023-10-19T05:34:05.288Z",
+        "HTUSERNAME": this.waxprocessFrom.value.enteredBy,
+        "Details": [
+          {
+            "UNIQUEID": 0,
+            "DT_VOCTYPE": "JWA",
+            "DT_BRANCH_CODE": this.branchCode,
+            "DT_VOCNO": 10,
+            "DT_YEARMONTH": this.yearMonth,
+            "SRNO": 0,
+            "JOB_NUMBER": "12",
+            "UNQ_JOB_ID": "",
+            "PROCESS_CODE": "",
+            "WORKER_CODE": "",
+            "DESIGN_CODE": "",
+            "PARTYCODE": "",
+            "ISSUE_PCS": 0,
+            "RETURN_PCS": 0,
+            "ISSUE_VOCTYPE": "",
+            "ISSUE_BRANCH_CODE": "",
+            "ISSUE_VOCNO": 0,
+            "ISSUE_YEARMONTH": "",
+            "TO_PROCESS_CODE": "",
+            "TO_WORKER_CODE": "",
+            "IS_AUTHORISE": true,
+            "GROSS_WT": 0,
+            "METAL_WT": 0,
+            "STONE_WT": 0,
+            "WAX_WT": 0,
+            "JOB_PCS": 0,
+            "AUTHORIZE_TIME": "2023-10-19T05:34:05.288Z",
+            "IS_REJECT": true,
+            "REASON": "",
+            "REJ_REMARKS": "",
+            "ATTACHMENT_FILE": ""
+          }
+        ]
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -269,23 +235,7 @@ removedata(){
     this.subscriptions.push(Sub)
   }
 
-  setFormValues() {
-    if(!this.content) return
-    console.log(this.content);
-    
-    this.waxprocessFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.waxprocessFrom.controls.vocno.setValue(this.content.VOCNO)
-    this.waxprocessFrom.controls.vocdate.setValue(this.content.VOCDATE)
-    this.waxprocessFrom.controls.process.setValue(this.content.PROCESS_CODE)
-    this.waxprocessFrom.controls.worker.setValue(this.content.WORKER_CODE)
-    this.waxprocessFrom.controls.toworker.setValue(this.content.TO_WORKER_CODE)
-    this.waxprocessFrom.controls.toprocess.setValue(this.content.TO_PROCESS_CODE)
-    this.waxprocessFrom.controls.waxcode.setValue(this.content.WAX_WT)
-    this.waxprocessFrom.controls.remark.setValue(this.content.REMARKS)
-
-    
-
-  }
+ 
 
 
   update(){
@@ -294,58 +244,65 @@ removedata(){
       return
     }
   
-    let API = 'JobWaxReturn/UpdateJobWaxReturn/'+ this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.vocdate
+    let API = 'JobWaxReturn/UpdateJobWaxReturn/'+ this.waxprocessFrom.value.branchCode + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.yearMonth
     let postData = {
       "MID": 0,
       "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-      "BRANCH_CODE": "string",
-      "VOCNO":  this.waxprocessFrom.value.vocno || "",
-      "VOCDATE":  this.waxprocessFrom.value.worker || "",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-07T08:43:49.448Z",
-      "PROCESS_CODE":  this.waxprocessFrom.value.process || "",
-      "WORKER_CODE":  this.waxprocessFrom.value.worker || "",
-      "SMAN": "string",
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.waxprocessFrom.value.vocno || "",
+      "VOCDATE": this.waxprocessFrom.value.vocDate || "",
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2023-10-19T05:34:05.288Z",
+      "PROCESS_CODE": this.waxprocessFrom.value.process || "",
+      "WORKER_CODE": this.waxprocessFrom.value.worker || "",
+      "SMAN": "",
       "REMARKS": this.waxprocessFrom.value.remark || "",
       "NAVSEQNO": 0,
       "AUTOPOSTING": true,
-      "POSTDATE": "string",
+      "POSTDATE": "",
       "PRINT_COUNT": 0,
       "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
-      "TO_WORKER_CODE":  this.waxprocessFrom.value.toworker || "",
-      "DIVISION_CODE": "s",
-      "STOCK_CODE": "string",
-      "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-      "HTUSERNAME": "string",
-      "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "RETURN_PCS": 0,
-      "ISSUE_VOCTYPE": "str",
-      "ISSUE_BRANCH_CODE": "string",
-      "ISSUE_VOCNO": 0,
-      "ISSUE_YEARMONTH": "string",
-      "IS_AUTHORISE": true,
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "WAX_WT":  this.waxprocessFrom.value.waxcode || "",
-      "JOB_PCS": 0,
-      "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
-      "approvalDetails": this.tableData,  
-    }
+      "TO_WORKER_CODE": this.waxprocessFrom.value.toworker || "",
+      "DIVISION_CODE": "",
+      "STOCK_CODE": "",
+      "SYSTEM_DATE": "2023-10-19T05:34:05.288Z",
+      "HTUSERNAME": this.waxprocessFrom.value.enteredBy,
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "DT_VOCTYPE": "",
+          "DT_BRANCH_CODE": "",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "",
+          "SRNO": 0,
+          "JOB_NUMBER": "",
+          "UNQ_JOB_ID": "",
+          "PROCESS_CODE": "",
+          "WORKER_CODE": "",
+          "DESIGN_CODE": "",
+          "PARTYCODE": "",
+          "ISSUE_PCS": 0,
+          "RETURN_PCS": 0,
+          "ISSUE_VOCTYPE": "",
+          "ISSUE_BRANCH_CODE": "",
+          "ISSUE_VOCNO": 0,
+          "ISSUE_YEARMONTH": "",
+          "TO_PROCESS_CODE": "",
+          "TO_WORKER_CODE": "",
+          "IS_AUTHORISE": true,
+          "GROSS_WT": 0,
+          "METAL_WT": 0,
+          "STONE_WT": 0,
+          "WAX_WT": 0,
+          "JOB_PCS": 0,
+          "AUTHORIZE_TIME": "2023-10-19T05:34:05.288Z",
+          "IS_REJECT": true,
+          "REASON": "",
+          "REJ_REMARKS": "",
+          "ATTACHMENT_FILE": ""
+        }
+      ]
+  }
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -396,7 +353,7 @@ removedata(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobWaxReturn/DeleteJobWaxReturn/' + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.vocdate
+        let API = 'JobWaxReturn/DeleteJobWaxReturn/' + this.waxprocessFrom.value.branchCode + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
