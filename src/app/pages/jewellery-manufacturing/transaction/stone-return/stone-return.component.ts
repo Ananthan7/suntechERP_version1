@@ -20,6 +20,7 @@ export class StoneReturnComponent implements OnInit {
   columnhead:any[] = ['Sl No','VOCNO','VOCTYPE','VOCDATE','JOB_NO','JOB_DATE','JOB_SO','UNQ_JOB','JOB_DE','BRANCH' ];
   @Input() content!: any; 
   tableData: any[] = [];
+  stoneReturnData : any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
@@ -98,7 +99,13 @@ export class StoneReturnComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-
+    modalRef.result.then((postData) => {
+      console.log(postData);      
+      if (postData) {
+        console.log('Data from modal:', postData);       
+        this.stoneReturnData.push(postData);
+      }
+    });
   }
 
 
@@ -113,6 +120,8 @@ export class StoneReturnComponent implements OnInit {
    worker:[''],
    workername:[''],
     remark:[''],
+    enterdBy : [''],
+    enteredByName :[''],
   });
 
 
@@ -135,7 +144,7 @@ removedata(){
     let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
     let postData = {
       "MID": 0,
-      "VOCTYPE": this.stonereturnFrom.value.voctype || "",
+      "VOCTYPE": "JWA",
       "BRANCH_CODE": this.branchCode,
       "VOCNO": this.stonereturnFrom.value.vocno || "",
       "VOCDATE": this.stonereturnFrom.value.vocdate || "",
@@ -160,70 +169,71 @@ removedata(){
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "HTUSERNAME": "",
-      "Details": [
-        {
-          "SRNO": 0,
-          "VOCNO": 0,
-          "VOCTYPE": "",
-          "VOCDATE": "2023-10-19T06:15:23.037Z",
-          "JOB_NUMBER": "",
-          "JOB_DATE": "2023-10-19T06:15:23.037Z",
-          "JOB_SO_NUMBER": 0,
-          "UNQ_JOB_ID": "",
-          "JOB_DESCRIPTION": "",
-          "BRANCH_CODE": "",
-          "DESIGN_CODE": "",
-          "DIVCODE": "s",
-          "STOCK_CODE": "",
-          "STOCK_DESCRIPTION": "",
-          "SIEVE": "",
-          "SHAPE": "",
-          "COLOR": "",
-          "CLARITY": "",
-          "SIZE": "",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "CURRENCY_CODE": "",
-          "CURRENCY_RATE": 0,
-          "RATEFC": 0,
-          "RATELC": 0,
-          "AMOUNTFC": 0,
-          "AMOUNTLC": 0,
-          "PROCESS_CODE": "",
-          "PROCESS_NAME": "",
-          "WORKER_CODE": "",
-          "WORKER_NAME": "",
-          "UNQ_DESIGN_ID": "",
-          "WIP_ACCODE": "",
-          "UNIQUEID": 0,
-          "LOCTYPE_CODE": "",
-          "STOCK_CODE_BRK": "",
-          "WASTAGE_QTY": 0,
-          "WASTAGE_PER": 0,
-          "WASTAGE_AMT": 0,
-          "NAVSEQNO": 0,
-          "YEARMONTH": "",
-          "DOCTIME": "",
-          "SMAN": "",
-          "REMARKS": "",
-          "TOTAL_PCS": 0,
-          "TOTAL_GROSS_WT": 0,
-          "TOTAL_AMOUNTFC": 0,
-          "TOTAL_AMOUNTLC": 0,
-          "ISBROCKEN": 0,
-          "BASE_CONV_RATE": 0,
-          "DT_BRANCH_CODE": "",
-          "DT_VOCTYPE": "",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "",
-          "RET_TO_DESC": "",
-          "PICTURE_NAME": "",
-          "RET_TO": "",
-          "ISMISSING": 0,
-          "SIEVE_SET": "",
-          "SUB_STOCK_CODE": ""
-        }
-      ]
+      "Details": this.stoneReturnData,
+      // [
+      //   {
+      //     "SRNO": 0,
+      //     "VOCNO": 0,
+      //     "VOCTYPE": "",
+      //     "VOCDATE": "2023-10-19T06:15:23.037Z",
+      //     "JOB_NUMBER": "",
+      //     "JOB_DATE": "2023-10-19T06:15:23.037Z",
+      //     "JOB_SO_NUMBER": 0,
+      //     "UNQ_JOB_ID": "",
+      //     "JOB_DESCRIPTION": "",
+      //     "BRANCH_CODE": "",
+      //     "DESIGN_CODE": "",
+      //     "DIVCODE": "s",
+      //     "STOCK_CODE": "",
+      //     "STOCK_DESCRIPTION": "",
+      //     "SIEVE": "",
+      //     "SHAPE": "",
+      //     "COLOR": "",
+      //     "CLARITY": "",
+      //     "SIZE": "",
+      //     "PCS": 0,
+      //     "GROSS_WT": 0,
+      //     "CURRENCY_CODE": "",
+      //     "CURRENCY_RATE": 0,
+      //     "RATEFC": 0,
+      //     "RATELC": 0,
+      //     "AMOUNTFC": 0,
+      //     "AMOUNTLC": 0,
+      //     "PROCESS_CODE": "",
+      //     "PROCESS_NAME": "",
+      //     "WORKER_CODE": "",
+      //     "WORKER_NAME": "",
+      //     "UNQ_DESIGN_ID": "",
+      //     "WIP_ACCODE": "",
+      //     "UNIQUEID": 0,
+      //     "LOCTYPE_CODE": "",
+      //     "STOCK_CODE_BRK": "",
+      //     "WASTAGE_QTY": 0,
+      //     "WASTAGE_PER": 0,
+      //     "WASTAGE_AMT": 0,
+      //     "NAVSEQNO": 0,
+      //     "YEARMONTH": "",
+      //     "DOCTIME": "",
+      //     "SMAN": "",
+      //     "REMARKS": "",
+      //     "TOTAL_PCS": 0,
+      //     "TOTAL_GROSS_WT": 0,
+      //     "TOTAL_AMOUNTFC": 0,
+      //     "TOTAL_AMOUNTLC": 0,
+      //     "ISBROCKEN": 0,
+      //     "BASE_CONV_RATE": 0,
+      //     "DT_BRANCH_CODE": "DM3",
+      //     "DT_VOCTYPE": "JWA",
+      //     "DT_VOCNO": 0,
+      //     "DT_YEARMONTH": this.yearMonth,
+      //     "RET_TO_DESC": "",
+      //     "PICTURE_NAME": "",
+      //     "RET_TO": "",
+      //     "ISMISSING": 0,
+      //     "SIEVE_SET": "String",
+      //     "SUB_STOCK_CODE": "String"
+      //   }
+      // ]
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)

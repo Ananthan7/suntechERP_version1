@@ -29,9 +29,15 @@
                         <div class="row mb-2">
                             <label for="input" class="col-sm-4 col-form-label">Voucher Date:</label>
                             <div class="col-sm-4 ">
-                                <mat-form-field style="width: 100%;">
+                                <!-- <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="vocDate" />
-                                </mat-form-field>
+                                </mat-form-field> -->
+                                <mat-form-field style="width: 100%">
+                                    <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
+                                      placeholder="YYYY/MM/DD" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                                  </mat-form-field>
                             </div>
                             <div class="col-sm-4 ">
                                 <mat-form-field style="width: 100%;">
@@ -70,10 +76,11 @@
                             </div>
                         </div>
                         <div class="row mb-2">
+                            ]
                             <label for="input" class="col-sm-4 col-form-label">Location:</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%" formControlName="location">
-                                    <input type="text" matInput />
+                                <mat-form-field style="width: 70%">
+                                    <input type="text" matInput  formControlName="location" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="locationCodeData"
                                           (newRowClick)="locationCodeSelected($event)"></master-search>
