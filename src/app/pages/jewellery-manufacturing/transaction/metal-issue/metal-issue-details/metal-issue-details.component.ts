@@ -310,29 +310,7 @@ export class MetalIssueDetailsComponent implements OnInit {
         }
       ]
     }
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.metalIssueDetailsForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+    this.close({postData});
   }
 
   updateMeltingType() {
@@ -436,29 +414,7 @@ export class MetalIssueDetailsComponent implements OnInit {
         }
       ]
     }
-      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.metalIssueDetailsForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
-          }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
+    this.close({postData});
     }
       /**USE: delete Melting Type From Row */
   deleteMeltingType() {
