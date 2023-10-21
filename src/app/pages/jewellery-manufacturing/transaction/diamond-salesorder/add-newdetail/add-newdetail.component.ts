@@ -505,11 +505,22 @@ export class AddNewdetailComponent implements OnInit {
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    .subscribe((result) => {
+    .subscribe((result:any) => {
       this.snackBar.dismiss()
       if (result.dynamicData || result.status == 'Success') {
         let data = result.dynamicData[0]
-        console.log(this.commonService.FCToCC(data[0].LCURR_CODE,data[0].LABOUR)) 
+        console.log(this.commonService.FCToCC(data[0].LCURR_CODE,data[0].LABOUR))
+
+        const rateArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == data[0].LCURR_CODE);
+        console.log(rateArr,'rateArr');
+        
+        this.summaryDetailForm.controls.LABOUR.setValue(this.commonService.FCToCC(data[0].LCURR_CODE,data[0].LABOUR)) 
+        let rate = 25.70
+        this.BOMDetailsArray.forEach((item:any)=>{
+          if(item.METALSTONE == 'M'){
+            item.LABRATEFC = rate
+          }
+        })
       }
     })
   }

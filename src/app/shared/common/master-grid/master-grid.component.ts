@@ -141,13 +141,7 @@ export class MasterGridComponent implements OnInit {
           this.totalDataCount = resp.dynamicData[0][0].COUNT || 100000
 
           // Replace empty object with an empty string
-          resp.dynamicData[0].forEach((obj: any, i: any) => {
-            for (const prop in obj) {
-              if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length === 0) {
-                obj[prop] = '';
-              }
-            }
-          });
+          resp.dynamicData[0] = this.CommonService.arrayEmptyObjectToString(resp.dynamicData[0])
           
           if (this.orderedItems.length > 0) {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
