@@ -20,6 +20,9 @@ export class StoneReturnDetailsComponent implements OnInit {
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  currentDate = new Date();
+  jobDate = new Date();
+  
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -57,8 +60,9 @@ export class StoneReturnDetailsComponent implements OnInit {
 
   stonereturndetailsFrom: FormGroup = this.formBuilder.group({
     jobno: [''],
-    jobdate: [''],
+    jobDate: [''],
     subjobno: [''],
+    subjobDesc : [''],
     designcode: [''],
     salesorderno: [''],
     process: [''],
@@ -68,6 +72,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     stock: [''],
     stockdes: [''],
     batchid: [''],
+    broken: [''],
     location: [''],
     pieces: [''],
     size: [''],
@@ -102,10 +107,10 @@ export class StoneReturnDetailsComponent implements OnInit {
     let postData = {
       "SRNO": 0,
       "VOCNO": 0,
-      "VOCTYPE": "",
+      "VOCTYPE": "DM3",
       "VOCDATE": "2023-10-19T06:15:23.037Z",
       "JOB_NUMBER": this.stonereturndetailsFrom.value.jobno || "",
-      "JOB_DATE": this.stonereturndetailsFrom.value.jobdate || "",
+      "JOB_DATE": this.stonereturndetailsFrom.value.jobDate || "",
       "JOB_SO_NUMBER": this.stonereturndetailsFrom.value.subjobno || "",
       "UNQ_JOB_ID": "",
       "JOB_DESCRIPTION": "",
@@ -140,8 +145,8 @@ export class StoneReturnDetailsComponent implements OnInit {
       "WASTAGE_PER": 0,
       "WASTAGE_AMT": 0,
       "NAVSEQNO": 0,
-      "YEARMONTH": "",
-      "DOCTIME": "",
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "06:15:23",
       "SMAN": "",
       "REMARKS": "",
       "TOTAL_PCS": 0,
@@ -150,71 +155,21 @@ export class StoneReturnDetailsComponent implements OnInit {
       "TOTAL_AMOUNTLC": 0,
       "ISBROCKEN": 0,
       "BASE_CONV_RATE": 0,
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "",
+      "DT_BRANCH_CODE": this.branchCode,
+      "DT_VOCTYPE": "QWA",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
       "RET_TO_DESC": "",
       "PICTURE_NAME": "",
       "RET_TO": "",
       "ISMISSING": 0,
-      "SIEVE_SET":  this.stonereturndetailsFrom.value.sieveset || "",
-      "SUB_STOCK_CODE": ""
+      "SIEVE_SET":  this.stonereturndetailsFrom.value.sieveset || "0",
+      "SUB_STOCK_CODE": "0"
     }
-
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.stonereturndetailsFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+    this.close(postData);
   }
 
-  setFormValues() {
-    if (!this.content) return
-    console.log(this.content);
-
-    this.stonereturndetailsFrom.controls.jobno.setValue(this.content.JOB_NUMBER)
-    this.stonereturndetailsFrom.controls.jobdate.setValue(this.content.JOB_DATE)
-    this.stonereturndetailsFrom.controls.subjobno.setValue(this.content.JOB_SO_NUMBER)
-    this.stonereturndetailsFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
-    this.stonereturndetailsFrom.controls.salesorderno.setValue(this.content.BASE_CURRENCY)
-    this.stonereturndetailsFrom.controls.process.setValue(this.content.PROCESS_CODE)
-    this.stonereturndetailsFrom.controls.processname.setValue(this.content.PROCESS_NAME)
-    this.stonereturndetailsFrom.controls.worker.setValue(this.content.WORKER_CODE)
-    this.stonereturndetailsFrom.controls.workername.setValue(this.content.WORKER_NAME)
-    this.stonereturndetailsFrom.controls.stock.setValue(this.content.STOCK_CODE)
-    this.stonereturndetailsFrom.controls.stockdes.setValue(this.content.STOCK_DESCRIPTION)
-    this.stonereturndetailsFrom.controls.batchid.setValue(this.content.REMARKS)
-    this.stonereturndetailsFrom.controls.pieces.setValue(this.content.REMARKS)
-    this.stonereturndetailsFrom.controls.size.setValue(this.content.SIZE)
-    this.stonereturndetailsFrom.controls.sieve.setValue(this.content.SIEVE)
-    this.stonereturndetailsFrom.controls.carat.setValue(this.content.REMARKS)
-    this.stonereturndetailsFrom.controls.color.setValue(this.content.COLOR)
-    this.stonereturndetailsFrom.controls.clarity.setValue(this.content.CLARITY)
-    this.stonereturndetailsFrom.controls.unitrate.setValue(this.content.REMARKS)
-    this.stonereturndetailsFrom.controls.location.setValue(this.content.LOCTYPE_CODE)
-    this.stonereturndetailsFrom.controls.shape.setValue(this.content.SHAPE)
-    this.stonereturndetailsFrom.controls.sieveset.setValue(this.content.SIEVE_SET)
-    this.stonereturndetailsFrom.controls.amount.setValue(this.content.REMARKS)
-  }
+  
 
 
   update() {
@@ -230,8 +185,8 @@ export class StoneReturnDetailsComponent implements OnInit {
       "VOCTYPE": "",
       "VOCDATE": "2023-10-19T06:15:23.037Z",
       "JOB_NUMBER": this.stonereturndetailsFrom.value.jobno || "",
-      "JOB_DATE": this.stonereturndetailsFrom.value.jobdate || "",
-      "JOB_SO_NUMBER": this.stonereturndetailsFrom.value.subjobno || "",
+      "JOB_DATE": this.stonereturndetailsFrom.value.jobDate || "",
+      "JOB_SO_NUMBER": this.stonereturndetailsFrom.value.subjobno || "0",
       "UNQ_JOB_ID": "",
       "JOB_DESCRIPTION": "",
       "BRANCH_CODE": this.branchCode,
@@ -266,7 +221,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       "WASTAGE_AMT": 0,
       "NAVSEQNO": 0,
       "YEARMONTH": "",
-      "DOCTIME": "",
+      "DOCTIME": "2023-10-19T06:15:23.037Z",
       "SMAN": "",
       "REMARKS": "",
       "TOTAL_PCS": 0,

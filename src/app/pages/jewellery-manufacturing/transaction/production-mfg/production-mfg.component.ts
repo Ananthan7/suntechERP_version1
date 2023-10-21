@@ -312,30 +312,6 @@ export class ProductionMfgComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  setFormValues() {
-    if (!this.content) return;
-    console.log(this.content);
-
-    this.productionFrom.controls.voctype.setValue(this.content.VOCTYPE);
-    this.productionFrom.controls.vocno.setValue(this.content.VOCNO);
-    this.productionFrom.controls.vocdate.setValue(this.content.VOCDATE);
-    this.productionFrom.controls.currency.setValue(this.content.CURRENCY_CODE);
-    this.productionFrom.controls.currencyrate.setValue(
-      this.content.CURRENCY_RATE
-    );
-    this.productionFrom.controls.basecurrency.setValue(
-      this.content.BASE_CURRENCY
-    );
-    this.productionFrom.controls.basecurrencyrate.setValue(
-      this.content.BASE_CURR_RATE
-    );
-    this.productionFrom.controls.time.setValue(this.content.TIME_TAKEN_HRS);
-    this.productionFrom.controls.metalrate.setValue(this.content.METAL_RATE);
-    this.productionFrom.controls.metalratetype.setValue(
-      this.content.METAL_RATE_TYPE
-    );
-    this.productionFrom.controls.narration.setValue(this.content.REMARKS);
-  }
 
   update() {
     if (this.productionFrom.invalid) {
