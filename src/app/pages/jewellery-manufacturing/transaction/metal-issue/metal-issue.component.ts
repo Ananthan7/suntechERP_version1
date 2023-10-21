@@ -175,7 +175,7 @@ export class MetalIssueComponent implements OnInit {
         "VOCNO": this.metalIssueForm.value.vocno || "",
         "VOCDATE": this.metalIssueForm.value.vocdate || "",
         "YEARMONTH": this.yearMonth,
-        "DOCTIME": "2023-10-20T11:26:54.200Z",
+        "DOCTIME": this.metalIssueForm.value.time || "",
         "CURRENCY_CODE": "",
         "CURRENCY_RATE": 0,
         "METAL_RATE_TYPE": "",

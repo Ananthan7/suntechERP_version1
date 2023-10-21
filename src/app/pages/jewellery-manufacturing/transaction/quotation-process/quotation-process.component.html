@@ -16,26 +16,24 @@
                         <div class="row mb-1 ">
                             <label for="inputPassword" class="col-sm-6">Voucher :</label>
                             <div class="col-md-3">
-                                <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput />
-                                    </mat-form-field>
-                                </div>
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="voctype" />
+                                </mat-form-field>
                             </div>
+
                             <div class="col-md-3">
-                                <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput />
-                                    </mat-form-field>
-                                </div>
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="vocno" />
+                                </mat-form-field>
                             </div>
+
 
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-6">Voucher Date : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput />
+                                    <input type="date" matInput formControlName="vocdate" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -45,7 +43,7 @@
                             <label for="inputPassword" class="col-sm-6">Document Type : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="documentype" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -53,9 +51,11 @@
                             <label for="inputPassword" class="col-sm-6">Salesman : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="salesman" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="salesCodeData"
+                                (newRowClick)="salesCodeSelected($event)">
+                            </master-search>
                             </div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                             <label for="inputPassword" class="col-sm-6">As On : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput />
+                                    <input type="date" matInput formControlName="ason" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                             <label for="inputPassword" class="col-sm-6">Doc.Ref : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="docref" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -113,10 +113,11 @@
                                 <div class="row align-items-center pt-1">
                                     <div class="col-md-6">
                                         <div class="row my-2">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label">Narration :</label>
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">Narration
+                                                :</label>
                                             <div class="col-md-8">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName="remarks" />
+                                                    <input type="text" matInput formControlName="narration" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
