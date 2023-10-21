@@ -91,108 +91,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     materMetal:[false]
   });
 
-  adddata() {
-    let length = this.tableData.length;
-    let srno = length + 1;
-    let data = {
-      "MID": 0,
-      "VOCTYPE": "str",
-      "BRANCH_CODE": "string",
-      "VOCNO": 0,
-      "VOCDATE": "2023-10-04T06:58:11.997Z",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-04T06:58:11.997Z",
-      "CURRENCY_CODE": "stri",
-      "CURRENCY_RATE": 0,
-      "METAL_RATE_TYPE": "string",
-      "METAL_RATE": 0,
-      "TOTAL_AMOUNTFC_METAL": 0,
-      "TOTAL_AMOUNTLC_METAL": 0,
-      "TOTAL_AMOUNTFC_MAKING": 0,
-      "TOTAL_AMOUNTLC_MAKING": 0,
-      "TOTAL_AMOUNTFC": 0,
-      "TOTAL_AMOUNTLC": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_GROSS_WT": 0,
-      "TOTAL_PURE_WT": 0,
-      "SMAN": "string",
-      "REMARKS": "string",
-      "NAVSEQNO": 0,
-      "FIX_UNFIX": true,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "SYSTEM_DATE": "2023-10-04T06:58:11.997Z",
-      "PRINT_COUNT": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "Details": [
-        {
-          "SRNO": 0,
-          "VOCNO": 0,
-          "VOCTYPE": "str",
-          "VOCDATE": "2023-10-04T06:58:11.997Z",
-          "JOB_NUMBER": "string",
-          "JOB_DATE": "2023-10-04T06:58:11.997Z",
-          "JOB_SO_NUMBER": 0,
-          "UNQ_JOB_ID": "string",
-          "JOB_DESCRIPTION": "string",
-          "BRANCH_CODE": "string",
-          "DESIGN_CODE": "string",
-          "DIVCODE": "s",
-          "STOCK_CODE": "string",
-          "STOCK_DESCRIPTION": "string",
-          "SUB_STOCK_CODE": "string",
-          "KARAT_CODE": "stri",
-          "JOB_PCS": 0,
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "PURITY": 0,
-          "PURE_WT": 0,
-          "RATE_TYPE": "string",
-          "METAL_RATE": 0,
-          "CURRENCY_CODE": "stri",
-          "CURRENCY_RATE": 0,
-          "METAL_GRM_RATEFC": 0,
-          "METAL_GRM_RATELC": 0,
-          "METAL_AMOUNTFC": 0,
-          "METAL_AMOUNTLC": 0,
-          "MAKING_RATEFC": 0,
-          "MAKING_RATELC": 0,
-          "MAKING_AMOUNTFC": 0,
-          "MAKING_AMOUNTLC": 0,
-          "TOTAL_RATEFC": 0,
-          "TOTAL_RATELC": 0,
-          "TOTAL_AMOUNTFC": 0,
-          "TOTAL_AMOUNTLC": 0,
-          "PROCESS_CODE": "string",
-          "PROCESS_NAME": "string",
-          "WORKER_CODE": "string",
-          "WORKER_NAME": "string",
-          "UNQ_DESIGN_ID": "string",
-          "WIP_ACCODE": "string",
-          "UNIQUEID": 0,
-          "LOCTYPE_CODE": "string",
-          "AMOUNTFC": 0,
-          "AMOUNTLC": 0,
-          "PICTURE_NAME": "string",
-          "PART_CODE": "string",
-          "MASTER_METAL": true,
-          "STONE_WT": 0,
-          "NET_WT": 0,
-          "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "str",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "string",
-          "TO_STOCK_CODE": "string",
-          "TO_STOCK_DESCRIPTION": "string",
-          "PUDIFF": 0,
-          "JOB_PURITY": 0,
-          "EXCLUDE_TRANSFER_WT": true
-        }
-      ]
-    };
-    this.tableData.push(data);
-  }
+  
 
   setFormValues() {
     if (!this.content) return
@@ -212,38 +111,6 @@ export class MetalIssueDetailsComponent implements OnInit {
 
     let API = 'JobMetalIssueMasterDJ/InsertJobMetalIssueMasterDJ'
     let postData =
-    {
-      "MID": 0,
-      "VOCTYPE": "str",
-      "BRANCH_CODE": "string",
-      "VOCNO": 0,
-      "VOCDATE": "2023-10-04T06:58:11.997Z",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-04T06:58:11.997Z",
-      "CURRENCY_CODE": "stri",
-      "CURRENCY_RATE": 0,
-      "METAL_RATE_TYPE": "string",
-      "METAL_RATE": 0,
-      "TOTAL_AMOUNTFC_METAL": 0,
-      "TOTAL_AMOUNTLC_METAL": 0,
-      "TOTAL_AMOUNTFC_MAKING": 0,
-      "TOTAL_AMOUNTLC_MAKING": 0,
-      "TOTAL_AMOUNTFC": 0,
-      "TOTAL_AMOUNTLC": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_GROSS_WT": 0,
-      "TOTAL_PURE_WT": 0,
-      "SMAN": "string",
-      "REMARKS": "string",
-      "NAVSEQNO": 0,
-      "FIX_UNFIX": true,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "SYSTEM_DATE": "2023-10-04T06:58:11.997Z",
-      "PRINT_COUNT": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "Details": [
         {
           "SRNO": 0,
           "VOCNO": 0,
@@ -308,9 +175,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           "JOB_PURITY":  this.metalIssueDetailsForm.value.jobPurity,
           "EXCLUDE_TRANSFER_WT": true
         }
-      ]
-    }
-    this.close({postData});
+    this.close(postData);
   }
 
   updateMeltingType() {

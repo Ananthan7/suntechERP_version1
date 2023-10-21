@@ -23,6 +23,7 @@ export class StoneIssueComponent implements OnInit {
   columnhead:any[] = ['SR NO','JOB NO','UNQ JOD ID', 'Design','Stock Code','Description ','Division','Carat','Rate','Amount'];
   @Input() content!: any; 
   tableData: any[] = [];
+  stoneIssueData : any[] =[];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
@@ -90,7 +91,7 @@ export class StoneIssueComponent implements OnInit {
 
   userDataSelected(value: any) {
     console.log(value);
-       this.stoneissueFrom.controls.userName.setValue(value.UsersName);
+       this.stoneissueFrom.controls.enteredBy.setValue(value.UsersName);
   }
 
   CurrencyCodeSelected(e:any){
@@ -110,6 +111,13 @@ export class StoneIssueComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.result.then((postData) => {
+      console.log(postData);      
+      if (postData) {
+        console.log('Data from modal:', postData);       
+        this.stoneIssueData.push(postData);
+      }
+    });
 
   }
 
@@ -118,6 +126,7 @@ export class StoneIssueComponent implements OnInit {
     voctype:[''],
     vocno:[''],
     vocdate:[''],
+    enteredBy:[''],
    basecurrency:[''],
    basecurrencyrate:[''],
    currency:[''],
@@ -156,7 +165,7 @@ removedata(){
   "TOTAL_GROSS_WT": 0,
   "TOTAL_AMOUNTFC": 0,
   "TOTAL_AMOUNTLC": 0,
-  "SMAN": "",
+  "SMAN": this.stoneissueFrom.value.enteredBy,
   "REMARKS": this.stoneissueFrom.value.narration || "",
   "NAVSEQNO": 0,
   "BASE_CURRENCY": this.stoneissueFrom.value.basecurrency || "",
@@ -168,61 +177,7 @@ removedata(){
   "PRINT_COUNT": 0,
   "PRINT_COUNT_ACCOPY": 0,
   "PRINT_COUNT_CNTLCOPY": 0,
-  "Details": [
-    {
-      "SRNO": 0,
-      "VOCNO": 0,
-      "VOCTYPE": "",
-      "VOCDATE": "2023-10-19T06:55:16.030Z",
-      "JOB_NUMBER": "string",
-      "JOB_DATE": "2023-10-19T06:55:16.030Z",
-      "JOB_SO_NUMBER": 0,
-      "UNQ_JOB_ID": "",
-      "JOB_DESCRIPTION": "",
-      "BRANCH_CODE": "",
-      "DESIGN_CODE": "",
-      "DIVCODE": "",
-      "STOCK_CODE": "",
-      "STOCK_DESCRIPTION": "",
-      "SIEVE": "",
-      "SHAPE": "",
-      "COLOR": "",
-      "CLARITY": "",
-      "SIZE": "",
-      "JOB_PCS": 0,
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
-      "RATEFC": 0,
-      "RATELC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTLC": 0,
-      "PROCESS_CODE": "",
-      "PROCESS_NAME": "",
-      "WORKER_CODE": "",
-      "WORKER_NAME": "",
-      "UNQ_DESIGN_ID": "",
-      "WIP_ACCODE": "",
-      "UNIQUEID": 0,
-      "LOCTYPE_CODE": "",
-      "PICTURE_NAME": "",
-      "PART_CODE": "",
-      "REPAIRJOB": 0,
-      "BASE_CONV_RATE": 0,
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "",
-      "CONSIGNMENT": 0,
-      "SIEVE_SET": "",
-      "SUB_STOCK_CODE": "",
-      "D_REMARKS": "",
-      "SIEVE_DESC": "",
-      "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": ""
-    }
-  ]
+  "Details": this.stoneIssueData,
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)

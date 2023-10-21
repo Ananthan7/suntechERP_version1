@@ -19,202 +19,203 @@
               <div class="col-md-3">
                 <label for="inputPassword"><b>Post</b> </label>
               </div>
-            
-                          <div class="col-md-4">
-                            <div class="row">   
-                              <label for="inputPassword" class="col-sm-2">Uniq:</label>
-                              <div class="col-sm-2">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="uniq" />
-                                </mat-form-field>
-                              </div>
-                              <div class="col-sm-2">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="uniq" />
-                                </mat-form-field>
-                              </div>                                                                 
-                              <label for="inputPassword" class="col-sm-2">Job:</label>
-                              <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="job" />
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            </div>
-                        </div> 
+
+              <div class="col-md-4">
+                <div class="row">
+                  <label for="inputPassword" class="col-sm-2">Uniq:</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="uniq" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="uniqNo" />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-2">Job:</label>
+                  <div class="col-sm-3">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="job" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="row">
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Voucher :</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="vocher"/>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Voucher Date :</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="date" matInput formControlName="vocDate"/>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Entered By :</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="enteredBy"/>
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 ">
+              <div class=" row">
+                <label for="inputPassword" class="col-sm-6 ">From Process:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="fromProcess" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+              <div class=" row">
+                <label for="inputPassword" class="col-sm-6 ">From Worker:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="fromWorker" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Job No:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="jobNo" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="jobnoCodeData"
+                    (newRowClick)="jobnoCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Mould No:</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="mouldNo" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Mould Type:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="mouldType" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="mouldCodeData"
+                    (newRowClick)="mouldCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">No of Parts :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="noOfParts" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Narration:</label>
+                <div class="col-sm-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="narration" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">To Process:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="toProcess" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">To Worker:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="toWorker" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Design Code:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="designCode" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Item Currency:</label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="itemCurrency" />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="itemCurrencyRate" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Location:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="location" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
               <div class="col-md-3">
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Voucher :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Voucher Date :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="date" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Entered By :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="user"
-                    (newRowClick)="userDataSelected($event)">
-                </master-search>
+                <div class="square-box"></div>
+              </div>
+              <div>
+                <div class="d-flex justify-content-center text-center">
+                  <div class="p-2  bd-highlight">
+                    <button type="button" class="btn btn-primary suntech-btn-primary">
+                      Capture
+                    </button>
                   </div>
                 </div>
               </div>
-              <div class="col-md-3 ">
-                <div class=" row">
-                  <label for="inputPassword" class="col-sm-6 ">From Process:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
-                    </master-search>
-                  </div>
-                </div>
-                <div class=" row">
-                  <label for="inputPassword" class="col-sm-6 ">From Worker:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
-                    </master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Job No:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="jobnoCodeData" (newRowClick)="jobnoCodeSelected($event)"></master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Mould No:</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Mould Type:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="mouldCodeData" (newRowClick)="mouldCodeSelected($event)"></master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">No of Parts :</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Narration:</label>
-                  <div class="col-sm-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">To Process:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
-                    </master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">To Worker:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
-                    </master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Design Code:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Item Currency:</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Location:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="col-md-3">
-                  <div class="square-box"></div>
-                </div>
-                <div>
-                  <div class="d-flex justify-content-center text-center">
-                    <div class="p-2  bd-highlight">
-                      <button type="button" class="btn btn-primary suntech-btn-primary">
-                        Capture
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div class="d-flex justify-content-center text-center">
-                    <div class="p-2 bd-highlight">
-                      <button type="button" class="btn btn-primary suntech-btn-primary">
-                        Browser
-                      </button>
-                    </div>
+              <div>
+                <div class="d-flex justify-content-center text-center">
+                  <div class="p-2 bd-highlight">
+                    <button type="button" class="btn btn-primary suntech-btn-primary">
+                      Browser
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-    
+      </div>
+
       <div class="container-fluid pt-3">
         <div class="col-md-12">
           <div class="row">

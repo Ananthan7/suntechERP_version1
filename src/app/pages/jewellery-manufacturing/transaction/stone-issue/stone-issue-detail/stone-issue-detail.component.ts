@@ -125,7 +125,7 @@ removedata(){
     let postData = {
       "SRNO": 0,
       "VOCNO": 0,
-      "VOCTYPE": "",
+      "VOCTYPE": "JWA",
       "VOCDATE": "2023-10-19T06:55:16.030Z",
       "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobnumber || "",
       "JOB_DATE": "2023-10-19T06:55:16.030Z",
@@ -163,42 +163,20 @@ removedata(){
       "PART_CODE": this.stoneissuedetailsFrom.value.partcode || "",
       "REPAIRJOB": 0,
       "BASE_CONV_RATE": 0,
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "",
+      "DT_BRANCH_CODE": this.branchCode,
+      "DT_VOCTYPE": "Str",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
       "CONSIGNMENT": 0,
-      "SIEVE_SET": "",
-      "SUB_STOCK_CODE": "",
-      "D_REMARKS": "",
-      "SIEVE_DESC": "",
+      "SIEVE_SET": "0",
+      "SUB_STOCK_CODE": "0",
+      "D_REMARKS": "Str",
+      "SIEVE_DESC": "0",
       "EXCLUDE_TRANSFER_WT": true,
       "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "", 
     }
   
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if(result.status == "Success"){
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.stoneissuedetailsFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+    this.close(postData);
   }
 
   setFormValues() {
@@ -283,15 +261,15 @@ removedata(){
       "PART_CODE": this.stoneissuedetailsFrom.value.partcode || "",
       "REPAIRJOB": 0,
       "BASE_CONV_RATE": 0,
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "",
+      "DT_BRANCH_CODE": this.branchCode,
+      "DT_VOCTYPE": "QWA",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
       "CONSIGNMENT": 0,
-      "SIEVE_SET": "",
-      "SUB_STOCK_CODE": "",
-      "D_REMARKS": "",
-      "SIEVE_DESC": "",
+      "SIEVE_SET": "0",
+      "SUB_STOCK_CODE": "0",
+      "D_REMARKS": "Str",
+      "SIEVE_DESC": "0",
       "EXCLUDE_TRANSFER_WT": true,
       "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "",  
     }

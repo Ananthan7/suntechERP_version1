@@ -346,16 +346,16 @@ export class DiamondSalesorderComponent implements OnInit {
       "BRANCH_CODE": this.commonService.branchCode || "",
       "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
       "VOCNO": this.PartyDetailsOrderForm.value.voucherNo || 0,
-      "VOCDATE": this.commonService.formatDDMMYY(this.PartyDetailsOrderForm.value.voucherDate) || "",
+      "VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate) || "",
       "EXP_PROD_START_DATE": "2023-09-14T14:56:43.961Z",
-      "DELIVERY_DATE": this.commonService.formatDDMMYY(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
+      "DELIVERY_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
       "YEARMONTH": this.commonService.yearSelected || "",
       "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode || "",
       "PARTY_CURRENCY": this.PartyDetailsOrderForm.value.partyCurrencyType || "",
       "PARTY_CURR_RATE":  this.PartyDetailsOrderForm.value.partyCurrencyRate || 0,
       "ITEM_CURRENCY":  this.PartyDetailsOrderForm.value.ItemCurrency || "",
       "ITEM_CURR_RATE":  this.PartyDetailsOrderForm.value.ItemCurrencyRate || 0,
-      "VALUE_DATE": this.commonService.formatDDMMYY(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
+      "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
       "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode || "",
       "METAL_RATE_TYPE": "",
       "METAL_RATE": 0,
@@ -412,10 +412,10 @@ export class DiamondSalesorderComponent implements OnInit {
       "details": detailsToSave
     }
 
-    if (this.PartyDetailsOrderForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.PartyDetailsOrderForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
     let API = 'WebEnquiry/DiamondSalesOrder'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
