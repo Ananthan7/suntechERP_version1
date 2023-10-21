@@ -31,8 +31,14 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="voctype" />
+                <!-- <mat-form-field style="width: 100%;">
+                  <input type="date" matInput formControlName="vocDate" />
+                </mat-form-field> -->
+                <mat-form-field style="width: 100%">
+                  <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
+                    placeholder="YYYY/MM/DD" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -84,7 +90,7 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Entered By :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="vocno" />
+                  <input type="text" matInput formControlName="enteredBy" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="user"
                 (newRowClick)="userDataSelected($event)">
@@ -101,17 +107,6 @@
 
             </div>
           </div>
-
-          <div class="col-md-2 pt-5">
-            <div class="row mb-1">
-              <div class="col-md-5">
-                <mat-form-field style="width: 90%;">
-                  <input type="text" matInput formControlName="vocno" />
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-
         </div>
 
         <div class="row m-2">
