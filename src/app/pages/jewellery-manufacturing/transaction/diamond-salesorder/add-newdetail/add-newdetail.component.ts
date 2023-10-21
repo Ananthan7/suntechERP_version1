@@ -25,7 +25,7 @@ export class AddNewdetailComponent implements OnInit {
   currentDate = new Date()
   firstTableWidth: any;
   secondTableWidth: any;
-  headerDetails:any;
+  headerDetails: any;
   intLabType: number = this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE')
 
   isViewComponentsTab: boolean = false;
@@ -166,10 +166,9 @@ export class AddNewdetailComponent implements OnInit {
   setInitialValues() {
     if (this.content[0] && this.content[0].headerDetails) {
       this.headerDetails = this.content[0].headerDetails
-      console.log(this.headerDetails);
-      
+
     }
-   
+
     if (this.content[0] && this.content[0].BOMDetails) {
       this.BOMDetailsArray = this.content[0].BOMDetails
       // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
@@ -255,7 +254,6 @@ export class AddNewdetailComponent implements OnInit {
     if (event.target.value == '') return
     this.reset() //reset all data
     this.snackBar.open('Loading...')
-    let API = 'ExecueteSPInterface'
     let postData = {
       "SPID": "003",
       "parameter": {
@@ -266,7 +264,7 @@ export class AddNewdetailComponent implements OnInit {
         "ACCODE": ''
       }
     }
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.snackBar.dismiss()
         if (result.dynamicData || result.status == 'Success') {
@@ -360,14 +358,21 @@ export class AddNewdetailComponent implements OnInit {
     let dblRhodium: number = 0; let dblLabour: number = 0;
     let dblMisc: number = 0; let dblWastageAmt: number = 0;
 
-    console.log(this.BOMDetailsArray, 'this.BOMDetailsArray');
-
-    this.BOMDetailsArray.forEach((item: any) => {
+    this.BOMDetailsArray.forEach((item: any, index: number) => {
       if (item.METALSTONE == "M") {
+        if (!this.headerDetails.FixedMetal) {
+          item.AMOUNTFC = this.commonService.decimalQuantityFormat(0.00, 'AMOUNT')
+          item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(0.00, 'AMOUNT')
+        }
         dblMetal_Wt += this.commonService.emptyToZero(item.GROSS_WT);
-        dblMetal_Amt += this.commonService.emptyToZero(item.AMOUNTFC);
         dblLab_amount += this.commonService.emptyToZero(item.LABAMOUNTFC);
+        dblMetal_Amt += this.commonService.emptyToZero(item.AMOUNTFC);
         dblWastageAmt += this.commonService.emptyToZero(item.WASTAGE_AMTFC);
+
+        // Calc_Metal_Value(i);
+        if (this.intLabType != 4) {
+          this.calculateMetalLabour(index);
+        }
       } else {
         if (item.METALSTONE == "Z") {
           dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item.GROSS_WT)) * 5;
@@ -396,7 +401,7 @@ export class AddNewdetailComponent implements OnInit {
     let txtCharge2FC: number = 0;
     let txtCharge3FC: number = 0;
     let txtCharge5FC: number = 0;
-    
+
     if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
     if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
     if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
@@ -408,21 +413,21 @@ export class AddNewdetailComponent implements OnInit {
       if (this.intLabType == 2) {
         //  dblTotLabour = this.commonService.emptyToZero(txtTotalLabour);
       } else {
-        dblTotLabour = txtCharge1FC + txtCharge2FC;
+        dblTotLabour = txtCharge1FC + txtCharge4FC;
         dblTotLabour += txtCharge3FC + txtCharge4FC + txtCharge5FC;
         this.summaryDetailForm.controls.Total_Labour.setValue(dblTotLabour)
       }
     }
     // if (this.content.FixedMetal && this.content.FixedMetal == true) dblAmount -= dblMetal_Amt;
-    dblTotRate = this.commonService.decimalQuantityFormat(dblAmount + dblTotLabour,'AMOUNT');
+    dblTotRate = this.commonService.decimalQuantityFormat(dblAmount + dblTotLabour, 'AMOUNT');
     this.diamondSalesDetailForm.controls.RATEFC.setValue(dblTotRate)
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(this.diamondSalesDetailForm.value.PCS * dblTotRate)
-
+    //rate x weight = amount
     if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarkupPercentage > 0)) {
       dblMarkup_Amt = (dblDia_Amt * this.summaryDetailForm.value.MarkupPercentage) / 100;
       dblTotRate += dblMarkup_Amt;
     }
-    
+
     if (this.commonService.emptyToZero(this.summaryDetailForm.value.WastagePercentage) > 0 && dblWastageAmt == 0) {
       dblGold_Loss_Amt = (dblMetal_Amt * this.summaryDetailForm.value.WastagePercentage) / 100;
       dblTotRate += dblGold_Loss_Amt;
@@ -460,8 +465,8 @@ export class AddNewdetailComponent implements OnInit {
     // txtDISCAMTFC = dblDisc_Amt.ToString();
     let txtItemRateFC = dblTotRate;
 
-    console.log(txtItemRateFC,'final');
-    
+    console.log(txtItemRateFC, 'final');
+
     this.diamondSalesDetailForm.controls.RATEFC.setValue(txtItemRateFC)
     let txtValueFC = (this.diamondSalesDetailForm.value.PCS * dblTotRate);
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(txtValueFC)
@@ -471,7 +476,44 @@ export class AddNewdetailComponent implements OnInit {
       this.viewFlag.AmountValueFC = false;
     }
   }
-  calculateRateAmount(event:any){
+  calculateMetalLabour(index: number) {
+    let metalItemData = this.BOMDetailsArray.filter((item: any) => item.METALSTONE == 'M')
+    console.log(metalItemData,'metalItemData');
+    
+    this.snackBar.open('Loading...')
+    let postData = {
+      "SPID": "021",
+      "parameter": {
+        "Design_Code": this.diamondSalesDetailForm.value.designCode || '',
+        "strPartyCode": this.headerDetails.PartyCode || '',
+        "strCurr_Code": this.headerDetails.partyCurrencyType || '',
+        "dblCurr_Rate":  this.headerDetails.partyCurrencyRate || '',
+        "dblPcs":  metalItemData[0].PCS.toString() || 0,
+        "dblGross_Wt": metalItemData[0].GROSS_WT.toString() || 0,
+        "strPriceCode": '',
+        "strLabCode": metalItemData[0].LABCHGCODE.toString() || '',
+        "strDivision": metalItemData[0].DIVCODE || '',
+        "strColorSet": 'N',
+        "strSHAPE": metalItemData[0].SHAPE || '',
+        "strSieve": metalItemData[0].SIEVE || '',
+        "strSieve_Set": metalItemData[0].SIEVE_SET || '',
+        "strColor": metalItemData[0].COLOR || '',
+        "strClarity": metalItemData[0].CLARITY || '',
+        "strSize_From": metalItemData[0].SIZE_FROM || '',
+        "strSize_To": metalItemData[0].SIZE_TO || '',
+        "strVocDate": '',
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result) => {
+      this.snackBar.dismiss()
+      if (result.dynamicData || result.status == 'Success') {
+        let data = result.dynamicData[0]
+        console.log(this.commonService.FCToCC(data[0].LCURR_CODE,data[0].LABOUR)) 
+      }
+    })
+  }
+  calculateRateAmount(event: any) {
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(
       this.diamondSalesDetailForm.value.RATEFC * event.target.value
     )
