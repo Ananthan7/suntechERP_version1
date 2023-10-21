@@ -105,27 +105,29 @@ mouldCodeData: MasterSearchModel = {
 
   userDataSelected(value: any) {
     console.log(value);
-       this.mouldMakingForm.controls.enteredby.setValue(value.UsersName);
+       this.mouldMakingForm.controls.enteredBy.setValue(value.UsersName);
   }
 
   ProcessCodeSelected(e:any){
     console.log(e);
-    this.mouldMakingForm.controls.process.setValue(e.Process_Code);
+    this.mouldMakingForm.controls.fromProcess.setValue(e.Process_Code);
+    this.mouldMakingForm.controls.toProcess.setValue(e.Process_Code);
   }
   
   WorkerCodeSelected(e:any){
     console.log(e);
-    this.mouldMakingForm.controls.worker.setValue(e.WORKER_CODE);
+    this.mouldMakingForm.controls.fromWorker.setValue(e.WORKER_CODE);
+    this.mouldMakingForm.controls.toWorker.setValue(e.WORKER_CODE);
   }
 
   jobnoCodeSelected(e:any){
     console.log(e);
-    this.mouldMakingForm.controls.jobNumber.setValue(e.job_number);
+    this.mouldMakingForm.controls.jobNo.setValue(e.job_number);
   }
 
   mouldCodeSelected(e:any){
     console.log(e);
-    this.mouldMakingForm.controls.mouldtype.setValue(e.CODE);
+    this.mouldMakingForm.controls.mouldType.setValue(e.CODE);
   }
 
   close(data?: any) {
@@ -134,24 +136,26 @@ mouldCodeData: MasterSearchModel = {
   }
   
   mouldMakingForm: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocdate:[''],
-    enteredby:[''],
-    fromprocess:[''],
-    fromworker:[''],
-    jobno:[''],
-    mouldno:[''],
-    mouldtype:[''],
-    noofparts:[''],
-    narration:[''],
-    uniq:[''],
-    job:[''],
-    toprocess:[''],
-    toworker:[''],
-    designcode:[''],
-    itemcurrency:[''],
-    itemcurrencyrate:[''],
-    location:[''],
+    uniq : [''],
+    uniqNo : [''],
+    job : [''],
+    vocher :[''],
+    vocDate : [''],
+    enteredBy : [''],
+    fromProcess : [''],
+    fromWorker : [''],
+    jobNo : [''],
+    mouldNo : [''],
+    mouldType : [''],
+    noOfParts : [''],
+    narration : [''],
+    toProcess : [''],
+    toWorker : [''],
+    designCode : [''],
+    itemCurrency : [''],
+    itemCurrencyRate : [''],
+    location :[''],
+
   });
   formSubmit(){
 
@@ -168,27 +172,27 @@ mouldCodeData: MasterSearchModel = {
     let postData = {
      "MID": 0,
      "BRANCH_CODE":  this.branchCode,
-     "VOCTYPE":this.mouldMakingForm.value.voctype || "",
+     "VOCTYPE":this.mouldMakingForm.value.vocher || "",
       "VOCNO": 0,
-      "VOCDATE": this.mouldMakingForm.value.vocdate || "",
+      "VOCDATE": this.mouldMakingForm.value.vocDate || "",
       "YEARMONTH": this.yearMonth,
-      "JOB_NUMBER": this.mouldMakingForm.value.jobno || "",
+      "JOB_NUMBER": this.mouldMakingForm.value.jobNo || "",
       "JOB_DESCRIPTION": this.mouldMakingForm.value.job || "",
-      "DESIGN_CODE": this.mouldMakingForm.value.designcode || "",
-      "MOULD_NUMBER": this.mouldMakingForm.value.mouldno || "",
+      "DESIGN_CODE": this.mouldMakingForm.value.designCode || "",
+      "MOULD_NUMBER": this.mouldMakingForm.value.mouldNo || "",
       "MOULD_LOCATION": this.mouldMakingForm.value.location || "",
-      "MOULD_TYPE":this.mouldMakingForm.value.mouldtype || "",
-      "UNQ_JOB_ID": "",
-      "UNQ_DESIGN_ID": "",
+      "MOULD_TYPE":this.mouldMakingForm.value.mouldType || "",
+      "UNQ_JOB_ID": this.mouldMakingForm.value.uniq,
+      "UNQ_DESIGN_ID": this.mouldMakingForm.value.uniqNo,
       "JOB_SO_MID": 0,
       "JOB_SO_NUMBER": 0,
-      "PARTYCODE":this.mouldMakingForm.value.noofparts || "",
+      "PARTYCODE":this.mouldMakingForm.value.noOfParts || "",
       "PARTY_CURRENCY": "",
       "PARTY_CURR_RATE": 0,
-      "ITEM_CURRENCY": this.mouldMakingForm.value.itemcurrency || "",
-      "ITEM_CURR_RATE": this.mouldMakingForm.value.itemcurrencyrate || "",
+      "ITEM_CURRENCY": this.mouldMakingForm.value.itemCurrency || "",
+      "ITEM_CURR_RATE": this.mouldMakingForm.value.itemCurrencyRate || "",
       "VALUE_DATE": "2023-10-19T08:59:58.514Z",
-      "SALESPERSON_CODE": "",
+      "SALESPERSON_CODE": this.mouldMakingForm.value.enteredBy,
       "TOTAL_PCS": 0,
       "TOTAL_GRWT": 0,
       "TOTAL_DISCAMTFC": 0,
@@ -221,10 +225,10 @@ mouldCodeData: MasterSearchModel = {
       "PRINT_COUNT": 0,
       "DOC_REF": "",
       "PICTURE_NAME": "",
-      "FROM_WORKER_CODE":this.mouldMakingForm.value.fromworker || "",
-      "TO_WORKER_CODE": this.mouldMakingForm.value.toworker || "",
-      "FROM_PROCESS_CODE":this.mouldMakingForm.value.fromprocess || "",
-      "TO_PROCESS_CODE": this.mouldMakingForm.value.toprocess || "",
+      "FROM_WORKER_CODE":this.mouldMakingForm.value.fromWorker || "",
+      "TO_WORKER_CODE": this.mouldMakingForm.value.toWorker || "",
+      "FROM_PROCESS_CODE":this.mouldMakingForm.value.fromProcess || "",
+      "TO_PROCESS_CODE": this.mouldMakingForm.value.toProcess || "",
       "PARTS": 0,
   "Details": [
     {
@@ -284,29 +288,7 @@ mouldCodeData: MasterSearchModel = {
     this.subscriptions.push(Sub)
   }
 
-  setFormValues() {
-    if(!this.content) return
-    console.log(this.content);
-    
-    this.mouldMakingForm.controls.voctype.setValue(this.content.VOCTYPE)
-    this.mouldMakingForm.controls.vocdate.setValue(this.content.VOCDATE)
-    this.mouldMakingForm.controls.fromprocess.setValue(this.content.FROM_PROCESS_CODE)
-    this.mouldMakingForm.controls.fromworker.setValue(this.content.FROM_WORKER_CODE)
-    this.mouldMakingForm.controls.jobno.setValue(this.content.JOB_NUMBER)
-    this.mouldMakingForm.controls.mouldno.setValue(this.content.MOULD_NUMBER)
-    this.mouldMakingForm.controls.mouldtype.setValue(this.content.MOULD_TYPE)
-    this.mouldMakingForm.controls.noofparts.setValue(this.content.PARTYCODE)
-    this.mouldMakingForm.controls.narration.setValue(this.content.REMARKS)
-    this.mouldMakingForm.controls.job.setValue(this.content.JOB_DESCRIPTION)
-    this.mouldMakingForm.controls.toprocess.setValue(this.content.TO_PROCESS_CODE)
-    this.mouldMakingForm.controls.toworker.setValue(this.content.TO_WORKER_CODE)
-    this.mouldMakingForm.controls.designcode.setValue(this.content.DESIGN_CODE)
-    this.mouldMakingForm.controls.itemcurrency.setValue(this.content.ITEM_CURRENCY)
-    this.mouldMakingForm.controls.itemcurrencyrate.setValue(this.content.ITEM_CURR_RATE)
-    this.mouldMakingForm.controls.location.setValue(this.content.LOCTYPE_CODE)
-  }
-
-
+ 
   update(){
     if (this.mouldMakingForm.invalid) {
       this.toastr.error('select all required fields')

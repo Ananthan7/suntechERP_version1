@@ -15,16 +15,16 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Type :</label>
-                            <div class="col-sm-8">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Voucher Type :</label>
+                            <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="vocType" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date :</label>
-                            <div class="col-sm-8">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Voucher Date :</label>
+                            <div class="col-sm-7">
                                 <!-- <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="vocDate" />
                                 </mat-form-field> -->
@@ -37,16 +37,16 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voc Number :</label>
-                            <div class="col-sm-8">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Voc Number :</label>
+                            <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="VocNo" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Enter By :</label>
-                            <div class="col-sm-8">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Enter By :</label>
+                            <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="EnterBy" />
                                 </mat-form-field>
@@ -55,8 +55,8 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Return Type :</label>
-                            <div class="col-sm-8">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Return Type :</label>
+                            <div class="col-sm-7">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="returnType" />
                                 </mat-form-field>
@@ -66,22 +66,20 @@
                             <div class="col-md-12">
                                 <div class="d-flex justify-content-between">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio">
-                                        <label class="form-check-label" for="radioGold" formControlName="radioGold">
+                                        <input class="form-check-input" type="radio" formControlName="radioGold">
+                                        <label class="form-check-label" for="radioGold">
                                             Gold
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio">
-                                        <label class="form-check-label" for="radioDiamond"
-                                            formControlName="radioDiamond">
+                                        <input class="form-check-input" type="radio" formControlName="radioDiamond">
+                                        <label class="form-check-label" for="radioDiamond">
                                             Diamond
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio">
-                                        <label class="form-check-label" for="radioRefinery"
-                                            formControlName="radioRefinery">
+                                        <input class="form-check-input" type="radio"  formControlName="radioRefinery">
+                                        <label class="form-check-label" for="radioRefinery">
                                             Refinery
                                         </label>
                                     </div>
@@ -89,20 +87,20 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Received By :</label>
-                            <div class="col-sm-8">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Received By :</label>
+                            <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="receicvedBy" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)">
+                                </master-search>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio">
-                                    <label class="form-check-label" for="radioAllowRecovery"
-                                        formControlName="radioAllowRecovery">
+                                    <input class="form-check-input" type="radio" formControlName="radioAllowRecovery">
+                                    <label class="form-check-label" for="radioAllowRecovery">
                                         Allow Recovery
                                     </label>
                                 </div>
@@ -139,9 +137,9 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio">
-                                    <label class="form-check-label" for="radioScrapReturn"
-                                        formControlName="radioScrapReturn">
+                                    <input class="form-check-input" type="radio" 
+                                    formControlName="radioScrapReturn">
+                                    <label class="form-check-label" for="radioScrapReturn">
                                         Scrap Return
                                     </label>
                                 </div>
@@ -162,9 +160,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio">
-                                    <label class="form-check-label" for="radioFinalLoss"
-                                        formControlName="radioFinalLoss">
+                                    <input class="form-check-input" type="radio" formControlName="radioFinalLoss">
+                                    <label class="form-check-label" for="radioFinalLoss">
                                         Final Loss
                                     </label>
                                 </div>
@@ -233,12 +230,12 @@
                                             <label for="inputPassword" class="col-sm-3 col-form-label">Job No :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="jobNo" />
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-sm-6">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="jobDesc" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -246,16 +243,18 @@
                                             <label for="inputPassword" class="col-sm-3 col-form-label">Worker :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="worker" />
                                                 </mat-form-field>
-                                                <master-search></master-search>
+                                                <master-search [MasterSearchData]="workerCodeData"
+                                                    (newRowClick)="workCodeSelected($event)"></master-search>
                                             </div>
                                             <label for="inputPassword" class="col-sm-3 col-form-label">Process :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="process" />
                                                 </mat-form-field>
-                                                <master-search></master-search>
+                                                <master-search [MasterSearchData]="ProcessCodeData"
+                                                    (newRowClick)="processCodeSelected($event)"></master-search>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
@@ -263,40 +262,42 @@
                                                 :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="stockCode" />
                                                 </mat-form-field>
-                                                <master-search></master-search>
+                                                <master-search [MasterSearchData]="StockCodeData"
+                                                    (newRowClick)="stockCodeSelected($event)"></master-search>
                                             </div>
                                             <label for="inputPassword" class="col-sm-3 col-form-label">Loaction To
                                                 :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="locationTo" />
                                                 </mat-form-field>
-                                                <master-search></master-search>
+                                                <master-search [MasterSearchData]="locationCodeData"
+                                                    (newRowClick)="locationCodeSelected($event)">
+                                                </master-search>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
                                             <label for="inputPassword" class="col-sm-3 col-form-label">Karat
                                                 :</label>
-                                                <div class="col-sm-2">
-                                                    <mat-form-field style="width: 70%;">
-                                                        <input type="text" matInput />
-                                                    </mat-form-field>
-                                                    <master-search></master-search>
-                                                </div>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="karatCode" />
                                                 </mat-form-field>
-                                                <master-search></master-search>
+                                                <master-search [MasterSearchData]="KaratCodeData"
+                                                    (newRowClick)="karatCodeSelected($event)"></master-search>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-sm-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="karatCodeDesc" />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio">
-                                                    <label class="form-check-label" for="radioFinalLoss"
-                                                        formControlName="radioFinalLoss">
-                                                       Karat wise Filter
+                                                    <input class="form-check-input" type="radio" formControlName="radioKaratWiseFilter">
+                                                    <label class="form-check-label" for="radioFinalLoss">
+                                                        Karat wise Filter
                                                     </label>
                                                 </div>
                                             </div>
@@ -304,36 +305,38 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label">Scrap Return Wt :</label>
-                                            <div class="col-sm-7">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Scrap Return Wt
+                                                :</label>
+                                            <div class="col-sm-6">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="scrapReturnWt" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label">Balance Wt :</label>
-                                            <div class="col-sm-7">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Balance Wt
+                                                :</label>
+                                            <div class="col-sm-6">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="balanceWt" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label">Excess/Loss :</label>
-                                            <div class="col-sm-7">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Excess/Loss
+                                                :</label>
+                                            <div class="col-sm-6">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="excessLoss" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio">
-                                                    <label class="form-check-label" for="radioFinalLoss"
-                                                        formControlName="radioFinalLoss">
-                                                       Show Pending Jobs For Scrap
+                                                    <input class="form-check-input" type="radio" formControlName="radioShowPendingJobsForScrap">
+                                                    <label class="form-check-label" for="radioShowPendingJobsForScrap">
+                                                        Show Pending Jobs For Scrap
                                                     </label>
                                                 </div>
                                             </div>
@@ -341,36 +344,40 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label">Scrap Pure Wt :</label>
-                                            <div class="col-sm-7">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Scrap Pure Wt
+                                                :</label>
+                                            <div class="col-sm-6">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="scrapPureWt" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label">Balance Pure  Wt :</label>
-                                            <div class="col-sm-7">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Balance Pure Wt
+                                                :</label>
+                                            <div class="col-sm-6">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="balancePureWt" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label">Remain Bal Pure :</label>
-                                            <div class="col-sm-7">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Remain Bal Pure
+                                                :</label>
+                                            <div class="col-sm-6">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput />
+                                                    <input type="text" matInput formControlName="remainBalPure" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label">New Job No :</label>
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">New Job No
+                                                :</label>
                                             <div class="col-sm-8">
-                                                <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput />
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="newJobNo" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -378,7 +385,7 @@
                                     <div class="col-md-3">
                                         <div class="p-1 bd-highlight">
                                             <button type="button" class="btn btn-outline-primary  add-btn">
-                                               Collaction Details
+                                                Collaction Details
                                             </button>
                                         </div>
                                     </div>

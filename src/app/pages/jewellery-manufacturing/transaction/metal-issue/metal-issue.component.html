@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metalIssueForm">
@@ -24,7 +24,7 @@
                                         Type:</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="vocType"/>
+                                            <input type="text" matInput formControlName="voctype"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -37,7 +37,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Time:</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput  formControlName="time"/>
+                                            <input type="date" matInput  formControlName="time"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -49,15 +49,8 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
                                         Date:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field style="width: 150px">
-                                            <!-- <mat-label>Date Of Birth</mat-label> -->
-                                            <input matInput DateValidation                    
-                                                [matDatepicker]="dob"
-                                                formControlName="voucherDate"
-                                                placeholder="DD/MM/YYYY" />
-                                            <mat-datepicker-toggle matSuffix
-                                                [for]="dob"></mat-datepicker-toggle>
-                                            <mat-datepicker #dob></mat-datepicker>
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="date" matInput  formControlName="vocdate"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -81,7 +74,7 @@
                                         No:</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput  formControlName="vocNo"/>
+                                            <input type="number" matInput  formControlName="vocno"/>
                                         </mat-form-field>
                                     </div>
                                 </div>

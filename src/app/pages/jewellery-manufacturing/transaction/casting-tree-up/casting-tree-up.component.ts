@@ -16,28 +16,103 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class CastingTreeUpComponent implements OnInit {
 
   divisionMS: any = 'ID';
-
+  branchCode?: String;
+  yearMonth?: String;
   modalReference:any;
   closeResult:any;
   pageTitle: any;
   currentFilter: any;
   columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Wt.','Metal Wt','Stone Wt','RCVD Gross Weight','RCVD Metal Weight','Process code','Worker Code',];
-   @Input() content!: any; 
+  columnheader : any[] = ['type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
+
+   @Input() content!: any;
+
    tableData: any[] = [];
+
    userName = localStorage.getItem('username');
+
    private subscriptions: Subscription[] = [];
-     user: MasterSearchModel = {
-     PAGENO: 1,
-     RECORDS: 10,
-     LOOKUPID: 73,
-     SEARCH_FIELD: 'UsersName',
-     SEARCH_HEADING: 'User',
-     SEARCH_VALUE: '',
-     WHERECONDITION: "UsersName<> ''",
-     VIEW_INPUT: true,
-     VIEW_TABLE: true,
-     LOAD_ONCLICK: true,
-   }
+
+   user: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+
+
+  processCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+ 
+
+  WorkerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
+
+ karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 84,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  cylinderCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+ 
+
    constructor(
      private activeModal: NgbActiveModal,
      private modalService: NgbModal,
@@ -48,117 +123,89 @@ export class CastingTreeUpComponent implements OnInit {
    ) { }
  
    ngOnInit(): void {
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
    }
  
    close(data?: any) {
      //TODO reset forms and data before closing
      this.activeModal.close(data);
    }
+
+   formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue);
+    let yr = date.getFullYear();
+    let dt = date.getDate();
+    let dy = date.getMonth();
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.castingTreeUpFrom.controls.startdate.setValue(new Date(date));
+    }
+  }
  
  
- 
-   waxprocessFrom: FormGroup = this.formBuilder.group({
-     voctype:[''],
-     vocno:[''],
-    process:[''],
+   castingTreeUpFrom: FormGroup = this.formBuilder.group({
+    vocType:[''],
+    vocNo:[''],
+    vocDate:[''],
+    processCode:[''],
+    cylinder:[''],
+    tree:[''],
+    stoneWt:[''],
+    treeNo:[''],
     worker:[''],
-    toworker:[''],
-    toprocess:[''],
-    waxcode:[''],
-     remark:[''],
+    convFact:[''],
+    waxWt:[''],
+    reqMetal:[''],
+    toProcess : [''],
+    enteredBy : [''],
+    karatCode : [''],
+    base : [''],
+    recMetal :[''],
+    toWorker : [''],
+    color : [''],
    });
- 
- 
- 
-  CurrencyCodeData: MasterSearchModel = {
-     PAGENO: 1,
-     RECORDS: 10,
-     LOOKUPID: 8,
-     SEARCH_FIELD: 'currency',
-     SEARCH_HEADING: 'Button Color',
-     SEARCH_VALUE: '',
-     WHERECONDITION: "CURRENCY_CODE<> ''",
-     VIEW_INPUT: true,
-     VIEW_TABLE: true,
-   }
-   CurrencyCodeSelected(e:any){
-     console.log(e);
-     this.waxprocessFrom.controls.currency.setValue(e.CURRENCY_CODE);
-   }
- 
- 
- 
-   WorkerCodeData: MasterSearchModel = {
-     PAGENO: 1,
-     RECORDS: 10,
-     LOOKUPID: 19,
-     SEARCH_FIELD: 'worker',
-     SEARCH_HEADING: 'Button Color',
-     SEARCH_VALUE: '',
-     WHERECONDITION: "WORKER_CODE<> ''",
-     VIEW_INPUT: true,
-     VIEW_TABLE: true,
-   }
-   WorkerCodeSelected(e:any){
-     console.log(e);
-     this.waxprocessFrom.controls.worker.setValue(e.WORKER_CODE);
-   }
  
    adddata() {
      let length = this.tableData.length;
      let srno = length + 1;
-     let data =  {
-       "MID": 0,
-       "VOCTYPE": "str",
-       "BRANCH_CODE": "string",
-       "VOCNO": 0,
-       "VOCDATE": "2023-10-07T08:43:49.448Z",
-       "YEARMONTH": "string",
-       "DOCTIME": "2023-10-07T08:43:49.448Z",
-       "PROCESS_CODE": "string",
-       "WORKER_CODE": "string",
-       "SMAN": "string",
-       "REMARKS": "string",
-       "NAVSEQNO": 0,
-       "AUTOPOSTING": true,
-       "POSTDATE": "string",
-       "PRINT_COUNT": 0,
-       "TO_PROCESS_CODE": "string",
-       "TO_WORKER_CODE": "string",
-       "DIVISION_CODE": "s",
-       "STOCK_CODE": "string",
-       "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-       "HTUSERNAME": "string",
-       "UNIQUEID": 0,
-       "DT_VOCTYPE": "str",
-       "DT_BRANCH_CODE": "string",
-       "DT_VOCNO": 0,
-       "DT_YEARMONTH": "string",
-       "SRNO": 0,
-       "JOB_NUMBER": "string",
-       "UNQ_JOB_ID": "string",
-       "DESIGN_CODE": "string",
-       "PARTYCODE": "string",
-       "ISSUE_PCS": 0,
-       "RETURN_PCS": 0,
-       "ISSUE_VOCTYPE": "str",
-       "ISSUE_BRANCH_CODE": "string",
-       "ISSUE_VOCNO": 0,
-       "ISSUE_YEARMONTH": "string",
-       "IS_AUTHORISE": true,
-       "GROSS_WT": 0,
-       "METAL_WT": 0,
-       "STONE_WT": 0,
-       "WAX_WT": 0,
-       "JOB_PCS": 0,
-       "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-       "IS_REJECT": true,
-       "REASON": "string",
-       "REJ_REMARKS": "string",
-       "ATTACHMENT_FILE": "string",
-     };
+     let data =  {};
      this.tableData.push(data);
  }
+
+ processCodeSelected(e:any){
+  console.log(e);
+  this.castingTreeUpFrom.controls.processCode.setValue(e.Process_Code);
+  this.castingTreeUpFrom.controls.toProcess.setValue(e.Process_Code)
+}
+
+WorkerCodeSelected(e:any){
+  console.log(e);
+  this.castingTreeUpFrom.controls.worker.setValue(e.WORKER_CODE);
+  this.castingTreeUpFrom.controls.toWorker.setValue(e.WORKER_CODE);
+}
+
+userDataSelected(value: any) {
+  console.log(value);
+     this.castingTreeUpFrom.controls.enteredBy.setValue(value.UsersName);
+}
+
+ cylinderCodeSelected(e:any){
+  console.log(e);
+  this.castingTreeUpFrom.controls.cylinder.setValue(e.CODE);
+}
+
+colorCodeSelected(e:any){
+  console.log(e);
+  this.castingTreeUpFrom.controls.color.setValue(e.CODE);
+}
+
+karatCodeSelected(e:any){
+  console.log(e);
+  this.castingTreeUpFrom.controls.karatCode.setValue(e['Karat Code']);
+}
+
  removedata(){
    this.tableData.pop();
  }
@@ -168,63 +215,105 @@ export class CastingTreeUpComponent implements OnInit {
        this.update()
        return
      }
-     if (this.waxprocessFrom.invalid) {
+     if (this.castingTreeUpFrom.invalid) {
        this.toastr.error('select all required fields')
        return
      }
    
-     let API = 'JobWaxReturn/InsertJobWaxReturn'
+     let API = 'JobTreeMasterDJ/InsertJobTreeMasterDJ'
      let postData = {
-       "MID": 0,
-       "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-       "BRANCH_CODE": "string",
-       "VOCNO":  this.waxprocessFrom.value.vocno || "",
-       "VOCDATE":  this.waxprocessFrom.value.worker || "",
-       "YEARMONTH": "string",
-       "DOCTIME": "2023-10-07T08:43:49.448Z",
-       "PROCESS_CODE":  this.waxprocessFrom.value.process || "",
-       "WORKER_CODE":  this.waxprocessFrom.value.worker || "",
-       "SMAN": "string",
-       "REMARKS": this.waxprocessFrom.value.remark || "",
-       "NAVSEQNO": 0,
-       "AUTOPOSTING": true,
-       "POSTDATE": "string",
-       "PRINT_COUNT": 0,
-       "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
-       "TO_WORKER_CODE":  this.waxprocessFrom.value.toworker || "",
-       "DIVISION_CODE": "s",
-       "STOCK_CODE": "string",
-       "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-       "HTUSERNAME": "string",
-       "UNIQUEID": 0,
-       "DT_VOCTYPE": "str",
-       "DT_BRANCH_CODE": "string",
-       "DT_VOCNO": 0,
-       "DT_YEARMONTH": "string",
-       "SRNO": 0,
-       "JOB_NUMBER": "string",
-       "UNQ_JOB_ID": "string",
-       "DESIGN_CODE": "string",
-       "PARTYCODE": "string",
-       "ISSUE_PCS": 0,
-       "RETURN_PCS": 0,
-       "ISSUE_VOCTYPE": "str",
-       "ISSUE_BRANCH_CODE": "string",
-       "ISSUE_VOCNO": 0,
-       "ISSUE_YEARMONTH": "string",
-       "IS_AUTHORISE": true,
-       "GROSS_WT": 0,
-       "METAL_WT": 0,
-       "STONE_WT": 0,
-       "WAX_WT":  this.waxprocessFrom.value.waxcode || "",
-       "JOB_PCS": 0,
-       "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-       "IS_REJECT": true,
-       "REASON": "string",
-       "REJ_REMARKS": "string",
-       "ATTACHMENT_FILE": "string",
-       "approvalDetails": this.tableData,  
-     }
+      "MID": 0,
+      "VOCTYPE": this.castingTreeUpFrom.value.vocType,
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.castingTreeUpFrom.value.vocNo,
+      "YEARMONTH": this.yearMonth,
+      "VOCDATE": this.castingTreeUpFrom.value.vocDate,
+      "DOCTIME": "2023-10-21T07:22:12.302Z",
+      "SMAN": this.castingTreeUpFrom.value.enteredBy,
+      "REMARKS": "",
+      "NAVSEQNO": 0,
+      "KARAT_CODE": this.castingTreeUpFrom.value.karatCode,
+      "COLOR": this.castingTreeUpFrom.value.color,
+      "METAL_WT": 0,
+      "STONE_WT": this.castingTreeUpFrom.value.stoneWt,
+      "BASE_WT": 0,
+      "TREE_WT": this.castingTreeUpFrom.value.tree,
+      "WAX_WT": this.castingTreeUpFrom.value.waxWt,
+      "WORKER_CODE": this.castingTreeUpFrom.value.worker,
+      "PROCESS_CODE": this.castingTreeUpFrom.value.processCode,
+      "CONV_FACT": this.castingTreeUpFrom.value.convFact,
+      "STOCK_CODE": "",
+      "RCVD_MET_WT": this.castingTreeUpFrom.value.reqMetal,
+      "PRINT_COUNT": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "CYLINDER_CODE": this.castingTreeUpFrom.value.cylinder,
+      "FROM_PROCESS_CODE": "",
+      "FROM_WORKER_CODE": "",
+      "TRANSREF": "",
+      "TREE_NO": this.castingTreeUpFrom.value.treeNo,
+      "SALESPERSON_CODE": "",
+      "PARTIAL_TREE_REF": "",
+      "SYSTEM_DATE": "2023-10-21T07:22:12.302Z",
+      "JOB_TREEJOB_DETAIL_DJ": [
+        {
+          "DT_VOCTYPE": "str",
+          "DT_BRANCH_CODE": this.branchCode,
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": this.yearMonth,
+          "SRNO": 0,
+          "JOB_NUMBER": "",
+          "UNQ_JOB_ID": "",
+          "UNQ_DESIGN_ID": "",
+          "GROSS_WT": 0,
+          "METAL_WT": 0,
+          "STONE_WT": 0,
+          "KARAT_CODE": "",
+          "RCVD_GROSS_WT": 0,
+          "RCVD_METAL_WT": 0,
+          "PURITY": 0,
+          "PURE_WT": 0,
+          "COLOR": "",
+          "PCS": 0,
+          "STOCK_CODE": "",
+          "DESIGN_CODE": "",
+          "RCVD_PURE_WT": 0,
+          "SIZE_CODE": "",
+          "WIDTH_CODE": "",
+          "LOSS_QTY": 0,
+          "LOSS_PURE_WT": 0,
+          "PARTIAL_TREE_REF": "",
+          "PROCESS_CODE": "",
+          "WORKER_CODE": "",
+          "UNIQUEID": 0,
+          "AUTHORIZE_TIME": "2023-10-21T07:22:12.302Z",
+          "IS_REJECT": true,
+          "REASON": "",
+          "REJ_REMARKS": "",
+          "ATTACHMENT_FILE": ""
+        }
+      ],
+      "JOB_TREESTOCK_DETAIL_DJ": [
+        {
+          "DT_VOCTYPE": "str",
+          "DT_BRANCH_CODE": this.branchCode,
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": this.yearMonth,
+          "SRNO": 0,
+          "STOCK_CODE": "",
+          "SUB_STOCK_CODE": "",
+          "DIVCODE": "",
+          "GROSS_WT": 0,
+          "PURITY": 0,
+          "PURE_WT": 0,
+          "TYPE": "",
+          "LOCTYPE_CODE": "",
+          "PCS": 0,
+          "PARTIAL_TREE_REF": "",
+          "UNIQUEID": 0
+        }
+      ]
+    };
    
      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
        .subscribe((result) => {
@@ -238,7 +327,7 @@ export class CastingTreeUpComponent implements OnInit {
                confirmButtonText: 'Ok'
              }).then((result: any) => {
                if (result.value) {
-                 this.waxprocessFrom.reset()
+                 this.castingTreeUpFrom.reset()
                  this.tableData = []
                  this.close('reloadMainGrid')
                }
@@ -254,80 +343,109 @@ export class CastingTreeUpComponent implements OnInit {
    setFormValues() {
      if(!this.content) return
      console.log(this.content);
-     
-     this.waxprocessFrom.controls.voctype.setValue(this.content.VOCTYPE)
-     this.waxprocessFrom.controls.vocno.setValue(this.content.VOCNO)
-     this.waxprocessFrom.controls.vocdate.setValue(this.content.VOCDATE)
-     this.waxprocessFrom.controls.process.setValue(this.content.PROCESS_CODE)
-     this.waxprocessFrom.controls.worker.setValue(this.content.WORKER_CODE)
-     this.waxprocessFrom.controls.toworker.setValue(this.content.TO_WORKER_CODE)
-     this.waxprocessFrom.controls.toprocess.setValue(this.content.TO_PROCESS_CODE)
-     this.waxprocessFrom.controls.waxcode.setValue(this.content.WAX_WT)
-     this.waxprocessFrom.controls.remark.setValue(this.content.REMARKS)
- 
-     
- 
    }
  
  
    update(){
-     if (this.waxprocessFrom.invalid) {
+     if (this.castingTreeUpFrom.invalid) {
        this.toastr.error('select all required fields')
        return
      }
    
-     let API = 'JobWaxReturn/UpdateJobWaxReturn/'+ this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.vocdate
+     let API = 'JobTreeMasterDJ/UpdateJobTreeMasterDJ/'+ this.castingTreeUpFrom.value.branchCode + this.castingTreeUpFrom.value.voctype + this.castingTreeUpFrom.value.vocno + this.castingTreeUpFrom.value.yearMonth;
      let postData = {
-       "MID": 0,
-       "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-       "BRANCH_CODE": "string",
-       "VOCNO":  this.waxprocessFrom.value.vocno || "",
-       "VOCDATE":  this.waxprocessFrom.value.worker || "",
-       "YEARMONTH": "string",
-       "DOCTIME": "2023-10-07T08:43:49.448Z",
-       "PROCESS_CODE":  this.waxprocessFrom.value.process || "",
-       "WORKER_CODE":  this.waxprocessFrom.value.worker || "",
-       "SMAN": "string",
-       "REMARKS": this.waxprocessFrom.value.remark || "",
-       "NAVSEQNO": 0,
-       "AUTOPOSTING": true,
-       "POSTDATE": "string",
-       "PRINT_COUNT": 0,
-       "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
-       "TO_WORKER_CODE":  this.waxprocessFrom.value.toworker || "",
-       "DIVISION_CODE": "s",
-       "STOCK_CODE": "string",
-       "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-       "HTUSERNAME": "string",
-       "UNIQUEID": 0,
-       "DT_VOCTYPE": "str",
-       "DT_BRANCH_CODE": "string",
-       "DT_VOCNO": 0,
-       "DT_YEARMONTH": "string",
-       "SRNO": 0,
-       "JOB_NUMBER": "string",
-       "UNQ_JOB_ID": "string",
-       "DESIGN_CODE": "string",
-       "PARTYCODE": "string",
-       "ISSUE_PCS": 0,
-       "RETURN_PCS": 0,
-       "ISSUE_VOCTYPE": "str",
-       "ISSUE_BRANCH_CODE": "string",
-       "ISSUE_VOCNO": 0,
-       "ISSUE_YEARMONTH": "string",
-       "IS_AUTHORISE": true,
-       "GROSS_WT": 0,
-       "METAL_WT": 0,
-       "STONE_WT": 0,
-       "WAX_WT":  this.waxprocessFrom.value.waxcode || "",
-       "JOB_PCS": 0,
-       "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-       "IS_REJECT": true,
-       "REASON": "string",
-       "REJ_REMARKS": "string",
-       "ATTACHMENT_FILE": "string",
-       "approvalDetails": this.tableData,  
-     }
+      "MID": 0,
+      "VOCTYPE": this.castingTreeUpFrom.value.vocType,
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.castingTreeUpFrom.value.vocNo,
+      "YEARMONTH": this.yearMonth,
+      "VOCDATE": this.castingTreeUpFrom.value.vocDate,
+      "DOCTIME": "2023-10-21T07:22:12.302Z",
+      "SMAN": this.castingTreeUpFrom.value.enteredBy,
+      "REMARKS": "",
+      "NAVSEQNO": 0,
+      "KARAT_CODE": this.castingTreeUpFrom.value.karatCode,
+      "COLOR": this.castingTreeUpFrom.value.color,
+      "METAL_WT": 0,
+      "STONE_WT": this.castingTreeUpFrom.value.stoneWt,
+      "BASE_WT": 0,
+      "TREE_WT": this.castingTreeUpFrom.value.tree,
+      "WAX_WT": this.castingTreeUpFrom.value.waxWt,
+      "WORKER_CODE": this.castingTreeUpFrom.value.worker,
+      "PROCESS_CODE": this.castingTreeUpFrom.value.processCode,
+      "CONV_FACT": this.castingTreeUpFrom.value.convFact,
+      "STOCK_CODE": "",
+      "RCVD_MET_WT": this.castingTreeUpFrom.value.reqMetal,
+      "PRINT_COUNT": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "CYLINDER_CODE": this.castingTreeUpFrom.value.cylinder,
+      "FROM_PROCESS_CODE": "",
+      "FROM_WORKER_CODE": "",
+      "TRANSREF": "",
+      "TREE_NO": this.castingTreeUpFrom.value.treeNo,
+      "SALESPERSON_CODE": "",
+      "PARTIAL_TREE_REF": "",
+      "SYSTEM_DATE": "2023-10-21T07:22:12.302Z",
+      "JOB_TREEJOB_DETAIL_DJ": [
+        {
+          "DT_VOCTYPE": "str",
+          "DT_BRANCH_CODE": this.branchCode,
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": this.yearMonth,
+          "SRNO": 0,
+          "JOB_NUMBER": "",
+          "UNQ_JOB_ID": "",
+          "UNQ_DESIGN_ID": "",
+          "GROSS_WT": 0,
+          "METAL_WT": 0,
+          "STONE_WT": 0,
+          "KARAT_CODE": "",
+          "RCVD_GROSS_WT": 0,
+          "RCVD_METAL_WT": 0,
+          "PURITY": 0,
+          "PURE_WT": 0,
+          "COLOR": "",
+          "PCS": 0,
+          "STOCK_CODE": "",
+          "DESIGN_CODE": "",
+          "RCVD_PURE_WT": 0,
+          "SIZE_CODE": "",
+          "WIDTH_CODE": "",
+          "LOSS_QTY": 0,
+          "LOSS_PURE_WT": 0,
+          "PARTIAL_TREE_REF": "",
+          "PROCESS_CODE": "",
+          "WORKER_CODE": "",
+          "UNIQUEID": 0,
+          "AUTHORIZE_TIME": "2023-10-21T07:22:12.302Z",
+          "IS_REJECT": true,
+          "REASON": "",
+          "REJ_REMARKS": "",
+          "ATTACHMENT_FILE": ""
+        }
+      ],
+      "JOB_TREESTOCK_DETAIL_DJ": [
+        {
+          "DT_VOCTYPE": "str",
+          "DT_BRANCH_CODE": this.branchCode,
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": this.yearMonth,
+          "SRNO": 0,
+          "STOCK_CODE": "",
+          "SUB_STOCK_CODE": "",
+          "DIVCODE": "",
+          "GROSS_WT": 0,
+          "PURITY": 0,
+          "PURE_WT": 0,
+          "TYPE": "",
+          "LOCTYPE_CODE": "",
+          "PCS": 0,
+          "PARTIAL_TREE_REF": "",
+          "UNIQUEID": 0
+        }
+      ]
+    };
    
      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
        .subscribe((result) => {
@@ -341,7 +459,7 @@ export class CastingTreeUpComponent implements OnInit {
                confirmButtonText: 'Ok'
              }).then((result: any) => {
                if (result.value) {
-                 this.waxprocessFrom.reset()
+                 this.castingTreeUpFrom.reset()
                  this.tableData = []
                  this.close('reloadMainGrid')
                }
@@ -378,7 +496,7 @@ export class CastingTreeUpComponent implements OnInit {
        confirmButtonText: 'Yes, delete!'
      }).then((result) => {
        if (result.isConfirmed) {
-         let API = 'JobWaxReturn/DeleteJobWaxReturn/' + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.vocdate
+         let API = 'JobTreeMasterDJ/DeleteJobTreeMasterDJ/'+ this.castingTreeUpFrom.value.branchCode + this.castingTreeUpFrom.value.voctype + this.castingTreeUpFrom.value.vocno + this.castingTreeUpFrom.value.yearMonth;
          let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
            .subscribe((result) => {
              if (result) {
@@ -391,7 +509,7 @@ export class CastingTreeUpComponent implements OnInit {
                    confirmButtonText: 'Ok'
                  }).then((result: any) => {
                    if (result.value) {
-                     this.waxprocessFrom.reset()
+                     this.castingTreeUpFrom.reset()
                      this.tableData = []
                      this.close('reloadMainGrid')
                    }
@@ -405,7 +523,7 @@ export class CastingTreeUpComponent implements OnInit {
                    confirmButtonText: 'Ok'
                  }).then((result: any) => {
                    if (result.value) {
-                     this.waxprocessFrom.reset()
+                     this.castingTreeUpFrom.reset()
                      this.tableData = []
                      this.close()
                    }

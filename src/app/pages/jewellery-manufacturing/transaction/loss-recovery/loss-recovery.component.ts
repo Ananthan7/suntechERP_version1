@@ -20,6 +20,83 @@ export class LossRecoveryComponent implements OnInit {
   currentDate = new Date();
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
+  columnhead:any[] = ['',];
+  columnheader:any[] = ['Sn No','Type','Worker Code','Process Code','Loss Qty','Recovery','Reco.Pure','Net Loss','Location To','Job Number','Job SO No','Design Code','Scrap UNQ Job'];
+ 
+  user: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: "UsersName",
+    SEARCH_HEADING: "User",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  ProcessCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'Process_Code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "Location",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  StockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: "RECOV_STOCK_CODE",
+    SEARCH_HEADING: "Stock Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "RECOV_STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  KaratCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 84,
+    SEARCH_FIELD: "KARAT_CODE",
+    SEARCH_HEADING: "Karat Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: "worker",
+    SEARCH_HEADING: "Worker Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "worker<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -38,9 +115,35 @@ export class LossRecoveryComponent implements OnInit {
   close(data?: any) {
     this.activeModal.close(data);
   }
-  columnhead:any[] = ['',];
-  columnheader:any[] = ['Sn No','Type','Worker Code','Process Code','Loss Qty','Recovery','Reco.Pure','Net Loss','Location To','Job Number','Job SO No','Design Code','Scrap UNQ Job'];
+  
+  userDataSelected(value: any) {
+    console.log(value);
+       this.lossRecoveryFrom.controls.receicvedBy.setValue(value.UsersName);
+  }
 
+  processCodeSelected(e:any){
+    console.log(e);
+    this.lossRecoveryFrom.controls.process.setValue(e.Process_Code);
+  }
+
+  karatCodeSelected(e:any){
+    console.log(e);
+    this.lossRecoveryFrom.controls.karatCode.setValue(e['Karat Code']);
+    this.lossRecoveryFrom.controls.karatCodeDesc.setValue(e['Karat Description']);
+  }
+
+  stockCodeSelected(e:any){
+    console.log(e);
+  }
+
+  workCodeSelected(e:any){
+    console.log(e);
+  }
+
+  locationCodeSelected(e:any){
+    console.log(e);
+    this.lossRecoveryFrom.controls.locationTo.setValue(e.COUNT);
+  }
 
 
   lossRecoveryFrom: FormGroup = this.formBuilder.group({
@@ -54,12 +157,29 @@ export class LossRecoveryComponent implements OnInit {
     toDate : [''],
     returnDate : [''],
     remarks : [''],
-    radioGold : [true],
-    radioDiamond : [true],
-    radioRefinery : [true],
-    radioAllowRecovery : [true],
-    radioScrapReturn : [true],
-    radioFinalLoss : [true],
+    jobNo : [''],
+    jobDesc : [''],
+    worker : [''],
+    process : [''],
+    stockCode :[''],
+    locationTo : [''],
+    karatCode : [''],
+    karatCodeDesc : [''],
+    scrapReturnWt : [''],
+    balanceWt : [''],
+    excessLoss : [''],
+    scrapPureWt : [''],
+    balancePureWt : [''],
+    remainBalPure : [''],
+    newJobNo :[''],
+    radioShowPendingJobsForScrap : true,
+    radioKaratWiseFilter : true,
+    radioGold : true,
+    radioDiamond : true,
+    radioRefinery : true,
+    radioAllowRecovery : true,
+    radioScrapReturn : true,
+    radioFinalLoss : true,
   });
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
@@ -118,7 +238,7 @@ export class LossRecoveryComponent implements OnInit {
           "RECO_PURE_QTY": 0,
           "NET_LOSS": 0,
           "NET_LOSS_PURE": 0,
-          "DIVISION_CODE": "s",
+          "DIVISION_CODE": "",
           "ADJ_WT": 0,
           "ADJ_PUREWT": 0,
           "ADJ_ACCODE": "",
@@ -126,7 +246,7 @@ export class LossRecoveryComponent implements OnInit {
           "LOCTYPE_CODE": "",
           "DT_YEARMONTH": "",
           "DT_VOCNO": 0,
-          "DT_VOCTYPE": "str",
+          "DT_VOCTYPE": "",
           "DT_BRANCH_CODE": "",
           "PROCESS_CODE": "",
           "SCRAP_STOCK_CODE": "",
@@ -144,13 +264,13 @@ export class LossRecoveryComponent implements OnInit {
         {
           "REFMID": 0,
           "SRNO": 0,
-          "JOBNO": "",
-          "WORKER_CODE": "",
+          "JOBNO": this.lossRecoveryFrom.value.jobNo,
+          "WORKER_CODE": this.lossRecoveryFrom.value.worker,
           "WORKER_NAME": "",
-          "PROCESS_CODE": "",
+          "PROCESS_CODE": this.lossRecoveryFrom.value.process,
           "PROCESS_NAME": "",
           "PROC_LOSS_ACCODE": "",
-          "STOCK_CODE": "",
+          "STOCK_CODE": this.lossRecoveryFrom.value.stockCode,
           "PURITY": 0,
           "PHY_STOCK_ACCODE": "",
           "LOSS_UPTODATE": "2023-10-19T10:46:17.071Z",
@@ -162,19 +282,19 @@ export class LossRecoveryComponent implements OnInit {
           "RECO_QTY_PURE": 0,
           "NET_LOSS": 0,
           "NET_LOSS_PURE": 0,
-          "DIVISION_CODE": "s",
+          "DIVISION_CODE": "",
           "TRANS_MID": 0,
           "FULL_RECOVERY": 0,
-          "TYPE": "s",
+          "TYPE": "",
           "SRSLNO": 0,
-          "SCRAP_STOCK_CODE": "",
+          "SCRAP_STOCK_CODE": this.lossRecoveryFrom.value.scrapReturnWt,
           "SCRAP_GROSS_WT": 0,
-          "SCRAP_PURE_WT": 0,
+          "SCRAP_PURE_WT": this.lossRecoveryFrom.value.scrapPureWt,
           "SCRAP_JOB_NUMBER": "",
           "SCRAP_UNQ_JOB_ID": "",
-          "JOB_SO_NUMBER": 0,
+          "JOB_SO_NUMBER": this.lossRecoveryFrom.value.newJobNo,
           "DESIGN_CODE": "",
-          "LOSS_ACCODE": "",
+          "LOSS_ACCODE": this.lossRecoveryFrom.value.excessLoss,
           "WIP_GROSS_WT": 0,
           "WIP_LOSS_WT": 0,
           "WIP_GROSS_PUREWT": 0,
@@ -182,14 +302,14 @@ export class LossRecoveryComponent implements OnInit {
           "PCS": 0,
           "LOSS_BOOK": "s",
           "STOCK_DESC": "",
-          "TRANS_VOCTYPE": "str"
+          "TRANS_VOCTYPE": ""
         }
       ],
       "PROD_LOSS_RECOVERY_SUBJOB_DETAIL": [
         {
           "REFMID": 0,
           "DT_BRANCH_CODE": "",
-          "DT_VOCTYPE": "str",
+          "DT_VOCTYPE": "",
           "DT_VOCNO": 0,
           "DT_YEARMONTH": "",
           "DT_VOCDATE": "2023-10-19T10:46:17.071Z",
@@ -197,8 +317,8 @@ export class LossRecoveryComponent implements OnInit {
           "DSO_VOCNO": "",
           "PARTYCODE": "",
           "DESIGN_CODE": "",
-          "KARAT": "stri",
-          "DIVCODE": "s",
+          "KARAT": "",
+          "DIVCODE": "",
           "STOCK_CODE": "",
           "PURITY": 0,
           "PCS": 0,
