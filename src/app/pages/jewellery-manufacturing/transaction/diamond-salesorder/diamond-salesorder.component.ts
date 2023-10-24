@@ -17,17 +17,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class DiamondSalesorderComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
-  currentFilter: any;
-  divisionMS: string = 'ID';
+  private subscriptions: Subscription[] = [];
+
   detailData: any[] = [];
   tableDataHead: any[] = [];
   tableData: any[] = []
-  checked = false;
-  check = false;
-  indeterminate = false;
+  grossChecked:boolean = false;
+  NetWtChecked:boolean = false;
   currentDate = new Date()
-  private subscriptions: Subscription[] = [];
-  tableItems: any = []
+  tableItems: any[] = []
   totalDetailNo: number = 0;
 
   OrderTypeData: MasterSearchModel = {
@@ -121,7 +119,8 @@ export class DiamondSalesorderComponent implements OnInit {
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
     private snackBar: MatSnackBar,
-  ) { }
+  ) { 
+  }
 
   ngOnInit(): void {
     this.PartyDetailsOrderForm.controls.voucherDate.setValue(this.currentDate)
@@ -149,15 +148,16 @@ export class DiamondSalesorderComponent implements OnInit {
       this.PartyDetailsOrderForm.controls.VoucherDate.setValue(new Date(date))
     }
   }
+  
   selectionChangedHandler(event: any) {
-    let selectedData = event.selectedRowsData
-
-    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData[0].SRNO)
-
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
     let allDataSelected = [detailRow[0].DATA]
     this.addNewDetail(allDataSelected)
   }
   addNewDetail(data?: any) {
+    console.log(data,'33333333');
+    
     if(data){
       data[0].headerDetails = this.PartyDetailsOrderForm.value;
     }else{
@@ -220,22 +220,22 @@ export class DiamondSalesorderComponent implements OnInit {
     }
     
     let detailsToSave:any[] = []
-    console.log(this.detailData,'this.detailData');
-    
+    let summaryData = this.detailData[0].DATA
+    summaryData = summaryData.summaryDetail[0]
     
     let detailArrayValues = {
       "UNIQUEID": 0,
-      "SRNO": 0,
+      "SRNO": summaryData.SRNO || 0,
       "EXP_PROD_START_DATE": "2023-09-14T14:56:43.961Z",
       "DELIVERY_DATE": "2023-09-14T14:56:43.961Z",
-      "PARTYCODE": "",
-      "DESIGN_CODE": "",
-      "KARAT": "",
+      "PARTYCODE": summaryData.KARAT_CODE || "",
+      "DESIGN_CODE": summaryData.designCode || "",
+      "KARAT": summaryData.KARAT_CODE || "",
       "METAL_COLOR": "",
-      "PCS": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "GROSS_WT": 0,
+      "PCS": summaryData.PCS || 0,
+      "METAL_WT":  Number(summaryData.METAL_WT) || 0,
+      "STONE_WT": Number(summaryData.STONE_WT) || 0,
+      "GROSS_WT": Number(summaryData.GROSS_WT) || 0,
       "RATEFC": 0,
       "RATECC": 0,
       "VALUEFC": 0,
@@ -243,8 +243,8 @@ export class DiamondSalesorderComponent implements OnInit {
       "DISCPER": 0,
       "DISCAMTFC": 0,
       "DISCAMTCC": 0,
-      "NETVALUEFC": 0,
-      "NETVALUECC": 0,
+      "NETVALUEFC": Number(summaryData.AMOUNT) || 0,
+      "NETVALUECC": Number(summaryData.AMOUNT) || 0,
       "LOCTYPE_CODE": "",
       "JOBCARD_REF": "",
       "JOBCARD_DATE": "2023-09-14T14:56:43.961Z",
@@ -304,29 +304,29 @@ export class DiamondSalesorderComponent implements OnInit {
       "DT_VOCDATE": "2023-09-14T14:56:43.961Z",
       "KARIGAR_CODE": "",
       "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "str",
+      "DT_VOCTYPE": "",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": "",
       "TOTAL_LABOUR": 0,
-      "CATEGORY_CODE": "",
+      "CATEGORY_CODE": summaryData.CATEGORY_CODE || "",
       "COUNTRY_CODE": "",
       "CUT_CODE": "",
       "FINISH_CODE": "",
       "DYE_CODE": "",
       "TYPE_CODE": "",
-      "BRAND_CODE": "",
+      "BRAND_CODE": summaryData.BRAND_CODE || "",
       "RHODIUM_COLOR": "",
       "SIZE": "",
       "LENGTH": "",
       "SCREW_FIELD": "",
-      "ORDER_TYPE": "",
-      "SUBCATEGORY_CODE": "",
+      "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "",
+      "SUBCATEGORY_CODE": summaryData.SUBCATEGORY_CODE || "",
       "DSN_STOCK_CODE": "",
       "JOBNO": "",
       "ENAMEL_COLOR": "",
       "PROD_VARIANCE": 0,
       "SERVICE_ACCCODE": "",
-      "DIVISION_CODE": "s",
+      "DIVISION_CODE": summaryData.DIVCODE || "",
       "JOB_STATUS": "",
       "APPR_REFF": "",
       "MAIN_REFF": "",
@@ -335,9 +335,9 @@ export class DiamondSalesorderComponent implements OnInit {
       "DELIVERY_TYPE": "",
       "DELIVERY_DAYS": 0,
       "GOLD_LOSS_WT": 0,
-      "PURITY": 0
+      "PURITY": summaryData.PURITY || 0
     }
-
+    //detail arrays
     detailsToSave.push(detailArrayValues)
 
     
@@ -396,7 +396,7 @@ export class DiamondSalesorderComponent implements OnInit {
       "DELIVERYADDRESS": "",
       "TERMSANDCONDITIONS": "",
       "PAYMENTTERMS": "",
-      "DETAILBRANCHCODE": "strin",
+      "DETAILBRANCHCODE": "",
       "AMCSTARTDATE": "2023-09-14T14:56:43.961Z",
       "SALESINVPENAMOUNTCC": 0,
       "PROSP_ORIGIN": "",
@@ -462,7 +462,7 @@ export class DiamondSalesorderComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.snackBar.dismiss()
-        if (result.status == "Success") { //
+        if (result.status == "Success") {
           let data = result.dynamicData[0]
           if (data && data[0].CURRENCY_CODE) {
 

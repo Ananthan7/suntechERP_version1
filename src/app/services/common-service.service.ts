@@ -57,15 +57,28 @@ export class CommonServiceService {
     private _decimalPipe: DecimalPipe,
   ) {
   }
-
-  /**USE: To format the value to limit decimal place from branch master data */ 
-  decimalQuantityFormat(value: any, flag: string) {
+  //**USE: common fuction to get all company parameter values */
+  getCompanyParamValue(parameter: string) {
+    let paramValue: any;
+    this.allCompanyParams.map((data: any) => {
+      if (data.PARAMETER == parameter) {
+        paramValue = data.PARAM_VALUE;
+      }
+    })
+    return paramValue
+  }
+  /**USE: common fuction to format the value to limit decimal places from branch master */
+  decimalQuantityFormat(value: any, flag: string){
     if (flag == 'AMOUNT') {
       this.decimalQtyFormat = this.allbranchMaster?.BAMTDECIMALS
     } else if (flag == 'METAL') {
       this.decimalQtyFormat = this.allbranchMaster?.BMQTYDECIMALS
     } else if (flag == 'STONE') {
       this.decimalQtyFormat = this.allbranchMaster?.BSQTYDECIMALS
+    } else if (flag == 'PURITY') {
+      this.decimalQtyFormat = 6 //same as .net
+    } else if (flag == 'RATE') {
+      this.decimalQtyFormat = 11 //same as .net
     }
 
     let str = ''
@@ -146,7 +159,7 @@ export class CommonServiceService {
   }
   getCurrRate(currency: any) {
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
-    return result[0].CONV_RATE;
+    return result[0].CONV_RATE || 1;
   }
   CCToFC(currency: any, amount: any) {
 
@@ -233,16 +246,7 @@ export class CommonServiceService {
       }
     });
   }
-  //**USE: common fuction to get all company parameter values */
-  getCompanyParamValue(parameter: string) {
-    let paramValue: any;
-    this.allCompanyParams.map((data: any) => {
-      if (data.PARAMETER == parameter) {
-        paramValue = data.PARAM_VALUE;
-      }
-    })
-    return paramValue
-  }
+
   // Get Combo filter(selectbox) data by id
   getComboFilterByID(type: any) {
     type = type.trim();
@@ -263,7 +267,7 @@ export class CommonServiceService {
     }
   }
   emptyToZero(value: any) {
-    value = typeof (value) == 'number' || value == undefined ? value : value.trim();
+    value = typeof (value) == 'number' || value == undefined ? value : value.toString().trim();
 
     if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
       return 0;

@@ -38,6 +38,7 @@ export class AddNewdetailComponent implements OnInit {
   };
 
   BOMDetailsArray: any[] = [];
+  BOMDetailsDataToGroup: any[] = [];
   groupedBOMDetails: any[] = [];
   groupedBOMDetailsHead: any[] = [];
   gridComponents: any[] = [];
@@ -130,6 +131,7 @@ export class AddNewdetailComponent implements OnInit {
     MarginPercentage: ['', [Validators.required]],
     LoadingPercentage: ['', [Validators.required]],
     DiscountPercentage: ['', [Validators.required]],
+    StampDetails: [''],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -150,7 +152,7 @@ export class AddNewdetailComponent implements OnInit {
     this.handleResize();
   }
 
-  private handleResize() {
+  private handleResize():void {
     // Access screen size here using window.innerWidth and window.innerHeight
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
@@ -163,7 +165,7 @@ export class AddNewdetailComponent implements OnInit {
     }
   }
   /**USE: first setup if already added */
-  setInitialValues() {
+  setInitialValues():void {
     if (this.content[0] && this.content[0].headerDetails) {
       this.headerDetails = this.content[0].headerDetails
 
@@ -172,8 +174,30 @@ export class AddNewdetailComponent implements OnInit {
     if (this.content[0] && this.content[0].BOMDetails) {
       this.BOMDetailsArray = this.content[0].BOMDetails
       // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
-      this.groupBomDetailsData({})
+      this.groupBomDetailsData()
     }
+  }
+  customizeComma(data:any){
+    if(!Number(data.value)) return data.value
+    return Number(data.value).toLocaleString('en-US', { style: 'decimal' })
+  }
+  customizeText(data:any){
+    let num = Number(data.value).toFixed(2)
+    return num
+  }
+  //**USE: Format decimals in BOM details grid change*/
+  formatBOMDetailGrid(data?: any): void{
+    this.groupBomDetailsData()
+    this.BOMDetailsArray.forEach((item:any)=>{
+      if(item.METALSTONE == 'M'){
+        item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT,'METAL')
+      }else if((item.METALSTONE == 'S')){
+        item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT,'STONE')
+      }
+      item.RATEFC = this.commonService.decimalQuantityFormat(item.RATEFC,'AMOUNT')
+      item.LABRATEFC = this.commonService.decimalQuantityFormat(item.LABRATEFC,'AMOUNT')
+      item.PURITY = this.commonService.decimalQuantityFormat(item.PURITY,'PURITY')
+    })
   }
   /**USE: Allow Row Edit */
   isAllowRowEdit(data: any): boolean {
@@ -208,8 +232,7 @@ export class AddNewdetailComponent implements OnInit {
     this.BOMDetailsArray[value.data.SRNO - 1].PROCESS_TYPE = event.PROCESS_TYPE;
   }
   /**USE: group BOM Details Data */
-  groupBomDetailsData(event: any) {
-    // let data = event.data
+  groupBomDetailsData() {
     let result: any[] = []
     this.BOMDetailsArray.reduce((res: any, value: any) => {
       if (!res[value.DIVCODE]) {
@@ -232,11 +255,23 @@ export class AddNewdetailComponent implements OnInit {
       res[value.DIVCODE].WASTAGE_AMTFC += value.WASTAGE_AMTFC;
       return res;
     }, {});
+    
     this.groupedBOMDetails = result
     this.groupedBOMDetailsHead = Object.keys(this.groupedBOMDetails[0]);
+    this.customizeGroupedGrid() //add decimal db
+  }
+  /**customize Grouped Grid data fo BOM details*/
+  customizeGroupedGrid(){
+    this.groupedBOMDetails.forEach((item:any)=>{
+      item.WEIGHT = this.commonService.decimalQuantityFormat(item.WEIGHT,'METAL')
+      item.WEIGHT_GMS = this.commonService.decimalQuantityFormat(item.WEIGHT_GMS,'METAL')
+      item.AMOUNT_FC = this.commonService.decimalQuantityFormat(item.AMOUNT_FC,'METAL')
+      item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC,'AMOUNT')
+      item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC,'AMOUNT')
+    })
   }
   /**USE: design Code Selection */
-  designCodeSelected(data: any) {
+  designCodeSelected(data: any):void {
     if (data.DESIGN_CODE) {
       this.codeSearchFlag = 'DESIGN'
       this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
@@ -249,7 +284,7 @@ export class AddNewdetailComponent implements OnInit {
     }
   }
   /**use: design code change fn to fetch data with design code */
-  designCodeValidate(event: any) {
+  designCodeValidate(event: any):void {
     // 'GetDesignStnmtlDetailNet'
     if (event.target.value == '') return
     this.reset() //reset all data
@@ -261,7 +296,7 @@ export class AddNewdetailComponent implements OnInit {
         "DESIGNCODE": event.target.value || '', //TODO 'HM14437' 
         "METAL_COLOR": '',
         "MRG_PERC": '',
-        "ACCODE": ''
+        "ACCODE": this.headerDetails.PartyCode || ''
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
@@ -299,7 +334,9 @@ export class AddNewdetailComponent implements OnInit {
           if (result.dynamicData[3].length > 0) {
             this.isViewBOMTab = true;
             this.BOMDetailsArray = result.dynamicData[3]
-            this.groupBomDetailsData({})
+            this.BOMDetailsDataToGroup = result.dynamicData[3]
+            this.groupBomDetailsData()
+            this.formatBOMDetailGrid()
           } else {
             this.isViewBOMTab = false;
           }
@@ -344,6 +381,7 @@ export class AddNewdetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   //**USE: calculate total on value change */
   calculateTotal(event: any) {
     // if(event.target.value == '') return;
@@ -420,8 +458,9 @@ export class AddNewdetailComponent implements OnInit {
     }
     // if (this.content.FixedMetal && this.content.FixedMetal == true) dblAmount -= dblMetal_Amt;
     dblTotRate = this.commonService.decimalQuantityFormat(dblAmount + dblTotLabour, 'AMOUNT');
-    this.diamondSalesDetailForm.controls.RATEFC.setValue(dblTotRate)
-    this.diamondSalesDetailForm.controls.AMOUNT.setValue(this.diamondSalesDetailForm.value.PCS * dblTotRate)
+    this.diamondSalesDetailForm.controls.RATEFC.setValue(this.customizeComma({value: dblTotRate}))
+    let sumAMOUNT = this.customizeComma({value: this.diamondSalesDetailForm.value.PCS * dblTotRate})
+    this.diamondSalesDetailForm.controls.AMOUNT.setValue(sumAMOUNT)
     //rate x weight = amount
     if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarkupPercentage > 0)) {
       dblMarkup_Amt = (dblDia_Amt * this.summaryDetailForm.value.MarkupPercentage) / 100;
@@ -545,9 +584,7 @@ export class AddNewdetailComponent implements OnInit {
   reset() {
     this.BOMDetailsArray = []
   }
-  selectionChanged(data: any) {
-    console.log(data, 'fireddddd');
-  }
+ 
   /**USE: close activeModal */
   close(data?: any) {
     this.activeModal.close(data);
