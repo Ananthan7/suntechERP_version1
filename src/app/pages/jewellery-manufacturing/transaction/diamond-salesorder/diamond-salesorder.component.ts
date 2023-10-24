@@ -17,18 +17,17 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class DiamondSalesorderComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
-  currentFilter: any;
-  divisionMS: string = 'ID';
+  private subscriptions: Subscription[] = [];
+
   detailData: any[] = [];
   tableDataHead: any[] = [];
   tableData: any[] = []
-  checked = false;
-  check = false;
-  indeterminate = false;
+  grossChecked: boolean = false;
+  NetWtChecked: boolean = false;
   currentDate = new Date()
-  private subscriptions: Subscription[] = [];
-  tableItems: any = []
+  tableItems: any[] = []
   totalDetailNo: number = 0;
+  detailRowToSave: any[] = []
 
   OrderTypeData: MasterSearchModel = {
     PAGENO: 1,
@@ -94,6 +93,7 @@ export class DiamondSalesorderComponent implements OnInit {
     orderType: ['', [Validators.required]],
     PartyCode: ['', [Validators.required]],
     SalesmanCode: ['', [Validators.required]],
+    SalesmanName: ['', [Validators.required]],
     FixedMetal: [false,],
     rateType: ['', [Validators.required]],
     wholeSaleRate: ['', [Validators.required]],
@@ -103,6 +103,9 @@ export class DiamondSalesorderComponent implements OnInit {
     ItemCurrencyRate: ['', [Validators.required]],
     BillToAccountHead: [''],
     BillToAddress: [''],
+    DeliveryType: [''],
+    DeliveryTypeDesc: [''],
+    DeliveryOnDateType: [''],
     DeliveryOnDate: [''],
     Proposal: [''],
     BussinessType: [''],
@@ -113,6 +116,7 @@ export class DiamondSalesorderComponent implements OnInit {
     ShipTo: [''],
     ShipToDesc: [''],
   })
+  Narration: string = ''
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -121,7 +125,8 @@ export class DiamondSalesorderComponent implements OnInit {
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
     private snackBar: MatSnackBar,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.PartyDetailsOrderForm.controls.voucherDate.setValue(this.currentDate)
@@ -132,10 +137,11 @@ export class DiamondSalesorderComponent implements OnInit {
   getRateType() {
     let data = this.commonService.RateTypeMasterData.filter((item: any) => item.DIVISION_CODE == 'G' && item.DEFAULT_RTYPE == 1)
 
-    if (data[0].WHOLESALE_RATE)
-      this.PartyDetailsOrderForm.controls.wholeSaleRate.setValue(data[0].WHOLESALE_RATE)
-    if (data[0].RATE_TYPE)
-      this.PartyDetailsOrderForm.controls.rateType.setValue(data[0].RATE_TYPE)
+    if (data[0].WHOLESALE_RATE) {
+      let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
+      this.PartyDetailsOrderForm.controls.wholeSaleRate.setValue(WHOLESALE_RATE)
+    }
+    this.PartyDetailsOrderForm.controls.rateType.setValue(data[0].RATE_TYPE)
   }
 
   formatDate(event: any) {
@@ -149,22 +155,26 @@ export class DiamondSalesorderComponent implements OnInit {
       this.PartyDetailsOrderForm.controls.VoucherDate.setValue(new Date(date))
     }
   }
-  selectionChangedHandler(event: any) {
-    let selectedData = event.selectedRowsData
-
-    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData[0].SRNO)
-
+  /**USE: on clicking row Opens new detail adding screen */
+  onRowClickHandler(event: any) {
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
     let allDataSelected = [detailRow[0].DATA]
     this.addNewDetail(allDataSelected)
   }
+  /**USE: Opens new detail adding screen 
+   * input: data contains {headerDetails,DATA}
+  */
   addNewDetail(data?: any) {
-    if(data){
+    if (data) {
+      console.log(data, 'data passing to detail screen');
+
       data[0].headerDetails = this.PartyDetailsOrderForm.value;
-    }else{
-      data = [{headerDetails: this.PartyDetailsOrderForm.value}]
+    } else {
+      data = [{ headerDetails: this.PartyDetailsOrderForm.value }]
     }
 
-    if(this.PartyDetailsOrderForm.value.PartyCode == ''){
+    if (this.PartyDetailsOrderForm.value.PartyCode == '') {
       this.toastr.error('PartyCode not found', '', {
         timeOut: 3000,
       })
@@ -187,8 +197,8 @@ export class DiamondSalesorderComponent implements OnInit {
     });
     // modalRef.componentInstance.content = data;
   }
-  private setValuesToHeaderGrid(result: any):void {
-    console.log(result, 'summaryData');
+  private setValuesToHeaderGrid(result: any): void {
+    console.log(result, 'data comming to header screen');
     this.totalDetailNo += 1
     //summary details
     let summaryData: any[] = result[0].summaryDetail
@@ -201,7 +211,7 @@ export class DiamondSalesorderComponent implements OnInit {
       this.tableData.push(item)
     })
     this.tableDataHead = Object.keys(this.tableData[0]);
-    
+
     if (result.length > 0) {
       result.forEach((item: any, index: any) => {
         this.detailData.push({
@@ -212,135 +222,137 @@ export class DiamondSalesorderComponent implements OnInit {
     }
   }
   /**USE:  final save API call*/
-  formSubmit():void {
+  formSubmit(): void {
     if (this.content && this.content.FLAG == 'EDIT') {
       // this.selectProcess()
       // this.updateWorkerMaster()
       return
     }
-    
-    let detailsToSave:any[] = []
-    console.log(this.detailData,'this.detailData');
-    
-    
-    let detailArrayValues = {
-      "UNIQUEID": 0,
-      "SRNO": 0,
-      "EXP_PROD_START_DATE": "2023-09-14T14:56:43.961Z",
-      "DELIVERY_DATE": "2023-09-14T14:56:43.961Z",
-      "PARTYCODE": "",
-      "DESIGN_CODE": "",
-      "KARAT": "",
-      "METAL_COLOR": "",
-      "PCS": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "GROSS_WT": 0,
-      "RATEFC": 0,
-      "RATECC": 0,
-      "VALUEFC": 0,
-      "VALUECC": 0,
-      "DISCPER": 0,
-      "DISCAMTFC": 0,
-      "DISCAMTCC": 0,
-      "NETVALUEFC": 0,
-      "NETVALUECC": 0,
-      "LOCTYPE_CODE": "",
-      "JOBCARD_REF": "",
-      "JOBCARD_DATE": "2023-09-14T14:56:43.961Z",
-      "JOBCARD_STATUS": "",
-      "SEQ_CODE": "",
-      "STD_TIME": 0,
-      "MAX_TIME": 0,
-      "ACT_TIME": 0,
-      "DESCRIPTION": "",
-      "UNQ_DESIGN_ID": "",
-      "FINISHED_PCS": 0,
-      "PENDING_PCS": 0,
-      "STOCK_CODE": "",
-      "SUPPLIER": "",
-      "PODPROCREF": "",
-      "REMARKS": "",
-      "DSURFACEPROPERTY": "",
-      "DREFERENCE": "",
-      "DWIDTH": 0,
-      "DTHICKNESS": 0,
-      "CHARGE1FC": 0,
-      "CHARGE1LC": 0,
-      "CHARGE2FC": 0,
-      "CHARGE2LC": 0,
-      "CHARGE3FC": 0,
-      "CHARGE3LC": 0,
-      "CHARGE4FC": 0,
-      "CHARGE4LC": 0,
-      "CHARGE5FC": 0,
-      "CHARGE5LC": 0,
-      "SONO": 0,
-      "QUOT": 0,
-      "SUFFIX": "",
-      "D_REMARKS": "",
-      "ENGRAVE_TEXT": "",
-      "ENGRAVE_FONT": "",
-      "DUTY_AMT": 0,
-      "LOAD_PER": 0,
-      "MARGIN_PER": 0,
-      "DUTY_PER": 0,
-      "PICTURE_NAME": "",
-      "DSO_PICTURE_NAME": "",
-      "DSO_STOCK_CODE": "",
-      "SOBALANCE_PCS": 0,
-      "SORDER_CLOSE": 0,
-      "SOREF": "",
-      "SO_STATUS": 0,
-      "MARKUP_PER": 0,
-      "MARKUP_AMTFC": 0,
-      "MARKUP_AMTLC": 0,
-      "MARGIN_AMTFC": 0,
-      "MARGIN_AMTLC": 0,
-      "GOLD_LOSS_PER": 0,
-      "GOLD_LOSS_AMTFC": 0,
-      "GOLD_LOSS_AMTLC": 0,
-      "COSTFC": 0,
-      "DT_VOCDATE": "2023-09-14T14:56:43.961Z",
-      "KARIGAR_CODE": "",
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "str",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "",
-      "TOTAL_LABOUR": 0,
-      "CATEGORY_CODE": "",
-      "COUNTRY_CODE": "",
-      "CUT_CODE": "",
-      "FINISH_CODE": "",
-      "DYE_CODE": "",
-      "TYPE_CODE": "",
-      "BRAND_CODE": "",
-      "RHODIUM_COLOR": "",
-      "SIZE": "",
-      "LENGTH": "",
-      "SCREW_FIELD": "",
-      "ORDER_TYPE": "",
-      "SUBCATEGORY_CODE": "",
-      "DSN_STOCK_CODE": "",
-      "JOBNO": "",
-      "ENAMEL_COLOR": "",
-      "PROD_VARIANCE": 0,
-      "SERVICE_ACCCODE": "",
-      "DIVISION_CODE": "s",
-      "JOB_STATUS": "",
-      "APPR_REFF": "",
-      "MAIN_REFF": "",
-      "SALESPERSON_CODE": "",
-      "METAL_SALES_REF": "",
-      "DELIVERY_TYPE": "",
-      "DELIVERY_DAYS": 0,
-      "GOLD_LOSS_WT": 0,
-      "PURITY": 0
-    }
 
-    detailsToSave.push(detailArrayValues)
-
+    let summaryData = this.detailData[0].DATA
+    summaryData = summaryData.summaryDetail
+    let detailArrayValues = {}
+    summaryData.forEach((item:any) => {
+      detailArrayValues = {
+        "UNIQUEID": 0,
+        "SRNO": item.SRNO || 0,
+        "EXP_PROD_START_DATE": "2023-09-14T14:56:43.961Z",
+        "DELIVERY_DATE": "2023-09-14T14:56:43.961Z",
+        "PARTYCODE": item.KARAT_CODE || "",
+        "DESIGN_CODE": item.designCode || "",
+        "KARAT": item.KARAT_CODE || "",
+        "METAL_COLOR": item.COLOR || "",
+        "PCS": item.PCS || 0,
+        "METAL_WT": Number(item.METAL_WT) || 0,
+        "STONE_WT": Number(item.STONE_WT) || 0,
+        "GROSS_WT": Number(item.GROSS_WT) || 0,
+        "RATEFC": 0,
+        "RATECC": 0,
+        "VALUEFC": 0,
+        "VALUECC": 0,
+        "DISCPER": 0,
+        "DISCAMTFC": 0,
+        "DISCAMTCC": 0,
+        "NETVALUEFC": Number(item.AMOUNT) || 0,
+        "NETVALUECC": Number(item.AMOUNT) || 0,
+        "LOCTYPE_CODE": "tst",
+        "JOBCARD_REF": "tst",
+        "JOBCARD_DATE": "2023-09-14T14:56:43.961Z",
+        "JOBCARD_STATUS": "tst",
+        "SEQ_CODE": "tst",
+        "STD_TIME": 0,
+        "MAX_TIME": 0,
+        "ACT_TIME": 0,
+        "DESCRIPTION": "tst",
+        "UNQ_DESIGN_ID": "tst",
+        "FINISHED_PCS": 0,
+        "PENDING_PCS": 0,
+        "STOCK_CODE": "tst",
+        "SUPPLIER": "tst",
+        "PODPROCREF": "tst",
+        "REMARKS": "tst",
+        "DSURFACEPROPERTY": "tst",
+        "DREFERENCE": "tst",
+        "DWIDTH": 0,
+        "DTHICKNESS": 0,
+        "CHARGE1FC": 0,
+        "CHARGE1LC": 0,
+        "CHARGE2FC": 0,
+        "CHARGE2LC": 0,
+        "CHARGE3FC": 0,
+        "CHARGE3LC": 0,
+        "CHARGE4FC": 0,
+        "CHARGE4LC": 0,
+        "CHARGE5FC": 0,
+        "CHARGE5LC": 0,
+        "SONO": 0,
+        "QUOT": 0,
+        "SUFFIX": "tst",
+        "D_REMARKS": "tst",
+        "ENGRAVE_TEXT": "tst",
+        "ENGRAVE_FONT": "tst",
+        "DUTY_AMT": 0,
+        "LOAD_PER": 0,
+        "MARGIN_PER": 0,
+        "DUTY_PER": 0,
+        "PICTURE_NAME": "tst",
+        "DSO_PICTURE_NAME": "tst",
+        "DSO_STOCK_CODE": "tst",
+        "SOBALANCE_PCS": 0,
+        "SORDER_CLOSE": 0,
+        "SOREF": "tst",
+        "SO_STATUS": 0,
+        "MARKUP_PER": 0,
+        "MARKUP_AMTFC": 0,
+        "MARKUP_AMTLC": 0,
+        "MARGIN_AMTFC": 0,
+        "MARGIN_AMTLC": 0,
+        "GOLD_LOSS_PER": 0,
+        "GOLD_LOSS_AMTFC": 0,
+        "GOLD_LOSS_AMTLC": 0,
+        "COSTFC": 0,
+        "DT_VOCDATE": "2023-09-14T14:56:43.961Z",
+        "KARIGAR_CODE": "tst",
+        "DT_BRANCH_CODE": "tst",
+        "DT_VOCTYPE": "tst",
+        "DT_VOCNO": 0,
+        "DT_YEARMONTH": "tst",
+        "TOTAL_LABOUR": 0,
+        "CATEGORY_CODE": item.CATEGORY_CODE || "tst",
+        "COUNTRY_CODE": "tst",
+        "CUT_CODE": "tst",
+        "FINISH_CODE": "tst",
+        "DYE_CODE": "tst",
+        "TYPE_CODE": "tst",
+        "BRAND_CODE": item.BRAND_CODE || "tst",
+        "RHODIUM_COLOR": "tst",
+        "SIZE": "tst",
+        "LENGTH": "tst",
+        "SCREW_FIELD": "tst",
+        "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "S",
+        "SUBCATEGORY_CODE": item.SUBCATEGORY_CODE || "tst",
+        "DSN_STOCK_CODE": "tst",
+        "JOBNO": "tst",
+        "ENAMEL_COLOR": "tst",
+        "PROD_VARIANCE": 0,
+        "SERVICE_ACCCODE": "tst",
+        "DIVISION_CODE": item.DIVCODE || "S",
+        "JOB_STATUS": "tst",
+        "APPR_REFF": "tst",
+        "MAIN_REFF": "tst",
+        "SALESPERSON_CODE": "tst",
+        "METAL_SALES_REF": "tst",
+        "DELIVERY_TYPE": "tst",
+        "DELIVERY_DAYS": 0,
+        "GOLD_LOSS_WT": 0,
+        "PURITY": item.PURITY || 0
+      }
+      this.detailRowToSave.push(detailArrayValues)
+    });
     
+    //detail arrays
+
+
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.commonService.branchCode || "",
@@ -352,12 +364,12 @@ export class DiamondSalesorderComponent implements OnInit {
       "YEARMONTH": this.commonService.yearSelected || "",
       "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode || "",
       "PARTY_CURRENCY": this.PartyDetailsOrderForm.value.partyCurrencyType || "",
-      "PARTY_CURR_RATE":  this.PartyDetailsOrderForm.value.partyCurrencyRate || 0,
-      "ITEM_CURRENCY":  this.PartyDetailsOrderForm.value.ItemCurrency || "",
-      "ITEM_CURR_RATE":  this.PartyDetailsOrderForm.value.ItemCurrencyRate || 0,
+      "PARTY_CURR_RATE": this.PartyDetailsOrderForm.value.partyCurrencyRate || 0,
+      "ITEM_CURRENCY": this.PartyDetailsOrderForm.value.ItemCurrency || "",
+      "ITEM_CURR_RATE": this.PartyDetailsOrderForm.value.ItemCurrencyRate || 0,
       "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
       "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode || "",
-      "METAL_RATE_TYPE": "",
+      "METAL_RATE_TYPE": "tst",
       "METAL_RATE": 0,
       "METAL_GRAM_RATE": 0,
       "TOTAL_PCS": 0,
@@ -367,78 +379,85 @@ export class DiamondSalesorderComponent implements OnInit {
       "TOTAL_AMOUNT_FC": 0,
       "TOTAL_AMOUNT_LC": 0,
       "MARGIN_PER": 0,
-      "REMARKS": "",
+      "REMARKS": "tst",
       "SYSTEM_DATE": "2023-09-14T14:56:43.961Z",
       "ROUND_VALUE_CC": 0,
       "NAVSEQNO": 0,
       "SO_STATUS": true,
       "TOTAL_AMOUNT_PRTY": 0,
       "FIX_UNFIX": true,
-      "LINKID": "",
+      "LINKID": "tst",
       "OUSTATUSNEW": 0,
       "CR_DAYS": 0,
-      "PARTY_ADDRESS": "",
-      "SALESPERSON_NAME": "",
+      "PARTY_ADDRESS": "tst",
+      "SALESPERSON_NAME": this.PartyDetailsOrderForm.value.SalesmanName || "",
       "MARKUP_PER": 0,
       "GOLD_LOSS_PER": 0,
       "PRINT_COUNT": 0,
-      "ORDER_TYPE": "",
-      "SALESORDER_REF": "",
-      "JOB_STATUS": "",
-      "APPR_REFF": "",
-      "MAIN_REFF": "",
-      "PARTY_NAME": "",
-      "SUBLEDGER_CODE": "",
-      "USERDEF1": "",
-      "USERDEF2": "",
-      "USERDEF3": "",
-      "USERDEF4": "",
-      "DELIVERYADDRESS": "",
-      "TERMSANDCONDITIONS": "",
-      "PAYMENTTERMS": "",
-      "DETAILBRANCHCODE": "strin",
+      "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "",
+      "SALESORDER_REF": "tst",
+      "JOB_STATUS": "tst",
+      "APPR_REFF": "tst",
+      "MAIN_REFF": "tst",
+      "PARTY_NAME": "tst",
+      "SUBLEDGER_CODE": "tst",
+      "USERDEF1": "tst",
+      "USERDEF2": "tst",
+      "USERDEF3": "tst",
+      "USERDEF4": "tst",
+      "DELIVERYADDRESS": "tst",
+      "TERMSANDCONDITIONS": "tst",
+      "PAYMENTTERMS": "tst",
+      "DETAILBRANCHCODE": "tst",
       "AMCSTARTDATE": "2023-09-14T14:56:43.961Z",
       "SALESINVPENAMOUNTCC": 0,
-      "PROSP_ORIGIN": "",
+      "PROSP_ORIGIN": "tst",
       "CANCEL_SALES_ORDER": true,
-      "DELIVERY_TYPE": "",
+      "DELIVERY_TYPE": "tst",
       "DELIVERY_DAYS": 0,
       "MKG_GROSS": true,
-      "ORDER_STATUS": "",
-      "HTUSERNAME": "",
+      "ORDER_STATUS": "1",
+      "HTUSERNAME": "tst",
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "AUTOPOSTING": true,
-      "details": detailsToSave
+      "details": this.detailRowToSave
     }
 
     // if (this.PartyDetailsOrderForm.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
+    this.snackBar.open('Saving...')
     let API = 'WebEnquiry/DiamondSalesOrder'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.PartyDetailsOrderForm.reset()
-                this.tableData = []
-                this.close()
-              }
-            });
-          }
+        this.snackBar.dismiss()
+        if (result.status.toUpperCase() == "SUCCESS" || result.status.toUpperCase() == "OK") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              // this.PartyDetailsOrderForm.reset()
+              // this.tableData = []
+              this.activeModal.close('reloadMainGrid');
+            }
+          });
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error(result.message, result.message ? result.message : '', {
+            timeOut: 3000,
+          })
         }
-      }, err => alert(err))
+      }, err => {
+        this.snackBar.dismiss()
+        this.toastr.error(err, err.error ? err.error['title'] : '', {
+          timeOut: 3000,
+        })
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -452,17 +471,17 @@ export class DiamondSalesorderComponent implements OnInit {
   //party Code Change
   partyCodeChange(event: any) {
     if (event.target.value == '') return
-    this.snackBar.open('Loading...')
     let postData = {
       "SPID": "001",
       "parameter": {
         "ACCODE": event.target.value || "",
       }
     }
+    this.snackBar.open('Validating Party Code...')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.snackBar.dismiss()
-        if (result.status == "Success") { //
+        if (result.status == "Success") {
           let data = result.dynamicData[0]
           if (data && data[0].CURRENCY_CODE) {
 
@@ -473,7 +492,9 @@ export class DiamondSalesorderComponent implements OnInit {
 
             // let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data[0].CURRENCY_CODE)
             let currencyRate = this.commonService.getCurrRate(data[0].CURRENCY_CODE)
-            currencyRate = this.commonService.transformDecimalVB(this.commonService.amtDecimals,currencyRate)
+
+            currencyRate = this.commonService.decimalQuantityFormat(currencyRate, 'RATE')
+
             this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
             this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyRate)
           }
@@ -507,14 +528,17 @@ export class DiamondSalesorderComponent implements OnInit {
   }
   SalesmanSelected(event: any) {
     this.PartyDetailsOrderForm.controls.SalesmanCode.setValue(event.SALESPERSON_CODE)
+    this.PartyDetailsOrderForm.controls.SalesmanName.setValue(event.DESCRIPTION)
   }
   rateTypeSelected(event: any) {
     this.PartyDetailsOrderForm.controls.rateType.setValue(event.RATE_TYPE)
     this.PartyDetailsOrderForm.controls.rateTypeDESC.setValue(event.DESCRIPTION)
   }
   itemCurrencySelected(event: any) {
+    let currencyRate = this.commonService.decimalQuantityFormat(event.CONV_RATE, 'RATE')
+
     this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(event.CURRENCY_CODE)
-    this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(event.CONV_RATE)
+    this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
   }
   partyCurrencySelected(event: any) {
     this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(event.CURRENCY_CODE)

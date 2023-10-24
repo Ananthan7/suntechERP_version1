@@ -74,7 +74,8 @@
                                         formControlName="StockCodeDesc" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="DesignCodeData"></master-search>
+                                    [MasterSearchData]="DesignCodeData">
+                                </master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -198,8 +199,9 @@
                                     class="col-sm-2 col-form-label">Rate</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput AmountDecimalInput
-                                            [disabled]="viewFlag.ItemRateFC"
+                                        <input type="text" matInput
+                                            AmountDecimalInput
+                                            [readOnly]="viewFlag.ItemRateFC"
                                             formControlName="RATEFC"
                                             class="text-right" />
                                     </mat-form-field>
@@ -209,7 +211,8 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" StoneDecimalInput
-                                            matInput [disabled]="viewFlag.ItemRateFC"
+                                            matInput
+                                            [readOnly]="viewFlag.ItemRateFC"
                                             class="text-right"
                                             formControlName="STONE_WT" />
                                     </mat-form-field>
@@ -220,7 +223,8 @@
                                     class="col-sm-2 col-form-label">Amount</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput AmountDecimalInput
+                                        <input type="text" matInput
+                                            AmountDecimalInput
                                             formControlName="AMOUNT"
                                             class="text-right" />
                                     </mat-form-field>
@@ -287,111 +291,181 @@
                                             width="auto" [showBorders]="true"
                                             [showRowLines]="true" height="300"
                                             [dataSource]="BOMDetailsArray"
-                                            (onRowUpdated)="groupBomDetailsData($event)">
+                                            (onRowUpdated)="formatBOMDetailGrid($event)">
                                             <dxo-editing mode="cell"
                                                 [allowUpdating]="true">
                                             </dxo-editing>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxo-selection mode="single"></dxo-selection>
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="DIVCODE"
                                                 caption="Div." alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="STONE_TYPE"
                                                 caption="Stone Type"
                                                 alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="COMP_CODE"
                                                 caption="Company Code"
                                                 alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="KARAT_CODE"
                                                 caption="Karat" alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="true"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="true"
                                                 dataField="PCS"
                                                 caption="Pcs" alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="true"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="true"
                                                 dataField="GROSS_WT"
-                                                caption="Weight/Carat" alignment="right">
+                                                caption="Weight/Carat"
+                                                alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="true"
-                                                dataField="RATELC"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="true"
+                                                dataField="RATEFC"
+                                                [customizeText]="customizeComma"
                                                 caption="Rate" alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="AMOUNTFC"
-                                                caption="Amount" alignment="right">
+                                                [customizeText]="customizeComma"
+                                                caption="Amount"
+                                                alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="SHAPE"
                                                 caption="Shape" alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="SIEVE"
                                                 caption="Sieve" alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="true"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="true"
                                                 dataField="LABRATEFC"
-                                                caption="Lab Rate" alignment="right">
+                                                caption="Lab Rate"
+                                                alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="WASTAGE_PER"
-                                                caption="Wastage %" alignment="right">
+                                                caption="Wastage %"
+                                                alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="WASTAGE_WT"
-                                                caption="Wastage Weight" alignment="right">
+                                                caption="Wastage Weight"
+                                                alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="WASTAGE_AMTFC"
-                                                caption="Wastage Amount" alignment="right">
+                                                caption="Wastage Amount"
+                                                alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="LABAMOUNTFC"
-                                                caption="Lab Amount" alignment="right">
+                                                caption="Lab Amount"
+                                                alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="SIEVE_DESC"
-                                                caption="Sieve Desc" alignment="left">
+                                                caption="Sieve Desc"
+                                                alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="SIEVE"
                                                 caption="Sieve" alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="SIZE_FORM"
                                                 caption="Size" alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="COLOR"
                                                 caption="Color" alignment="left"
                                                 cellTemplate="colorcode">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="CLARITY"
-                                                caption="Clarity" alignment="left">
+                                                caption="Clarity"
+                                                alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="STOCK_CODE"
-                                                caption="Stock Code" alignment="left">
+                                                caption="Stock Code"
+                                                alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="PROCESS_TYPE"
                                                 cellTemplate="processTypes"
-                                                caption="Process" alignment="left">
+                                                caption="Process"
+                                                alignment="left">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="true"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="true"
                                                 dataField="PROD_VARIANCE"
-                                                caption="Variance" alignment="right">
+                                                caption="Variance"
+                                                alignment="right">
                                             </dxi-column>
-                                            <dxi-column width="auto" [allowEditing]="false"
+                                            <dxi-column width="auto"
+                                                [allowEditing]="false"
                                                 dataField="PURITY"
-                                                caption="Purity" alignment="right">
+                                                caption="Purity"
+                                                alignment="right">
                                             </dxi-column>
-
+                                            <dxo-summary>
+                                                <dxi-total-item
+                                                    displayFormat="{0}"
+                                                    column="PCS"
+                                                    summaryType="sum">
+                                                </dxi-total-item>
+                                                <dxi-total-item
+                                                    displayFormat="{0}"
+                                                    column="GROSS_WT"
+                                                    [customizeText]="customizeText"
+                                                    summaryType="sum">
+                                                </dxi-total-item>
+                                                <dxi-total-item
+                                                    column="AMOUNTFC"
+                                                    summaryType="sum"
+                                                    displayFormat="{0}"
+                                                    [customizeText]="customizeText">
+                                                </dxi-total-item>
+                                                <dxi-total-item
+                                                    column="WASTAGE_PER"
+                                                    summaryType="sum"
+                                                    displayFormat="{0}"
+                                                    [customizeText]="customizeText">
+                                                </dxi-total-item>
+                                                <dxi-total-item
+                                                    column="LABAMOUNTFC"
+                                                    summaryType="sum"
+                                                    displayFormat="{0}"
+                                                    [customizeText]="customizeText">
+                                                </dxi-total-item>
+                                            </dxo-summary>
                                             <!-- <dxi-column width="auto"
                                                 *ngFor="let data of BOMDetailsArrayHead"
                                                 dataField="{{ data }}"
@@ -400,7 +474,8 @@
                                                 [alignment]="addAlignment(data)"
                                                 [cellTemplate]="colorcodeSelect(data)">
                                             </dxi-column> -->
-                                            <div *dxTemplate="let data of 'colorcode'">
+                                            <div
+                                                *dxTemplate="let data of 'colorcode'">
                                                 <div
                                                     class="d-flex justify-content-between">
                                                     <div>
@@ -415,7 +490,8 @@
                                                     </master-search>
                                                 </div>
                                             </div>
-                                            <div *dxTemplate="let data of 'processTypes'">
+                                            <div
+                                                *dxTemplate="let data of 'processTypes'">
                                                 <div
                                                     class="d-flex justify-content-between">
                                                     <div>
@@ -433,7 +509,7 @@
                                         </dx-data-grid>
                                     </dx-resizable>
                                     &nbsp;
-                                    <!-- grouped data grid -->
+                                    <!-- grouped BOM data grid starts-->
                                     <dx-resizable id="gridContainer"
                                         [width]="secondTableWidth"
                                         [height]="150"
@@ -446,21 +522,79 @@
                                             [allowColumnResizing]="true"
                                             [showBorders]="true">
                                             <dxo-paging [enabled]="false"></dxo-paging>
-                                            <dxo-editing mode="cell"
-                                                [allowUpdating]="true">
-                                            </dxo-editing>
                                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                            <dxi-column
-                                                *ngFor="let data of groupedBOMDetailsHead"
-                                                dataField="{{ data }}"
+                                            <dxi-column dataField="DIVCODE"
                                                 width="auto"
-                                                caption="{{ data }}"
-                                                [allowEditing]="true"
-                                                alignment="center">
+                                                caption="Division"
+                                                alignment="right">
                                             </dxi-column>
+                                            <dxi-column dataField="PCS"
+                                                width="auto"
+                                                caption="Pcs"
+                                                alignment="right">
+                                            </dxi-column>
+                                            <dxi-column dataField="WEIGHT"
+                                                width="auto"
+                                                caption="Weight"
+                                                alignment="right">
+                                            </dxi-column>
+                                            <dxi-column dataField="WEIGHT_GMS"
+                                                width="auto"
+                                                caption="Weight.Gms"
+                                                alignment="right">
+                                            </dxi-column>
+                                            <dxi-column dataField="AMOUNT_FC"
+                                                width="auto"
+                                                caption="Amount FC"
+                                                alignment="right">
+                                            </dxi-column>
+                                            <dxi-column
+                                                dataField="LABAMOUNTFC"
+                                                width="auto"
+                                                caption="Lab Amount FC"
+                                                alignment="right">
+                                            </dxi-column>
+                                            <dxi-column
+                                                dataField="WASTAGE_AMTFC"
+                                                width="auto"
+                                                caption="Weight Amount FC"
+                                                alignment="right">
+                                            </dxi-column>
+                                            <dxo-summary>
+                                                <dxi-total-item
+                                                    displayFormat="{0}"
+                                                    column="PCS"
+                                                    summaryType="sum">
+                                                </dxi-total-item>
+                                                <dxi-total-item
+                                                    displayFormat="{0}"
+                                                    column="WEIGHT_GMS"
+                                                    [customizeText]="customizeText"
+                                                    summaryType="sum">
+                                                </dxi-total-item>
+                                                <dxi-total-item
+                                                    column="AMOUNT_FC"
+                                                    summaryType="sum"
+                                                    displayFormat="{0}"
+                                                    [customizeText]="customizeText">
+                                                </dxi-total-item>
+                                                <dxi-total-item
+                                                    column="LABAMOUNTFC"
+                                                    summaryType="sum"
+                                                    displayFormat="{0}"
+                                                    [customizeText]="customizeText">
+                                                </dxi-total-item>
+                                                <dxi-total-item
+                                                    column="WASTAGE_AMTFC"
+                                                    summaryType="sum"
+                                                    displayFormat="{0}"
+                                                    [customizeText]="customizeText">
+                                                </dxi-total-item>
+                                            </dxo-summary>
                                         </dx-data-grid>
                                     </dx-resizable>
+                                    <!-- grouped BOM data grid ends -->
                                 </div>
 
                             </div>
@@ -486,8 +620,7 @@
                                         *ngFor="let data of gridPartsHead"
                                         dataField="{{ data }}"
                                         width="auto" caption="{{ data }}"
-                                        [allowEditing]="true" alignment="center"
-                                        backgroundcolor="#000">
+                                        [allowEditing]="true" alignment="right">
                                     </dxi-column>
                                 </dx-data-grid>
                             </div>
@@ -560,7 +693,7 @@
                                         <label class="col-sm-3 col-form-label">Purity</label>
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput
+                                                <input type="text" matInput SixDecimalInput
                                                     formControlName="PURITY" />
                                             </mat-form-field>
                                         </div>
@@ -598,13 +731,6 @@
                                                     formControlName="SUBCATEGORY_CODE" />
                                             </mat-form-field>
                                         </div>
-                                        <!-- <label class="col-sm-3 col-form-label">Length</label>
-                                        <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="COLOR" />
-                                            </mat-form-field>
-                                            <master-search></master-search>
-                                        </div> -->
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-3 col-form-label">Size</label>
@@ -619,7 +745,7 @@
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput
-                                                    formControlName="COLOR" />
+                                                    formControlName="StampDetails" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -690,7 +816,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="SETTING"/>
+                                                                matInput
+                                                                formControlName="SETTING" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -700,7 +827,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="POLISHING"/>
+                                                                matInput
+                                                                formControlName="POLISHING" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -710,7 +838,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="RHODIUM"/>
+                                                                matInput
+                                                                formControlName="RHODIUM" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -720,7 +849,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="LABOUR"/>
+                                                                matInput
+                                                                formControlName="LABOUR" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -730,7 +860,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="Misc"/>
+                                                                matInput
+                                                                formControlName="Misc" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -741,7 +872,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="Total_Labour"/>
+                                                                matInput
+                                                                formControlName="Total_Labour" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -760,7 +892,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="Wastage"/>
+                                                                matInput
+                                                                formControlName="Wastage" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -770,7 +903,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="MarkupPercentage"/>
+                                                                matInput
+                                                                formControlName="MarkupPercentage" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -780,7 +914,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="DutyPercentage"/>
+                                                                matInput
+                                                                formControlName="DutyPercentage" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -790,7 +925,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="MarginPercentage"/>
+                                                                matInput
+                                                                formControlName="MarginPercentage" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -800,7 +936,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="LoadingPercentage"/>
+                                                                matInput
+                                                                formControlName="LoadingPercentage" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -811,7 +948,8 @@
                                                         <mat-form-field
                                                             style="width: 100%;">
                                                             <input type="text"
-                                                                matInput formControlName="DiscountPercentage"/>
+                                                                matInput
+                                                                formControlName="DiscountPercentage" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>

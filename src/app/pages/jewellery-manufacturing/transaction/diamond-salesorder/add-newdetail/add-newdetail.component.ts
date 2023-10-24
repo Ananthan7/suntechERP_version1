@@ -38,6 +38,7 @@ export class AddNewdetailComponent implements OnInit {
   };
 
   BOMDetailsArray: any[] = [];
+  BOMDetailsDataToGroup: any[] = [];
   groupedBOMDetails: any[] = [];
   groupedBOMDetailsHead: any[] = [];
   gridComponents: any[] = [];
@@ -130,6 +131,7 @@ export class AddNewdetailComponent implements OnInit {
     MarginPercentage: ['', [Validators.required]],
     LoadingPercentage: ['', [Validators.required]],
     DiscountPercentage: ['', [Validators.required]],
+    StampDetails: [''],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -150,7 +152,7 @@ export class AddNewdetailComponent implements OnInit {
     this.handleResize();
   }
 
-  private handleResize() {
+  private handleResize():void {
     // Access screen size here using window.innerWidth and window.innerHeight
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
@@ -162,18 +164,49 @@ export class AddNewdetailComponent implements OnInit {
       this.secondTableWidth = 350
     }
   }
-  /**USE: first setup if already added */
-  setInitialValues() {
-    if (this.content[0] && this.content[0].headerDetails) {
+  /**USE: to edit detail if already added */
+  setInitialValues():void {
+    if (this.content && this.content[0].headerDetails) {
       this.headerDetails = this.content[0].headerDetails
-
     }
 
-    if (this.content[0] && this.content[0].BOMDetails) {
+    if (this.content && this.content[0].BOMDetails) {
       this.BOMDetailsArray = this.content[0].BOMDetails
       // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
-      this.groupBomDetailsData({})
+      this.groupBomDetailsData()
     }
+    if (this.content && this.content[0].summaryDetail) {
+      let summaryDetail = this.content[0].summaryDetail
+      
+      this.diamondSalesDetailForm.controls.designCode.setValue(summaryDetail[0].designCode)
+      this.diamondSalesDetailForm.controls.designDescription.setValue(summaryDetail[0].designDescription)
+    }
+  }
+  customizeComma(data:any){
+    if(!Number(data.value)) return data.value
+    return Number(data.value).toLocaleString('en-US', { style: 'decimal' })
+  }
+  customizeText(data:any){
+    let num = Number(data.value).toFixed(2)
+    return num
+  }
+  //**USE: Format decimals in BOM details grid change*/
+  formatBOMDetailGrid(data?: any): void{
+    this.groupBomDetailsData()
+    this.BOMDetailsArray.forEach((item:any)=>{
+      if(item.METALSTONE == 'M'){
+        item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT,'METAL')
+      }else if((item.METALSTONE == 'S')){
+        item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT,'STONE')
+      }
+      item.RATEFC = this.commonService.decimalQuantityFormat(item.RATEFC,'AMOUNT')
+      item.LABRATEFC = this.commonService.decimalQuantityFormat(item.LABRATEFC,'AMOUNT')
+      item.PURITY = this.commonService.decimalQuantityFormat(item.PURITY,'PURITY')
+      item.WASTAGE_PER = this.commonService.decimalQuantityFormat(item.WASTAGE_PER,'AMOUNT')
+      item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC,'METAL')
+      item.WASTAGE_WT = this.commonService.decimalQuantityFormat(item.WASTAGE_WT,'METAL')
+      item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC,'AMOUNT')
+    })
   }
   /**USE: Allow Row Edit */
   isAllowRowEdit(data: any): boolean {
@@ -208,8 +241,7 @@ export class AddNewdetailComponent implements OnInit {
     this.BOMDetailsArray[value.data.SRNO - 1].PROCESS_TYPE = event.PROCESS_TYPE;
   }
   /**USE: group BOM Details Data */
-  groupBomDetailsData(event: any) {
-    // let data = event.data
+  groupBomDetailsData() {
     let result: any[] = []
     this.BOMDetailsArray.reduce((res: any, value: any) => {
       if (!res[value.DIVCODE]) {
@@ -232,11 +264,23 @@ export class AddNewdetailComponent implements OnInit {
       res[value.DIVCODE].WASTAGE_AMTFC += value.WASTAGE_AMTFC;
       return res;
     }, {});
+    
     this.groupedBOMDetails = result
     this.groupedBOMDetailsHead = Object.keys(this.groupedBOMDetails[0]);
+    this.customizeGroupedGrid() //add decimal db
+  }
+  /**customize Grouped Grid data fo BOM details*/
+  customizeGroupedGrid(){
+    this.groupedBOMDetails.forEach((item:any)=>{
+      item.WEIGHT = this.commonService.decimalQuantityFormat(item.WEIGHT,'METAL')
+      item.WEIGHT_GMS = this.commonService.decimalQuantityFormat(item.WEIGHT_GMS,'METAL')
+      item.AMOUNT_FC = this.commonService.decimalQuantityFormat(item.AMOUNT_FC,'METAL')
+      item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC,'AMOUNT')
+      item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC,'AMOUNT')
+    })
   }
   /**USE: design Code Selection */
-  designCodeSelected(data: any) {
+  designCodeSelected(data: any):void {
     if (data.DESIGN_CODE) {
       this.codeSearchFlag = 'DESIGN'
       this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
@@ -249,7 +293,7 @@ export class AddNewdetailComponent implements OnInit {
     }
   }
   /**use: design code change fn to fetch data with design code */
-  designCodeValidate(event: any) {
+  designCodeValidate(event: any):void {
     // 'GetDesignStnmtlDetailNet'
     if (event.target.value == '') return
     this.reset() //reset all data
@@ -261,7 +305,7 @@ export class AddNewdetailComponent implements OnInit {
         "DESIGNCODE": event.target.value || '', //TODO 'HM14437' 
         "METAL_COLOR": '',
         "MRG_PERC": '',
-        "ACCODE": ''
+        "ACCODE": this.headerDetails.PartyCode || ''
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
@@ -299,7 +343,9 @@ export class AddNewdetailComponent implements OnInit {
           if (result.dynamicData[3].length > 0) {
             this.isViewBOMTab = true;
             this.BOMDetailsArray = result.dynamicData[3]
-            this.groupBomDetailsData({})
+            this.BOMDetailsDataToGroup = result.dynamicData[3]
+            this.groupBomDetailsData()
+            this.formatBOMDetailGrid()
           } else {
             this.isViewBOMTab = false;
           }
@@ -318,7 +364,7 @@ export class AddNewdetailComponent implements OnInit {
           this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
           this.summaryDetailForm.controls.COLOR.setValue(data.COLOR)
           this.summaryDetailForm.controls.KARAT_CODE.setValue(data.KARAT_CODE)
-          this.summaryDetailForm.controls.PURITY.setValue(data.PURITY)
+          this.summaryDetailForm.controls.PURITY.setValue(this.commonService.decimalQuantityFormat(data.PURITY,'PURITY'))
           this.summaryDetailForm.controls.SUPPLIER_CODE.setValue(data.SUPPLIER_CODE)
           this.summaryDetailForm.controls.SEQ_CODE.setValue(data.SEQ_CODE)
           this.summaryDetailForm.controls.BRAND_CODE.setValue(data.BRAND_CODE)
@@ -344,6 +390,7 @@ export class AddNewdetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   //**USE: calculate total on value change */
   calculateTotal(event: any) {
     // if(event.target.value == '') return;
@@ -397,6 +444,7 @@ export class AddNewdetailComponent implements OnInit {
 
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
+    // this.diamondSalesDetailForm.controls.SETTING.setValue(txtCharge1FC)
     //todo
     let txtCharge2FC: number = 0;
     let txtCharge3FC: number = 0;
@@ -420,8 +468,9 @@ export class AddNewdetailComponent implements OnInit {
     }
     // if (this.content.FixedMetal && this.content.FixedMetal == true) dblAmount -= dblMetal_Amt;
     dblTotRate = this.commonService.decimalQuantityFormat(dblAmount + dblTotLabour, 'AMOUNT');
-    this.diamondSalesDetailForm.controls.RATEFC.setValue(dblTotRate)
-    this.diamondSalesDetailForm.controls.AMOUNT.setValue(this.diamondSalesDetailForm.value.PCS * dblTotRate)
+    this.diamondSalesDetailForm.controls.RATEFC.setValue(this.customizeComma({value: dblTotRate}))
+    let sumAMOUNT = this.customizeComma({value: this.diamondSalesDetailForm.value.PCS * dblTotRate})
+    this.diamondSalesDetailForm.controls.AMOUNT.setValue(sumAMOUNT)
     //rate x weight = amount
     if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarkupPercentage > 0)) {
       dblMarkup_Amt = (dblDia_Amt * this.summaryDetailForm.value.MarkupPercentage) / 100;
@@ -465,8 +514,6 @@ export class AddNewdetailComponent implements OnInit {
     // txtDISCAMTFC = dblDisc_Amt.ToString();
     let txtItemRateFC = dblTotRate;
 
-    console.log(txtItemRateFC, 'final');
-
     this.diamondSalesDetailForm.controls.RATEFC.setValue(txtItemRateFC)
     let txtValueFC = (this.diamondSalesDetailForm.value.PCS * dblTotRate);
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(txtValueFC)
@@ -478,7 +525,6 @@ export class AddNewdetailComponent implements OnInit {
   }
   calculateMetalLabour(index: number) {
     let metalItemData = this.BOMDetailsArray.filter((item: any) => item.METALSTONE == 'M')
-    console.log(metalItemData,'metalItemData');
     
     this.snackBar.open('Loading...')
     let postData = {
@@ -509,10 +555,8 @@ export class AddNewdetailComponent implements OnInit {
       this.snackBar.dismiss()
       if (result.dynamicData || result.status == 'Success') {
         let data = result.dynamicData[0]
-        console.log(this.commonService.FCToCC(data[0].LCURR_CODE,data[0].LABOUR))
 
         const rateArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == data[0].LCURR_CODE);
-        console.log(rateArr,'rateArr');
         
         this.summaryDetailForm.controls.LABOUR.setValue(this.commonService.FCToCC(data[0].LCURR_CODE,data[0].LABOUR)) 
         let rate = 25.70
@@ -535,19 +579,17 @@ export class AddNewdetailComponent implements OnInit {
     if (this.BOMDetailsArray.length > 0) {
       item.BOMDetails = this.BOMDetailsArray
     }
-    if (this.summaryDetailForm.value) {
+    if (this.summaryDetailForm.value || this.diamondSalesDetailForm.value) {
       item.summaryDetail = [{ ...this.diamondSalesDetailForm.value, ...this.summaryDetailForm.value }]
     }
-
+    
     this.close([item])//USE: passing Detail data to header screen on close
   }
   /**USE: reset All data with this function to reuse as needed */
   reset() {
     this.BOMDetailsArray = []
   }
-  selectionChanged(data: any) {
-    console.log(data, 'fireddddd');
-  }
+ 
   /**USE: close activeModal */
   close(data?: any) {
     this.activeModal.close(data);
