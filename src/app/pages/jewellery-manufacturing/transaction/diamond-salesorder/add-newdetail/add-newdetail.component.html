@@ -201,7 +201,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
                                             AmountDecimalInput
-                                            [disabled]="viewFlag.ItemRateFC"
+                                            [readOnly]="viewFlag.ItemRateFC"
                                             formControlName="RATEFC"
                                             class="text-right" />
                                     </mat-form-field>
@@ -212,7 +212,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" StoneDecimalInput
                                             matInput
-                                            [disabled]="viewFlag.ItemRateFC"
+                                            [readOnly]="viewFlag.ItemRateFC"
                                             class="text-right"
                                             formControlName="STONE_WT" />
                                     </mat-form-field>

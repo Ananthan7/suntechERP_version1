@@ -355,7 +355,7 @@ export class AddNewdetailComponent implements OnInit {
           this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
           this.summaryDetailForm.controls.COLOR.setValue(data.COLOR)
           this.summaryDetailForm.controls.KARAT_CODE.setValue(data.KARAT_CODE)
-          this.summaryDetailForm.controls.PURITY.setValue(data.PURITY)
+          this.summaryDetailForm.controls.PURITY.setValue(this.commonService.decimalQuantityFormat(data.PURITY,'PURITY'))
           this.summaryDetailForm.controls.SUPPLIER_CODE.setValue(data.SUPPLIER_CODE)
           this.summaryDetailForm.controls.SEQ_CODE.setValue(data.SEQ_CODE)
           this.summaryDetailForm.controls.BRAND_CODE.setValue(data.BRAND_CODE)
@@ -397,6 +397,8 @@ export class AddNewdetailComponent implements OnInit {
     let dblMisc: number = 0; let dblWastageAmt: number = 0;
 
     this.BOMDetailsArray.forEach((item: any, index: number) => {
+      console.log(item,'item');
+      
       if (item.METALSTONE == "M") {
         if (!this.headerDetails.FixedMetal) {
           item.AMOUNTFC = this.commonService.decimalQuantityFormat(0.00, 'AMOUNT')
@@ -435,6 +437,7 @@ export class AddNewdetailComponent implements OnInit {
 
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
+    this.diamondSalesDetailForm.controls.SETTING.setValue(txtCharge1FC)
     //todo
     let txtCharge2FC: number = 0;
     let txtCharge3FC: number = 0;
@@ -504,8 +507,6 @@ export class AddNewdetailComponent implements OnInit {
     // txtDISCAMTFC = dblDisc_Amt.ToString();
     let txtItemRateFC = dblTotRate;
 
-    console.log(txtItemRateFC, 'final');
-
     this.diamondSalesDetailForm.controls.RATEFC.setValue(txtItemRateFC)
     let txtValueFC = (this.diamondSalesDetailForm.value.PCS * dblTotRate);
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(txtValueFC)
@@ -517,7 +518,6 @@ export class AddNewdetailComponent implements OnInit {
   }
   calculateMetalLabour(index: number) {
     let metalItemData = this.BOMDetailsArray.filter((item: any) => item.METALSTONE == 'M')
-    console.log(metalItemData,'metalItemData');
     
     this.snackBar.open('Loading...')
     let postData = {
@@ -548,10 +548,8 @@ export class AddNewdetailComponent implements OnInit {
       this.snackBar.dismiss()
       if (result.dynamicData || result.status == 'Success') {
         let data = result.dynamicData[0]
-        console.log(this.commonService.FCToCC(data[0].LCURR_CODE,data[0].LABOUR))
 
         const rateArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == data[0].LCURR_CODE);
-        console.log(rateArr,'rateArr');
         
         this.summaryDetailForm.controls.LABOUR.setValue(this.commonService.FCToCC(data[0].LCURR_CODE,data[0].LABOUR)) 
         let rate = 25.70
@@ -574,10 +572,10 @@ export class AddNewdetailComponent implements OnInit {
     if (this.BOMDetailsArray.length > 0) {
       item.BOMDetails = this.BOMDetailsArray
     }
-    if (this.summaryDetailForm.value) {
+    if (this.summaryDetailForm.value || this.diamondSalesDetailForm.value) {
       item.summaryDetail = [{ ...this.diamondSalesDetailForm.value, ...this.summaryDetailForm.value }]
     }
-
+    
     this.close([item])//USE: passing Detail data to header screen on close
   }
   /**USE: reset All data with this function to reuse as needed */

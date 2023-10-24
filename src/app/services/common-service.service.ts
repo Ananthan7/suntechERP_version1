@@ -78,7 +78,7 @@ export class CommonServiceService {
     } else if (flag == 'PURITY') {
       this.decimalQtyFormat = 6 //same as .net
     } else if (flag == 'RATE') {
-      this.decimalQtyFormat = 11 //same as .net
+      this.decimalQtyFormat = 6 //same as .net
     }
 
     let str = ''
@@ -159,7 +159,7 @@ export class CommonServiceService {
   }
   getCurrRate(currency: any) {
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
-    return result[0].CONV_RATE || 1;
+    return result[0]?.CONV_RATE;
   }
   CCToFC(currency: any, amount: any) {
 
