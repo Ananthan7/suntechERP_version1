@@ -55,7 +55,6 @@ export class TransactionComponent implements OnInit {
   ) {
     this.menuTitle = this.CommonService.getModuleName()
     this.componentName = this.CommonService.getFormComponentName()
-    // this.getMasterGridData()
   }
 
   ngOnInit(): void {
@@ -159,7 +158,11 @@ export class TransactionComponent implements OnInit {
     });
     modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
-        this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
+        let details = { 
+          HEADER_TABLE: this.CommonService.getqueryParamTable(),
+          MENU_CAPTION_ENG: this.CommonService.getModuleName()
+        }
+        this.getMasterGridData(details)
       }
     }, (reason) => {
       // Handle modal dismissal (if needed)
@@ -169,14 +172,18 @@ export class TransactionComponent implements OnInit {
 
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
-    console.log(data,'data');
     if (data) {
-      this.menuTitle = data.MENU_CAPTION_ENG;
+      if(data.MENU_CAPTION_ENG){
+        this.menuTitle = data.MENU_CAPTION_ENG;
+      }else{
+        this.menuTitle = this.CommonService.getModuleName()
+      }
+      if(data.ANG_WEB_FORM_NAME){
+        this.componentName = data.ANG_WEB_FORM_NAME;
+      }else{
+        this.componentName = this.CommonService.getFormComponentName()
+      }
       this.PERMISSIONS = data.PERMISSION;
-      this.componentName = data.ANG_WEB_FORM_NAME;
-    } else {
-      this.menuTitle = this.CommonService.getModuleName()
-      this.componentName = this.CommonService.getFormComponentName()
     }
     this.masterGridComponent?.getMasterGridData(data)
   }
