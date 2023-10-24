@@ -453,6 +453,18 @@
                                                     displayFormat="{0}"
                                                     [customizeText]="customizeText">
                                                 </dxi-total-item>
+                                                <dxi-total-item
+                                                    column="WASTAGE_PER"
+                                                    summaryType="sum"
+                                                    displayFormat="{0}"
+                                                    [customizeText]="customizeText">
+                                                </dxi-total-item>
+                                                <dxi-total-item
+                                                    column="LABAMOUNTFC"
+                                                    summaryType="sum"
+                                                    displayFormat="{0}"
+                                                    [customizeText]="customizeText">
+                                                </dxi-total-item>
                                             </dxo-summary>
                                             <!-- <dxi-column width="auto"
                                                 *ngFor="let data of BOMDetailsArrayHead"
@@ -681,7 +693,7 @@
                                         <label class="col-sm-3 col-form-label">Purity</label>
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput
+                                                <input type="text" matInput SixDecimalInput
                                                     formControlName="PURITY" />
                                             </mat-form-field>
                                         </div>
@@ -719,13 +731,6 @@
                                                     formControlName="SUBCATEGORY_CODE" />
                                             </mat-form-field>
                                         </div>
-                                        <!-- <label class="col-sm-3 col-form-label">Length</label>
-                                        <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="COLOR" />
-                                            </mat-form-field>
-                                            <master-search></master-search>
-                                        </div> -->
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-3 col-form-label">Size</label>

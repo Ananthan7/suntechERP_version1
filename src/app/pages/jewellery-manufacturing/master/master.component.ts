@@ -94,8 +94,6 @@ export class MasterComponent implements OnInit {
       case 'MeltingTypeComponent':
         contents = MeltingTypeComponent
         break;
-      //continue adding components using case then break    
-
       case 'AlloyMasterComponent':
         contents = AlloyMasterComponent
         break;
@@ -117,7 +115,7 @@ export class MasterComponent implements OnInit {
 
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
-      backdrop: 'static',//'static'
+      backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });

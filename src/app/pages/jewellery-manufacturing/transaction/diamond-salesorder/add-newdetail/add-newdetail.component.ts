@@ -164,17 +164,22 @@ export class AddNewdetailComponent implements OnInit {
       this.secondTableWidth = 350
     }
   }
-  /**USE: first setup if already added */
+  /**USE: to edit detail if already added */
   setInitialValues():void {
-    if (this.content[0] && this.content[0].headerDetails) {
+    if (this.content && this.content[0].headerDetails) {
       this.headerDetails = this.content[0].headerDetails
-
     }
 
-    if (this.content[0] && this.content[0].BOMDetails) {
+    if (this.content && this.content[0].BOMDetails) {
       this.BOMDetailsArray = this.content[0].BOMDetails
       // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
       this.groupBomDetailsData()
+    }
+    if (this.content && this.content[0].summaryDetail) {
+      let summaryDetail = this.content[0].summaryDetail
+      
+      this.diamondSalesDetailForm.controls.designCode.setValue(summaryDetail[0].designCode)
+      this.diamondSalesDetailForm.controls.designDescription.setValue(summaryDetail[0].designDescription)
     }
   }
   customizeComma(data:any){
@@ -197,6 +202,10 @@ export class AddNewdetailComponent implements OnInit {
       item.RATEFC = this.commonService.decimalQuantityFormat(item.RATEFC,'AMOUNT')
       item.LABRATEFC = this.commonService.decimalQuantityFormat(item.LABRATEFC,'AMOUNT')
       item.PURITY = this.commonService.decimalQuantityFormat(item.PURITY,'PURITY')
+      item.WASTAGE_PER = this.commonService.decimalQuantityFormat(item.WASTAGE_PER,'AMOUNT')
+      item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC,'METAL')
+      item.WASTAGE_WT = this.commonService.decimalQuantityFormat(item.WASTAGE_WT,'METAL')
+      item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC,'AMOUNT')
     })
   }
   /**USE: Allow Row Edit */
@@ -397,8 +406,6 @@ export class AddNewdetailComponent implements OnInit {
     let dblMisc: number = 0; let dblWastageAmt: number = 0;
 
     this.BOMDetailsArray.forEach((item: any, index: number) => {
-      console.log(item,'item');
-      
       if (item.METALSTONE == "M") {
         if (!this.headerDetails.FixedMetal) {
           item.AMOUNTFC = this.commonService.decimalQuantityFormat(0.00, 'AMOUNT')
@@ -437,7 +444,7 @@ export class AddNewdetailComponent implements OnInit {
 
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
-    this.diamondSalesDetailForm.controls.SETTING.setValue(txtCharge1FC)
+    // this.diamondSalesDetailForm.controls.SETTING.setValue(txtCharge1FC)
     //todo
     let txtCharge2FC: number = 0;
     let txtCharge3FC: number = 0;
