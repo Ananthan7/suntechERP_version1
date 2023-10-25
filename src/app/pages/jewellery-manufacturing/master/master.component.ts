@@ -94,8 +94,6 @@ export class MasterComponent implements OnInit {
       case 'MeltingTypeComponent':
         contents = MeltingTypeComponent
         break;
-      //continue adding components using case then break    
-
       case 'AlloyMasterComponent':
         contents = AlloyMasterComponent
         break;
@@ -117,14 +115,14 @@ export class MasterComponent implements OnInit {
 
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
-      backdrop: 'static',//'static'
+      backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
     modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
         this.tableName = this.CommonService.getqueryParamTable()
-        this.getMasterGridData({HEADER_TABLE: this.tableName})
+        this.getMasterGridData({ HEADER_TABLE: this.tableName })
       }
     }, (reason) => {
       // Handle modal dismissal (if needed)
@@ -135,18 +133,23 @@ export class MasterComponent implements OnInit {
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     if (data) {
-      this.menuTitle = data.MENU_CAPTION_ENG;
+      if (data.MENU_CAPTION_ENG) {
+        this.menuTitle = data.MENU_CAPTION_ENG;
+      } else {
+        this.menuTitle = this.CommonService.getModuleName()
+      }
+      if (data.ANG_WEB_FORM_NAME) {
+        this.componentName = data.ANG_WEB_FORM_NAME;
+      } else {
+        this.componentName = this.CommonService.getFormComponentName()
+      }
       this.PERMISSIONS = data.PERMISSION;
-      this.componentName = data.ANG_WEB_FORM_NAME;
-    } else {
-      this.menuTitle = this.CommonService.getModuleName()
-      this.componentName = this.CommonService.getFormComponentName()
+      // this.menuTitle = data.MENU_CAPTION_ENG;
+      // this.PERMISSIONS = data.PERMISSION;
+      // this.componentName = data.ANG_WEB_FORM_NAME;
     }
     this.masterGridComponent?.getMasterGridData(data)
   }
   // const endTime = performance.now();
   // const duration = endTime - startTime;
-  // Log the duration or perform other actions
-  // console.log(`API request took ${duration} milliseconds`);
-  // console.log(`API request took ${duration / 1000} seconds`);
 }

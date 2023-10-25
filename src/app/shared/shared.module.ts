@@ -68,6 +68,7 @@ import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.direc
 import { AmountDecimalDirective } from './directives/format-amount-decimal.directive';
 import { MetalDecimalDirective } from './directives/format-metal-decimal.directive';
 import { StoneDecimalDirective } from './directives/format-stone-decimal.directive';
+import { FormatSixDecimalDirective } from './directives/format-six-decimal.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -92,7 +93,8 @@ import { StoneDecimalDirective } from './directives/format-stone-decimal.directi
     AllowLeadingZeroDirective,
     AmountDecimalDirective,
     MetalDecimalDirective,
-    StoneDecimalDirective
+    StoneDecimalDirective,
+    FormatSixDecimalDirective
   ],
   imports: [
     CommonModule,
@@ -158,6 +160,7 @@ import { StoneDecimalDirective } from './directives/format-stone-decimal.directi
     AmountDecimalDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
+    FormatSixDecimalDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,

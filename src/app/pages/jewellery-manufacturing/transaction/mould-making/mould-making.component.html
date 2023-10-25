@@ -19,425 +19,203 @@
               <div class="col-md-3">
                 <label for="inputPassword"><b>Post</b> </label>
               </div>
-              <div class="col-md-3">
+
+              <div class="col-md-4">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="d-flex">
-                          <div class="col-md-3">
-                            <label for="inputPassword" ><b>Ho</b> </label>
-                          </div>
-                          <div class="col-md-3">
-                            <label for="inputPassword"><b>Post</b> </label>
-                          </div>
-                          <div class="col-md-3">
-                            <div class="row">   
-                              <label for="inputPassword" class="col-sm-2">Uniq:</label>
-                              <div class="col-sm-2">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="uniq" />
-                                </mat-form-field>
-                              </div>
-                              <div class="col-sm-2">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="uniq" />
-                                </mat-form-field>
-                              </div>                                                                 
-                              <label for="inputPassword" class="col-sm-2">Job:</label>
-                              <div class="col-sm-2">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="job" />
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-3">
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">Voucher :</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="voctype" />
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">Voucher Date :</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="date" matInput formControlName="vocdate" />
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">Entered By :</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 70%;">
-                                  <input type="text" matInput formControlName="enteredby" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-3 ">
-                            <div class=" row">
-                              <label for="inputPassword" class="col-sm-6 ">From Process:</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 70%;">
-                                  <input type="text" matInput formControlName="fromprocess" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                              </div>
-                            </div>
-                            <div class=" row">
-                              <label for="inputPassword" class="col-sm-6 ">From Worker:</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 70%;">
-                                  <input type="text" matInput formControlName="fromworker" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">Job No:</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 70%;">
-                                  <input type="text" matInput formControlName="jobno" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">Mould No:</label>
-                              <div class="col-md-5">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="mouldno" />
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">Mould Type:</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 70%;">
-                                  <input type="text" matInput formControlName="mouldtype" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">No of Parts :</label>
-                              <div class="col-md-5">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="noofparts" />
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class="row">
-                                <label for="inputPassword" class="col-sm-6 ">Narration:</label>
-                                <div class="col-sm-6">
-                                  <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="narration" />
-                                  </mat-form-field>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col-md-3">
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">To Process:</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 70%;">
-                                  <input type="text" matInput formControlName="toprocess" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">To Worker:</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 70%;">
-                                  <input type="text" matInput formControlName="toworker" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">Design Code:</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="designcode" />
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">Item Currency:</label>
-                              <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="itemcurrency" />
-                                </mat-form-field>
-                              </div>
-                              <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="itemcurrencyrate" />
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <label for="inputPassword" class="col-sm-6 ">Location:</label>
-                              <div class="col-md-6">
-                                <mat-form-field style="width: 100%;">
-                                  <input type="text" matInput formControlName="location" />
-                                </mat-form-field>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-3">
-                            <div class="col-md-3">
-                                <div class="square-box"></div>
-                              </div>
-                            <div>
-                                <div class="d-flex justify-content-center text-center">
-                                <div class="p-2  bd-highlight">
-                                  <button type="button" class="btn btn-primary suntech-btn-primary">
-                                     Capture
-                                  </button>
-                                </div>                            
-                              </div>
-                            </div>
-                            <div>
-                                <div class="d-flex justify-content-center text-center">
-                                    <div class="p-2 bd-highlight">
-                                        <button type="button" class="btn btn-primary suntech-btn-primary">
-                                            Browser
-                                        </button>
-                                      </div>                             
-                                </div>
-                              </div>
-                          </div>       
-                        </div>       
-                      </div>
-                    </div>                    
-                  </div>       
-                  <div class="container-fluid pt-3">
-                    <div class="card metal-sales-card">
-                      <div class="card-body sales-card-body p-2">
-                        <div class="">                          
-                          <div class="col-md-12">
-                            <div class="row">                           
-                                    <div class="row py-2 border-top">
-                                    <div class="col-md-3 d-flex">
-                                      <div class="p-1">
-                                        <button type="button" mat-flat-button color="primary">
-                                          <i class="fa fa-plus" style="font-size: 11px;"></i>
-                                        </button>
-                                      </div>
-                                      <div class="p-1">
-                                        <button type="button" mat-flat-button color="primary">
-                                          <i class="fa fa-trash" style="font-size: 11px;"></i>
-                                        </button>
-                                      </div>
-                                    </div>
-                                  <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                                    <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
-                                    </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>       
-                                    <dxi-column *ngFor="let data of columnheads" dataField="{{ data }}" 
-                                      caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                                    </dxi-column>
-                                  </dx-data-grid>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                   <label for="inputPassword" class="col-sm-2">Uniq:</label>
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="uniq" />
                     </mat-form-field>
                   </div>
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="uniqNo" />
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-2">Job:</label>
-                  <div class="col-sm-2">
+                  <div class="col-sm-3">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="job" />
                     </mat-form-field>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row">
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Voucher :</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="vocher"/>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Voucher Date :</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="date" matInput formControlName="vocDate"/>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Entered By :</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="enteredBy"/>
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 ">
+              <div class=" row">
+                <label for="inputPassword" class="col-sm-6 ">From Process:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="fromProcess" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+              <div class=" row">
+                <label for="inputPassword" class="col-sm-6 ">From Worker:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="fromWorker" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Job No:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="jobNo" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="jobnoCodeData"
+                    (newRowClick)="jobnoCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Mould No:</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="mouldNo" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Mould Type:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="mouldType" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="mouldCodeData"
+                    (newRowClick)="mouldCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">No of Parts :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="noOfParts" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Narration:</label>
+                <div class="col-sm-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="narration" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">To Process:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="toProcess" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">To Worker:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="toWorker" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                  </master-search>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Design Code:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="designCode" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Item Currency:</label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="itemCurrency" />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="itemCurrencyRate" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label for="inputPassword" class="col-sm-6 ">Location:</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="location" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
               <div class="col-md-3">
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Voucher :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Voucher Date :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="date" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Entered By :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
+                <div class="square-box"></div>
+              </div>
+              <div>
+                <div class="d-flex justify-content-center text-center">
+                  <div class="p-2  bd-highlight">
+                    <button type="button" class="btn btn-primary suntech-btn-primary">
+                      Capture
+                    </button>
                   </div>
                 </div>
               </div>
-              <div class="col-md-3 ">
-                <div class=" row">
-                  <label for="inputPassword" class="col-sm-6 ">From Process:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div>
-                <div class=" row">
-                  <label for="inputPassword" class="col-sm-6 ">From Worker:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Job No:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Mould No:</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Mould Type:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">No of Parts :</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Narration:</label>
-                  <div class="col-sm-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">To Process:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">To Worker:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Design Code:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Item Currency:</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <label for="inputPassword" class="col-sm-6 ">Location:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="col-md-3">
-                  <div class="square-box"></div>
-                </div>
-                <div>
-                  <div class="d-flex justify-content-center text-center">
-                    <div class="p-2  bd-highlight">
-                      <button type="button" class="btn btn-primary suntech-btn-primary">
-                        Capture
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div class="d-flex justify-content-center text-center">
-                    <div class="p-2 bd-highlight">
-                      <button type="button" class="btn btn-primary suntech-btn-primary">
-                        Browser
-                      </button>
-                    </div>
+              <div>
+                <div class="d-flex justify-content-center text-center">
+                  <div class="p-2 bd-highlight">
+                    <button type="button" class="btn btn-primary suntech-btn-primary">
+                      Browser
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-    
+      </div>
+
       <div class="container-fluid pt-3">
         <div class="col-md-12">
           <div class="row">

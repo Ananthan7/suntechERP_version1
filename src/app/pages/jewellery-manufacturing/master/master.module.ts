@@ -32,7 +32,7 @@ import { MatRadioModule } from '@angular/material/radio';
     MeltingTypeComponent,
     ApprovalMasterComponent,
     PictureTypeMasterComponent,
-    DesignMasterComponent
+    DesignMasterComponent,
     
   ],
   imports: [

@@ -20,6 +20,7 @@ export class MouldMakingComponent implements OnInit {
   userName = localStorage.getItem('username');
   columnheads : any[] = ['Stock Code','Description','Psc','Gross Weight','Rate','Amount','Location'];
   branchCode?: String;
+  yearMonth?: String;
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -34,6 +35,60 @@ export class MouldMakingComponent implements OnInit {
   VIEW_TABLE: true,
   LOAD_ONCLICK: true,
 }
+
+
+ProcessCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 20,
+  SEARCH_FIELD: 'process_code',
+  SEARCH_HEADING: 'Button Color',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "PROCESS_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+
+WorkerCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 19,
+  SEARCH_FIELD: 'WORKER_CODE',
+  SEARCH_HEADING: 'Button Color',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "WORKER_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+
+jobnoCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 46,
+  SEARCH_FIELD: 'job_number',
+  SEARCH_HEADING: 'Button Color',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "job_number<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+
+mouldCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 3,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'Button Color',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+
  constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -45,31 +100,62 @@ export class MouldMakingComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+  }
+
+  userDataSelected(value: any) {
+    console.log(value);
+       this.mouldMakingForm.controls.enteredBy.setValue(value.UsersName);
+  }
+
+  ProcessCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.fromProcess.setValue(e.Process_Code);
+    this.mouldMakingForm.controls.toProcess.setValue(e.Process_Code);
+  }
+  
+  WorkerCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.fromWorker.setValue(e.WORKER_CODE);
+    this.mouldMakingForm.controls.toWorker.setValue(e.WORKER_CODE);
+  }
+
+  jobnoCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.jobNo.setValue(e.job_number);
+  }
+
+  mouldCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.mouldType.setValue(e.CODE);
   }
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  
   mouldMakingForm: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocdate:[''],
-    enteredby:[''],
-    fromprocess:[''],
-    fromworker:[''],
-    jobno:[''],
-    mouldno:[''],
-    mouldtype:[''],
-    noofparts:[''],
-    narration:[''],
-    uniq:[''],
-    job:[''],
-    toprocess:[''],
-    toworker:[''],
-    designcode:[''],
-    itemcurrency:[''],
-    itemcurrencyrate:[''],
-    location:[''],
+    uniq : [''],
+    uniqNo : [''],
+    job : [''],
+    vocher :[''],
+    vocDate : [''],
+    enteredBy : [''],
+    fromProcess : [''],
+    fromWorker : [''],
+    jobNo : [''],
+    mouldNo : [''],
+    mouldType : [''],
+    noOfParts : [''],
+    narration : [''],
+    toProcess : [''],
+    toWorker : [''],
+    designCode : [''],
+    itemCurrency : [''],
+    itemCurrencyRate : [''],
+    location :[''],
+
   });
   formSubmit(){
 
@@ -84,29 +170,29 @@ export class MouldMakingComponent implements OnInit {
   
     let API = 'JobMouldHeaderDJ/InsertJobMouldHeaderDJ'
     let postData = {
-      "MID": 0,
-      "BRANCH_CODE":  this.branchCode,
-      "VOCTYPE":this.mouldMakingForm.value.voctype || "",
+     "MID": 0,
+     "BRANCH_CODE":  this.branchCode,
+     "VOCTYPE":this.mouldMakingForm.value.vocher || "",
       "VOCNO": 0,
-      "VOCDATE": this.mouldMakingForm.value.vocdate || "",
-      "YEARMONTH": "string",
-      "JOB_NUMBER": this.mouldMakingForm.value.jobno || "",
+      "VOCDATE": this.mouldMakingForm.value.vocDate || "",
+      "YEARMONTH": this.yearMonth,
+      "JOB_NUMBER": this.mouldMakingForm.value.jobNo || "",
       "JOB_DESCRIPTION": this.mouldMakingForm.value.job || "",
-      "DESIGN_CODE": this.mouldMakingForm.value.designcode || "",
-      "MOULD_NUMBER": this.mouldMakingForm.value.mouldno || "",
-      "MOULD_LOCATION": "string",
-      "MOULD_TYPE":this.mouldMakingForm.value.mouldtype || "",
-      "UNQ_JOB_ID": "string",
-      "UNQ_DESIGN_ID": "string",
+      "DESIGN_CODE": this.mouldMakingForm.value.designCode || "",
+      "MOULD_NUMBER": this.mouldMakingForm.value.mouldNo || "",
+      "MOULD_LOCATION": this.mouldMakingForm.value.location || "",
+      "MOULD_TYPE":this.mouldMakingForm.value.mouldType || "",
+      "UNQ_JOB_ID": this.mouldMakingForm.value.uniq,
+      "UNQ_DESIGN_ID": this.mouldMakingForm.value.uniqNo,
       "JOB_SO_MID": 0,
       "JOB_SO_NUMBER": 0,
-      "PARTYCODE":this.mouldMakingForm.value.noofparts || "",
-      "PARTY_CURRENCY": "stri",
+      "PARTYCODE":this.mouldMakingForm.value.noOfParts || "",
+      "PARTY_CURRENCY": "",
       "PARTY_CURR_RATE": 0,
-      "ITEM_CURRENCY": this.mouldMakingForm.value.itemcurrency || "",
-      "ITEM_CURR_RATE": this.mouldMakingForm.value.itemcurrencyrate || "",
-      "VALUE_DATE": "2023-10-16T10:38:33.131Z",
-      "SALESPERSON_CODE": "string",
+      "ITEM_CURRENCY": this.mouldMakingForm.value.itemCurrency || "",
+      "ITEM_CURR_RATE": this.mouldMakingForm.value.itemCurrencyRate || "",
+      "VALUE_DATE": "2023-10-19T08:59:58.514Z",
+      "SALESPERSON_CODE": this.mouldMakingForm.value.enteredBy,
       "TOTAL_PCS": 0,
       "TOTAL_GRWT": 0,
       "TOTAL_DISCAMTFC": 0,
@@ -122,31 +208,33 @@ export class MouldMakingComponent implements OnInit {
       "GROSS_VALUE_FC": 0,
       "GROSS_VALUE_CC": 0,
       "REMARKS": this.mouldMakingForm.value.narration || "",
-      "SYSTEM_DATE": "2023-10-16T10:38:33.131Z",
+      "SYSTEM_DATE": "2023-10-19T08:59:58.514Z",
       "CONSIGNMENTID": 0,
       "ROUND_VALUE_CC": 0,
       "NAVSEQNO": 0,
       "SUPINVNO": "string",
-      "SUPINVDATE": "2023-10-16T10:38:33.131Z",
-      "PAYMENTREMARKS": "string",
-      "HHACCOUNT_HEAD": "string",
-      "D2DTRANSFER": "s",
-      "BASE_CURRENCY": "stri",
+      "SUPINVDATE": "2023-10-19T08:59:58.514Z",
+      "PAYMENTREMARKS": "",
+      "HHACCOUNT_HEAD": "",
+      "D2DTRANSFER": "",
+      "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
-      "POSTDATE": "string",
+      "POSTDATE": "",
       "PRINT_COUNT": 0,
-      "DOC_REF": "string",
-      "PICTURE_NAME": "string",
-      "FROM_WORKER_CODE":this.mouldMakingForm.value.fromworker || "",
-      "TO_WORKER_CODE": this.mouldMakingForm.value.toworker || "",
-      "FROM_PROCESS_CODE":this.mouldMakingForm.value.fromprocess || "",
-      "TO_PROCESS_CODE": this.mouldMakingForm.value.toprocess || "",
+      "DOC_REF": "",
+      "PICTURE_NAME": "",
+      "FROM_WORKER_CODE":this.mouldMakingForm.value.fromWorker || "",
+      "TO_WORKER_CODE": this.mouldMakingForm.value.toWorker || "",
+      "FROM_PROCESS_CODE":this.mouldMakingForm.value.fromProcess || "",
+      "TO_PROCESS_CODE": this.mouldMakingForm.value.toProcess || "",
       "PARTS": 0,
+  "Details": [
+    {
       "UNIQUEID": 0,
       "SRNO": 0,
-      "STOCK_CODE": "string",
+      "STOCK_CODE": "",
       "PCS": 0,
       "GRWT": 0,
       "RATEFC": 0,
@@ -158,18 +246,21 @@ export class MouldMakingComponent implements OnInit {
       "DISCAMTCC": 0,
       "NETVALUEFC": 0,
       "NETVALUECC": 0,
-      "LOCTYPE_CODE": this.mouldMakingForm.value.location || "",
-      "STOCK_DOCDESC": "string",
-      "DETDIVISION": "s",
-      "DIVISION_CODE": "s",
-      "DETLINEREMARKS": "string",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
+      "LOCTYPE_CODE": "",
+      "STOCK_DOCDESC": "",
+      "DETDIVISION": "",
+      "BASE_CONV_RATE": 0,
+      "DIVISION_CODE": "",
+      "POSTDATE": "",
+      "DETLINEREMARKS": "",
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
       "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
+      "DT_YEARMONTH": "",
       "TOTAL_AMOUNTCC": 0,
-      "TOTAL_AMOUNTFC": 0,
-      "approvalDetails": this.tableData,  
+      "TOTAL_AMOUNTFC": 0
+    }
+  ]
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -197,60 +288,38 @@ export class MouldMakingComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  setFormValues() {
-    if(!this.content) return
-    console.log(this.content);
-    
-    this.mouldMakingForm.controls.voctype.setValue(this.content.VOCTYPE)
-    this.mouldMakingForm.controls.vocdate.setValue(this.content.VOCDATE)
-    this.mouldMakingForm.controls.fromprocess.setValue(this.content.FROM_PROCESS_CODE)
-    this.mouldMakingForm.controls.fromworker.setValue(this.content.FROM_WORKER_CODE)
-    this.mouldMakingForm.controls.jobno.setValue(this.content.JOB_NUMBER)
-    this.mouldMakingForm.controls.mouldno.setValue(this.content.MOULD_NUMBER)
-    this.mouldMakingForm.controls.mouldtype.setValue(this.content.MOULD_TYPE)
-    this.mouldMakingForm.controls.noofparts.setValue(this.content.PARTYCODE)
-    this.mouldMakingForm.controls.narration.setValue(this.content.REMARKS)
-    this.mouldMakingForm.controls.job.setValue(this.content.JOB_DESCRIPTION)
-    this.mouldMakingForm.controls.toprocess.setValue(this.content.TO_PROCESS_CODE)
-    this.mouldMakingForm.controls.toworker.setValue(this.content.TO_WORKER_CODE)
-    this.mouldMakingForm.controls.designcode.setValue(this.content.DESIGN_CODE)
-    this.mouldMakingForm.controls.itemcurrency.setValue(this.content.ITEM_CURRENCY)
-    this.mouldMakingForm.controls.itemcurrencyrate.setValue(this.content.ITEM_CURR_RATE)
-    this.mouldMakingForm.controls.location.setValue(this.content.LOCTYPE_CODE)
-  }
-
-
+ 
   update(){
     if (this.mouldMakingForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
   
-    let API = 'JobMouldHeaderDJ/UpdateJobMouldHeaderDJ/'+ this.mouldMakingForm.value.branchCode + this.mouldMakingForm.value.voctype + this.mouldMakingForm.value.vocno + this.mouldMakingForm.value.vocdate
+    let API = 'JobMouldHeaderDJ/UpdateJobMouldHeaderDJ/'+ this.mouldMakingForm.value.branchCode + this.mouldMakingForm.value.voctype + this.mouldMakingForm.value.vocno + this.mouldMakingForm.value.yearMonth
     let postData = {
       "MID": 0,
-      "BRANCH_CODE":  this.branchCode,
-      "VOCTYPE":this.mouldMakingForm.value.voctype || "",
+     "BRANCH_CODE":  this.branchCode,
+     "VOCTYPE":this.mouldMakingForm.value.voctype || "",
       "VOCNO": 0,
       "VOCDATE": this.mouldMakingForm.value.vocdate || "",
-      "YEARMONTH": "string",
+      "YEARMONTH": this.yearMonth,
       "JOB_NUMBER": this.mouldMakingForm.value.jobno || "",
       "JOB_DESCRIPTION": this.mouldMakingForm.value.job || "",
       "DESIGN_CODE": this.mouldMakingForm.value.designcode || "",
       "MOULD_NUMBER": this.mouldMakingForm.value.mouldno || "",
-      "MOULD_LOCATION": "string",
+      "MOULD_LOCATION": this.mouldMakingForm.value.location || "",
       "MOULD_TYPE":this.mouldMakingForm.value.mouldtype || "",
-      "UNQ_JOB_ID": "string",
-      "UNQ_DESIGN_ID": "string",
+      "UNQ_JOB_ID": "",
+      "UNQ_DESIGN_ID": "",
       "JOB_SO_MID": 0,
       "JOB_SO_NUMBER": 0,
       "PARTYCODE":this.mouldMakingForm.value.noofparts || "",
-      "PARTY_CURRENCY": "stri",
+      "PARTY_CURRENCY": "",
       "PARTY_CURR_RATE": 0,
       "ITEM_CURRENCY": this.mouldMakingForm.value.itemcurrency || "",
       "ITEM_CURR_RATE": this.mouldMakingForm.value.itemcurrencyrate || "",
-      "VALUE_DATE": "2023-10-16T10:38:33.131Z",
-      "SALESPERSON_CODE": "string",
+      "VALUE_DATE": "2023-10-19T08:59:58.514Z",
+      "SALESPERSON_CODE": "",
       "TOTAL_PCS": 0,
       "TOTAL_GRWT": 0,
       "TOTAL_DISCAMTFC": 0,
@@ -266,31 +335,33 @@ export class MouldMakingComponent implements OnInit {
       "GROSS_VALUE_FC": 0,
       "GROSS_VALUE_CC": 0,
       "REMARKS": this.mouldMakingForm.value.narration || "",
-      "SYSTEM_DATE": "2023-10-16T10:38:33.131Z",
+      "SYSTEM_DATE": "2023-10-19T08:59:58.514Z",
       "CONSIGNMENTID": 0,
       "ROUND_VALUE_CC": 0,
       "NAVSEQNO": 0,
-      "SUPINVNO": "string",
-      "SUPINVDATE": "2023-10-16T10:38:33.131Z",
-      "PAYMENTREMARKS": "string",
-      "HHACCOUNT_HEAD": "string",
+      "SUPINVNO": "",
+      "SUPINVDATE": "2023-10-19T08:59:58.514Z",
+      "PAYMENTREMARKS": "",
+      "HHACCOUNT_HEAD": "",
       "D2DTRANSFER": "s",
-      "BASE_CURRENCY": "stri",
+      "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
-      "POSTDATE": "string",
+      "POSTDATE": "",
       "PRINT_COUNT": 0,
-      "DOC_REF": "string",
-      "PICTURE_NAME": "string",
+      "DOC_REF": "",
+      "PICTURE_NAME": "",
       "FROM_WORKER_CODE":this.mouldMakingForm.value.fromworker || "",
       "TO_WORKER_CODE": this.mouldMakingForm.value.toworker || "",
       "FROM_PROCESS_CODE":this.mouldMakingForm.value.fromprocess || "",
       "TO_PROCESS_CODE": this.mouldMakingForm.value.toprocess || "",
       "PARTS": 0,
+  "Details": [
+    {
       "UNIQUEID": 0,
       "SRNO": 0,
-      "STOCK_CODE": "string",
+      "STOCK_CODE": "",
       "PCS": 0,
       "GRWT": 0,
       "RATEFC": 0,
@@ -302,18 +373,21 @@ export class MouldMakingComponent implements OnInit {
       "DISCAMTCC": 0,
       "NETVALUEFC": 0,
       "NETVALUECC": 0,
-      "LOCTYPE_CODE": this.mouldMakingForm.value.location || "",
-      "STOCK_DOCDESC": "string",
+      "LOCTYPE_CODE": "",
+      "STOCK_DOCDESC": "",
       "DETDIVISION": "s",
-      "DIVISION_CODE": "s",
-      "DETLINEREMARKS": "string",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
+      "BASE_CONV_RATE": 0,
+      "DIVISION_CODE": "",
+      "POSTDATE": "",
+      "DETLINEREMARKS": "",
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
       "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
+      "DT_YEARMONTH": "",
       "TOTAL_AMOUNTCC": 0,
-      "TOTAL_AMOUNTFC": 0, 
-      "approvalDetails": this.tableData,  
+      "TOTAL_AMOUNTFC": 0
+    }
+  ]
     }
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -365,7 +439,7 @@ export class MouldMakingComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobMouldHeaderDJ/DeleteJobMouldHeaderDJ/' + this.mouldMakingForm.value.branchCode + this.mouldMakingForm.value.voctype + this.mouldMakingForm.value.vocno + this.mouldMakingForm.value.vocdate
+        let API = 'JobMouldHeaderDJ/DeleteJobMouldHeaderDJ/' + this.mouldMakingForm.value.branchCode + this.mouldMakingForm.value.voctype + this.mouldMakingForm.value.vocno + this.mouldMakingForm.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

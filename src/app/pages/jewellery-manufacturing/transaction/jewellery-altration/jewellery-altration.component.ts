@@ -20,8 +20,10 @@ export class JewelleryAltrationComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
+  branchCode?: String;
+  yearMonth?: String;
   private subscriptions: Subscription[] = [];
-    user: MasterSearchModel = {
+  user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 73,
@@ -33,16 +35,43 @@ export class JewelleryAltrationComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+ 
+  costCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+ 
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+  }
+
+  costCodeSelected(e:any){
+    console.log(e);
+    this.jewelleryaltrationFrom.controls.stockcode.setValue(e.COST_CODE);
+  }
+
+  userDataSelected(value: any) {
+    console.log(value);
+       this.jewelleryaltrationFrom.controls.userName.setValue(value.UsersName);
   }
 
   close(data?: any) {
@@ -52,53 +81,21 @@ export class JewelleryAltrationComponent implements OnInit {
 
 
 
-  waxprocessFrom: FormGroup = this.formBuilder.group({
+  jewelleryaltrationFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
     vocno:[''],
-   process:[''],
-   worker:[''],
-   toworker:[''],
-   toprocess:[''],
-   waxcode:[''],
-    remark:[''],
+   vocdate:[''],
+   metalrate:[''],
+   metalratetype:[''],
+   costcode:[''],
+   lossaccount:[''],
+   enteredby:[''],
+   itemcurrency:[''],
+   itemcurrencycc:[''],
+    narration:[''],
   });
 
 
-
- CurrencyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 8,
-    SEARCH_FIELD: 'currency',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  CurrencyCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.currency.setValue(e.CURRENCY_CODE);
-  }
-
-
-
-  WorkerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 19,
-    SEARCH_FIELD: 'worker',
-    SEARCH_HEADING: 'Button Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  WorkerCodeSelected(e:any){
-    console.log(e);
-    this.waxprocessFrom.controls.worker.setValue(e.WORKER_CODE);
-  }
-  
   openjewelleryaltrationdetails() {
     const modalRef: NgbModalRef = this.modalService.open(JewelleryAltrationDetailsComponent, {
       size: 'xl',
@@ -109,61 +106,6 @@ export class JewelleryAltrationComponent implements OnInit {
 
   }
 
-  adddata() {
-    let length = this.tableData.length;
-    let srno = length + 1;
-    let data =  {
-      "MID": 0,
-      "VOCTYPE": "str",
-      "BRANCH_CODE": "string",
-      "VOCNO": 0,
-      "VOCDATE": "2023-10-07T08:43:49.448Z",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-07T08:43:49.448Z",
-      "PROCESS_CODE": "string",
-      "WORKER_CODE": "string",
-      "SMAN": "string",
-      "REMARKS": "string",
-      "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "PRINT_COUNT": 0,
-      "TO_PROCESS_CODE": "string",
-      "TO_WORKER_CODE": "string",
-      "DIVISION_CODE": "s",
-      "STOCK_CODE": "string",
-      "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-      "HTUSERNAME": "string",
-      "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "RETURN_PCS": 0,
-      "ISSUE_VOCTYPE": "str",
-      "ISSUE_BRANCH_CODE": "string",
-      "ISSUE_VOCNO": 0,
-      "ISSUE_YEARMONTH": "string",
-      "IS_AUTHORISE": true,
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "WAX_WT": 0,
-      "JOB_PCS": 0,
-      "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
-    };
-    this.tableData.push(data);
-}
 removedata(){
   this.tableData.pop();
 }
@@ -173,62 +115,168 @@ removedata(){
       this.update()
       return
     }
-    if (this.waxprocessFrom.invalid) {
+    if (this.jewelleryaltrationFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
   
-    let API = 'JobWaxReturn/InsertJobWaxReturn'
+    let API = 'DiamondJewelAlteration/InsertDiamondJewelAlteration'
     let postData = {
       "MID": 0,
-      "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-      "BRANCH_CODE": "string",
-      "VOCNO":  this.waxprocessFrom.value.vocno || "",
-      "VOCDATE":  this.waxprocessFrom.value.worker || "",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-07T08:43:49.448Z",
-      "PROCESS_CODE":  this.waxprocessFrom.value.process || "",
-      "WORKER_CODE":  this.waxprocessFrom.value.worker || "",
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.jewelleryaltrationFrom.value.voctype || "",
+      "VOCNO": this.jewelleryaltrationFrom.value.vocno || "",
+      "VOCDATE": this.jewelleryaltrationFrom.value.vocdate || "",
+      "YEARMONTH": this.yearMonth,
       "SMAN": "string",
-      "REMARKS": this.waxprocessFrom.value.remark || "",
+      "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount || "",
+      "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency || "",
+      "CC_RATE": this.jewelleryaltrationFrom.value.itemcurrencycc || "",
+      "MET_RATE_TYPE": this.jewelleryaltrationFrom.value.metalratetype || "",
+      "METAL_RATE": this.jewelleryaltrationFrom.value.metalrate || "",
       "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
+      "TOTALPCS": 0,
+      "TOTAL_LAB_CHARGECC": 0,
+      "TOTAL_LAB_CHARGEFC": 0,
+      "TOTAL_COST_OLDCC": 0,
+      "TOTAL_COST_OLDFC": 0,
+      "TOTAL_COST_NEWCC": 0,
+      "TOTAL_COST_NEWFC": 0,
+      "REMARKS": this.jewelleryaltrationFrom.value.narration || "",
       "PRINT_COUNT": 0,
-      "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
-      "TO_WORKER_CODE":  this.waxprocessFrom.value.toworker || "",
-      "DIVISION_CODE": "s",
-      "STOCK_CODE": "string",
-      "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
+      "POSTDATE": "string",
+      "AUTOPOSTING": true,
       "HTUSERNAME": "string",
+      "REMARKS_DETAIL": "string",
+      "GENSEQNO": 0,
+  "Details": [
+    {
       "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
+      "SRNO": 0,
+      "STOCK_CODE": "string",
+      "DESCRIPTION": "string",
+      "PCS": 0,
+      "COSTFC": 0,
+      "COSTCC": 0,
+      "COSTFCNEW": 0,
+      "COSTCCNEW": 0,
+      "METALWT": 0,
+      "PUREWT": 0,
+      "STONEWT": 0,
+      "GROSSWT": 0,
+      "METAL_AMTFC": 0,
+      "METAL_AMTCC": 0,
+      "STONE_AMTFC": 0,
+      "STONE_AMTCC": 0,
+      "METALWT_NEW": 0,
+      "PUREWT_NEW": 0,
+      "STONEWT_NEW": 0,
+      "GROSSWT_NEW": 0,
+      "METAL_AMTFCNEW": 0,
+      "METAL_AMTCCNEW": 0,
+      "STONE_AMTFCNEW": 0,
+      "STONE_AMTCCNEW": 0,
+      "SET_ACCODE": "string",
+      "SET_AMTFC": 0,
+      "SET_AMTCC": 0,
+      "SET_AMTFCNEW": 0,
+      "SET_AMTCCNEW": 0,
+      "POL_ACCODE": "string",
+      "POL_AMTFC": 0,
+      "POL_AMTCC": 0,
+      "POL_AMTFCNEW": 0,
+      "POL_AMTCCNEW": 0,
+      "RHO_ACCODE": "string",
+      "RHO_AMTFC": 0,
+      "RHO_AMTCC": 0,
+      "RHO_AMTFCNEW": 0,
+      "RHO_AMTCCNEW": 0,
+      "MKG_ACCODE": "string",
+      "MKG_AMTFC": 0,
+      "MKG_AMTCC": 0,
+      "MKG_AMTFCNEW": 0,
+      "MKG_AMTCCNEW": 0,
+      "MIS_ACCODE": "string",
+      "MIS_AMTFC": 0,
+      "MIS_AMTCC": 0,
+      "MIS_AMTFCNEW": 0,
+      "MIS_AMTCCNEW": 0,
+      "TOTALLAB_AMTFC": 0,
+      "TOTALLAB_AMTCC": 0,
+      "TOTALLAB_AMTFCNEW": 0,
+      "TOTALLAB_AMTCCNEW": 0,
+      "MFGVOC_REF": "string",
+      "MFGVOC_DATE": "2023-10-19T10:00:12.767Z",
+      "LOSS_ACCODE": "string",
+      "COST_CODE": "string",
+      "REMARKS_DETAIL": "string",
+      "STOCK_FCCOST": 0,
+      "STOCK_LCCOST": 0,
+      "PRICE1PER": "string",
+      "PRICE2PER": "string",
+      "PRICE3PER": "string",
+      "PRICE4PER": "string",
+      "PRICE5PER": "string",
+      "PRICE1FC": 0,
+      "PRICE1LC": 0,
+      "PRICE2FC": 0,
+      "PRICE2LC": 0,
+      "PRICE3FC": 0,
+      "PRICE3LC": 0,
+      "PRICE4FC": 0,
+      "PRICE4LC": 0,
+      "PRICE5FC": 0,
+      "PRICE5LC": 0,
+      "CURRENCY_CODE": "stri",
+      "CC_RATE": 0,
       "DT_BRANCH_CODE": "string",
+      "DT_VOCTYPE": "str",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": "string",
-      "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "RETURN_PCS": 0,
-      "ISSUE_VOCTYPE": "str",
-      "ISSUE_BRANCH_CODE": "string",
-      "ISSUE_VOCNO": 0,
-      "ISSUE_YEARMONTH": "string",
-      "IS_AUTHORISE": true,
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "WAX_WT":  this.waxprocessFrom.value.waxcode || "",
-      "JOB_PCS": 0,
-      "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
-      "approvalDetails": this.tableData,  
+      "PLAT_ACCODE": "string",
+      "CERT_ACCODE": "string",
+      "PLAT_CHARGESFC": 0,
+      "PLAT_CHARGESCC": 0,
+      "CERT_CHARGESFC": 0,
+      "CERT_CHARGESCC": 0,
+      "PLAT_CHARGESFCNEW": 0,
+      "PLAT_CHARGESCCNEW": 0,
+      "CERT_CHARGESFCNEW": 0,
+      "CERT_CHARGESCCNEW": 0,
+      "COLOR": "string",
+      "TAG_LINES": "string"
+    }
+  ],
+  "DetailComponents": [
+    {
+      "REFMID": 0,
+      "MAINCODE": "string",
+      "SLNO": 0,
+      "METALSTONE": "s",
+      "DIVISION": "s",
+      "DET_STOCK_CODE": "string",
+      "RET_STOCK_CODE": "string",
+      "KARAT_CODE": "stri",
+      "PURITY": 0,
+      "PCS": 0,
+      "WEIGHT": 0,
+      "PUREWT": 0,
+      "RATEFC": 0,
+      "RATECC": 0,
+      "AMOUNTFC": 0,
+      "AMOUNTCC": 0,
+      "REMOVED": 0,
+      "NEWENTRY": 0,
+      "LOC_TYPE": "string",
+      "COLOR": "string",
+      "SHAPE": "string",
+      "SIEVE": "string",
+      "STONE_TYPE": "string",
+      "CLARITY": "string",
+      "SIZE": "string",
+      "SIEVE_SET": "string"
+    }
+  ]
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -243,7 +291,7 @@ removedata(){
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.waxprocessFrom.reset()
+                this.jewelleryaltrationFrom.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -260,15 +308,15 @@ removedata(){
     if(!this.content) return
     console.log(this.content);
     
-    this.waxprocessFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.waxprocessFrom.controls.vocno.setValue(this.content.VOCNO)
-    this.waxprocessFrom.controls.vocdate.setValue(this.content.VOCDATE)
-    this.waxprocessFrom.controls.process.setValue(this.content.PROCESS_CODE)
-    this.waxprocessFrom.controls.worker.setValue(this.content.WORKER_CODE)
-    this.waxprocessFrom.controls.toworker.setValue(this.content.TO_WORKER_CODE)
-    this.waxprocessFrom.controls.toprocess.setValue(this.content.TO_PROCESS_CODE)
-    this.waxprocessFrom.controls.waxcode.setValue(this.content.WAX_WT)
-    this.waxprocessFrom.controls.remark.setValue(this.content.REMARKS)
+    this.jewelleryaltrationFrom.controls.voctype.setValue(this.content.VOCTYPE)
+    this.jewelleryaltrationFrom.controls.vocno.setValue(this.content.VOCNO)
+    this.jewelleryaltrationFrom.controls.vocdate.setValue(this.content.VOCDATE)
+    this.jewelleryaltrationFrom.controls.lossaccount.setValue(this.content.LOSS_ACCODE)
+    this.jewelleryaltrationFrom.controls.itemcurrency.setValue(this.content.CURRENCY_CODE)
+    this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue(this.content.CC_RATE)
+    this.jewelleryaltrationFrom.controls.metalratetype.setValue(this.content.MET_RATE_TYPE)
+    this.jewelleryaltrationFrom.controls.metalrate.setValue(this.content.METAL_RATE)
+    this.jewelleryaltrationFrom.controls.narration.setValue(this.content.REMARKS)
 
     
 
@@ -276,62 +324,168 @@ removedata(){
 
 
   update(){
-    if (this.waxprocessFrom.invalid) {
+    if (this.jewelleryaltrationFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
   
-    let API = 'JobWaxReturn/UpdateJobWaxReturn/'+ this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.vocdate
+    let API = 'DiamondJewelAlteration/UpdateDiamondJewelAlteration/'+ this.jewelleryaltrationFrom.value.branchCode  + this.jewelleryaltrationFrom.value.voctype + this.jewelleryaltrationFrom.value.vocno + this.jewelleryaltrationFrom.value.yearMonth
     let postData = {
       "MID": 0,
-      "VOCTYPE": this.waxprocessFrom.value.voctype || "",
-      "BRANCH_CODE": "string",
-      "VOCNO":  this.waxprocessFrom.value.vocno || "",
-      "VOCDATE":  this.waxprocessFrom.value.worker || "",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-07T08:43:49.448Z",
-      "PROCESS_CODE":  this.waxprocessFrom.value.process || "",
-      "WORKER_CODE":  this.waxprocessFrom.value.worker || "",
-      "SMAN": "string",
-      "REMARKS": this.waxprocessFrom.value.remark || "",
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.jewelleryaltrationFrom.value.voctype || "",
+      "VOCNO": this.jewelleryaltrationFrom.value.vocno || "",
+      "VOCDATE": this.jewelleryaltrationFrom.value.vocdate || "",
+      "YEARMONTH": this.yearMonth,
+      "SMAN": "",
+      "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount || "",
+      "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency || "",
+      "CC_RATE": this.jewelleryaltrationFrom.value.itemcurrencycc || "",
+      "MET_RATE_TYPE": this.jewelleryaltrationFrom.value.metalratetype || "",
+      "METAL_RATE": this.jewelleryaltrationFrom.value.metalrate || "",
       "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
+      "TOTALPCS": 0,
+      "TOTAL_LAB_CHARGECC": 0,
+      "TOTAL_LAB_CHARGEFC": 0,
+      "TOTAL_COST_OLDCC": 0,
+      "TOTAL_COST_OLDFC": 0,
+      "TOTAL_COST_NEWCC": 0,
+      "TOTAL_COST_NEWFC": 0,
+      "REMARKS": this.jewelleryaltrationFrom.value.narration || "",
       "PRINT_COUNT": 0,
-      "TO_PROCESS_CODE": this.waxprocessFrom.value.toprocess || "",
-      "TO_WORKER_CODE":  this.waxprocessFrom.value.toworker || "",
-      "DIVISION_CODE": "s",
-      "STOCK_CODE": "string",
-      "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-      "HTUSERNAME": "string",
+      "POSTDATE": "",
+      "AUTOPOSTING": true,
+      "HTUSERNAME": "",
+      "REMARKS_DETAIL": "",
+      "GENSEQNO": 0,
+  "Details": [
+    {
       "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
       "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "RETURN_PCS": 0,
-      "ISSUE_VOCTYPE": "str",
-      "ISSUE_BRANCH_CODE": "string",
-      "ISSUE_VOCNO": 0,
-      "ISSUE_YEARMONTH": "string",
-      "IS_AUTHORISE": true,
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "WAX_WT":  this.waxprocessFrom.value.waxcode || "",
-      "JOB_PCS": 0,
-      "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
-      "approvalDetails": this.tableData,  
+      "STOCK_CODE": "",
+      "DESCRIPTION": "",
+      "PCS": 0,
+      "COSTFC": 0,
+      "COSTCC": 0,
+      "COSTFCNEW": 0,
+      "COSTCCNEW": 0,
+      "METALWT": 0,
+      "PUREWT": 0,
+      "STONEWT": 0,
+      "GROSSWT": 0,
+      "METAL_AMTFC": 0,
+      "METAL_AMTCC": 0,
+      "STONE_AMTFC": 0,
+      "STONE_AMTCC": 0,
+      "METALWT_NEW": 0,
+      "PUREWT_NEW": 0,
+      "STONEWT_NEW": 0,
+      "GROSSWT_NEW": 0,
+      "METAL_AMTFCNEW": 0,
+      "METAL_AMTCCNEW": 0,
+      "STONE_AMTFCNEW": 0,
+      "STONE_AMTCCNEW": 0,
+      "SET_ACCODE": "",
+      "SET_AMTFC": 0,
+      "SET_AMTCC": 0,
+      "SET_AMTFCNEW": 0,
+      "SET_AMTCCNEW": 0,
+      "POL_ACCODE": "",
+      "POL_AMTFC": 0,
+      "POL_AMTCC": 0,
+      "POL_AMTFCNEW": 0,
+      "POL_AMTCCNEW": 0,
+      "RHO_ACCODE": "",
+      "RHO_AMTFC": 0,
+      "RHO_AMTCC": 0,
+      "RHO_AMTFCNEW": 0,
+      "RHO_AMTCCNEW": 0,
+      "MKG_ACCODE": "",
+      "MKG_AMTFC": 0,
+      "MKG_AMTCC": 0,
+      "MKG_AMTFCNEW": 0,
+      "MKG_AMTCCNEW": 0,
+      "MIS_ACCODE": "",
+      "MIS_AMTFC": 0,
+      "MIS_AMTCC": 0,
+      "MIS_AMTFCNEW": 0,
+      "MIS_AMTCCNEW": 0,
+      "TOTALLAB_AMTFC": 0,
+      "TOTALLAB_AMTCC": 0,
+      "TOTALLAB_AMTFCNEW": 0,
+      "TOTALLAB_AMTCCNEW": 0,
+      "MFGVOC_REF": "",
+      "MFGVOC_DATE": "2023-10-19T10:00:12.767Z",
+      "LOSS_ACCODE": "",
+      "COST_CODE": "",
+      "REMARKS_DETAIL": "",
+      "STOCK_FCCOST": 0,
+      "STOCK_LCCOST": 0,
+      "PRICE1PER": "",
+      "PRICE2PER": "",
+      "PRICE3PER": "",
+      "PRICE4PER": "",
+      "PRICE5PER": "",
+      "PRICE1FC": 0,
+      "PRICE1LC": 0,
+      "PRICE2FC": 0,
+      "PRICE2LC": 0,
+      "PRICE3FC": 0,
+      "PRICE3LC": 0,
+      "PRICE4FC": 0,
+      "PRICE4LC": 0,
+      "PRICE5FC": 0,
+      "PRICE5LC": 0,
+      "CURRENCY_CODE": "",
+      "CC_RATE": 0,
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "",
+      "PLAT_ACCODE": "",
+      "CERT_ACCODE": "",
+      "PLAT_CHARGESFC": 0,
+      "PLAT_CHARGESCC": 0,
+      "CERT_CHARGESFC": 0,
+      "CERT_CHARGESCC": 0,
+      "PLAT_CHARGESFCNEW": 0,
+      "PLAT_CHARGESCCNEW": 0,
+      "CERT_CHARGESFCNEW": 0,
+      "CERT_CHARGESCCNEW": 0,
+      "COLOR": "",
+      "TAG_LINES": ""
+    }
+  ],
+  "DetailComponents": [
+    {
+      "REFMID": 0,
+      "MAINCODE": "",
+      "SLNO": 0,
+      "METALSTONE": "",
+      "DIVISION": "",
+      "DET_STOCK_CODE": "",
+      "RET_STOCK_CODE": "",
+      "KARAT_CODE": "",
+      "PURITY": 0,
+      "PCS": 0,
+      "WEIGHT": 0,
+      "PUREWT": 0,
+      "RATEFC": 0,
+      "RATECC": 0,
+      "AMOUNTFC": 0,
+      "AMOUNTCC": 0,
+      "REMOVED": 0,
+      "NEWENTRY": 0,
+      "LOC_TYPE": "",
+      "COLOR": "",
+      "SHAPE": "",
+      "SIEVE": "",
+      "STONE_TYPE": "",
+      "CLARITY": "",
+      "SIZE": "",
+      "SIEVE_SET": ""
+    }
+  ]
     }
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -346,7 +500,7 @@ removedata(){
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.waxprocessFrom.reset()
+                this.jewelleryaltrationFrom.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -383,7 +537,7 @@ removedata(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobWaxReturn/DeleteJobWaxReturn/' + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.vocdate
+        let API = 'DiamondJewelAlteration/DeleteDiamondJewelAlteration/' + this.jewelleryaltrationFrom.value.branchCode  + this.jewelleryaltrationFrom.value.voctype + this.jewelleryaltrationFrom.value.vocno + this.jewelleryaltrationFrom.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -396,7 +550,7 @@ removedata(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.waxprocessFrom.reset()
+                    this.jewelleryaltrationFrom.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -410,7 +564,7 @@ removedata(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.waxprocessFrom.reset()
+                    this.jewelleryaltrationFrom.reset()
                     this.tableData = []
                     this.close()
                   }

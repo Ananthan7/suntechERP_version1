@@ -19,8 +19,11 @@ export class JewelleryDismantlingComponent implements OnInit {
  @Input() content!: any; 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
+  branchCode?: String;
+  yearMonth?: String;
+
   private subscriptions: Subscription[] = [];
-    user: MasterSearchModel = {
+  user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 73,
@@ -32,10 +35,6 @@ export class JewelleryDismantlingComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  userDataSelected(value: any) {
-    console.log(value);
-       this.jewellerydismantlingFrom.controls.userName.setValue(value.UsersName);
-  }
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -43,10 +42,17 @@ export class JewelleryDismantlingComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+  }
+
+  userDataSelected(value: any) {
+    console.log(value);
+       this.jewellerydismantlingFrom.controls.userName.setValue(value.UsersName);
   }
 
   close(data?: any) {
@@ -55,73 +61,21 @@ export class JewelleryDismantlingComponent implements OnInit {
   }
 
 
-
-  jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
+ jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
+    branchCode:[''],
     voctype:[''],
     vocno:[''],
-   process:[''],
-   worker:[''],
-   toworker:[''],
-   toprocess:[''],
-   waxcode:[''],
-    remark:[''],
+    vocdate:[''],
+   enteredby:[''],
+   lossaccount:[''],
+   itemcurrency:[''],
+   itemcurrencycc:[''],
+   metalrate:[''],
+   metalratetype:[''],
+   base:[''],
+   narration:[''],
   });
 
-  adddata() {
-    let length = this.tableData.length;
-    let srno = length + 1;
-    let data =  {
-      "MID": 0,
-      "VOCTYPE": "str",
-      "BRANCH_CODE": "string",
-      "VOCNO": 0,
-      "VOCDATE": "2023-10-07T08:43:49.448Z",
-      "YEARMONTH": "string",
-      "DOCTIME": "2023-10-07T08:43:49.448Z",
-      "PROCESS_CODE": "string",
-      "WORKER_CODE": "string",
-      "SMAN": "string",
-      "REMARKS": "string",
-      "NAVSEQNO": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "PRINT_COUNT": 0,
-      "TO_PROCESS_CODE": "string",
-      "TO_WORKER_CODE": "string",
-      "DIVISION_CODE": "s",
-      "STOCK_CODE": "string",
-      "SYSTEM_DATE": "2023-10-07T08:43:49.448Z",
-      "HTUSERNAME": "string",
-      "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "DESIGN_CODE": "string",
-      "PARTYCODE": "string",
-      "ISSUE_PCS": 0,
-      "RETURN_PCS": 0,
-      "ISSUE_VOCTYPE": "str",
-      "ISSUE_BRANCH_CODE": "string",
-      "ISSUE_VOCNO": 0,
-      "ISSUE_YEARMONTH": "string",
-      "IS_AUTHORISE": true,
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0,
-      "WAX_WT": 0,
-      "JOB_PCS": 0,
-      "AUTHORIZE_TIME": "2023-10-07T08:43:49.448Z",
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
-    };
-    this.tableData.push(data);
-}
 removedata(){
   this.tableData.pop();
 }
@@ -136,10 +90,82 @@ removedata(){
       return
     }
   
-    let API = 'JobWaxReturn/InsertJobWaxReturn'
+    let API = 'DiamondDismantle/InsertDiamondDismantle'
     let postData = {
-      
-      "approvalDetails": this.tableData,  
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.jewellerydismantlingFrom.value.voctype || "",
+      "VOCNO": this.jewellerydismantlingFrom.value.vocno || "",
+      "VOCDATE": this.jewellerydismantlingFrom.value.vocdate || "",
+      "YEARMONTH": this.yearMonth,
+      "SMAN": "",
+      "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount || "",
+      "CURRENCY_CODE": this.jewellerydismantlingFrom.value.itemcurrency || "",
+      "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencycc || "",
+      "MET_RATE_TYPE": this.jewellerydismantlingFrom.value.metalratetype || "",
+      "METAL_RATE": this.jewellerydismantlingFrom.value.metalrate || "",
+      "NAVSEQNO": 0,
+      "TOTALPCS": 0,
+      "TOTMETALAMOUNTFC": 0,
+      "TOTMETALAMOUNTCC": 0,
+      "TOTSTONEAMOUNTFC": 0,
+      "TOTSTONEAMOUNTCC": 0,
+      "TOTLABOURAMOUNTFC": 0,
+      "TOTLABOURAMOUNTCC": 0,
+      "TOTLOSSAMOUNTFC": 0,
+      "TOTLOSSAMOUNTCC": 0,
+      "TOTAMOUNTFC": 0,
+      "TOTAMOUNTCC": 0,
+      "HREMARKS": this.jewellerydismantlingFrom.value.narration || "",
+      "GENSEQNO": 0,
+      "PRINT_COUNT": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "HTUSERNAME": "",
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "SRNO": 0,
+          "STOCK_CODE": "",
+          "DESCRIPTION": "",
+          "PCS": 0,
+          "METAL_AMOUNTFC": 0,
+          "METAL_AMOUNTCC": 0,
+          "STONE_AMOUNTFC": 0,
+          "STONE_AMOUNTCC": 0,
+          "LABOR_AMOUNTFC": 0,
+          "LABOR_AMOUNTCC": 0,
+          "LOSS_AMOUNTFC": 0,
+          "LOSS_AMOUNTCC": 0,
+          "SETTINGCHARGEFC": 0,
+          "SETTINGCHARGECC": 0,
+          "POLISHCHARGEFC": 0,
+          "POLISHCHARGECC": 0,
+          "RHODIUMCHARGEFC": 0,
+          "RHODIUMCHARGECC": 0,
+          "LABOURCHARGEFC": 0,
+          "LABOURCHARGECC": 0,
+          "MISCLCHARGEFC": 0,
+          "MISCLCHARGECC": 0,
+          "TOTALAMOUNTFC": 0,
+          "TOTALAMOUNTCC": 0,
+          "MFGVOC_REF": "",
+          "MFGVOC_DATE": "2023-10-19T09:20:05.269Z",
+          "LOSS_ACCODE": "",
+          "COST_CODE": "",
+          "DIFF_TOTAL": 0,
+          "RCVD_TOTAL": 0,
+          "DIFF_WGT": 0,
+          "DREMARKS": "",
+          "DLOCTYPE_CODE": "",
+          "DT_BRANCH_CODE": "",
+          "DT_VOCTYPE": "",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": ""
+        }
+      ] 
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -171,7 +197,16 @@ removedata(){
     if(!this.content) return
     console.log(this.content);
     
-  
+    this.jewellerydismantlingFrom.controls.branchCode.setValue(this.content.BRANCH_CODE)
+    this.jewellerydismantlingFrom.controls.voctype.setValue(this.content.VOCTYPE)
+    this.jewellerydismantlingFrom.controls.vocno.setValue(this.content.VOCNO)
+    this.jewellerydismantlingFrom.controls.vocdate.setValue(this.content.VOCDATE)
+    this.jewellerydismantlingFrom.controls.lossaccount.setValue(this.content.LOSS_ACCODE)
+    this.jewellerydismantlingFrom.controls.itemcurrency.setValue(this.content.CURRENCY_CODE)
+    this.jewellerydismantlingFrom.controls.itemcurrencycc.setValue(this.content.CC_RATE)
+    this.jewellerydismantlingFrom.controls.metalrate.setValue(this.content.METAL_RATE)
+    this.jewellerydismantlingFrom.controls.metalratetype.setValue(this.content.MET_RATE_TYPE)
+    this.jewellerydismantlingFrom.controls.narration.setValue(this.content.HREMARKS)
 
     
 
@@ -184,10 +219,82 @@ removedata(){
       return
     }
   
-    let API = 'JobWaxReturn/UpdateJobWaxReturn/'+ this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.vocdate
+    let API = 'DiamondDismantle/UpdateDiamondDismantle/'+ this.jewellerydismantlingFrom.value.branchCode + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.yearMonth
     let postData = {
-    
-      "approvalDetails": this.tableData,  
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.jewellerydismantlingFrom.value.voctype || "",
+      "VOCNO": this.jewellerydismantlingFrom.value.vocno || "",
+      "VOCDATE": this.jewellerydismantlingFrom.value.vocdate || "",
+      "YEARMONTH": this.yearMonth,
+      "SMAN": "",
+      "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount || "",
+      "CURRENCY_CODE": this.jewellerydismantlingFrom.value.itemcurrency || "",
+      "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencycc || "",
+      "MET_RATE_TYPE": this.jewellerydismantlingFrom.value.metalratetype || "",
+      "METAL_RATE": this.jewellerydismantlingFrom.value.metalrate || "",
+      "NAVSEQNO": 0,
+      "TOTALPCS": 0,
+      "TOTMETALAMOUNTFC": 0,
+      "TOTMETALAMOUNTCC": 0,
+      "TOTSTONEAMOUNTFC": 0,
+      "TOTSTONEAMOUNTCC": 0,
+      "TOTLABOURAMOUNTFC": 0,
+      "TOTLABOURAMOUNTCC": 0,
+      "TOTLOSSAMOUNTFC": 0,
+      "TOTLOSSAMOUNTCC": 0,
+      "TOTAMOUNTFC": 0,
+      "TOTAMOUNTCC": 0,
+      "HREMARKS": this.jewellerydismantlingFrom.value.narration || "",
+      "GENSEQNO": 0,
+      "PRINT_COUNT": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "HTUSERNAME":  "",
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "SRNO": 0,
+          "STOCK_CODE": "",
+          "DESCRIPTION": "",
+          "PCS": 0,
+          "METAL_AMOUNTFC": 0,
+          "METAL_AMOUNTCC": 0,
+          "STONE_AMOUNTFC": 0,
+          "STONE_AMOUNTCC": 0,
+          "LABOR_AMOUNTFC": 0,
+          "LABOR_AMOUNTCC": 0,
+          "LOSS_AMOUNTFC": 0,
+          "LOSS_AMOUNTCC": 0,
+          "SETTINGCHARGEFC": 0,
+          "SETTINGCHARGECC": 0,
+          "POLISHCHARGEFC": 0,
+          "POLISHCHARGECC": 0,
+          "RHODIUMCHARGEFC": 0,
+          "RHODIUMCHARGECC": 0,
+          "LABOURCHARGEFC": 0,
+          "LABOURCHARGECC": 0,
+          "MISCLCHARGEFC": 0,
+          "MISCLCHARGECC": 0,
+          "TOTALAMOUNTFC": 0,
+          "TOTALAMOUNTCC": 0,
+          "MFGVOC_REF": "",
+          "MFGVOC_DATE": "2023-10-19T09:20:05.269Z",
+          "LOSS_ACCODE": "",
+          "COST_CODE": "",
+          "DIFF_TOTAL": 0,
+          "RCVD_TOTAL": 0,
+          "DIFF_WGT": 0,
+          "DREMARKS": "",
+          "DLOCTYPE_CODE": "",
+          "DT_BRANCH_CODE": "",
+          "DT_VOCTYPE": "",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": ""
+        }
+      ]   
     }
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -239,7 +346,7 @@ removedata(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobWaxReturn/DeleteJobWaxReturn/' + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.vocdate
+        let API = 'DiamondDismantle/DeleteDiamondDismantle/'+ this.jewellerydismantlingFrom.value.branchCode + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

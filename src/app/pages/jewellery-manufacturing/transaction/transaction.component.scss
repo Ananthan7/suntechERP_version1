@@ -76,6 +76,16 @@
   }
 }
 
+@media (min-width: 768px) {
+  ::ng-deep {
+    .modal-xl {
+      max-width: 95vw !important;
+      max-height: 90vh !important;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+  }
+}
 
 ::ng-deep {
   .dx-datagrid .dx-header-row {

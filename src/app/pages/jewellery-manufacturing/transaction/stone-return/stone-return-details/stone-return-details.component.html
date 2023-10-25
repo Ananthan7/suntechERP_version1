@@ -23,8 +23,11 @@
                                                 <mat-form-field style="width: 100%;">
                                                     <input type="text" matInput formControlName="jobno" />
                                                 </mat-form-field>&nbsp;
-                                                <mat-form-field style="width: 100%;">
-                                                    <input type="date" matInput formControlName="jobdate" />
+                                                <mat-form-field style="width: 100%">
+                                                  <input matInput [matDatepicker]="jobDate"  formControlName="jobDate"
+                                                    placeholder="YYYY/MM/DD" DateValidation />
+                                                  <mat-datepicker-toggle matSuffix [for]="jobDate"></mat-datepicker-toggle>
+                                                  <mat-datepicker [startAt]="currentDate" #jobDate></mat-datepicker>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -34,10 +37,10 @@
                                         <div class="col-sm-8">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName=" subjobno" />
+                                                    <input type="text" matInput formControlName="subjobno" />
                                                 </mat-form-field>&nbsp;
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName=" subjobno" />
+                                                    <input type="text" matInput formControlName="subjobDesc" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -95,7 +98,7 @@
                                     <div class="position-relative d-flex">
 
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName=" worker" />
+                                            <input type="text" matInput formControlName="worker" />
                                         </mat-form-field>&nbsp;
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput formControlName="workername" />
@@ -122,7 +125,7 @@
                                 <div class="col-sm-5">
                                     <div class="position-relative d-flex">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName=" batchid" />
+                                            <input type="text" matInput formControlName="batchid" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -135,12 +138,12 @@
                                     <div class="col-sm-1"></div>                                  
                                     <div class="col-sm-4">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="voctype" />
+                                            <input type="text" matInput formControlName="broken" />
                                           </mat-form-field>
                                     </div>
                                     <div class="col-sm-4">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="voctype" />
+                                            <input type="text" matInput formControlName="broken" />
                                           </mat-form-field>
                                     </div>
                                 </div>
@@ -274,4 +277,4 @@
                     </div>
                 </div>
             </div>
-  
+          </form>

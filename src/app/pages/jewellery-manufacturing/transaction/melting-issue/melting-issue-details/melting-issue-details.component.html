@@ -36,9 +36,10 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Process :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="process" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
@@ -55,9 +56,13 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Worker :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <!-- <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="worker" />
+                                </mat-form-field> -->
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="worker" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
@@ -83,22 +88,28 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="location" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="locationCodeData"
+                                (newRowClick)="locationCodeSelected($event)">
+                            </master-search>
                             </div>
                         </div>
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Stock Code :</label>
-                            <div class="col-md-1">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-md-2">
+                                <!-- <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="stockcode" />
+                                </mat-form-field> -->
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="stockcode" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="stockCodeData" (newRowClick)="StockCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="stockdes" />
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="tostock" />
                                 </mat-form-field>

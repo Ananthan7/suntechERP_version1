@@ -40,14 +40,15 @@
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-4">Voucher Date : </label>
               <div class="col-sm-8">
+                <!-- <mat-form-field style="width: 100%;">
+                  <input type="date" matInput />
+                </mat-form-field> -->
                 <mat-form-field style="width: 150px">
                   <!-- <mat-label>Date Of Birth</mat-label> -->
-                  <input matInput DateValidation                    
-                      [matDatepicker]="dob"
-                      formControlName="voucherDate"
+                  <input matInput DateValidation (dateChange)="formatDate($event)"
+                      [matDatepicker]="dob" formControlName="voucherDate"
                       placeholder="DD/MM/YYYY" />
-                  <mat-datepicker-toggle matSuffix
-                      [for]="dob"></mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
                   <mat-datepicker #dob></mat-datepicker>
               </mat-form-field>
               </div>
@@ -58,7 +59,7 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="meltingType"/>
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="MeltingCodeData" (newRowClick)="MeltingCodeSelected($event)"></master-search>
               </div>
             </div>
           </div>
@@ -105,7 +106,7 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="time" />
                 </mat-form-field>
-                <master-search></master-search>
+                <master-search [MasterSearchData]="timeCodeData" (newRowClick)="timeCodeSelected($event)"></master-search>
               </div>
             </div>
           </div>

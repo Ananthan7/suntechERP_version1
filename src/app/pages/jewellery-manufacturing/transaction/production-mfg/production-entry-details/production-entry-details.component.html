@@ -11,7 +11,7 @@
 <div class="container-fluid">
   <form [formGroup]="productiondetailsFrom">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-5">
         <div class="row mb-2">
           <label for="input" class="col-sm-3 col-form-label">Job No :</label>
           <div class="col-sm-3">
@@ -25,13 +25,13 @@
               <input type="text" matInput formControlName="jobnoDesc" />
             </mat-form-field> -->
             <mat-form-field style="width: 100%">
-              <input matInput DateValidation (dateChange)="formatDate($event)"
-                  [matDatepicker]="dob" formControlName="startdate"
-                  placeholder="DD/MM/YYYY" />
-              <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-              <mat-datepicker #dob></mat-datepicker>
-          </mat-form-field>
+              <input matInput [matDatepicker]="jobDate" name="jobDate" formControlName="jobDate"
+                placeholder="YYYY/MM/DD" DateValidation />
+              <mat-datepicker-toggle matSuffix [for]="jobDate"></mat-datepicker-toggle>
+              <mat-datepicker [startAt]="currentDate" #jobDate></mat-datepicker>
+            </mat-form-field>
           </div>
+
         </div>
         <div class="row mb-2">
           <label for="input" class="col-sm-3 col-form-label">Sub Job No :</label>
@@ -55,12 +55,12 @@
           </div>
           <div class="col-sm-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="customer" />
+              <input type="text" matInput formControlName="customerDesc" />
             </mat-form-field>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-5">
         <div class="row mb-2">
           <label for="input" class="col-sm-3 col-form-label">Process :</label>
           <div class="col-sm-3">
@@ -96,16 +96,23 @@
           </div>
           <div class="col-sm-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="parts" />
+              <input type="text" matInput formControlName="partsName" />
             </mat-form-field>
           </div>
         </div>
       </div>
+      <div class="col-md-2">
+        <div class="p-1">
+          <button type="button" class="btn btn-primary add-btn" (click)="opennewdetails()">
+            Stock
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="card-body sales-card-body p-2">
+    <div class="p-2">
       <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-        <mat-tab label="Diamond Jewellery"><br>
+        <mat-tab label="Diamond Jewellery">
           <div class="row">
             <div class="col-md-8">
               <div class="row mb-2">
@@ -117,7 +124,7 @@
                 </div>
                 <div class="col-sm-4">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="design" />
+                    <input type="text" matInput formControlName="designCode" />
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Total PCS :</label>
@@ -196,7 +203,7 @@
                     <input type="text" matInput formControlName="prefix" />
                   </mat-form-field>&nbsp;
                   <mat-form-field style="width: 50%;">
-                    <input type="text" matInput formControlName="prefix" />
+                    <input type="text" matInput formControlName="prefixNo" />
                   </mat-form-field>
                 </div>
 
@@ -258,29 +265,25 @@
                 <div class="col-sm-2">
                   <!-- <mat-form-field style="width: 100%;">
                     <input type="date" matInput formControlName="startdate" />
-                  </mat-form-field> -->
-                  <mat-form-field style="width: 100px">
-                    <!-- <mat-label>Date Of Birth</mat-label> -->
-                    <input matInput DateValidation (dateChange)="formatDate($event)"
-                        [matDatepicker]="dob" formControlName="startdate"
-                        placeholder="DD/MM/YYYY" />
-                    <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                    <mat-datepicker #dob></mat-datepicker>
-                </mat-form-field>
+                  </mat-form-field> -->>
+                  <mat-form-field style="width: 100%">
+                    <input matInput [matDatepicker]="startdate" name="startdate" formControlName="startdate"
+                      placeholder="YYYY/MM/DD" DateValidation />
+                    <mat-datepicker-toggle matSuffix [for]="startdate"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" #startdate></mat-datepicker>
+                  </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">End Date :</label>
                 <div class="col-sm-2">
                   <!-- <mat-form-field style="width: 100%;">
                     <input type="date" matInput formControlName="enddate" />
                   </mat-form-field> -->
-                  <mat-form-field style="width: 100px">
-                    <!-- <mat-label>Date Of Birth</mat-label> -->
-                    <input matInput DateValidation (dateChange)="formatDate($event)"
-                        [matDatepicker]="dob" formControlName="startdate"
-                        placeholder="DD/MM/YYYY" />
-                    <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                    <mat-datepicker #dob></mat-datepicker>
-                </mat-form-field>
+                  <mat-form-field style="width: 100%">
+                    <input matInput [matDatepicker]="endDate" name="endDate" formControlName="startdate"
+                      placeholder="YYYY/MM/DD" DateValidation />
+                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" #endDate></mat-datepicker>
+                  </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Price 5 :</label>
                 <div class="col-sm-2">
@@ -317,14 +320,14 @@
                 <label for="input" class="col-sm-3 col-form-label">Loss % :</label>
                 <div class="col-sm-4">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="loss" />
+                    <input type="text" matInput formControlName="lossone" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="row justify-content-end mb-2">
                 <div class="col-sm-4">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="loss" />
+                    <input type="text" matInput formControlName="losswt" />
                   </mat-form-field>
                 </div>
               </div>
@@ -339,7 +342,250 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Metal Jewellery"><br>
+        <mat-tab label="Metal Jewellery">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="row mb-2">
+                <div class="col-md-6">
+                  <div class="row justify-content-end mb-2">
+                    <label for="input" class="col-sm-4 col-form-label">From Stock Code :</label>
+                    <div class="col-sm-3">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput formControlName="fromStockCode" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-5">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput formControlName="fromStockCodeDesc" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row justify-content-end mb-2">
+                    <label for="input" class="col-sm-4 col-form-label">To Stock Code :</label>
+                    <div class="col-sm-3">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput formControlName="toStockCode" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-5">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput formControlName="toStockCodeDesc" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-end mb-1">
+                <label for="input" class="col-sm-2 col-form-label">Pcs :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="metalpcs" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Gross Wt :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;" >
+                    <input type="text" matInput formControlName="grossWt" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Stone Wt :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;" >
+                    <input type="text" matInput  formControlName="stoneWt" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row justify-content-end mb-1">
+                <label for="input" class="col-sm-2 col-form-label">Purity :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;" >
+                    <input type="text" matInput formControlName="purity" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Net Wt :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="netWt" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Chargable Wt :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="chargableWt" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row justify-content-end mb-1">
+                <label for="input" class="col-sm-2 col-form-label">Purity % :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="purityPer" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Pure Wt :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="pureWt" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Purity Diff :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="purityDiff" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row justify-content-end mb-1">
+                <label for="input" class="col-sm-2 col-form-label">Stone Diff :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="stoneDiff" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Loss :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="loss" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Mkg Rate :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="mkgRate" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row justify-content-end mb-1">
+                <label for="input" class="col-sm-2 col-form-label">Lot No :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="lotNo" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Bal Wt :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="balwt" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Mkg Value :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="mkgValue" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row justify-content-end mb-1">
+                <label for="input" class="col-sm-2 col-form-label">Bar No :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="barNo" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Ticket No :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="ticketNo" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Prod % :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="prod" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row justify-content-end mb-1">
+                <label for="input" class="col-sm-2 col-form-label">Loaction :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput formControlName="location" />
+                  </mat-form-field>
+                  <master-search>
+                  </master-search>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Bal Pcs :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="balPcs" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Job Purity :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="jobPurity" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mt-2">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing>
+                  <dxo-selection mode="multiple"></dxo-selection>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                  <dxi-column *ngFor="let data of columnheadTop" dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  </dxi-column>
+                </dx-data-grid>
+              </div>
+              <div class="mt-2">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing>
+                  <dxo-selection mode="multiple"></dxo-selection>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                  <dxi-column *ngFor="let data of columnheadBottom" dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  </dxi-column>
+                </dx-data-grid>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8">
+                <div class="row mb-1">
+                  <div class="col-sm-4">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="form-check p-1">
+                    <input class="form-check-input" type="radio" >
+                    <label class="form-check-label">
+                      Own
+                    </label>
+                  </div>
+                  <div class="form-check p-1">
+                    <input class="form-check-input" type="radio">
+                    <label class="form-check-label">
+                      Vendor
+                    </label>
+                  </div>
+                  <div class="p-1">
+                    <button type="button" class="btn btn-primary add-btn">
+                      Attachment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </mat-tab>
       </mat-tab-group>
 

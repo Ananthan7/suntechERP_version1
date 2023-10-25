@@ -1,5 +1,5 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Melal Return</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Melal Return Details</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -20,8 +20,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="jobNumber" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="jobNumberData"
-                                (newRowClick)="jobNumberSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="jobnoCodeData"
+                                (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
@@ -48,8 +48,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="processCode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="processCodeData"
-                                (newRowClick)="processSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="ProcessCodeData"
+                                (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
@@ -63,8 +63,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="workerCode">
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="workerCodeData"
-                                (newRowClick)="workerSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="WorkerCodeData"
+                                (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
@@ -135,7 +135,7 @@
                                     <input type="text" matInput formControlName="location">
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="locationCodeData"
-                                (newRowClick)="locationSelected($event)"></master-search>
+                                (newRowClick)="locationCodeSelected($event)"></master-search>
                             </div>
                         </div>
 
