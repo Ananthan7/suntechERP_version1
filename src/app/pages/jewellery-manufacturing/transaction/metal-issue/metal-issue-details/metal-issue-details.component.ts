@@ -17,7 +17,9 @@ export class MetalIssueDetailsComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   tableData: any[] = [];
   columnhead: any[] = ['Div', 'Stock Code', 'Karat', 'Color', 'Req.Pcs', 'Req.Wt ', 'Issued Pcs', 'Issued Wt', 'Bal.pcs', 'Bal.Wt'];
-
+  vocMaxDate = new Date();
+  currentDate = new Date();
+  
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,

@@ -36,9 +36,15 @@
                                 <div class=" row">
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Time:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
+                                        <!-- <mat-form-field style="width: 100%;">
                                             <input type="date" matInput  formControlName="time"/>
-                                        </mat-form-field>
+                                        </mat-form-field> -->
+                                        <mat-form-field style="width: 100%">
+                                            <input matInput [matDatepicker]="time" name="time" formControlName="time"
+                                              placeholder="YYYY/MM/DD" DateValidation />
+                                            <mat-datepicker-toggle matSuffix [for]="time"></mat-datepicker-toggle>
+                                            <mat-datepicker [startAt]="currentDate" #time></mat-datepicker>
+                                          </mat-form-field>
                                     </div>
                                 </div>
                             </div>
@@ -49,9 +55,15 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
                                         Date:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
+                                        <!-- <mat-form-field style="width: 100%;">
                                             <input type="date" matInput  formControlName="vocdate"/>
-                                        </mat-form-field>
+                                        </mat-form-field> -->
+                                        <mat-form-field style="width: 100%">
+                                            <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate"
+                                              placeholder="YYYY/MM/DD" DateValidation />
+                                            <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                                            <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                                          </mat-form-field>
                                     </div>
                                 </div>
                             </div>

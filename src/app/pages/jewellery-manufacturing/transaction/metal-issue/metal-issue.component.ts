@@ -25,6 +25,9 @@ export class MetalIssueComponent implements OnInit {
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  vocMaxDate = new Date();
+  currentDate = new Date();
+
   private subscriptions: Subscription[] = [];
   constructor(
     private activeModal: NgbActiveModal,
