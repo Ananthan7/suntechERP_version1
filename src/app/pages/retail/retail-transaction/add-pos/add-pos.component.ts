@@ -3029,6 +3029,11 @@ export class AddPosComponent implements OnInit {
             this.customerDetailForm.controls.fcn_cust_detail_nationality.setValue(
               result.NATIONALITY
             );
+
+            this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
+              result.MOBILE1
+            );
+
             this.customerDetails = result;
 
             if (this.amlNameValidation)
@@ -5531,7 +5536,7 @@ export class AddPosComponent implements OnInit {
       total_sum = total_sum + parseFloat(item.total_amount);
       tax_sum = tax_sum + parseFloat(item.tax_amount);
       net_sum = net_sum + parseFloat(item.net_amount);
-      total_pcs = total_pcs + item.pcs;
+      total_pcs = total_pcs + parseFloat(item.pcs);
       total_weight = total_weight + parseFloat(item.weight);
       total_pure_weight = total_pure_weight + parseFloat(item.pure_wt);
       total_making_amt = total_making_amt + parseFloat(item.making_amt);

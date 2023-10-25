@@ -125,7 +125,8 @@
         <tr>
           <td style="border-right-style: hidden" colspan="2">
             <div>
-              <p style="float: left">({{ prnt_inv_total_pcs }} items)</p>
+              <p style="float: left">({{ ordered_items?.length }} items)</p>
+              <!-- <p style="float: left">({{ prnt_inv_total_pcs }} items)</p> -->
               <p style="float: right">Total</p>
             </div>
           </td>
@@ -2651,7 +2652,6 @@
                   type="text"
                   matInput
                   formControlName="fcn_returns_voc_date"
-                  value="{{ fcn_returns_voc_date_val }}"
                   [readonly]="viewOnly"
                 />
               </mat-form-field>
