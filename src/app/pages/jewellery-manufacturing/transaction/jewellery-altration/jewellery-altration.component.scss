@@ -11,3 +11,9 @@
   .t-a1{
     text-align: end;
   }
+  ::ng-deep {
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
+  }

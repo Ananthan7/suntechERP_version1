@@ -16,11 +16,14 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class JewelleryDismantlingComponent implements OnInit {
   divisionMS: any = 'ID';
   columnheads:any[] = ['SrNo','Stock Code','Description', 'Pcs','Metal/Value','Lab Amount','Total Amount','Loss','MFGRE','MFGDATE',' Settings','Remarks','Locations'];
+  columnhead :any[] = ['Col ID','Division','Cols','ColR','ColKt','Fes','Weight','Rate','Amount','Pcs','RecWeight','RecAmount','Re...','...']
  @Input() content!: any; 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  vocMaxDate = new Date();
+  currentDate = new Date();
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -34,6 +37,18 @@ export class JewelleryDismantlingComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+  }
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Button Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
 
   constructor(
@@ -52,7 +67,12 @@ export class JewelleryDismantlingComponent implements OnInit {
 
   userDataSelected(value: any) {
     console.log(value);
-       this.jewellerydismantlingFrom.controls.userName.setValue(value.UsersName);
+       this.jewellerydismantlingFrom.controls.enteredby.setValue(value.UsersName);
+  }
+
+  locationCodeSelected(e:any){
+    console.log(e);
+    this.jewellerydismantlingFrom.controls.location.setValue(e.LOCATION_CODE);
   }
 
   close(data?: any) {
@@ -62,23 +82,34 @@ export class JewelleryDismantlingComponent implements OnInit {
 
 
  jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
-    branchCode:[''],
-    voctype:[''],
-    vocno:[''],
-    vocdate:[''],
+   voctype:[''],
+   vocno:[''],
+   vocdate:[''],
    enteredby:[''],
    lossaccount:[''],
    itemcurrency:[''],
-   itemcurrencycc:[''],
+   itemcurrencDesc:[''],
    metalrate:[''],
    metalratetype:[''],
    base:[''],
+   baseDesc : [''],
    narration:[''],
+   stock : [''],
+   description : [''],
+   pcs : [''],
+   totalValue : [''],
+   mfgDate : [''],
+   lossAccount : [''],
+   mfgfurRef : [''],
+   location : [''],
+   setting : [''],
+   labourCharge : [''],
+   polishing : [''],
+   miscCode : [''],
+   labTotal : [''],
   });
 
-removedata(){
-  this.tableData.pop();
-}
+
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -101,11 +132,11 @@ removedata(){
       "SMAN": "",
       "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount || "",
       "CURRENCY_CODE": this.jewellerydismantlingFrom.value.itemcurrency || "",
-      "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencycc || "",
+      "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencDesc || "",
       "MET_RATE_TYPE": this.jewellerydismantlingFrom.value.metalratetype || "",
       "METAL_RATE": this.jewellerydismantlingFrom.value.metalrate || "",
       "NAVSEQNO": 0,
-      "TOTALPCS": 0,
+      "TOTALPCS": this.jewellerydismantlingFrom.value.pcs || "",
       "TOTMETALAMOUNTFC": 0,
       "TOTMETALAMOUNTCC": 0,
       "TOTSTONEAMOUNTFC": 0,
@@ -121,7 +152,7 @@ removedata(){
       "PRINT_COUNT": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",
-      "HTUSERNAME": "",
+      "HTUSERNAME": this.jewellerydismantlingFrom.value.enteredby,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "Details": [
@@ -194,22 +225,6 @@ removedata(){
   }
 
   setFormValues() {
-    if(!this.content) return
-    console.log(this.content);
-    
-    this.jewellerydismantlingFrom.controls.branchCode.setValue(this.content.BRANCH_CODE)
-    this.jewellerydismantlingFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.jewellerydismantlingFrom.controls.vocno.setValue(this.content.VOCNO)
-    this.jewellerydismantlingFrom.controls.vocdate.setValue(this.content.VOCDATE)
-    this.jewellerydismantlingFrom.controls.lossaccount.setValue(this.content.LOSS_ACCODE)
-    this.jewellerydismantlingFrom.controls.itemcurrency.setValue(this.content.CURRENCY_CODE)
-    this.jewellerydismantlingFrom.controls.itemcurrencycc.setValue(this.content.CC_RATE)
-    this.jewellerydismantlingFrom.controls.metalrate.setValue(this.content.METAL_RATE)
-    this.jewellerydismantlingFrom.controls.metalratetype.setValue(this.content.MET_RATE_TYPE)
-    this.jewellerydismantlingFrom.controls.narration.setValue(this.content.HREMARKS)
-
-    
-
   }
 
 
@@ -219,7 +234,7 @@ removedata(){
       return
     }
   
-    let API = 'DiamondDismantle/UpdateDiamondDismantle/'+ this.jewellerydismantlingFrom.value.branchCode + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.yearMonth
+    let API = 'DiamondDismantle/UpdateDiamondDismantle'+ this.jewellerydismantlingFrom.value.branchCode + this.jewellerydismantlingFrom.value.voctype + this.jewellerydismantlingFrom.value.vocno + this.jewellerydismantlingFrom.value.yearMonth;
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
@@ -230,7 +245,7 @@ removedata(){
       "SMAN": "",
       "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount || "",
       "CURRENCY_CODE": this.jewellerydismantlingFrom.value.itemcurrency || "",
-      "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencycc || "",
+      "CC_RATE": this.jewellerydismantlingFrom.value.itemcurrencDesc || "",
       "MET_RATE_TYPE": this.jewellerydismantlingFrom.value.metalratetype || "",
       "METAL_RATE": this.jewellerydismantlingFrom.value.metalrate || "",
       "NAVSEQNO": 0,
@@ -388,11 +403,5 @@ removedata(){
     });
   }
   
-  ngOnDestroy() {
-    if (this.subscriptions.length > 0) {
-      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
-      this.subscriptions = []; // Clear the array
-    }
-  }
-
+ 
 }

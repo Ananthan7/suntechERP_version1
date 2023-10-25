@@ -28,7 +28,7 @@ export class CommonServiceService {
   basePartyCode: any
   compCurrency: any
   popMetalValueOnNet: any
-  decimalQtyFormat: any;
+  decimalFormatCount: any;
   public allMessageBoxData: any;
   public allCompanyParams: any;
   public baseUsername: any;
@@ -70,20 +70,21 @@ export class CommonServiceService {
   /**USE: common fuction to format the value to limit decimal places from branch master */
   decimalQuantityFormat(value: any, flag: string){
     if (flag == 'AMOUNT') {
-      this.decimalQtyFormat = this.allbranchMaster?.BAMTDECIMALS
+      this.decimalFormatCount = this.allbranchMaster?.BAMTDECIMALS
     } else if (flag == 'METAL') {
-      this.decimalQtyFormat = this.allbranchMaster?.BMQTYDECIMALS
+      this.decimalFormatCount = this.allbranchMaster?.BMQTYDECIMALS
     } else if (flag == 'STONE') {
-      this.decimalQtyFormat = this.allbranchMaster?.BSQTYDECIMALS
+      this.decimalFormatCount = this.allbranchMaster?.BSQTYDECIMALS
     } else if (flag == 'PURITY') {
-      this.decimalQtyFormat = 6 //same as .net
+      this.decimalFormatCount = 6 //same as .net
     } else if (flag == 'RATE') {
-      this.decimalQtyFormat = 6 //same as .net
+      this.decimalFormatCount = 6 //same as .net
     }
+    value = Number(value).toFixed(this.decimalFormatCount)
 
     let str = ''
     let x = 1
-    while (x <= this.decimalQtyFormat) {
+    while (x <= this.decimalFormatCount) {
       str += '0'
       x++;
     }
@@ -102,17 +103,17 @@ export class CommonServiceService {
       fractionalPart += str;
     }
     // Limit the fractional part to 3 decimal places
-    if (fractionalPart.length > this.decimalQtyFormat) {
-      fractionalPart = fractionalPart.slice(0, this.decimalQtyFormat);
+    if (fractionalPart.length > this.decimalFormatCount) {
+      fractionalPart = fractionalPart.slice(0, this.decimalFormatCount);
     }
     let strzero = ''
     let count = 1
-    let addedzero = (this.decimalQtyFormat) - (fractionalPart.length)
+    let addedzero = (this.decimalFormatCount) - (fractionalPart.length)
     while (count <= addedzero) {
       strzero += '0'
       count++;
     }
-    if (fractionalPart && this.decimalQtyFormat > fractionalPart.length) {
+    if (fractionalPart && this.decimalFormatCount > fractionalPart.length) {
       fractionalPart += strzero;
     }
     // Reconstruct the value and set it back to the input field

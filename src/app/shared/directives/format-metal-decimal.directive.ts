@@ -21,7 +21,7 @@ export class MetalDecimalDirective {
     const parts = value.split('.');
     let integerPart = parts[0];
     let fractionalPart = parts[1];
-    if (fractionalPart.length > AMTDECIMAL) {
+    if (fractionalPart && fractionalPart.length > AMTDECIMAL) {
       fractionalPart = fractionalPart.slice(0, AMTDECIMAL);
       input.value = `${integerPart}.${fractionalPart}`;
     }

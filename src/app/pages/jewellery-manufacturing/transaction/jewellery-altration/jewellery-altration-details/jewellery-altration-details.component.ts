@@ -20,11 +20,13 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   divisionMS: any = 'ID';
 
   columnheads:any[] = ['Sr','Div','Components','Location','Kt','Purity','Pcs','Weight ','Rate','Amount','Sieve','Shape'];
+  columnheads1:any[] = ['Sr','Division','Component ID','Location','Transfer To','Kt','Purity','Pcs','Weight ','Rate','Amount'];
   @Input() content!: any; 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  currentDate = new Date();
   private subscriptions: Subscription[] = [];
     user: MasterSearchModel = {
     PAGENO: 1,
@@ -50,10 +52,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  stockCodeSelected(e:any){
-    console.log(e);
-    this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
-  }
+ 
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -74,7 +73,10 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-
+  stockCodeSelected(e:any){
+    console.log(e);
+    this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
+  }
 
   jewelleryaltrationdetailsFrom: FormGroup = this.formBuilder.group({
    stockcode:[''],
@@ -162,67 +164,67 @@ formSubmit(){
   let API = 'DiamondJewelAlteration/InsertDiamondJewelAlteration'
   let postData = {
     "UNIQUEID": 0,
-    "SRNO": 0,
-    "STOCK_CODE": this.jewelleryaltrationdetailsFrom.value.stockcode || "",
-    "DESCRIPTION": this.jewelleryaltrationdetailsFrom.value.description || "",
-    "PCS": this.jewelleryaltrationdetailsFrom.value.pcs || "",
-    "COSTFC":this.jewelleryaltrationdetailsFrom.value.costFC || "",
-    "COSTCC":this.jewelleryaltrationdetailsFrom.value.costCC || "",
-    "COSTFCNEW": this.jewelleryaltrationdetailsFrom.value.costFCNEW || "",
-    "COSTCCNEW": this.jewelleryaltrationdetailsFrom.value.costCCNEW || "",
-    "METALWT": this.jewelleryaltrationdetailsFrom.value.metalWT || "",
-    "PUREWT": 0,
-    "STONEWT": 0,
-    "GROSSWT": this.jewelleryaltrationdetailsFrom.value.gross || "",
+      "SRNO": 0,
+      "STOCK_CODE": this.jewelleryaltrationdetailsFrom.value.stockcode || "",
+      "DESCRIPTION": this.jewelleryaltrationdetailsFrom.value.description || "",
+      "PCS": this.jewelleryaltrationdetailsFrom.value.pcs || "",
+      "COSTFC":this.jewelleryaltrationdetailsFrom.value.costFC || "",
+      "COSTCC":this.jewelleryaltrationdetailsFrom.value.costCC || "",
+      "COSTFCNEW": this.jewelleryaltrationdetailsFrom.value.costFCNEW || "",
+      "COSTCCNEW": this.jewelleryaltrationdetailsFrom.value.costCCNEW || "",
+      "METALWT": this.jewelleryaltrationdetailsFrom.value.metalWT || "",
+      "PUREWT": 0,
+      "STONEWT": 0,
+      "GROSSWT": this.jewelleryaltrationdetailsFrom.value.gross || "",
     "METAL_AMTFC":this.jewelleryaltrationdetailsFrom.value.metalAMTFC || "",
     "METAL_AMTCC":this.jewelleryaltrationdetailsFrom.value.metalAMTCC || "",
-    "STONE_AMTFC": 0,
-    "STONE_AMTCC": 0,
-    "METALWT_NEW": this.jewelleryaltrationdetailsFrom.value.metalWTNEW || "",
-    "PUREWT_NEW": 0,
-    "STONEWT_NEW": 0,
-    "GROSSWT_NEW": this.jewelleryaltrationdetailsFrom.value.grossWTNEW || "",
-    "METAL_AMTFCNEW": 0,
-    "METAL_AMTCCNEW": 0,
-    "STONE_AMTFCNEW": 0,
-    "STONE_AMTCCNEW": 0,
-    "SET_ACCODE": this.jewelleryaltrationdetailsFrom.value.settings || "",
+      "STONE_AMTFC": 0,
+      "STONE_AMTCC": 0,
+      "METALWT_NEW": this.jewelleryaltrationdetailsFrom.value.metalWTNEW || "",
+      "PUREWT_NEW": 0,
+      "STONEWT_NEW": 0,
+      "GROSSWT_NEW": this.jewelleryaltrationdetailsFrom.value.grossWTNEW || "",
+      "METAL_AMTFCNEW": 0,
+      "METAL_AMTCCNEW": 0,
+      "STONE_AMTFCNEW": 0,
+      "STONE_AMTCCNEW": 0,
+      "SET_ACCODE": this.jewelleryaltrationdetailsFrom.value.settings || "",
     "SET_AMTFC":this.jewelleryaltrationdetailsFrom.value.settingsAMTFC || "",
     "SET_AMTCC": this.jewelleryaltrationdetailsFrom.value.settingsAMTCC || "",
-    "SET_AMTFCNEW": 0,
-    "SET_AMTCCNEW": 0,
-    "POL_ACCODE": this.jewelleryaltrationdetailsFrom.value.polishing || "",
+      "SET_AMTFCNEW": 0,
+      "SET_AMTCCNEW": 0,
+      "POL_ACCODE": this.jewelleryaltrationdetailsFrom.value.polishing || "",
     "POL_AMTFC": this.jewelleryaltrationdetailsFrom.value.polishingAMTFC || "",
     "POL_AMTCC": this.jewelleryaltrationdetailsFrom.value.polishingAMTCC || "",
-    "POL_AMTFCNEW": 0,
-    "POL_AMTCCNEW": 0,
-    "RHO_ACCODE": this.jewelleryaltrationdetailsFrom.value.rhodium || "",
-    "RHO_AMTFC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTFC || "",
-    "RHO_AMTCC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTCC || "",
-    "RHO_AMTFCNEW": 0,
-    "RHO_AMTCCNEW": 0,
-    "MKG_ACCODE": this.jewelleryaltrationdetailsFrom.value.making || "",
-    "MKG_AMTFC": this.jewelleryaltrationdetailsFrom.value.makingAMTFC || "",
-    "MKG_AMTCC": this.jewelleryaltrationdetailsFrom.value.makingAMTCC || "",
-    "MKG_AMTFCNEW": 0,
-    "MKG_AMTCCNEW": 0,
-    "MIS_ACCODE": this.jewelleryaltrationdetailsFrom.value.misccharges || "",
+      "POL_AMTFCNEW": 0,
+      "POL_AMTCCNEW": 0,
+      "RHO_ACCODE": this.jewelleryaltrationdetailsFrom.value.rhodium || "",
+      "RHO_AMTFC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTFC || "",
+      "RHO_AMTCC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTCC || "",
+      "RHO_AMTFCNEW": 0,
+      "RHO_AMTCCNEW": 0,
+      "MKG_ACCODE": this.jewelleryaltrationdetailsFrom.value.making || "",
+      "MKG_AMTFC": this.jewelleryaltrationdetailsFrom.value.makingAMTFC || "",
+      "MKG_AMTCC": this.jewelleryaltrationdetailsFrom.value.makingAMTCC || "",
+      "MKG_AMTFCNEW": 0,
+      "MKG_AMTCCNEW": 0,
+      "MIS_ACCODE": this.jewelleryaltrationdetailsFrom.value.misccharges || "",
     "MIS_AMTFC":this.jewelleryaltrationdetailsFrom.value.miscchargesAMTFC || "",
     "MIS_AMTCC": this.jewelleryaltrationdetailsFrom.value.miscchargesAMTCC || "",
-    "MIS_AMTFCNEW": 0,
-    "MIS_AMTCCNEW": 0,
-    "TOTALLAB_AMTFC": this.jewelleryaltrationdetailsFrom.value.totalAMTFC || "",
+      "MIS_AMTFCNEW": 0,
+      "MIS_AMTCCNEW": 0,
+      "TOTALLAB_AMTFC": this.jewelleryaltrationdetailsFrom.value.totalAMTFC || "",
     "TOTALLAB_AMTCC": this.jewelleryaltrationdetailsFrom.value.totalAMTCC || "",
-    "TOTALLAB_AMTFCNEW": 0,
-    "TOTALLAB_AMTCCNEW": 0,
-    "MFGVOC_REF": "string",
-    "MFGVOC_DATE": "2023-10-19T10:00:12.767Z",
-    "LOSS_ACCODE": "string",
-    "COST_CODE": this.jewelleryaltrationdetailsFrom.value.costcode || "",
-    "REMARKS_DETAIL": "string",
-    "STOCK_FCCOST": 0,
-    "STOCK_LCCOST": 0,
-    "PRICE1PER": this.jewelleryaltrationdetailsFrom.value.price1PER || "",
+      "TOTALLAB_AMTFCNEW": 0,
+      "TOTALLAB_AMTCCNEW": 0,
+      "MFGVOC_REF": "",
+      "MFGVOC_DATE": "2023-10-25T05:39:49.369Z",
+      "LOSS_ACCODE": "",
+      "COST_CODE": this.jewelleryaltrationdetailsFrom.value.costcode || "",
+      "REMARKS_DETAIL": this.jewelleryaltrationdetailsFrom.value.remarks || "",
+      "STOCK_FCCOST": 0,
+      "STOCK_LCCOST": 0,
+      "PRICE1PER": this.jewelleryaltrationdetailsFrom.value.price1PER || "",
     "PRICE2PER": this.jewelleryaltrationdetailsFrom.value.price2PER || "",
     "PRICE3PER": this.jewelleryaltrationdetailsFrom.value.price3PER || "",
     "PRICE4PER": this.jewelleryaltrationdetailsFrom.value.price4PER || "",
@@ -237,79 +239,26 @@ formSubmit(){
     "PRICE4LC": this.jewelleryaltrationdetailsFrom.value.price4LC || "",
     "PRICE5FC": this.jewelleryaltrationdetailsFrom.value.price5FC || "",
     "PRICE5LC": this.jewelleryaltrationdetailsFrom.value.price5LC || "",
-    "CURRENCY_CODE": "stri",
-    "CC_RATE": 0,
-    "DT_BRANCH_CODE": this.branchCode,
-    "DT_VOCTYPE": "str",
-    "DT_VOCNO": 0,
-    "DT_YEARMONTH": this.yearMonth,
-    "PLAT_ACCODE":this.jewelleryaltrationdetailsFrom.value.platecharges || "",
-    "CERT_ACCODE": this.jewelleryaltrationdetailsFrom.value.certcharges || "",
-    "PLAT_CHARGESFC": this.jewelleryaltrationdetailsFrom.value.platechargesFC || "",
-    "PLAT_CHARGESCC": this.jewelleryaltrationdetailsFrom.value.platechargesCC || "",
-    "CERT_CHARGESFC":this.jewelleryaltrationdetailsFrom.value.certchargesFC || "",
-    "CERT_CHARGESCC":this.jewelleryaltrationdetailsFrom.value.certchargesCC || "",
-    "PLAT_CHARGESFCNEW": 0,
-    "PLAT_CHARGESCCNEW": 0,
-    "CERT_CHARGESFCNEW": 0,
-    "CERT_CHARGESCCNEW": 0,
-    "COLOR": this.jewelleryaltrationdetailsFrom.value.metalcolor || "",
-  "TAG_LINES": "string",
-"DetailComponents": [
-  {
-    "REFMID": this.jewelleryaltrationdetailsFrom.value.refvoc || "",
-    "MAINCODE": "string",
-    "SLNO": 0,
-    "METALSTONE": "s",
-    "DIVISION": "s",
-    "DET_STOCK_CODE": "string",
-    "RET_STOCK_CODE": "string",
-    "KARAT_CODE": this.jewelleryaltrationdetailsFrom.value.karat || "",
-    "PURITY": 0,
-    "PCS": 0,
-    "WEIGHT": 0,
-    "PUREWT": 0,
-    "RATEFC": 0,
-    "RATECC": 0,
-    "AMOUNTFC": 0,
-    "AMOUNTCC": 0,
-    "REMOVED": 0,
-    "NEWENTRY": 0,
-    "LOC_TYPE": "string",
-    "COLOR": "string",
-    "SHAPE": "string",
-    "SIEVE": "string",
-    "STONE_TYPE": "string",
-    "CLARITY": "string",
-    "SIZE": "string",
-    "SIEVE_SET": "string"
+      "CURRENCY_CODE": "",
+      "CC_RATE": 0,
+      "DT_BRANCH_CODE": '',
+      "DT_VOCTYPE": "",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH":  "",
+      "PLAT_ACCODE":this.jewelleryaltrationdetailsFrom.value.platecharges || "",
+      "CERT_ACCODE": this.jewelleryaltrationdetailsFrom.value.certcharges || "",
+      "PLAT_CHARGESFC": this.jewelleryaltrationdetailsFrom.value.platechargesFC || "",
+      "PLAT_CHARGESCC": this.jewelleryaltrationdetailsFrom.value.platechargesCC || "",
+      "CERT_CHARGESFC":this.jewelleryaltrationdetailsFrom.value.certchargesFC || "",
+      "CERT_CHARGESCC":this.jewelleryaltrationdetailsFrom.value.certchargesCC || "",
+      "PLAT_CHARGESFCNEW": 0,
+      "PLAT_CHARGESCCNEW": 0,
+      "CERT_CHARGESFCNEW": 0,
+      "CERT_CHARGESCCNEW": 0,
+      "COLOR": this.jewelleryaltrationdetailsFrom.value.metalcolor || "",
+      "TAG_LINES": "",
   }
-]
-  }
-
-  let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-    .subscribe((result) => {
-      if (result.response) {
-        if(result.status == "Success"){
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.jewelleryaltrationdetailsFrom.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
-        }
-      } else {
-        this.toastr.error('Not saved')
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
+  this.close(postData);
 }
 
 setFormValues() {

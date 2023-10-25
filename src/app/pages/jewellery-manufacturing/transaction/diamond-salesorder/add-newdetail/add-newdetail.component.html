@@ -187,9 +187,8 @@
                                 </label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" AmountDecimalInput
-                                            matInput
-                                            class="text-right"
+                                        <input type="number" matInput MetalDecimalInput
+                                            class="text-right" [readOnly]="isViewBOMTab"
                                             formControlName="METAL_WT" />
                                     </mat-form-field>
                                 </div>
@@ -200,8 +199,8 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
-                                            AmountDecimalInput
-                                            [readOnly]="viewFlag.ItemRateFC"
+                                            AmountDecimalInput 
+                                            [readOnly]="isViewBOMTab"
                                             formControlName="RATEFC"
                                             class="text-right" />
                                     </mat-form-field>
@@ -210,9 +209,9 @@
                                     class="col-sm-3 col-form-label">Stone Weight</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" StoneDecimalInput
+                                        <input type="number" StoneDecimalInput
                                             matInput
-                                            [readOnly]="viewFlag.ItemRateFC"
+                                            [readOnly]="isViewBOMTab"
                                             class="text-right"
                                             formControlName="STONE_WT" />
                                     </mat-form-field>
@@ -223,8 +222,8 @@
                                     class="col-sm-2 col-form-label">Amount</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput
-                                            AmountDecimalInput
+                                        <input type="number" matInput
+                                            AmountDecimalInput [readOnly]="isViewBOMTab"
                                             formControlName="AMOUNT"
                                             class="text-right" />
                                     </mat-form-field>
@@ -233,8 +232,9 @@
                                     class="col-sm-3 col-form-label">Gross Weight</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput
+                                        <input type="number" matInput MetalDecimalInput
                                             formControlName="GROSS_WT"
+                                            [readOnly]="true"
                                             class="text-right" />
                                     </mat-form-field>
                                 </div>
@@ -304,6 +304,7 @@
                                             <dxi-column width="auto"
                                                 [allowEditing]="false"
                                                 dataField="STONE_TYPE"
+                                                cellTemplate="stoneType"
                                                 caption="Stone Type"
                                                 alignment="left">
                                             </dxi-column>
@@ -345,6 +346,7 @@
                                             <dxi-column width="auto"
                                                 [allowEditing]="false"
                                                 dataField="SHAPE"
+                                                cellTemplate="shapeSelect"
                                                 caption="Shape" alignment="left">
                                             </dxi-column>
                                             <dxi-column width="auto"
@@ -408,6 +410,7 @@
                                                 [allowEditing]="false"
                                                 dataField="CLARITY"
                                                 caption="Clarity"
+                                                cellTemplate="CLARITYType"
                                                 alignment="left">
                                             </dxi-column>
                                             <dxi-column width="auto"
@@ -466,33 +469,70 @@
                                                     [customizeText]="customizeText">
                                                 </dxi-total-item>
                                             </dxo-summary>
-                                            <!-- <dxi-column width="auto"
-                                                *ngFor="let data of BOMDetailsArrayHead"
-                                                dataField="{{ data }}"
-                                                caption="{{ data }}"
-                                                [allowEditing]="isAllowRowEdit(data)"
-                                                [alignment]="addAlignment(data)"
-                                                [cellTemplate]="colorcodeSelect(data)">
-                                            </dxi-column> -->
-                                            <div
-                                                *dxTemplate="let data of 'colorcode'">
-                                                <div
+                                            <!-- shape Select search starts -->
+                                            <div *dxTemplate="let data of 'shapeSelect'">
+                                                <div (mouseenter)="onHoverShape(data)"
                                                     class="d-flex justify-content-between">
                                                     <div>
-                                                        <a
-                                                            href="javascript:void(0)"
+                                                        <a href="javascript:void(0)"
                                                             class="mx-1"
                                                             [innerHTML]="data.value"></a>
                                                     </div>
-                                                    <master-search
-                                                        [MasterSearchData]="colorCode"
-                                                        (newRowClick)="userDataSelected($event,data)">
+                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="shapeSelected($event,data)">
                                                     </master-search>
                                                 </div>
                                             </div>
-                                            <div
-                                                *dxTemplate="let data of 'processTypes'">
-                                                <div
+                                            <!-- CLARITY Type search starts -->
+                                            <div *dxTemplate="let data of 'CLARITYType'">
+                                                <div (mouseenter)="onHoverClarity(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="claritySelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <!-- stonetype search starts -->
+                                            <div *dxTemplate="let data of 'stoneType'">
+                                                <div (mouseenter)="onHoverstoneType(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="stoneTypeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <!-- colorcode search starts -->
+                                            <div *dxTemplate="let data of 'colorcode'">
+                                                <div (mouseenter)="onHoverColorCode(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search 
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="colorCodeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <!-- processType search starts -->
+                                            <div *dxTemplate="let data of 'processTypes'">
+                                                <div (mouseenter)="onHoverProcessType(data)"
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a
@@ -501,7 +541,7 @@
                                                             [innerHTML]="data.value"></a>
                                                     </div>
                                                     <master-search
-                                                        [MasterSearchData]="colorCode"
+                                                        [MasterSearchData]="generalMaster"
                                                         (newRowClick)="processTypeSelected($event,data)">
                                                     </master-search>
                                                 </div>
@@ -693,7 +733,7 @@
                                         <label class="col-sm-3 col-form-label">Purity</label>
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput SixDecimalInput
+                                                <input type="text" style="text-align: right;" matInput SixDecimalInput
                                                     formControlName="PURITY" />
                                             </mat-form-field>
                                         </div>
