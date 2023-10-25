@@ -19,9 +19,12 @@ export class JewelleryAltrationComponent implements OnInit {
   columnhead:any[] = ['SrNo','Stock Code','Description', 'Pcs','Metal/','Stone ','Gross','Cost (OLD)','Cost (New)','Remark'];
   @Input() content!: any; 
   tableData: any[] = [];
+  jewelleryaltrationdetail : any[] =[];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  currentDate = new Date();
+
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -66,12 +69,12 @@ export class JewelleryAltrationComponent implements OnInit {
 
   costCodeSelected(e:any){
     console.log(e);
-    this.jewelleryaltrationFrom.controls.stockcode.setValue(e.COST_CODE);
+    this.jewelleryaltrationFrom.controls.costcode.setValue(e.COST_CODE);
   }
 
   userDataSelected(value: any) {
     console.log(value);
-       this.jewelleryaltrationFrom.controls.userName.setValue(value.UsersName);
+       this.jewelleryaltrationFrom.controls.enteredby.setValue(value.UsersName);
   }
 
   close(data?: any) {
@@ -103,6 +106,16 @@ export class JewelleryAltrationComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.result.then((postData) => {
+      console.log(postData);      
+      if (postData) {
+        console.log('Data from modal:', postData);       
+        this.jewelleryaltrationdetail.push(postData);
+        console.log(this.jewelleryaltrationdetail);
+        
+      }
+    });
+
 
   }
 
@@ -128,12 +141,12 @@ removedata(){
       "VOCNO": this.jewelleryaltrationFrom.value.vocno || "",
       "VOCDATE": this.jewelleryaltrationFrom.value.vocdate || "",
       "YEARMONTH": this.yearMonth,
-      "SMAN": "string",
+      "SMAN": this.jewelleryaltrationFrom.value.enteredby || "",
       "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount || "",
       "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency || "",
-      "CC_RATE": this.jewelleryaltrationFrom.value.itemcurrencycc || "",
+      "CC_RATE": 0,
       "MET_RATE_TYPE": this.jewelleryaltrationFrom.value.metalratetype || "",
-      "METAL_RATE": this.jewelleryaltrationFrom.value.metalrate || "",
+      "METAL_RATE":this.jewelleryaltrationFrom.value.metalrate || "",
       "NAVSEQNO": 0,
       "TOTALPCS": 0,
       "TOTAL_LAB_CHARGECC": 0,
@@ -144,139 +157,43 @@ removedata(){
       "TOTAL_COST_NEWFC": 0,
       "REMARKS": this.jewelleryaltrationFrom.value.narration || "",
       "PRINT_COUNT": 0,
-      "POSTDATE": "string",
+      "POSTDATE": "",
       "AUTOPOSTING": true,
-      "HTUSERNAME": "string",
-      "REMARKS_DETAIL": "string",
+      "HTUSERNAME": "",
+      "REMARKS_DETAIL": "",
       "GENSEQNO": 0,
-  "Details": [
-    {
-      "UNIQUEID": 0,
-      "SRNO": 0,
-      "STOCK_CODE": "string",
-      "DESCRIPTION": "string",
-      "PCS": 0,
-      "COSTFC": 0,
-      "COSTCC": 0,
-      "COSTFCNEW": 0,
-      "COSTCCNEW": 0,
-      "METALWT": 0,
-      "PUREWT": 0,
-      "STONEWT": 0,
-      "GROSSWT": 0,
-      "METAL_AMTFC": 0,
-      "METAL_AMTCC": 0,
-      "STONE_AMTFC": 0,
-      "STONE_AMTCC": 0,
-      "METALWT_NEW": 0,
-      "PUREWT_NEW": 0,
-      "STONEWT_NEW": 0,
-      "GROSSWT_NEW": 0,
-      "METAL_AMTFCNEW": 0,
-      "METAL_AMTCCNEW": 0,
-      "STONE_AMTFCNEW": 0,
-      "STONE_AMTCCNEW": 0,
-      "SET_ACCODE": "string",
-      "SET_AMTFC": 0,
-      "SET_AMTCC": 0,
-      "SET_AMTFCNEW": 0,
-      "SET_AMTCCNEW": 0,
-      "POL_ACCODE": "string",
-      "POL_AMTFC": 0,
-      "POL_AMTCC": 0,
-      "POL_AMTFCNEW": 0,
-      "POL_AMTCCNEW": 0,
-      "RHO_ACCODE": "string",
-      "RHO_AMTFC": 0,
-      "RHO_AMTCC": 0,
-      "RHO_AMTFCNEW": 0,
-      "RHO_AMTCCNEW": 0,
-      "MKG_ACCODE": "string",
-      "MKG_AMTFC": 0,
-      "MKG_AMTCC": 0,
-      "MKG_AMTFCNEW": 0,
-      "MKG_AMTCCNEW": 0,
-      "MIS_ACCODE": "string",
-      "MIS_AMTFC": 0,
-      "MIS_AMTCC": 0,
-      "MIS_AMTFCNEW": 0,
-      "MIS_AMTCCNEW": 0,
-      "TOTALLAB_AMTFC": 0,
-      "TOTALLAB_AMTCC": 0,
-      "TOTALLAB_AMTFCNEW": 0,
-      "TOTALLAB_AMTCCNEW": 0,
-      "MFGVOC_REF": "string",
-      "MFGVOC_DATE": "2023-10-19T10:00:12.767Z",
-      "LOSS_ACCODE": "string",
-      "COST_CODE": "string",
-      "REMARKS_DETAIL": "string",
-      "STOCK_FCCOST": 0,
-      "STOCK_LCCOST": 0,
-      "PRICE1PER": "string",
-      "PRICE2PER": "string",
-      "PRICE3PER": "string",
-      "PRICE4PER": "string",
-      "PRICE5PER": "string",
-      "PRICE1FC": 0,
-      "PRICE1LC": 0,
-      "PRICE2FC": 0,
-      "PRICE2LC": 0,
-      "PRICE3FC": 0,
-      "PRICE3LC": 0,
-      "PRICE4FC": 0,
-      "PRICE4LC": 0,
-      "PRICE5FC": 0,
-      "PRICE5LC": 0,
-      "CURRENCY_CODE": "stri",
-      "CC_RATE": 0,
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "PLAT_ACCODE": "string",
-      "CERT_ACCODE": "string",
-      "PLAT_CHARGESFC": 0,
-      "PLAT_CHARGESCC": 0,
-      "CERT_CHARGESFC": 0,
-      "CERT_CHARGESCC": 0,
-      "PLAT_CHARGESFCNEW": 0,
-      "PLAT_CHARGESCCNEW": 0,
-      "CERT_CHARGESFCNEW": 0,
-      "CERT_CHARGESCCNEW": 0,
-      "COLOR": "string",
-      "TAG_LINES": "string"
-    }
-  ],
-  "DetailComponents": [
-    {
-      "REFMID": 0,
-      "MAINCODE": "string",
-      "SLNO": 0,
-      "METALSTONE": "s",
-      "DIVISION": "s",
-      "DET_STOCK_CODE": "string",
-      "RET_STOCK_CODE": "string",
-      "KARAT_CODE": "stri",
-      "PURITY": 0,
-      "PCS": 0,
-      "WEIGHT": 0,
-      "PUREWT": 0,
-      "RATEFC": 0,
-      "RATECC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTCC": 0,
-      "REMOVED": 0,
-      "NEWENTRY": 0,
-      "LOC_TYPE": "string",
-      "COLOR": "string",
-      "SHAPE": "string",
-      "SIEVE": "string",
-      "STONE_TYPE": "string",
-      "CLARITY": "string",
-      "SIZE": "string",
-      "SIEVE_SET": "string"
-    }
-  ]
+      "Details": this.jewelleryaltrationdetail,
+      
+      "DetailComponents": [
+        {
+          "REFMID": 0,
+          "MAINCODE": "str",
+          "SLNO": 0,
+          "METALSTONE": "s",
+          "DIVISION": "s",
+          "DET_STOCK_CODE": "",
+          "RET_STOCK_CODE": "",
+          "KARAT_CODE": "",
+          "PURITY": 0,
+          "PCS": 0,
+          "WEIGHT": 0,
+          "PUREWT": 0,
+          "RATEFC": 0,
+          "RATECC": 0,
+          "AMOUNTFC": 0,
+          "AMOUNTCC": 0,
+          "REMOVED": 0,
+          "NEWENTRY": 0,
+          "LOC_TYPE": "",
+          "COLOR": "",
+          "SHAPE": "",
+          "SIEVE": "",
+          "STONE_TYPE": "",
+          "CLARITY": "",
+          "SIZE": "",
+          "SIEVE_SET": ""
+        }
+      ]
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -304,23 +221,6 @@ removedata(){
     this.subscriptions.push(Sub)
   }
 
-  setFormValues() {
-    if(!this.content) return
-    console.log(this.content);
-    
-    this.jewelleryaltrationFrom.controls.voctype.setValue(this.content.VOCTYPE)
-    this.jewelleryaltrationFrom.controls.vocno.setValue(this.content.VOCNO)
-    this.jewelleryaltrationFrom.controls.vocdate.setValue(this.content.VOCDATE)
-    this.jewelleryaltrationFrom.controls.lossaccount.setValue(this.content.LOSS_ACCODE)
-    this.jewelleryaltrationFrom.controls.itemcurrency.setValue(this.content.CURRENCY_CODE)
-    this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue(this.content.CC_RATE)
-    this.jewelleryaltrationFrom.controls.metalratetype.setValue(this.content.MET_RATE_TYPE)
-    this.jewelleryaltrationFrom.controls.metalrate.setValue(this.content.METAL_RATE)
-    this.jewelleryaltrationFrom.controls.narration.setValue(this.content.REMARKS)
-
-    
-
-  }
 
 
   update(){
@@ -337,12 +237,12 @@ removedata(){
       "VOCNO": this.jewelleryaltrationFrom.value.vocno || "",
       "VOCDATE": this.jewelleryaltrationFrom.value.vocdate || "",
       "YEARMONTH": this.yearMonth,
-      "SMAN": "",
+      "SMAN": this.jewelleryaltrationFrom.value.enteredby || "",
       "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount || "",
       "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency || "",
-      "CC_RATE": this.jewelleryaltrationFrom.value.itemcurrencycc || "",
+      "CC_RATE": 0,
       "MET_RATE_TYPE": this.jewelleryaltrationFrom.value.metalratetype || "",
-      "METAL_RATE": this.jewelleryaltrationFrom.value.metalrate || "",
+      "METAL_RATE":this.jewelleryaltrationFrom.value.metalrate || "",
       "NAVSEQNO": 0,
       "TOTALPCS": 0,
       "TOTAL_LAB_CHARGECC": 0,
@@ -358,134 +258,134 @@ removedata(){
       "HTUSERNAME": "",
       "REMARKS_DETAIL": "",
       "GENSEQNO": 0,
-  "Details": [
-    {
-      "UNIQUEID": 0,
-      "SRNO": 0,
-      "STOCK_CODE": "",
-      "DESCRIPTION": "",
-      "PCS": 0,
-      "COSTFC": 0,
-      "COSTCC": 0,
-      "COSTFCNEW": 0,
-      "COSTCCNEW": 0,
-      "METALWT": 0,
-      "PUREWT": 0,
-      "STONEWT": 0,
-      "GROSSWT": 0,
-      "METAL_AMTFC": 0,
-      "METAL_AMTCC": 0,
-      "STONE_AMTFC": 0,
-      "STONE_AMTCC": 0,
-      "METALWT_NEW": 0,
-      "PUREWT_NEW": 0,
-      "STONEWT_NEW": 0,
-      "GROSSWT_NEW": 0,
-      "METAL_AMTFCNEW": 0,
-      "METAL_AMTCCNEW": 0,
-      "STONE_AMTFCNEW": 0,
-      "STONE_AMTCCNEW": 0,
-      "SET_ACCODE": "",
-      "SET_AMTFC": 0,
-      "SET_AMTCC": 0,
-      "SET_AMTFCNEW": 0,
-      "SET_AMTCCNEW": 0,
-      "POL_ACCODE": "",
-      "POL_AMTFC": 0,
-      "POL_AMTCC": 0,
-      "POL_AMTFCNEW": 0,
-      "POL_AMTCCNEW": 0,
-      "RHO_ACCODE": "",
-      "RHO_AMTFC": 0,
-      "RHO_AMTCC": 0,
-      "RHO_AMTFCNEW": 0,
-      "RHO_AMTCCNEW": 0,
-      "MKG_ACCODE": "",
-      "MKG_AMTFC": 0,
-      "MKG_AMTCC": 0,
-      "MKG_AMTFCNEW": 0,
-      "MKG_AMTCCNEW": 0,
-      "MIS_ACCODE": "",
-      "MIS_AMTFC": 0,
-      "MIS_AMTCC": 0,
-      "MIS_AMTFCNEW": 0,
-      "MIS_AMTCCNEW": 0,
-      "TOTALLAB_AMTFC": 0,
-      "TOTALLAB_AMTCC": 0,
-      "TOTALLAB_AMTFCNEW": 0,
-      "TOTALLAB_AMTCCNEW": 0,
-      "MFGVOC_REF": "",
-      "MFGVOC_DATE": "2023-10-19T10:00:12.767Z",
-      "LOSS_ACCODE": "",
-      "COST_CODE": "",
-      "REMARKS_DETAIL": "",
-      "STOCK_FCCOST": 0,
-      "STOCK_LCCOST": 0,
-      "PRICE1PER": "",
-      "PRICE2PER": "",
-      "PRICE3PER": "",
-      "PRICE4PER": "",
-      "PRICE5PER": "",
-      "PRICE1FC": 0,
-      "PRICE1LC": 0,
-      "PRICE2FC": 0,
-      "PRICE2LC": 0,
-      "PRICE3FC": 0,
-      "PRICE3LC": 0,
-      "PRICE4FC": 0,
-      "PRICE4LC": 0,
-      "PRICE5FC": 0,
-      "PRICE5LC": 0,
-      "CURRENCY_CODE": "",
-      "CC_RATE": 0,
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "",
-      "PLAT_ACCODE": "",
-      "CERT_ACCODE": "",
-      "PLAT_CHARGESFC": 0,
-      "PLAT_CHARGESCC": 0,
-      "CERT_CHARGESFC": 0,
-      "CERT_CHARGESCC": 0,
-      "PLAT_CHARGESFCNEW": 0,
-      "PLAT_CHARGESCCNEW": 0,
-      "CERT_CHARGESFCNEW": 0,
-      "CERT_CHARGESCCNEW": 0,
-      "COLOR": "",
-      "TAG_LINES": ""
-    }
-  ],
-  "DetailComponents": [
-    {
-      "REFMID": 0,
-      "MAINCODE": "",
-      "SLNO": 0,
-      "METALSTONE": "",
-      "DIVISION": "",
-      "DET_STOCK_CODE": "",
-      "RET_STOCK_CODE": "",
-      "KARAT_CODE": "",
-      "PURITY": 0,
-      "PCS": 0,
-      "WEIGHT": 0,
-      "PUREWT": 0,
-      "RATEFC": 0,
-      "RATECC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTCC": 0,
-      "REMOVED": 0,
-      "NEWENTRY": 0,
-      "LOC_TYPE": "",
-      "COLOR": "",
-      "SHAPE": "",
-      "SIEVE": "",
-      "STONE_TYPE": "",
-      "CLARITY": "",
-      "SIZE": "",
-      "SIEVE_SET": ""
-    }
-  ]
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "SRNO": 0,
+          "STOCK_CODE": "",
+          "DESCRIPTION": "",
+          "PCS": 0,
+          "COSTFC": 0,
+          "COSTCC": 0,
+          "COSTFCNEW": 0,
+          "COSTCCNEW": 0,
+          "METALWT": 0,
+          "PUREWT": 0,
+          "STONEWT": 0,
+          "GROSSWT": 0,
+          "METAL_AMTFC": 0,
+          "METAL_AMTCC": 0,
+          "STONE_AMTFC": 0,
+          "STONE_AMTCC": 0,
+          "METALWT_NEW": 0,
+          "PUREWT_NEW": 0,
+          "STONEWT_NEW": 0,
+          "GROSSWT_NEW": 0,
+          "METAL_AMTFCNEW": 0,
+          "METAL_AMTCCNEW": 0,
+          "STONE_AMTFCNEW": 0,
+          "STONE_AMTCCNEW": 0,
+          "SET_ACCODE": "",
+          "SET_AMTFC": 0,
+          "SET_AMTCC": 0,
+          "SET_AMTFCNEW": 0,
+          "SET_AMTCCNEW": 0,
+          "POL_ACCODE": "",
+          "POL_AMTFC": 0,
+          "POL_AMTCC": 0,
+          "POL_AMTFCNEW": 0,
+          "POL_AMTCCNEW": 0,
+          "RHO_ACCODE": "",
+          "RHO_AMTFC": 0,
+          "RHO_AMTCC": 0,
+          "RHO_AMTFCNEW": 0,
+          "RHO_AMTCCNEW": 0,
+          "MKG_ACCODE": "",
+          "MKG_AMTFC": 0,
+          "MKG_AMTCC": 0,
+          "MKG_AMTFCNEW": 0,
+          "MKG_AMTCCNEW": 0,
+          "MIS_ACCODE": "",
+          "MIS_AMTFC": 0,
+          "MIS_AMTCC": 0,
+          "MIS_AMTFCNEW": 0,
+          "MIS_AMTCCNEW": 0,
+          "TOTALLAB_AMTFC": 0,
+          "TOTALLAB_AMTCC": 0,
+          "TOTALLAB_AMTFCNEW": 0,
+          "TOTALLAB_AMTCCNEW": 0,
+          "MFGVOC_REF": "",
+          "MFGVOC_DATE": "2023-10-25T05:39:49.369Z",
+          "LOSS_ACCODE": "",
+          "COST_CODE": "",
+          "REMARKS_DETAIL": "",
+          "STOCK_FCCOST": 0,
+          "STOCK_LCCOST": 0,
+          "PRICE1PER": "",
+          "PRICE2PER": "",
+          "PRICE3PER": "",
+          "PRICE4PER": "",
+          "PRICE5PER": "",
+          "PRICE1FC": 0,
+          "PRICE1LC": 0,
+          "PRICE2FC": 0,
+          "PRICE2LC": 0,
+          "PRICE3FC": 0,
+          "PRICE3LC": 0,
+          "PRICE4FC": 0,
+          "PRICE4LC": 0,
+          "PRICE5FC": 0,
+          "PRICE5LC": 0,
+          "CURRENCY_CODE": "",
+          "CC_RATE": 0,
+          "DT_BRANCH_CODE": "",
+          "DT_VOCTYPE": "",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "",
+          "PLAT_ACCODE": "",
+          "CERT_ACCODE": "",
+          "PLAT_CHARGESFC": 0,
+          "PLAT_CHARGESCC": 0,
+          "CERT_CHARGESFC": 0,
+          "CERT_CHARGESCC": 0,
+          "PLAT_CHARGESFCNEW": 0,
+          "PLAT_CHARGESCCNEW": 0,
+          "CERT_CHARGESFCNEW": 0,
+          "CERT_CHARGESCCNEW": 0,
+          "COLOR": "",
+          "TAG_LINES": ""
+        }
+      ],
+      "DetailComponents": [
+        {
+          "REFMID": 0,
+          "MAINCODE": "",
+          "SLNO": 0,
+          "METALSTONE": "",
+          "DIVISION": "",
+          "DET_STOCK_CODE": "",
+          "RET_STOCK_CODE": "",
+          "KARAT_CODE": "",
+          "PURITY": 0,
+          "PCS": 0,
+          "WEIGHT": 0,
+          "PUREWT": 0,
+          "RATEFC": 0,
+          "RATECC": 0,
+          "AMOUNTFC": 0,
+          "AMOUNTCC": 0,
+          "REMOVED": 0,
+          "NEWENTRY": 0,
+          "LOC_TYPE": "",
+          "COLOR": "",
+          "SHAPE": "",
+          "SIEVE": "",
+          "STONE_TYPE": "",
+          "CLARITY": "",
+          "SIZE": "",
+          "SIEVE_SET": ""
+        }
+      ]
     }
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
