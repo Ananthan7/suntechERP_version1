@@ -56,18 +56,54 @@ export class AddNewdetailComponent implements OnInit {
   columnheadmain: any[] = ['Stock Code', 'Stone Size', 'Stone Pcs', 'Stone Weight'];
   private subscriptions: Subscription[] = [];
   /**USE: color Code lookup model*/
-  colorCode: MasterSearchModel = {
+  generalMaster: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 35,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color',
+    SEARCH_HEADING: 'GENERAL MASTER',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE <> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  // processCode: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 3,
+  //   SEARCH_FIELD: 'CODE',
+  //   SEARCH_HEADING: 'Process',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
+  // stoneType: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 3,
+  //   SEARCH_FIELD: 'CODE',
+  //   SEARCH_HEADING: 'Process',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
+  // clarityCode: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 3,
+  //   SEARCH_FIELD: 'CODE',
+  //   SEARCH_HEADING: 'Process',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
   /**USE: Design Code lookup model*/
   DesignCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -152,7 +188,7 @@ export class AddNewdetailComponent implements OnInit {
     this.handleResize();
   }
 
-  private handleResize():void {
+  private handleResize(): void {
     // Access screen size here using window.innerWidth and window.innerHeight
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
@@ -165,7 +201,7 @@ export class AddNewdetailComponent implements OnInit {
     }
   }
   /**USE: to edit detail if already added */
-  setInitialValues():void {
+  setInitialValues(): void {
     if (this.content && this.content[0].headerDetails) {
       this.headerDetails = this.content[0].headerDetails
     }
@@ -177,69 +213,71 @@ export class AddNewdetailComponent implements OnInit {
     }
     if (this.content && this.content[0].summaryDetail) {
       let summaryDetail = this.content[0].summaryDetail
-      
+
       this.diamondSalesDetailForm.controls.designCode.setValue(summaryDetail[0].designCode)
       this.diamondSalesDetailForm.controls.designDescription.setValue(summaryDetail[0].designDescription)
     }
   }
-  customizeComma(data:any){
-    if(!Number(data.value)) return data.value
+  
+  customizeComma(data: any) {
+    if (!Number(data.value)) return data.value
     return Number(data.value).toLocaleString('en-US', { style: 'decimal' })
   }
-  customizeText(data:any){
+  customizeText(data: any) {
     let num = Number(data.value).toFixed(2)
     return num
   }
   //**USE: Format decimals in BOM details grid change*/
-  formatBOMDetailGrid(data?: any): void{
+  formatBOMDetailGrid(data?: any): void {
     this.groupBomDetailsData()
-    this.BOMDetailsArray.forEach((item:any)=>{
-      if(item.METALSTONE == 'M'){
-        item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT,'METAL')
-      }else if((item.METALSTONE == 'S')){
-        item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT,'STONE')
+    this.BOMDetailsArray.forEach((item: any) => {
+      if (item.METALSTONE == 'M') {
+        item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT, 'METAL')
+      } else if ((item.METALSTONE == 'S')) {
+        item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT, 'STONE')
       }
-      item.RATEFC = this.commonService.decimalQuantityFormat(item.RATEFC,'AMOUNT')
-      item.LABRATEFC = this.commonService.decimalQuantityFormat(item.LABRATEFC,'AMOUNT')
-      item.PURITY = this.commonService.decimalQuantityFormat(item.PURITY,'PURITY')
-      item.WASTAGE_PER = this.commonService.decimalQuantityFormat(item.WASTAGE_PER,'AMOUNT')
-      item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC,'METAL')
-      item.WASTAGE_WT = this.commonService.decimalQuantityFormat(item.WASTAGE_WT,'METAL')
-      item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC,'AMOUNT')
+      item.RATEFC = this.commonService.decimalQuantityFormat(item.RATEFC, 'AMOUNT')
+      item.LABRATEFC = this.commonService.decimalQuantityFormat(item.LABRATEFC, 'AMOUNT')
+      item.PURITY = this.commonService.decimalQuantityFormat(item.PURITY, 'PURITY')
+      item.WASTAGE_PER = this.commonService.decimalQuantityFormat(item.WASTAGE_PER, 'AMOUNT')
+      item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC, 'METAL')
+      item.WASTAGE_WT = this.commonService.decimalQuantityFormat(item.WASTAGE_WT, 'METAL')
+      item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC, 'AMOUNT')
     })
   }
-  /**USE: Allow Row Edit */
-  isAllowRowEdit(data: any): boolean {
-    if (data == 'PCS' || data == 'GROSS_WT' || data == 'LABRATELC'
-    ) {
-      return true
-    } else {
-      return false
-    }
-  }
-  /**USE: Allow Row Edit */
-  addAlignment(data: any): string {
-    if (data == 'DIVCODE' || data == 'STONE_TYPE' || data == 'COMP_CODE'
-      || data == 'KARAT_CODE' || data == 'SHAPE' || data == 'STOCK_CODE') {
-      return 'center'
-    } else {
-      return 'right'
-    }
-  }
-  /**USE: color code Select data */
-  colorcodeSelect(data: any): string {
-    if (data == 'COLOR') {
-      return 'colorcode'
-    } else {
-      return ''
-    }
-  }
-  userDataSelected(event: any, value: any) {
+  // search data change in BOM details grid starts
+  colorCodeSelected(event: any, value: any) {
     this.BOMDetailsArray[value.data.SRNO - 1].COLOR = event.CODE;
   }
   processTypeSelected(event: any, value: any) {
-    this.BOMDetailsArray[value.data.SRNO - 1].PROCESS_TYPE = event.PROCESS_TYPE;
+    this.BOMDetailsArray[value.data.SRNO - 1].PROCESS_TYPE = event.CODE;
   }
+  stoneTypeSelected(event: any, value: any) {
+    this.BOMDetailsArray[value.data.SRNO - 1].STONE_TYPE = event.CODE;
+  }
+  claritySelected(event: any, value: any) {
+    this.BOMDetailsArray[value.data.SRNO - 1].CLARITY = event.CODE;
+  }
+  shapeSelected(event: any, value: any) {
+    this.BOMDetailsArray[value.data.SRNO - 1].SHAPE = event.CODE;
+  }
+  onHoverColorCode({data}:any){
+    this.generalMaster.WHERECONDITION = `TYPES = 'COLOR MASTER' AND DIV_${data.DIVCODE}=1`
+  }
+  onHoverstoneType({data}:any){
+    this.generalMaster.WHERECONDITION = `TYPES = 'STONE TYPE MASTER' AND DIV_${data.DIVCODE}=1`
+  }
+  onHoverClarity({data}:any){
+    this.generalMaster.WHERECONDITION = `TYPES = 'CLARITY MASTER' AND  DIV_${data.DIVCODE}=1`
+  }
+  onHoverShape({data}:any){
+    this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
+  }
+  onHoverProcessType({data}:any){
+    this.generalMaster.WHERECONDITION = `SETTING TYPE MASTER`
+  }
+  // search data change in BOM details grid ends
+
   /**USE: group BOM Details Data */
   groupBomDetailsData() {
     let result: any[] = []
@@ -259,28 +297,45 @@ export class AddNewdetailComponent implements OnInit {
       res[value.DIVCODE].PCS += value.PCS;
       res[value.DIVCODE].WEIGHT += value.GROSS_WT;
       res[value.DIVCODE].WEIGHT_GMS += value.GROSS_WT;
-      res[value.DIVCODE].AMOUNT_FC += value.AMOUNTFC;
       res[value.DIVCODE].LABAMOUNTFC += value.LABAMOUNTFC;
       res[value.DIVCODE].WASTAGE_AMTFC += value.WASTAGE_AMTFC;
+
+      if (res[value.DIVCODE].DIVCODE == 'G') {
+        if (!this.headerDetails.FixedMetal) {
+          res[value.DIVCODE].AMOUNT_FC = 0.00;
+        } else {
+          res[value.DIVCODE].AMOUNT_FC += value.AMOUNTFC;
+        }
+      } else {
+        res[value.DIVCODE].AMOUNT_FC += value.AMOUNTFC;
+      }
       return res;
     }, {});
-    
+
     this.groupedBOMDetails = result
     this.groupedBOMDetailsHead = Object.keys(this.groupedBOMDetails[0]);
     this.customizeGroupedGrid() //add decimal db
   }
   /**customize Grouped Grid data fo BOM details*/
-  customizeGroupedGrid(){
-    this.groupedBOMDetails.forEach((item:any)=>{
-      item.WEIGHT = this.commonService.decimalQuantityFormat(item.WEIGHT,'METAL')
-      item.WEIGHT_GMS = this.commonService.decimalQuantityFormat(item.WEIGHT_GMS,'METAL')
+  customizeGroupedGrid() {
+    this.groupedBOMDetails.forEach((item: any) => {
+      item.WEIGHT = this.commonService.decimalQuantityFormat(item.WEIGHT, 'METAL')
+
+      if (item.DIVCODE == 'G') {
+        item.WEIGHT_GMS = this.commonService.decimalQuantityFormat(item.WEIGHT_GMS, 'METAL')
+        if (!this.headerDetails.FixedMetal) {
+          item.AMOUNTFC = '0.00'
+        }
+      } else {
+        item.WEIGHT_GMS = this.commonService.decimalQuantityFormat(item.WEIGHT_GMS / 5, 'METAL')
+      }
       item.AMOUNT_FC = this.commonService.decimalQuantityFormat(item.AMOUNT_FC,'METAL')
-      item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC,'AMOUNT')
-      item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC,'AMOUNT')
+      item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC, 'AMOUNT')
+      item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC, 'AMOUNT')
     })
   }
   /**USE: design Code Selection */
-  designCodeSelected(data: any):void {
+  designCodeSelected(data: any): void {
     if (data.DESIGN_CODE) {
       this.codeSearchFlag = 'DESIGN'
       this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
@@ -292,8 +347,8 @@ export class AddNewdetailComponent implements OnInit {
       })
     }
   }
-  /**use: design code change fn to fetch data with design code */
-  designCodeValidate(event: any):void {
+  /**use: validate design code change to fetch data with design code */
+  designCodeValidate(event: any): void {
     // 'GetDesignStnmtlDetailNet'
     if (event.target.value == '') return
     this.reset() //reset all data
@@ -313,7 +368,7 @@ export class AddNewdetailComponent implements OnInit {
         this.snackBar.dismiss()
         if (result.dynamicData || result.status == 'Success') {
           let data: any;
-          //Summary details data
+          // 1st result set Summary details data
           if (result.dynamicData[0].length > 0) {
             this.isViewSummaryTab = true;
             data = result.dynamicData[0]
@@ -324,7 +379,7 @@ export class AddNewdetailComponent implements OnInit {
               timeOut: 3000,
             })
           }
-          // Parts / Components details data
+          // 2nd and 3rd result Parts / Components details data
           if (result.dynamicData[1].length > 0) {
             this.isViewComponentsTab = true;
             this.gridComponents = result.dynamicData[1]
@@ -339,7 +394,7 @@ export class AddNewdetailComponent implements OnInit {
           } else {
             this.isViewComponentsTab = false;
           }
-          //BOM Details data
+          //4th result is BOM Details data
           if (result.dynamicData[3].length > 0) {
             this.isViewBOMTab = true;
             this.BOMDetailsArray = result.dynamicData[3]
@@ -359,12 +414,13 @@ export class AddNewdetailComponent implements OnInit {
           this.diamondSalesDetailForm.controls.RATEFC.setValue(data.RATE)
           this.diamondSalesDetailForm.controls.METAL_WT.setValue(data.METALWT)
           this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
+          this.diamondSalesDetailForm.controls.Remarks.setValue(data.KARAT_CODE+':'+ data.COLOR+':'+ data.DESIGN_DESCRIPTION)
 
           this.summaryDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
           this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
           this.summaryDetailForm.controls.COLOR.setValue(data.COLOR)
           this.summaryDetailForm.controls.KARAT_CODE.setValue(data.KARAT_CODE)
-          this.summaryDetailForm.controls.PURITY.setValue(this.commonService.decimalQuantityFormat(data.PURITY,'PURITY'))
+          this.summaryDetailForm.controls.PURITY.setValue(this.commonService.decimalQuantityFormat(data.PURITY, 'PURITY'))
           this.summaryDetailForm.controls.SUPPLIER_CODE.setValue(data.SUPPLIER_CODE)
           this.summaryDetailForm.controls.SEQ_CODE.setValue(data.SEQ_CODE)
           this.summaryDetailForm.controls.BRAND_CODE.setValue(data.BRAND_CODE)
@@ -406,10 +462,10 @@ export class AddNewdetailComponent implements OnInit {
     let dblMisc: number = 0; let dblWastageAmt: number = 0;
 
     this.BOMDetailsArray.forEach((item: any, index: number) => {
-      if (item.METALSTONE == "M") {
+      if (item.METALSTONE == "M") { //GOLD calculation
         if (!this.headerDetails.FixedMetal) {
           item.AMOUNTFC = this.commonService.decimalQuantityFormat(0.00, 'AMOUNT')
-          item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(0.00, 'AMOUNT')
+          item.RATEFC = this.commonService.decimalQuantityFormat(0.00, 'AMOUNT')
         }
         dblMetal_Wt += this.commonService.emptyToZero(item.GROSS_WT);
         dblLab_amount += this.commonService.emptyToZero(item.LABAMOUNTFC);
@@ -417,16 +473,16 @@ export class AddNewdetailComponent implements OnInit {
         dblWastageAmt += this.commonService.emptyToZero(item.WASTAGE_AMTFC);
 
         // Calc_Metal_Value(i);
-        if (this.intLabType != 4) {
-          this.calculateMetalLabour(index);
-        }
-      } else {
+        // if (this.intLabType != 4) {
+        //   this.calculateMetalLabour(index);
+        // }
+      } else { //stone calculation
+        dblSetting_Amount += this.commonService.emptyToZero(item.LABAMOUNTFC);
         if (item.METALSTONE == "Z") {
           dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item.GROSS_WT)) * 5;
         } else {
           dblStone_Wt += this.commonService.emptyToZero(this.commonService.emptyToZero(item.GROSS_WT));
         }
-        dblSetting_Amount += this.commonService.emptyToZero(item.LABAMOUNTFC);
         if (item.METALSTONE == "L") {
           dblDia_Amt += this.commonService.emptyToZero(item.AMOUNTFC);
         }
@@ -444,15 +500,17 @@ export class AddNewdetailComponent implements OnInit {
 
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
-    // this.diamondSalesDetailForm.controls.SETTING.setValue(txtCharge1FC)
-    //todo
-    let txtCharge2FC: number = 0;
-    let txtCharge3FC: number = 0;
-    let txtCharge5FC: number = 0;
-
+    console.log(txtCharge4FC,'txtCharge4FC');
+    
+    let txtCharge2FC: number = 0;//todo
+    let txtCharge3FC: number = 0;//todo
+    let txtCharge5FC: number = 0;//todo
+    
     if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
     if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
     if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
+    if (txtCharge1FC) this.summaryDetailForm.controls.SETTING.setValue(txtCharge1FC);
+    if (txtCharge1FC) this.summaryDetailForm.controls.LABOUR.setValue(txtCharge4FC);
 
     // labourchargetype checking
     if (this.intLabType == 4) {
@@ -461,15 +519,15 @@ export class AddNewdetailComponent implements OnInit {
       if (this.intLabType == 2) {
         //  dblTotLabour = this.commonService.emptyToZero(txtTotalLabour);
       } else {
-        dblTotLabour = txtCharge1FC + txtCharge4FC;
-        dblTotLabour += txtCharge3FC + txtCharge4FC + txtCharge5FC;
-        this.summaryDetailForm.controls.Total_Labour.setValue(dblTotLabour)
+        dblTotLabour = txtCharge1FC + txtCharge3FC + txtCharge4FC + txtCharge5FC;
+        
+        if (dblTotLabour) this.summaryDetailForm.controls.Total_Labour.setValue(dblTotLabour)
       }
     }
     // if (this.content.FixedMetal && this.content.FixedMetal == true) dblAmount -= dblMetal_Amt;
     dblTotRate = this.commonService.decimalQuantityFormat(dblAmount + dblTotLabour, 'AMOUNT');
-    this.diamondSalesDetailForm.controls.RATEFC.setValue(this.customizeComma({value: dblTotRate}))
-    let sumAMOUNT = this.customizeComma({value: this.diamondSalesDetailForm.value.PCS * dblTotRate})
+    this.diamondSalesDetailForm.controls.RATEFC.setValue(this.customizeComma({ value: dblTotRate }))
+    let sumAMOUNT = this.customizeComma({ value: this.diamondSalesDetailForm.value.PCS * dblTotRate })
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(sumAMOUNT)
     //rate x weight = amount
     if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarkupPercentage > 0)) {
@@ -515,7 +573,7 @@ export class AddNewdetailComponent implements OnInit {
     let txtItemRateFC = dblTotRate;
 
     this.diamondSalesDetailForm.controls.RATEFC.setValue(txtItemRateFC)
-    let txtValueFC = (this.diamondSalesDetailForm.value.PCS * dblTotRate);
+    let txtValueFC = this.commonService.decimalQuantityFormat((this.diamondSalesDetailForm.value.PCS * dblTotRate), 'AMOUNT');
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(txtValueFC)
 
     if (dblTotRate > 0) {
@@ -525,7 +583,7 @@ export class AddNewdetailComponent implements OnInit {
   }
   calculateMetalLabour(index: number) {
     let metalItemData = this.BOMDetailsArray.filter((item: any) => item.METALSTONE == 'M')
-    
+
     this.snackBar.open('Loading...')
     let postData = {
       "SPID": "021",
@@ -533,8 +591,8 @@ export class AddNewdetailComponent implements OnInit {
         "Design_Code": this.diamondSalesDetailForm.value.designCode || '',
         "strPartyCode": this.headerDetails.PartyCode || '',
         "strCurr_Code": this.headerDetails.partyCurrencyType || '',
-        "dblCurr_Rate":  this.headerDetails.partyCurrencyRate || '',
-        "dblPcs":  metalItemData[0].PCS.toString() || 0,
+        "dblCurr_Rate": this.headerDetails.partyCurrencyRate || '',
+        "dblPcs": metalItemData[0].PCS.toString() || 0,
         "dblGross_Wt": metalItemData[0].GROSS_WT.toString() || 0,
         "strPriceCode": '',
         "strLabCode": metalItemData[0].LABCHGCODE.toString() || '',
@@ -551,22 +609,22 @@ export class AddNewdetailComponent implements OnInit {
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    .subscribe((result:any) => {
-      this.snackBar.dismiss()
-      if (result.dynamicData || result.status == 'Success') {
-        let data = result.dynamicData[0]
+      .subscribe((result: any) => {
+        this.snackBar.dismiss()
+        if (result.dynamicData || result.status == 'Success') {
+          let data = result.dynamicData[0]
 
-        const rateArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == data[0].LCURR_CODE);
-        
-        this.summaryDetailForm.controls.LABOUR.setValue(this.commonService.FCToCC(data[0].LCURR_CODE,data[0].LABOUR)) 
-        let rate = 25.70
-        this.BOMDetailsArray.forEach((item:any)=>{
-          if(item.METALSTONE == 'M'){
-            item.LABRATEFC = rate
-          }
-        })
-      }
-    })
+          const rateArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == data[0].LCURR_CODE);
+
+          this.summaryDetailForm.controls.LABOUR.setValue(this.commonService.FCToCC(data[0].LCURR_CODE, data[0].LABOUR))
+          let rate = 25.70
+          this.BOMDetailsArray.forEach((item: any) => {
+            if (item.METALSTONE == 'M') {
+              item.LABRATEFC = rate
+            }
+          })
+        }
+      })
   }
   calculateRateAmount(event: any) {
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(
@@ -582,14 +640,14 @@ export class AddNewdetailComponent implements OnInit {
     if (this.summaryDetailForm.value || this.diamondSalesDetailForm.value) {
       item.summaryDetail = [{ ...this.diamondSalesDetailForm.value, ...this.summaryDetailForm.value }]
     }
-    
+
     this.close([item])//USE: passing Detail data to header screen on close
   }
   /**USE: reset All data with this function to reuse as needed */
   reset() {
     this.BOMDetailsArray = []
   }
- 
+
   /**USE: close activeModal */
   close(data?: any) {
     this.activeModal.close(data);
