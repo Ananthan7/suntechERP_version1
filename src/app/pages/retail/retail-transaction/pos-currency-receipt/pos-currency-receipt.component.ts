@@ -473,7 +473,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   openCustMaster() {
 
     const modalRef: NgbModalRef = this.modalService.open(PosCustomerMasterComponent, {
-      size: 'xl',
+      size: 'lg',
       backdrop: true,
       keyboard: false,
       // windowClass: 'modal-full-width',

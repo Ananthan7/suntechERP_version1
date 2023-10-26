@@ -3144,11 +3144,14 @@
                   formControlName="fcn_cust_detail_state"
                   id="fcn_cust_detail_state"
                   [matAutocomplete]="state"
+
                   [readonly]="viewOnly"
                 />
                 <mat-autocomplete
                   #state="matAutocomplete"
                   autoActiveFirstOption
+                  (optionSelected)="changeState($event.option.value)"
+
                 >
                   <mat-option
                     *ngFor="let option of stateMasterOptions | async"
