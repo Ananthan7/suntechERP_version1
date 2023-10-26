@@ -47,10 +47,13 @@
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-4 col-form-label">Entered By:</label>
-                            <div class="col-sm-4">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 85%;">
                                     <input type="text" matInput formControlName="enteredBy" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="user"
+                                (newRowClick)="userDataSelected($event)">
+                            </master-search>
                             </div>
                         </div>
                     </div>
@@ -76,7 +79,6 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            ]
                             <label for="input" class="col-sm-4 col-form-label">Location:</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%">
