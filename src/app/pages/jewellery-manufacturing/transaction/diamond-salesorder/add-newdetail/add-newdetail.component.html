@@ -21,7 +21,8 @@
                             <div class="col-md-4" style="width: 25% !important;">
                                 <div class="form-check pt-2">
                                     <input class="form-check-input" type="radio"
-                                        name="flexRadioDefault"
+                                        [(ngModel)]="designCodeSelect"
+                                        standalone="true"
                                         id="DesighCode">
                                     <label class="form-check-label"
                                         for="DesighCode">
@@ -53,7 +54,9 @@
                             <div class="col-md-4" style="width: 25% !important;">
                                 <div class="form-check  pt-2">
                                     <input class="form-check-input" type="radio"
-                                        name="flexRadioDefault" id="stockCode">
+                                        formControlName="StockCodeSelect"
+                                        name="flexRadioDefault" 
+                                        id="stockCode">
                                     <label class="form-check-label"
                                         for="stockCode">
                                         Stock Code
@@ -282,7 +285,7 @@
                                     <!-- bom details data grid -->
                                     <dx-resizable id="gridContainer"
                                         [width]="firstTableWidth"
-                                        [height]="300"
+                                        [height]="280"
                                         [keepAspectRatio]="false"
                                         handles="right">
                                         <dx-data-grid #dataGrid
@@ -416,6 +419,7 @@
                                             <dxi-column width="auto"
                                                 [allowEditing]="false"
                                                 dataField="STOCK_CODE"
+                                                cellTemplate="StockCode"
                                                 caption="Stock Code"
                                                 alignment="left">
                                             </dxi-column>
@@ -524,7 +528,7 @@
                                                             class="mx-1"
                                                             [innerHTML]="data.value"></a>
                                                     </div>
-                                                    <master-search 
+                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
                                                         [MasterSearchData]="generalMaster"
                                                         (newRowClick)="colorCodeSelected($event,data)">
                                                     </master-search>
@@ -546,13 +550,29 @@
                                                     </master-search>
                                                 </div>
                                             </div>
+                                            <!-- Stock Code search starts -->
+                                            <div *dxTemplate="let data of 'StockCode'">
+                                                <div (mouseenter)="onHoverStockCode(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        [MasterSearchData]="stockCode"
+                                                        (newRowClick)="stockCodeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
                                         </dx-data-grid>
                                     </dx-resizable>
                                     &nbsp;
                                     <!-- grouped BOM data grid starts-->
                                     <dx-resizable id="gridContainer"
                                         [width]="secondTableWidth"
-                                        [height]="150"
+                                        [height]="140"
                                         [keepAspectRatio]="true"
                                         handles="right">
                                         <dx-data-grid #dataGrid

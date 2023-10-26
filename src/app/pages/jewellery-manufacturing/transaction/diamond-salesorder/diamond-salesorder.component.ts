@@ -21,13 +21,18 @@ export class DiamondSalesorderComponent implements OnInit {
 
   detailData: any[] = [];
   tableDataHead: any[] = [];
-  tableData: any[] = []
+  tableData: any[] = [];
   grossChecked: boolean = false;
-  NetWtChecked: boolean = false;
-  currentDate = new Date()
-  tableItems: any[] = []
+  NetWtChecked: boolean = true;
+  currentDate = new Date();
+  tableItems: any[] = [];
   totalDetailNo: number = 0;
-  detailRowToSave: any[] = []
+  detailRowToSave: any[] = [];
+  Narration: string = '';
+  labourDetailGrid: any[] = [];
+  divisionDetailGrid: any[] = [];
+  headerLaboursList:any[] = [];
+  headerDivisionList:any[] = [];
 
   OrderTypeData: MasterSearchModel = {
     PAGENO: 1,
@@ -116,7 +121,6 @@ export class DiamondSalesorderComponent implements OnInit {
     ShipTo: [''],
     ShipToDesc: [''],
   })
-  Narration: string = ''
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -133,6 +137,37 @@ export class DiamondSalesorderComponent implements OnInit {
     this.PartyDetailsOrderForm.controls.DeliveryOnDate.setValue(this.currentDate)
     this.PartyDetailsOrderForm.controls.voucherType.setValue(this.commonService.getqueryParamVocType())
     this.getRateType()
+    this.getLabourChargeGridDetails()
+  }
+  
+  //party Code Change
+  getLabourChargeGridDetails() {
+    let postData = {
+      "SPID": "022",
+      "parameter": {
+        "strMainVocType": this.PartyDetailsOrderForm.value.voucherType || "",
+        "intMid": "",
+      }
+    }
+    this.snackBar.open('Loading Labour Details...')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.snackBar.dismiss()
+        if (result.status == "Success") {
+          this.labourDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+          this.divisionDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[1])
+        } else {
+          this.toastr.error('Labour Details Not Found', result.Message ? result.Message : '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.snackBar.dismiss()
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
+    this.subscriptions.push(Sub)
   }
   getRateType() {
     let data = this.commonService.RateTypeMasterData.filter((item: any) => item.DIVISION_CODE == 'G' && item.DEFAULT_RTYPE == 1)
@@ -219,6 +254,59 @@ export class DiamondSalesorderComponent implements OnInit {
           DATA: item
         })
       })
+    }
+  }
+  // division checkbox change
+  selectDivisionGridData(event:any,{data}:any){
+      let division = {
+        "UNIQUEID": 0,
+        "BRANCH_CODE": this.commonService.branchCode || "",
+        "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
+        "VOCNO": 0,
+        "YEARMONTH": this.commonService.yearSelected || "",
+        "SRNO": data.Id || 0,
+        "DIVISION_CODE": data.DIVISION_CODE || "",
+        "DESCRIPTION": data.DESCRIPTION || ""
+      }
+    if(event.currentTarget.checked){
+      this.headerDivisionList.push(division)
+    }else{
+      if(this.headerDivisionList.length>0){
+        this.headerDivisionList = this.headerDivisionList.filter((item:any)=> item.SRNO != data.Id)
+      }
+    }
+  }
+  selectLabourGridData(event:any,{data}:any){
+      let headerDetails = {
+        "UNIQUEID": 0,
+        "BRANCH_CODE": this.commonService.branchCode || "",
+        "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
+        "VOCNO": 0,
+        "YEARMONTH": this.commonService.yearSelected || "",
+        "SRNO": data.Id || 0,
+        "LABOUR_CODE": data.LABOUR_CODE || "",
+        "METALSTONE": data.METALSTONE || "",
+        "DIVCODE": data.DIVCODE || "",
+        "DIVISION": data.DIVISION || "",
+        "KARAT_CODE": data.KARAT_CODE || "",
+        "UNITCODE": data.UNITCODE || "",
+        "WASTAGE_PER": data.WASTAGE_PER || 0,
+        "SELLING_PER": data.SELLING_PER || 0,
+        "SELLING_RATE": data.SELLING_RATE || 0,
+        "CURRENCYCODE": data.CURRENCYCODE || "",
+        "CARATWT_FROM": data.CARATWT_FROM || 0,
+        "CARATWT_TO": data.CARATWT_TO || 0,
+        "TYPE_CODE": data.TYPE_CODE || "",
+        "CATEGORY_CODE": data.CATEGORY_CODE || "",
+        "LAB_ACCODE": data.LAB_ACCODE || "",
+        "SHAPE": data.SHAPE || ""
+      }
+    if(event.currentTarget.checked){
+      this.headerLaboursList.push(headerDetails)
+    }else{
+      if(this.headerLaboursList.length>0){
+        this.headerLaboursList = this.headerLaboursList.filter((item:any)=> item.SRNO != data.Id)
+      }
     }
   }
   /**USE:  final save API call*/
@@ -349,8 +437,6 @@ export class DiamondSalesorderComponent implements OnInit {
       }
       this.detailRowToSave.push(detailArrayValues)
     });
-    
-    //detail arrays
 
 
     let postData = {
@@ -379,23 +465,25 @@ export class DiamondSalesorderComponent implements OnInit {
       "TOTAL_AMOUNT_FC": 0,
       "TOTAL_AMOUNT_LC": 0,
       "MARGIN_PER": 0,
-      "REMARKS": "tst",
-      "SYSTEM_DATE": "2023-09-14T14:56:43.961Z",
+      "REMARKS": "",
+      "SYSTEM_DATE": "2023-10-26T09:05:45.384Z",
       "ROUND_VALUE_CC": 0,
       "NAVSEQNO": 0,
       "SO_STATUS": true,
       "TOTAL_AMOUNT_PRTY": 0,
       "FIX_UNFIX": true,
       "LINKID": "tst",
+      "OUSTATUS": true,
       "OUSTATUSNEW": 0,
+      "ORDER_STATUS": "tst",
+      "MARKUP_PER": 0,
+      "GOLD_LOSS_PER": 0,
       "CR_DAYS": 0,
       "PARTY_ADDRESS": "tst",
       "SALESPERSON_NAME": this.PartyDetailsOrderForm.value.SalesmanName || "",
-      "MARKUP_PER": 0,
-      "GOLD_LOSS_PER": 0,
       "PRINT_COUNT": 0,
-      "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "",
       "SALESORDER_REF": "tst",
+      "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "",
       "JOB_STATUS": "tst",
       "APPR_REFF": "tst",
       "MAIN_REFF": "tst",
@@ -409,19 +497,118 @@ export class DiamondSalesorderComponent implements OnInit {
       "TERMSANDCONDITIONS": "tst",
       "PAYMENTTERMS": "tst",
       "DETAILBRANCHCODE": "tst",
-      "AMCSTARTDATE": "2023-09-14T14:56:43.961Z",
+      "AMCSTARTDATE": "2023-10-26T09:05:45.384Z",
       "SALESINVPENAMOUNTCC": 0,
       "PROSP_ORIGIN": "tst",
       "CANCEL_SALES_ORDER": true,
       "DELIVERY_TYPE": "tst",
       "DELIVERY_DAYS": 0,
       "MKG_GROSS": true,
-      "ORDER_STATUS": "1",
       "HTUSERNAME": "tst",
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "AUTOPOSTING": true,
-      "details": this.detailRowToSave
+      "AutoPosting": true,
+      "Details": this.detailRowToSave,
+      "stnmtlDetail": [
+        {
+          "UNIQUEID": 0,
+          "SRNO": 0,
+          "BRANCH_CODE": "string",
+          "DESIGN_CODE": "string",
+          "METALSTONE": "string",
+          "DIVCODE": "string",
+          "PRICEID": "string",
+          "KARAT_CODE": "string",
+          "CARAT": 0,
+          "GROSS_WT": 0,
+          "PCS": 0,
+          "RATE_TYPE": "string",
+          "CURRENCY_CODE": "string",
+          "AMOUNTFC": 0,
+          "AMOUNTLC": 0,
+          "MAKINGRATE": 0,
+          "MAKINGAMOUNT": 0,
+          "SIEVE": "string",
+          "COLOR": "string",
+          "CLARITY": "string",
+          "SHAPE": "string",
+          "SIZE_FROM": "string",
+          "SIZE_TO": "string",
+          "UNQ_DESIGN_ID": "string",
+          "ISSUE_COST": 0,
+          "LOCTYPE_CODE": "string",
+          "RATELC": 0,
+          "RATEFC": 0,
+          "LINKID": "string",
+          "LABCHGCODE": "string",
+          "LABRATEFC": 0,
+          "LABRATELC": 0,
+          "LABAMOUNTFC": 0,
+          "LABAMOUNTLC": 0,
+          "METALPERCENTAGE": 0,
+          "CURRENCY_RATE": 0,
+          "STOCK_CODE": "string",
+          "VOCTYPE": "string",
+          "VOCNO": 0,
+          "YEARMONTH": "string",
+          "COMPSLNO": 0,
+          "TREE_BRANCH_CODE": "string",
+          "TREE_VOCTYPE": "string",
+          "TREE_VOCNO": 0,
+          "TREE_YEARMONTH": "string",
+          "PROCESS_TYPE": "string",
+          "SIEVE_SET": "string",
+          "DSN_STOCK_CODE": "string",
+          "PROD_VARIANCE": 0,
+          "COMP_CODE": "string",
+          "DEL_DATE": "2023-10-26T09:05:45.384Z",
+          "WASTAGE_PER": 0,
+          "WASTAGE_WT": 0,
+          "WASTAGE_AMTFC": 0,
+          "WASTAGE_AMTLC": 0,
+          "STONE_TYPE": "string",
+          "PURITY": 0
+        }
+      ],
+      "HeaderLabours": this.headerLaboursList,
+      "LabourDetails": [
+        {
+          "UNIQUEID": 0,
+          "BRANCH_CODE": "string",
+          "DESIGN_CODE": "string",
+          "CODE": "string",
+          "DESCRIPTION": "string",
+          "COST": 0,
+          "STD_TIME": 0,
+          "MAX_TIME": 0,
+          "UNQ_DESIGN_ID": "string",
+          "LOCTYPE_CODE": "string",
+          "VOCTYPE": "string",
+          "VOCNO": 0,
+          "YEARMONTH": "string",
+          "SRNO": 0,
+          "STOCK_CODE": "string",
+          "METALSTONE": "string",
+          "DIVCODE": "string",
+          "PCS": 0,
+          "GROSS_WT": 0,
+          "LABOUR_CODE": "string",
+          "LAB_RATE": 0,
+          "LAB_ACCODE": "string",
+          "LAB_AMTFC": 0,
+          "UNITCODE": "string",
+          "LABTYPE": "string",
+          "CURRENCYCODE": "string",
+          "SLNO": 0,
+          "DIVISION": "string",
+          "WASTAGE_PER": 0,
+          "WASTAGE_QTY": 0,
+          "WASTAGE_AMT": 0,
+          "WASTAGE_RATE": 0,
+          "KARAT_CODE": "string"
+        }
+      ],
+      "HeaderDivisons": this.headerDivisionList
     }
 
     // if (this.PartyDetailsOrderForm.invalid) {
@@ -429,7 +616,7 @@ export class DiamondSalesorderComponent implements OnInit {
     //   return
     // }
     this.snackBar.open('Saving...')
-    let API = 'WebEnquiry/DiamondSalesOrder'
+    let API = 'DaimondSalesOrder/InsertDaimondSalesOrder'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.snackBar.dismiss()

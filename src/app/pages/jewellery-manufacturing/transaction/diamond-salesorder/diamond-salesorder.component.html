@@ -27,12 +27,12 @@
                                         Voucher Type</label>
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
-                                            <input type="text" matInput
+                                            <input type="text" matInput readonly
                                                 formControlName="voucherType" />
                                         </mat-form-field>
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
-                                            <input type="number" maxlength="6"
+                                            <input type="number" readonly
                                                 matInput class="text-right"
                                                 formControlName="voucherNo" />
                                         </mat-form-field>
@@ -137,7 +137,8 @@
                                         </mat-form-field>
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
-                                            <input type="text" matInput SixDecimalInput
+                                            <input type="text" matInput
+                                                SixDecimalInput
                                                 class="text-right"
                                                 formControlName="wholeSaleRate" />
                                         </mat-form-field>
@@ -177,7 +178,8 @@
                                         </mat-form-field>
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
-                                            <input type="text" matInput SixDecimalInput
+                                            <input type="text" matInput
+                                                SixDecimalInput
                                                 class="text-right"
                                                 formControlName="ItemCurrencyRate" />
                                         </mat-form-field>
@@ -277,7 +279,8 @@
                                                             <label
                                                                 class="col-sm-4 col-form-label">
                                                                 BussinessType</label>
-                                                            <span class="col-sm-7">
+                                                            <span
+                                                                class="col-sm-7">
                                                                 <mat-form-field>
                                                                     <input
                                                                         type="text"
@@ -353,13 +356,15 @@
                                                     <div class="col-11">
                                                         <div class="row p-1">
                                                             <mat-form-field
-                                                            style="width: 100%; margin-left: 7px;">
-                                                            <input type="text"
-                                                                matInput
-                                                                formControlName="ShipTo" />
-                                                        </mat-form-field>
+                                                                style="width: 100%; margin-left: 7px;">
+                                                                <input
+                                                                    type="text"
+                                                                    matInput
+                                                                    formControlName="ShipTo" />
+                                                            </mat-form-field>
                                                         </div>
-                                                        <textarea formControlName="ShipToDesc"
+                                                        <textarea
+                                                            formControlName="ShipToDesc"
                                                             style="width: 100%;height: 120px; margin-left: 7px;">
                                                         </textarea>
                                                     </div>
@@ -377,95 +382,162 @@
                 </div>
             </mat-tab>
             <mat-tab label="Labour Details">
-                <div class="col-11 p-2">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6 class="let">Divisions for GrossWeight
-                                    Calculations</h6>
-                                <div class="row p-2">
-                                    <div class="row">
-                                        <dx-data-grid #dataGrid
-                                            [dataSource]="tableData"
-                                            id="gridContainer"
-                                            [showBorders]="true">
-                                            <dxo-paging [enabled]="false"></dxo-paging>
-                                            <!-- <dxo-editing mode="cell"
-                                                [allowUpdating]="true">
-                                            </dxo-editing> -->
-                                            <!-- <dxo-selection
-                                            selectAllMode="allMode"
-                                            mode="multiple"
-                                          ></dxo-selection> -->
-                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                            <dxi-column width="40px"
-                                                cellTemplate="limitTemplate"
-                                                alignment="right"></dxi-column>
-                                            <div
-                                                *dxTemplate="let cellInfo of 'limitTemplate'">
-                                                <input type="checkbox" />
-                                            </div>
-                                            <dxi-column dataField="Division"
-                                                width="auto" caption="Division"
-                                                [allowEditing]="true"
-                                                alignment="center"
-                                                backgroundcolor="#000">
-                                            </dxi-column>
-                                            <dxi-column dataField="Description"
-                                                width="auto"
-                                                caption="Description"
-                                                [allowEditing]="true"
-                                                alignment="center"
-                                                backgroundcolor="#000">
-                                            </dxi-column>
-                                        </dx-data-grid>
+                <div class="row">
+                    <div class="col-md-3">
+                        <h6 class="let">Divisions for GrossWeight
+                            Calculations</h6>
+                        <div class="pt-2">
+                            <!-- Divisions grid -->
+                            <dx-data-grid id="gridContainer"
+                                [dataSource]="divisionDetailGrid"
+                                [showRowLines]="true"
+                                height="auto"
+                                [showBorders]="true"
+                                [allowColumnResizing]="true">
+                                <dxo-selection mode="single"></dxo-selection>
+                                <dxo-paging [enabled]="false"></dxo-paging>
+                                <dxo-editing mode="cell"
+                                    [allowUpdating]="true">
+                                </dxo-editing>
+                                <dxi-column width="40px"
+                                    cellTemplate="limitTemplate"
+                                    alignment="right">
+                                    <div
+                                        *dxTemplate="let cellInfo of 'limitTemplate'">
+                                        <input type="checkbox" />
                                     </div>
-
-                                </div>
+                                </dxi-column>
+                                <dxi-column
+                                    dataField="DIVISION_CODE"
+                                    width="auto" caption="Division"
+                                    [allowEditing]="true"
+                                    alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="DESCRIPTION"
+                                    width="auto"
+                                    caption="Description"
+                                    [allowEditing]="true"
+                                    alignment="center">
+                                </dxi-column>
+                            </dx-data-grid>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="d-flex">
+                            <h6 class="lets pt-3">Labour Calculate on
+                            </h6>
+                            <div class="chbox pt-3">
+                                <mat-radio-group aria-label="Select an option">
+                                    <mat-radio-button [(ngModel)]="grossChecked"
+                                        value="1" style="font-size: 13px;">
+                                        Gross Weight</mat-radio-button>
+                                    &nbsp;
+                                    <mat-radio-button [(ngModel)]="NetWtChecked"
+                                        value="2" style="font-size: 13px;">
+                                        Net Weight</mat-radio-button>
+                                </mat-radio-group>
                             </div>
-                            <div class="col-md-8">
-                                <div class="d-flex">
-                                    <h6 class="lets">Labour Calculate on
-                                    </h6>
-                                    <div class="chbox">
-                                        <section class="example-section">
-                                            <mat-checkbox class="example-margin"
-                                                [(ngModel)]="grossChecked">Gross
-                                                Wt</mat-checkbox>
-                                            <mat-checkbox class="example-margin"
-                                                style="padding-left: 10px;"
-                                                [(ngModel)]="NetWtChecked">Net
-                                                Wt</mat-checkbox>
-                                        </section>
+                            <div class="d-flex ps-2">
+                                <label class="col-sm-4 col-form-label">
+                                    Margin %</label>
+                                <span class="col-sm-3">
+                                    <mat-form-field>
+                                        <input type="number" maxlength="6"
+                                            matInput AmountDecimalInput />
+                                    </mat-form-field>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <!-- Labour detail grid -->
+                            <dx-data-grid id="gridContainer"
+                                [dataSource]="labourDetailGrid"
+                                [showRowLines]="true"
+                                [showBorders]="true"
+                                [allowColumnResizing]="true">
+                                <dxo-selection mode="single"></dxo-selection>
+                                <dxo-paging [enabled]="false"></dxo-paging>
+                                <dxo-editing mode="cell"
+                                    [allowUpdating]="true">
+                                </dxo-editing>
+                                <dxi-column width="40px"
+                                    cellTemplate="limitTemplate"
+                                    alignment="right">
+                                    <div
+                                        *dxTemplate="let cellInfo of 'limitTemplate'">
+                                        <input type="checkbox" (change)="selectLabourGridData($event,cellInfo)"/>
                                     </div>
-                                </div>
-
-                                <div class="row">
-                                    <dx-data-grid #dataGrid id="gridContainer"
-                                        [dataSource]="tableData"
-                                        [showBorders]="true">
-                                        <dxo-paging [enabled]="false"></dxo-paging>
-                                        <dxo-editing mode="cell"
-                                            [allowUpdating]="true">
-                                        </dxo-editing>
-                                        <dxo-selection mode="multiple"></dxo-selection>
-                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                        <dxi-column
-                                            *ngFor="let data of tableDataHead"
-                                            dataField="{{ data }}"
-                                            width="auto" caption="{{ data }}"
-                                            [allowEditing]="true"
-                                            alignment="center"
-                                            backgroundcolor="#000">
-                                        </dxi-column>
-                                    </dx-data-grid>
-                                </div>
-                            </div>
+                                </dxi-column>
+                                <dxi-column dataField="LABOUR_CODE"
+                                    width="auto" caption="Code"
+                                    [allowEditing]="false"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="DIVCODE"
+                                    width="auto" caption="Div"
+                                    [allowEditing]="false"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="Qty"
+                                    width="auto" caption="Qty"
+                                    [allowEditing]="false"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="SELLING_RATE"
+                                    width="auto" caption="Rate"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="WASTAGE_PER"
+                                    width="auto" caption="Wastage %"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="DIVISION"
+                                    width="auto" caption="Lab Type"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="LAB_ACCODE"
+                                    width="auto" caption="Lab A/c"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="UNITCODE"
+                                    width="auto" caption="Unit"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="SHAPE"
+                                    width="auto" caption="Shape"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="KARAT_CODE"
+                                    width="auto" caption="Karat"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="CURRENCYCODE"
+                                    width="auto" caption="Currency"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="CARATWT_FROM"
+                                    width="auto" caption="Wt From"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                                <dxi-column dataField="CARATWT_TO"
+                                    width="auto" caption="Wt To"
+                                    [allowEditing]="true"
+                                    alignment="left">
+                                </dxi-column>
+                            </dx-data-grid>
                         </div>
                     </div>
                 </div>
-
             </mat-tab>
         </mat-tab-group>
     </div>
@@ -523,223 +595,248 @@
                         <!-- <dxi-column caption="RATE CC" dataField="RATEFC"
                             width="auto" alignment="center">
                         </dxi-column> -->
-                        <dxi-column caption="VALUE FC" dataField="RATEFC"
+                        <dxi-column caption="VALUE FC" dataField="VALUE_FC"
                             width="auto" alignment="center">
                         </dxi-column>
                         <!-- <dxi-column caption="VALUE CC" dataField="RATEFC"
                             width="auto" alignment="center">
                         </dxi-column> -->
-                        <dxi-column caption="NETVALUE FC" dataField="RATEFC"
+                        <dxi-column caption="NETVALUE FC"
+                            dataField="NETVALUE_FC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="CHARGE1FC" dataField="RATEFC"
+                        <dxi-column caption="CHARGE1FC" dataField="CHARGE1FC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="CHARGE2FC" dataField="RATEFC"
+                        <dxi-column caption="CHARGE2FC" dataField="CHARGE2FC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="CHARGE3FC" dataField="RATEFC"
+                        <dxi-column caption="CHARGE3FC" dataField="CHARGE3FC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="CHARGE4FC" dataField="RATEFC"
+                        <dxi-column caption="CHARGE4FC" dataField="CHARGE4FC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="CHARGE5FC" dataField="RATEFC"
+                        <dxi-column caption="CHARGE5FC" dataField="CHARGE5FC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DUTY_AMT" dataField="RATEFC"
+                        <dxi-column caption="DUTY_AMT" dataField="DUTY_AMT"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DUTY_PER" dataField="RATEFC"
+                        <dxi-column caption="DUTY_PER" dataField="DUTY_PER"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="LOAD_PER" dataField="RATEFC"
+                        <dxi-column caption="LOAD_PER" dataField="LOAD_PER"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="MARGIN_PER" dataField="RATEFC"
+                        <dxi-column caption="MARGIN_PER" dataField="MARGIN_PER"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DISCPER" dataField="RATEFC"
+                        <dxi-column caption="DISCPER" dataField="DISCPER"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DISCAMTFC" dataField="RATEFC"
+                        <dxi-column caption="DISCAMTFC" dataField="DISCAMTFC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="LOCTYPE_CODE" dataField="RATEFC"
+                        <dxi-column caption="LOCTYPE_CODE"
+                            dataField="LOCTYPE_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="D_REMARKS" dataField="RATEFC"
+                        <dxi-column caption="D_REMARKS" dataField="D_REMARKS"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DSURFACEPROPERTY" dataField="RATEFC"
+                        <dxi-column caption="DSURFACEPROPERTY"
+                            dataField="DSURFACEPROPERTY"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DREFERENCE" dataField="RATEFC"
+                        <dxi-column caption="DREFERENCE" dataField="DREFERENCE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DWIDTH" dataField="RATEFC"
+                        <dxi-column caption="DWIDTH" dataField="DWIDTH"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DTHICKNESS" dataField="RATEFC"
+                        <dxi-column caption="DTHICKNESS" dataField="DTHICKNESS"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="ENGRAVE_TEXT" dataField="RATEFC"
+                        <dxi-column caption="ENGRAVE_TEXT"
+                            dataField="ENGRAVE_TEXT"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="ENGRAVE_FONT" dataField="RATEFC"
+                        <dxi-column caption="ENGRAVE_FONT"
+                            dataField="ENGRAVE_FONT"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="SUPPLIER" dataField="RATEFC"
+                        <dxi-column caption="SUPPLIER" dataField="SUPPLIER"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="SUFFIX" dataField="RATEFC"
+                        <dxi-column caption="SUFFIX" dataField="SUFFIX"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DESCRIPTION" dataField="RATEFC"
+                        <dxi-column caption="DESCRIPTION"
+                            dataField="DESCRIPTION"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="SEQ_CODE" dataField="RATEFC"
+                        <dxi-column caption="SEQ_CODE" dataField="SEQ_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DSO_PICTURE_NAME" dataField="RATEFC"
+                        <dxi-column caption="DSO_PICTURE_NAME"
+                            dataField="DSO_PICTURE_NAME"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="QUOT" dataField="RATEFC"
+                        <dxi-column caption="QUOT" dataField="QUOT"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DSO_STOCK_CODE" dataField="RATEFC"
+                        <dxi-column caption="DSO_STOCK_CODE"
+                            dataField="DSO_STOCK_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="MARKUP_PER" dataField="RATEFC"
+                        <dxi-column caption="MARKUP_PER" dataField="MARKUP_PER"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="GOLD_LOSS_PER" dataField="RATEFC"
+                        <dxi-column caption="GOLD_LOSS_PER"
+                            dataField="GOLD_LOSS_PER"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="MARGIN_AMTFC" dataField="RATEFC"
+                        <dxi-column caption="MARGIN_AMTFC"
+                            dataField="MARGIN_AMTFC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="MARKUP_AMTFC" dataField="RATEFC"
+                        <dxi-column caption="MARKUP_AMTFC"
+                            dataField="MARKUP_AMTFC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="GOLD_LOSS_AMTFC" dataField="RATEFC"
+                        <dxi-column caption="GOLD_LOSS_AMTFC"
+                            dataField="GOLD_LOSS_AMTFC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="COSTFC" dataField="RATEFC"
+                        <dxi-column caption="COSTFC" dataField="COSTFC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="TOTAL_LABOUR" dataField="RATEFC"
+                        <dxi-column caption="TOTAL_LABOUR"
+                            dataField="TOTAL_LABOUR"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="CATEGORY_CODE" dataField="RATEFC"
+                        <dxi-column caption="CATEGORY_CODE"
+                            dataField="CATEGORY_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="SUBCATEGORY_CODE" dataField="RATEFC"
+                        <dxi-column caption="SUBCATEGORY_CODE"
+                            dataField="SUBCATEGORY_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="TYPE_CODE" dataField="RATEFC"
+                        <dxi-column caption="TYPE_CODE" dataField="TYPE_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="BRAND_CODE" dataField="RATEFC"
+                        <dxi-column caption="BRAND_CODE" dataField="BRAND_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="COUNTRY_CODE" dataField="RATEFC"
+                        <dxi-column caption="COUNTRY_CODE"
+                            dataField="COUNTRY_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="CUT_CODE" dataField="RATEFC"
+                        <dxi-column caption="CUT_CODE" dataField="CUT_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="FINISH_CODE" dataField="RATEFC"
+                        <dxi-column caption="FINISH_CODE"
+                            dataField="FINISH_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DYE_CODE" dataField="RATEFC"
+                        <dxi-column caption="DYE_CODE" dataField="DYE_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
                         <dxi-column caption="DELIVERY_DATE"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="DELIVERY_DATE" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="SIZE"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="SIZE" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="LENGTH"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="LENGTH" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="SCREW_FIELD"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="SCREW_FIELD" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="DSN_STOCK_CODE"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="DSN_STOCK_CODE" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="ENAMEL_COLOR"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="ENAMEL_COLOR" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="RATECC"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="RATECC" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="VALUECC"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="VALUECC" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="DISCAMTCC"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="DISCAMTCC" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="NETVALUECC"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="NETVALUECC" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="CHARGE1LC"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="CHARGE1LC" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="CHARGE2LC"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="CHARGE2LC" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="CHARGE3LC"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="CHARGE3LC" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="CHARGE4LC"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="CHARGE4LC" width="auto"
                             alignment="center">
                         </dxi-column>
                         <dxi-column caption="CHARGE5LC"
-                            dataField="KARAT_CODE" width="auto"
+                            dataField="CHARGE5LC" width="auto"
                             alignment="center">
                         </dxi-column>
-                        <dxi-column caption="MARKUP_AMTLC" dataField="PURITY"
+                        <dxi-column caption="MARKUP_AMTLC"
+                            dataField="MARKUP_AMTLC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="MARGIN_AMTLC" dataField="PURITY"
+                        <dxi-column caption="MARGIN_AMTLC"
+                            dataField="MARGIN_AMTLC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="GOLD_LOSS_AMTLC" dataField="PURITY"
+                        <dxi-column caption="GOLD_LOSS_AMTLC"
+                            dataField="GOLD_LOSS_AMTLC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="UNQ_DESIGN_ID" dataField="PURITY"
+                        <dxi-column caption="UNQ_DESIGN_ID"
+                            dataField="UNQ_DESIGN_ID"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="SERVICE_ACCCODE" dataField="PURITY"
+                        <dxi-column caption="SERVICE_ACCCODE"
+                            dataField="SERVICE_ACCCODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DIVISION_CODE" dataField="PURITY"
+                        <dxi-column caption="DIVISION_CODE"
+                            dataField="DIVISION_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="JOBNO" dataField="PURITY"
+                        <dxi-column caption="JOBNO" dataField="JOBNO"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DELIVERY_TYPE" dataField="PURITY"
+                        <dxi-column caption="DELIVERY_TYPE"
+                            dataField="DELIVERY_TYPE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="DELIVERY_DAYS" dataField="PURITY"
+                        <dxi-column caption="DELIVERY_DAYS"
+                            dataField="DELIVERY_DAYS"
                             width="auto" alignment="center">
                         </dxi-column>
                         <dxi-column caption="PURITY" dataField="PURITY"

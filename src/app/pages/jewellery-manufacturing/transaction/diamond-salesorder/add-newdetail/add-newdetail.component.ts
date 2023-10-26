@@ -32,6 +32,8 @@ export class AddNewdetailComponent implements OnInit {
   isViewBOMTab: boolean = true;
   isViewSummaryTab: boolean = true;
   isViewDesignTab: boolean = false;
+  designCodeSelect: boolean = true;
+
   viewFlag: any = {
     ItemRateFC: true,
     AmountValueFC: true
@@ -55,7 +57,7 @@ export class AddNewdetailComponent implements OnInit {
   columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
   columnheadmain: any[] = ['Stock Code', 'Stone Size', 'Stone Pcs', 'Stone Weight'];
   private subscriptions: Subscription[] = [];
-  /**USE: color Code lookup model*/
+  /**USE: generalMaster Code lookup model*/
   generalMaster: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -68,42 +70,19 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  // processCode: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 3,
-  //   SEARCH_FIELD: 'CODE',
-  //   SEARCH_HEADING: 'Process',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
-  // stoneType: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 3,
-  //   SEARCH_FIELD: 'CODE',
-  //   SEARCH_HEADING: 'Process',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: "",
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
-  // clarityCode: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 3,
-  //   SEARCH_FIELD: 'CODE',
-  //   SEARCH_HEADING: 'Process',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: "",
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
+  /**USE: stockCode  lookup model*/
+  stockCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 4,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'STOCK CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
   /**USE: Design Code lookup model*/
   DesignCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -135,6 +114,8 @@ export class AddNewdetailComponent implements OnInit {
     AMOUNT: ['', [Validators.required]],
     GROSS_WT: ['', [Validators.required]],
     STOCK_CODE: ['', [Validators.required]],
+    StockCodeSelect: [false],
+    designCodeSelect: [false],
   })
   /**USE:  first sub form group for summary details tab*/
   summaryDetailForm: FormGroup = this.formBuilder.group({
@@ -176,7 +157,9 @@ export class AddNewdetailComponent implements OnInit {
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
     private snackBar: MatSnackBar,
-  ) { }
+  ) { 
+    this.diamondSalesDetailForm.controls.designCodeSelect.setValue(true)
+  }
 
   ngOnInit(): void {
     this.setInitialValues()
@@ -261,6 +244,9 @@ export class AddNewdetailComponent implements OnInit {
   shapeSelected(event: any, value: any) {
     this.BOMDetailsArray[value.data.SRNO - 1].SHAPE = event.CODE;
   }
+  stockCodeSelected(event: any, value: any) {
+    this.BOMDetailsArray[value.data.SRNO - 1].SHAPE = event.Stock_Code;
+  }
   onHoverColorCode({data}:any){
     this.generalMaster.WHERECONDITION = `TYPES = 'COLOR MASTER' AND DIV_${data.DIVCODE}=1`
   }
@@ -274,7 +260,16 @@ export class AddNewdetailComponent implements OnInit {
     this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
   }
   onHoverProcessType({data}:any){
-    this.generalMaster.WHERECONDITION = `SETTING TYPE MASTER`
+    this.generalMaster.WHERECONDITION = `TYPES = 'SETTING TYPE MASTER'`
+  }
+  onHoverStockCode({data}:any){
+    if(data.METALSTONE == 'S'){
+      this.stockCode.LOOKUPID = 4
+      this.stockCode.WHERECONDITION = `ITEM = '${data.DIVCODE}'`
+    }else{
+      this.stockCode.LOOKUPID = 23
+      this.stockCode.WHERECONDITION = `DIVISION_CODE = '${data.DIVCODE}' AND KARAT_CODE = '${data.KARAT_CODE}'`
+    }
   }
   // search data change in BOM details grid ends
 
