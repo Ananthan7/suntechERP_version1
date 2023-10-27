@@ -24,6 +24,7 @@ export class JewelleryAssemblingComponent implements OnInit {
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  currentDate = new Date();
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -644,4 +645,4 @@ export class JewelleryAssemblingComponent implements OnInit {
         this.subscriptions = []; // Clear the array
       }
     }
-df8f54ae80fd2448
+}
