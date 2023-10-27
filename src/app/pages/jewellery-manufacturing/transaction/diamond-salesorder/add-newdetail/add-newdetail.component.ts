@@ -21,7 +21,7 @@ export class AddNewdetailComponent implements OnInit {
   season2: string[] = ['Metal', 'Stones', 'Total'];
   currentFilter: any;
   divisionMS: string = 'ID';
-  codeSearchFlag: string = 'ALL';
+  codeSearchFlag: string = 'design';
   currentDate = new Date()
   firstTableWidth: any;
   secondTableWidth: any;
@@ -32,7 +32,6 @@ export class AddNewdetailComponent implements OnInit {
   isViewBOMTab: boolean = true;
   isViewSummaryTab: boolean = true;
   isViewDesignTab: boolean = false;
-  designCodeSelect: boolean = true;
 
   viewFlag: any = {
     ItemRateFC: true,
@@ -99,6 +98,7 @@ export class AddNewdetailComponent implements OnInit {
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
     designDescription: [''],
+    divisionCode: [''],
     StockCode: [''],
     StockCodeDesc: [''],
     DeliveryType: ['', [Validators.required]],
@@ -114,8 +114,7 @@ export class AddNewdetailComponent implements OnInit {
     AMOUNT: ['', [Validators.required]],
     GROSS_WT: ['', [Validators.required]],
     STOCK_CODE: ['', [Validators.required]],
-    StockCodeSelect: [false],
-    designCodeSelect: [false],
+    designCodeSelect: ['design'],
   })
   /**USE:  first sub form group for summary details tab*/
   summaryDetailForm: FormGroup = this.formBuilder.group({
@@ -158,7 +157,6 @@ export class AddNewdetailComponent implements OnInit {
     private commonService: CommonServiceService,
     private snackBar: MatSnackBar,
   ) { 
-    this.diamondSalesDetailForm.controls.designCodeSelect.setValue(true)
   }
 
   ngOnInit(): void {
@@ -185,23 +183,26 @@ export class AddNewdetailComponent implements OnInit {
   }
   /**USE: to edit detail if already added */
   setInitialValues(): void {
-    if (this.content && this.content[0].headerDetails) {
-      this.headerDetails = this.content[0].headerDetails
+    if (this.content && this.content[0].HEARDERDETAILS) {
+      this.headerDetails = this.content[0].HEARDERDETAILS
     }
 
-    if (this.content && this.content[0].BOMDetails) {
-      this.BOMDetailsArray = this.content[0].BOMDetails
+    if (this.content && this.content[0].BOMDETAILS) {
+      this.BOMDetailsArray = this.content[0].BOMDETAILS
       // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0])
       this.groupBomDetailsData()
     }
-    if (this.content && this.content[0].summaryDetail) {
-      let summaryDetail = this.content[0].summaryDetail
+    if (this.content && this.content[0].SUMMARYDETAILS) {
+      let summaryDetail = this.content[0].SUMMARYDETAILS
 
       this.diamondSalesDetailForm.controls.designCode.setValue(summaryDetail[0].designCode)
       this.diamondSalesDetailForm.controls.designDescription.setValue(summaryDetail[0].designDescription)
     }
   }
   
+  radioButtonChanged() {
+      this.codeSearchFlag = this.diamondSalesDetailForm.value.designCodeSelect
+  }
   customizeComma(data: any) {
     if (!Number(data.value)) return data.value
     return Number(data.value).toLocaleString('en-US', { style: 'decimal' })
@@ -332,7 +333,6 @@ export class AddNewdetailComponent implements OnInit {
   /**USE: design Code Selection */
   designCodeSelected(data: any): void {
     if (data.DESIGN_CODE) {
-      this.codeSearchFlag = 'DESIGN'
       this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
       this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
       this.designCodeValidate({ target: { value: data.DESIGN_CODE } })
@@ -630,10 +630,10 @@ export class AddNewdetailComponent implements OnInit {
   formSubmit() {
     let item: any = {}
     if (this.BOMDetailsArray.length > 0) {
-      item.BOMDetails = this.BOMDetailsArray
+      item.BOMDETAILS = this.BOMDetailsArray
     }
     if (this.summaryDetailForm.value || this.diamondSalesDetailForm.value) {
-      item.summaryDetail = [{ ...this.diamondSalesDetailForm.value, ...this.summaryDetailForm.value }]
+      item.SUMMARYDETAILS = [{ ...this.diamondSalesDetailForm.value, ...this.summaryDetailForm.value }]
     }
 
     this.close([item])//USE: passing Detail data to header screen on close

@@ -17,13 +17,14 @@
                     <div class="col-md-5">
                         <div class="row mb-1">
                             <!-- TODO stockcode is selected disable designcode 
-                            and design code is selected disable stockcode -->
+                                and design code is selected disable stockcode -->
+
                             <div class="col-md-4" style="width: 25% !important;">
                                 <div class="form-check pt-2">
                                     <input class="form-check-input" type="radio"
-                                        [(ngModel)]="designCodeSelect"
-                                        standalone="true"
-                                        id="DesighCode">
+                                        value="design"
+                                        formControlName="designCodeSelect"
+                                        (change)="radioButtonChanged()">
                                     <label class="form-check-label"
                                         for="DesighCode">
                                         Design Code
@@ -35,17 +36,16 @@
                                     <input type="text" matInput
                                         placeholder="Code"
                                         (focusout)="designCodeValidate($event)"
-                                        [readonly]="codeSearchFlag == 'STOCK'"
+                                        [readonly]="codeSearchFlag == 'stock'"
                                         formControlName="designCode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput
-                                        [readonly]="codeSearchFlag == 'STOCK'"
+                                    <input type="text" matInput readonly
                                         formControlName="designDescription" />
                                 </mat-form-field>
-                                <master-search
+                                <master-search *ngIf="codeSearchFlag == 'design'"
                                     [MasterSearchData]="DesignCodeData"
                                     (newRowClick)="designCodeSelected($event)"></master-search>
                             </div>
@@ -54,8 +54,9 @@
                             <div class="col-md-4" style="width: 25% !important;">
                                 <div class="form-check  pt-2">
                                     <input class="form-check-input" type="radio"
-                                        formControlName="StockCodeSelect"
-                                        name="flexRadioDefault" 
+                                        value="stock"
+                                        formControlName="designCodeSelect"
+                                        (change)="radioButtonChanged()"
                                         id="stockCode">
                                     <label class="form-check-label"
                                         for="stockCode">
@@ -63,20 +64,26 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 90%;">
+                                    <input type="text" matInput
+                                        formControlName="divisionCode"
+                                        [readonly]="codeSearchFlag == 'design'" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
                                 <mat-form-field style="width: 90%;">
                                     <input type="text" matInput
                                         formControlName="StockCode"
-                                        [readonly]="codeSearchFlag == 'DESIGN'" />
+                                        [readonly]="codeSearchFlag == 'design'" />
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
-                                        [readonly]="codeSearchFlag == 'DESIGN'"
-                                        formControlName="StockCodeDesc" />
+                                        readonly formControlName="StockCodeDesc" />
                                 </mat-form-field>
-                                <master-search
+                                <master-search *ngIf="codeSearchFlag == 'stock'"
                                     [MasterSearchData]="DesignCodeData">
                                 </master-search>
                             </div>
@@ -190,8 +197,10 @@
                                 </label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput MetalDecimalInput
-                                            class="text-right" [readOnly]="isViewBOMTab"
+                                        <input type="number" matInput
+                                            MetalDecimalInput
+                                            class="text-right"
+                                            [readOnly]="isViewBOMTab"
                                             formControlName="METAL_WT" />
                                     </mat-form-field>
                                 </div>
@@ -202,7 +211,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
-                                            AmountDecimalInput 
+                                            AmountDecimalInput
                                             [readOnly]="isViewBOMTab"
                                             formControlName="RATEFC"
                                             class="text-right" />
@@ -226,7 +235,8 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
-                                            AmountDecimalInput [readOnly]="isViewBOMTab"
+                                            AmountDecimalInput
+                                            [readOnly]="isViewBOMTab"
                                             formControlName="AMOUNT"
                                             class="text-right" />
                                     </mat-form-field>
@@ -235,7 +245,8 @@
                                     class="col-sm-3 col-form-label">Gross Weight</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput MetalDecimalInput
+                                        <input type="number" matInput
+                                            MetalDecimalInput
                                             formControlName="GROSS_WT"
                                             [readOnly]="true"
                                             class="text-right" />
@@ -474,53 +485,10 @@
                                                 </dxi-total-item>
                                             </dxo-summary>
                                             <!-- shape Select search starts -->
-                                            <div *dxTemplate="let data of 'shapeSelect'">
-                                                <div (mouseenter)="onHoverShape(data)"
-                                                    class="d-flex justify-content-between">
-                                                    <div>
-                                                        <a href="javascript:void(0)"
-                                                            class="mx-1"
-                                                            [innerHTML]="data.value"></a>
-                                                    </div>
-                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
-                                                        [MasterSearchData]="generalMaster"
-                                                        (newRowClick)="shapeSelected($event,data)">
-                                                    </master-search>
-                                                </div>
-                                            </div>
-                                            <!-- CLARITY Type search starts -->
-                                            <div *dxTemplate="let data of 'CLARITYType'">
-                                                <div (mouseenter)="onHoverClarity(data)"
-                                                    class="d-flex justify-content-between">
-                                                    <div>
-                                                        <a href="javascript:void(0)"
-                                                            class="mx-1"
-                                                            [innerHTML]="data.value"></a>
-                                                    </div>
-                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
-                                                        [MasterSearchData]="generalMaster"
-                                                        (newRowClick)="claritySelected($event,data)">
-                                                    </master-search>
-                                                </div>
-                                            </div>
-                                            <!-- stonetype search starts -->
-                                            <div *dxTemplate="let data of 'stoneType'">
-                                                <div (mouseenter)="onHoverstoneType(data)"
-                                                    class="d-flex justify-content-between">
-                                                    <div>
-                                                        <a href="javascript:void(0)"
-                                                            class="mx-1"
-                                                            [innerHTML]="data.value"></a>
-                                                    </div>
-                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
-                                                        [MasterSearchData]="generalMaster"
-                                                        (newRowClick)="stoneTypeSelected($event,data)">
-                                                    </master-search>
-                                                </div>
-                                            </div>
-                                            <!-- colorcode search starts -->
-                                            <div *dxTemplate="let data of 'colorcode'">
-                                                <div (mouseenter)="onHoverColorCode(data)"
+                                            <div
+                                                *dxTemplate="let data of 'shapeSelect'">
+                                                <div
+                                                    (mouseenter)="onHoverShape(data)"
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a
@@ -528,15 +496,75 @@
                                                             class="mx-1"
                                                             [innerHTML]="data.value"></a>
                                                     </div>
-                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
+                                                    <master-search
+                                                        *ngIf="data.data.DIVCODE != 'G'"
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="shapeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <!-- CLARITY Type search starts -->
+                                            <div
+                                                *dxTemplate="let data of 'CLARITYType'">
+                                                <div
+                                                    (mouseenter)="onHoverClarity(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        *ngIf="data.data.DIVCODE != 'G'"
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="claritySelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <!-- stonetype search starts -->
+                                            <div
+                                                *dxTemplate="let data of 'stoneType'">
+                                                <div
+                                                    (mouseenter)="onHoverstoneType(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        *ngIf="data.data.DIVCODE != 'G'"
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="stoneTypeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <!-- colorcode search starts -->
+                                            <div
+                                                *dxTemplate="let data of 'colorcode'">
+                                                <div
+                                                    (mouseenter)="onHoverColorCode(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        *ngIf="data.data.DIVCODE != 'G'"
                                                         [MasterSearchData]="generalMaster"
                                                         (newRowClick)="colorCodeSelected($event,data)">
                                                     </master-search>
                                                 </div>
                                             </div>
                                             <!-- processType search starts -->
-                                            <div *dxTemplate="let data of 'processTypes'">
-                                                <div (mouseenter)="onHoverProcessType(data)"
+                                            <div
+                                                *dxTemplate="let data of 'processTypes'">
+                                                <div
+                                                    (mouseenter)="onHoverProcessType(data)"
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a
@@ -551,8 +579,10 @@
                                                 </div>
                                             </div>
                                             <!-- Stock Code search starts -->
-                                            <div *dxTemplate="let data of 'StockCode'">
-                                                <div (mouseenter)="onHoverStockCode(data)"
+                                            <div
+                                                *dxTemplate="let data of 'StockCode'">
+                                                <div
+                                                    (mouseenter)="onHoverStockCode(data)"
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a
@@ -753,7 +783,9 @@
                                         <label class="col-sm-3 col-form-label">Purity</label>
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" style="text-align: right;" matInput SixDecimalInput
+                                                <input type="text"
+                                                    style="text-align: right;"
+                                                    matInput SixDecimalInput
                                                     formControlName="PURITY" />
                                             </mat-form-field>
                                         </div>

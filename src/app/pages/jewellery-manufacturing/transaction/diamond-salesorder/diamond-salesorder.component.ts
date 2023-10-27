@@ -204,9 +204,9 @@ export class DiamondSalesorderComponent implements OnInit {
     if (data) {
       console.log(data, 'data passing to detail screen');
 
-      data[0].headerDetails = this.PartyDetailsOrderForm.value;
+      data[0].HEARDERDETAILS = this.PartyDetailsOrderForm.value;
     } else {
-      data = [{ headerDetails: this.PartyDetailsOrderForm.value }]
+      data = [{ HEARDERDETAILS: this.PartyDetailsOrderForm.value }]
     }
 
     if (this.PartyDetailsOrderForm.value.PartyCode == '') {
@@ -236,7 +236,7 @@ export class DiamondSalesorderComponent implements OnInit {
     console.log(result, 'data comming to header screen');
     this.totalDetailNo += 1
     //summary details
-    let summaryData: any[] = result[0].summaryDetail
+    let summaryData: any[] = result[0].SUMMARYDETAILS
 
     summaryData.forEach((item: any, index: any) => {
       if (item.CATEGORY_CODE == '') {
@@ -255,6 +255,9 @@ export class DiamondSalesorderComponent implements OnInit {
         })
       })
     }
+  }
+  private ItemDetailInsert(){
+
   }
   // division checkbox change
   selectDivisionGridData(event:any,{data}:any){
@@ -309,14 +312,109 @@ export class DiamondSalesorderComponent implements OnInit {
       }
     }
   }
-  /**USE:  final save API call*/
-  formSubmit(): void {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      // this.selectProcess()
-      // this.updateWorkerMaster()
-      return
-    }
-
+  private getLabType4Detail(){
+    let labType4Data = [{
+      "UNIQUEID": 0,
+      "BRANCH_CODE": "string",
+      "DESIGN_CODE": "string",
+      "CODE": "string",
+      "DESCRIPTION": "string",
+      "COST": 0,
+      "STD_TIME": 0,
+      "MAX_TIME": 0,
+      "UNQ_DESIGN_ID": "string",
+      "LOCTYPE_CODE": "string",
+      "VOCTYPE": "string",
+      "VOCNO": 0,
+      "YEARMONTH": "string",
+      "SRNO": 0,
+      "STOCK_CODE": "string",
+      "METALSTONE": "string",
+      "DIVCODE": "string",
+      "PCS": 0,
+      "GROSS_WT": 0,
+      "LABOUR_CODE": "string",
+      "LAB_RATE": 0,
+      "LAB_ACCODE": "string",
+      "LAB_AMTFC": 0,
+      "UNITCODE": "string",
+      "LABTYPE": "string",
+      "CURRENCYCODE": "string",
+      "SLNO": 0,
+      "DIVISION": "string",
+      "WASTAGE_PER": 0,
+      "WASTAGE_QTY": 0,
+      "WASTAGE_AMT": 0,
+      "WASTAGE_RATE": 0,
+      "KARAT_CODE": "string"
+    }]
+    return []
+  }
+  private getComponentData(){
+    let data = [
+      {
+        "UNIQUEID": 0,
+        "SRNO": 0,
+        "BRANCH_CODE": "string",
+        "DESIGN_CODE": "string",
+        "METALSTONE": "string",
+        "DIVCODE": "string",
+        "PRICEID": "string",
+        "KARAT_CODE": "string",
+        "CARAT": 0,
+        "GROSS_WT": 0,
+        "PCS": 0,
+        "RATE_TYPE": "string",
+        "CURRENCY_CODE": "string",
+        "AMOUNTFC": 0,
+        "AMOUNTLC": 0,
+        "MAKINGRATE": 0,
+        "MAKINGAMOUNT": 0,
+        "SIEVE": "string",
+        "COLOR": "string",
+        "CLARITY": "string",
+        "SHAPE": "string",
+        "SIZE_FROM": "string",
+        "SIZE_TO": "string",
+        "UNQ_DESIGN_ID": "string",
+        "ISSUE_COST": 0,
+        "LOCTYPE_CODE": "string",
+        "RATELC": 0,
+        "RATEFC": 0,
+        "LINKID": "string",
+        "LABCHGCODE": "string",
+        "LABRATEFC": 0,
+        "LABRATELC": 0,
+        "LABAMOUNTFC": 0,
+        "LABAMOUNTLC": 0,
+        "METALPERCENTAGE": 0,
+        "CURRENCY_RATE": 0,
+        "STOCK_CODE": "string",
+        "VOCTYPE": "string",
+        "VOCNO": 0,
+        "YEARMONTH": "string",
+        "COMPSLNO": 0,
+        "TREE_BRANCH_CODE": "string",
+        "TREE_VOCTYPE": "string",
+        "TREE_VOCNO": 0,
+        "TREE_YEARMONTH": "string",
+        "PROCESS_TYPE": "string",
+        "SIEVE_SET": "string",
+        "DSN_STOCK_CODE": "string",
+        "PROD_VARIANCE": 0,
+        "COMP_CODE": "string",
+        "DEL_DATE": "2023-10-26T09:05:45.384Z",
+        "WASTAGE_PER": 0,
+        "WASTAGE_WT": 0,
+        "WASTAGE_AMTFC": 0,
+        "WASTAGE_AMTLC": 0,
+        "STONE_TYPE": "string",
+        "PURITY": 0
+      }
+    ]
+    return []
+  }
+  private getAllDetailData(){
     let summaryData = this.detailData[0].DATA
     summaryData = summaryData.summaryDetail
     let detailArrayValues = {}
@@ -324,8 +422,8 @@ export class DiamondSalesorderComponent implements OnInit {
       detailArrayValues = {
         "UNIQUEID": 0,
         "SRNO": item.SRNO || 0,
-        "EXP_PROD_START_DATE": "2023-09-14T14:56:43.961Z",
-        "DELIVERY_DATE": "2023-09-14T14:56:43.961Z",
+        "EXP_PROD_START_DATE": item.ProductionDate.toISOString() || "2023-09-14T14:56:43.961Z",
+        "DELIVERY_DATE": item.DeliveryOnDate.toISOString() || "2023-09-14T14:56:43.961Z",
         "PARTYCODE": item.KARAT_CODE || "",
         "DESIGN_CODE": item.designCode || "",
         "KARAT": item.KARAT_CODE || "",
@@ -334,10 +432,10 @@ export class DiamondSalesorderComponent implements OnInit {
         "METAL_WT": Number(item.METAL_WT) || 0,
         "STONE_WT": Number(item.STONE_WT) || 0,
         "GROSS_WT": Number(item.GROSS_WT) || 0,
-        "RATEFC": 0,
-        "RATECC": 0,
-        "VALUEFC": 0,
-        "VALUECC": 0,
+        "RATEFC": Number(item.RATEFC) || 0,
+        "RATECC": Number(item.RATEFC) || 0,
+        "VALUEFC": Number(item.RATEFC) || 0,
+        "VALUECC": Number(item.RATEFC) || 0,
         "DISCPER": 0,
         "DISCAMTFC": 0,
         "DISCAMTCC": 0,
@@ -355,7 +453,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "UNQ_DESIGN_ID": "tst",
         "FINISHED_PCS": 0,
         "PENDING_PCS": 0,
-        "STOCK_CODE": "tst",
+        "STOCK_CODE": "",
         "SUPPLIER": "tst",
         "PODPROCREF": "tst",
         "REMARKS": "tst",
@@ -363,8 +461,8 @@ export class DiamondSalesorderComponent implements OnInit {
         "DREFERENCE": "tst",
         "DWIDTH": 0,
         "DTHICKNESS": 0,
-        "CHARGE1FC": 0,
-        "CHARGE1LC": 0,
+        "CHARGE1FC": Number(item.SETTING) || 0,
+        "CHARGE1LC": Number(item.SETTING) || 0,
         "CHARGE2FC": 0,
         "CHARGE2LC": 0,
         "CHARGE3FC": 0,
@@ -390,7 +488,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "SORDER_CLOSE": 0,
         "SOREF": "tst",
         "SO_STATUS": 0,
-        "MARKUP_PER": 0,
+        "MARKUP_PER": Number(item.MarkupPercentage) || 0,
         "MARKUP_AMTFC": 0,
         "MARKUP_AMTLC": 0,
         "MARGIN_AMTFC": 0,
@@ -414,9 +512,9 @@ export class DiamondSalesorderComponent implements OnInit {
         "TYPE_CODE": "tst",
         "BRAND_CODE": item.BRAND_CODE || "tst",
         "RHODIUM_COLOR": "tst",
-        "SIZE": "tst",
+        "SIZE": item.SIZE || "",
         "LENGTH": "tst",
-        "SCREW_FIELD": "tst",
+        "SCREW_FIELD": item.SCREW_FIELD || "",
         "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "S",
         "SUBCATEGORY_CODE": item.SUBCATEGORY_CODE || "tst",
         "DSN_STOCK_CODE": "tst",
@@ -430,14 +528,22 @@ export class DiamondSalesorderComponent implements OnInit {
         "MAIN_REFF": "tst",
         "SALESPERSON_CODE": "tst",
         "METAL_SALES_REF": "tst",
-        "DELIVERY_TYPE": "tst",
+        "DELIVERY_TYPE": item.DeliveryType || "tst",
         "DELIVERY_DAYS": 0,
         "GOLD_LOSS_WT": 0,
         "PURITY": item.PURITY || 0
       }
       this.detailRowToSave.push(detailArrayValues)
     });
-
+    return this.detailRowToSave
+  }
+  /**USE:  final save API call*/
+  formSubmit(): void {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      // this.selectProcess()
+      // this.updateWorkerMaster()
+      return
+    }
 
     let postData = {
       "MID": 0,
@@ -445,7 +551,7 @@ export class DiamondSalesorderComponent implements OnInit {
       "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
       "VOCNO": this.PartyDetailsOrderForm.value.voucherNo || 0,
       "VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate) || "",
-      "EXP_PROD_START_DATE": "2023-09-14T14:56:43.961Z",
+      "EXP_PROD_START_DATE": this.detailRowToSave[0].ProductionDate.toISOString() || "2023-09-14T14:56:43.961Z",
       "DELIVERY_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
       "YEARMONTH": this.commonService.yearSelected || "",
       "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode || "",
@@ -466,7 +572,7 @@ export class DiamondSalesorderComponent implements OnInit {
       "TOTAL_AMOUNT_LC": 0,
       "MARGIN_PER": 0,
       "REMARKS": "",
-      "SYSTEM_DATE": "2023-10-26T09:05:45.384Z",
+      "SYSTEM_DATE": this.currentDate.toISOString() || "2023-10-26T09:05:45.384Z",
       "ROUND_VALUE_CC": 0,
       "NAVSEQNO": 0,
       "SO_STATUS": true,
@@ -508,106 +614,10 @@ export class DiamondSalesorderComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "AutoPosting": true,
-      "Details": this.detailRowToSave,
-      "stnmtlDetail": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "BRANCH_CODE": "string",
-          "DESIGN_CODE": "string",
-          "METALSTONE": "string",
-          "DIVCODE": "string",
-          "PRICEID": "string",
-          "KARAT_CODE": "string",
-          "CARAT": 0,
-          "GROSS_WT": 0,
-          "PCS": 0,
-          "RATE_TYPE": "string",
-          "CURRENCY_CODE": "string",
-          "AMOUNTFC": 0,
-          "AMOUNTLC": 0,
-          "MAKINGRATE": 0,
-          "MAKINGAMOUNT": 0,
-          "SIEVE": "string",
-          "COLOR": "string",
-          "CLARITY": "string",
-          "SHAPE": "string",
-          "SIZE_FROM": "string",
-          "SIZE_TO": "string",
-          "UNQ_DESIGN_ID": "string",
-          "ISSUE_COST": 0,
-          "LOCTYPE_CODE": "string",
-          "RATELC": 0,
-          "RATEFC": 0,
-          "LINKID": "string",
-          "LABCHGCODE": "string",
-          "LABRATEFC": 0,
-          "LABRATELC": 0,
-          "LABAMOUNTFC": 0,
-          "LABAMOUNTLC": 0,
-          "METALPERCENTAGE": 0,
-          "CURRENCY_RATE": 0,
-          "STOCK_CODE": "string",
-          "VOCTYPE": "string",
-          "VOCNO": 0,
-          "YEARMONTH": "string",
-          "COMPSLNO": 0,
-          "TREE_BRANCH_CODE": "string",
-          "TREE_VOCTYPE": "string",
-          "TREE_VOCNO": 0,
-          "TREE_YEARMONTH": "string",
-          "PROCESS_TYPE": "string",
-          "SIEVE_SET": "string",
-          "DSN_STOCK_CODE": "string",
-          "PROD_VARIANCE": 0,
-          "COMP_CODE": "string",
-          "DEL_DATE": "2023-10-26T09:05:45.384Z",
-          "WASTAGE_PER": 0,
-          "WASTAGE_WT": 0,
-          "WASTAGE_AMTFC": 0,
-          "WASTAGE_AMTLC": 0,
-          "STONE_TYPE": "string",
-          "PURITY": 0
-        }
-      ],
+      "Details": this.getAllDetailData(),
+      "stnmtlDetail": this.getComponentData(), //component details
       "HeaderLabours": this.headerLaboursList,
-      "LabourDetails": [
-        {
-          "UNIQUEID": 0,
-          "BRANCH_CODE": "string",
-          "DESIGN_CODE": "string",
-          "CODE": "string",
-          "DESCRIPTION": "string",
-          "COST": 0,
-          "STD_TIME": 0,
-          "MAX_TIME": 0,
-          "UNQ_DESIGN_ID": "string",
-          "LOCTYPE_CODE": "string",
-          "VOCTYPE": "string",
-          "VOCNO": 0,
-          "YEARMONTH": "string",
-          "SRNO": 0,
-          "STOCK_CODE": "string",
-          "METALSTONE": "string",
-          "DIVCODE": "string",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "LABOUR_CODE": "string",
-          "LAB_RATE": 0,
-          "LAB_ACCODE": "string",
-          "LAB_AMTFC": 0,
-          "UNITCODE": "string",
-          "LABTYPE": "string",
-          "CURRENCYCODE": "string",
-          "SLNO": 0,
-          "DIVISION": "string",
-          "WASTAGE_PER": 0,
-          "WASTAGE_QTY": 0,
-          "WASTAGE_AMT": 0,
-          "WASTAGE_RATE": 0,
-          "KARAT_CODE": "string"
-        }
-      ],
+      "LabourDetails": this.getLabType4Detail(), //lab type 4
       "HeaderDivisons": this.headerDivisionList
     }
 
@@ -720,6 +730,14 @@ export class DiamondSalesorderComponent implements OnInit {
   rateTypeSelected(event: any) {
     this.PartyDetailsOrderForm.controls.rateType.setValue(event.RATE_TYPE)
     this.PartyDetailsOrderForm.controls.rateTypeDESC.setValue(event.DESCRIPTION)
+
+    let data = this.commonService.RateTypeMasterData.filter((item: any) => item.DIVISION_CODE == 'G' && item.DEFAULT_RTYPE == 1)
+    console.log(data,'data');
+    
+    if (data[0].WHOLESALE_RATE) {
+      let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
+      this.PartyDetailsOrderForm.controls.wholeSaleRate.setValue(WHOLESALE_RATE)
+    }
   }
   itemCurrencySelected(event: any) {
     let currencyRate = this.commonService.decimalQuantityFormat(event.CONV_RATE, 'RATE')
