@@ -27,6 +27,19 @@ export class MetalReturnComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
 
+  user: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -95,6 +108,11 @@ export class MetalReturnComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+
+  userDataSelected(value: any) {
+    console.log(value);
+       this.metalReturnForm.controls.enteredBy.setValue(value.UsersName);
   }
 
   ProcessCodeSelected(e:any){
@@ -175,6 +193,7 @@ export class MetalReturnComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "Details": this.metalReturnDetailsData,
     }
+    
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
