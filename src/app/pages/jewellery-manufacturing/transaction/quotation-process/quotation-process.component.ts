@@ -29,7 +29,7 @@ export class QuotationProcessComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 1,
     SEARCH_FIELD: 'SALESPERSON_CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'SalesPerson Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
