@@ -2928,6 +2928,7 @@ export class AddPosComponent implements OnInit {
       }
     }
   }
+  
   onCustomerNameFocus(value: any = null) {
     console.log(value);
     let _cust_mobile_no = value == null ? this.customerDataForm.value.fcn_customer_mobile : value;
@@ -9778,18 +9779,16 @@ export class AddPosComponent implements OnInit {
         if (data.status == "Success") {
           this.stateMaster = data.response;
           this.stateMasterOptions =
-            this.customerDetailForm.controls.fcn_cust_detail_city.valueChanges.pipe(
+            this.customerDetailForm.controls.fcn_cust_detail_state.valueChanges.pipe(
               startWith(''),
               map((value) =>
-                this._filterMasters(this.cityMaster, value, 'CODE', 'DESCRIPTION')
+                this._filterMasters(this.stateMaster, value, 'CODE', 'DESCRIPTION')
               )
             );
         } else {
-          this.cityMaster = [];
+          this.stateMaster = [];
         }
-
       });
-
   }
 
   dummyDateCheck(date: any) {
