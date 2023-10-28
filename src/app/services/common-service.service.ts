@@ -67,7 +67,7 @@ export class CommonServiceService {
     })
     return paramValue
   }
-  /**USE: common fuction to format the value to limit decimal places from branch master */
+  /**USE: common fuction to format the Number to limit decimal places from branch master */
   decimalQuantityFormat(value: any, flag: string){
     if (flag == 'AMOUNT') {
       this.decimalFormatCount = this.allbranchMaster?.BAMTDECIMALS
@@ -130,6 +130,7 @@ export class CommonServiceService {
   }
   //service for ADD POS starts
   stringToBoolean = (string: string) => string != undefined && string != null ? string.toString().toLowerCase() == 'false' ? false : true : false;
+  
   formControlSetReadOnly(id: any, isReadonly: boolean) {
     const ele: any = document.getElementById(id);
     console.log('ele ', ele);
@@ -255,8 +256,9 @@ export class CommonServiceService {
     return res;
   }
   posKARATRATECHANGE: any = '';
+
   getDivisionMS(division: any) {
-    // return this.divisionMasterList.filter((data) => data.DIVISION_CODE == division)[0].DIVISION;
+    return this.divisionMasterList.filter((data:any) => data.DIVISION_CODE == division)[0].DIVISION;
   }
   Null2BitValue(value: any) {
     value = value.trim();

@@ -45,7 +45,8 @@
                                     <input type="text" matInput readonly
                                         formControlName="designDescription" />
                                 </mat-form-field>
-                                <master-search *ngIf="codeSearchFlag == 'design'"
+                                <master-search
+                                    *ngIf="codeSearchFlag == 'design'"
                                     [MasterSearchData]="DesignCodeData"
                                     (newRowClick)="designCodeSelected($event)"></master-search>
                             </div>
@@ -65,14 +66,16 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 90%;">
+                                <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
                                         formControlName="divisionCode"
+                                        maxlength="1"
+                                        (focusout)="changeDivision($event)"
                                         [readonly]="codeSearchFlag == 'design'" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 90%;">
+                                <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="StockCode"
                                         [readonly]="codeSearchFlag == 'design'" />
@@ -84,7 +87,8 @@
                                         readonly formControlName="StockCodeDesc" />
                                 </mat-form-field>
                                 <master-search *ngIf="codeSearchFlag == 'stock'"
-                                    [MasterSearchData]="DesignCodeData">
+                                    [MasterSearchData]="stockCodeData"
+                                    (newRowClick)="mainStockCodeSelected($event)">
                                 </master-search>
                             </div>
                         </div>
@@ -697,20 +701,49 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <dx-data-grid #dataGrid id="gridContainer"
-                                    keyExpr="ID" [dataSource]="gridParts"
+                                    [dataSource]="gridParts"
+                                    width="auto" [showRowLines]="true"
                                     [showBorders]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell"
                                         [allowUpdating]="true">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-selection mode="single"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column
-                                        *ngFor="let data of gridPartsHead"
-                                        dataField="{{ data }}"
-                                        width="auto" caption="{{ data }}"
-                                        [allowEditing]="true" alignment="right">
+                                    <dxi-column dataField="SLNO"
+                                        width="auto" caption="No"
+                                        [allowEditing]="false"
+                                        alignment="center">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_CODE"
+                                        width="auto" caption="Part Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_DESCRIPTION"
+                                        width="auto" caption="Part Description"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="PART_COLOR"
+                                        width="auto" caption="Part Color"
+                                        cellTemplate="partcolorcode"
+                                        [allowEditing]="false" alignment="left">
+                                        <!-- colorcode search starts -->
+                                        <div *dxTemplate="let data of 'partcolorcode'">
+                                            <div
+                                                (mouseenter)="onHoverPartColorCode(data)"
+                                                class="d-flex justify-content-between">
+                                                <div>
+                                                    <a href="javascript:void(0)"
+                                                        class="mx-1"
+                                                        [innerHTML]="data.value"></a>
+                                                </div>
+                                                <master-search 
+                                                    [MasterSearchData]="partColorCode"
+                                                    (newRowClick)="partColorCodeSelected($event,data)">
+                                                </master-search>
+                                            </div>
+                                        </div>
                                     </dxi-column>
                                 </dx-data-grid>
                             </div>
@@ -719,22 +752,55 @@
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <dx-data-grid #dataGrid id="gridContainer"
-                                    keyExpr="ID"
                                     [dataSource]="gridComponents"
+                                    [showRowLines]="true"
                                     [showBorders]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell"
                                         [allowUpdating]="true">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-selection mode="single"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column
-                                        *ngFor="let data of gridComponentsHead"
-                                        dataField="{{ data }}"
-                                        width="auto" caption="{{ data }}"
-                                        [allowEditing]="true" alignment="center"
-                                        backgroundcolor="#000">
+                                    <dxi-column dataField="SLNO"
+                                        width="auto" caption="Sl No"
+                                        [allowEditing]="false" alignment="center">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_CODE"
+                                        width="auto" caption="Comp Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_DESCRIPTION"
+                                        width="auto" caption="Comp Description"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_SHAPE"
+                                        width="auto" caption="Comp Shape"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="PCS"
+                                        width="auto" caption="Pcs"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="TYPE_CODE"
+                                        width="auto" caption="Type Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="CATEGORY_CODE"
+                                        width="auto" caption="Category Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMPSIZE_CODE"
+                                        width="auto" caption="Size Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMPSET_CODE"
+                                        width="auto" caption="Set Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="REMARKS"
+                                        width="auto" caption="Remarks"
+                                        [allowEditing]="true" alignment="left">
                                     </dxi-column>
                                 </dx-data-grid>
                             </div>

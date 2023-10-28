@@ -82,6 +82,19 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  /**USE: stockCode  lookup model*/
+  partColorCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 74,
+    SEARCH_FIELD: 'ATTR_CODE',
+    SEARCH_HEADING: 'Size Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
   /**USE: Design Code lookup model*/
   DesignCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -93,6 +106,19 @@ export class AddNewdetailComponent implements OnInit {
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  }
+  /**USE: Design Code lookup model*/
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 110,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Metal Stock Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
   /**USE: details main form group*/
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
@@ -156,7 +182,7 @@ export class AddNewdetailComponent implements OnInit {
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
     private snackBar: MatSnackBar,
-  ) { 
+  ) {
   }
 
   ngOnInit(): void {
@@ -181,6 +207,32 @@ export class AddNewdetailComponent implements OnInit {
       this.secondTableWidth = 350
     }
   }
+  changeDivision(event: any) {
+    if (event.target.value == '') return;
+    event.target.value = event.target.value.toUpperCase()
+    if (this.commonService.divisionMasterList.length == 0) {
+      console.log('Division master data not found in indexed db');
+      return
+    }
+    let divisionArr = this.commonService.divisionMasterList?.filter((item: any) => item.DIVISION_CODE == event.target.value)
+    if (divisionArr.length == 0) {
+      this.toastr.error('Division Code not found', '', {
+        timeOut: 3000,
+      })
+      return
+    }
+    if (event.target.value == 'X') {
+      this.stockCodeData.LOOKUPID = 110
+      this.stockCodeData.WHERECONDITION = ''
+    } else if (divisionArr[0].DIVISION == 'M') {
+      this.stockCodeData.LOOKUPID = 23
+      this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${event.target.value}' AND SUBCODE = 0`
+    } else {
+      this.stockCodeData.LOOKUPID = 4
+      this.stockCodeData.WHERECONDITION = `ITEM = '${event.target.value}'`
+    }
+
+  }
   /**USE: to edit detail if already added */
   setInitialValues(): void {
     if (this.content && this.content[0].HEARDERDETAILS) {
@@ -199,9 +251,9 @@ export class AddNewdetailComponent implements OnInit {
       this.diamondSalesDetailForm.controls.designDescription.setValue(summaryDetail[0].designDescription)
     }
   }
-  
+
   radioButtonChanged() {
-      this.codeSearchFlag = this.diamondSalesDetailForm.value.designCodeSelect
+    this.codeSearchFlag = this.diamondSalesDetailForm.value.designCodeSelect
   }
   customizeComma(data: any) {
     if (!Number(data.value)) return data.value
@@ -229,7 +281,7 @@ export class AddNewdetailComponent implements OnInit {
       item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC, 'AMOUNT')
     })
   }
-  // search data change in BOM details grid starts
+  // search data change in BOM details grid starts==========
   colorCodeSelected(event: any, value: any) {
     this.BOMDetailsArray[value.data.SRNO - 1].COLOR = event.CODE;
   }
@@ -248,31 +300,41 @@ export class AddNewdetailComponent implements OnInit {
   stockCodeSelected(event: any, value: any) {
     this.BOMDetailsArray[value.data.SRNO - 1].SHAPE = event.Stock_Code;
   }
-  onHoverColorCode({data}:any){
+  onHoverColorCode({ data }: any) {
     this.generalMaster.WHERECONDITION = `TYPES = 'COLOR MASTER' AND DIV_${data.DIVCODE}=1`
   }
-  onHoverstoneType({data}:any){
+  onHoverstoneType({ data }: any) {
     this.generalMaster.WHERECONDITION = `TYPES = 'STONE TYPE MASTER' AND DIV_${data.DIVCODE}=1`
   }
-  onHoverClarity({data}:any){
+  onHoverClarity({ data }: any) {
     this.generalMaster.WHERECONDITION = `TYPES = 'CLARITY MASTER' AND  DIV_${data.DIVCODE}=1`
   }
-  onHoverShape({data}:any){
+  onHoverShape({ data }: any) {
     this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
   }
-  onHoverProcessType({data}:any){
+  onHoverProcessType({ data }: any) {
     this.generalMaster.WHERECONDITION = `TYPES = 'SETTING TYPE MASTER'`
   }
-  onHoverStockCode({data}:any){
-    if(data.METALSTONE == 'S'){
+  onHoverStockCode({ data }: any) {
+    if (data.METALSTONE == 'S') {
       this.stockCode.LOOKUPID = 4
       this.stockCode.WHERECONDITION = `ITEM = '${data.DIVCODE}'`
-    }else{
+    } else {
       this.stockCode.LOOKUPID = 23
       this.stockCode.WHERECONDITION = `DIVISION_CODE = '${data.DIVCODE}' AND KARAT_CODE = '${data.KARAT_CODE}'`
     }
   }
-  // search data change in BOM details grid ends
+
+
+  // search data change in BOM details grid ends===
+  // search for Part Details Grid starts ======
+  partColorCodeSelected(event: any, value: any) {
+    this.gridParts[value.data.SLNO - 1].PART_COLOR = event.ATTR_CODE;
+  }
+  onHoverPartColorCode({ data }: any) {
+    this.partColorCode.LOOKUPID = 74
+    // this.partColorCode.WHERECONDITION = `DESIGN_CODE = '${data.COMP_CODE}' AND ATTR_TYPE='COLOR'`
+  }
 
   /**USE: group BOM Details Data */
   groupBomDetailsData() {
@@ -325,7 +387,7 @@ export class AddNewdetailComponent implements OnInit {
       } else {
         item.WEIGHT_GMS = this.commonService.decimalQuantityFormat(item.WEIGHT_GMS / 5, 'METAL')
       }
-      item.AMOUNT_FC = this.commonService.decimalQuantityFormat(item.AMOUNT_FC,'METAL')
+      item.AMOUNT_FC = this.commonService.decimalQuantityFormat(item.AMOUNT_FC, 'METAL')
       item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC, 'AMOUNT')
       item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC, 'AMOUNT')
     })
@@ -335,7 +397,24 @@ export class AddNewdetailComponent implements OnInit {
     if (data.DESIGN_CODE) {
       this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
       this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
-      this.designCodeValidate({ target: { value: data.DESIGN_CODE } })
+      this.designCodeValidate({ target: { value: data.DESIGN_CODE } }, 'DESIGN')
+    } else {
+      this.toastr.error('Design Code not found', '', {
+        timeOut: 3000,
+      })
+    }
+  }
+  /**USE: design Code Selection */
+  mainStockCodeSelected(data: any): void {
+    if (data.STOCK_CODE) {
+      this.diamondSalesDetailForm.controls.StockCode.setValue(data.STOCK_CODE)
+      if (data.DESCRIPTION) {
+        this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.DESCRIPTION)
+      }
+      if (data.Stock_Description) {
+        this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.Stock_Description)
+      }
+      this.designCodeValidate({ target: { value: data.STOCK_CODE } }, 'STOCK')
     } else {
       this.toastr.error('Design Code not found', '', {
         timeOut: 3000,
@@ -343,7 +422,7 @@ export class AddNewdetailComponent implements OnInit {
     }
   }
   /**use: validate design code change to fetch data with design code */
-  designCodeValidate(event: any): void {
+  designCodeValidate(event: any, flag?: string): void {
     // 'GetDesignStnmtlDetailNet'
     if (event.target.value == '') return
     this.reset() //reset all data
@@ -352,7 +431,8 @@ export class AddNewdetailComponent implements OnInit {
       "SPID": "003",
       "parameter": {
         "FLAG": 'VIEW',
-        "DESIGNCODE": event.target.value || '', //TODO 'HM14437' 
+        "DESIGNCODE": event.target.value || '',
+        "STRDESIGN_STOCK": flag == 'STOCK' ? 'Y' : 'N',
         "METAL_COLOR": '',
         "MRG_PERC": '',
         "ACCODE": this.headerDetails.PartyCode || ''
@@ -375,20 +455,19 @@ export class AddNewdetailComponent implements OnInit {
             })
           }
           // 2nd and 3rd result Parts / Components details data
-          if (result.dynamicData[1].length > 0) {
+          if (result.dynamicData[1].length > 0 || result.dynamicData[2].length > 0) {
             this.isViewComponentsTab = true;
             this.gridComponents = result.dynamicData[1]
-            this.gridComponentsHead = Object.keys(this.gridComponents[0]);
-          } else {
-            this.isViewComponentsTab = false;
-          }
-          if (result.dynamicData[2].length > 0) {
-            this.isViewComponentsTab = true;
             this.gridParts = result.dynamicData[2]
-            this.gridParts = Object.keys(this.gridParts[0]);
           } else {
             this.isViewComponentsTab = false;
           }
+          // if (result.dynamicData[2].length > 0 || result.dynamicData[1].length > 0 ||) {
+          //   this.isViewComponentsTab = true;
+          //   this.gridParts = result.dynamicData[2]
+          // } else {
+          //   this.isViewComponentsTab = false;
+          // }
           //4th result is BOM Details data
           if (result.dynamicData[3].length > 0) {
             this.isViewBOMTab = true;
@@ -409,7 +488,7 @@ export class AddNewdetailComponent implements OnInit {
           this.diamondSalesDetailForm.controls.RATEFC.setValue(data.RATE)
           this.diamondSalesDetailForm.controls.METAL_WT.setValue(data.METALWT)
           this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
-          this.diamondSalesDetailForm.controls.Remarks.setValue(data.KARAT_CODE+':'+ data.COLOR+':'+ data.DESIGN_DESCRIPTION)
+          this.diamondSalesDetailForm.controls.Remarks.setValue(data.KARAT_CODE + ':' + data.COLOR + ':' + data.DESIGN_DESCRIPTION)
 
           this.summaryDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
           this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
@@ -495,12 +574,12 @@ export class AddNewdetailComponent implements OnInit {
 
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
-    console.log(txtCharge4FC,'txtCharge4FC');
-    
+    console.log(txtCharge4FC, 'txtCharge4FC');
+
     let txtCharge2FC: number = 0;//todo
     let txtCharge3FC: number = 0;//todo
     let txtCharge5FC: number = 0;//todo
-    
+
     if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
     if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
     if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
@@ -515,7 +594,7 @@ export class AddNewdetailComponent implements OnInit {
         //  dblTotLabour = this.commonService.emptyToZero(txtTotalLabour);
       } else {
         dblTotLabour = txtCharge1FC + txtCharge3FC + txtCharge4FC + txtCharge5FC;
-        
+
         if (dblTotLabour) this.summaryDetailForm.controls.Total_Labour.setValue(dblTotLabour)
       }
     }
