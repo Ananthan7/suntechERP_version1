@@ -42,11 +42,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 14,
-    SEARCH_FIELD: "PREFIX_CODE",
-    SEARCH_HEADING: "Button Color",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "PREFIX_CODE<> ''",
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Number',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -54,11 +54,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: "ACCODE",
-    SEARCH_HEADING: "Button Color",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<> ''",
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };

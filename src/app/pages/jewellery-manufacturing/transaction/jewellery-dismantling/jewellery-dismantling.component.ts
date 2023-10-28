@@ -44,7 +44,7 @@ export class JewelleryDismantlingComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 11,
     SEARCH_FIELD: 'LOCATION_CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Location Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "LOCATION_CODE<> ''",
     VIEW_INPUT: true,
