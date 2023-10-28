@@ -125,9 +125,8 @@
                                             formControlName="FixedMetal"
                                             class="example-margin"
                                             class="col-sm-4">
-                                            <label
-                                                style="font-size: 0.9em;padding-top: 8px;">Fixed
-                                                Metal</label>
+                                            <label style="font-size: 0.9em;padding-top: 8px;">
+                                                Fixed Metal</label>
                                         </mat-checkbox>
                                     </section>
                                     <span class="col-sm-8">
@@ -404,7 +403,7 @@
                                     alignment="right">
                                     <div
                                         *dxTemplate="let cellInfo of 'limitTemplate'">
-                                        <input type="checkbox" />
+                                        <input type="checkbox" (change)="selectDivisionGridData($event,cellInfo)"/>
                                     </div>
                                 </dxi-column>
                                 <dxi-column
@@ -595,17 +594,17 @@
                         <!-- <dxi-column caption="RATE CC" dataField="RATEFC"
                             width="auto" alignment="center">
                         </dxi-column> -->
-                        <dxi-column caption="VALUE FC" dataField="VALUE_FC"
+                        <dxi-column caption="VALUE FC" dataField="RATEFC"
                             width="auto" alignment="center">
                         </dxi-column>
                         <!-- <dxi-column caption="VALUE CC" dataField="RATEFC"
                             width="auto" alignment="center">
                         </dxi-column> -->
                         <dxi-column caption="NETVALUE FC"
-                            dataField="NETVALUE_FC"
+                            dataField="RATEFC"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="CHARGE1FC" dataField="CHARGE1FC"
+                        <dxi-column caption="CHARGE1FC" dataField="SETTING"
                             width="auto" alignment="center">
                         </dxi-column>
                         <dxi-column caption="CHARGE2FC" dataField="CHARGE2FC"
@@ -690,7 +689,7 @@
                             dataField="DSO_STOCK_CODE"
                             width="auto" alignment="center">
                         </dxi-column>
-                        <dxi-column caption="MARKUP_PER" dataField="MARKUP_PER"
+                        <dxi-column caption="MARKUP_PER" dataField="MarkupPercentage"
                             width="auto" alignment="center">
                         </dxi-column>
                         <dxi-column caption="GOLD_LOSS_PER"

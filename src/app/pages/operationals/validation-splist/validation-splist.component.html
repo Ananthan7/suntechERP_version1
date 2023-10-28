@@ -17,10 +17,9 @@
                 <!-- <dxo-paging [pageSize]="10"> </dxo-paging> -->
                 <dxo-search-panel [visible]="true"></dxo-search-panel>
                 <dxo-editing mode="row" [allowUpdating]="true" 
-                [allowAdding]="true"
-                [allowDeleting]="true"
-                fixed="true" 
-                >
+                    [allowAdding]="true"
+                    [allowDeleting]="true"
+                    fixed="true">
                 </dxo-editing>
                 <!-- <dxi-column dataField="slno" caption="#"> </dxi-column> -->
                 <dxi-column dataField="SP_ID" caption="SP ID">
@@ -45,7 +44,7 @@
                     <dxo-lookup [dataSource]="ModuleTypeDataSource" displayExpr="MODULE_TYPE" valueExpr="MODULE_TYPE">
                     </dxo-lookup>
                 </dxi-column>
-                <dxi-column dataField="TABLE_NAME" width="270" caption="Table">
+                <dxi-column dataField="TABLE_NAME" width="270" caption="Description">
                 </dxi-column>
                 <!-- <dxi-column dataField="date" dataType="date"> -->
                 <!-- </dxi-column> -->
