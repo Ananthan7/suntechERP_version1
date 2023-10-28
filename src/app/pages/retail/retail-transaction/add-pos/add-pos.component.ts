@@ -897,6 +897,9 @@ export class AddPosComponent implements OnInit {
         this.inv_customer_name = posCustomer.NAME;
         this.inv_cust_mobile_no = posCustomer.MOBILE;
 
+        this.customerDetailForm.controls.fcn_mob_code.setValue(
+          posCustomer.MOBILECODE1
+        );
         this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
           posCustomer.MOBILE
         );
@@ -2476,7 +2479,9 @@ export class AddPosComponent implements OnInit {
           LOCATION_PARKING: this.customerDetails?.LOCATION_PARKING || '',
           SOURCE: this.customerDetails?.SOURCE || '',
           PREFERENCE_CONTACT: this.customerDetails?.PREFERENCE_CONTACT || '',
-          MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
+          // MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
+          MOBILECODE1: this.customerDetailForm.value.fcn_mob_code.toString() || '',
+
           MOBILECODE2: this.customerDetails?.MOBILECODE2 || '',
           IDCATEGORY:
             this.customerDataForm.value.fcn_customer_id_type
@@ -2971,6 +2976,10 @@ export class AddPosComponent implements OnInit {
             );
             this.inv_customer_name = result.NAME;
             this.inv_cust_mobile_no = _cust_mobile_no;
+
+            this.customerDetailForm.controls.fcn_mob_code.setValue(
+              result.MOBILECODE1
+            );
 
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               result.MOBILE
@@ -6495,7 +6504,8 @@ export class AddPosComponent implements OnInit {
           LOCATION_PARKING: this.customerDetails?.LOCATION_PARKING || '',
           SOURCE: this.customerDetails?.SOURCE || '',
           PREFERENCE_CONTACT: this.customerDetails?.PREFERENCE_CONTACT || '',
-          MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
+          MOBILECODE1: this.customerDetailForm.value.fcn_mob_code.toString() || '',
+          // MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
           MOBILECODE2: this.customerDetails?.MOBILECODE2 || '',
           IDCATEGORY:
             this.customerDataForm.value.fcn_customer_id_type

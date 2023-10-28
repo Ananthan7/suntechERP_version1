@@ -572,4 +572,8 @@ export class CommonServiceService {
     const blobData = new Blob([excelbuffer], { type: EXCEL_TYPE });
     FileSaver.saveAs(blobData, excelName);
   }
+
+  convertDateWithTimeZero(date: any) {
+    return date.split('T')[0] + 'T00:00:00.000Z';
+  }
 }

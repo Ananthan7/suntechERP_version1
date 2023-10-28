@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -86,6 +86,7 @@ export class PosCustomerMasterComponent implements OnInit {
     private snackBar: MatSnackBar,
     private acRoute: ActivatedRoute,
     private indexedDb: IndexedDbService,
+    private renderer: Renderer2,
 
   ) {
 
@@ -173,6 +174,9 @@ export class PosCustomerMasterComponent implements OnInit {
             const result = resp.response;
            
 
+            this.customerDetailForm.controls.fcn_mob_code.setValue(
+              result.MOBILECODE1
+            );
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               result.MOBILE
             );
@@ -271,7 +275,46 @@ export class PosCustomerMasterComponent implements OnInit {
 
 
   nameChange(event: any) {
+    const value = event.target.value.toString().trim();
+    // event.target.value = value;
+    if (value != '') {
+      this.amlNameValidationData = false;
 
+      const res = value.split(/\s+/);
+      event.target.value = res.join(' ');
+
+      this.customerDetailForm.controls.fcn_customer_detail_fname.setValue(
+        res[0]
+      );
+      if (res.length == 1) {
+        this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
+        this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
+          ''
+        );
+      }
+      if (res.length == 2) {
+        this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
+        this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
+          res[1]
+        );
+      }
+      if (res.length > 2) {
+        this.customerDetailForm.controls.fcn_customer_detail_mname.setValue(
+          res[1]
+        );
+        res.splice(0, 2);
+        this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
+          res.join(' ')
+        );
+      }
+
+      this.renderer.selectRootElement('#fcn_cust_detail_phone').focus();
+    } else {
+      this.customerDetailForm.controls.fcn_customer_detail_fname.setValue('');
+      this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
+      this.customerDetailForm.controls.fcn_customer_detail_lname.setValue('');
+      this.amlNameValidationData = true;
+    }
   }
   changeCountry(value: any) {
     this.getStateMasterByID(value);
@@ -343,6 +386,7 @@ export class PosCustomerMasterComponent implements OnInit {
     if (!this.isCustProcessing) {
       this.isCustProcessing = true;
 
+
       this.customerDetails.MOBILE =
         this.customerDetailForm.value.fcn_cust_detail_phone;
       this.customerDetails.EMAIL =
@@ -358,14 +402,10 @@ export class PosCustomerMasterComponent implements OnInit {
       this.customerDetails.NATIONAL_IDENTIFICATION_NO =
         this.customerDetailForm.value.fcn_cust_detail_idcard;
 
-      // this.customerDataForm.controls.fcn_customer_id_number.setValue(
-      //   this.customerDetailForm.value.fcn_cust_detail_idcard
-      // );
+     
       this.customerDetails.NAME =
         this.customerDetailForm.value.fcn_customer_detail_name;
-      // this.customerDataForm.controls.fcn_customer_name.setValue(
-      //   this.customerDetailForm.value.fcn_customer_detail_name
-      // );
+   
       this.customerDetails.FIRSTNAME =
         this.customerDetailForm.value.fcn_customer_detail_fname;
       this.customerDetails.MIDDLENAME =
@@ -374,16 +414,14 @@ export class PosCustomerMasterComponent implements OnInit {
         this.customerDetailForm.value.fcn_customer_detail_lname;
       this.customerDetails.MOBILE =
         this.customerDetailForm.value.fcn_cust_detail_phone;
-      // this.customerDataForm.controls.fcn_customer_mobile.setValue(
-      //   this.customerDetailForm.value.fcn_cust_detail_phone
-      // );
-
+    
       this.customerDetails.IDCATEGORY =
         // this.customerDetails.CUST_TYPE =
         this.customerDetailForm.value.fcn_cust_detail_idType;
-      // this.customerDataForm.controls.fcn_customer_id_type.setValue(
-      //   this.customerDetailForm.value.fcn_cust_detail_idType
-      // );
+
+
+      // this.modalService.
+      // if (this.amlNameValidation) {
 
       // trigger form errors
       Object.values(this.customerDetailForm.controls).forEach(control => {
@@ -394,8 +432,10 @@ export class PosCustomerMasterComponent implements OnInit {
 
         const posCustomer = {
           CODE: this.customerDetails?.CODE || '0',
-          NAME: this.customerDetailForm.value.fcn_customer_name || '',
-          COMPANY: this.customerDetailForm.value.COMPANY || this.customerDetails?.COMPANY || '',
+          NAME: this.customerDetailForm.value.fcn_customer_detail_name || '',
+          COMPANY: this.customerDetailForm.value.fcn_cust_detail_company
+            // || this.customerDetails?.COMPANY
+            || '',
           ADDRESS:
             this.customerDetailForm.value.fcn_cust_detail_address ||
             // this.customerDetails?.ADDRESS ||
@@ -419,13 +459,13 @@ export class PosCustomerMasterComponent implements OnInit {
             // this.customerDetailForm.value.fcn_cust_detail_phone2 ||
             this.customerDetails?.TEL2 ||
             '',
-          MOBILE: `${this.customerDetailForm.value.fcn_customer_mobile}` || '',
+          MOBILE: `${this.customerDetailForm.value.fcn_cust_detail_phone}` || '',
           FAX: this.customerDetails?.FAX || '',
           MARITAL_ST:
             this.customerDetailForm.value.fcn_cust_detail_marital_status ||
             // this.customerDetails?.MARITAL_ST ||
             'Unknown',
-          WED_DATE: this.customerDetails?.WED_DATE || '',
+          WED_DATE: this.customerDetails?.WED_DATE || this.dummyDate,
           SPOUSE_NAME: this.customerDetails?.SPOUSE_NAME || '',
           REMARKS: this.customerDetails?.REMARKS || '',
           DATE_OF_BIRTH:
@@ -457,7 +497,7 @@ export class PosCustomerMasterComponent implements OnInit {
           Branch_Code: this.customerDetails?.Branch_Code || '',
           TOTALSALES: this.customerDetails?.TOTALSALES || 0,
           POSCUSTIDNO:
-            this.customerDetailForm.value.fcn_customer_id_number ||
+            this.customerDetailForm.value.fcn_cust_detail_idcard ||
             // this.customerDetails?.POSCUSTIDNO ||
             '',
           POSSMAN: this.customerDetails?.POSSMAN || '',
@@ -487,10 +527,12 @@ export class PosCustomerMasterComponent implements OnInit {
           LOCATION_PARKING: this.customerDetails?.LOCATION_PARKING || '',
           SOURCE: this.customerDetails?.SOURCE || '',
           PREFERENCE_CONTACT: this.customerDetails?.PREFERENCE_CONTACT || '',
-          MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
+          // MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
+          MOBILECODE1: this.customerDetailForm.value.fcn_mob_code.toString() || '',
+
           MOBILECODE2: this.customerDetails?.MOBILECODE2 || '',
           IDCATEGORY:
-            this.customerDetailForm.value.fcn_customer_id_type
+            this.customerDetailForm.value.fcn_cust_detail_idType
             // || this.customerDetails?.IDCATEGORY
             || '',
           ADDRESS_OFFICIAL: this.customerDetails?.ADDRESS_OFFICIAL || '',
@@ -499,7 +541,10 @@ export class PosCustomerMasterComponent implements OnInit {
           BLOOD_GROUP: this.customerDetails?.BLOOD_GROUP || '',
           NO_OF_CHILDREN: this.customerDetails?.NO_OF_CHILDREN || 0,
           ZODIAC_SIGN: this.customerDetails?.ZODIAC_SIGN || '',
-          DESIGNATION: this.customerDetails?.DESIGNATION || '',
+          DESIGNATION:
+            this.customerDetailForm.value.fcn_cust_detail_designation
+            // this.customerDetails?.DESIGNATION
+            || '',
           LEVELFLAG: this.customerDetails?.LEVELFLAG || 0,
           INCOMERANGE: this.customerDetails?.INCOMERANGE || '',
           LAST_UPDATED_DATE:
@@ -588,8 +633,8 @@ export class PosCustomerMasterComponent implements OnInit {
           AUTOCREATEMST: this.customerDetails?.AUTOCREATEMST || false,
           WUPMOBILECODE: this.customerDetails?.WUPMOBILECODE || '',
           WUPMOBILENO: this.customerDetails?.WUPMOBILENO || '',
-          OCCUPATION: this.customerDetailForm.value.fcn_cust_detail_occupation
-            //  || this.customerDetails?.OCCUPATION
+          OCCUPATION:
+            this.customerDetails?.OCCUPATION
             || '',
           ShowRoomAccessibility:
             this.customerDetails?.ShowRoomAccessibility || '',
@@ -621,10 +666,12 @@ export class PosCustomerMasterComponent implements OnInit {
           CREDIT_LIMIT_STATUS:
             this.customerDetails?.CREDIT_LIMIT_STATUS || false,
           PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
-          VOCTYPE: '', //todo
-          YEARMONTH: '',//todo
-          VOCNO: '',//todo
-          VOCDATE: '',//todo
+          // VOCTYPE: this.vocType || '',
+          // YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+          // VOCNO: this.vocDataForm.value.fcn_voc_no || '',
+          // VOCDATE: this.comService.convertDateWithTimeZero(
+          //   new Date(this.vocDataForm.value.vocdate).toISOString()
+          // ),
           // new values - poscustomer
           'OT_TRANSFER_TIME': this.customerDetails?.OT_TRANSFER_TIME || '',
           'COUNTRY_DESC': this.customerDetails?.COUNTRY_DESC || '',
@@ -638,7 +685,7 @@ export class PosCustomerMasterComponent implements OnInit {
           'TYPE_DESC': this.customerDetails?.TYPE_DESC || '',
 
 
-          "BRANCH_CODE": this.comService.branchCode || '',
+          // "BRANCH_CODE": this.strBranchcode || '',
           "DETAILS_JOHARA": this.customerDetails?.DETAILS_JOHARA || '',
           "DETAILS_FARAH": this.customerDetails?.DETAILS_FARAH || '',
           "DETAILS_JAWAHERALSHARQ": this.customerDetails?.DETAILS_JAWAHERALSHARQ || '',
@@ -661,30 +708,37 @@ export class PosCustomerMasterComponent implements OnInit {
 
         };
 
-        const apiCtrl =
-          posCustomer.CODE &&
-            posCustomer.CODE != '' &&
-            posCustomer.CODE.toString() != '0'
-            ? 'updatePosCustomer'
-            : 'insertPosCustomer';
+        // const apiCtrl =
+        //   posCustomer.CODE &&
+        //     posCustomer.CODE != '' &&
+        //     posCustomer.CODE.toString() != '0'
+        //     ? `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`
+        //     : 'PosCustomerMaster/InsertCustomerMaster';
 
-        this.apiService.postDynamicAPI(apiCtrl, posCustomer).subscribe((data: any) => {
+        let apiCtrl;
+        let method;
+        let custResponse;
+        if (
+          posCustomer.CODE &&
+          posCustomer.CODE !== '' &&
+          posCustomer.CODE.toString() !== '0'
+        ) {
+          apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
+          custResponse = this.apiService.putDynamicAPI(apiCtrl, posCustomer)
+        } else {
+          apiCtrl = 'PosCustomerMaster/InsertCustomerMaster';
+          custResponse = this.apiService.postDynamicAPI(apiCtrl, posCustomer)
+        }
+
+
+        custResponse.subscribe(async (data) => {
+
           this.isCustProcessing = false;
 
           if (data.status == 'Success') {
-            this.customerDetails = data.response;
-            // this.customerDataForm.controls['fcn_customer_name'].setValue(
-            //   this.customerDetails.NAME
-            // );
-            // this.customerDataForm.controls['fcn_customer_id_type'].setValue(
-            //   this.customerDetails.IDCATEGORY
-            //   // this.customerDetails.CUST_TYPE
-            // );
-            // this.customerDataForm.controls['fcn_customer_id_number'].setValue(
-            //   this.customerDetails.POSCUSTIDNO
-            // );
-            // this.inv_customer_name = this.customerDetails.NAME;
-            // this.inv_cust_mobile_no = this.customerDetails.MOBILE;
+            this.customerDetails = await data.response;
+          
+           
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               this.customerDetails.MOBILE
             );
@@ -728,15 +782,177 @@ export class PosCustomerMasterComponent implements OnInit {
             this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
               this.customerDetails.MARITAL_ST
             );
-            // this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
-            //   this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
-            // );
-
+            this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
+              this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
+            );
+            // this.snackBar.open('Customer details saved successfully');
+            // this.snackBar.dismiss();
             this.snackBar.open('Customer details saved successfully', '', {
               duration: 1000 // time in milliseconds
             });
 
+            // ${data.AMLDIGICOMPANYNAME}/${data.AMLDIGIUSERNAME}/${data.AMLDIGIPASSWORD}/${data.CODE}/${data.FIRSTNAME}/${data.MIDDLENAME}/${data.LASTNAME}/%27%27/${data.POSCustIDNo}/${data.NATIONALITY}/${data.DATE_OF_BIRTH}/${data.CUST_Type}/${data.AMLUSERID}/${data.AMLDIGITHRESHOLD}/${data.AMLDIGICOMPANYNAME}/1/${data.DIGIIPPATH}`);
+            if (this.amlNameValidation && !this.customerDetails.DIGISCREENED) {
+              this.isCustProcessing = true;
+
+              // const custCodeWithAcCode =
+              //   this.comService.allbranchMaster?.DIGICOMPACCODE &&
+              //     this.comService.allbranchMaster?.DIGICOMPACCODE != ''
+              //     ? `${this.comService.allbranchMaster?.DIGICOMPACCODE}/${this.customerDetails.CODE}`
+              //     : this.customerDetails.CODE;
+
+
+              const payload = {
+                AMLDIGICOMPANYNAME: encodeURIComponent(
+                  this.comService.allbranchMaster.AMLDIGICOMPANYNAME || ' '
+                ),
+                AMLDIGIUSERNAME: encodeURIComponent(
+                  this.comService.allbranchMaster.AMLDIGIUSERNAME || ' '
+                ),
+                AMLDIGIPASSWORD: encodeURIComponent(
+                  this.comService.allbranchMaster.AMLDIGIPASSWORD || ' '
+                ),
+                CODE: encodeURIComponent(this.customerDetails.CODE || ' '),
+                FIRSTNAME:
+                  ''
+                // encodeURIComponent(this.customerDetails.FIRSTNAME)
+                // || '%27%27'
+                ,
+                MIDDLENAME: ''
+                // encodeURIComponent(this.customerDetails.MIDDLENAME)
+                // || '%27%27'
+                ,
+                LASTNAME:
+                  encodeURIComponent(
+                    this.customerDetails.NAME //
+                    // this.customerDetails.LASTNAME || ''
+                  )
+                  || ''
+                ,
+                NATIONALITY:
+                  encodeURIComponent(this.customerDetails.NATIONALITY),
+                // ||                '%27%27',
+                // NATIONALITY:  encodeURIComponent(this.customerDetails.NATIONALITY || ' '),
+                DATE_OF_BIRTH:
+                  // this.comService.nullOrEmpty(
+
+                  encodeURIComponent(
+                    this.comService.convertDateToMDY(
+                      this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
+                    )
+                  )
+                ,
+                // CUST_Type: this.comService.nullOrEmpty(
+                //   encodeURIComponent(this.customerDetails.CUST_TYPE),
+                //   '%27%27'),
+                CUST_Type: encodeURIComponent('I'),
+
+                // CUST_Type: encodeURIComponent(
+                //   this.customerDetails.CUST_Type || ' '
+                // ),
+                AMLUSERID:
+                  encodeURIComponent(this.comService.allbranchMaster.AMLUSERID)
+                ,
+                AMLDIGITHRESHOLD:
+                  encodeURIComponent(
+                    this.comService.allbranchMaster.AMLDIGITHRESHOLD
+                  ) || '%27%27',
+                DIGIIPPATH:
+                  encodeURIComponent(this.comService.allbranchMaster.DIGIIPPATH) ||
+                  '%27%27',
+                Gender:
+                  encodeURIComponent(this.customerDetails?.GENDER) ||
+                  '%27%27',
+                CustomerIdType:
+                  encodeURIComponent(this.customerDetails?.IDCATEGORY) ||
+                  '%27%27',
+                CustomerIdNumber:
+                  encodeURIComponent(this.customerDetails?.NATIONAL_IDENTIFICATION_NO) ||
+                  '%27%27',
+              };
+              // this.snackBar.open('Loading...');
+
+              // this.suntechApi.getAMLValidation(payload).subscribe(async (data) => {
+              //   this.isCustProcessing = false;
+
+              //   this.snackBar.open('Loading...');
+
+              //   // data = JSON.parse(data);
+              //   // console.log(data, typeof data);
+              //   this.suntechApi
+              //     .updateAMLDigiScreenValidation(
+              //       this.customerDetails.CODE,
+              //       true
+              //     )
+              //     .subscribe((resp) => {
+              //       this.snackBar.dismiss();
+              //       if (resp.status == "Success") {
+              //         // this.customerDetails = resp.response;
+              //         this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
+              //       } else {
+              //         this.snackBar.open('Digiscreen Failed');
+              //       }
+
+              //       console.log('====================================');
+              //       console.log('resp', resp);
+              //       console.log('====================================');
+              //     });
+
+              //   if (data.response.isMatched != null) {
+              //     this.snackBar.dismiss();
+
+              //     if (data.response.isMatched.toUpperCase() == 'YES') {
+              //       // if (data.response == 'yes') {
+              //       this.openDialog('Warning', 'We cannot proceed', true);
+              //       this.dialogBox.afterClosed().subscribe((data) => {
+              //         if (data == 'OK') {
+              //           this.modalReference.close();
+              //         }
+              //       });
+              //       // need to use put api
+              //       this.amlNameValidationData = true;
+
+              //       this.suntechApi
+              //         .updateAMLNameValidation(this.customerDetails.CODE, true)
+              //         .subscribe((resp) => {
+              //           // this.customerDetails = resp.response;
+              //           this.customerDetails.AMLNAMEVALIDATION =
+              //             resp.response != null ? resp.response?.AMLNAMEVALIDATION : true;
+
+              //           console.log('====================================');
+              //           console.log('resp', resp);
+              //           console.log('====================================');
+              //         });
+              //       // }
+              //     } else {
+
+              //       this.openDialog('Success', JSON.stringify(data.response), true);
+              //       this.dialogBox.afterClosed().subscribe((data) => {
+              //         if (data == 'OK') {
+              //           this.modalReference.close();
+              //         }
+              //       });
+              //       //proceed
+              //       this.amlNameValidationData = false;
+              //     }
+              //   } else {
+              //     this.openDialog('Warning', JSON.stringify(data.response), true);
+              //     this.dialogBox.afterClosed().subscribe((data) => {
+              //       if (data == 'OK') {
+              //         this.modalReference.close();
+              //       }
+              //     });
+              //     this.amlNameValidationData = true;
+
+              //   }
+              // });
+            } else {
+              this.isCustProcessing = false;
+
+              // this.modalReference.close();
+            }
           } else {
+            // this.modalReference.close();
             this.customerDetails = {};
             this.snackBar.open(data.message, '', {
               duration: 2000 // time in milliseconds
@@ -755,7 +971,7 @@ export class PosCustomerMasterComponent implements OnInit {
       }
     }
   }
-
+  
 
   getStateMasterByID(countryCode: any) {
     let API = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('STATE MASTER')}/${encodeURIComponent(countryCode)}`
