@@ -103,7 +103,7 @@ export class MeltingTypeComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 35,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,

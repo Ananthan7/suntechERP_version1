@@ -40,6 +40,13 @@ export class AlloyMasterComponent implements OnInit {
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid:[],
     code: [''],
+    costCenter: [''],
+    type: [''],
+    category: [''],
+    subCategory: [''],
+    brand: [''],
+    vendor: [''],
+    price: [''],
     description: [''],
     metal: [''],
     color: [''],
@@ -57,11 +64,15 @@ export class AlloyMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 15,
     SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Stock Code',
+    SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "COST_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  }
+  costCenterSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.costCenter.setValue(e.COST_CODE);
   }
 
   masterCodeData: MasterSearchModel = {
@@ -76,12 +87,76 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 62,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.type.setValue(e.CODE);
+  }
+
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  categoryCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.category.setValue(e.CODE);
+  }
+
+  subcategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Subcategory Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  subcategoryCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.subCategory.setValue(e.CODE);
+  }
+
+  BrandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 32,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  brandCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.brand.setValue(e.CODE);
+  }
   colorCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 35,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color',
+    SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -91,7 +166,6 @@ export class AlloyMasterComponent implements OnInit {
   ColorCodeSelected(e:any){
     console.log(e);
     this.alloyMastereForm.controls.color.setValue(e.CODE);
-
   }
 
   vendorCodeData: MasterSearchModel = {
@@ -105,17 +179,25 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  vendorCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.vendor.setValue(e.COUNT);
+  }
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 82,
     SEARCH_FIELD: 'PRICE_CODE',
-    SEARCH_HEADING: 'Price',
+    SEARCH_HEADING: 'Price Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "PRICE_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  }
+  priceCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.price.setValue(e.PRICE_CODE);
   }
 
   setFormValues() {
