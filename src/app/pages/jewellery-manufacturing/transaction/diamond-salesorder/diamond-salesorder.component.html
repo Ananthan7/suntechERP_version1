@@ -161,10 +161,10 @@
                                                 class="text-right" readonly
                                                 formControlName="partyCurrencyRate" />
                                         </mat-form-field>
-                                        <!-- <master-search
-                                            [MasterSearchData]="currencyMasterData"
+                                        <master-search
+                                            [MasterSearchData]="partyCurrencyData"
                                             (newRowClick)="partyCurrencySelected($event)">
-                                        </master-search> -->
+                                        </master-search>
                                     </span>
                                 </div>
                                 <div class="row">
@@ -251,8 +251,8 @@
                                                                 matInput
                                                                 formControlName="BillToAccountHead" />
                                                         </mat-form-field>
-                                                        <textarea
-                                                            style="width: 100%;height: 120px; margin-left: 7px;"
+                                                        <textarea style="width: 100%;height: 100px;
+                                                             margin-left: 7px;margin-top: 7px;"
                                                             formControlName="BillToAddress">
                                                         </textarea>
                                                     </div>

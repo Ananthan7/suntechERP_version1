@@ -5,18 +5,17 @@
             <h5>Validation SP List</h5>
         </div>
         <div class="col-md-12 col-sm-12 p-2" *ngIf="!isViewForm">
-            <dx-data-grid id="gridContainer" [dataSource]="tableData" 
+            <dx-data-grid id="gridContainer" [dataSource]="tableData"
                 [allowColumnResizing]="true"
-                height="400"
-                [columnAutoWidth]="true" [showRowLines]="true" 
+                height="450"
+                [columnAutoWidth]="true" [showRowLines]="true"
                 [showBorders]="true" (onEditingStart)="logEvent('EditingStart')"
                 (onRowInserted)="onSaving($event)"
                 (onRowUpdated)="updateData($event)"
-                (onRowRemoved)="deleteData($event)"
-                >
+                (onRowRemoved)="deleteData($event)">
                 <!-- <dxo-paging [pageSize]="10"> </dxo-paging> -->
                 <dxo-search-panel [visible]="true"></dxo-search-panel>
-                <dxo-editing mode="row" [allowUpdating]="true" 
+                <dxo-editing mode="row" [allowUpdating]="true"
                     [allowAdding]="true"
                     [allowDeleting]="true"
                     fixed="true">
@@ -27,24 +26,29 @@
                         message="SP ID is required">
                     </dxi-validation-rule>
                 </dxi-column>
-                <dxi-column dataField="SP_NAME" caption="SP Name"> 
+                <dxi-column dataField="SP_NAME" caption="SP Name">
                     <dxi-validation-rule type="required"
-                    message="SP Name is required"></dxi-validation-rule>
+                        message="SP Name is required"></dxi-validation-rule>
                 </dxi-column>
                 <dxi-column dataField="FORM_NAME" caption="Form Name">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dxi-column>
-                <dxi-column dataField="MODULE_NAME" width="180" caption="Module Name">
+                <dxi-column dataField="MODULE_NAME" width="140"
+                    caption="Module Name">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
-                    <dxo-lookup [dataSource]="ModuleNameDataSource" displayExpr="MODULE_NAME" valueExpr="MODULE_NAME">
+                    <dxo-lookup [dataSource]="ModuleNameDataSource"
+                        displayExpr="MODULE_NAME" valueExpr="MODULE_NAME">
                     </dxo-lookup>
                 </dxi-column>
-                <dxi-column dataField="MODULE_TYPE" width="110" caption="Module Type">
+                <dxi-column dataField="MODULE_TYPE" width="110"
+                    caption="Module Type">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
-                    <dxo-lookup [dataSource]="ModuleTypeDataSource" displayExpr="MODULE_TYPE" valueExpr="MODULE_TYPE">
+                    <dxo-lookup [dataSource]="ModuleTypeDataSource"
+                        displayExpr="MODULE_TYPE" valueExpr="MODULE_TYPE">
                     </dxo-lookup>
                 </dxi-column>
-                <dxi-column dataField="TABLE_NAME" width="270" caption="Description">
+                <dxi-column dataField="TABLE_NAME" width="300"
+                    caption="Description">
                 </dxi-column>
                 <!-- <dxi-column dataField="date" dataType="date"> -->
                 <!-- </dxi-column> -->

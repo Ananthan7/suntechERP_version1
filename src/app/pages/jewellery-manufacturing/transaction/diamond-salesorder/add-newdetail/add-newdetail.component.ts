@@ -95,6 +95,19 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  /**USE: stockCode  lookup model*/
+  componetCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 16,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Design Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
   /**USE: Design Code lookup model*/
   DesignCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -216,7 +229,7 @@ export class AddNewdetailComponent implements OnInit {
     }
     let divisionArr = this.commonService.divisionMasterList?.filter((item: any) => item.DIVISION_CODE == event.target.value)
     if (divisionArr.length == 0) {
-      this.toastr.error('Division Code not found', '', {
+      this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
         timeOut: 3000,
       })
       return
@@ -327,14 +340,24 @@ export class AddNewdetailComponent implements OnInit {
 
 
   // search data change in BOM details grid ends===
-  // search for Part Details Grid starts ======
+  // search for Part Details Grid STARTS ======
   partColorCodeSelected(event: any, value: any) {
     this.gridParts[value.data.SLNO - 1].PART_COLOR = event.ATTR_CODE;
   }
   onHoverPartColorCode({ data }: any) {
     this.partColorCode.LOOKUPID = 74
-    // this.partColorCode.WHERECONDITION = `DESIGN_CODE = '${data.COMP_CODE}' AND ATTR_TYPE='COLOR'`
+    this.partColorCode.WHERECONDITION = `DESIGN_CODE = '${data.COMP_CODE}' AND ATTR_TYPE='COLOR'`
   }
+  // Part Details Grid ENDS
+  // COMPONENT Details Grid STARTS
+  componentCodeSelected(event: any, value: any) {
+    this.gridParts[value.data.SLNO - 1].PART_COLOR = event.ATTR_CODE;
+  }
+  onHoverCompCode({ data }: any) {
+    this.componetCode.LOOKUPID = 16
+    this.componetCode.WHERECONDITION = `Design_Type = 'COMP'`
+  }
+  // COMPONENT Details Grid ENDS
 
   /**USE: group BOM Details Data */
   groupBomDetailsData() {
@@ -399,7 +422,7 @@ export class AddNewdetailComponent implements OnInit {
       this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
       this.designCodeValidate({ target: { value: data.DESIGN_CODE } }, 'DESIGN')
     } else {
-      this.toastr.error('Design Code not found', '', {
+      this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
         timeOut: 3000,
       })
     }
@@ -416,7 +439,7 @@ export class AddNewdetailComponent implements OnInit {
       }
       this.designCodeValidate({ target: { value: data.STOCK_CODE } }, 'STOCK')
     } else {
-      this.toastr.error('Design Code not found', '', {
+      this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
         timeOut: 3000,
       })
     }
@@ -450,7 +473,7 @@ export class AddNewdetailComponent implements OnInit {
             data = this.commonService.arrayEmptyObjectToString(data)
             data = data[0]
           } else {
-            this.toastr.error('Summary details not found', '', {
+            this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
               timeOut: 3000,
             })
           }
@@ -508,13 +531,13 @@ export class AddNewdetailComponent implements OnInit {
 
           this.calculateTotal({})
         } else {
-          this.toastr.error('Design Code not found', result.Message ? result.Message : '', {
+          this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
             timeOut: 3000,
           })
         }
       }, err => {
         this.snackBar.dismiss()
-        this.toastr.error('Server Error', '', {
+        this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
           timeOut: 3000,
         })
       })

@@ -89,6 +89,17 @@ export class DiamondSalesorderComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  partyCurrencyData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 9,
+    SEARCH_FIELD: 'Currency',
+    SEARCH_HEADING: 'CURRENCY MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   /**USE: main form party details */
   PartyDetailsOrderForm: FormGroup = this.formBuilder.group({
     voucherType: ['', [Validators.required]],
@@ -157,13 +168,13 @@ export class DiamondSalesorderComponent implements OnInit {
           this.labourDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           this.divisionDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[1])
         } else {
-          this.toastr.error('Labour Details Not Found', result.Message ? result.Message : '', {
+          this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
             timeOut: 3000,
           })
         }
       }, err => {
         this.snackBar.dismiss()
-        this.toastr.error('Server Error', '', {
+        this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
           timeOut: 3000,
         })
       })
@@ -210,7 +221,7 @@ export class DiamondSalesorderComponent implements OnInit {
     }
 
     if (this.PartyDetailsOrderForm.value.PartyCode == '') {
-      this.toastr.error('PartyCode not found', '', {
+      this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
         timeOut: 3000,
       })
       return
@@ -651,7 +662,7 @@ export class DiamondSalesorderComponent implements OnInit {
         }
       }, err => {
         this.snackBar.dismiss()
-        this.toastr.error(err, err.error ? err.error['title'] : '', {
+        this.toastr.error(this.commonService.getMsgByID('MSG1531'), err.error ? err.error['title'] : '', {
           timeOut: 3000,
         })
       })
@@ -668,10 +679,15 @@ export class DiamondSalesorderComponent implements OnInit {
   //party Code Change
   partyCodeChange(event: any) {
     if (event.target.value == '') return
+    if(!this.commonService.branchCode || this.commonService.branchCode == '') { 
+     this.snackBar.open('Branch Code'+this.commonService.getMsgByID('MSG1531'),'close')
+     return
+    }
     let postData = {
       "SPID": "001",
       "parameter": {
         "ACCODE": event.target.value || "",
+        "BRANCH_CODE": this.commonService.branchCode
       }
     }
     this.snackBar.open('Validating Party Code...')
@@ -680,29 +696,38 @@ export class DiamondSalesorderComponent implements OnInit {
         this.snackBar.dismiss()
         if (result.status == "Success") {
           let data = result.dynamicData[0]
-          if (data && data[0].CURRENCY_CODE) {
+          
+          if(data.length>1){
+            this.partyCurrencyData.WHERECONDITION = this.commonService.branchCode +','+ event.target.value
+          }
+          let defaultCurrencyArr = data.filter((item:any)=> item.DEFAULT_CURRENCY === 1)
+          
+          
+          if (defaultCurrencyArr && defaultCurrencyArr[0].CURRENCY_CODE) {
 
-            this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data[0].CURRENCY_CODE)
-            this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data[0].ACCOUNT_HEAD)
-            this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data[0].ADDRESS)
+            this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(defaultCurrencyArr[0].CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(defaultCurrencyArr[0].CURRENCY_CODE)
+            this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(defaultCurrencyArr[0].ACCOUNT_HEAD)
+            this.PartyDetailsOrderForm.controls.BillToAddress.setValue(defaultCurrencyArr[0].ADDRESS)
 
-            // let currencyArr = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE = data[0].CURRENCY_CODE)
-            let currencyRate = this.commonService.getCurrRate(data[0].CURRENCY_CODE)
-
+            let currencyRate = this.commonService.getCurrRate(defaultCurrencyArr[0].CURRENCY_CODE)
             currencyRate = this.commonService.decimalQuantityFormat(currencyRate, 'RATE')
 
             this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
             this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyRate)
+          }else{
+            this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
+              timeOut: 3000,
+            })
           }
         } else {
-          this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
+          this.toastr.error(this.commonService.getMsgByID('MSG1747'), result.Message ? result.Message : '', {
             timeOut: 3000,
           })
         }
       }, err => {
         this.snackBar.dismiss()
-        this.toastr.error('Server Error', '', {
+        this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
           timeOut: 3000,
         })
       })
