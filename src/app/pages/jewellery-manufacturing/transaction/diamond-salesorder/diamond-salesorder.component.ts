@@ -633,7 +633,8 @@ export class DiamondSalesorderComponent implements OnInit {
       "LabourDetails": this.getLabType4Detail(), //lab type 4
       "HeaderDivisons": this.headerDivisionList
     }
-
+    console.log(postData,'postData');
+    
     // if (this.PartyDetailsOrderForm.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
@@ -836,6 +837,29 @@ export class DiamondSalesorderComponent implements OnInit {
     // }
 
     return true;
+  }
+
+  addDays() {
+    const daysToAdd = parseInt(this.PartyDetailsOrderForm.value.DeliveryOnDateType);
+    const currentDate = new Date();
+    
+    if (!isNaN(daysToAdd)) {
+      const futureDate = new Date(currentDate);
+      futureDate.setDate(currentDate.getDate() + daysToAdd);
+  
+      const dateInput = this.PartyDetailsOrderForm.value.DeliveryOnDateType
+      
+      let dates = this.formatDateF(futureDate);
+      this.PartyDetailsOrderForm.controls.DeliveryOnDate.setValue(dates)
+    }
+  }
+  
+  formatDateF(date:any) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}`;
   }
 
   close() {
