@@ -8,6 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
 import { map, startWith } from 'rxjs/operators';
+import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-pos-customer-master',
@@ -17,8 +19,9 @@ import { map, startWith } from 'rxjs/operators';
 export class PosCustomerMasterComponent implements OnInit {
 
   @Output() closebtnClick = new EventEmitter();
-  // @Input() public customerData: any;
+  @Input() public customerData: any;
   @Input() amlNameValidation?: boolean;
+  @Input() vocDetails?: any;
 
 
   //variables
@@ -54,6 +57,11 @@ export class PosCustomerMasterComponent implements OnInit {
 
   amlNameValidationData = false;
 
+
+  // Dialog box
+  dialogBox: any;
+  dialogBoxResult: any;
+
   //formgroups
   customerDetailForm: FormGroup = this.formBuilder.group({
     fcn_customer_detail_name: ['', Validators.required],
@@ -87,6 +95,9 @@ export class PosCustomerMasterComponent implements OnInit {
     private acRoute: ActivatedRoute,
     private indexedDb: IndexedDbService,
     private renderer: Renderer2,
+    public dialog: MatDialog,
+    private activeModal: NgbActiveModal,
+
 
   ) {
 
@@ -138,13 +149,15 @@ export class PosCustomerMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDropDownData();
-
+console.log('===========customerData=========================');
+console.log(this.customerData);
+console.log('====================================');
     this.getMasters();
     this.getIdMaster();
   }
 
 
-  
+
   onCustomerNameFocus(value: any = null) {
     console.log(value);
     let _cust_mobile_no = value == null ? this.customerDetailForm.value.fcn_cust_detail_phone : value;
@@ -155,14 +168,14 @@ export class PosCustomerMasterComponent implements OnInit {
     // }
 
 
-     if (_cust_mobile_no != '' && _cust_mobile_no != null) {
+    if (_cust_mobile_no != '' && _cust_mobile_no != null) {
 
       let custMobile = `${this.customerDetailForm.value.fcn_cust_detail_phone}`;
 
       // if (value == null) {
       this.customerDetails = {};
       this.customerDetailForm.reset();
-     
+
       this.customerDetailForm.reset({
         fcn_cust_detail_phone: custMobile,
       });
@@ -172,7 +185,7 @@ export class PosCustomerMasterComponent implements OnInit {
           if (resp.status == 'Success') {
             // const result = resp[0];
             const result = resp.response;
-           
+
 
             this.customerDetailForm.controls.fcn_mob_code.setValue(
               result.MOBILECODE1
@@ -402,10 +415,10 @@ export class PosCustomerMasterComponent implements OnInit {
       this.customerDetails.NATIONAL_IDENTIFICATION_NO =
         this.customerDetailForm.value.fcn_cust_detail_idcard;
 
-     
+
       this.customerDetails.NAME =
         this.customerDetailForm.value.fcn_customer_detail_name;
-   
+
       this.customerDetails.FIRSTNAME =
         this.customerDetailForm.value.fcn_customer_detail_fname;
       this.customerDetails.MIDDLENAME =
@@ -414,7 +427,7 @@ export class PosCustomerMasterComponent implements OnInit {
         this.customerDetailForm.value.fcn_customer_detail_lname;
       this.customerDetails.MOBILE =
         this.customerDetailForm.value.fcn_cust_detail_phone;
-    
+
       this.customerDetails.IDCATEGORY =
         // this.customerDetails.CUST_TYPE =
         this.customerDetailForm.value.fcn_cust_detail_idType;
@@ -666,12 +679,10 @@ export class PosCustomerMasterComponent implements OnInit {
           CREDIT_LIMIT_STATUS:
             this.customerDetails?.CREDIT_LIMIT_STATUS || false,
           PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
-          // VOCTYPE: this.vocType || '',
-          // YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
-          // VOCNO: this.vocDataForm.value.fcn_voc_no || '',
-          // VOCDATE: this.comService.convertDateWithTimeZero(
-          //   new Date(this.vocDataForm.value.vocdate).toISOString()
-          // ),
+          VOCTYPE: this.vocDetails.VOCTYPE || '',
+          YEARMONTH: this.vocDetails.YEARMONTH || localStorage.getItem('YEAR'),
+          VOCNO: this.vocDetails.VOCNO || '',
+          VOCDATE: this.vocDetails.VOCDATE,
           // new values - poscustomer
           'OT_TRANSFER_TIME': this.customerDetails?.OT_TRANSFER_TIME || '',
           'COUNTRY_DESC': this.customerDetails?.COUNTRY_DESC || '',
@@ -737,8 +748,8 @@ export class PosCustomerMasterComponent implements OnInit {
 
           if (data.status == 'Success') {
             this.customerDetails = await data.response;
-          
-           
+
+
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               this.customerDetails.MOBILE
             );
@@ -870,82 +881,108 @@ export class PosCustomerMasterComponent implements OnInit {
                   encodeURIComponent(this.customerDetails?.NATIONAL_IDENTIFICATION_NO) ||
                   '%27%27',
               };
-              // this.snackBar.open('Loading...');
+              this.snackBar.open('Loading...');
 
-              // this.suntechApi.getAMLValidation(payload).subscribe(async (data) => {
-              //   this.isCustProcessing = false;
+              // companyname=${data.AMLDIGICOMPANYNAME}&username=${data.AMLDIGIUSERNAME}&Password=${data.AMLDIGIPASSWORD}&CustomerId=${data.CODE}&FirstName=${data.FIRSTNAME}&MiddleName=${data.MIDDLENAME}&LastName=${data.LASTNAME}&MatchCategory=&CustomerIdNumber=${data.CustomerIdNumber}&Nationality=${data.NATIONALITY}&DOB=${data.DATE_OF_BIRTH}&CustomerType=${data.CUST_Type}&UserId=${data.AMLUSERID}&Threshold=${data.AMLDIGITHRESHOLD}&CompName=${data.AMLDIGICOMPANYNAME}&GeneratePayload=1&IPPath=${data.DIGIIPPATH}&Gender=${data.Gender}&CustomerIdType=${data.CustomerIdType}
 
-              //   this.snackBar.open('Loading...');
+              const queryParams = {
+                companyname: payload.AMLDIGICOMPANYNAME,
+                username: payload.AMLDIGIUSERNAME,
+                Password: payload.AMLDIGIPASSWORD,
+                CustomerId: payload.CODE,
+                FirstName: payload.FIRSTNAME,
+                MiddleName: payload.MIDDLENAME,
+                LastName: payload.LASTNAME,
+                MatchCategory: '',
+                CustomerIdNumber: payload.CustomerIdNumber,
+                Nationality: payload.NATIONALITY,
+                DOB: payload.DATE_OF_BIRTH,
+                CustomerType: payload.CUST_Type,
+                UserId: payload.AMLUSERID,
+                Threshold: payload.AMLDIGITHRESHOLD,
+                CompName: payload.AMLDIGICOMPANYNAME,
+                GeneratePayload: '1',
+                IPPath: payload.DIGIIPPATH,
+                Gender: payload.Gender,
+                CustomerIdType: payload.CustomerIdType
+              };
 
-              //   // data = JSON.parse(data);
-              //   // console.log(data, typeof data);
-              //   this.suntechApi
-              //     .updateAMLDigiScreenValidation(
-              //       this.customerDetails.CODE,
-              //       true
-              //     )
-              //     .subscribe((resp) => {
-              //       this.snackBar.dismiss();
-              //       if (resp.status == "Success") {
-              //         // this.customerDetails = resp.response;
-              //         this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
-              //       } else {
-              //         this.snackBar.open('Digiscreen Failed');
-              //       }
+              this.apiService.getDynamicAPIwithParams('AMLValidation', queryParams).subscribe(async (data) => {
+                this.isCustProcessing = false;
 
-              //       console.log('====================================');
-              //       console.log('resp', resp);
-              //       console.log('====================================');
-              //     });
+                this.snackBar.open('Loading...');
 
-              //   if (data.response.isMatched != null) {
-              //     this.snackBar.dismiss();
+                this.apiService
+                  .putDynamicAPI(
+                    `PosCustomerMaster/UpdateDigiScreened/code=${this.customerDetails.CODE}/DigiScreened=true`,
+                    ''
+                  )
+                  .subscribe((resp) => {
+                    this.snackBar.dismiss();
+                    if (resp.status == "Success") {
+                      // this.customerDetails = resp.response;
+                      this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
+                    } else {
+                      this.snackBar.open('Digiscreen Failed');
+                    }
 
-              //     if (data.response.isMatched.toUpperCase() == 'YES') {
-              //       // if (data.response == 'yes') {
-              //       this.openDialog('Warning', 'We cannot proceed', true);
-              //       this.dialogBox.afterClosed().subscribe((data) => {
-              //         if (data == 'OK') {
-              //           this.modalReference.close();
-              //         }
-              //       });
-              //       // need to use put api
-              //       this.amlNameValidationData = true;
+                    console.log('====================================');
+                    console.log('resp', resp);
+                    console.log('====================================');
+                  });
 
-              //       this.suntechApi
-              //         .updateAMLNameValidation(this.customerDetails.CODE, true)
-              //         .subscribe((resp) => {
-              //           // this.customerDetails = resp.response;
-              //           this.customerDetails.AMLNAMEVALIDATION =
-              //             resp.response != null ? resp.response?.AMLNAMEVALIDATION : true;
+                if (data.response.isMatched != null) {
+                  this.snackBar.dismiss();
 
-              //           console.log('====================================');
-              //           console.log('resp', resp);
-              //           console.log('====================================');
-              //         });
-              //       // }
-              //     } else {
+                  if (data.response.isMatched.toUpperCase() == 'YES') {
+                    // if (data.response == 'yes') {
+                    this.openDialog('Warning', 'We cannot proceed', true);
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                      if (data == 'OK') {
+                        // this.modalReference.close();
+                      }
+                    });
+                    // need to use put api
+                    this.amlNameValidationData = true;
 
-              //       this.openDialog('Success', JSON.stringify(data.response), true);
-              //       this.dialogBox.afterClosed().subscribe((data) => {
-              //         if (data == 'OK') {
-              //           this.modalReference.close();
-              //         }
-              //       });
-              //       //proceed
-              //       this.amlNameValidationData = false;
-              //     }
-              //   } else {
-              //     this.openDialog('Warning', JSON.stringify(data.response), true);
-              //     this.dialogBox.afterClosed().subscribe((data) => {
-              //       if (data == 'OK') {
-              //         this.modalReference.close();
-              //       }
-              //     });
-              //     this.amlNameValidationData = true;
+                    this.apiService
+                      .putDynamicAPI(
+                        `PosCustomerMaster/updateCustomerAmlNameValidation/code=${this.customerDetails.CODE}/AmlNameValidation=true`,
+                        ''
+                      )
+                      // .updateAMLNameValidation(this.customerDetails.CODE, true)
+                      .subscribe((resp) => {
+                        // this.customerDetails = resp.response;
+                        this.customerDetails.AMLNAMEVALIDATION =
+                          resp.response != null ? resp.response?.AMLNAMEVALIDATION : true;
 
-              //   }
-              // });
+                        console.log('====================================');
+                        console.log('resp', resp);
+                        console.log('====================================');
+                      });
+                    // }
+                  } else {
+
+                    this.openDialog('Success', JSON.stringify(data.response), true);
+                    this.dialogBox.afterClosed().subscribe((data: any) => {
+                      if (data == 'OK') {
+                        // this.modalReference.close();
+                      }
+                    });
+                    //proceed
+                    this.amlNameValidationData = false;
+                  }
+                } else {
+                  this.openDialog('Warning', JSON.stringify(data.response), true);
+                  this.dialogBox.afterClosed().subscribe((data: any) => {
+                    if (data == 'OK') {
+                      // this.modalReference.close();
+                    }
+                  });
+                  this.amlNameValidationData = true;
+
+                }
+              });
             } else {
               this.isCustProcessing = false;
 
@@ -971,7 +1008,7 @@ export class PosCustomerMasterComponent implements OnInit {
       }
     }
   }
-  
+
 
   getStateMasterByID(countryCode: any) {
     let API = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('STATE MASTER')}/${encodeURIComponent(countryCode)}`
@@ -1013,7 +1050,7 @@ export class PosCustomerMasterComponent implements OnInit {
 
   }
 
-  
+
   async getIdMaster() {
     const resp = await this.comService.idMaster;
     console.log(this.comService.idMaster);
@@ -1086,8 +1123,24 @@ export class PosCustomerMasterComponent implements OnInit {
       return date;
   }
 
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(DialogboxComponent, {
+      width: '40%',
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
+
   /**USE: close modal window */
   close() {
     this.closebtnClick.emit()
   }
+  closeModal() {
+    this.customerDetails;
+    const returnData = {
+      customerDetails: this.customerDetails,
+    }
+    this.activeModal.close(returnData);
+  }
+
 }
