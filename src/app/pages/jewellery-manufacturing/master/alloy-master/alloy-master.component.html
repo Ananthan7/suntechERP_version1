@@ -144,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">First Trans :</label>
+                                <label for="input" class="col-sm-5 col-form-label">Frist Trans :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field>
                                         <input type="text" matInput formControlName="fristTrans" />
@@ -208,154 +208,153 @@
                                     <h6>FC</h6>
                                 </div>
                                 <div class="col-sm-2">
-                                    <h6>LC</h6>
+                                    <h6>Lc</h6>
                                 </div>
                             </div>
-                            <div class="row mb-1">
+                            <div class="row align-items-center  mb-1">
                                 <div class="col-sm-2">
                                     <h6>Price 1</h6>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="text" matInput formControlName="price1code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceCodeSelected($event)"></master-search>
+                                    (newRowClick)="priceOneCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price1per" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price1Fc" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price1Lc" />
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row mb-1">
+                            <div class="row align-items-center  mb-1">
                                 <div class="col-sm-2">
                                     <h6>Price 2</h6>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="text" matInput formControlName="price2code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceCodeSelected($event)"></master-search>
+                                    (newRowClick)="priceTwoCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price2per" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price2Fc" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price2Lc" />
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row mb-3">
+                            <div class="row align-items-center  mb-1">
                                 <div class="col-sm-2">
                                     <h6>Price 3</h6>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="text" matInput formControlName="price3code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceCodeSelected($event)"></master-search>
+                                    (newRowClick)="priceThreeCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price3per" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price3Fc" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price3Lc" />
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row mb-1">
+                            <div class="row align-items-center  mb-1">
                                 <div class="col-sm-2">
                                     <h6>Price 4</h6>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="text" matInput formControlName="price4code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceCodeSelected($event)"></master-search>
+                                    (newRowClick)="priceFourCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price4per" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price4Fc" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price4Lc" />
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row mb-1">
+                            <div class="row align-items-center  mb-1">
                                 <div class="col-sm-2">
                                     <h6>Price 5</h6>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="text" matInput formControlName="price5code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceCodeSelected($event)"></master-search>
+                                    (newRowClick)="priceFiveCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price5per" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price5Fc" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="number" matInput formControlName="price5Lc" />
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row mb-1">
+                            <div class="row align-items-center  mb-1">
                                 <div class="col-sm-2">
                                     <h6>HSN</h6>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price" />
+                                        <input type="text" matInput formControlName="hsncode" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceCodeSelected($event)"></master-search>
+                                    <master-search></master-search>
                                 </div>
                             </div>
                         </div>
