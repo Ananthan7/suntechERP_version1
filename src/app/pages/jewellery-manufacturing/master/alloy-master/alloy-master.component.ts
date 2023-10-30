@@ -40,6 +40,32 @@ export class AlloyMasterComponent implements OnInit {
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid:[],
     code: [''],
+    costCenter: [''],
+    type: [''],
+    category: [''],
+    subCategory: [''],
+    brand: [''],
+    vendor: [''],
+    price1code: [''],
+    price1per : [''],
+    price1Fc : [''],
+    price1Lc : [''],
+    price2code: [''],
+    price2per : [''],
+    price2Fc : [''],
+    price2Lc : [''],
+    price3code: [''],
+    price3per : [''],
+    price3Fc : [''],
+    price3Lc : [''],
+    price4code: [''],
+    price4per : [''],
+    price4Fc : [''],
+    price4Lc : [''],
+    price5code: [''],
+    price5per : [''],
+    price5Fc : [''],
+    price5Lc : [''],
     description: [''],
     metal: [''],
     color: [''],
@@ -57,12 +83,13 @@ export class AlloyMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 15,
     SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Stock Code',
+    SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "COST_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+ 
 
   masterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -76,23 +103,71 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  colorCodeData: MasterSearchModel = {
+  typeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 35,
+    LOOKUPID: 62,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color',
+    SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  ColorCodeSelected(e:any){
-    console.log(e);
-    this.alloyMastereForm.controls.color.setValue(e.CODE);
 
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
+
+
+
+  subcategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Subcategory Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+ 
+
+  BrandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 32,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+ 
 
   vendorCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -106,54 +181,128 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 82,
     SEARCH_FIELD: 'PRICE_CODE',
-    SEARCH_HEADING: 'Price',
+    SEARCH_HEADING: 'Price Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "PRICE_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
+  subcategoryCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.subCategory.setValue(e.CODE);
+  }
+
+  brandCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.brand.setValue(e.CODE);
+  }
+
+  ColorCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.color.setValue(e.CODE);
+  }
+
+  vendorCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.vendor.setValue(e.COUNT);
+  }
+
+  typeCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.type.setValue(e.CODE);
+  }
+
+  categoryCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.category.setValue(e.CODE);
+  }
+
+  costCenterSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.costCenter.setValue(e.COST_CODE);
+  }
+
+  priceOneCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.price1code.setValue(e.PRICE_CODE);
+    
+  }
+
+  priceTwoCodeSelected(e:any){
+    this.alloyMastereForm.controls.price2code.setValue(e.PRICE_CODE);
+  }
+
+  priceThreeCodeSelected(e:any){
+    this.alloyMastereForm.controls.price3code.setValue(e.PRICE_CODE);
+  }
+
+  priceFourCodeSelected(e:any){
+       this.alloyMastereForm.controls.price4code.setValue(e.PRICE_CODE);
+
+  }
+  priceFiveCodeSelected(e:any){
+    this.alloyMastereForm.controls.price5code.setValue(e.PRICE_CODE);
+  }
+
   setFormValues() {
     if(!this.content) return
     console.log(this.content);
-    
-    this.alloyMastereForm.controls.mid.setValue(this.content.MID);
-    this.alloyMastereForm.controls.code.setValue(this.content.MELTYPE_CODE);
-    this.alloyMastereForm.controls.description.setValue(this.content.MELTYPE_DESCRIPTION);
-    this.alloyMastereForm.controls.karat.setValue(this.content.KARAT_CODE);
-    this.alloyMastereForm.controls.purity.setValue(this.content.PURITY);
-    this.alloyMastereForm.controls.metal.setValue(this.content.METAL_PER);
-    this.alloyMastereForm.controls.alloy.setValue(this.content.ALLOY_PER);
-    this.alloyMastereForm.controls.color.setValue(this.content.COLOR);
-    this.alloyMastereForm.controls.stockCode.setValue(this.content.STOCK_CODE);
-    this.tableData = this.content.MELTING_TYPE_DETAIL;
 
   }
 
- updateMeltingType() {
-  let API = 'MeltingType/UpdateMeltingType/'+ this.alloyMastereForm.value.mid;
-    let postData=
-      {
-        "MID": this.alloyMastereForm.value.mid,
-        "MELTYPE_CODE":  this.alloyMastereForm.value.code,
-        "MELTYPE_DESCRIPTION": this.alloyMastereForm.value.description,
-        "KARAT_CODE": this.alloyMastereForm.value.karat,
-        "PURITY": this.commonService.transformDecimalVB(6,this.alloyMastereForm.value.purity),
-        "METAL_PER": this.alloyMastereForm.value.metal,
-        "ALLOY_PER": parseFloat(this.alloyMastereForm.value.alloy),
-        "CREATED_BY": this.userName,
-        "COLOR": this.alloyMastereForm.value.color,
-        "STOCK_CODE": this.alloyMastereForm.value.stockCode,
-        "MELTING_TYPE_DETAIL": this.tableData || []
-      
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      // this.updateMeltingType()
+      return
     }
 
-    let myData = {}
+    if (this.alloyMastereForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = ''
+    let postData ={
+
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.alloyMastereForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+ updateMeltingType() {
+    let API = '';
+    let postData=
+      {
+      
+    }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
