@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import * as FileSaver from "file-saver";
+import { ToastrService } from 'ngx-toastr';
 import * as XLSX from "xlsx";
 
 @Injectable({
@@ -55,7 +56,19 @@ export class CommonServiceService {
   constructor(
     private route: ActivatedRoute,
     private _decimalPipe: DecimalPipe,
+    private toastr: ToastrService,
   ) {
+  }
+  //**USE: common fuction to show toaster By MsgId */
+  toastErrorByMsgId(MsgId: string,Description?: string){
+    this.toastr.error(this.getMsgByID(MsgId), Description ? Description : '', {
+      timeOut: 3000,
+    })
+  }
+  toastSuccessByMsgId(MsgId: string,Description?: string){
+    this.toastr.success(this.getMsgByID(MsgId), Description ? Description : '', {
+      timeOut: 3000,
+    })
   }
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {

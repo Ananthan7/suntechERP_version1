@@ -31,8 +31,8 @@ export class DiamondSalesorderComponent implements OnInit {
   Narration: string = '';
   labourDetailGrid: any[] = [];
   divisionDetailGrid: any[] = [];
-  headerLaboursList:any[] = [];
-  headerDivisionList:any[] = [];
+  headerLaboursList: any[] = [];
+  headerDivisionList: any[] = [];
 
   OrderTypeData: MasterSearchModel = {
     PAGENO: 1,
@@ -97,8 +97,9 @@ export class DiamondSalesorderComponent implements OnInit {
     SEARCH_HEADING: 'CURRENCY MASTER',
     SEARCH_VALUE: '',
     WHERECONDITION: "",
-    VIEW_INPUT: true,
+    VIEW_INPUT: false,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true
   }
   /**USE: main form party details */
   PartyDetailsOrderForm: FormGroup = this.formBuilder.group({
@@ -149,8 +150,9 @@ export class DiamondSalesorderComponent implements OnInit {
     this.PartyDetailsOrderForm.controls.voucherType.setValue(this.commonService.getqueryParamVocType())
     this.getRateType()
     this.getLabourChargeGridDetails()
+    this.partyCurrencyData.WHERECONDITION = this.commonService.branchCode + ',' 
   }
-  
+
   //party Code Change
   getLabourChargeGridDetails() {
     let postData = {
@@ -219,11 +221,12 @@ export class DiamondSalesorderComponent implements OnInit {
     } else {
       data = [{ HEARDERDETAILS: this.PartyDetailsOrderForm.value }]
     }
-
+    
+    // if (this.HeaderValidate() == false){
+    //   return
+    // }
     if (this.PartyDetailsOrderForm.value.PartyCode == '') {
-      this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
-        timeOut: 3000,
-      })
+      this.commonService.toastErrorByMsgId('MSG1549');
       return
     }
     const modalRef: NgbModalRef = this.modalService.open(AddNewdetailComponent, {
@@ -267,63 +270,63 @@ export class DiamondSalesorderComponent implements OnInit {
       })
     }
   }
-  private ItemDetailInsert(){
+  private ItemDetailInsert() {
 
   }
   // division checkbox change
-  selectDivisionGridData(event:any,{data}:any){
-      let division = {
-        "UNIQUEID": 0,
-        "BRANCH_CODE": this.commonService.branchCode || "",
-        "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
-        "VOCNO": 0,
-        "YEARMONTH": this.commonService.yearSelected || "",
-        "SRNO": data.Id || 0,
-        "DIVISION_CODE": data.DIVISION_CODE || "",
-        "DESCRIPTION": data.DESCRIPTION || ""
-      }
-    if(event.currentTarget.checked){
+  selectDivisionGridData(event: any, { data }: any) {
+    let division = {
+      "UNIQUEID": 0,
+      "BRANCH_CODE": this.commonService.branchCode || "",
+      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
+      "VOCNO": 0,
+      "YEARMONTH": this.commonService.yearSelected || "",
+      "SRNO": data.Id || 0,
+      "DIVISION_CODE": data.DIVISION_CODE || "",
+      "DESCRIPTION": data.DESCRIPTION || ""
+    }
+    if (event.currentTarget.checked) {
       this.headerDivisionList.push(division)
-    }else{
-      if(this.headerDivisionList.length>0){
-        this.headerDivisionList = this.headerDivisionList.filter((item:any)=> item.SRNO != data.Id)
+    } else {
+      if (this.headerDivisionList.length > 0) {
+        this.headerDivisionList = this.headerDivisionList.filter((item: any) => item.SRNO != data.Id)
       }
     }
   }
-  selectLabourGridData(event:any,{data}:any){
-      let headerDetails = {
-        "UNIQUEID": 0,
-        "BRANCH_CODE": this.commonService.branchCode || "",
-        "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
-        "VOCNO": 0,
-        "YEARMONTH": this.commonService.yearSelected || "",
-        "SRNO": data.Id || 0,
-        "LABOUR_CODE": data.LABOUR_CODE || "",
-        "METALSTONE": data.METALSTONE || "",
-        "DIVCODE": data.DIVCODE || "",
-        "DIVISION": data.DIVISION || "",
-        "KARAT_CODE": data.KARAT_CODE || "",
-        "UNITCODE": data.UNITCODE || "",
-        "WASTAGE_PER": data.WASTAGE_PER || 0,
-        "SELLING_PER": data.SELLING_PER || 0,
-        "SELLING_RATE": data.SELLING_RATE || 0,
-        "CURRENCYCODE": data.CURRENCYCODE || "",
-        "CARATWT_FROM": data.CARATWT_FROM || 0,
-        "CARATWT_TO": data.CARATWT_TO || 0,
-        "TYPE_CODE": data.TYPE_CODE || "",
-        "CATEGORY_CODE": data.CATEGORY_CODE || "",
-        "LAB_ACCODE": data.LAB_ACCODE || "",
-        "SHAPE": data.SHAPE || ""
-      }
-    if(event.currentTarget.checked){
+  selectLabourGridData(event: any, { data }: any) {
+    let headerDetails = {
+      "UNIQUEID": 0,
+      "BRANCH_CODE": this.commonService.branchCode || "",
+      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
+      "VOCNO": 0,
+      "YEARMONTH": this.commonService.yearSelected || "",
+      "SRNO": data.Id || 0,
+      "LABOUR_CODE": data.LABOUR_CODE || "",
+      "METALSTONE": data.METALSTONE || "",
+      "DIVCODE": data.DIVCODE || "",
+      "DIVISION": data.DIVISION || "",
+      "KARAT_CODE": data.KARAT_CODE || "",
+      "UNITCODE": data.UNITCODE || "",
+      "WASTAGE_PER": data.WASTAGE_PER || 0,
+      "SELLING_PER": data.SELLING_PER || 0,
+      "SELLING_RATE": data.SELLING_RATE || 0,
+      "CURRENCYCODE": data.CURRENCYCODE || "",
+      "CARATWT_FROM": data.CARATWT_FROM || 0,
+      "CARATWT_TO": data.CARATWT_TO || 0,
+      "TYPE_CODE": data.TYPE_CODE || "",
+      "CATEGORY_CODE": data.CATEGORY_CODE || "",
+      "LAB_ACCODE": data.LAB_ACCODE || "",
+      "SHAPE": data.SHAPE || ""
+    }
+    if (event.currentTarget.checked) {
       this.headerLaboursList.push(headerDetails)
-    }else{
-      if(this.headerLaboursList.length>0){
-        this.headerLaboursList = this.headerLaboursList.filter((item:any)=> item.SRNO != data.Id)
+    } else {
+      if (this.headerLaboursList.length > 0) {
+        this.headerLaboursList = this.headerLaboursList.filter((item: any) => item.SRNO != data.Id)
       }
     }
   }
-  private getLabType4Detail(){
+  private getLabType4Detail() {
     let labType4Data = [{
       "UNIQUEID": 0,
       "BRANCH_CODE": "string",
@@ -361,7 +364,7 @@ export class DiamondSalesorderComponent implements OnInit {
     }]
     return []
   }
-  private getComponentData(){
+  private getComponentData() {
     let data = [
       {
         "UNIQUEID": 0,
@@ -425,11 +428,11 @@ export class DiamondSalesorderComponent implements OnInit {
     ]
     return []
   }
-  private getAllDetailData(){
+  private getAllDetailData() {
     let summaryData = this.detailData[0].DATA
     summaryData = summaryData.summaryDetail
     let detailArrayValues = {}
-    summaryData.forEach((item:any) => {
+    summaryData.forEach((item: any) => {
       detailArrayValues = {
         "UNIQUEID": 0,
         "SRNO": item.SRNO || 0,
@@ -679,9 +682,9 @@ export class DiamondSalesorderComponent implements OnInit {
   //party Code Change
   partyCodeChange(event: any) {
     if (event.target.value == '') return
-    if(!this.commonService.branchCode || this.commonService.branchCode == '') { 
-     this.snackBar.open('Branch Code'+this.commonService.getMsgByID('MSG1531'),'close')
-     return
+    if (!this.commonService.branchCode || this.commonService.branchCode == '') {
+      this.snackBar.open('Branch Code' + this.commonService.getMsgByID('MSG1531'), 'close')
+      return
     }
     let postData = {
       "SPID": "001",
@@ -696,13 +699,13 @@ export class DiamondSalesorderComponent implements OnInit {
         this.snackBar.dismiss()
         if (result.status == "Success") {
           let data = result.dynamicData[0]
-          
-          if(data.length>1){
-            this.partyCurrencyData.WHERECONDITION = this.commonService.branchCode +','+ event.target.value
+
+          if (data.length > 1) {
+            this.partyCurrencyData.WHERECONDITION = this.commonService.branchCode + ',' + event.target.value
           }
-          let defaultCurrencyArr = data.filter((item:any)=> item.DEFAULT_CURRENCY === 1)
-          
-          
+          let defaultCurrencyArr = data.filter((item: any) => item.DEFAULT_CURRENCY === 1)
+
+
           if (defaultCurrencyArr && defaultCurrencyArr[0].CURRENCY_CODE) {
 
             this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(defaultCurrencyArr[0].CURRENCY_CODE)
@@ -715,7 +718,7 @@ export class DiamondSalesorderComponent implements OnInit {
 
             this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
             this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyRate)
-          }else{
+          } else {
             this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
               timeOut: 3000,
             })
@@ -757,8 +760,8 @@ export class DiamondSalesorderComponent implements OnInit {
     this.PartyDetailsOrderForm.controls.rateTypeDESC.setValue(event.DESCRIPTION)
 
     let data = this.commonService.RateTypeMasterData.filter((item: any) => item.DIVISION_CODE == 'G' && item.DEFAULT_RTYPE == 1)
-    console.log(data,'data');
-    
+    console.log(data, 'data');
+
     if (data[0].WHOLESALE_RATE) {
       let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
       this.PartyDetailsOrderForm.controls.wholeSaleRate.setValue(WHOLESALE_RATE)
@@ -776,6 +779,54 @@ export class DiamondSalesorderComponent implements OnInit {
   }
   SalesmanChange(event: any) {
     this.SalesmanData.SEARCH_VALUE = event.target.value
+  }
+
+
+  private HeaderValidate(): boolean {
+    if (this.PartyDetailsOrderForm.value.voucherType == '') {
+      this.commonService.toastErrorByMsgId('MSG1942');
+      // txtVocType.Focus();
+      return false;
+    }
+    // if (txtVocNumber.Text.Trim() == string.Empty) {
+    //   MessageBox.Show(objCommonFunctions.GetMessage("MSG1940"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);//"Voucher Number Cannot Be Empty"
+    //   txtVocNumber.Focus();
+    //   return false;
+    // }
+    if (this.PartyDetailsOrderForm.value.voucherType == '') {
+      this.commonService.toastErrorByMsgId('MSG1549');
+      return false;
+    }
+    if (this.PartyDetailsOrderForm.value.partyCurrencyRate == '') {
+      this.commonService.toastErrorByMsgId('MSG1552');
+      return false;
+    }
+    if (this.PartyDetailsOrderForm.value.ItemCurrencyRate == '') {
+      this.commonService.toastErrorByMsgId('MSG1353');
+      return false;
+    }
+    if (this.PartyDetailsOrderForm.value.ItemCurrency == '') {
+      this.commonService.toastErrorByMsgId('MSG1352');
+      return false;
+    }
+    if (this.PartyDetailsOrderForm.value.partyCurrencyRate == '') {
+      this.commonService.toastErrorByMsgId('MSG1550');
+      return false;
+    }
+    if (this.PartyDetailsOrderForm.value.SalesmanCode == '') {
+      this.commonService.toastErrorByMsgId('MSG1767');
+      return false;
+    }
+    if (this.PartyDetailsOrderForm.value.orderType == '') {
+      this.commonService.toastErrorByMsgId('MSG1550');
+      return false;
+    }
+    // if (StaticValues.strCOMPANYACCODE == "SUNTECH" && objSqlObjectTrans.Empty2zero(txtAmc_Per.Text) <= 0 && strMainVocType.Trim() == "DSO") {
+    //   this.commonService.toastErrorByMsgId('MSG1550');
+    //   return false;
+    // }
+
+    return true;
   }
 
   close() {

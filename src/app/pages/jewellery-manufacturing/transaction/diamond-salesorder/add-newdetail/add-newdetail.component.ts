@@ -2,7 +2,6 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -191,7 +190,6 @@ export class AddNewdetailComponent implements OnInit {
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
-    private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
     private snackBar: MatSnackBar,
@@ -220,32 +218,7 @@ export class AddNewdetailComponent implements OnInit {
       this.secondTableWidth = 350
     }
   }
-  changeDivision(event: any) {
-    if (event.target.value == '') return;
-    event.target.value = event.target.value.toUpperCase()
-    if (this.commonService.divisionMasterList.length == 0) {
-      console.log('Division master data not found in indexed db');
-      return
-    }
-    let divisionArr = this.commonService.divisionMasterList?.filter((item: any) => item.DIVISION_CODE == event.target.value)
-    if (divisionArr.length == 0) {
-      this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
-        timeOut: 3000,
-      })
-      return
-    }
-    if (event.target.value == 'X') {
-      this.stockCodeData.LOOKUPID = 110
-      this.stockCodeData.WHERECONDITION = ''
-    } else if (divisionArr[0].DIVISION == 'M') {
-      this.stockCodeData.LOOKUPID = 23
-      this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${event.target.value}' AND SUBCODE = 0`
-    } else {
-      this.stockCodeData.LOOKUPID = 4
-      this.stockCodeData.WHERECONDITION = `ITEM = '${event.target.value}'`
-    }
 
-  }
   /**USE: to edit detail if already added */
   setInitialValues(): void {
     if (this.content && this.content[0].HEARDERDETAILS) {
@@ -415,6 +388,52 @@ export class AddNewdetailComponent implements OnInit {
       item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC, 'AMOUNT')
     })
   }
+
+  /**USE: stock code division change to assign data to the lookup */
+  changeDivision(event: any): void {
+    if (event.target.value == '') return;
+    event.target.value = event.target.value.toUpperCase()
+    if (this.commonService.divisionMasterList.length == 0) {
+      this.commonService.toastErrorByMsgId('MSG1531');
+      return
+    }
+    let divisionArr = this.commonService.divisionMasterList?.filter((item: any) => item.DIVISION_CODE == event.target.value)
+    if (divisionArr.length == 0) {
+      this.commonService.toastErrorByMsgId('MSG1531');// MSG NOT FOUND
+      return
+    }
+    if (event.target.value == 'X') {
+      this.stockCodeData.LOOKUPID = 110
+      this.stockCodeData.WHERECONDITION = ''
+    } else if (divisionArr[0].DIVISION == 'M') {
+      this.stockCodeData.LOOKUPID = 23
+      this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${event.target.value}' AND SUBCODE = 0`
+    } else {
+      this.stockCodeData.LOOKUPID = 4
+      this.stockCodeData.WHERECONDITION = `ITEM = '${event.target.value}'`
+    }
+
+  }
+  /**USE: design Code Selection */
+  mainStockCodeSelected(data: any): void {
+    console.log(data,'data');
+    
+    if (data.STOCK_CODE || data.Stock_Code) {
+      this.diamondSalesDetailForm.controls.StockCode.setValue(data.STOCK_CODE)
+      if (data.DESCRIPTION) {
+        this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.DESCRIPTION)
+      }
+      if (data.Stock_Code) {
+        this.diamondSalesDetailForm.controls.StockCode.setValue(data.Stock_Code)
+      }
+      if (data.Stock_Description) {
+        this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.Stock_Description)
+      }
+      this.designCodeValidate({ target: { value: data.STOCK_CODE } }, 'STOCK')
+    } else {
+      this.commonService.toastErrorByMsgId('MSG1531');
+    }
+  }
   /**USE: design Code Selection */
   designCodeSelected(data: any): void {
     if (data.DESIGN_CODE) {
@@ -422,26 +441,7 @@ export class AddNewdetailComponent implements OnInit {
       this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
       this.designCodeValidate({ target: { value: data.DESIGN_CODE } }, 'DESIGN')
     } else {
-      this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
-        timeOut: 3000,
-      })
-    }
-  }
-  /**USE: design Code Selection */
-  mainStockCodeSelected(data: any): void {
-    if (data.STOCK_CODE) {
-      this.diamondSalesDetailForm.controls.StockCode.setValue(data.STOCK_CODE)
-      if (data.DESCRIPTION) {
-        this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.DESCRIPTION)
-      }
-      if (data.Stock_Description) {
-        this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.Stock_Description)
-      }
-      this.designCodeValidate({ target: { value: data.STOCK_CODE } }, 'STOCK')
-    } else {
-      this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
-        timeOut: 3000,
-      })
+      this.commonService.toastErrorByMsgId('MSG1531');
     }
   }
   /**use: validate design code change to fetch data with design code */
@@ -473,9 +473,7 @@ export class AddNewdetailComponent implements OnInit {
             data = this.commonService.arrayEmptyObjectToString(data)
             data = data[0]
           } else {
-            this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
-              timeOut: 3000,
-            })
+            this.commonService.toastErrorByMsgId('MSG1531');
           }
           // 2nd and 3rd result Parts / Components details data
           if (result.dynamicData[1].length > 0 || result.dynamicData[2].length > 0) {
@@ -531,15 +529,11 @@ export class AddNewdetailComponent implements OnInit {
 
           this.calculateTotal({})
         } else {
-          this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
-            timeOut: 3000,
-          })
+          this.commonService.toastErrorByMsgId('MSG1531');
         }
       }, err => {
         this.snackBar.dismiss()
-        this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
-          timeOut: 3000,
-        })
+        this.commonService.toastErrorByMsgId('MSG1531');
       })
     this.subscriptions.push(Sub)
   }
