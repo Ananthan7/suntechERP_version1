@@ -24,7 +24,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   branchCode?: String;
   paymentModeList: any[] = [];
-
+  
   debitAmountData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
