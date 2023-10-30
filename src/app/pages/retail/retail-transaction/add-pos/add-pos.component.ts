@@ -512,6 +512,7 @@ export class AddPosComponent implements OnInit {
       fcn_customer_name: ['', Validators.required],
       fcn_customer_id_number: ['', Validators.required],
       fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
+      fcn_customer_code: ['',],
     });
 
     this.vocDataForm = this.formBuilder.group({
@@ -899,6 +900,9 @@ export class AddPosComponent implements OnInit {
 
         this.customerDetailForm.controls.fcn_mob_code.setValue(
           posCustomer.MOBILECODE1
+        );
+        this.customerDataForm.controls.fcn_customer_code.setValue(
+          posCustomer.CODE
         );
         this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
           posCustomer.MOBILE
@@ -1759,7 +1763,7 @@ export class AddPosComponent implements OnInit {
       // }
 
     } else {
-      this.snackBar.open('Please Fill All Fields');
+      this.snackBar.open('Please Fill All Fields', 'OK');
     }
 
   }
@@ -2372,6 +2376,9 @@ export class AddPosComponent implements OnInit {
         this.customerDetailForm.value.fcn_cust_detail_idType
       );
 
+      this.customerDetails.CODE =
+      this.customerDataForm.value.fcn_customer_code;
+
       // this.modalService.
       // if (this.amlNameValidation) {
 
@@ -2383,7 +2390,8 @@ export class AddPosComponent implements OnInit {
       if (!this.customerDetailForm.invalid) {
 
         const posCustomer = {
-          CODE: this.customerDetails?.CODE || '0',
+          CODE: this.customerDataForm.value.fcn_customer_code || '0',
+          // CODE: this.customerDetails?.CODE || '0',
           NAME: this.customerDataForm.value.fcn_customer_name || '',
           COMPANY: this.customerDetailForm.value.fcn_cust_detail_company
             // || this.customerDetails?.COMPANY
@@ -2747,6 +2755,11 @@ export class AddPosComponent implements OnInit {
             this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
               this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
             );
+
+            this.customerDataForm.controls.fcn_customer_code.setValue(
+              this.customerDetails.CODE
+            );
+
             // this.snackBar.open('Customer details saved successfully');
             // this.snackBar.dismiss();
             this.snackBar.open('Customer details saved successfully', '', {
@@ -2979,6 +2992,9 @@ export class AddPosComponent implements OnInit {
 
             this.customerDetailForm.controls.fcn_mob_code.setValue(
               result.MOBILECODE1
+            );
+            this.customerDataForm.controls.fcn_customer_code.setValue(
+              result.CODE
             );
 
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
@@ -9715,7 +9731,7 @@ export class AddPosComponent implements OnInit {
   // }
 
   changeAdvanceVocNo(event: any) {
-    let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/'PCR'/${this.advanceReceiptForm.value.advanceRecNo}/${this.advanceReceiptForm.value.advanceYear}`
+    let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/MOE/${this.advanceReceiptForm.value.advanceRecNo}/${this.advanceReceiptForm.value.advanceYear}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((res) => {
         if (res['status'] == 'Success') {
