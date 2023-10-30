@@ -124,7 +124,7 @@ export class AddNewdetailComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 110,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'stock_code',
     SEARCH_HEADING: 'Metal Stock Master',
     SEARCH_VALUE: '',
     WHERECONDITION: "",
@@ -416,20 +416,26 @@ export class AddNewdetailComponent implements OnInit {
   }
   /**USE: design Code Selection */
   mainStockCodeSelected(data: any): void {
-    console.log(data,'data');
-    
-    if (data.STOCK_CODE || data.Stock_Code) {
-      this.diamondSalesDetailForm.controls.StockCode.setValue(data.STOCK_CODE)
+    if (data) {
+      console.log(data,'data');
+      
       if (data.DESCRIPTION) {
         this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.DESCRIPTION)
-      }
-      if (data.Stock_Code) {
-        this.diamondSalesDetailForm.controls.StockCode.setValue(data.Stock_Code)
       }
       if (data.Stock_Description) {
         this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.Stock_Description)
       }
-      this.designCodeValidate({ target: { value: data.STOCK_CODE } }, 'STOCK')
+      if (data.STOCK_CODE) {
+        this.diamondSalesDetailForm.controls.StockCode.setValue(data.STOCK_CODE)
+        this.designCodeValidate({ target: { value: data.STOCK_CODE } }, 'STOCK')
+      }
+      if (data.Stock_Code) {
+        console.log(data.Stock_Code,'data.StockCode');
+        
+        this.diamondSalesDetailForm.controls.StockCode.setValue(data.Stock_Code)
+        this.designCodeValidate({ target: { value: data.Stock_Code } }, 'STOCK')
+      }
+      
     } else {
       this.commonService.toastErrorByMsgId('MSG1531');
     }
@@ -450,6 +456,8 @@ export class AddNewdetailComponent implements OnInit {
     if (event.target.value == '') return
     this.reset() //reset all data
     this.snackBar.open('Loading...')
+    console.log(event.target.value,'event.target.value');
+    
     let postData = {
       "SPID": "003",
       "parameter": {
@@ -467,7 +475,7 @@ export class AddNewdetailComponent implements OnInit {
         if (result.dynamicData || result.status == 'Success') {
           let data: any;
           // 1st result set Summary details data
-          if (result.dynamicData[0].length > 0) {
+          if (result.dynamicData[0] && result.dynamicData[0].length > 0) {
             this.isViewSummaryTab = true;
             data = result.dynamicData[0]
             data = this.commonService.arrayEmptyObjectToString(data)
@@ -476,7 +484,8 @@ export class AddNewdetailComponent implements OnInit {
             this.commonService.toastErrorByMsgId('MSG1531');
           }
           // 2nd and 3rd result Parts / Components details data
-          if (result.dynamicData[1].length > 0 || result.dynamicData[2].length > 0) {
+          if ((result.dynamicData[1] && result.dynamicData[1].length > 0) ||
+            (result.dynamicData[2] && result.dynamicData[2].length > 0)) {
             this.isViewComponentsTab = true;
             this.gridComponents = result.dynamicData[1]
             this.gridParts = result.dynamicData[2]
@@ -490,7 +499,7 @@ export class AddNewdetailComponent implements OnInit {
           //   this.isViewComponentsTab = false;
           // }
           //4th result is BOM Details data
-          if (result.dynamicData[3].length > 0) {
+          if (result.dynamicData[3] && result.dynamicData[3].length > 0) {
             this.isViewBOMTab = true;
             this.BOMDetailsArray = result.dynamicData[3]
             this.BOMDetailsDataToGroup = result.dynamicData[3]
@@ -527,6 +536,8 @@ export class AddNewdetailComponent implements OnInit {
           this.summaryDetailForm.controls.ENGRAVING_TEXT.setValue(data.ENGRAVING_TEXT)
           this.summaryDetailForm.controls.ENGRAVING_FONT.setValue(data.ENGRAVING_FONT)
 
+          console.log(this.summaryDetailForm.value);
+          
           this.calculateTotal({})
         } else {
           this.commonService.toastErrorByMsgId('MSG1531');

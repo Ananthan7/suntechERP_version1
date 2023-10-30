@@ -150,7 +150,6 @@ export class DiamondSalesorderComponent implements OnInit {
     this.PartyDetailsOrderForm.controls.voucherType.setValue(this.commonService.getqueryParamVocType())
     this.getRateType()
     this.getLabourChargeGridDetails()
-    this.partyCurrencyData.WHERECONDITION = this.commonService.branchCode + ',' 
   }
 
   //party Code Change
@@ -702,6 +701,8 @@ export class DiamondSalesorderComponent implements OnInit {
 
           if (data.length > 1) {
             this.partyCurrencyData.WHERECONDITION = this.commonService.branchCode + ',' + event.target.value
+          }else{
+            this.partyCurrencyData.WHERECONDITION = ''
           }
           let defaultCurrencyArr = data.filter((item: any) => item.DEFAULT_CURRENCY === 1)
 
@@ -774,8 +775,16 @@ export class DiamondSalesorderComponent implements OnInit {
     this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
   }
   partyCurrencySelected(event: any) {
-    this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(event.CURRENCY_CODE)
-    this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(event.CONV_RATE)
+    if(event.CURRENCY_CODE){
+      this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(event.CURRENCY_CODE)
+      this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(event.CONV_RATE)
+    }
+    if(event.Currency){
+      this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(event.Currency)
+      this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(
+        this.commonService.decimalQuantityFormat(event['Conv Rate'],'RATE')
+        )
+    }
   }
   SalesmanChange(event: any) {
     this.SalesmanData.SEARCH_VALUE = event.target.value
