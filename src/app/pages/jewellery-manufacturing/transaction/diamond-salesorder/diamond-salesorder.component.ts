@@ -705,9 +705,10 @@ export class DiamondSalesorderComponent implements OnInit {
             this.partyCurrencyData.WHERECONDITION = ''
           }
           let defaultCurrencyArr = data.filter((item: any) => item.DEFAULT_CURRENCY === 1)
-
+          console.log(defaultCurrencyArr,'currencyRate');
 
           if (defaultCurrencyArr && defaultCurrencyArr[0].CURRENCY_CODE) {
+            console.log(defaultCurrencyArr,'currencyRate');
 
             this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(defaultCurrencyArr[0].CURRENCY_CODE)
             this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(defaultCurrencyArr[0].CURRENCY_CODE)
@@ -716,9 +717,12 @@ export class DiamondSalesorderComponent implements OnInit {
 
             let currencyRate = this.commonService.getCurrRate(defaultCurrencyArr[0].CURRENCY_CODE)
             currencyRate = this.commonService.decimalQuantityFormat(currencyRate, 'RATE')
-
+            console.log(currencyRate,'currencyRate');
+            
             this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
             this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyRate)
+            console.log(this.PartyDetailsOrderForm.value);
+            
           } else {
             this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
               timeOut: 3000,
