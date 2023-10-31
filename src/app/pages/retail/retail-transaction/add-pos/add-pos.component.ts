@@ -171,7 +171,7 @@ export class AddPosComponent implements OnInit {
     receiptModeOthers: new FormControl('', Validators.required),
   });
 
-  options_year: string[] = [''];
+  options_year: string[] = [];
   filteredOptions_year!: Observable<any[]>;
   filteredadvanceYear!: Observable<any[]>;
 
@@ -2377,7 +2377,7 @@ export class AddPosComponent implements OnInit {
       );
 
       this.customerDetails.CODE =
-      this.customerDataForm.value.fcn_customer_code;
+        this.customerDataForm.value.fcn_customer_code;
 
       // this.modalService.
       // if (this.amlNameValidation) {
@@ -2946,7 +2946,7 @@ export class AddPosComponent implements OnInit {
       }
     }
   }
-  
+
   onCustomerNameFocus(value: any = null) {
     console.log(value);
     let _cust_mobile_no = value == null ? this.customerDataForm.value.fcn_customer_mobile : value;
@@ -6045,7 +6045,8 @@ export class AddPosComponent implements OnInit {
           } else {
             _response = resp.response[0];
             this.salesReturnsItems_forVoc = resp.response;
-            let _vocdate = _response.POS_BRANCH_CODE.split(' ');
+            let _vocdate = _response?.POS_VOCDATE?.split(' ');
+            // let _vocdate = _response.POS_BRANCH_CODE.split(' ');
             for (let i = 0; i < this.salesReturnsItems_forVoc.length; i++) {
               for (let j = 0; j < this.sales_returns_items.length; j++) {
                 if (this.salesReturnsItems_forVoc[i].SRNO.toString() == this.sales_returns_items[j].sn_no.toString()) {
@@ -9499,18 +9500,21 @@ export class AddPosComponent implements OnInit {
     let API = `FinancialYear?branchcode=${this.strBranchcode}&strusername=${this.strUser}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
-        var data = resp.response.map((t: any) => t.fyearcode);
-        this.options_year = data;
-        this.filteredOptions_year =
-          this.salesReturnForm.controls.fcn_returns_fin_year.valueChanges.pipe(
-            startWith(''),
-            map((value) => this._filteryear(value))
-          );
-        this.filteredadvanceYear =
-          this.advanceReceiptForm.controls.advanceYear.valueChanges.pipe(
-            startWith(''),
-            map((value) => this._filteryear(value))
-          );
+        if (resp.status != 'Failed') {
+
+          var data = resp.response?.map((t: any) => t.fyearcode);
+          this.options_year = data;
+          this.filteredOptions_year =
+            this.salesReturnForm.controls.fcn_returns_fin_year.valueChanges.pipe(
+              startWith(''),
+              map((value) => this._filteryear(value))
+            );
+          this.filteredadvanceYear =
+            this.advanceReceiptForm.controls.advanceYear.valueChanges.pipe(
+              startWith(''),
+              map((value) => this._filteryear(value))
+            );
+        }
         this.advanceReceiptForm.controls.advanceYear.setValue(this.baseYear);
 
       });
