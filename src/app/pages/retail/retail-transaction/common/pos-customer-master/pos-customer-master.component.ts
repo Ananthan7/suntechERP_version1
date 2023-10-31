@@ -206,6 +206,9 @@ console.log('====================================');
             this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(
               result.COUNTRY_CODE
             );
+            this.customerDetailForm.controls['fcn_cust_detail_state'].setValue(
+              result.STATE
+            );
             this.customerDetailForm.controls['fcn_cust_detail_city'].setValue(
               result.CITY
             );
