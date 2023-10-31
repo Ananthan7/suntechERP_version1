@@ -11,151 +11,121 @@
 <div class="row">
     <div>
         <form [formGroup]="meltingTypeForm">
-        <div class="container-fluid pt-3">
-            <div class="check_radio_btn">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-1 col-form-label">Code :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="code" />
-                                </mat-form-field>
-
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-1 col-form-label ">Description :</label>
-                            <div class="col-sm-2">
-
-                                <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="description" />
-                                </mat-form-field>
-
-                            </div>
-                            <label for="input" class="col-sm-1 col-form-label">Metal % :</label>
-                            <div class="col-sm-2">
-                                <mat-form-field style="width: 100%;margin-left: 7px;">
-                                    <input type="number" matInput step="0.001" min="0" maxlength="4"
-                                        formControlName="metal" />
-                                </mat-form-field>
-                            </div>
-                            <label for="input" class="col-sm-1 col-form-label">Color :</label>
-                            <div class="col-sm-2">
-                                <mat-form-field style="width: 70%;margin-left: 7px;">
-                                    <input type="text" matInput maxlength="6" formControlName="color" />
-                                </mat-form-field>
-                                <master-search [MasterSearchData]="colorCodeData"
-                                    (newRowClick)="ColorCodeSelected($event)">
-                                    </master-search>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <label for="input" class="col-sm-1 col-form-label">Karat :</label>
-                            <div class="col-sm-2">
-                                <mat-form-field style="width: 70%;margin-left: 7px;">
-                                    <input type="text" matInput maxlength="6" formControlName="karat" />
-                                </mat-form-field>
-                                <master-search [MasterSearchData]="karatCodeData"
-                                (newRowClick)="KaratCodeSelected($event)">
-                                </master-search>
-                            </div>
-                            <label for="input" class="col-sm-1 col-form-label">Purity :</label>
-                            <div class="col-sm-2">
-                                <mat-form-field style="width: 100%;margin-left: 7px;">
-                                    <input type="number" matInput step="0.001" min="0" maxlength="6"
-                                        formControlName="purity" />
-                                </mat-form-field>
-                            </div>
-                            <label for="input" class="col-sm-1 col-form-label">Alloy % :</label>
-                            <div class="col-sm-2">
-                                <mat-form-field style="width: 100%;margin-left: 7px;">
-                                    <input type="number" matInput maxlength="6" formControlName="alloy" />
-                                </mat-form-field>
-
-                            </div>
-                            <label for="input" class="col-sm-1 col-form-label">Stock Code :</label>
-                            <div class="col-sm-2">
-                                <mat-form-field style="width: 70%;margin-left: 7px;">
-                                    <input type="text" matInput maxlength="6" formControlName="stockCode" />
-                                </mat-form-field>
-                                <master-search [MasterSearchData]="stockCodeData"
-                                (newRowClick)="StockCodeSelected($event)">
-                                </master-search>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-12">
+            <div class="container-fluid pt-3">
                 <div class="check_radio_btn">
-                    <h6>Details</h6>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-1 col-form-label">Code :</label>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 100%">
+                                        <input type="text" matInput formControlName="code" />
+                                    </mat-form-field>
 
-                    <div class="col-md-12">
-                        <div class="d-flex justify-content-start text-start">
-                            <div class="p-2 bd-highlight">
-                                <button type="button" class="btn btn-primary" (click)="addTableData()">
-                                    Add
-                                </button>
+                                </div>
                             </div>
-                            <div class="p-2 bd-highlight">
-                                <button type="button" class="btn btn-outline-primary">
-                                    Delete
-                                </button>
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-1 col-form-label ">Description :</label>
+                                <div class="col-sm-2">
+
+                                    <mat-form-field style="width: 100%">
+                                        <input type="text" matInput formControlName="description" />
+                                    </mat-form-field>
+
+                                </div>
+                                <label for="input" class="col-sm-1 col-form-label">Metal % :</label>
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%;margin-left: 7px;">
+                                        <input type="number" matInput step="0.001" min="0" maxlength="4"
+                                            formControlName="metal" />
+                                    </mat-form-field>
+                                </div>
+                                <label for="input" class="col-sm-1 col-form-label">Color :</label>
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 70%;margin-left: 7px;">
+                                        <input type="text" matInput maxlength="6" formControlName="color" />
+                                    </mat-form-field>
+                                    <master-search [MasterSearchData]="colorCodeData"
+                                        (newRowClick)="ColorCodeSelected($event)">
+                                    </master-search>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label for="input" class="col-sm-1 col-form-label">Karat :</label>
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 70%;margin-left: 7px;">
+                                        <input type="text" matInput maxlength="6" formControlName="karat" />
+                                    </mat-form-field>
+                                    <master-search [MasterSearchData]="karatCodeData"
+                                        (newRowClick)="KaratCodeSelected($event)">
+                                    </master-search>
+                                </div>
+                                <label for="input" class="col-sm-1 col-form-label">Purity :</label>
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%;margin-left: 7px;">
+                                        <input type="number" matInput step="0.001" min="0" maxlength="6"
+                                            formControlName="purity" />
+                                    </mat-form-field>
+                                </div>
+                                <label for="input" class="col-sm-1 col-form-label">Alloy % :</label>
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%;margin-left: 7px;">
+                                        <input type="number" matInput maxlength="6" formControlName="alloy" />
+                                    </mat-form-field>
+
+                                </div>
+                                <label for="input" class="col-sm-1 col-form-label">Stock Code :</label>
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 70%;margin-left: 7px;">
+                                        <input type="text" matInput maxlength="6" formControlName="stockCode" />
+                                    </mat-form-field>
+                                    <master-search [MasterSearchData]="stockCodeData"
+                                        (newRowClick)="StockCodeSelected($event)">
+                                    </master-search>
+                                </div>
                             </div>
                         </div>
-                        <!-- <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                            <dxi-column *ngFor="let data of columnheads" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
-                        </dx-data-grid> -->
-                        <dx-data-grid
-                    id="gridContainer"
-                    [dataSource]="tableData"
-                    [showBorders]="true"
-                    [showColumnLines]="true"
-                    [showRowLines]="true"
-                    class="mt-3"
-                    >
-                   
-                 
-                    <!-- <dxi-column dataField="MODULE_NAME" caption="Module Name"> </dxi-column>
-                    <dxi-column dataField="FORM_NAME" caption="Form Name"> </dxi-column> -->
-                    <dxi-column dataField="SRNO" caption="SNo"> </dxi-column>
-                    <dxi-column dataField="MELTYPE_CODE" caption="Code"> </dxi-column>
-                    <dxi-column dataField="DIVISION_CODE" caption="Division Code"> </dxi-column>
-                    <dxi-column dataField="MELTYPE_DESCRIPTION" caption="Description"> </dxi-column>
-                    <dxi-column dataField="ALLOY_PER" caption="Alloy "> </dxi-column>
-                  
-                    
-                    
-                    
-                    <!-- <dxo-paging [pageSize]="10"> </dxo-paging>
-                    <dxo-pager
-                            [visible]="true"></dxo-pager>
-                            <div *dxTemplate="let data of 'SerialNoTemplate'">  
-                                {{data.row.rowIndex+1}}
-                            </div>
-                            <div *dxTemplate="let data of 'cellTemplate'">
-                                        <ngb-progressbar [value]="data.value" [showValue]="true"  height="15px"></ngb-progressbar>                                                                                                    
-                              </div>
-                              <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling> -->
-        
-                    </dx-data-grid>
                     </div>
                 </div>
 
 
+                <div class="col-md-12">
+                    <div class="check_radio_btn">
+                        <h6>Alloy Details</h6>
+                        <div class="col-md-12">
+                            <!-- <div class="d-flex justify-content-start text-start">
+                                <div class="p-2 bd-highlight">
+                                    <button type="button" class="btn btn-primary" (click)="addTableData()">
+                                        Add
+                                    </button>
+                                </div>
+                                <div class="p-2 bd-highlight">
+                                    <button type="button" class="btn btn-outline-primary" (click)="deleteTableData()">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div> -->
+                            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                            [viewImportBtn]="false"
+                            (addClick)="addTableData()"
+                            (deleteClick)="deleteTableData()"
+                            >
+                        </menu-buttons>
+                           
+                            <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                                [showColumnLines]="true" [showRowLines]="true" class="mt-3">                               
+                                <dxi-column dataField="SRNO" caption="SNo" class="tab"> </dxi-column>
+                                <dxi-column dataField="MELTYPE_CODE" caption="Division"> </dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Division Alloy"> </dxi-column>
+                                <dxi-column dataField="MELTYPE_DESCRIPTION" caption="Description"> </dxi-column>
+                                <dxi-column dataField="ALLOY_PER" caption="Alloy %"> </dxi-column>
+                            </dx-data-grid>
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
-        </div>
         </form>
     </div>
 
