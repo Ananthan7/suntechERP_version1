@@ -35,7 +35,7 @@ export class StonePricingMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 86,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Sleve Set',
+    SEARCH_HEADING: 'sieve Set',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -66,10 +66,10 @@ export class StonePricingMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  sizefromData: MasterSearchModel = {
+  sievefromData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 38,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size From',
     SEARCH_VALUE: '',
@@ -78,10 +78,10 @@ export class StonePricingMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  sizetoData: MasterSearchModel = {
+  sievetoData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 38,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size To',
     SEARCH_VALUE: '',
@@ -136,14 +136,16 @@ export class StonePricingMasterComponent implements OnInit {
     sleve_to: ['', [Validators.required]],
     color: [''],
     clarity: [''],
-    size_from: [''],
-    size_to: [''],
+    sieve_from: [''],
+    sieve_to: [''],
     currency: [''],
     carat_wt: [''],
-    size_from_desc: [''],
-    size_to_desc: [''],
+    sieve_from_desc: [''],
+    sieve_to_desc: [''],
     wt_from: [''],
     wt_to: [''],
+    size_to :[''],
+    size_from :[''],
     issue_rate: [''],
     selling: [''],
     selling_rate: [''],
@@ -170,12 +172,12 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.sleve_to.setValue(this.content.SIEVE_TO)
     this.stonePrizeMasterForm.controls.color.setValue(this.content.COLOR)
     this.stonePrizeMasterForm.controls.clarity.setValue(this.content.CLARITY)
-    this.stonePrizeMasterForm.controls.size_from.setValue(this.content.SIZE_FROM)
-    this.stonePrizeMasterForm.controls.size_to.setValue(this.content.SIZE_TO)
+    this.stonePrizeMasterForm.controls.sieve_from.setValue(this.content.sieve_FROM)
+    this.stonePrizeMasterForm.controls.sieve_to.setValue(this.content.sieve_TO)
     this.stonePrizeMasterForm.controls.currency.setValue(this.content.CURRENCYCODE)
     this.stonePrizeMasterForm.controls.carat_wt.setValue(this.content.CARAT_WT)
-    this.stonePrizeMasterForm.controls.size_from_desc.setValue(this.content.SIZE_FROM)
-    this.stonePrizeMasterForm.controls.size_to_desc.setValue(this.content.SIZE_TO)
+    this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(this.content.sieve_FROM)
+    this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(this.content.sieve_TO)
     this.stonePrizeMasterForm.controls.wt_from.setValue(this.content.WEIGHT_FROM)
     this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.WEIGHT_TO)
     this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
@@ -194,31 +196,30 @@ export class StonePricingMasterComponent implements OnInit {
 
     let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
     let postData = {
-
-      "MID": 0,
-      "SRNO": 0,
-      "CODE": this.stonePrizeMasterForm.value.price_code || "",
-      "DESCRIPTION": "",
-      "SHAPE": this.stonePrizeMasterForm.value.shape || "",
-      "COLOR": this.stonePrizeMasterForm.value.color || "",
-      "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
-      "SIZE_FROM": this.stonePrizeMasterForm.value.size_from || "",
-      "SIZE_TO": this.stonePrizeMasterForm.value.size_to || "",
-      "CURRENCYCODE": this.stonePrizeMasterForm.value.currency || "",
-      "ISSUE_RATE":  this.stonePrizeMasterForm.value.issue_rate || 0,
-      "SELLING_RATE":  this.stonePrizeMasterForm.value.selling_rate || 0,
-      "LAST_ISSUE_RATE": 0,
-      "LAST_SELLING_RATE": 0,
-      "SELLING_PER":  this.stonePrizeMasterForm.value.selling || 0,
-      "CARAT_WT":  this.stonePrizeMasterForm.value.carat_wt || 0,
-      "SIEVE": "",
-      "SIEVE_SET": this.stonePrizeMasterForm.value.sleve_set || "",
-      "WEIGHT_FROM":  this.stonePrizeMasterForm.value.wt_from || 0,
-      "WEIGHT_TO":  this.stonePrizeMasterForm.value.wt_to || 0,
-      "SIEVE_TO":  this.stonePrizeMasterForm.value.sleve_to || "",
-      "SIEVEFROM_DESC": "",
-      "SIEVETO_DESC": "",
-      "LAST_UPDATE": new Date().toISOString()
+        "MID": 0,
+        "SRNO": 0,
+        "CODE": this.stonePrizeMasterForm.value.price_code || "",
+        "DESCRIPTION": "",
+        "SHAPE": this.stonePrizeMasterForm.value.shape || "",
+        "COLOR": this.stonePrizeMasterForm.value.color || "",
+        "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
+        "SIZE_FROM": this.stonePrizeMasterForm.value.size_from || "",
+        "SIZE_TO": this.stonePrizeMasterForm.value.size_to || "",
+        "CURRENCYCODE": this.stonePrizeMasterForm.value.currency || "",
+        "ISSUE_RATE":  this.stonePrizeMasterForm.value.issue_rate || 0,
+        "SELLING_RATE":  this.stonePrizeMasterForm.value.selling_rate || 0,
+        "LAST_ISSUE_RATE": 0,
+        "LAST_SELLING_RATE": 0,
+        "SELLING_PER":  this.stonePrizeMasterForm.value.selling || 0,
+        "CARAT_WT":  this.stonePrizeMasterForm.value.carat_wt || 0,
+        "SIEVE": "",
+        "SIEVE_SET": this.stonePrizeMasterForm.value.sleve_set || "",
+        "WEIGHT_FROM":  this.stonePrizeMasterForm.value.wt_from || 0,
+        "WEIGHT_TO":  this.stonePrizeMasterForm.value.wt_to || 0,
+        "SIEVE_TO":  this.stonePrizeMasterForm.value.sleve_to || "",
+        "SIEVEFROM_DESC":  this.stonePrizeMasterForm.value.sieve_from_desc || "",
+        "SIEVETO_DESC":  this.stonePrizeMasterForm.value.sieve_to_desc || "",
+        "LAST_UPDATE": new Date().toISOString()
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -276,8 +277,8 @@ export class StonePricingMasterComponent implements OnInit {
       "WEIGHT_FROM":  this.stonePrizeMasterForm.value.wt_from || 0,
       "WEIGHT_TO":  this.stonePrizeMasterForm.value.wt_to || 0,
       "SIEVE_TO":  this.stonePrizeMasterForm.value.sleve_to || "",
-      "SIEVEFROM_DESC": "",
-      "SIEVETO_DESC": "",
+      "SIEVEFROM_DESC":  this.stonePrizeMasterForm.value.sieve_from_desc || "",
+      "SIEVETO_DESC":  this.stonePrizeMasterForm.value.sieve_to_desc || "",
       "LAST_UPDATE": new Date().toISOString()
     }
 
@@ -313,7 +314,7 @@ export class StonePricingMasterComponent implements OnInit {
 
   /**USE: delete worker master from row */
   deleteStonepriceMaster() {
-    if (!this.content.MID) {
+    if (!this.stonePrizeMasterForm.value.price_code) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -336,7 +337,7 @@ export class StonePricingMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'StonePriceMasterDJ/DeleteStonePriceMaster/' + this.content.MID
+        let API = 'StonePriceMasterDJ/DeleteStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -393,10 +394,13 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   slevefromDataSelected(data: any) {
-    this.stonePrizeMasterForm.controls.sleve_form.setValue(data.CODE)
+    this.stonePrizeMasterForm.controls.sleve_form.setValue(data.CODE);
+    this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(data.DESCRIPTION);
   }
   slevetoDataSelected(data: any) {
-    this.stonePrizeMasterForm.controls.sleve_to.setValue(data.CODE)
+    this.stonePrizeMasterForm.controls.sleve_to.setValue(data.CODE);
+    this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
+
   }
   colorDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.color.setValue(data.CODE)
@@ -404,10 +408,10 @@ export class StonePricingMasterComponent implements OnInit {
   clarityDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.clarity.setValue(data.CODE)
   }
-  sizefromDataSelected(data: any) {
+  sievefromDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.size_from.setValue(data.CODE)
   }
-  sizetoDataSelected(data: any) {
+  sievetoDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.size_to.setValue(data.CODE)
   }
   currencyDataSelected(data: any) {
