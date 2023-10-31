@@ -23,13 +23,15 @@ export class MetalReturnDetailsComponent implements OnInit {
   columnhead: any[] = [''];
   branchCode?: String;
   yearMonth?: String;
+  vocMaxDate = new Date();
+  currentDate = new Date();
 
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 20,
     SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "PROCESS_CODE<> ''",
     VIEW_INPUT: true,
@@ -42,7 +44,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 19,
     SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
@@ -55,7 +57,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 11,
     SEARCH_FIELD: 'LOCATION_CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Location Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "LOCATION_CODE<> ''",
     VIEW_INPUT: true,
@@ -68,29 +70,25 @@ export class MetalReturnDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 46,
     SEARCH_FIELD: 'job_number',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Job Number',
     SEARCH_VALUE: '',
     WHERECONDITION: "job_number<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  WorkerCodeSelected(e:any){
-    console.log(e);
-    this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
-  locationCodeSelected(e:any){
-    console.log(e);
-    this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
-  }
-  jobnoCodeSelected(e:any){
-    console.log(e);
-    this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
-  }
-  ProcessCodeSelected(e:any){
-    console.log(e);
-    this.metalReturnDetailsForm.controls.processCode.setValue(e.Process_Code);
-  }
+
 
   metalReturnDetailsForm: FormGroup = this.formBuilder.group({
     jobNumber : [''],
@@ -102,7 +100,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     workerCode : [''],
     workerCodeDesc : [''],
     designCode : [''],
-    part_code : [''],
+    partcode : [''],
     makingRateFc : [''],
     makingRateLc : [''],
     makingAmountLC : [''],
@@ -143,6 +141,30 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.yearMonth = this.commonService.yearSelected;
   }
 
+  
+  WorkerCodeSelected(e:any){
+    console.log(e);
+    this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
+    this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(e.DESCRIPTION);
+  }
+  locationCodeSelected(e:any){
+    console.log(e);
+    this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
+  }
+  jobnoCodeSelected(e:any){
+    console.log(e);
+    this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
+  }
+  ProcessCodeSelected(e:any){
+    console.log(e);
+    this.metalReturnDetailsForm.controls.processCode.setValue(e.Process_Code);
+    this.metalReturnDetailsForm.controls.processCodeDesc.setValue(e.Description);
+  }
+
+  stockCodeSelected(e:any){
+    console.log(e);
+    
+  }
   
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -211,7 +233,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           "SUB_RETURN_STOCK": "",
           "STONE_WT": this.metalReturnDetailsForm.value.stoneWeight,
           "NET_WT": this.metalReturnDetailsForm.value.netWeight,
-          "PART_CODE": this.metalReturnDetailsForm.value.part_code,
+          "PART_CODE": this.metalReturnDetailsForm.value.partcode,
           "DT_BRANCH_CODE": this.branchCode,
           "DT_VOCTYPE": "JWA",
           "DT_VOCNO": 0,

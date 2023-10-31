@@ -5,11 +5,12 @@
     <!-- panel -->
     <p-overlayPanel #overlayPanel >
         <ng-template pTemplate="content">
-           <div (mouseleave)="closeOverlayPanel()">
-                <div class="row border-bottom">
+           <div >
+                <div class="d-flex justify-content-between border-bottom">
                     <h6>{{MasterSearchData.SEARCH_HEADING}}</h6>
+                    <i (click)="closeOverlayPanel()" class="fas fa-times icon-common"></i>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="MasterSearchData.VIEW_INPUT">
                     <div class="col-md-6 p-2">
                         <mat-form-field style="width: 100%">
                             <mat-label>Search</mat-label>
@@ -21,7 +22,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="letters" >
+                <div class="letters" *ngIf="MasterSearchData.VIEW_INPUT">
                     <ng-container *ngFor="let item of alphabetSource">
                         <a (click)="alphabetClicked(item)">{{item}}</a>
                     </ng-container>

@@ -46,7 +46,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,

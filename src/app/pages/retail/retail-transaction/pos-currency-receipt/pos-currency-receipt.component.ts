@@ -9,7 +9,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
- import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
+import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
 
 
 @Component({
@@ -21,18 +21,21 @@ export class PosCurrencyReceiptComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   // columnhead: any[] = ['Sr#', 'Branch', 'Mode', 'A/c Code', 'Account Head', '', 'Curr.Rate', 'VAT_E_', 'VAT_E_'];
   columnsList: any[] = [
- {title:'branch', field:'BRANCH_CODE'},
- {title:'Mode', field:'MODE'},
- {title:'A/c Code', field:'ACCODE'},
- {title:'Account Head', field:'HDACCOUNT_HEAD'},
- {title:'Currency', field:'CURRENCY_CODE'},
- {title:'Curr.Rate', field:'CURRENCY_RATE'},
- {title:'VAT_E_', field:''},
- {title:'VAT_E_.', field:''},
-];
+    { title: 'branch', field: 'BRANCH_CODE' },
+    { title: 'Mode', field: 'MODE' },
+    { title: 'A/c Code', field: 'ACCODE' },
+    { title: 'Account Head', field: 'HDACCOUNT_HEAD' },
+    { title: 'Currency', field: 'CURRENCY_CODE' },
+    { title: 'Curr.Rate', field: 'CURRENCY_RATE' },
+    { title: 'VAT_E_', field: '' },
+    { title: 'VAT_E_.', field: '' },
+  ];
 
   posCurrencyDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
+  amlNameValidation?: boolean;
+  customerData: any;
+
 
   vocMaxDate = new Date();
   currentDate = new Date();
@@ -41,7 +44,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
   yearMonth?: String;
   userName?: String;
 
-  customerData: any;
 
 
   enteredByCode: MasterSearchModel = {
@@ -114,6 +116,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.userName = this.comService.userName;
+
+    let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
+    this.comService.allbranchMaster = JSON.parse(branchParams);
+
+    this.amlNameValidation = this.comService.allbranchMaster.AMLNAMEVALIDATION;
 
     this.posCurrencyReceiptForm.controls.vocDate.setValue(this.currentDate)
     this.posCurrencyReceiptForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
@@ -216,11 +223,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-  
+
     modalRef.result.then((postData) => {
       if (postData) {
         console.log('Data from modal:', postData);
-        this.posCurrencyDetailsData.push(postData);        
+        this.posCurrencyDetailsData.push(postData);
       }
     });
 
@@ -266,7 +273,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     let API = 'AdvanceReceipt/InsertAdvanceReceipt'
     console.log(this.posCurrencyReceiptForm.value.vocDate);
-    
+
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
@@ -342,7 +349,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "WOOCOMCARDID": "string",
-      "currencyReceiptDetails": this.posCurrencyDetailsData ,
+      "currencyReceiptDetails": this.posCurrencyDetailsData,
       // [
       //   {
       //     "UNIQUEID": 0,
@@ -473,16 +480,24 @@ export class PosCurrencyReceiptComponent implements OnInit {
   openCustMaster() {
 
     const modalRef: NgbModalRef = this.modalService.open(PosCustomerMasterComponent, {
-      size: 'xl',
+      size: 'lg',
       backdrop: true,
       keyboard: false,
       // windowClass: 'modal-full-width',
     });
-    // modalRef.componentInstance.customerData = this.customerData;
+    modalRef.componentInstance.customerData = this.customerData;
+    modalRef.componentInstance.amlNameValidation = this.amlNameValidation;
+    modalRef.componentInstance.vocDetails = {
+      VOCTYPE: this.comService.getqueryParamVocType(),
+      VOCDATE: this.posCurrencyReceiptForm.value.vocDate,
+      VOCNO: this.posCurrencyReceiptForm.value.vocNo,
+      YEARMONTH: this.yearMonth,
+    };
 
     modalRef.result.then(
       (result) => {
-        console.log( `Closed with: ${result}`);
+        console.log(`Closed with: ${result}`);
+        console.log(result);
       },
       (reason) => {
         console.log(`Dismissed ${reason}`);

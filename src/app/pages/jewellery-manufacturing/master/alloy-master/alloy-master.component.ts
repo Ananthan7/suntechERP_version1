@@ -193,6 +193,10 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  priceCodeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.price.setValue(e.PRICE_CODE);
+  }
 
   subcategoryCodeSelected(e:any){
     console.log(e);

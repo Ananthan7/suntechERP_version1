@@ -512,6 +512,7 @@ export class AddPosComponent implements OnInit {
       fcn_customer_name: ['', Validators.required],
       fcn_customer_id_number: ['', Validators.required],
       fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
+      fcn_customer_code: ['',],
     });
 
     this.vocDataForm = this.formBuilder.group({
@@ -897,6 +898,12 @@ export class AddPosComponent implements OnInit {
         this.inv_customer_name = posCustomer.NAME;
         this.inv_cust_mobile_no = posCustomer.MOBILE;
 
+        this.customerDetailForm.controls.fcn_mob_code.setValue(
+          posCustomer.MOBILECODE1
+        );
+        this.customerDataForm.controls.fcn_customer_code.setValue(
+          posCustomer.CODE
+        );
         this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
           posCustomer.MOBILE
         );
@@ -1756,7 +1763,7 @@ export class AddPosComponent implements OnInit {
       // }
 
     } else {
-      this.snackBar.open('Please Fill All Fields');
+      this.snackBar.open('Please Fill All Fields', 'OK');
     }
 
   }
@@ -2369,6 +2376,9 @@ export class AddPosComponent implements OnInit {
         this.customerDetailForm.value.fcn_cust_detail_idType
       );
 
+      this.customerDetails.CODE =
+      this.customerDataForm.value.fcn_customer_code;
+
       // this.modalService.
       // if (this.amlNameValidation) {
 
@@ -2380,7 +2390,8 @@ export class AddPosComponent implements OnInit {
       if (!this.customerDetailForm.invalid) {
 
         const posCustomer = {
-          CODE: this.customerDetails?.CODE || '0',
+          CODE: this.customerDataForm.value.fcn_customer_code || '0',
+          // CODE: this.customerDetails?.CODE || '0',
           NAME: this.customerDataForm.value.fcn_customer_name || '',
           COMPANY: this.customerDetailForm.value.fcn_cust_detail_company
             // || this.customerDetails?.COMPANY
@@ -2476,7 +2487,9 @@ export class AddPosComponent implements OnInit {
           LOCATION_PARKING: this.customerDetails?.LOCATION_PARKING || '',
           SOURCE: this.customerDetails?.SOURCE || '',
           PREFERENCE_CONTACT: this.customerDetails?.PREFERENCE_CONTACT || '',
-          MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
+          // MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
+          MOBILECODE1: this.customerDetailForm.value.fcn_mob_code.toString() || '',
+
           MOBILECODE2: this.customerDetails?.MOBILECODE2 || '',
           IDCATEGORY:
             this.customerDataForm.value.fcn_customer_id_type
@@ -2742,6 +2755,11 @@ export class AddPosComponent implements OnInit {
             this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
               this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
             );
+
+            this.customerDataForm.controls.fcn_customer_code.setValue(
+              this.customerDetails.CODE
+            );
+
             // this.snackBar.open('Customer details saved successfully');
             // this.snackBar.dismiss();
             this.snackBar.open('Customer details saved successfully', '', {
@@ -2928,6 +2946,7 @@ export class AddPosComponent implements OnInit {
       }
     }
   }
+  
   onCustomerNameFocus(value: any = null) {
     console.log(value);
     let _cust_mobile_no = value == null ? this.customerDataForm.value.fcn_customer_mobile : value;
@@ -2970,6 +2989,13 @@ export class AddPosComponent implements OnInit {
             );
             this.inv_customer_name = result.NAME;
             this.inv_cust_mobile_no = _cust_mobile_no;
+
+            this.customerDetailForm.controls.fcn_mob_code.setValue(
+              result.MOBILECODE1
+            );
+            this.customerDataForm.controls.fcn_customer_code.setValue(
+              result.CODE
+            );
 
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               result.MOBILE
@@ -6494,7 +6520,8 @@ export class AddPosComponent implements OnInit {
           LOCATION_PARKING: this.customerDetails?.LOCATION_PARKING || '',
           SOURCE: this.customerDetails?.SOURCE || '',
           PREFERENCE_CONTACT: this.customerDetails?.PREFERENCE_CONTACT || '',
-          MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
+          MOBILECODE1: this.customerDetailForm.value.fcn_mob_code.toString() || '',
+          // MOBILECODE1: this.customerDetails?.MOBILECODE1 || '',
           MOBILECODE2: this.customerDetails?.MOBILECODE2 || '',
           IDCATEGORY:
             this.customerDataForm.value.fcn_customer_id_type
@@ -9704,7 +9731,7 @@ export class AddPosComponent implements OnInit {
   // }
 
   changeAdvanceVocNo(event: any) {
-    let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/'PCR'/${this.advanceReceiptForm.value.advanceRecNo}/${this.advanceReceiptForm.value.advanceYear}`
+    let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/MOE/${this.advanceReceiptForm.value.advanceRecNo}/${this.advanceReceiptForm.value.advanceYear}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((res) => {
         if (res['status'] == 'Success') {
@@ -9778,18 +9805,16 @@ export class AddPosComponent implements OnInit {
         if (data.status == "Success") {
           this.stateMaster = data.response;
           this.stateMasterOptions =
-            this.customerDetailForm.controls.fcn_cust_detail_city.valueChanges.pipe(
+            this.customerDetailForm.controls.fcn_cust_detail_state.valueChanges.pipe(
               startWith(''),
               map((value) =>
-                this._filterMasters(this.cityMaster, value, 'CODE', 'DESCRIPTION')
+                this._filterMasters(this.stateMaster, value, 'CODE', 'DESCRIPTION')
               )
             );
         } else {
-          this.cityMaster = [];
+          this.stateMaster = [];
         }
-
       });
-
   }
 
   dummyDateCheck(date: any) {

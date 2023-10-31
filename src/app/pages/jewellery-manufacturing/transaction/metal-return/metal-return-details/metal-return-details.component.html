@@ -24,9 +24,15 @@
                                 (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
+                                <!-- <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="jobDate" />
-                                </mat-form-field>
+                                </mat-form-field> -->
+                                <mat-form-field style="width: 100%">
+                                    <input matInput [matDatepicker]="jobDate" name="jobDate" formControlName="jobDate"
+                                      placeholder="YYYY/MM/DD" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="jobDate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #jobDate></mat-datepicker>
+                                  </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
@@ -89,7 +95,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Part Code:</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="part_code" />
+                                    <input type="text" matInput formControlName="partcode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -142,9 +148,11 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-3 col-form-label">Stock Code:</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="stockCode"/>
-                                </mat-form-field>
+                                </mat-form-field>                                
+                                <master-search [MasterSearchData]="stockCodeData"
+                                (newRowClick)="stockCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
@@ -265,9 +273,15 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3  offset-sm-3">
-                                <mat-form-field style="width: 100%;">
+                                <!-- <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="jobPcsDate" />
-                                </mat-form-field>
+                                </mat-form-field> -->
+                                <mat-form-field style="width: 100%">
+                                    <input matInput [matDatepicker]="jobPcsDate" name="jobPcsDate" formControlName="jobPcsDate"
+                                      placeholder="YYYY/MM/DD" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="jobPcsDate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #jobPcsDate></mat-datepicker>
+                                  </mat-form-field>
                             </div>
                         </div>
                     </div>

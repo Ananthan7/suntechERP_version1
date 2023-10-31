@@ -27,12 +27,25 @@ export class MetalReturnComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
 
+  user: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 20,
     SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "PROCESS_CODE<> ''",
     VIEW_INPUT: true,
@@ -44,7 +57,7 @@ export class MetalReturnComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 19,
     SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
@@ -57,7 +70,7 @@ export class MetalReturnComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 11,
     SEARCH_FIELD: 'LOCATION_CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'location Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "LOCATION_CODE<> ''",
     VIEW_INPUT: true,
@@ -95,6 +108,11 @@ export class MetalReturnComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+
+  userDataSelected(value: any) {
+    console.log(value);
+       this.metalReturnForm.controls.enteredBy.setValue(value.UsersName);
   }
 
   ProcessCodeSelected(e:any){
@@ -175,6 +193,7 @@ export class MetalReturnComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "Details": this.metalReturnDetailsData,
     }
+    
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {

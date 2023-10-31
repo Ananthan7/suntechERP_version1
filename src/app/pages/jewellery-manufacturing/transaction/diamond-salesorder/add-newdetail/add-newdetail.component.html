@@ -17,12 +17,14 @@
                     <div class="col-md-5">
                         <div class="row mb-1">
                             <!-- TODO stockcode is selected disable designcode 
-                            and design code is selected disable stockcode -->
+                                and design code is selected disable stockcode -->
+
                             <div class="col-md-4" style="width: 25% !important;">
                                 <div class="form-check pt-2">
                                     <input class="form-check-input" type="radio"
-                                        name="flexRadioDefault"
-                                        id="DesighCode">
+                                        value="design"
+                                        formControlName="designCodeSelect"
+                                        (change)="radioButtonChanged()">
                                     <label class="form-check-label"
                                         for="DesighCode">
                                         Design Code
@@ -34,17 +36,17 @@
                                     <input type="text" matInput
                                         placeholder="Code"
                                         (focusout)="designCodeValidate($event)"
-                                        [readonly]="codeSearchFlag == 'STOCK'"
+                                        [readonly]="codeSearchFlag == 'stock'"
                                         formControlName="designCode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput
-                                        [readonly]="codeSearchFlag == 'STOCK'"
+                                    <input type="text" matInput readonly
                                         formControlName="designDescription" />
                                 </mat-form-field>
                                 <master-search
+                                    *ngIf="codeSearchFlag == 'design'"
                                     [MasterSearchData]="DesignCodeData"
                                     (newRowClick)="designCodeSelected($event)"></master-search>
                             </div>
@@ -53,28 +55,41 @@
                             <div class="col-md-4" style="width: 25% !important;">
                                 <div class="form-check  pt-2">
                                     <input class="form-check-input" type="radio"
-                                        name="flexRadioDefault" id="stockCode">
+                                        value="stock"
+                                        formControlName="designCodeSelect"
+                                        (change)="radioButtonChanged()"
+                                        id="stockCode">
                                     <label class="form-check-label"
                                         for="stockCode">
                                         Stock Code
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 90%;">
-                                    <input type="text" matInput
-                                        formControlName="StockCode"
-                                        [readonly]="codeSearchFlag == 'DESIGN'" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-6">
+                            <div class="col-md-2">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
-                                        [readonly]="codeSearchFlag == 'DESIGN'"
-                                        formControlName="StockCodeDesc" />
+                                        formControlName="divisionCode"
+                                        maxlength="1" placeholder="Div"
+                                        (focusout)="changeDivision($event)"
+                                        [readonly]="codeSearchFlag == 'design'" />
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="DesignCodeData">
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput
+                                        placeholder="Code"
+                                        formControlName="StockCode"
+                                        [readonly]="codeSearchFlag == 'design'" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-5">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput
+                                        readonly formControlName="StockCodeDesc" />
+                                </mat-form-field>
+                                <master-search *ngIf="codeSearchFlag == 'stock'"
+                                    [MasterSearchData]="stockCodeData"
+                                    (newRowClick)="mainStockCodeSelected($event)">
                                 </master-search>
                             </div>
                         </div>
@@ -187,8 +202,10 @@
                                 </label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput MetalDecimalInput
-                                            class="text-right" [readOnly]="isViewBOMTab"
+                                        <input type="number" matInput
+                                            MetalDecimalInput
+                                            class="text-right"
+                                            [readOnly]="isViewBOMTab"
                                             formControlName="METAL_WT" />
                                     </mat-form-field>
                                 </div>
@@ -199,7 +216,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
-                                            AmountDecimalInput 
+                                            AmountDecimalInput
                                             [readOnly]="isViewBOMTab"
                                             formControlName="RATEFC"
                                             class="text-right" />
@@ -223,7 +240,8 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
-                                            AmountDecimalInput [readOnly]="isViewBOMTab"
+                                            AmountDecimalInput
+                                            [readOnly]="isViewBOMTab"
                                             formControlName="AMOUNT"
                                             class="text-right" />
                                     </mat-form-field>
@@ -232,7 +250,8 @@
                                     class="col-sm-3 col-form-label">Gross Weight</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput MetalDecimalInput
+                                        <input type="number" matInput
+                                            MetalDecimalInput
                                             formControlName="GROSS_WT"
                                             [readOnly]="true"
                                             class="text-right" />
@@ -282,7 +301,7 @@
                                     <!-- bom details data grid -->
                                     <dx-resizable id="gridContainer"
                                         [width]="firstTableWidth"
-                                        [height]="300"
+                                        [height]="280"
                                         [keepAspectRatio]="false"
                                         handles="right">
                                         <dx-data-grid #dataGrid
@@ -416,6 +435,7 @@
                                             <dxi-column width="auto"
                                                 [allowEditing]="false"
                                                 dataField="STOCK_CODE"
+                                                cellTemplate="StockCode"
                                                 caption="Stock Code"
                                                 alignment="left">
                                             </dxi-column>
@@ -470,53 +490,10 @@
                                                 </dxi-total-item>
                                             </dxo-summary>
                                             <!-- shape Select search starts -->
-                                            <div *dxTemplate="let data of 'shapeSelect'">
-                                                <div (mouseenter)="onHoverShape(data)"
-                                                    class="d-flex justify-content-between">
-                                                    <div>
-                                                        <a href="javascript:void(0)"
-                                                            class="mx-1"
-                                                            [innerHTML]="data.value"></a>
-                                                    </div>
-                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
-                                                        [MasterSearchData]="generalMaster"
-                                                        (newRowClick)="shapeSelected($event,data)">
-                                                    </master-search>
-                                                </div>
-                                            </div>
-                                            <!-- CLARITY Type search starts -->
-                                            <div *dxTemplate="let data of 'CLARITYType'">
-                                                <div (mouseenter)="onHoverClarity(data)"
-                                                    class="d-flex justify-content-between">
-                                                    <div>
-                                                        <a href="javascript:void(0)"
-                                                            class="mx-1"
-                                                            [innerHTML]="data.value"></a>
-                                                    </div>
-                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
-                                                        [MasterSearchData]="generalMaster"
-                                                        (newRowClick)="claritySelected($event,data)">
-                                                    </master-search>
-                                                </div>
-                                            </div>
-                                            <!-- stonetype search starts -->
-                                            <div *dxTemplate="let data of 'stoneType'">
-                                                <div (mouseenter)="onHoverstoneType(data)"
-                                                    class="d-flex justify-content-between">
-                                                    <div>
-                                                        <a href="javascript:void(0)"
-                                                            class="mx-1"
-                                                            [innerHTML]="data.value"></a>
-                                                    </div>
-                                                    <master-search *ngIf="data.data.DIVCODE != 'G'"
-                                                        [MasterSearchData]="generalMaster"
-                                                        (newRowClick)="stoneTypeSelected($event,data)">
-                                                    </master-search>
-                                                </div>
-                                            </div>
-                                            <!-- colorcode search starts -->
-                                            <div *dxTemplate="let data of 'colorcode'">
-                                                <div (mouseenter)="onHoverColorCode(data)"
+                                            <div
+                                                *dxTemplate="let data of 'shapeSelect'">
+                                                <div
+                                                    (mouseenter)="onHoverShape(data)"
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a
@@ -524,15 +501,75 @@
                                                             class="mx-1"
                                                             [innerHTML]="data.value"></a>
                                                     </div>
-                                                    <master-search 
+                                                    <master-search
+                                                        *ngIf="data.data.DIVCODE != 'G'"
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="shapeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <!-- CLARITY Type search starts -->
+                                            <div
+                                                *dxTemplate="let data of 'CLARITYType'">
+                                                <div
+                                                    (mouseenter)="onHoverClarity(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        *ngIf="data.data.DIVCODE != 'G'"
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="claritySelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <!-- stonetype search starts -->
+                                            <div
+                                                *dxTemplate="let data of 'stoneType'">
+                                                <div
+                                                    (mouseenter)="onHoverstoneType(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        *ngIf="data.data.DIVCODE != 'G'"
+                                                        [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="stoneTypeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <!-- colorcode search starts -->
+                                            <div
+                                                *dxTemplate="let data of 'colorcode'">
+                                                <div
+                                                    (mouseenter)="onHoverColorCode(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        *ngIf="data.data.DIVCODE != 'G'"
                                                         [MasterSearchData]="generalMaster"
                                                         (newRowClick)="colorCodeSelected($event,data)">
                                                     </master-search>
                                                 </div>
                                             </div>
                                             <!-- processType search starts -->
-                                            <div *dxTemplate="let data of 'processTypes'">
-                                                <div (mouseenter)="onHoverProcessType(data)"
+                                            <div
+                                                *dxTemplate="let data of 'processTypes'">
+                                                <div
+                                                    (mouseenter)="onHoverProcessType(data)"
                                                     class="d-flex justify-content-between">
                                                     <div>
                                                         <a
@@ -546,13 +583,31 @@
                                                     </master-search>
                                                 </div>
                                             </div>
+                                            <!-- Stock Code search starts -->
+                                            <div
+                                                *dxTemplate="let data of 'StockCode'">
+                                                <div
+                                                    (mouseenter)="onHoverStockCode(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        [MasterSearchData]="stockCode"
+                                                        (newRowClick)="stockCodeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
                                         </dx-data-grid>
                                     </dx-resizable>
                                     &nbsp;
                                     <!-- grouped BOM data grid starts-->
                                     <dx-resizable id="gridContainer"
                                         [width]="secondTableWidth"
-                                        [height]="150"
+                                        [height]="140"
                                         [keepAspectRatio]="true"
                                         handles="right">
                                         <dx-data-grid #dataGrid
@@ -645,22 +700,53 @@
                         *ngIf="isViewComponentsTab">
                         <!-- Parts details grid -->
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <dx-data-grid #dataGrid id="gridContainer"
-                                    keyExpr="ID" [dataSource]="gridParts"
+                                    [dataSource]="gridParts"
+                                    [columnAutoWidth]="true"
+                                    [allowColumnResizing]="true"
+                                    [showRowLines]="true"
                                     [showBorders]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell"
                                         [allowUpdating]="true">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-selection mode="single"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column
-                                        *ngFor="let data of gridPartsHead"
-                                        dataField="{{ data }}"
-                                        width="auto" caption="{{ data }}"
-                                        [allowEditing]="true" alignment="right">
+                                    <dxi-column dataField="SLNO"
+                                        caption="No"
+                                        [allowEditing]="false"
+                                        alignment="center">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_CODE"
+                                        caption="Part Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_DESCRIPTION"
+                                        caption="Part Description"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="PART_COLOR"
+                                        caption="Part Color"
+                                        cellTemplate="partcolorcode"
+                                        [allowEditing]="false" alignment="left">
+                                        <!-- part colorcode search starts -->
+                                        <div *dxTemplate="let data of 'partcolorcode'">
+                                            <div
+                                                (mouseenter)="onHoverPartColorCode(data)"
+                                                class="d-flex justify-content-between">
+                                                <div>
+                                                    <a href="javascript:void(0)"
+                                                        class="mx-1"
+                                                        [innerHTML]="data.value"></a>
+                                                </div>
+                                                <master-search 
+                                                    [MasterSearchData]="partColorCode"
+                                                    (newRowClick)="partColorCodeSelected($event,data)">
+                                                </master-search>
+                                            </div>
+                                        </div>
                                     </dxi-column>
                                 </dx-data-grid>
                             </div>
@@ -669,22 +755,72 @@
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <dx-data-grid #dataGrid id="gridContainer"
-                                    keyExpr="ID"
                                     [dataSource]="gridComponents"
+                                    [showRowLines]="true"
+                                    [allowColumnResizing]="true"
+                                    [columnAutoWidth]="true"
                                     [showBorders]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell"
                                         [allowUpdating]="true">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-selection mode="single"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column
-                                        *ngFor="let data of gridComponentsHead"
-                                        dataField="{{ data }}"
-                                        width="auto" caption="{{ data }}"
-                                        [allowEditing]="true" alignment="center"
-                                        backgroundcolor="#000">
+                                    <dxi-column dataField="SLNO"
+                                        caption="Sl No"
+                                        [allowEditing]="false" alignment="center">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_CODE"
+                                        caption="Comp Code"
+                                        cellTemplate="compCode"
+                                        [allowEditing]="false" alignment="left">
+                                        <div *dxTemplate="let data of 'compCode'">
+                                            <div (mouseenter)="onHoverCompCode(data)"
+                                                class="d-flex justify-content-between">
+                                                <div>
+                                                    <a href="javascript:void(0)"
+                                                        class="mx-1"
+                                                        [innerHTML]="data.value"></a>
+                                                </div>
+                                                <master-search 
+                                                    [MasterSearchData]="componetCode"
+                                                    (newRowClick)="componentCodeSelected($event,data)">
+                                                </master-search>
+                                            </div>
+                                        </div>
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_DESCRIPTION"
+                                        caption="Comp Description"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMP_SHAPE"
+                                        caption="Comp Shape"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="PCS"
+                                        caption="Pcs"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="TYPE_CODE"
+                                        caption="Type Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="CATEGORY_CODE"
+                                        caption="Category Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMPSIZE_CODE"
+                                        caption="Size Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="COMPSET_CODE"
+                                        caption="Set Code"
+                                        [allowEditing]="false" alignment="left">
+                                    </dxi-column>
+                                    <dxi-column dataField="REMARKS"
+                                        caption="Remarks"
+                                        [allowEditing]="true" alignment="left">
                                     </dxi-column>
                                 </dx-data-grid>
                             </div>
@@ -733,7 +869,9 @@
                                         <label class="col-sm-3 col-form-label">Purity</label>
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" style="text-align: right;" matInput SixDecimalInput
+                                                <input type="text"
+                                                    style="text-align: right;"
+                                                    matInput SixDecimalInput
                                                     formControlName="PURITY" />
                                             </mat-form-field>
                                         </div>
@@ -1000,6 +1138,7 @@
                                     <div class="row mt-2">
                                         <div class="col-md-12">
                                             <dx-data-grid #dataGrid
+                                                [allowColumnResizing]="true"
                                                 id="gridContainer" keyExpr="ID"
                                                 [showBorders]="true">
                                                 <dxo-paging [enabled]="false"></dxo-paging>

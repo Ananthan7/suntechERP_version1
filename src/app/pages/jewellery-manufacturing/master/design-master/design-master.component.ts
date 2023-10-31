@@ -46,9 +46,17 @@ export class DesignMasterComponent implements OnInit {
   ngOnInit(): void {
   }
   
-  alloyMastereForm: FormGroup = this.formBuilder.group({
+  designmasterForm: FormGroup = this.formBuilder.group({
     mid:[],
     code: [''],
+    design: [''],
+    costcenter: [''],
+    category: [''],
+    subcategory: [''],
+    type: [''],
+    brand: [''],
+    style: [''],
+    range: [''],
     description: [''],
     metal: [''],
     color: [''],
@@ -66,11 +74,15 @@ export class DesignMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 15,
     SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Stock Code',
+    SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "COST_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  }
+  costCenterSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.costCenter.setValue(e.COST_CODE);
   }
 
   masterCodeData: MasterSearchModel = {
@@ -83,6 +95,135 @@ export class DesignMasterComponent implements OnInit {
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  }
+
+ designCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Design Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DESIGN_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  designCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.design.setValue(e.DESIGN_CODE);
+  }
+
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 84,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  karatCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.karat.setValue(e.KARAT_CODE);
+  }
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 62,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.type.setValue(e.CODE);
+  }
+
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  categoryCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.category.setValue(e.CODE);
+  }
+
+  subcategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Subcategory Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  subcategoryCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.subcategory.setValue(e.CODE);
+  }
+
+  BrandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 32,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  brandCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.brand.setValue(e.CODE);
+  }
+
+  StyleCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Style Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  StyleCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.style.setValue(e.CODE);
+  }
+
+  RangeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Range Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  RangeCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.range.setValue(e.CODE);
   }
 
   colorCodeData: MasterSearchModel = {
@@ -99,65 +240,61 @@ export class DesignMasterComponent implements OnInit {
 
   ColorCodeSelected(e:any){
     console.log(e);
-    this.alloyMastereForm.controls.color.setValue(e.CODE);
+    this.designmasterForm.controls.color.setValue(e.CODE);
 
   }
 
-  vendorCodeData: MasterSearchModel = {
+  countryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Vendor',
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-  priceCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 82,
-    SEARCH_FIELD: 'PRICE_CODE',
-    SEARCH_HEADING: 'Price',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "PRICE_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
+  countryCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.vendor.setValue(e.CODE);
   }
+
+
+ 
+
 
   setFormValues() {
     if(!this.content) return
     console.log(this.content);
     
-    this.alloyMastereForm.controls.mid.setValue(this.content.MID);
-    this.alloyMastereForm.controls.code.setValue(this.content.MELTYPE_CODE);
-    this.alloyMastereForm.controls.description.setValue(this.content.MELTYPE_DESCRIPTION);
-    this.alloyMastereForm.controls.karat.setValue(this.content.KARAT_CODE);
-    this.alloyMastereForm.controls.purity.setValue(this.content.PURITY);
-    this.alloyMastereForm.controls.metal.setValue(this.content.METAL_PER);
-    this.alloyMastereForm.controls.alloy.setValue(this.content.ALLOY_PER);
-    this.alloyMastereForm.controls.color.setValue(this.content.COLOR);
-    this.alloyMastereForm.controls.stockCode.setValue(this.content.STOCK_CODE);
+    this.designmasterForm.controls.mid.setValue(this.content.MID);
+    this.designmasterForm.controls.code.setValue(this.content.MELTYPE_CODE);
+    this.designmasterForm.controls.description.setValue(this.content.MELTYPE_DESCRIPTION);
+    this.designmasterForm.controls.karat.setValue(this.content.KARAT_CODE);
+    this.designmasterForm.controls.purity.setValue(this.content.PURITY);
+    this.designmasterForm.controls.metal.setValue(this.content.METAL_PER);
+    this.designmasterForm.controls.alloy.setValue(this.content.ALLOY_PER);
+    this.designmasterForm.controls.color.setValue(this.content.COLOR);
+    this.designmasterForm.controls.stockCode.setValue(this.content.STOCK_CODE);
     this.tableData = this.content.MELTING_TYPE_DETAIL;
 
   }
 
  updateMeltingType() {
-  let API = 'MeltingType/UpdateMeltingType/'+ this.alloyMastereForm.value.mid;
+  let API = 'MeltingType/UpdateMeltingType/'+ this.designmasterForm.value.mid;
     let postData=
       {
-        "MID": this.alloyMastereForm.value.mid,
-        "MELTYPE_CODE":  this.alloyMastereForm.value.code,
-        "MELTYPE_DESCRIPTION": this.alloyMastereForm.value.description,
-        "KARAT_CODE": this.alloyMastereForm.value.karat,
-        "PURITY": this.commonService.transformDecimalVB(6,this.alloyMastereForm.value.purity),
-        "METAL_PER": this.alloyMastereForm.value.metal,
-        "ALLOY_PER": parseFloat(this.alloyMastereForm.value.alloy),
+        "MID": this.designmasterForm.value.mid,
+        "MELTYPE_CODE":  this.designmasterForm.value.code,
+        "MELTYPE_DESCRIPTION": this.designmasterForm.value.description,
+        "KARAT_CODE": this.designmasterForm.value.karat,
+        "PURITY": this.commonService.transformDecimalVB(6,this.designmasterForm.value.purity),
+        "METAL_PER": this.designmasterForm.value.metal,
+        "ALLOY_PER": parseFloat(this.designmasterForm.value.alloy),
         "CREATED_BY": this.userName,
-        "COLOR": this.alloyMastereForm.value.color,
-        "STOCK_CODE": this.alloyMastereForm.value.stockCode,
+        "COLOR": this.designmasterForm.value.color,
+        "STOCK_CODE": this.designmasterForm.value.stockCode,
         "MELTING_TYPE_DETAIL": this.tableData || []
       
     }
@@ -176,7 +313,7 @@ export class DesignMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.alloyMastereForm.reset()
+                this.designmasterForm.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -227,7 +364,7 @@ export class DesignMasterComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.alloyMastereForm.reset()
+                    this.designmasterForm.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -241,7 +378,7 @@ export class DesignMasterComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.alloyMastereForm.reset()
+                    this.designmasterForm.reset()
                     this.tableData = []
                     this.close()
                   }

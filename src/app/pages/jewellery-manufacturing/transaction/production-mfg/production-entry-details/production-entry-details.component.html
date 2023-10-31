@@ -503,8 +503,8 @@
                   <mat-form-field style="width: 70%;">
                     <input type="text" matInput formControlName="location" />
                   </mat-form-field>
-                  <master-search>
-                  </master-search>
+                  <master-search [MasterSearchData]="locationCodeData"
+                  (newRowClick)="locationCodeSelected($event)"></master-search>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Bal Pcs :</label>
                 <div class="col-sm-2">

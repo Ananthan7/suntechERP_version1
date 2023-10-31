@@ -418,7 +418,7 @@
           style="width: 100%; max-width: none"
         >
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
               <mat-form-field>
                 <mat-label>Mobile Number</mat-label>
                 <input
@@ -442,7 +442,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <mat-form-field>
                 <mat-label>Name</mat-label>
                 <input
@@ -474,6 +474,16 @@
                 </mat-error>
               </mat-form-field>
             </div>
+            <div class="col-md-2" >
+                <mat-form-field>
+                  <mat-label>Code</mat-label>
+                  <input type="text" matInput formControlName="fcn_customer_code" (change)="nameChange($event)"
+                    [readonly]="viewOnly || this.customerDataForm.value.fcn_customer_code == '' " />
+                  <mat-error *ngIf="customerDataForm.controls.fcn_customer_code.hasError('required')">
+                    Code is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
             <div class="col-md-2">
               <mat-form-field>
                 <mat-label>ID Type </mat-label>
@@ -3144,11 +3154,14 @@
                   formControlName="fcn_cust_detail_state"
                   id="fcn_cust_detail_state"
                   [matAutocomplete]="state"
+
                   [readonly]="viewOnly"
                 />
                 <mat-autocomplete
                   #state="matAutocomplete"
                   autoActiveFirstOption
+                  (optionSelected)="changeState($event.option.value)"
+
                 >
                   <mat-option
                     *ngFor="let option of stateMasterOptions | async"

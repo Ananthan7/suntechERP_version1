@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import * as FileSaver from "file-saver";
+import { ToastrService } from 'ngx-toastr';
 import * as XLSX from "xlsx";
 
 @Injectable({
@@ -55,7 +56,19 @@ export class CommonServiceService {
   constructor(
     private route: ActivatedRoute,
     private _decimalPipe: DecimalPipe,
+    private toastr: ToastrService,
   ) {
+  }
+  //**USE: common fuction to show toaster By MsgId */
+  toastErrorByMsgId(MsgId: string,Description?: string){
+    this.toastr.error(this.getMsgByID(MsgId), Description ? Description : '', {
+      timeOut: 3000,
+    })
+  }
+  toastSuccessByMsgId(MsgId: string,Description?: string){
+    this.toastr.success(this.getMsgByID(MsgId), Description ? Description : '', {
+      timeOut: 3000,
+    })
   }
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
@@ -67,7 +80,7 @@ export class CommonServiceService {
     })
     return paramValue
   }
-  /**USE: common fuction to format the value to limit decimal places from branch master */
+  /**USE: common fuction to format the Number to limit decimal places from branch master */
   decimalQuantityFormat(value: any, flag: string){
     if (flag == 'AMOUNT') {
       this.decimalFormatCount = this.allbranchMaster?.BAMTDECIMALS
@@ -130,6 +143,7 @@ export class CommonServiceService {
   }
   //service for ADD POS starts
   stringToBoolean = (string: string) => string != undefined && string != null ? string.toString().toLowerCase() == 'false' ? false : true : false;
+  
   formControlSetReadOnly(id: any, isReadonly: boolean) {
     const ele: any = document.getElementById(id);
     console.log('ele ', ele);
@@ -255,8 +269,9 @@ export class CommonServiceService {
     return res;
   }
   posKARATRATECHANGE: any = '';
+
   getDivisionMS(division: any) {
-    // return this.divisionMasterList.filter((data) => data.DIVISION_CODE == division)[0].DIVISION;
+    return this.divisionMasterList.filter((data:any) => data.DIVISION_CODE == division)[0].DIVISION;
   }
   Null2BitValue(value: any) {
     value = value.trim();
@@ -571,5 +586,9 @@ export class CommonServiceService {
     });
     const blobData = new Blob([excelbuffer], { type: EXCEL_TYPE });
     FileSaver.saveAs(blobData, excelName);
+  }
+
+  convertDateWithTimeZero(date: any) {
+    return date.split('T')[0] + 'T00:00:00.000Z';
   }
 }

@@ -51,11 +51,11 @@ export class LossRecoveryComponent implements OnInit {
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: "ACCODE",
+    LOOKUPID: 11,
+    SEARCH_FIELD: "LOCATION_CODE",
     SEARCH_HEADING: "Location",
     SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "LOCATION_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -142,7 +142,7 @@ export class LossRecoveryComponent implements OnInit {
 
   locationCodeSelected(e:any){
     console.log(e);
-    this.lossRecoveryFrom.controls.locationTo.setValue(e.COUNT);
+    this.lossRecoveryFrom.controls.locationTo.setValue(e.LOCATION_CODE);
   }
 
 

@@ -44,7 +44,7 @@ export class JobCreationComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 20,
     SEARCH_FIELD: 'Process_Code',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "PROCESS_CODE<> ''",
     VIEW_INPUT: true,

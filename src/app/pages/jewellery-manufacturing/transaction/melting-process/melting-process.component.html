@@ -9,7 +9,7 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="row">
   <div class="col-md-12">
-    <form [formGroup]="meltingIssueFrom">
+    <form [formGroup]="meltingProcessFrom">
       <div class="container-fluid pt-3">
         <div class="row">
           <div class="col-md-6">
@@ -43,14 +43,12 @@
                 <!-- <mat-form-field style="width: 100%;">
                   <input type="date" matInput />
                 </mat-form-field> -->
-                <mat-form-field style="width: 150px">
-                  <!-- <mat-label>Date Of Birth</mat-label> -->
-                  <input matInput DateValidation (dateChange)="formatDate($event)"
-                      [matDatepicker]="dob" formControlName="voucherDate"
-                      placeholder="DD/MM/YYYY" />
-                  <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                  <mat-datepicker #dob></mat-datepicker>
-              </mat-form-field>
+                <mat-form-field style="width: 100%">
+                  <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
+                    placeholder="YYYY/MM/DD" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
@@ -68,7 +66,7 @@
               <label for="inputPassword" class="col-sm-4">Process : </label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="processCode"/>
+                  <input type="text" matInput formControlName="process"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
@@ -81,7 +79,7 @@
               <label for="inputPassword" class="col-sm-4">Worker :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="workerCode" />
+                  <input type="text" matInput formControlName="worker" />
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
@@ -182,7 +180,7 @@
                     <label for="inputPassword" class="col-sm-6 col-form-label">Stone Weight:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="StoneWeight" />
+                        <input type="text" matInput formControlName="stoneWeight" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -213,117 +211,108 @@
             </div>
 
             <div class="col-md-4">
-               <table class="table table-bordered">
-                <tbody>
-                  <tr>
-                    <th class="p-1 fs-7" rowspan="2">R To Stock</th>
-                    <th class="p-1 fs-7">Stock Code</th>
-                    <th class="p-1 fs-7">Gross Wt</th>
-                    <th class="p-1 fs-7">Purity</th>
-                    <th class="p-1 fs-7">Pure Wt</th>
-                    <th class="p-1 fs-7">Location</th>
-                  </tr>
-                  <tr>
-                    <!-- <td class="p-1"></td> -->
-                    <td class="p-1">
-                      <mat-form-field style="width: 58%;">
-                        <input type="text" matInput formControlName="stockCode" />
-                      </mat-form-field>
-                      <master-search></master-search>
-
-                    </td>
-                    <td class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="purity" />
-                      </mat-form-field>
-                    </td>
-                    <td  class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="pureWt" />
-                      </mat-form-field>
-                    </td>
-                    <td  class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="grossWt" />
-                      </mat-form-field>
-                    </td>
-                    <td  class="p-1">
-                      <mat-form-field style="width: 58%;">
-                        <input type="text" matInput formControlName="location" />
-                      </mat-form-field>
-                      <master-search></master-search>
-                    </td>
-                  </tr>
-                </tbody>
-                </table>
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-4"> Stock Code : </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="stockcodeRet" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-4"> Gross Wt : </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number"  matInput formControlName="TotalgrossWt" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-4"> Purity : </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number"  matInput formControlName="purity" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-4">Pure Wt : </label>
+                <div class="col-sm-8">
+                    <mat-form-field style="width: 100%;">
+                      <input type="number"  matInput formControlName="TotalpureWt" />
+                    </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-4"> Location : </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="locationRet" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="locationCodeData" (newRowClick)="locationCodeSelected($event)"></master-search>
+                </div>
+              </div>
             </div>
             <div class="col-md-8">
-              <table class="table table-bordered">
-                <tbody>
-                  <tr>
-                    <th class="p-1 fs-7" rowspan="2">R To Stock</th>
-                    <th class="p-1 fs-7">Stock Code</th>
-                    <th class="p-1 fs-7">Gross Wt</th>
-                    <th class="p-1 fs-7">Purity</th>
-                    <th class="p-1 fs-7">Pure Wt</th>
-                    <th class="p-1 fs-7">Location</th>
-                    <th class="p-1 fs-7">Loss</th>
-                    <th class="p-1 fs-7">Pure Wt</th>
-                    <th class="p-1 fs-7">Bal Gross</th>
-                    <th class="p-1 fs-7">Bal Pure</th>
-
-                  </tr>
-                  <tr>
-                    <td class="p-1">
-                      <mat-form-field style="width: 60%;">
-                        <input type="text" matInput formControlName="stockCode" />
-                      </mat-form-field>
-                      <master-search></master-search>
-                    </td>
-                    <td class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="purity" />
-                      </mat-form-field>
-                    </td>
-                    <td  class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="pureWt" />
-                      </mat-form-field>
-                    </td>
-                    <td  class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="grossWt" />
-                      </mat-form-field>
-                    </td>
-                    <td  class="p-1">
-                      <mat-form-field style="width: 60%;">
-                        <input type="text" matInput formControlName="location" />
-                      </mat-form-field>
-                      <master-search></master-search>
-                    </td>
-                    <td class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="loss" />
-                      </mat-form-field>
-                    </td>
-                    <td  class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="pureWtOne" />
-                      </mat-form-field>
-                    </td>
-                    <td  class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="balGross" />
-                      </mat-form-field>
-                    </td>
-                    <td  class="p-1">
-                      <mat-form-field style="width: 100%;">
-                        <input type="number"  matInput formControlName="balPure" />
-                      </mat-form-field>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-3">Stock Code : </label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="stockCodeScp" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeScpSelected($event)"></master-search>
+                </div>
+                <label for="inputPassword" class="col-sm-3"> Gross Wt : </label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number"  matInput formControlName="RETgrossWt" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-3"> Purity : </label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number"  matInput formControlName="purityRET" />
+                  </mat-form-field>
+                </div>
+                <label for="inputPassword" class="col-sm-3">Pure Wt : </label>
+                <div class="col-sm-3">
+                    <mat-form-field style="width: 100%;">
+                      <input type="number"  matInput formControlName="RETpureWt" />
+                    </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-3"> Location : </label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="locationScp" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="locationCodeData" (newRowClick)="locationCodeScpSelected($event)"></master-search>
+                </div>
+                <label for="inputPassword" class="col-sm-3">Loss : </label>
+                <div class="col-sm-3">
+                    <mat-form-field style="width: 100%;">
+                      <input type="number"  matInput formControlName="loss" />
+                    </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-3">Bal Gross : </label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number"  matInput formControlName="balGross" />
+                  </mat-form-field>
+                </div>
+                <label for="inputPassword" class="col-sm-3">Bal Gross : </label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="number"  matInput formControlName="balPure" />
+                  </mat-form-field>
+                </div>
+              </div>
             </div>
             <div class="col-md-12 mt-2">
               <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
@@ -339,9 +328,7 @@
               </dx-data-grid>
             </div>
           </div>
-          <div class="row m-2 ">
-
-          </div>
+          
         </div>
       </div>
     </form>
