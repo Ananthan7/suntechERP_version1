@@ -23,6 +23,8 @@ export class MeltingTypeComponent implements OnInit {
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
 
+  slNo = 0;
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -77,9 +79,10 @@ export class MeltingTypeComponent implements OnInit {
             confirmButtonText: 'Ok'
           }).then((result: any) => {
             if (result.value) {
-              this.meltingTypeForm.reset()
-              this.tableData = []
+              this.meltingTypeForm.reset();
+              this.tableData = [];
               this.close('reloadMainGrid')
+              this.slNo = 0;
             }
           });
         }
@@ -169,10 +172,10 @@ export class MeltingTypeComponent implements OnInit {
 
   addTableData(){
     console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
-    
+    this.slNo = this.slNo + 1;
     let data = {
       "UNIQUEID": 0,
-      "SRNO": 0,
+      "SRNO": this.slNo,
       "MELTYPE_CODE":  this.meltingTypeForm.value.code,
       "MELTYPE_DESCRIPTION":  this.meltingTypeForm.value.description,
       "KARAT_CODE":  this.meltingTypeForm.value.karat,
@@ -250,7 +253,7 @@ export class MeltingTypeComponent implements OnInit {
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
-    if (!this.content.WORKER_CODE) {
+    if (!this.meltingTypeForm.value.code) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -273,7 +276,7 @@ export class MeltingTypeComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'MeltingType/DeleteMeltingType/' + this.content.MID;
+        let API = 'MeltingType/DeleteMeltingType/' + this.meltingTypeForm.value.code;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -323,4 +326,11 @@ export class MeltingTypeComponent implements OnInit {
   }
 
  
+  deleteTableData(){
+    console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
+  //  this.tableData.push(data);
+   this.tableData.pop()
+    console.log(this.tableData);
+    
+  }
 }
