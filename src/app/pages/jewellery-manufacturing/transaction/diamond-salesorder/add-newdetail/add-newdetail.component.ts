@@ -7,6 +7,12 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
+interface dataToSave {
+  BOMDETAILS:any[]
+  SUMMARYDETAILS:any[]
+  PART_DETAILS:any[]
+  COMPONENT_DETAILS:any[]
+}
 @Component({
   selector: 'app-add-newdetail',
   templateUrl: './add-newdetail.component.html',
@@ -255,8 +261,12 @@ export class AddNewdetailComponent implements OnInit {
     this.BOMDetailsArray.forEach((item: any) => {
       if (item.METALSTONE == 'M') {
         item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT, 'METAL')
+        
       } else if ((item.METALSTONE == 'S')) {
         item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT, 'STONE')
+      }
+      if(item.DIVCODE == 'G'){
+        this.diamondSalesDetailForm.controls.METAL_WT.setValue(item.GROSS_WT)
       }
       item.RATEFC = this.commonService.decimalQuantityFormat(item.RATEFC, 'AMOUNT')
       item.LABRATEFC = this.commonService.decimalQuantityFormat(item.LABRATEFC, 'AMOUNT')
@@ -733,16 +743,26 @@ export class AddNewdetailComponent implements OnInit {
       this.diamondSalesDetailForm.value.RATEFC * event.target.value
     )
   }
-  /**USE: final form save */
+  /**USE: final form save  */
   formSubmit() {
-    let item: any = {}
+    let item: dataToSave = {
+      BOMDETAILS: [],
+      SUMMARYDETAILS: [],
+      PART_DETAILS: [],
+      COMPONENT_DETAILS: []
+    }
     if (this.BOMDetailsArray.length > 0) {
       item.BOMDETAILS = this.BOMDetailsArray
     }
     if (this.summaryDetailForm.value || this.diamondSalesDetailForm.value) {
       item.SUMMARYDETAILS = [{ ...this.diamondSalesDetailForm.value, ...this.summaryDetailForm.value }]
     }
-
+    if(this.gridParts.length>0){
+      item.PART_DETAILS = this.gridParts
+    }
+    if(this.gridComponents.length>0){
+      item.COMPONENT_DETAILS = this.gridComponents
+    }
     this.close([item])//USE: passing Detail data to header screen on close
   }
   /**USE: reset All data with this function to reuse as needed */
