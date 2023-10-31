@@ -220,7 +220,7 @@ export class DiamondSalesorderComponent implements OnInit {
     } else {
       data = [{ HEARDERDETAILS: this.PartyDetailsOrderForm.value }]
     }
-    
+
     // if (this.HeaderValidate() == false){
     //   return
     // }
@@ -269,9 +269,7 @@ export class DiamondSalesorderComponent implements OnInit {
       })
     }
   }
-  private ItemDetailInsert() {
 
-  }
   // division checkbox change
   selectDivisionGridData(event: any, { data }: any) {
     let division = {
@@ -363,13 +361,18 @@ export class DiamondSalesorderComponent implements OnInit {
     }]
     return []
   }
-  private getComponentData() {
-    let data = [
-      {
+  private getBOMData() {
+    let bomData = this.detailData[0].DATA
+    bomData = bomData.BOM_DETAILS
+    console.log(bomData, 'summaryData');
+    let stnmtlDetail:any[] = [];
+    for (let index = 0; index < bomData.length; index++) {
+      const element = bomData[index];
+      stnmtlDetail.push({
         "UNIQUEID": 0,
-        "SRNO": 0,
-        "BRANCH_CODE": "string",
-        "DESIGN_CODE": "string",
+        "SRNO": element.SRNO || 0,
+        "BRANCH_CODE": this.commonService.branchCode || "",
+        "DESIGN_CODE": "",
         "METALSTONE": "string",
         "DIVCODE": "string",
         "PRICEID": "string",
@@ -407,10 +410,10 @@ export class DiamondSalesorderComponent implements OnInit {
         "VOCNO": 0,
         "YEARMONTH": "string",
         "COMPSLNO": 0,
-        "TREE_BRANCH_CODE": "string",
-        "TREE_VOCTYPE": "string",
+        "TREE_BRANCH_CODE": "",
+        "TREE_VOCTYPE": "",
         "TREE_VOCNO": 0,
-        "TREE_YEARMONTH": "string",
+        "TREE_YEARMONTH": "",
         "PROCESS_TYPE": "string",
         "SIEVE_SET": "string",
         "DSN_STOCK_CODE": "string",
@@ -423,25 +426,25 @@ export class DiamondSalesorderComponent implements OnInit {
         "WASTAGE_AMTLC": 0,
         "STONE_TYPE": "string",
         "PURITY": 0
-      }
-    ]
-    return []
+      })
+    }
+    return stnmtlDetail
   }
   private getAllDetailData() {
     let summaryData = this.detailData[0].DATA
-    summaryData = summaryData.summaryDetail
+    summaryData = summaryData.SUMMARYDETAILS
     let detailArrayValues = {}
     summaryData.forEach((item: any) => {
       detailArrayValues = {
         "UNIQUEID": 0,
-        "SRNO": item.SRNO || 0,
+        "SRNO": Number(item.SRNO) || 0,
         "EXP_PROD_START_DATE": item.ProductionDate.toISOString() || "2023-09-14T14:56:43.961Z",
         "DELIVERY_DATE": item.DeliveryOnDate.toISOString() || "2023-09-14T14:56:43.961Z",
-        "PARTYCODE": item.KARAT_CODE || "",
+        "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode || "",
         "DESIGN_CODE": item.designCode || "",
         "KARAT": item.KARAT_CODE || "",
         "METAL_COLOR": item.COLOR || "",
-        "PCS": item.PCS || 0,
+        "PCS": Number(item.PCS) || 0,
         "METAL_WT": Number(item.METAL_WT) || 0,
         "STONE_WT": Number(item.STONE_WT) || 0,
         "GROSS_WT": Number(item.GROSS_WT) || 0,
@@ -544,7 +547,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "DELIVERY_TYPE": item.DeliveryType || "tst",
         "DELIVERY_DAYS": 0,
         "GOLD_LOSS_WT": 0,
-        "PURITY": item.PURITY || 0
+        "PURITY": Number(item.PURITY) || 0
       }
       this.detailRowToSave.push(detailArrayValues)
     });
@@ -562,16 +565,16 @@ export class DiamondSalesorderComponent implements OnInit {
       "MID": 0,
       "BRANCH_CODE": this.commonService.branchCode || "",
       "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
-      "VOCNO": this.PartyDetailsOrderForm.value.voucherNo || 0,
+      "VOCNO": Number(this.PartyDetailsOrderForm.value.voucherNo) || 0,
       "VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate) || "",
-      "EXP_PROD_START_DATE": this.detailRowToSave[0].ProductionDate.toISOString() || "2023-09-14T14:56:43.961Z",
+      "EXP_PROD_START_DATE": this.commonService.formatDateTime(this.currentDate) || "2023-09-14T14:56:43.961Z",
       "DELIVERY_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
       "YEARMONTH": this.commonService.yearSelected || "",
       "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode || "",
       "PARTY_CURRENCY": this.PartyDetailsOrderForm.value.partyCurrencyType || "",
-      "PARTY_CURR_RATE": this.PartyDetailsOrderForm.value.partyCurrencyRate || 0,
+      "PARTY_CURR_RATE": Number(this.PartyDetailsOrderForm.value.partyCurrencyRate) || 0,
       "ITEM_CURRENCY": this.PartyDetailsOrderForm.value.ItemCurrency || "",
-      "ITEM_CURR_RATE": this.PartyDetailsOrderForm.value.ItemCurrencyRate || 0,
+      "ITEM_CURR_RATE": Number(this.PartyDetailsOrderForm.value.ItemCurrencyRate) || 0,
       "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
       "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode || "",
       "METAL_RATE_TYPE": "tst",
@@ -594,7 +597,7 @@ export class DiamondSalesorderComponent implements OnInit {
       "LINKID": "tst",
       "OUSTATUS": true,
       "OUSTATUSNEW": 0,
-      "ORDER_STATUS": "tst",
+      "ORDER_STATUS": "T",
       "MARKUP_PER": 0,
       "GOLD_LOSS_PER": 0,
       "CR_DAYS": 0,
@@ -628,13 +631,12 @@ export class DiamondSalesorderComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "AutoPosting": true,
       "Details": this.getAllDetailData(),
-      "stnmtlDetail": this.getComponentData(), //component details
+      "stnmtlDetail": this.getBOMData(), //component details
       "HeaderLabours": this.headerLaboursList,
       "LabourDetails": this.getLabType4Detail(), //lab type 4
       "HeaderDivisons": this.headerDivisionList
     }
-    console.log(postData,'postData');
-    
+
     // if (this.PartyDetailsOrderForm.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
@@ -644,7 +646,7 @@ export class DiamondSalesorderComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.snackBar.dismiss()
-        if (result.status.toUpperCase() == "SUCCESS" || result.status.toUpperCase() == "OK") {
+        if (result.status.toUpperCase().trim() == "SUCCESS" || result.status.toUpperCase() == "OK") {
           Swal.fire({
             title: result.message || 'Success',
             text: '',
@@ -702,7 +704,7 @@ export class DiamondSalesorderComponent implements OnInit {
 
           if (data.length > 1) {
             this.partyCurrencyData.WHERECONDITION = this.commonService.branchCode + ',' + event.target.value
-          }else{
+          } else {
             this.partyCurrencyData.WHERECONDITION = ''
           }
           let defaultCurrencyArr = data.filter((item: any) => item.DEFAULT_CURRENCY === 1)
@@ -717,7 +719,7 @@ export class DiamondSalesorderComponent implements OnInit {
 
             let currencyRate = this.commonService.getCurrRate(defaultCurrencyArr[0].CURRENCY_CODE)
             currencyRate = this.commonService.decimalQuantityFormat(currencyRate, 'RATE')
-            
+
             this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
             this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyRate)
           } else {
@@ -776,15 +778,15 @@ export class DiamondSalesorderComponent implements OnInit {
     this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
   }
   partyCurrencySelected(event: any) {
-    if(event.CURRENCY_CODE){
+    if (event.CURRENCY_CODE) {
       this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(event.CURRENCY_CODE)
       this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(event.CONV_RATE)
     }
-    if(event.Currency){
+    if (event.Currency) {
       this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(event.Currency)
       this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(
-        this.commonService.decimalQuantityFormat(event['Conv Rate'],'RATE')
-        )
+        this.commonService.decimalQuantityFormat(event['Conv Rate'], 'RATE')
+      )
     }
   }
   SalesmanChange(event: any) {
@@ -842,23 +844,23 @@ export class DiamondSalesorderComponent implements OnInit {
   addDays() {
     const daysToAdd = parseInt(this.PartyDetailsOrderForm.value.DeliveryOnDateType);
     const currentDate = new Date();
-    
+
     if (!isNaN(daysToAdd)) {
       const futureDate = new Date(currentDate);
       futureDate.setDate(currentDate.getDate() + daysToAdd);
-  
+
       const dateInput = this.PartyDetailsOrderForm.value.DeliveryOnDateType
-      
+
       let dates = this.formatDateF(futureDate);
       this.PartyDetailsOrderForm.controls.DeliveryOnDate.setValue(dates)
     }
   }
-  
-  formatDateF(date:any) {
+
+  formatDateF(date: any) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-  
+
     return `${year}-${month}-${day}`;
   }
 
