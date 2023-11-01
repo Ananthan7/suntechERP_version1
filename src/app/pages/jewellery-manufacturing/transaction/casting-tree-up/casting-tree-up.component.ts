@@ -53,7 +53,7 @@ export class CastingTreeUpComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 20,
     SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "PROCESS_CODE<> ''",
     VIEW_INPUT: true,
@@ -66,7 +66,7 @@ export class CastingTreeUpComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 19,
     SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
@@ -79,7 +79,7 @@ export class CastingTreeUpComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 84,
     SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "KARAT_CODE<> ''",
     VIEW_INPUT: true,
@@ -92,7 +92,7 @@ export class CastingTreeUpComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 35,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -105,7 +105,7 @@ export class CastingTreeUpComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 35,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_HEADING: 'Cylinder Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -204,6 +204,14 @@ colorCodeSelected(e:any){
 karatCodeSelected(e:any){
   console.log(e);
   this.castingTreeUpFrom.controls.karatCode.setValue(e['Karat Code']);
+}
+
+addTableData(){ 
+  
+}
+
+deleteTableData(){
+ 
 }
 
  removedata(){

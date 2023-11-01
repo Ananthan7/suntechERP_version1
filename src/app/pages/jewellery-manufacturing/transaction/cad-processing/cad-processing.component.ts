@@ -355,7 +355,7 @@ export class CADProcessingComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 19,
     SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Location',
+    SEARCH_HEADING: 'Worker Code ',
     SEARCH_VALUE: '',
     WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
@@ -381,4 +381,10 @@ export class CADProcessingComponent implements OnInit {
     });
 
   }
+
+  deleteTableData(){
+ 
+    
+  }
+
 }
