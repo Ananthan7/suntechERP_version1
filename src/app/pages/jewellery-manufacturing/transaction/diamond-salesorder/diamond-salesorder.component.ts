@@ -220,7 +220,6 @@ export class DiamondSalesorderComponent implements OnInit {
     } else {
       data = [{ HEARDERDETAILS: this.PartyDetailsOrderForm.value }]
     }
-
     // if (this.HeaderValidate() == false){
     //   return
     // }
@@ -269,7 +268,6 @@ export class DiamondSalesorderComponent implements OnInit {
       })
     }
   }
-
   // division checkbox change
   selectDivisionGridData(event: any, { data }: any) {
     let division = {
@@ -636,7 +634,8 @@ export class DiamondSalesorderComponent implements OnInit {
       "LabourDetails": this.getLabType4Detail(), //lab type 4
       "HeaderDivisons": this.headerDivisionList
     }
-
+    console.log(postData,'postData');
+    
     // if (this.PartyDetailsOrderForm.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
@@ -719,7 +718,7 @@ export class DiamondSalesorderComponent implements OnInit {
 
             let currencyRate = this.commonService.getCurrRate(defaultCurrencyArr[0].CURRENCY_CODE)
             currencyRate = this.commonService.decimalQuantityFormat(currencyRate, 'RATE')
-
+            
             this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
             this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyRate)
           } else {

@@ -381,4 +381,10 @@ export class CADProcessingComponent implements OnInit {
     });
 
   }
+
+  deleteTableData(){
+ 
+    
+  }
+
 }

@@ -167,16 +167,12 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-3 d-flex mb-2">
-                        <div class="p-1">
-                            <button type="button" mat-flat-button color="primary" (click)="openaddalloyallocation()">
-                                <i class="fa fa-plus" style="font-size: 11px;"></i>
-                            </button>
-                        </div>
-                        <div class="p-1">
-                            <button type="button" mat-flat-button color="primary">
-                                <i class="fa fa-trash" style="font-size: 11px;"></i>
-                            </button>
-                        </div>
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                            [viewImportBtn]="false"
+                            (addClick)="openaddalloyallocation()"
+                            (deleteClick)="deleteTableData()"
+                            >
+                        </menu-buttons>
                     </div>
                     <div class="col-md-12">
                         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">

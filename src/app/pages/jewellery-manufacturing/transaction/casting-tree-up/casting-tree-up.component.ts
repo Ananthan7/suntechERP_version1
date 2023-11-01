@@ -206,6 +206,14 @@ karatCodeSelected(e:any){
   this.castingTreeUpFrom.controls.karatCode.setValue(e['Karat Code']);
 }
 
+addTableData(){ 
+  
+}
+
+deleteTableData(){
+ 
+}
+
  removedata(){
    this.tableData.pop();
  }
