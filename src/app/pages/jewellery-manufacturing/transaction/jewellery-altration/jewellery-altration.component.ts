@@ -119,6 +119,10 @@ export class JewelleryAltrationComponent implements OnInit {
 
   }
 
+  deleteTableData(){
+ 
+  }
+
 removedata(){
   this.tableData.pop();
 }

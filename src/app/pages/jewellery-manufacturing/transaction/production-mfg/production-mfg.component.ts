@@ -104,6 +104,9 @@ export class ProductionMfgComponent implements OnInit {
   }
 
 
+  deleteTableData(){
+   
+  }
 
   removedata() {
     this.tableData.pop();

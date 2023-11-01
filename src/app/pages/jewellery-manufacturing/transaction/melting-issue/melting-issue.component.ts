@@ -160,6 +160,12 @@ export class MeltingIssueComponent implements OnInit {
 
   }
 
+ 
+  
+  deleteTableData(){
+   
+  }
+
   meltingIssueFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
     vocno:[''],

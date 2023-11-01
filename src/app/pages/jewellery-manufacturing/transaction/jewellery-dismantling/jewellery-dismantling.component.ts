@@ -80,6 +80,17 @@ export class JewelleryDismantlingComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  addTableData(){ 
+  
+  }
+  
+  deleteTableData(){
+   
+  }
+
+  addTableDatas(){ 
+
+  }
 
  jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
    voctype:[''],

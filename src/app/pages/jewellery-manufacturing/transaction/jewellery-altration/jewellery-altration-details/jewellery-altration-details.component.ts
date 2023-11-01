@@ -78,6 +78,14 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
   }
 
+  addTableData(){ 
+  
+  }
+  
+  deleteTableData(){
+   
+  }
+
   jewelleryaltrationdetailsFrom: FormGroup = this.formBuilder.group({
    stockcode:[''],
    description:[''],

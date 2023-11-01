@@ -115,26 +115,12 @@
 
           <div class="row d-flex pt-5">
             <div class="col-12 d-flex">
-              <!--<div class="p-2 bd-highlight">
-                 <button type="button" class="btn btn-primary add-btn">
-                  Add
-                </button>
-              </div>
-              <div class="p-2 bd-highlight">
-                <button type="button" class="btn btn-outline-primary del-btn">
-                  Delete
-                </button>
-              </div> -->
-              <div class="p-1">
-                <button type="button" mat-flat-button color="primary">
-                  <i class="fa fa-plus" style="font-size: 11px;"></i>
-                </button>
-              </div>
-              <div class="p-1">
-                <button type="button" mat-flat-button color="primary">
-                  <i class="fa fa-trash" style="font-size: 11px;"></i>
-                </button>
-              </div>
+              <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+              [viewImportBtn]="false"
+              (addClick)="addTableData()"
+              (deleteClick)="deleteTableData()"
+              >
+          </menu-buttons>
               <div class="col-sm-3">
                 <mat-form-field style="width: 80%;">
                   <input type="text" matInput />
@@ -306,16 +292,12 @@
                       </div>
                       <div class="row">
                         <div class="col-md-12 d-flex">
-                          <div class="p-1">
-                            <button type="button" mat-flat-button color="primary">
-                              <i class="fa fa-plus" style="font-size: 11px;"></i>
-                            </button>
-                          </div>
-                          <div class="p-1">
-                            <button type="button" mat-flat-button color="primary">
-                              <i class="fa fa-trash" style="font-size: 11px;"></i>
-                            </button>
-                          </div>
+                          <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                          [viewImportBtn]="false"
+                          (addClick)="addTableDatas()"
+                          (deleteClick)="deleteTableData()"
+                          >
+                      </menu-buttons>
                         </div>
                       </div>
                     </div>

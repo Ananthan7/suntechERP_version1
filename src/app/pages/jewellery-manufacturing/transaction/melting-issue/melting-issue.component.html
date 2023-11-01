@@ -124,26 +124,12 @@
                 </div>
                 <div class="row py-2 border-top">
                     <div class="col-md-3 d-flex">
-                        <!-- <div class="p-2 bd-highlight">
-                            <button type="button" class="btn btn-primary add-btn" (click)="openaddMeltingIssueDetails()">
-                                Add
-                            </button>
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <button type="button" class="btn btn-outline-primary del-btn">
-                                Delete
-                            </button>
-                        </div> -->
-                        <div class="p-1">
-                            <button type="button" mat-flat-button color="primary" (click)="openaddMeltingIssueDetails()">
-                              <i class="fa fa-plus" style="font-size: 11px;"></i>
-                            </button>
-                          </div>
-                          <div class="p-1">
-                            <button type="button" mat-flat-button color="primary">
-                              <i class="fa fa-trash" style="font-size: 11px;"></i>
-                            </button>
-                          </div>
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                        [viewImportBtn]="false"
+                        (addClick)="openaddMeltingIssueDetails()"
+                        (deleteClick)="deleteTableData()"
+                        >
+                    </menu-buttons>
                     </div>
                     <div class="col-md-12">
                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">

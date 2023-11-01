@@ -121,6 +121,9 @@ export class StoneIssueComponent implements OnInit {
 
   }
 
+  deleteTableData(){
+   
+  }
 
   stoneissueFrom: FormGroup = this.formBuilder.group({
     voctype:[''],

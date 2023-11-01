@@ -108,6 +108,9 @@ export class StoneReturnComponent implements OnInit {
     });
   }
 
+  deleteTableData(){
+   
+  }
 
   stonereturnFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
