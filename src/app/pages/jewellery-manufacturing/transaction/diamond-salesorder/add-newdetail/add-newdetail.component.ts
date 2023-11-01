@@ -138,6 +138,7 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+ 
   /**USE: details main form group*/
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
@@ -187,7 +188,9 @@ export class AddNewdetailComponent implements OnInit {
     Total_Labour: ['', [Validators.required]],
     Wastage: ['', [Validators.required]],
     WastagePercentage: ['', [Validators.required]],
+    Markup: ['', [Validators.required]],
     MarkupPercentage: ['', [Validators.required]],
+    Duty: ['', [Validators.required]],
     DutyPercentage: ['', [Validators.required]],
     MarginPercentage: ['', [Validators.required]],
     LoadingPercentage: ['', [Validators.required]],
@@ -324,7 +327,7 @@ export class AddNewdetailComponent implements OnInit {
     this.BOMDetailsArray[value.data.SRNO - 1].SHAPE = event.CODE;
   }
   stockCodeSelected(event: any, value: any) {
-    this.BOMDetailsArray[value.data.SRNO - 1].SHAPE = event.Stock_Code;
+    this.BOMDetailsArray[value.data.SRNO - 1].STOCK_CODE = event.Stock_Code;
   }
   onHoverColorCode({ data }: any) {
     this.generalMaster.WHERECONDITION = `TYPES = 'COLOR MASTER' AND DIV_${data.DIVCODE}=1`

@@ -101,6 +101,18 @@ export class DiamondSalesorderComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true
   }
+   /**USE: Design Code lookup model*/
+  deliveryTypeMaster: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'General Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'DELIVERY TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   /**USE: main form party details */
   PartyDetailsOrderForm: FormGroup = this.formBuilder.group({
     voucherType: ['', [Validators.required]],
@@ -760,15 +772,30 @@ export class DiamondSalesorderComponent implements OnInit {
   }
   rateTypeSelected(event: any) {
     this.PartyDetailsOrderForm.controls.rateType.setValue(event.RATE_TYPE)
-    this.PartyDetailsOrderForm.controls.rateTypeDESC.setValue(event.DESCRIPTION)
-
-    let data = this.commonService.RateTypeMasterData.filter((item: any) => item.DIVISION_CODE == 'G' && item.DEFAULT_RTYPE == 1)
-    console.log(data, 'data');
-
-    if (data[0].WHOLESALE_RATE) {
-      let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
-      this.PartyDetailsOrderForm.controls.wholeSaleRate.setValue(WHOLESALE_RATE)
-    }
+    let data = this.commonService.RateTypeMasterData.filter((item: any) => item.RATE_TYPE == event.RATE_TYPE)
+    
+    data.forEach((element:any) => {
+      if(element.RATE_TYPE == event.RATE_TYPE){
+        let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
+        this.PartyDetailsOrderForm.controls.wholeSaleRate.setValue(WHOLESALE_RATE)
+      }
+    });
+  }
+  
+  partyCurrencyChange(event: any) {
+    this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(
+      this.commonService.decimalQuantityFormat(event.target.value, 'RATE')
+    )
+  }
+  // /calculateDateDifference
+  
+  dateDifference(event: any) {
+    console.log(event.target.value);
+    
+  }
+  deliveryTypeSelected(event: any) {
+    this.PartyDetailsOrderForm.controls.DeliveryType.setValue(event.CODE)
+    this.PartyDetailsOrderForm.controls.DeliveryTypeDesc.setValue(event.DESCRIPTION)
   }
   itemCurrencySelected(event: any) {
     let currencyRate = this.commonService.decimalQuantityFormat(event.CONV_RATE, 'RATE')
