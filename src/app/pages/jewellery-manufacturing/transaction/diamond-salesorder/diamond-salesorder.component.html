@@ -158,7 +158,8 @@
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
                                             <input type="text" matInput
-                                                class="text-right" readonly
+                                                class="text-right" SixDecimalInput
+                                                (focusout)="partyCurrencyChange($event)"
                                                 formControlName="partyCurrencyRate" />
                                         </mat-form-field>
                                         <master-search
@@ -177,7 +178,7 @@
                                         </mat-form-field>
                                         <mat-form-field
                                             style="width: 40%; margin-left: 7px;">
-                                            <input type="text" matInput
+                                            <input type="number" matInput
                                                 SixDecimalInput
                                                 class="text-right"
                                                 formControlName="ItemCurrencyRate" />
@@ -202,6 +203,10 @@
                                             <input type="text" matInput
                                                 formControlName="DeliveryTypeDesc" />
                                         </mat-form-field>
+                                        <master-search
+                                            [MasterSearchData]="deliveryTypeMaster"
+                                            (newRowClick)="deliveryTypeSelected($event)">
+                                        </master-search>
                                     </span>
                                 </div>
                                 <div class="row">
@@ -210,7 +215,7 @@
                                     <span class="col-sm-8">
                                         <mat-form-field style="width: 20%">
                                             <input type="text" matInput
-                                                maxlength="6" (change)="addDays()"
+                                                maxlength="6" (focusout)="addDays()"
                                                 formControlName="DeliveryOnDateType" />
                                         </mat-form-field>
                                         <mat-form-field
@@ -219,7 +224,7 @@
                                                 [matDatepicker]="DeliveryOn"
                                                 formControlName="DeliveryOnDate"
                                                 placeholder="DD/MM/YYYY" />
-                                            <mat-datepicker-toggle matSuffix
+                                            <mat-datepicker-toggle matSuffix (dateChange)="dateDifference($event)"
                                                 [for]="DeliveryOn"></mat-datepicker-toggle>
                                             <mat-datepicker #DeliveryOn></mat-datepicker>
                                         </mat-form-field>

@@ -138,6 +138,7 @@ export class AddNewdetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+ 
   /**USE: details main form group*/
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
@@ -174,6 +175,7 @@ export class AddNewdetailComponent implements OnInit {
     SIZE: ['', [Validators.required]],
     SURFACEPROPERTY: ['', [Validators.required]],
     WIDTH: ['', [Validators.required]],
+    REFERENCE: ['', [Validators.required]],
     THICKNESS: ['', [Validators.required]],
     ENGRAVING_TEXT: ['', [Validators.required]],
     ENGRAVING_FONT: ['', [Validators.required]],
@@ -186,10 +188,15 @@ export class AddNewdetailComponent implements OnInit {
     Total_Labour: ['', [Validators.required]],
     Wastage: ['', [Validators.required]],
     WastagePercentage: ['', [Validators.required]],
+    Markup: ['', [Validators.required]],
     MarkupPercentage: ['', [Validators.required]],
+    Duty: ['', [Validators.required]],
     DutyPercentage: ['', [Validators.required]],
+    Margin: ['', [Validators.required]],
     MarginPercentage: ['', [Validators.required]],
+    Loading: ['', [Validators.required]],
     LoadingPercentage: ['', [Validators.required]],
+    Discount: ['', [Validators.required]],
     DiscountPercentage: ['', [Validators.required]],
     StampDetails: [''],
   })
@@ -227,8 +234,8 @@ export class AddNewdetailComponent implements OnInit {
 
   /**USE: to edit detail if already added */
   setInitialValues(): void {
-    if (this.content && this.content[0].HEARDERDETAILS) {
-      this.headerDetails = this.content[0].HEARDERDETAILS
+    if (this.content && this.content[0].HEADERDETAILS) {
+      this.headerDetails = this.content[0].HEADERDETAILS
     }
 
     if (this.content && this.content[0].BOMDETAILS) {
@@ -238,12 +245,41 @@ export class AddNewdetailComponent implements OnInit {
     }
     if (this.content && this.content[0].SUMMARYDETAILS) {
       let summaryDetail = this.content[0].SUMMARYDETAILS
-
+      console.log(summaryDetail,'summaryDetail');
+      //details first section
       this.diamondSalesDetailForm.controls.designCode.setValue(summaryDetail[0].designCode)
       this.diamondSalesDetailForm.controls.designDescription.setValue(summaryDetail[0].designDescription)
+      this.diamondSalesDetailForm.controls.AMOUNT.setValue(summaryDetail[0].AMOUNT)
+      this.diamondSalesDetailForm.controls.RATEFC.setValue(summaryDetail[0].RATEFC)
+      this.diamondSalesDetailForm.controls.METAL_WT.setValue(summaryDetail[0].METAL_WT)
+      this.diamondSalesDetailForm.controls.GROSS_WT.setValue(summaryDetail[0].GROSS_WT)
+      this.diamondSalesDetailForm.controls.STONE_WT.setValue(summaryDetail[0].STONE_WT)
+      this.diamondSalesDetailForm.controls.PCS.setValue(summaryDetail[0].PCS)
+      //summary details
+      this.summaryDetailForm.controls.KARAT_CODE.setValue(summaryDetail[0].KARAT_CODE)
+      this.summaryDetailForm.controls.TYPE_CODE.setValue(summaryDetail[0].TYPE_CODE)
+      this.summaryDetailForm.controls.BRAND_CODE.setValue(summaryDetail[0].BRAND_CODE)
+      this.summaryDetailForm.controls.PURITY.setValue(summaryDetail[0].PURITY)
+      this.summaryDetailForm.controls.SUPPLIER_CODE.setValue(summaryDetail[0].SUPPLIER_CODE)
+      this.summaryDetailForm.controls.CATEGORY_CODE.setValue(summaryDetail[0].CATEGORY_CODE)
+      this.summaryDetailForm.controls.SEQ_CODE.setValue(summaryDetail[0].SEQ_CODE)
+      this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(summaryDetail[0].SUBCATEGORY_CODE)
+      this.summaryDetailForm.controls.SIZE.setValue(summaryDetail[0].SIZE)
+      this.summaryDetailForm.controls.StampDetails.setValue(summaryDetail[0].StampDetails)
+      this.summaryDetailForm.controls.WIDTH.setValue(summaryDetail[0].WIDTH)
+      this.summaryDetailForm.controls.REFERENCE.setValue(summaryDetail[0].REFERENCE)
+      this.summaryDetailForm.controls.THICKNESS.setValue(summaryDetail[0].THICKNESS)
+      this.summaryDetailForm.controls.SCREW_FIELD.setValue(summaryDetail[0].SCREW_FIELD)
+      this.summaryDetailForm.controls.POLISHING.setValue(summaryDetail[0].POLISHING)
+      this.summaryDetailForm.controls.RHODIUM.setValue(summaryDetail[0].RHODIUM)
+      this.summaryDetailForm.controls.LABOUR.setValue(summaryDetail[0].LABOUR)
+      this.summaryDetailForm.controls.Misc.setValue(summaryDetail[0].Misc)
+      this.summaryDetailForm.controls.Total_Labour.setValue(summaryDetail[0].Total_Labour)
+    
     }
   }
-
+  
+ 
   radioButtonChanged() {
     this.codeSearchFlag = this.diamondSalesDetailForm.value.designCodeSelect
   }
@@ -294,7 +330,7 @@ export class AddNewdetailComponent implements OnInit {
     this.BOMDetailsArray[value.data.SRNO - 1].SHAPE = event.CODE;
   }
   stockCodeSelected(event: any, value: any) {
-    this.BOMDetailsArray[value.data.SRNO - 1].SHAPE = event.Stock_Code;
+    this.BOMDetailsArray[value.data.SRNO - 1].STOCK_CODE = event.Stock_Code;
   }
   onHoverColorCode({ data }: any) {
     this.generalMaster.WHERECONDITION = `TYPES = 'COLOR MASTER' AND DIV_${data.DIVCODE}=1`

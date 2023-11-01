@@ -544,6 +544,19 @@ export class CommonServiceService {
     });
     return dataArray
   }
+
+  calculateDateDifference(userDateValue:any) {
+    const userDate:any = new Date(userDateValue);
+    const currentDate:any = new Date();
+    const differenceInMilliseconds = userDate - currentDate;
+  
+    if (differenceInMilliseconds < 0) {
+      return 'Invalid Date';
+    } else {
+      const daysDifference = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+      return daysDifference;
+    }
+  }
   /**purpose: to find grossmargin percentage
    * in: GM and Revenue arrays
    * out: gm % value

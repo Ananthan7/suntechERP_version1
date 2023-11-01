@@ -732,7 +732,8 @@
                                         cellTemplate="partcolorcode"
                                         [allowEditing]="false" alignment="left">
                                         <!-- part colorcode search starts -->
-                                        <div *dxTemplate="let data of 'partcolorcode'">
+                                        <div
+                                            *dxTemplate="let data of 'partcolorcode'">
                                             <div
                                                 (mouseenter)="onHoverPartColorCode(data)"
                                                 class="d-flex justify-content-between">
@@ -741,7 +742,7 @@
                                                         class="mx-1"
                                                         [innerHTML]="data.value"></a>
                                                 </div>
-                                                <master-search 
+                                                <master-search
                                                     [MasterSearchData]="partColorCode"
                                                     (newRowClick)="partColorCodeSelected($event,data)">
                                                 </master-search>
@@ -769,21 +770,24 @@
 
                                     <dxi-column dataField="SLNO"
                                         caption="Sl No"
-                                        [allowEditing]="false" alignment="center">
+                                        [allowEditing]="false"
+                                        alignment="center">
                                     </dxi-column>
                                     <dxi-column dataField="COMP_CODE"
                                         caption="Comp Code"
                                         cellTemplate="compCode"
                                         [allowEditing]="false" alignment="left">
-                                        <div *dxTemplate="let data of 'compCode'">
-                                            <div (mouseenter)="onHoverCompCode(data)"
+                                        <div
+                                            *dxTemplate="let data of 'compCode'">
+                                            <div
+                                                (mouseenter)="onHoverCompCode(data)"
                                                 class="d-flex justify-content-between">
                                                 <div>
                                                     <a href="javascript:void(0)"
                                                         class="mx-1"
                                                         [innerHTML]="data.value"></a>
                                                 </div>
-                                                <master-search 
+                                                <master-search
                                                     [MasterSearchData]="componetCode"
                                                     (newRowClick)="componentCodeSelected($event,data)">
                                                 </master-search>
@@ -957,7 +961,7 @@
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput
-                                                    formControlName="SURFACEPROPERTY" />
+                                                    formControlName="REFERENCE" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -1066,17 +1070,33 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="td-p-5">Wastage %</td>
-                                                    <td class="textboxcorner">
+                                                    <td> 
                                                         <mat-form-field
-                                                            style="width: 100%;">
+                                                            style="width: 50px;">
                                                             <input type="text"
                                                                 matInput
                                                                 formControlName="Wastage" />
                                                         </mat-form-field>
                                                     </td>
+                                                    <td class="textboxcorner">
+                                                        <mat-form-field
+                                                            style="width: 100%;">
+                                                            <input type="text"
+                                                                matInput
+                                                                formControlName="WastagePercentage" />
+                                                        </mat-form-field>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="td-p-5">Markup %</td>
+                                                    <td>
+                                                        <mat-form-field
+                                                            style="width: 50px;">
+                                                            <input type="text"
+                                                                matInput
+                                                                formControlName="Markup" />
+                                                        </mat-form-field>
+                                                    </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
@@ -1088,6 +1108,14 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="td-p-5">Duty %</td>
+                                                    <td>
+                                                        <mat-form-field
+                                                            style="width: 50px;">
+                                                            <input type="text"
+                                                                matInput
+                                                                formControlName="Duty" />
+                                                        </mat-form-field>
+                                                    </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
@@ -1099,6 +1127,14 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="td-p-5">Margin %</td>
+                                                    <td>
+                                                        <mat-form-field
+                                                            style="width: 50px;">
+                                                            <input type="text"
+                                                                matInput
+                                                                formControlName="Margin" />
+                                                        </mat-form-field>
+                                                    </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
@@ -1110,6 +1146,14 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="td-p-5">Loading %</td>
+                                                    <td>
+                                                        <mat-form-field
+                                                            style="width: 50px;">
+                                                            <input type="text"
+                                                                matInput
+                                                                formControlName="Loading" />
+                                                        </mat-form-field>
+                                                    </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
@@ -1120,8 +1164,15 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="td-p-5">Discount
-                                                        %</td>
+                                                    <td class="td-p-5">Discount %</td>
+                                                    <td>
+                                                        <mat-form-field
+                                                            style="width: 50px;">
+                                                            <input type="text"
+                                                                matInput
+                                                                formControlName="Discount" />
+                                                        </mat-form-field>
+                                                    </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
