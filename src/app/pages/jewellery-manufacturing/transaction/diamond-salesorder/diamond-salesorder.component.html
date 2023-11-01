@@ -221,11 +221,10 @@
                                         <mat-form-field
                                             style="width: 40%;margin-left: 7px;">
                                             <input matInput DateValidation
-                                                (change)="dateDifference($event)"
                                                 [matDatepicker]="DeliveryOn"
                                                 formControlName="DeliveryOnDate"
                                                 placeholder="DD/MM/YYYY" />
-                                            <mat-datepicker-toggle matSuffix
+                                            <mat-datepicker-toggle matSuffix (dateChange)="dateDifference($event)"
                                                 [for]="DeliveryOn"></mat-datepicker-toggle>
                                             <mat-datepicker #DeliveryOn></mat-datepicker>
                                         </mat-form-field>

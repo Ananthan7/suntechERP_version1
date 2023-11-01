@@ -192,8 +192,11 @@ export class AddNewdetailComponent implements OnInit {
     MarkupPercentage: ['', [Validators.required]],
     Duty: ['', [Validators.required]],
     DutyPercentage: ['', [Validators.required]],
+    Margin: ['', [Validators.required]],
     MarginPercentage: ['', [Validators.required]],
+    Loading: ['', [Validators.required]],
     LoadingPercentage: ['', [Validators.required]],
+    Discount: ['', [Validators.required]],
     DiscountPercentage: ['', [Validators.required]],
     StampDetails: [''],
   })
@@ -276,7 +279,7 @@ export class AddNewdetailComponent implements OnInit {
     }
   }
   
-
+ 
   radioButtonChanged() {
     this.codeSearchFlag = this.diamondSalesDetailForm.value.designCodeSelect
   }
