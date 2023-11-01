@@ -188,6 +188,16 @@ export class MeltingTypeComponent implements OnInit {
 
     this.tableData.push(data);
     console.log(this.tableData);
+
+    this.meltingTypeForm.controls.code.setValue("");
+    this.meltingTypeForm.controls.description.setValue("");
+    this.meltingTypeForm.controls.karat.setValue("");
+    this.meltingTypeForm.controls.purity.setValue("");
+    this.meltingTypeForm.controls.divCode.setValue("");
+    this.meltingTypeForm.controls.stockCode.setValue("");
+    this.meltingTypeForm.controls.stockCodeDes.setValue("");
+    this.meltingTypeForm.controls.alloy.setValue("");
+
     
   }
 
