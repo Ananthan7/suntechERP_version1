@@ -498,6 +498,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       (result) => {
         console.log(`Closed with: ${result}`);
         console.log(result);
+        if (result != null && result?.customerDetails != null)
+          this.customerCodeSelected(result.customerDetails);
       },
       (reason) => {
         console.log(`Dismissed ${reason}`);

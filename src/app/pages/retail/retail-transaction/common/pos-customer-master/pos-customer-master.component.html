@@ -60,7 +60,7 @@
                   <input
                     type="text"
                     #mobile1
-                    (change)="onCustomerNameFocus(mobile1.value)"
+                    (change)="changeMobileNumber(mobile1.value)"
                     onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                     matInput
                     formControlName="fcn_cust_detail_phone"
