@@ -113,9 +113,13 @@ export class WaxProcessComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-
-
+  addTableData(){ 
   
+  }
+  
+  deleteTableData(){
+   
+  }
 
 formSubmit(){
 

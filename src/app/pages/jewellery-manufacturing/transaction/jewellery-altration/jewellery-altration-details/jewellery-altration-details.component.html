@@ -276,18 +276,12 @@
                                             <div class="row">
                                                 <div class="col-md-12 d-flex">
                                                     <div class="col-md-11">
-                                                        <div class="p-2 bd-highlight t-a2">
-                                                            <button type="button" class="btn btn-primary metal-issue-add-btn" >
-                                                                Add
-                                                            </button>
-                                                        </div>    
-                                                    </div>
-                                                    <div>
-                                                        <div class="p-2 bd-highlight">
-                                                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                                                                Delete
-                                                            </button>
-                                                        </div>    
+                                                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                                                        [viewImportBtn]="false"
+                                                        (addClick)="addTableData()"
+                                                        (deleteClick)="deleteTableData()"
+                                                        >
+                                                    </menu-buttons>
                                                     </div>
                                                 </div>
                                             </div>

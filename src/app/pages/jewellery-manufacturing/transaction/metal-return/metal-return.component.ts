@@ -147,6 +147,10 @@ export class MetalReturnComponent implements OnInit {
 
   }
 
+  deleteTableData(){
+   
+  }
+
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {

@@ -72,6 +72,10 @@ export class ProcessTransferComponent implements OnInit {
 
   // }
 
+  deleteTableData(){
+   
+  }
+
   processTransferFrom: FormGroup = this.formBuilder.group({
     voctype:[''],
     vocdate:[''],

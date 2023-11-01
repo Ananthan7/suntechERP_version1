@@ -123,26 +123,12 @@
     <div class="pt-3">
       <div class="row">
         <div class="col-12 d-flex">
-          <!-- <div class="p-2 bd-highlight">
-            <button type="button" class="btn btn-primary metal-issue-add-btn" (click)="openjewelleryaltrationdetails()">
-              Add
-            </button>
-          </div>
-          <div class="p-2 bd-highlight">
-            <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-              Delete
-            </button>
-          </div> -->
-          <div class="p-1">
-            <button type="button" mat-flat-button color="primary" (click)="openjewelleryaltrationdetails()">
-                <i class="fa fa-plus" style="font-size: 11px;"></i>
-            </button>
-        </div>
-        <div class="p-1">
-            <button type="button" mat-flat-button color="primary">
-                <i class="fa fa-trash" style="font-size: 11px;"></i>
-            </button>
-        </div>
+          <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+          [viewImportBtn]="false"
+          (addClick)="openjewelleryaltrationdetails()"
+          (deleteClick)="deleteTableData()"
+          >
+      </menu-buttons>
           <div class="col-sm-3">
             <mat-form-field style="width: 80%;">
               <input type="text" matInput />

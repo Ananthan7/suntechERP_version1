@@ -67,6 +67,10 @@ export class MetalIssueComponent implements OnInit {
 
   }
 
+  deleteTableData(){
+   
+  }
+
   metalIssueForm: FormGroup = this.formBuilder.group({
     voctype: [''],
     time: [''],

@@ -135,6 +135,14 @@ mouldCodeData: MasterSearchModel = {
     this.activeModal.close(data);
   }
   
+  addTableData(){ 
+  
+  }
+  
+  deleteTableData(){
+   
+  }
+  
   mouldMakingForm: FormGroup = this.formBuilder.group({
     uniq : [''],
     uniqNo : [''],

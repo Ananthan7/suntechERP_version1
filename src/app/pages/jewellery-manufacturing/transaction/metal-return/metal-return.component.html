@@ -111,26 +111,12 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-3 d-flex">
-                        <!-- <div class="p-2 bd-highlight">
-                            <button type="button" class="btn btn-primary add-btn"  (click)="openaddmetalreturn ()">
-                                Add
-                            </button>
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <button type="button" class="btn btn-outline-primary del-btn">
-                                Delete
-                            </button>
-                        </div> -->
-                        <div class="p-1">
-                            <button type="button" mat-flat-button color="primary"  (click)="openaddmetalreturn ()">
-                              <i class="fa fa-plus" style="font-size: 11px;"></i>
-                            </button>
-                          </div>
-                          <div class="p-1">
-                            <button type="button" mat-flat-button color="primary">
-                              <i class="fa fa-trash" style="font-size: 11px;"></i>
-                            </button>
-                          </div>
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                        [viewImportBtn]="false"
+                        (addClick)="openaddmetalreturn()"
+                        (deleteClick)="deleteTableData()"
+                        >
+                    </menu-buttons>
                     </div>
                 </div>
 
