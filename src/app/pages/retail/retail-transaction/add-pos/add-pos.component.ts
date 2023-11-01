@@ -9557,6 +9557,10 @@ export class AddPosComponent implements OnInit {
     this.balanceAmount =
       this.comFunc.emptyToZero(this.order_items_total_net_amount) - this.comFunc.emptyToZero(this.receiptTotalNetAmt);
 
+      if (this.balanceAmount >= 0) {
+        this.snackBar.open('Invalid Amount', 'Ok');
+      }
+
     this.prnt_received_amount = this.receiptTotalNetAmt;
     this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);
 
@@ -9767,9 +9771,8 @@ export class AddPosComponent implements OnInit {
 
     // this.accountLookupList.filter((data)=> data.)
   }
-  changeReceiptAmtFC(event: any, formName?: any, fieldName?: any) {
-    // this[formName].controls[fieldName].setValue(
-    //   event.target.value);
+  changeReceiptAmtFC(event: any, formName: keyof AddPosComponent, fieldName?: any) {
+    this[formName].controls[fieldName].setValue(event.target.value);
   }
 
 

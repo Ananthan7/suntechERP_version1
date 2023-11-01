@@ -115,7 +115,7 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Customer Code :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 70%">
-                  <input type="text" matInput formControlName="customerCode" />
+                  <input type="text" matInput formControlName="customerCode"  />
                 </mat-form-field>
                 <master-search [MasterSearchData]="customerCodeData"
                   (newRowClick)="customerCodeSelected($event)"></master-search>
@@ -128,16 +128,16 @@
               <div class="col-md-3">
                 <div class="p-2 bd-highlight">
                   <button type="button" class="btn btn-primary metal-issue-add-btn" (click)="openCustMaster()">
-                    New Customer
+                   {{ this.customerData != null? 'Edit Customer' : 'New Customer' }}
                   </button>
                 </div>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Moblie :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Mobile :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="text" formControlName="moblie" inputmode="numeric" appAllowLeadingZero />
+                  <input matInput type="text" formControlName="mobile" inputmode="numeric" appAllowLeadingZero />
                 </mat-form-field>
               </div>
               <label for="inputPassword" class="col-sm-3 col-form-label">Email :</label>

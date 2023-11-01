@@ -199,7 +199,7 @@
         </tr>
         <tr style="border-bottom: hidden">
           <td colspan="9" style="font-weight: 600">
-            Recieved : {{ prnt_received_amount | number : "1.2" }}
+            Received : {{ prnt_received_amount | number : "1.2" }}
           </td>
         </tr>
         <tr>
@@ -474,16 +474,30 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-2" >
-                <mat-form-field>
-                  <mat-label>Code</mat-label>
-                  <input type="text" matInput formControlName="fcn_customer_code" (change)="nameChange($event)"
-                    [readonly]="viewOnly || this.customerDataForm.value.fcn_customer_code == '' " />
-                  <mat-error *ngIf="customerDataForm.controls.fcn_customer_code.hasError('required')">
-                    Code is <strong>required</strong>
-                  </mat-error>
-                </mat-form-field>
-              </div>
+            <div class="col-md-2">
+              <mat-form-field>
+                <mat-label>Code</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="fcn_customer_code"
+                  (change)="nameChange($event)"
+                  [readonly]="
+                    viewOnly ||
+                    this.customerDataForm.value.fcn_customer_code == ''
+                  "
+                />
+                <mat-error
+                  *ngIf="
+                    customerDataForm.controls.fcn_customer_code.hasError(
+                      'required'
+                    )
+                  "
+                >
+                  Code is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
             <div class="col-md-2">
               <mat-form-field>
                 <mat-label>ID Type </mat-label>
@@ -889,6 +903,11 @@
                         <div>
                           <button
                             type="submit"
+                            [disabled]="
+                              this.ordered_items.length > 0 && !this.viewOnly
+                                ? false
+                                : true
+                            "
                             (click)="open(adjust_sale_return_modal)"
                             class="btn btn-secondary"
                             style="
@@ -1021,6 +1040,11 @@
                         <div>
                           <button
                             type="submit"
+                            [disabled]="
+                              this.ordered_items.length > 0 && !this.viewOnly
+                                ? false
+                                : true
+                            "
                             (click)="open(oldgoldmodal)"
                             class="btn btn-secondary"
                             style="
@@ -1778,10 +1802,10 @@
                     matInput
                     formControlName="advanceVatAmountFC"
                     id="advanceVatAmountFC"
-                    (focusout)="changeReceiptAmtFC($event)"
                     placeholder="0.00"
                     readonly
-                  />
+                    />
+                    <!-- (focusout)="changeReceiptAmtFC($event)" -->
                 </mat-form-field>
               </div>
             </div>
@@ -3154,14 +3178,12 @@
                   formControlName="fcn_cust_detail_state"
                   id="fcn_cust_detail_state"
                   [matAutocomplete]="state"
-
                   [readonly]="viewOnly"
                 />
                 <mat-autocomplete
                   #state="matAutocomplete"
                   autoActiveFirstOption
                   (optionSelected)="changeState($event.option.value)"
-
                 >
                   <mat-option
                     *ngFor="let option of stateMasterOptions | async"
