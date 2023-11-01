@@ -214,11 +214,10 @@ export class DiamondSalesorderComponent implements OnInit {
   */
   addNewDetail(data?: any) {
     if (data) {
-      console.log(data, 'data passing to detail screen');
 
-      data[0].HEARDERDETAILS = this.PartyDetailsOrderForm.value;
+      data[0].HEADERDETAILS = this.PartyDetailsOrderForm.value;
     } else {
-      data = [{ HEARDERDETAILS: this.PartyDetailsOrderForm.value }]
+      data = [{ HEADERDETAILS: this.PartyDetailsOrderForm.value }]
     }
 
     // if (this.HeaderValidate() == false){

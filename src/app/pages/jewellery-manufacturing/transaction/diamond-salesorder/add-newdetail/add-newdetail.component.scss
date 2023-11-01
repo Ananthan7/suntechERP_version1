@@ -27,6 +27,7 @@ td {
 
 .textboxcorner {
   background-color: #fff;
+  width: 50px !important;
   padding: 4px;
 }
 
@@ -75,6 +76,9 @@ td {
   width: 30%;
 }
 ::ng-deep {
+  .mat-form-field-infix {
+    width: 154px !important;
+  }
   .cdk-overlay-container {
       position: fixed;
       z-index: 1070 !important;
