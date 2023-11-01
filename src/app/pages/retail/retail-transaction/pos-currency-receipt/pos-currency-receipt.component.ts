@@ -125,8 +125,52 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.vocDate.setValue(this.currentDate)
     this.posCurrencyReceiptForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
 
+    if (this.content?.MID != null)
+      this.getArgsData();
   }
+  getArgsData() {
+    this.snackBar.open('Loading...');
+    let Sub: Subscription = this.dataService.getDynamicAPI(`AdvanceReceipt/GetAdvanceReceiptWithMID/${this.content.MID}`)
+      .subscribe((result) => {
+        this.snackBar.dismiss();
+        console.log('====================================');
+        console.log(result);
+        console.log('====================================');
+        if (result.status == "Success") {
+          const data = result.response;
+          this.posCurrencyDetailsData = data.currencyReceiptDetails;
 
+          // set form values
+          this.posCurrencyReceiptForm.controls.vocType.setValue(data.VOCTYPE);
+          this.posCurrencyReceiptForm.controls.vocNo.setValue(data.VOCNO);
+          this.posCurrencyReceiptForm.controls.vocDate.setValue(data.VOCDATE);
+          this.posCurrencyReceiptForm.controls.partyCode.setValue(data.PARTYCODE);
+          // this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue();
+          this.posCurrencyReceiptForm.controls.partyCurrency.setValue(data.PARTY_CURRENCY);
+          this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(data.PARTY_CURR_RATE);
+
+          this.posCurrencyReceiptForm.controls.enteredby.setValue(data.SALESPERSON_CODE);
+          // this.posCurrencyReceiptForm.controls.enteredbyuser.setValue();
+          this.posCurrencyReceiptForm.controls.dueDays.setValue(data.DUEDAYS);
+          // this.posCurrencyReceiptForm.controls.dueDaysdesc.setValue();
+
+          this.posCurrencyReceiptForm.controls.customerCode.setValue(data.POSCUSTOMERCODE);
+          this.posCurrencyReceiptForm.controls.customerName.setValue(data.CUSTOMER_NAME);
+          this.posCurrencyReceiptForm.controls.mobile.setValue(data.CUSTOMER_MOBILE);
+          this.posCurrencyReceiptForm.controls.email.setValue(data.CUSTOMER_EMAIL);
+          this.customerData = {
+            "MOBILE": data.CUSTOMER_MOBILE,
+            "CODE": data.POSCUSTOMERCODE,
+          }
+
+          this.posCurrencyReceiptForm.controls.partyAddress.setValue(data.PARTY_ADDRESS);
+          this.posCurrencyReceiptForm.controls.partyAmount.setValue(data.CUSTOMER_EMAIL);
+
+        }
+
+      });
+
+  }
 
   enteredBySelected(e: any) {
     console.log(e);
@@ -209,7 +253,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.customerData = e;
     this.posCurrencyReceiptForm.controls.customerCode.setValue(e.CODE);
     this.posCurrencyReceiptForm.controls.customerName.setValue(e.NAME);
-    this.posCurrencyReceiptForm.controls.moblie.setValue(e.MOBILE);
+    this.posCurrencyReceiptForm.controls.mobile.setValue(e.MOBILE);
     this.posCurrencyReceiptForm.controls.email.setValue(e.EMAIL);
   }
 
@@ -248,13 +292,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
     dueDays: [''], // no
     customerCode: [''],
     customerName: [''],
-    moblie: [''],
+    mobile: [''],
     email: [''],
     partyAddress: [''],
     schemaCode: [''],
     schemaId: [''],
-    partyAmount: [1000], // need to remove the value
-    partyAmountLc: [1000],  // need to remove the value
+    partyAmount: [0.00], // need to remove the value
+    partyAmountLc: [0.00],  // need to remove the value
     narration: [''],
     totalTax: [''],
     total: ['']
@@ -297,7 +341,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "SUPINVNO": "",
       "SUPINVDATE": this.posCurrencyReceiptForm.value.vocDate,
       "HHACCOUNT_HEAD": "",
-      "SALESPERSON_CODE": "",
+      "SALESPERSON_CODE": this.posCurrencyReceiptForm.value.enteredby,
       "BALANCE_FC": 0,
       "BALANCE_CC": 0,
       "AUTHORIZEDPOSTING": true,
@@ -330,7 +374,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "DOC_REF": "",
       "REC_STATUS": "0",
       "CUSTOMER_NAME": this.posCurrencyReceiptForm.value.customerName || "",
-      "CUSTOMER_MOBILE": this.posCurrencyReceiptForm.value.moblie || "",
+      "CUSTOMER_MOBILE": this.posCurrencyReceiptForm.value.mobile || "",
       "CUSTOMER_EMAIL": this.posCurrencyReceiptForm.value.email || "",
       "TDS_CODE": "",
       "TDS_APPLICABLE": true,
@@ -350,89 +394,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "WOOCOMCARDID": "string",
       "currencyReceiptDetails": this.posCurrencyDetailsData,
-      // [
-      //   {
-      //     "UNIQUEID": 0,
-      //     "SRNO": 0,
-      //     "BRANCH_CODE": "string",
-      //     "RECPAY_TYPE": "string",
-      //     "MODE": "string",
-      //     "ACCODE": "string",
-      //     "CURRENCY_CODE": "stri",
-      //     "CURRENCY_RATE": 0,
-      //     "AMOUNTFC": 0,
-      //     "AMOUNTCC": 0,
-      //     "HEADER_AMOUNT": 0,
-      //     "CHEQUE_NO": "string",
-      //     "CHEQUE_DATE": "2023-10-10T11:05:50.756Z",
-      //     "CHEQUE_BANK": "string",
-      //     "REMARKS": "string",
-      //     "BANKCODE": "string",
-      //     "PDCYN": "s",
-      //     "HDACCOUNT_HEAD": "string",
-      //     "MODEDESC": "string",
-      //     "D_POSSCHEMEID": "string",
-      //     "D_POSSCHEMEUNITS": 0,
-      //     "CARD_NO": "string",
-      //     "CARD_HOLDER": "string",
-      //     "CARD_EXPIRY": "2023-10-10T11:05:50.756Z",
-      //     "PCRMID": 0,
-      //     "BASE_CONV_RATE": 0,
-      //     "SUBLEDJER_CODE": "string",
-      //     "DT_BRANCH_CODE": "string",
-      //     "DT_VOCTYPE": "str",
-      //     "DT_VOCNO": 0,
-      //     "DT_YEARMONTH": "string",
-      //     "TOTAL_AMOUNTFC": 0,
-      //     "TOTAL_AMOUNTCC": 0,
-      //     "CGST_PER": 0,
-      //     "CGST_AMOUNTFC": 0,
-      //     "CGST_AMOUNTCC": 0,
-      //     "SGST_PER": 0,
-      //     "SGST_AMOUNTFC": 0,
-      //     "SGST_AMOUNTCC": 0,
-      //     "IGST_PER": 0,
-      //     "IGST_AMOUNTFC": 0,
-      //     "IGST_AMOUNTCC": 0,
-      //     "CGST_ACCODE": "string",
-      //     "SGST_ACCODE": "string",
-      //     "IGST_ACCODE": "string",
-      //     "GST_HEADER_AMOUNT": 0,
-      //     "GST_NUMBER": "string",
-      //     "INVOICE_NUMBER": "string",
-      //     "INVOICE_DATE": "2023-10-10T11:05:50.756Z",
-      //     "DT_GST_STATE_CODE": "st",
-      //     "DT_GST_TYPE": "stri",
-      //     "DT_GST_CODE": "string",
-      //     "DT_GST_GROUP": "s",
-      //     "CGST_CTRLACCODE": "string",
-      //     "SGST_CTRLACCODE": "string",
-      //     "IGST_CTRLACCODE": "string",
-      //     "HSN_CODE": "string",
-      //     "MIDPCR": 0,
-      //     "INCLUSIVE": true,
-      //     "COMM_PER": 0,
-      //     "COMM_AMOUNTCC": 0,
-      //     "COMM_AMOUNTFC": 0,
-      //     "COMM_TAXPER": 0,
-      //     "COMM_TAXAMOUNTCC": 0,
-      //     "COMM_TAXAMOUNTFC": 0,
-      //     "DT_TDS_CODE": "string",
-      //     "TDS_PER": 0,
-      //     "TDS_AMOUNTFC": 0,
-      //     "TDS_AMOUNTCC": 0,
-      //     "PDC_WALLETAC": "string",
-      //     "WALLET_YN": "s",
-      //     "SL_CODE": "string",
-      //     "SL_DESCRIPTION": "string",
-      //     "OT_TRANSFER_TIME": "string",
-      //     "VAT_EXPENSE_CODE": "string",
-      //     "VAT_EXPENSE_CODE_DESC": "string",
-      //     "AMLVALIDID": "string",
-      //     "AMLSOURCEOFFUNDS": "string",
-      //     "AMLTRANSACTION_TYPE": "string"
-      //   }
-      // ]
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -498,6 +459,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       (result) => {
         console.log(`Closed with: ${result}`);
         console.log(result);
+        if (result != null && result?.customerDetails != null)
+          this.customerCodeSelected(result.customerDetails);
       },
       (reason) => {
         console.log(`Dismissed ${reason}`);

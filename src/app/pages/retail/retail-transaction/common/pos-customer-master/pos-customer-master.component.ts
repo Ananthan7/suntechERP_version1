@@ -149,16 +149,16 @@ export class PosCustomerMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDropDownData();
-console.log('===========customerData=========================');
-console.log(this.customerData);
-console.log('====================================');
     this.getMasters();
     this.getIdMaster();
+    if (this.customerData != null && this.customerData.MOBILE != '')
+      this.changeMobileNumber(this.customerData.MOBILE)
   }
 
 
 
-  onCustomerNameFocus(value: any = null) {
+  changeMobileNumber(value: any = null) {
+    this.snackBar.open('Loading...');
     console.log(value);
     let _cust_mobile_no = value == null ? this.customerDetailForm.value.fcn_cust_detail_phone : value;
     // if (value != null) {
@@ -182,6 +182,7 @@ console.log('====================================');
       // }
       this.apiService.getDynamicAPI('PosCustomerMaster/GetCustomerMaster/Mobile=' + _cust_mobile_no)
         .subscribe((resp) => {
+          this.snackBar.dismiss();
           if (resp.status == 'Success') {
             // const result = resp[0];
             const result = resp.response;
@@ -970,6 +971,7 @@ console.log('====================================');
                     this.dialogBox.afterClosed().subscribe((data: any) => {
                       if (data == 'OK') {
                         // this.modalReference.close();
+                        this.closeModal();
                       }
                     });
                     //proceed
@@ -980,6 +982,7 @@ console.log('====================================');
                   this.dialogBox.afterClosed().subscribe((data: any) => {
                     if (data == 'OK') {
                       // this.modalReference.close();
+                      this.closeModal();
                     }
                   });
                   this.amlNameValidationData = true;
@@ -990,6 +993,7 @@ console.log('====================================');
               this.isCustProcessing = false;
 
               // this.modalReference.close();
+              this.closeModal();
             }
           } else {
             // this.modalReference.close();
@@ -998,6 +1002,7 @@ console.log('====================================');
               duration: 2000 // time in milliseconds
             });
             // this.modalReference.close();
+            this.closeModal();
           }
         });
 
