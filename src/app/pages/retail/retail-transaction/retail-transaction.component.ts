@@ -76,6 +76,9 @@ export class RetailTransactionComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width'
     });
+  
+    modalRef.componentInstance.content = data;
+
     modalRef.result.then((result) => {
       console.log('result', result);
 
@@ -92,7 +95,6 @@ export class RetailTransactionComponent implements OnInit {
     });
 
 
-    modalRef.componentInstance.content = data;
   }
 
   /**USE: to get table data from API */

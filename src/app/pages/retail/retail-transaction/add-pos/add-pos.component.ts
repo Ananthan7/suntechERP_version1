@@ -3,7 +3,7 @@
 import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Component, OnInit, ViewChild, Renderer2, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer2, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 // import { environment } from '../../../environments/environment';
 // import { SuntechapiService } from '../../suntechapi.service';
@@ -38,7 +38,8 @@ interface VocTypesEx {
   styleUrls: ['./add-pos.component.scss']
 })
 export class AddPosComponent implements OnInit {
-  // export class TouchposComponent implements AfterViewInit {
+  @Input() content!: any;
+
   @ViewChild('mymodal') public mymodal!: NgbModal;
   @ViewChild('adjust_sale_return_modal')
   public adjust_sale_return_modal_ref!: NgbModalRef;
@@ -567,10 +568,10 @@ export class AddPosComponent implements OnInit {
       fcn_returns_branch: ['', Validators.required],
       fcn_returns_voc_type: ['', Validators.required],
       fcn_returns_voc_no: ['', Validators.required],
-      fcn_returns_voc_date: ['', Validators.required],
-      fcn_returns_sales_man: ['', Validators.required],
-      fcn_returns_cust_code: ['', Validators.required],
-      fcn_returns_cust_mobile: ['', Validators.required],
+      fcn_returns_voc_date: ['',],
+      fcn_returns_sales_man: ['',],
+      fcn_returns_cust_code: ['',],
+      fcn_returns_cust_mobile: ['',],
     });
 
     this.exchangeForm = this.formBuilder.group({
@@ -824,26 +825,42 @@ export class AddPosComponent implements OnInit {
   }
 
   getArgs() {
-    this.acRoute.queryParams.subscribe((params) => {
-      if (params.vocNo) {
-        this.queryParams = params;
-        if (this.router.url.includes('view-pos')) {
-          this.viewOnly = true;
-          // this.setReadOnlyForViewMode();
-        }
-        if (this.router.url.includes('edit-pos')) this.editOnly = true;
+    console.log('======content==============================');
+    console.log(this.content);
+    console.log('====================================');
 
-        this.vocDataForm.controls.fcn_voc_no.setValue(params.vocNo);
-        this.strBranchcode = params.branchCode;
-        this.vocType = params.vocType;
-        this.baseYear = params.yearMonth;
-        this.getRetailSalesMaster(params);
-      }
-    });
+    this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
+    this.strBranchcode = this.content.BRANCH_CODE;
+    this.vocType = this.content.VOCTYPE;
+    this.baseYear = this.content.YEARMONTH;
+    this.getRetailSalesMaster(this.content);
+    if (this.content.FLAG == "EDIT") {
+      this.editOnly = true
+    } else {
+      this.viewOnly = true;
+    }
+    // this.acRoute.queryParams.subscribe((params) => {
+    //   if (params.vocNo) {
+    //     this.queryParams = params;
+    //     if (this.router.url.includes('view-pos')) {
+    //       this.viewOnly = true;
+    //       // this.setReadOnlyForViewMode();
+    //     }
+    //     if (this.router.url.includes('edit-pos')) this.editOnly = true;
+
+    //     this.vocDataForm.controls.fcn_voc_no.setValue(params.vocNo);
+    //     this.strBranchcode = params.branchCode;
+    //     this.vocType = params.vocType;
+    //     this.baseYear = params.yearMonth;
+    //     this.getRetailSalesMaster(params);
+    //   }
+    // });
   }
   getRetailSalesMaster(data: any) {
-    let API = `RetailSalesDataInDotnet/GetRetailSalesData/BranchCode=${data.branchCode}/VocType=${data.vocType}/YearMonth=${data.yearMonth}/VocNo=${data.vocNo}`
+    this.snackBar.open('Loading...');
+    let API = `RetailSalesDataInDotnet/GetRetailSalesData/BranchCode=${data.BRANCH_CODE}/VocType=${data.VOCTYPE}/YearMonth=${data.YEARMONTH}/VocNo=${data.VOCNO}`
     this.suntechApi.getDynamicAPI(API).subscribe((res) => {
+      this.snackBar.dismiss();
       console.log(res, 'getRetailSalesMaster');
       const posCustomer = res.response.customer;
       const retailSaleData = res.response.retailSales;
@@ -870,12 +887,12 @@ export class AddPosComponent implements OnInit {
         // alert(this.metalPurchaseDataVocNo);
         this.karatRateDetails = karatRate;
 
-        if (data.vocNo == retailSaleData.VOCNO) {
+        if (data.VOCNO == retailSaleData.VOCNO) {
           this.vocDataForm.controls['fcn_voc_no'].setValue(
             retailSaleData.VOCNO
           );
         } else {
-          this.vocDataForm.controls['fcn_voc_no'].setValue(data.vocNo);
+          this.vocDataForm.controls['fcn_voc_no'].setValue(data.VOCNO);
         }
         // salesperson code
         this.vocDataForm.controls['sales_person'].setValue(
@@ -4023,73 +4040,85 @@ export class AddPosComponent implements OnInit {
 
   addItemtoSalesReturn() {
     // alert('test');
-    console.table(this.sales_returns_pre_items);
-    const values = this.sales_returns_pre_items;
-    this.sales_returns_items = values;
-    console.log('******************');
-    console.log(this.sales_returns_items);
-    console.log(this.sales_returns_items[0]);
-    // this.sales_returns_items.forEach((data, index) => {
-    //   console.log('===============this.sales_returns_items.forEach=====================');
-    //   console.log(data);
-    //   data.ID = index + 1;
-    //   data.sn_no = index + 1;
 
-    //   console.log('====================================');
-    //   // this.sales_returns_items[index].ID = index + 1;
-    //   this.setSalesReturnItems(
-    //     index + 1,
-    //     data.slsReturn,
-    //   )
-    // });
-    // this.currentsalesReturnItems.forEach((data, index) => {
-    //   data.ID = index + 1;
-    //   data.SRNO = index + 1;
-    // });
-    for (let i = 0; i < this.sales_returns_items.length; i++) {
-      // this.sales_returns_items[i].ID = i + 1;
-      // this.sales_returns_items[i].rid = this.comFunc.generateNumber();
+    Object.values(this.salesReturnForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
 
+    if (!this.salesReturnForm.invalid) {
+
+      console.table(this.sales_returns_pre_items);
+      const values = this.sales_returns_pre_items;
+      this.sales_returns_items = values;
       console.log('******************');
-      console.log(this.sales_returns_items[i]);
-      console.log(this.sales_returns_items[i].slsReturn);
-      console.log('******************');
-      this.setSalesReturnItems(
-        this.sales_returns_items[i].ID,
-        this.sales_returns_items[i].slsReturn
-      );
+      console.log(this.sales_returns_items);
+      console.log(this.sales_returns_items[0]);
+      // this.sales_returns_items.forEach((data, index) => {
+      //   console.log('===============this.sales_returns_items.forEach=====================');
+      //   console.log(data);
+      //   data.ID = index + 1;
+      //   data.sn_no = index + 1;
+
+      //   console.log('====================================');
+      //   // this.sales_returns_items[index].ID = index + 1;
+      //   this.setSalesReturnItems(
+      //     index + 1,
+      //     data.slsReturn,
+      //   )
+      // });
+      // this.currentsalesReturnItems.forEach((data, index) => {
+      //   data.ID = index + 1;
+      //   data.SRNO = index + 1;
+      // });
+      for (let i = 0; i < this.sales_returns_items.length; i++) {
+        // this.sales_returns_items[i].ID = i + 1;
+        // this.sales_returns_items[i].rid = this.comFunc.generateNumber();
+
+        console.log('******************');
+        console.log(this.sales_returns_items[i]);
+        console.log(this.sales_returns_items[i].slsReturn);
+        console.log('******************');
+        this.setSalesReturnItems(
+          this.sales_returns_items[i].ID,
+          this.sales_returns_items[i].slsReturn
+        );
+      }
+
+      console.log('=============sales_returns_items=======================');
+      console.log(this.sales_returns_items);
+      console.log(this.currentsalesReturnItems);
+      console.log('====================================');
+      // this.sumTotalValues();
+
+      // console.log(this.sales_returns_items);
+      // console.log(this.sales_returns_items_slno_length);
+
+      // var items_length = this.sales_returns_items.length;
+      // if (items_length == 0) this.sales_returns_items_slno_length = 1;
+      // else
+      //   this.sales_returns_items_slno_length =
+      //     this.sales_returns_items_slno_length + 1;
+
+      // var values = {
+      //   ID: this.sales_returns_items_slno_length,
+      //   sn_no: this.sales_returns_items_slno_length,
+      //   stock_code: '',
+      //   mkg_amount: '',
+      //   total_amount: '',
+      //   pcs: '',
+      //   weight: '',
+      //   description: '',
+      //   tax_amount: '',
+      //   net_amount: '',
+      // };
+      this.sumTotalValues();
+      this.modalReference.close();
+      // this.modalReference.dismiss();
+    } else {
+      this.snackBar.open('Please Fill Required Fields', '', {
+        duration: 2000 // time in milliseconds
+      });
     }
-
-    console.log('=============sales_returns_items=======================');
-    console.log(this.sales_returns_items);
-    console.log(this.currentsalesReturnItems);
-    console.log('====================================');
-    // this.sumTotalValues();
-
-    // console.log(this.sales_returns_items);
-    // console.log(this.sales_returns_items_slno_length);
-
-    // var items_length = this.sales_returns_items.length;
-    // if (items_length == 0) this.sales_returns_items_slno_length = 1;
-    // else
-    //   this.sales_returns_items_slno_length =
-    //     this.sales_returns_items_slno_length + 1;
-
-    // var values = {
-    //   ID: this.sales_returns_items_slno_length,
-    //   sn_no: this.sales_returns_items_slno_length,
-    //   stock_code: '',
-    //   mkg_amount: '',
-    //   total_amount: '',
-    //   pcs: '',
-    //   weight: '',
-    //   description: '',
-    //   tax_amount: '',
-    //   net_amount: '',
-    // };
-    this.sumTotalValues();
-    this.modalReference.close();
-    // this.modalReference.dismiss();
   }
   // addItemtoSalesReturn() {
   //   // alert('test');
@@ -4618,126 +4647,138 @@ export class AddPosComponent implements OnInit {
   }
 
   addItemtoExchange(btn: any) {
-    let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
-    let _exchangeItemCode = this.exchangeForm.value.fcn_exchange_item_code;
-    let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
-    let _exchangePurity = this.exchangeForm.value.fcn_exchange_purity;
-    let _exchangeMetalRate = this.exchangeForm.value.fcn_exchange_metal_rate;
-    let _exchangeMetalAmt = this.exchangeForm.value.fcn_exchange_metal_amount;
-    let _exchangeMkgAmt = this.exchangeForm.value.fcn_exchange_making_amt;
-    let _exchangeNetAmt = this.exchangeForm.value.fcn_exchange_net_amount;
 
-    let _exchangePcs = this.exchangeForm.value.fcn_exchange_pcs;
-    let _exchangeWeight = this.exchangeForm.value.fcn_exchange_net_wt;
+    Object.values(this.exchangeForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
+    if (!this.exchangeForm.invalid) {
 
-    console.log(_exchangeMetalAmt);
+      let _exchangeDiv = this.exchangeForm.value.fcn_exchange_division;
+      let _exchangeItemCode = this.exchangeForm.value.fcn_exchange_item_code;
+      let _exchangeItemDesc = this.exchangeForm.value.fcn_exchange_item_desc;
+      let _exchangePurity = this.exchangeForm.value.fcn_exchange_purity;
+      let _exchangeMetalRate = this.exchangeForm.value.fcn_exchange_metal_rate;
+      let _exchangeMetalAmt = this.exchangeForm.value.fcn_exchange_metal_amount;
+      let _exchangeMkgAmt = this.exchangeForm.value.fcn_exchange_making_amt;
+      let _exchangeNetAmt = this.exchangeForm.value.fcn_exchange_net_amount;
+
+      let _exchangePcs = this.exchangeForm.value.fcn_exchange_pcs;
+      let _exchangeWeight = this.exchangeForm.value.fcn_exchange_net_wt;
+
+      console.log(_exchangeMetalAmt);
 
 
-    if (
-      this.exchangeForm.value.fcn_exchange_item_code != '' &&
-      _exchangeMetalAmt > 0 &&
-      _exchangeMetalAmt != '' &&
-      _exchangeNetAmt > 0 &&
-      _exchangeNetAmt != ''
-    ) {
-      // if (items_length == 0) this.exchange_items_slno_length = 1;
-      // else
-      //   this.exchange_items_slno_length = this.exchange_items_slno_length + 1;
-      let itemsLengths = this.exchange_items[this.exchange_items.length - 1];
       if (
-        this.exchangeItemEditId == '' ||
-        this.exchangeItemEditId == undefined ||
-        this.exchangeItemEditId == null
+        this.exchangeForm.value.fcn_exchange_item_code != '' &&
+        _exchangeMetalAmt > 0 &&
+        _exchangeMetalAmt != '' &&
+        _exchangeNetAmt > 0 &&
+        _exchangeNetAmt != ''
       ) {
-        if (itemsLengths == undefined) itemsLengths = 1;
-        else itemsLengths = itemsLengths.ID + 1;
-        this.exchange_items_slno_length = itemsLengths;
-      } else {
-        itemsLengths = this.exchangeItemEditId;
-        this.exchange_items_slno_length = itemsLengths;
-      }
-
-      var values = {
-        ID: this.exchange_items_slno_length,
-        sn_no: this.exchange_items_slno_length,
-        stock_code: _exchangeItemCode,
-        mkg_amount: _exchangeMkgAmt,
-        total_amount: _exchangeMetalAmt,
-        pcs: _exchangePcs,
-        weight: _exchangeWeight, // nett weight
-        description: _exchangeItemDesc,
-        tax_amount: '0',
-        net_amount: _exchangeNetAmt,
-        metalRate: _exchangeMetalRate,
-        metalAmt: _exchangeMetalAmt,
-
-        // need to update
-        gross_wt: this.exchangeForm.value.fcn_exchange_gross_wt || 0,
-        pure_wt: this.exchangeForm.value.fcn_exchange_pure_weight || 0,
-        stone_amt: this.exchangeForm.value.fcn_exchange_stone_amount || 0,
-        purity_diff: this.exchangeForm.value.fcn_exchange_purity_diff || 0,
-        // gross_amt: this.lineItemForm.value.fcn_li_gross_amount || 0,
-        METAL_RATE_TYPE: this._exchangeItemchange.METAL_RATE_TYPE,
-        METAL_RATE: this._exchangeItemchange.METAL_RATE,
-        METAL_RATE_PERGMS_ITEMKARAT:
-          this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT,
-        ozWeight: this.setOzWt(),
-      };
-
-      // this.exchange_items.push(values);
-      if (
-        this.exchangeItemEditId == '' ||
-        this.exchangeItemEditId == undefined ||
-        this.exchangeItemEditId == null
-      ) {
-        this.exchange_items.push(values);
-      } else {
-        // this.exchange_items[this.exchangeItemEditId - 1] = values;
-        // this.exchangeItemEditId = '';
-        // alert(this.exchangeItemEditId)
-        const preitemIndex = this.exchange_items.findIndex((data) => {
-          // console.table(data);
-          console.table(data.sn_no == this.exchangeItemEditId);
-          return data.sn_no == this.exchangeItemEditId;
-        });
-        // alert(preitemIndex)
-        console.log('====================================');
-        console.log(this.exchange_items);
-        console.log('====================================');
-        if (preitemIndex != -1) {
-          values.sn_no = this.exchangeItemEditId;
-          this.exchange_items[preitemIndex] = values;
-          console.log(
-            '==============this.exchange_items[preitemIndex]======================'
-          );
-          console.log(values);
-          console.log('====================================');
+        // if (items_length == 0) this.exchange_items_slno_length = 1;
+        // else
+        //   this.exchange_items_slno_length = this.exchange_items_slno_length + 1;
+        let itemsLengths = this.exchange_items[this.exchange_items.length - 1];
+        if (
+          this.exchangeItemEditId == '' ||
+          this.exchangeItemEditId == undefined ||
+          this.exchangeItemEditId == null
+        ) {
+          if (itemsLengths == undefined) itemsLengths = 1;
+          else itemsLengths = itemsLengths.ID + 1;
+          this.exchange_items_slno_length = itemsLengths;
+        } else {
+          itemsLengths = this.exchangeItemEditId;
+          this.exchange_items_slno_length = itemsLengths;
         }
+
+        var values = {
+          ID: this.exchange_items_slno_length,
+          sn_no: this.exchange_items_slno_length,
+          stock_code: _exchangeItemCode,
+          mkg_amount: _exchangeMkgAmt,
+          total_amount: _exchangeMetalAmt,
+          pcs: _exchangePcs,
+          weight: _exchangeWeight, // nett weight
+          description: _exchangeItemDesc,
+          tax_amount: '0',
+          net_amount: _exchangeNetAmt,
+          metalRate: _exchangeMetalRate,
+          metalAmt: _exchangeMetalAmt,
+
+          // need to update
+          gross_wt: this.exchangeForm.value.fcn_exchange_gross_wt || 0,
+          pure_wt: this.exchangeForm.value.fcn_exchange_pure_weight || 0,
+          stone_amt: this.exchangeForm.value.fcn_exchange_stone_amount || 0,
+          purity_diff: this.exchangeForm.value.fcn_exchange_purity_diff || 0,
+          // gross_amt: this.lineItemForm.value.fcn_li_gross_amount || 0,
+          METAL_RATE_TYPE: this._exchangeItemchange.METAL_RATE_TYPE,
+          METAL_RATE: this._exchangeItemchange.METAL_RATE,
+          METAL_RATE_PERGMS_ITEMKARAT:
+            this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT,
+          ozWeight: this.setOzWt(),
+        };
+
+        // this.exchange_items.push(values);
+        if (
+          this.exchangeItemEditId == '' ||
+          this.exchangeItemEditId == undefined ||
+          this.exchangeItemEditId == null
+        ) {
+          this.exchange_items.push(values);
+        } else {
+          // this.exchange_items[this.exchangeItemEditId - 1] = values;
+          // this.exchangeItemEditId = '';
+          // alert(this.exchangeItemEditId)
+          const preitemIndex = this.exchange_items.findIndex((data) => {
+            // console.table(data);
+            console.table(data.sn_no == this.exchangeItemEditId);
+            return data.sn_no == this.exchangeItemEditId;
+          });
+          // alert(preitemIndex)
+          console.log('====================================');
+          console.log(this.exchange_items);
+          console.log('====================================');
+          if (preitemIndex != -1) {
+            values.sn_no = this.exchangeItemEditId;
+            this.exchange_items[preitemIndex] = values;
+            console.log(
+              '==============this.exchange_items[preitemIndex]======================'
+            );
+            console.log(values);
+            console.log('====================================');
+          }
+        }
+
+        this.setExchangeMetalItems(this.exchange_items_slno_length, values);
+        this.setExchangeMetalGstItems(this.exchange_items_slno_length, values);
+        // alert('metal detail added');
+
+        this.exchangeForm.controls['fcn_exchange_division'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_item_desc'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_item_code'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_purity'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_metal_amount'].setValue('');
+        if (btn == 'saveBtn') this.modalReference.close();
+        this.sumTotalValues();
+
+        this.setMetalPurchaseDataPost();
+      } else {
+        // alert('Invalid Metal Amount');
+        if (this.exchangeForm.value.fcn_exchange_item_code == '') {
+          this.openDialog('Warning', 'Stock code should not be empty', true);
+        }
+        if (_exchangeMetalAmt == '' || 0)
+          this.openDialog('Warning', 'Invalid Metal Amount', true);
+        if (_exchangeNetAmt == '' || 0)
+          this.openDialog('Warning', 'Invalid Net Amount', true);
       }
 
-      this.setExchangeMetalItems(this.exchange_items_slno_length, values);
-      this.setExchangeMetalGstItems(this.exchange_items_slno_length, values);
-      // alert('metal detail added');
-
-      this.exchangeForm.controls['fcn_exchange_division'].setValue('');
-      this.exchangeForm.controls['fcn_exchange_item_desc'].setValue('');
-      this.exchangeForm.controls['fcn_exchange_item_code'].setValue('');
-      this.exchangeForm.controls['fcn_exchange_purity'].setValue('');
-      this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('');
-      this.exchangeForm.controls['fcn_exchange_metal_amount'].setValue('');
-      if (btn == 'saveBtn') this.modalReference.close();
-      this.sumTotalValues();
-
-      this.setMetalPurchaseDataPost();
     } else {
-      // alert('Invalid Metal Amount');
-      if (this.exchangeForm.value.fcn_exchange_item_code == '') {
-        this.openDialog('Warning', 'Stock code should not be empty', true);
-      }
-      if (_exchangeMetalAmt == '' || 0)
-        this.openDialog('Warning', 'Invalid Metal Amount', true);
-      if (_exchangeNetAmt == '' || 0)
-        this.openDialog('Warning', 'Invalid Net Amount', true);
+      this.snackBar.open('Please Fill Required Fields', '', {
+        duration: 2000 // time in milliseconds
+      });
     }
   }
 
@@ -5648,6 +5689,9 @@ export class AddPosComponent implements OnInit {
   }
 
   addItemtoList(btn: any) {
+    Object.values(this.lineItemForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
     if (!this.lineItemForm.invalid) {
       if (
         this.lineItemForm.controls.fcn_li_net_amount >
@@ -5796,6 +5840,9 @@ export class AddPosComponent implements OnInit {
   }
 
   updateRetailSalesReturnVal() {
+    Object.values(this.lineItemForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
     if (!this.lineItemForm.invalid) {
       this.setRetailSalesRowData(this.order_items_slno_length, this.newLineItem);
       this.modalReferenceSalesReturn.close();
@@ -6002,121 +6049,134 @@ export class AddPosComponent implements OnInit {
     // this.lineItemForm.controls['fcn_li_pcs'].setValue(1);
   }
   searchVocNoSalRet() {
+
     this.getRetailSReturn_EvnFn({
       target: {
         value: this.salesReturnForm.value.fcn_returns_voc_no,
       },
     });
+
   }
 
   getRetailSReturn_EvnFn(event: any) {
-    this.sales_returns_total_amt = 0;
-    this.salesReturnEditCode = '';
-    this.salesReturnEditAmt = '';
+    Object.values(this.salesReturnForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
 
-    //  this.fcn_returns_voc_no_val = event.target.value;
-    console.log(this.salesReturnForm.value.fcn_returns_fin_year);
-    console.log(this.salesReturnForm.value.fcn_returns_branch);
-    console.log(this.salesReturnForm.value.fcn_returns_voc_type);
-    console.log(this.salesReturnForm.value.fcn_returns_voc_no);
-    let _response;
+    if (!this.salesReturnForm.invalid) {
 
-    let fin_year = this.salesReturnForm.value.fcn_returns_fin_year;
-    let branch = this.salesReturnForm.value.fcn_returns_branch;
-    let voc_type = this.salesReturnForm.value.fcn_returns_voc_type;
-    let voc_no = this.salesReturnForm.value.fcn_returns_voc_no;
+      this.sales_returns_total_amt = 0;
+      this.salesReturnEditCode = '';
+      this.salesReturnEditAmt = '';
 
-    if (event.target.value != '') {
-      let API = 'RetailSReturnLookUp?strBranchCode=' + branch + '&strVoctype=' + voc_type +
-        '&intVocNo=' + voc_no + '&stryearmonth=' + fin_year
-      this.suntechApi.getDynamicAPI(API)
-        .subscribe((resp: any) => {
-          if (resp.status == 'Failed') {
-            // alert('Invalid Data');
-            this.snackBar.open('Invalid Data', 'OK');
-            this.salesReturnsItems_forVoc = [];
+      //  this.fcn_returns_voc_no_val = event.target.value;
+      console.log(this.salesReturnForm.value.fcn_returns_fin_year);
+      console.log(this.salesReturnForm.value.fcn_returns_branch);
+      console.log(this.salesReturnForm.value.fcn_returns_voc_type);
+      console.log(this.salesReturnForm.value.fcn_returns_voc_no);
+      let _response;
+
+      let fin_year = this.salesReturnForm.value.fcn_returns_fin_year;
+      let branch = this.salesReturnForm.value.fcn_returns_branch;
+      let voc_type = this.salesReturnForm.value.fcn_returns_voc_type;
+      let voc_no = this.salesReturnForm.value.fcn_returns_voc_no;
+
+      if (event.target.value != '') {
+        let API = 'RetailSReturnLookUp?strBranchCode=' + branch + '&strVoctype=' + voc_type +
+          '&intVocNo=' + voc_no + '&stryearmonth=' + fin_year
+        this.suntechApi.getDynamicAPI(API)
+          .subscribe((resp: any) => {
+            if (resp.status == 'Failed') {
+              // alert('Invalid Data');
+              this.snackBar.open('Invalid Data', 'OK');
+              this.salesReturnsItems_forVoc = [];
 
 
-            this.salesReturnForm.controls['fcn_returns_sales_man'].setValue('');
-            this.salesReturnForm.controls['fcn_returns_cust_code'].setValue('');
-            this.salesReturnForm.controls['fcn_returns_cust_mobile'].setValue(
-              ''
-            );
-          } else {
-            _response = resp.response[0];
-            this.salesReturnsItems_forVoc = resp.response;
-            let _vocdate = _response?.POS_VOCDATE?.split(' ');
-            // let _vocdate = _response.POS_BRANCH_CODE.split(' ');
-            for (let i = 0; i < this.salesReturnsItems_forVoc.length; i++) {
-              for (let j = 0; j < this.sales_returns_items.length; j++) {
-                if (this.salesReturnsItems_forVoc[i].SRNO.toString() == this.sales_returns_items[j].sn_no.toString()) {
-                  this.salesReturnsItems_forVoc[i]['TOTAL_AMOUNTFC'] =
-                    // this.salesReturnsItems_forVoc[i]['TOTALWITHVATFC'] =
-                    this.sales_returns_items[j]['total_amount']
+              this.salesReturnForm.controls['fcn_returns_sales_man'].setValue('');
+              this.salesReturnForm.controls['fcn_returns_cust_code'].setValue('');
+              this.salesReturnForm.controls['fcn_returns_cust_mobile'].setValue(
+                ''
+              );
+            } else {
+              _response = resp.response[0];
+              this.salesReturnsItems_forVoc = resp.response;
+              let _vocdate = _response?.POS_VOCDATE?.split(' ');
+              // let _vocdate = _response.POS_BRANCH_CODE.split(' ');
+              for (let i = 0; i < this.salesReturnsItems_forVoc.length; i++) {
+                for (let j = 0; j < this.sales_returns_items.length; j++) {
+                  if (this.salesReturnsItems_forVoc[i].SRNO.toString() == this.sales_returns_items[j].sn_no.toString()) {
+                    this.salesReturnsItems_forVoc[i]['TOTAL_AMOUNTFC'] =
+                      // this.salesReturnsItems_forVoc[i]['TOTALWITHVATFC'] =
+                      this.sales_returns_items[j]['total_amount']
+                  }
                 }
               }
+              this.salesReturnForm.controls['fcn_returns_sales_man'].setValue(
+                _response.SALESPERSON_CODE
+              );
+              this.salesReturnForm.controls['fcn_returns_cust_code'].setValue(
+                _response.POSCUSTCODE
+              );
+              this.salesReturnForm.controls['fcn_returns_cust_mobile'].setValue(
+                _response.MOBILE
+              );
+              this.salesReturnForm.controls['fcn_returns_voc_date'].setValue(
+                _vocdate[0]
+              );
+              console.table(this.sales_returns_items);
+              console.table(this.sales_returns_pre_items);
+              this.sales_returns_total_amt = this.sales_returns_items.reduce(
+                (preVal: any, curVal: any) =>
+                  parseFloat(preVal) + parseFloat(curVal.total_amount),
+                0
+              );
+              this.sales_returns_pre_items = this.sales_returns_items;
+              // if (
+              //   this.salesReturnEditId == '' ||
+              //   this.salesReturnEditId == undefined ||
+              //   this.salesReturnEditId == null
+              // ) {
+              // } else {
+              //   // console.log('===============salesReturnEditId=====================');
+              //   // console.log(this.sales_returns_items[(parseInt(this.salesReturnEditId) - 1)]);
+              //   // console.log('====================================');
+              //   // alert(this.salesReturnEditId);
+
+              //   // this.salesReturnsItems_forVoc
+              //   console.table(this.sales_returns_items);
+              //   const value =
+              //     this.sales_returns_items[this.salesReturnEditId - 1];
+              //   if (value != null && value != undefined) {
+              //     this.salesReturnEditCode = value.stock_code;
+              //     this.salesReturnEditAmt = value.total_amount;
+              //     this.sales_returns_total_amt = value.total_amount;
+
+              //     // this.sales_returns_pre_items.push(value);
+              //     // this.sales_returns_items.push(value);
+              //     // this.sales_returns_pre_items.ID = value.SRNO;
+              //     // this.sales_returns_items.ID = value.SRNO;
+              //     // this.sales_returns_items_slno_length = 1;
+              //     // alert('this.sales_returns_pre_items ' + this.sales_returns_pre_items.length);
+
+              //     // const val = this.salesReturnsItems_forVoc.filter((data) => {
+              //     //   if (data.STOCK_CODE == this.salesReturnEditCode && data.NETVALUEFC == this.salesReturnEditAmt) {
+              //     //     return data;
+              //     //   }
+              //     // })
+              //     // if (val.length != 0)
+              //     //   this.salesReturnsItems_forVoc = val;
+              //   }
+              // }
             }
-            this.salesReturnForm.controls['fcn_returns_sales_man'].setValue(
-              _response.SALESPERSON_CODE
-            );
-            this.salesReturnForm.controls['fcn_returns_cust_code'].setValue(
-              _response.POSCUSTCODE
-            );
-            this.salesReturnForm.controls['fcn_returns_cust_mobile'].setValue(
-              _response.MOBILE
-            );
-            this.salesReturnForm.controls['fcn_returns_voc_date'].setValue(
-              _vocdate[0]
-            );
-            console.table(this.sales_returns_items);
-            console.table(this.sales_returns_pre_items);
-            this.sales_returns_total_amt = this.sales_returns_items.reduce(
-              (preVal: any, curVal: any) =>
-                parseFloat(preVal) + parseFloat(curVal.total_amount),
-              0
-            );
-            this.sales_returns_pre_items = this.sales_returns_items;
-            // if (
-            //   this.salesReturnEditId == '' ||
-            //   this.salesReturnEditId == undefined ||
-            //   this.salesReturnEditId == null
-            // ) {
-            // } else {
-            //   // console.log('===============salesReturnEditId=====================');
-            //   // console.log(this.sales_returns_items[(parseInt(this.salesReturnEditId) - 1)]);
-            //   // console.log('====================================');
-            //   // alert(this.salesReturnEditId);
-
-            //   // this.salesReturnsItems_forVoc
-            //   console.table(this.sales_returns_items);
-            //   const value =
-            //     this.sales_returns_items[this.salesReturnEditId - 1];
-            //   if (value != null && value != undefined) {
-            //     this.salesReturnEditCode = value.stock_code;
-            //     this.salesReturnEditAmt = value.total_amount;
-            //     this.sales_returns_total_amt = value.total_amount;
-
-            //     // this.sales_returns_pre_items.push(value);
-            //     // this.sales_returns_items.push(value);
-            //     // this.sales_returns_pre_items.ID = value.SRNO;
-            //     // this.sales_returns_items.ID = value.SRNO;
-            //     // this.sales_returns_items_slno_length = 1;
-            //     // alert('this.sales_returns_pre_items ' + this.sales_returns_pre_items.length);
-
-            //     // const val = this.salesReturnsItems_forVoc.filter((data) => {
-            //     //   if (data.STOCK_CODE == this.salesReturnEditCode && data.NETVALUEFC == this.salesReturnEditAmt) {
-            //     //     return data;
-            //     //   }
-            //     // })
-            //     // if (val.length != 0)
-            //     //   this.salesReturnsItems_forVoc = val;
-            //   }
-            // }
-          }
-        });
+          });
+      } else {
+        // alert('Invalid Data');
+        this.snackBar.open('Invalid Data', 'OK');
+      }
     } else {
-      // alert('Invalid Data');
-      this.snackBar.open('Invalid Data', 'OK');
+      this.snackBar.open('Please Fill Required Fields', '', {
+        duration: 2000 // time in milliseconds
+      });
     }
   }
 
@@ -6353,6 +6413,12 @@ export class AddPosComponent implements OnInit {
   }
 
   saveOrder() {
+    Object.values(this.vocDataForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
+    Object.values(this.customerDataForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
     // this.postRetailSalesMaster();
 
     /*********** Need to enable this validation ****** */
@@ -6408,6 +6474,14 @@ export class AddPosComponent implements OnInit {
     // alert(this.retailSalesDataPost.VOCNO);
     // alert(this.retailSReturnDataPost.VOCNO);
     // alert(this.metalPurchaseDataPost.VOCNO);
+
+    Object.values(this.vocDataForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
+    Object.values(this.customerDataForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
+
     if (
       !this.vocDataForm.invalid &&
       this.customerDataForm.value.fcn_customer_mobile != '' &&
@@ -9557,9 +9631,9 @@ export class AddPosComponent implements OnInit {
     this.balanceAmount =
       this.comFunc.emptyToZero(this.order_items_total_net_amount) - this.comFunc.emptyToZero(this.receiptTotalNetAmt);
 
-      if (this.balanceAmount >= 0) {
-        this.snackBar.open('Invalid Amount', 'Ok');
-      }
+    if (this.balanceAmount >= 0) {
+      this.snackBar.open('Invalid Amount', 'Ok');
+    }
 
     this.prnt_received_amount = this.receiptTotalNetAmt;
     this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);

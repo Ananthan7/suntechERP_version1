@@ -207,7 +207,7 @@
             {{
               prnt_received_amount_words != ""
                 ? prnt_received_amount_words +
-                  "UNITED ARAB EMIRATES DIRHAM Only"
+                  " UNITED ARAB EMIRATES DIRHAM Only"
                 : ""
             }}
           </td>
@@ -381,7 +381,7 @@
             <mat-error
               *ngIf="vocDataForm.controls.sales_person.hasError('required')"
             >
-              SalesmanCode cannot be Empty
+              Salesman Code cannot be Empty
             </mat-error>
             <mat-error
               *ngIf="vocDataForm.controls.sales_person.hasError('notInOptions')"
@@ -1804,8 +1804,8 @@
                     id="advanceVatAmountFC"
                     placeholder="0.00"
                     readonly
-                    />
-                    <!-- (focusout)="changeReceiptAmtFC($event)" -->
+                  />
+                  <!-- (focusout)="changeReceiptAmtFC($event)" -->
                 </mat-form-field>
               </div>
             </div>
@@ -2589,6 +2589,15 @@
                 <mat-error
                   *ngIf="
                     salesReturnForm.controls.fcn_returns_fin_year.hasError(
+                      'required'
+                    )
+                  "
+                >
+                  Fin Year is <strong>required</strong>
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    salesReturnForm.controls.fcn_returns_fin_year.hasError(
                       'notInOptions'
                     )
                   "
@@ -2625,6 +2634,24 @@
                     {{ option }}
                   </mat-option>
                 </mat-autocomplete>
+                <mat-error
+                *ngIf="
+                  salesReturnForm.controls.fcn_returns_branch.hasError(
+                    'required'
+                  )
+                "
+              >
+                Branch is <strong>required</strong>
+              </mat-error>
+              <mat-error
+              *ngIf="
+                salesReturnForm.controls.fcn_returns_branch.hasError(
+                  'notInOptions'
+                )
+              "
+            >
+              Invalid value
+            </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-3">
@@ -2641,7 +2668,15 @@
                     {{ voctype.viewValue }}
                   </mat-option>
                 </mat-select>
-
+                <mat-error
+                *ngIf="
+                  salesReturnForm.controls.fcn_returns_voc_type.hasError(
+                    'required'
+                  )
+                "
+              >
+                VOC Type is <strong>required</strong>
+              </mat-error>
                 <!--<mat-label>Voc Type </mat-label>
                                   <input type="text" matInput formControlName="fcn_returns_voc_type" [matAutocomplete]="voctypeauto">
                                   <mat-autocomplete #voctypeauto="matAutocomplete" autoActiveFirstOption>
@@ -2665,6 +2700,15 @@
                   (change)="getRetailSReturn_EvnFn($event)"
                   [readonly]="viewOnly || this.sales_returns_items.length > 0"
                 />
+                <mat-error
+                *ngIf="
+                  salesReturnForm.controls.fcn_returns_voc_no.hasError(
+                    'required'
+                  )
+                "
+              >
+                VOC No. is <strong>required</strong>
+              </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-1 text-right" style="margin-top: 7px">
