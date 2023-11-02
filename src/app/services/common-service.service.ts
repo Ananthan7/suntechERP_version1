@@ -544,7 +544,10 @@ export class CommonServiceService {
     });
     return dataArray
   }
-
+  addCommaSeperation(data:any){
+    if (!Number(data)) return data
+    return Number(data).toLocaleString('en-US', { style: 'decimal' })
+  }
   calculateDateDifference(userDateValue:any) {
     const userDate:any = new Date(userDateValue);
     const currentDate:any = new Date();

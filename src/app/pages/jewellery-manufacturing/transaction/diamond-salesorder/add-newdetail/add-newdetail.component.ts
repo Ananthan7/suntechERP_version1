@@ -31,6 +31,7 @@ export class AddNewdetailComponent implements OnInit {
   firstTableWidth: any;
   secondTableWidth: any;
   headerDetails: any;
+  summaryDetailData:any;
   intLabType: number = this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE')
 
   isViewComponentsTab: boolean = false;
@@ -51,7 +52,6 @@ export class AddNewdetailComponent implements OnInit {
   gridComponentsHead: any[] = [];
   gridParts: any[] = [];
   gridPartsHead: any[] = [];
-
   BOMDetailsArrayHead: any[] = ['DIVCODE', 'STONE_TYPE', 'COMP_CODE',
     'KARAT_CODE', 'PCS', 'GROSS_WT', 'RATELC', 'AMOUNTFC', 'SHAPE', 'SIEVE',
     'LABRATEFC', 'WASTAGE_PER', 'WASTAGE_WT', 'WASTAGE_AMTFC', 'LABAMOUNTFC',
@@ -120,6 +120,42 @@ export class AddNewdetailComponent implements OnInit {
     LOOKUPID: 56,
     SEARCH_FIELD: 'DESIGN_CODE',
     SEARCH_HEADING: 'Design Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  /**USE: color Code lookup model*/
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'General Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES= 'COLOR MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  /**USE: karat Code lookup model*/
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 84,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  /**USE: Size Code lookup model*/
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 74,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Master',
     SEARCH_VALUE: '',
     WHERECONDITION: "",
     VIEW_INPUT: true,
@@ -496,13 +532,37 @@ export class AddNewdetailComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531');
     }
   }
+  /**USE: color Code Selection */
+  metalColorCodeSelected(data: any): void {
+    if (data.CODE) {
+      this.summaryDetailForm.controls.COLOR.setValue(data.CODE)
+    } else {
+      this.commonService.toastErrorByMsgId('MSG1531');
+    }
+  }
+  /**USE: color Code Selection */
+  karatCodeSelected(data: any): void {
+    if (data['Karat Code']) {
+      this.summaryDetailForm.controls.KARAT_CODE.setValue(data['Karat Code'])
+    } else {
+      this.commonService.toastErrorByMsgId('MSG1531');
+    }
+  }
+  /**USE: color Code Selection */
+  sizeCodeSelected(data: any): void {
+    if (data.ATTR_CODE) {
+      this.summaryDetailForm.controls.SIZE.setValue(data.ATTR_CODE)
+    } else {
+      this.commonService.toastErrorByMsgId('MSG1531');
+    }
+  }
+  
   /**use: validate design code change to fetch data with design code */
   designCodeValidate(event: any, flag?: string): void {
     // 'GetDesignStnmtlDetailNet'
     if (event.target.value == '') return
     this.reset() //reset all data
     this.snackBar.open('Loading...')
-    console.log(event.target.value,'event.target.value');
     
     let postData = {
       "SPID": "003",
@@ -519,13 +579,13 @@ export class AddNewdetailComponent implements OnInit {
       .subscribe((result) => {
         this.snackBar.dismiss()
         if (result.dynamicData || result.status == 'Success') {
-          let data: any;
+          let data: any = []
           // 1st result set Summary details data
           if (result.dynamicData[0] && result.dynamicData[0].length > 0) {
             this.isViewSummaryTab = true;
             data = result.dynamicData[0]
             data = this.commonService.arrayEmptyObjectToString(data)
-            data = data[0]
+            this.summaryDetailData = data[0]
           } else {
             this.commonService.toastErrorByMsgId('MSG1531');
           }
@@ -558,33 +618,31 @@ export class AddNewdetailComponent implements OnInit {
 
           this.diamondSalesDetailForm.controls.PCS.setValue(1)
 
-          this.diamondSalesDetailForm.controls.designCode.setValue(data.DESIGN_CODE)
-          this.diamondSalesDetailForm.controls.designDescription.setValue(data.DESIGN_DESCRIPTION)
+          this.diamondSalesDetailForm.controls.designCode.setValue(this.summaryDetailData.DESIGN_CODE)
+          this.diamondSalesDetailForm.controls.designDescription.setValue(this.summaryDetailData.DESIGN_DESCRIPTION)
 
-          this.diamondSalesDetailForm.controls.RATEFC.setValue(data.RATE)
-          this.diamondSalesDetailForm.controls.METAL_WT.setValue(data.METALWT)
-          this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(data.STOCK_CODE)
-          this.diamondSalesDetailForm.controls.Remarks.setValue(data.KARAT_CODE + ':' + data.COLOR + ':' + data.DESIGN_DESCRIPTION)
+          this.diamondSalesDetailForm.controls.RATEFC.setValue(this.summaryDetailData.RATE)
+          this.diamondSalesDetailForm.controls.METAL_WT.setValue(this.summaryDetailData.METALWT)
+          this.diamondSalesDetailForm.controls.STOCK_CODE.setValue(this.summaryDetailData.STOCK_CODE)
+          this.diamondSalesDetailForm.controls.Remarks.setValue(this.summaryDetailData.KARAT_CODE + ':' + this.summaryDetailData.COLOR + ':' + this.summaryDetailData.DESIGN_DESCRIPTION)
 
-          this.summaryDetailForm.controls.CATEGORY_CODE.setValue(data.CATEGORY_CODE)
-          this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(data.SUBCATEGORY_CODE)
-          this.summaryDetailForm.controls.COLOR.setValue(data.COLOR)
-          this.summaryDetailForm.controls.KARAT_CODE.setValue(data.KARAT_CODE)
-          this.summaryDetailForm.controls.PURITY.setValue(this.commonService.decimalQuantityFormat(data.PURITY, 'PURITY'))
-          this.summaryDetailForm.controls.SUPPLIER_CODE.setValue(data.SUPPLIER_CODE)
-          this.summaryDetailForm.controls.SEQ_CODE.setValue(data.SEQ_CODE)
-          this.summaryDetailForm.controls.BRAND_CODE.setValue(data.BRAND_CODE)
-          this.summaryDetailForm.controls.TYPE_CODE.setValue(data.TYPE_CODE)
-          this.summaryDetailForm.controls.SIZE.setValue(data.SIZE)
-          this.summaryDetailForm.controls.SURFACEPROPERTY.setValue(data.SURFACEPROPERTY)
-          this.summaryDetailForm.controls.WIDTH.setValue(data.WIDTH)
-          this.summaryDetailForm.controls.THICKNESS.setValue(data.THICKNESS)
-          this.summaryDetailForm.controls.ENGRAVING_TEXT.setValue(data.ENGRAVING_TEXT)
-          this.summaryDetailForm.controls.ENGRAVING_FONT.setValue(data.ENGRAVING_FONT)
+          this.summaryDetailForm.controls.CATEGORY_CODE.setValue(this.summaryDetailData.CATEGORY_CODE)
+          this.summaryDetailForm.controls.SUBCATEGORY_CODE.setValue(this.summaryDetailData.SUBCATEGORY_CODE)
+          this.summaryDetailForm.controls.COLOR.setValue(this.summaryDetailData.COLOR)
+          this.summaryDetailForm.controls.KARAT_CODE.setValue(this.summaryDetailData.KARAT_CODE)
+          this.summaryDetailForm.controls.PURITY.setValue(this.commonService.decimalQuantityFormat(this.summaryDetailData.PURITY, 'PURITY'))
+          this.summaryDetailForm.controls.SUPPLIER_CODE.setValue(this.summaryDetailData.SUPPLIER_CODE)
+          this.summaryDetailForm.controls.SEQ_CODE.setValue(this.summaryDetailData.SEQ_CODE)
+          this.summaryDetailForm.controls.BRAND_CODE.setValue(this.summaryDetailData.BRAND_CODE)
+          this.summaryDetailForm.controls.TYPE_CODE.setValue(this.summaryDetailData.TYPE_CODE)
+          this.summaryDetailForm.controls.SIZE.setValue(this.summaryDetailData.SIZE)
+          this.summaryDetailForm.controls.SURFACEPROPERTY.setValue(this.summaryDetailData.SURFACEPROPERTY)
+          this.summaryDetailForm.controls.WIDTH.setValue(this.summaryDetailData.WIDTH)
+          this.summaryDetailForm.controls.THICKNESS.setValue(this.summaryDetailData.THICKNESS)
+          this.summaryDetailForm.controls.ENGRAVING_TEXT.setValue(this.summaryDetailData.ENGRAVING_TEXT)
+          this.summaryDetailForm.controls.ENGRAVING_FONT.setValue(this.summaryDetailData.ENGRAVING_FONT)
 
-          console.log(this.summaryDetailForm.value);
-          
-          this.calculateTotal({})
+          this.calculateTotal()
         } else {
           this.commonService.toastErrorByMsgId('MSG1531');
         }
@@ -596,7 +654,7 @@ export class AddNewdetailComponent implements OnInit {
   }
 
   //**USE: calculate total on value change */
-  calculateTotal(event: any) {
+  calculateTotal(event?: any) {
     // if(event.target.value == '') return;
     let dblStone_Wt: any = 0; let dblMetal_Wt: number = 0;
     let dblAmount: number = 0; let dblTotLabour: number = 0; let dblTotRate: number = 0;
@@ -619,7 +677,6 @@ export class AddNewdetailComponent implements OnInit {
         dblLab_amount += this.commonService.emptyToZero(item.LABAMOUNTFC);
         dblMetal_Amt += this.commonService.emptyToZero(item.AMOUNTFC);
         dblWastageAmt += this.commonService.emptyToZero(item.WASTAGE_AMTFC);
-
         // Calc_Metal_Value(i);
         // if (this.intLabType != 4) {
         //   this.calculateMetalLabour(index);
@@ -645,10 +702,11 @@ export class AddNewdetailComponent implements OnInit {
     TotMetal_Wt = this.commonService.decimalQuantityFormat(TotMetal_Wt, 'METAL')
     TotStone_Wt = this.commonService.decimalQuantityFormat(TotStone_Wt, 'STONE')
     TotGross_Wt = this.commonService.decimalQuantityFormat(TotGross_Wt, 'METAL')
+    this.summaryDetailData.TotMetal_Wt = TotMetal_Wt
+    this.summaryDetailData.TotStone_Wt = TotStone_Wt
 
     let txtCharge4FC: number = dblLab_amount;
     let txtCharge1FC: number = dblSetting_Amount;
-    console.log(txtCharge4FC, 'txtCharge4FC');
 
     let txtCharge2FC: number = 0;//todo
     let txtCharge3FC: number = 0;//todo
@@ -675,6 +733,8 @@ export class AddNewdetailComponent implements OnInit {
     // if (this.content.FixedMetal && this.content.FixedMetal == true) dblAmount -= dblMetal_Amt;
     dblTotRate = this.commonService.decimalQuantityFormat(dblAmount + dblTotLabour, 'AMOUNT');
     this.diamondSalesDetailForm.controls.RATEFC.setValue(this.customizeComma({ value: dblTotRate }))
+    this.summaryDetailData.dblTotRate = dblTotRate
+    
     let sumAMOUNT = this.customizeComma({ value: this.diamondSalesDetailForm.value.PCS * dblTotRate })
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(sumAMOUNT)
     //rate x weight = amount
@@ -774,11 +834,7 @@ export class AddNewdetailComponent implements OnInit {
         }
       })
   }
-  calculateRateAmount(event: any) {
-    this.diamondSalesDetailForm.controls.AMOUNT.setValue(
-      this.diamondSalesDetailForm.value.RATEFC * event.target.value
-    )
-  }
+  
   /**USE: final form save  */
   formSubmit() {
     let item: dataToSave = {

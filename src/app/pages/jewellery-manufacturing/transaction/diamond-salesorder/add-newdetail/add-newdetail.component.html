@@ -193,7 +193,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
                                             formControlName="PCS"
-                                            (change)="calculateRateAmount($event)"
+                                            (change)="calculateTotal($event)"
                                             class="text-right" />
                                     </mat-form-field>
                                 </div>
@@ -215,7 +215,7 @@
                                     class="col-sm-2 col-form-label">Rate</label>
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput
+                                        <input type="number" matInput
                                             AmountDecimalInput
                                             [readOnly]="isViewBOMTab"
                                             formControlName="RATEFC"
@@ -603,7 +603,6 @@
                                             </div>
                                         </dx-data-grid>
                                     </dx-resizable>
-                                    &nbsp;
                                     <!-- grouped BOM data grid starts-->
                                     <dx-resizable id="gridContainer"
                                         [width]="secondTableWidth"
@@ -634,12 +633,14 @@
                                                 caption="Weight"
                                                 alignment="right">
                                             </dxi-column>
-                                            <dxi-column dataField="WEIGHT_GMS"
+                                            <dxi-column
+                                                dataField="WEIGHT_GMS"
                                                 width="auto"
                                                 caption="Weight.Gms"
                                                 alignment="right">
                                             </dxi-column>
-                                            <dxi-column dataField="AMOUNT_FC"
+                                            <dxi-column
+                                                dataField="AMOUNT_FC"
                                                 width="auto"
                                                 caption="Amount FC"
                                                 alignment="right">
@@ -837,13 +838,17 @@
                             <div class="row mt-2">
                                 <div class="col-md-5">
                                     <div class="row">
-                                        <label class="col-sm-3 col-form-label">Metal
-                                            Color</label>
-                                        <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;"
-                                                formControlName="COLOR">
-                                                <input type="text" matInput />
-                                            </mat-form-field>
+                                        <label class="col-sm-3 col-form-label">Metal Color</label>
+                                        <div class="d-flex col-md-3">
+                                                <mat-form-field style="width: 80%;" >
+                                                <input type="text" matInput 
+                                                    ormControlName="COLOR"/>
+                                                </mat-form-field>
+                                            <div class="pt-3">
+                                                <master-search [MasterSearchData]="colorCodeData"
+                                                    (newRowClick)="metalColorCodeSelected($event)">
+                                                </master-search>
+                                            </div>
                                         </div>
                                         <label class="col-sm-3 col-form-label">Type</label>
                                         <div class="col-md-3">
@@ -855,11 +860,16 @@
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-3 col-form-label">Karat</label>
-                                        <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
+                                        <div class="d-flex col-md-3">
+                                            <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
                                                     formControlName="KARAT_CODE" />
                                             </mat-form-field>
+                                            <div class="pt-3">
+                                                <master-search [MasterSearchData]="karatCodeData"
+                                                    (newRowClick)="karatCodeSelected($event)">
+                                                </master-search>
+                                            </div>
                                         </div>
                                         <label class="col-sm-3 col-form-label">Brand</label>
                                         <div class="col-md-3">
@@ -872,9 +882,9 @@
                                     <div class="row">
                                         <label class="col-sm-3 col-form-label">Purity</label>
                                         <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
+                                            <mat-form-field style="width: 80%;">
                                                 <input type="text"
-                                                    style="text-align: right;"
+                                                    class="text-right"
                                                     matInput SixDecimalInput
                                                     formControlName="PURITY" />
                                             </mat-form-field>
@@ -890,7 +900,7 @@
                                     <div class="row">
                                         <label class="col-sm-3 col-form-label">Category</label>
                                         <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
+                                            <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
                                                     formControlName="CATEGORY_CODE" />
                                             </mat-form-field>
@@ -908,7 +918,7 @@
                                         <label class="col-sm-3 col-form-label">Sub
                                             Category</label>
                                         <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
+                                            <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
                                                     formControlName="SUBCATEGORY_CODE" />
                                             </mat-form-field>
@@ -916,11 +926,16 @@
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-3 col-form-label">Size</label>
-                                        <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
+                                        <div class="d-flex col-md-3">
+                                            <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
                                                     formControlName="SIZE" />
                                             </mat-form-field>
+                                            <div class="pt-3">
+                                                <master-search [MasterSearchData]="sizeCodeData"
+                                                    (newRowClick)="sizeCodeSelected($event)">
+                                                </master-search>
+                                            </div>
                                         </div>
                                         <label class="col-sm-3 col-form-label">Stamp
                                             Details</label>
@@ -935,7 +950,7 @@
                                         <label class="col-sm-3 col-form-label">Stamp
                                             Font</label>
                                         <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
+                                            <mat-form-field style="width: 80%;">
                                                 <mat-select>
                                                     <mat-option value="item">item</mat-option>
                                                 </mat-select>
@@ -944,7 +959,9 @@
                                         <label class="col-sm-3 col-form-label">Width</label>
                                         <div class="col-md-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput
+                                                <input type="number" matInput
+                                                    AmountDecimalInput
+                                                    class="text-right"
                                                     formControlName="WIDTH" />
                                             </mat-form-field>
                                         </div>
@@ -952,7 +969,7 @@
                                     <div class="row">
                                         <label class="col-sm-3 col-form-label">Surface</label>
                                         <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
+                                            <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput
                                                     formControlName="SURFACEPROPERTY" />
                                             </mat-form-field>
@@ -968,8 +985,10 @@
                                     <div class="row">
                                         <label class="col-sm-3 col-form-label">Thickness</label>
                                         <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput
+                                            <mat-form-field style="width: 80%;">
+                                                <input type="number" matInput
+                                                    AmountDecimalInput
+                                                    class="text-right"
                                                     formControlName="THICKNESS" />
                                             </mat-form-field>
                                         </div>
@@ -997,8 +1016,10 @@
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="SETTING" />
                                                         </mat-form-field>
                                                     </td>
@@ -1008,8 +1029,10 @@
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="POLISHING" />
                                                         </mat-form-field>
                                                     </td>
@@ -1019,8 +1042,10 @@
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="RHODIUM" />
                                                         </mat-form-field>
                                                     </td>
@@ -1030,8 +1055,10 @@
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="LABOUR" />
                                                         </mat-form-field>
                                                     </td>
@@ -1041,8 +1068,10 @@
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="Misc" />
                                                         </mat-form-field>
                                                     </td>
@@ -1053,8 +1082,10 @@
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="Total_Labour" />
                                                         </mat-form-field>
                                                     </td>
@@ -1070,19 +1101,23 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="td-p-5">Wastage %</td>
-                                                    <td> 
+                                                    <td>
                                                         <mat-form-field
                                                             style="width: 50px;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="Wastage" />
                                                         </mat-form-field>
                                                     </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="WastagePercentage" />
                                                         </mat-form-field>
                                                     </td>
@@ -1092,16 +1127,20 @@
                                                     <td>
                                                         <mat-form-field
                                                             style="width: 50px;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="Markup" />
                                                         </mat-form-field>
                                                     </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="MarkupPercentage" />
                                                         </mat-form-field>
                                                     </td>
@@ -1111,16 +1150,20 @@
                                                     <td>
                                                         <mat-form-field
                                                             style="width: 50px;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="Duty" />
                                                         </mat-form-field>
                                                     </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="DutyPercentage" />
                                                         </mat-form-field>
                                                     </td>
@@ -1130,16 +1173,20 @@
                                                     <td>
                                                         <mat-form-field
                                                             style="width: 50px;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="Margin" />
                                                         </mat-form-field>
                                                     </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="MarginPercentage" />
                                                         </mat-form-field>
                                                     </td>
@@ -1149,35 +1196,44 @@
                                                     <td>
                                                         <mat-form-field
                                                             style="width: 50px;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="Loading" />
                                                         </mat-form-field>
                                                     </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="LoadingPercentage" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="td-p-5">Discount %</td>
+                                                    <td class="td-p-5">Discount
+                                                        %</td>
                                                     <td>
                                                         <mat-form-field
                                                             style="width: 50px;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="Discount" />
                                                         </mat-form-field>
                                                     </td>
                                                     <td class="textboxcorner">
                                                         <mat-form-field
                                                             style="width: 100%;">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                 matInput
+                                                                AmountDecimalInput
+                                                                class="text-right"
                                                                 formControlName="DiscountPercentage" />
                                                         </mat-form-field>
                                                     </td>
