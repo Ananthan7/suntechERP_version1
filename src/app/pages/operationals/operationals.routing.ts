@@ -11,6 +11,10 @@ const routes: Routes = [
     path: 'validation-splist',
     loadChildren: () => import('../operationals/validation-splist/validation-splist.module').then(m => m.ValidationSplistModule)
   },
+  {
+    path: 'menu-updation',
+    loadChildren: () => import('../operationals/menu-updation/menu-updation.module').then(m => m.MenuUpdationModule)
+  },
 ];
 
 @NgModule({

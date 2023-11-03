@@ -1,6 +1,7 @@
 // import { DecimalPipe } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
@@ -57,7 +58,14 @@ export class CommonServiceService {
     private route: ActivatedRoute,
     private _decimalPipe: DecimalPipe,
     private toastr: ToastrService,
+    private snackBar: MatSnackBar,
   ) {
+  }
+  showSnackBarMsg(Message: string){
+    this.snackBar.open(Message,'Close')
+  }
+  closeSnackBarMsg(){
+    this.snackBar.dismiss()
   }
   //**USE: common fuction to show toaster By MsgId */
   toastErrorByMsgId(MsgId: string,Description?: string){

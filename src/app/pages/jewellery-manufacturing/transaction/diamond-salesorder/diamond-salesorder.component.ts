@@ -691,7 +691,7 @@ export class DiamondSalesorderComponent implements OnInit {
   importClicked(): void {
 
   }
-  //party Code Change
+  //party Code validate
   partyCodeChange(event: any) {
     if (event.target.value == '') return
     if (!this.commonService.branchCode || this.commonService.branchCode == '') {

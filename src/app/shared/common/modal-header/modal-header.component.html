@@ -13,13 +13,13 @@
                     Cancel
                 </button>
             </div>
-            <div class="p-1">
+            <div class="p-1" *ngIf="isViewDelete">
                 <button type="button" class="btn btn-danger text-center" 
                     (click)="deleteClicked()">
                     Delete
                 </button>
             </div>
-            <div class="p-1 dropdown text-right">
+            <div class="p-1 dropdown text-right" *ngIf="isViewMore">
                 <div class="d-inline-block" ngbDropdown
                     #myDrop="ngbDropdown">
                     <button style="border: none !important;"
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <div class="col-md-4 d-flex justify-content-end">
+    <div class="col-md-4 d-flex justify-content-end" *ngIf="isViewArrow">
         <div class="pt-1 arrowicons">
             <span>
                 <i class="fa fa-angle-left"></i>

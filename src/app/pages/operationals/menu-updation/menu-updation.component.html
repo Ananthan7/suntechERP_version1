@@ -1,0 +1,52 @@
+<div class="col-md-12 col-sm-12">
+    <div class="card">
+        <div class="ps-2 pt-2" >
+            <h5>Menu Updation</h5>
+        </div>
+        <div class="p-1">
+            <modal-header [isViewDelete]="false" [isViewMore]="false" 
+            [isViewArrow]="false" (saveClick)="updateMenu()"></modal-header>
+        </div>
+        <form [formGroup]="menuMasterForm">
+            <div class="row p-3" >
+                <div class="col-md-2">
+                    <span>
+                        <label class="col-form-label">Menu ID : </label>
+                        <mat-form-field style="width: 50%">
+                            <input type="text" matInput
+                                formControlName="strMenuID" />
+                        </mat-form-field>
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <span>
+                        <label class="col-form-label">Module Path : </label>
+                        <mat-form-field style="width: 50%">
+                            <input type="text" matInput
+                                formControlName="strPathName" />
+                        </mat-form-field>
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <span>
+                        <label class="col-form-label">Module Name :
+                        </label>
+                        <mat-form-field style="width: 50%">
+                            <input type="text" matInput
+                                formControlName="strComponentName" />
+                        </mat-form-field>
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <span>
+                        <label class="col-form-label">Form Component :</label>
+                        <mat-form-field style="width: 50%">
+                            <input type="text" matInput
+                                formControlName="strFormComponentName" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

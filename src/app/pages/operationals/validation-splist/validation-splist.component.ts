@@ -38,12 +38,14 @@ export class ValidationSplistComponent implements OnInit {
     { MODULE_NAME: "Catalogue" },
     { MODULE_NAME: "Fixed Asset" },
     { MODULE_NAME: "Retail" },
-    { MODULE_NAME: "General" }
+    { MODULE_NAME: "General" },
+    { MODULE_NAME: "COMMON" }
   ];
   ModuleTypeDataSource: any[] = [
     { MODULE_TYPE: "MASTER" },
     { MODULE_TYPE: "TRANSACTION" },
     { MODULE_TYPE: "REPORT" },
+    { MODULE_TYPE: "COMMON" },
   ];
   constructor(
     private fb: FormBuilder,

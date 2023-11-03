@@ -1,0 +1,10 @@
+.card {
+  min-height: 70vh;
+}
+::ng-deep {
+  .mat-form-field {
+    height: 26px !important;
+    margin-bottom: 9px !important;
+    font-weight: 600 !important;
+  }
+}

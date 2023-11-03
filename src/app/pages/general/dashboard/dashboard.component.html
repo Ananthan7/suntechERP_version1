@@ -1,0 +1,83 @@
+<!-- title menu section -->
+<app-menubar *ngIf="menuTitle != ''" [menuTitle]="menuTitle"
+    (subMenuChange)="menuClicked($event)"></app-menubar>
+<!-- content section starts -->
+<div class="row d-flex justify-content-between"
+    style="min-height: 100vh !important;">
+    <div class="col-md-3 col-sm-12">
+        <div class="card p-3">
+            <h5>Favorites</h5>
+            <ul>
+                <li><h6 class="favItems">Job card</h6></li>
+                <li><h6 class="favItems">Departement Master</h6></li>
+                <li><h6 class="favItems">Sales Master</h6></li>
+                <li><h6 class="favItems">Inventory Master</h6></li>
+                <li><h6 class="favItems">Departement Master</h6></li>
+                <li><h6 class="favItems">Inventory Master</h6></li>
+                <li><h6 class="favItems">Inventory Master</h6></li>
+                <li><h6 class="favItems">Job Master</h6></li>
+                <li><h6 class="favItems">Sales Master</h6></li>
+                <li><h6 class="favItems">Inventory Master</h6></li>
+            </ul>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap h-100">
+                <h5>Defect Analysis</h5>
+                <img
+                  src="../../assets/images/chats/chat-7.png"
+                  alt="chat"
+                  width="100%"
+                />
+              </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="card p-3">
+            <div class="col-md-12">
+                <div class="card_wrap">
+                    <h4 class="favItems">{{menuTitle}}</h4>
+                    <img
+                        src="../../assets/images/chats/chat-8.png"
+                        alt="detalis"
+                        width="100%"
+                        height="365px" />
+                </div>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="col-md-6">
+                <div class="card_wrap">
+                    <h5>Avg Working Hours</h5>
+                    <img
+                        src="../../assets/images/chats/chat-5.png"
+                        alt="chat"
+                        width="100%"
+                        height=" 165px" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Reminders</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Overall</h5>
+                <img
+                    src="../../assets/images/chats/chat-2.png"
+                    alt="chat"
+                    width="100%" />
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Quantity Produced</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+    </div>
+</div>

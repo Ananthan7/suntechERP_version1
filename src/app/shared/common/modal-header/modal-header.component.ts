@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'modal-header',
@@ -9,6 +9,9 @@ export class ModalHeaderComponent implements OnInit {
   @Output() saveClick = new EventEmitter();
   @Output() cancelClick = new EventEmitter();
   @Output() deleteClick = new EventEmitter();
+  @Input() isViewDelete: boolean = true;
+  @Input() isViewMore: boolean = true;
+  @Input() isViewArrow: boolean = true;
   constructor() { }
 
   ngOnInit(): void {

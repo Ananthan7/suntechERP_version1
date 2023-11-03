@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { OperationalsRoutingModule } from './operationals.routing';
-import { OperationalsComponent } from './operationals.component';
+import { MenuUpdationRoutingModule } from './menu-updation.routing';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MenuUpdationComponent } from './menu-updation.component';
+
 
 @NgModule({
   declarations: [
-    OperationalsComponent,
+    MenuUpdationComponent
   ],
   imports: [
     CommonModule,
-    OperationalsRoutingModule,
+    MenuUpdationRoutingModule,
     SharedModule
   ]
 })
-export class OperationalsModule { }
+export class MenuUpdationModule { }

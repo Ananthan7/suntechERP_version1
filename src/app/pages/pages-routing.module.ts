@@ -22,6 +22,10 @@ const routes: Routes = [
     loadChildren: () => import('../pages/jewellery-manufacturing/jewellery-manufacturing.module').then(m => m.JewelleryManufacturingModule)
   },
   {
+    path: 'general',
+    loadChildren: () => import('../pages/general/general.module').then(m => m.GeneralModule)
+  },
+  {
     path: 'retail',
     loadChildren: () => import('../pages/retail/retail.module').then(m => m.RetailModule)
   },
