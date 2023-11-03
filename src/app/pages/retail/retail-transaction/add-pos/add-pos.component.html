@@ -12,31 +12,43 @@
     <tr style="border-bottom: hidden">
       <td>
         <label style="font-weight: bold">Customer Name </label>
-        <label style="float: right">{{ inv_customer_name }}</label>
+        <label style="float: right">{{
+          this.customerDataForm.value.fcn_customer_name || ""
+        }}</label>
       </td>
       <td>
         <label style="font-weight: bold">INVOICE NO </label>
-        <label style="font-weight: bold; float: right"> {{ inv_number }}</label>
+        <label style="font-weight: bold; float: right">
+          {{ this.vocDataForm.value.fcn_voc_no || "" }}</label
+        >
       </td>
     </tr>
     <tr style="border-bottom: hidden">
       <td>
         <label style="font-weight: bold">ID No/Passport </label>
-        <label style="float: right">{{ inv_cust_id_no }}</label>
+        <label style="float: right">{{
+          this.customerDataForm.value.fcn_customer_id_number || ""
+        }}</label>
       </td>
       <td>
         <label style="font-weight: bold">Bill Date </label>
-        <label style="float: right">{{ inv_bill_date }}</label>
+        <label style="float: right">
+          {{ this.convertDate(this.vocDataForm.value.vocdate) }}
+        </label>
       </td>
     </tr>
     <tr>
       <td>
         <label style="font-weight: bold">Mobile Mumber</label>
-        <label style="float: right">{{ inv_cust_mobile_no }}</label>
+        <label style="float: right">          {{ this.customerDataForm.value.fcn_customer_mobile }}
+        </label>
       </td>
       <td>
         <label style="font-weight: bold">Salesman</label>
-        <label style="float: right">{{ inv_sales_man }}</label>
+        <label style="float: right">
+          {{ this.vocDataForm.value.sales_person }}
+
+        </label>
       </td>
     </tr>
   </table>
@@ -2635,23 +2647,23 @@
                   </mat-option>
                 </mat-autocomplete>
                 <mat-error
-                *ngIf="
-                  salesReturnForm.controls.fcn_returns_branch.hasError(
-                    'required'
-                  )
-                "
-              >
-                Branch is <strong>required</strong>
-              </mat-error>
-              <mat-error
-              *ngIf="
-                salesReturnForm.controls.fcn_returns_branch.hasError(
-                  'notInOptions'
-                )
-              "
-            >
-              Invalid value
-            </mat-error>
+                  *ngIf="
+                    salesReturnForm.controls.fcn_returns_branch.hasError(
+                      'required'
+                    )
+                  "
+                >
+                  Branch is <strong>required</strong>
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    salesReturnForm.controls.fcn_returns_branch.hasError(
+                      'notInOptions'
+                    )
+                  "
+                >
+                  Invalid value
+                </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-3">
@@ -2669,14 +2681,14 @@
                   </mat-option>
                 </mat-select>
                 <mat-error
-                *ngIf="
-                  salesReturnForm.controls.fcn_returns_voc_type.hasError(
-                    'required'
-                  )
-                "
-              >
-                VOC Type is <strong>required</strong>
-              </mat-error>
+                  *ngIf="
+                    salesReturnForm.controls.fcn_returns_voc_type.hasError(
+                      'required'
+                    )
+                  "
+                >
+                  VOC Type is <strong>required</strong>
+                </mat-error>
                 <!--<mat-label>Voc Type </mat-label>
                                   <input type="text" matInput formControlName="fcn_returns_voc_type" [matAutocomplete]="voctypeauto">
                                   <mat-autocomplete #voctypeauto="matAutocomplete" autoActiveFirstOption>
@@ -2701,14 +2713,14 @@
                   [readonly]="viewOnly || this.sales_returns_items.length > 0"
                 />
                 <mat-error
-                *ngIf="
-                  salesReturnForm.controls.fcn_returns_voc_no.hasError(
-                    'required'
-                  )
-                "
-              >
-                VOC No. is <strong>required</strong>
-              </mat-error>
+                  *ngIf="
+                    salesReturnForm.controls.fcn_returns_voc_no.hasError(
+                      'required'
+                    )
+                  "
+                >
+                  VOC No. is <strong>required</strong>
+                </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-1 text-right" style="margin-top: 7px">

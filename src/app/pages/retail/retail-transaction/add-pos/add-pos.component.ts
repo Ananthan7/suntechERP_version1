@@ -5661,6 +5661,7 @@ export class AddPosComponent implements OnInit {
       this.invReturnSalesTotalNetTotal -
       total_exchange
     );
+    // alert('this.order_items_total_net_amount '+this.order_items_total_net_amount);
 
     this.sumReceiptItem();
     // this.prnt_inv_net_total_with_tax = this.order_items_total_net_amount;
@@ -6100,7 +6101,8 @@ export class AddPosComponent implements OnInit {
             } else {
               _response = resp.response[0];
               this.salesReturnsItems_forVoc = resp.response;
-              let _vocdate = _response?.POS_VOCDATE?.split(' ');
+              let _vocdate = _response?.VOCDATE?.split(' ');
+              // let _vocdate = _response?.POS_VOCDATE?.split(' ');
               // let _vocdate = _response.POS_BRANCH_CODE.split(' ');
               for (let i = 0; i < this.salesReturnsItems_forVoc.length; i++) {
                 for (let j = 0; j < this.sales_returns_items.length; j++) {
@@ -9631,7 +9633,11 @@ export class AddPosComponent implements OnInit {
     this.balanceAmount =
       this.comFunc.emptyToZero(this.order_items_total_net_amount) - this.comFunc.emptyToZero(this.receiptTotalNetAmt);
 
-    if (this.balanceAmount >= 0) {
+      console.log('============this.order_items_total_net_amount========================');
+      console.log(this.order_items_total_net_amount, this.receiptTotalNetAmt);
+      console.log('====================================');
+    if (this.balanceAmount >= 0 &&  this.order_items_total_net_amount != 0.00) {
+      // alert(this.order_items_total_net_amount +" - "+ this.balanceAmount)
       this.snackBar.open('Invalid Amount', 'Ok');
     }
 
