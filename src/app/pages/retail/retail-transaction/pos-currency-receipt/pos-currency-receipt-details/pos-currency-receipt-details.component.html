@@ -23,16 +23,14 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div class="row mb-1">
+                    <!-- <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Mode Of :</label>
                         <div class="col-md-3">
                             <mat-form-field>
                                 <mat-select formControlName="modeOfSelect">
                                     <mat-option *ngFor="let data of paymentModeList" [value]="data.ENGLISH">{{
                                         data.ENGLISH }}</mat-option>
-                                    <!-- <mat-option>Cash</mat-option>
-                                        <mat-option>Cash</mat-option>
-                                        <mat-option>Cash</mat-option> -->
+                                
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -40,82 +38,85 @@
                             <mat-form-field style="width: 70%;">
                                 <input type="text" matInput formControlName="modeOfSearch" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="codeData"
+                            (newRowClick)="codeSelected($event)"></master-search>
                         </div>
                         <div class="col-md-3">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" matInput formControlName="modeDesc" />
                             </mat-form-field>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-12 mb-2">
                     <mat-tab-group>
                         <mat-tab label="Cash">
-                            <div class="mt-1">
-                                <div class="row my-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%">
-                                            <input type="text" matInput formControlName="debitAmount"
-                                                (change)="DebitamountChange($event)" />
-                                        </mat-form-field>
-                                        <master-search [MasterSearchData]="debitAmountData"
-                                            (newRowClick)="debitAmountSelected($event)"></master-search>
+                            <form [formGroup]="cashReceiptForm">
+                                <div class="mt-1">
+                                    <div class="row my-1">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
+                                        <div class="col-md-2">
+                                            <mat-form-field style="width: 70%">
+                                                <input type="text" matInput formControlName="cashdebitAmount"
+                                                    (change)="DebitamountChange($event)" />
+                                            </mat-form-field>
+                                            <master-search [MasterSearchData]="debitAmountData"
+                                                (newRowClick)="debitAmountSelected($event)"></master-search>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="cashdebitAmountDesc" />
+                                            </mat-form-field>
+                                            <mat-form-field style="width: 100%;">    
+                                                <input matInput [matDatepicker]="cashDebitAmountDate" name="cashDebitAmountDate"
+                                                    placeholder="DD/MM/YYYY" DateValidation formControlName="cashDebitAmountDate"/>
+                                                <mat-datepicker-toggle matSuffix [for]="cashDebitAmountDate"></mat-datepicker-toggle>
+                                                <mat-datepicker #cashDebitAmountDate></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
                                     </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="debitAmountDesc" />
-                                        </mat-form-field>
-                                        <mat-form-field style="width: 100%;">
-
-                                            <input matInput [matDatepicker]="vocDate" name="vocDate"
-                                                placeholder="DD/MM/YYYY" DateValidation />
-                                            <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                            <mat-datepicker #vocDate></mat-datepicker>
-                                        </mat-form-field>
+                                    <div class="row mb-1">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
+                                        <div class="col-md-2">
+                                            <mat-form-field style="width: 70%;">
+                                                <input type="text" matInput formControlName="cashcurrencyCode" />
+                                            </mat-form-field>
+                                            <!-- < <master-search></master-search>  -->
+                                        </div>
+                                        <div class="col-md-5">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="cashcurrencyRate" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
+                                        <div class="col-md-2">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="cashAmountFc" />
+                                            </mat-form-field>
+                                        </div>
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
+                                        <div class="col-md-2">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="cashAmountLc" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
+                                        <div class="col-md-7">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="cashRemarks" />
+                                            </mat-form-field>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="currencyCode" />
-                                        </mat-form-field>
-                                        <!-- < <master-search></master-search>  -->
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="currencyRate" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountFc" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountCc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
-                                    <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
+                           
                         </mat-tab>
                         <mat-tab label="Credit Card">
-                            <div class="mt-1">
+                            <form [formGroup]="creditReceiptForm"  class="mt-1">
                                 <div class="row mb-1">
                                     <label for="inputPassword" class="col-sm-1 col-form-label">Number:</label>
                                     <div class="col-md-1">
@@ -140,51 +141,11 @@
                                         </mat-form-field>
                                     </div>
                                 </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="currencyCode" />
-                                        </mat-form-field>
-                                        <!-- < <master-search></master-search>  -->
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="currencyRate" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountFc" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountCc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
-                                    <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </div>
-                        </mat-tab>
-                        <mat-tab label="Others">
-                            <div class="mt-1">
                                 <div class="row my-1">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%">
-                                            <input type="text" matInput formControlName="debitAmount"
+                                            <input type="text" matInput formControlName="creditCardAmount"
                                                 (change)="DebitamountChange($event)" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="debitAmountData"
@@ -192,12 +153,68 @@
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="debitAmountDesc" />
+                                            <input type="text" matInput formControlName="creditCardAmountDesc" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="creditCardcurrencyCode" />
+                                        </mat-form-field>
+                                        <!-- < <master-search></master-search>  -->
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="creditCardcurrencyRate" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="creditCardamountFc" />
+                                        </mat-form-field>
+                                    </div>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="creditCardAmountLc" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
+                                    <div class="col-md-7">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="creditCardRemarks" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </form>
+                        </mat-tab>
+                        <mat-tab label="Others">
+                            <form [formGroup]="otherReceiptForm" class="mt-1">
+                                <div class="row my-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%">
+                                            <input type="text" matInput formControlName="otherdebitAmount"
+                                                (change)="DebitamountChange($event)" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="debitAmountData"
+                                            (newRowClick)="debitAmountSelected($event)"></master-search>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="otherdebitAmountDesc" />
                                         </mat-form-field>
                                         <mat-form-field style="width: 100%;">
 
                                             <input matInput [matDatepicker]="otherVocDate" name="otherVocDate"
-                                                placeholder="DD/MM/YYYY" DateValidation />
+                                                placeholder="DD/MM/YYYY" DateValidation formControlName="otherVocDate" />
                                             <mat-datepicker-toggle matSuffix [for]="otherVocDate"></mat-datepicker-toggle>
                                             <mat-datepicker #otherVocDate></mat-datepicker>
                                         </mat-form-field>
@@ -207,13 +224,13 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="currencyCode" />
+                                            <input type="text" matInput formControlName="otherCurrencyCode" />
                                         </mat-form-field>
                                         <!-- < <master-search></master-search>  -->
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="currencyRate" />
+                                            <input type="text" matInput formControlName="otherCurrencyRate" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -221,13 +238,13 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountFc" />
+                                            <input type="text" matInput formControlName="otherAmountFc" />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountCc" />
+                                            <input type="text" matInput formControlName="otherAmountLc" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -235,14 +252,14 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="text" matInput formControlName="otherRemarks" />
                                         </mat-form-field>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </mat-tab>
                         <mat-tab label="TT">
-                            <div class="mt-1">
+                            <form [formGroup]="ttReceiptForm" class="mt-1">
                                 <div class="row mb-1">
                                     <label for="inputPassword" class="col-sm-1 col-form-label">Number:</label>
                                     <div class="col-md-1">
@@ -254,7 +271,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
                                             <input matInput [matDatepicker]="ttDate" name="ttDate"
-                                                placeholder="DD/MM/YYYY" DateValidation />
+                                                placeholder="DD/MM/YYYY" DateValidation formControlName="ttDate" />
                                             <mat-datepicker-toggle matSuffix [for]="ttDate"></mat-datepicker-toggle>
                                             <mat-datepicker #ttDate></mat-datepicker>
                                         </mat-form-field>
@@ -272,17 +289,33 @@
                                         </mat-form-field>
                                     </div>
                                 </div>
+                                <div class="row my-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%">
+                                            <input type="text" matInput formControlName="ttAmount"
+                                                (change)="DebitamountChange($event)" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="debitAmountData"
+                                            (newRowClick)="debitAmountSelected($event)"></master-search>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="ttAmountDesc" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                                 <div class="row mb-1">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="currencyCode" />
+                                            <input type="text" matInput formControlName="ttCurrencyCode" />
                                         </mat-form-field>
                                         <!-- < <master-search></master-search>  -->
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="currencyRate" />
+                                            <input type="text" matInput formControlName="ttCurrencyRate" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -291,13 +324,13 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountFc" />
+                                            <input type="text" matInput formControlName="ttAmountFc" />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountCc" />
+                                            <input type="text" matInput formControlName="ttAmountLc" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -305,14 +338,14 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="text" matInput formControlName="ttRemarks" />
                                         </mat-form-field>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </mat-tab>
                         <mat-tab label="Cheque">
-                            <div class="mt-1">
+                            <form [formGroup]="chequeReceiptForm"class="mt-1">
                                 <div class="row mb-1">
                                     <label for="inputPassword" class="col-sm-1 col-form-label">Number:</label>
                                     <div class="col-md-1">
@@ -342,17 +375,33 @@
                                         </mat-form-field>
                                     </div>
                                 </div>
+                                <div class="row my-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%">
+                                            <input type="text" matInput formControlName="chequeAmount"
+                                                (change)="DebitamountChange($event)" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="debitAmountData"
+                                            (newRowClick)="debitAmountSelected($event)"></master-search>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="chequeAmountDesc" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                                 <div class="row mb-1">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="currencyCode" />
+                                            <input type="text" matInput formControlName="chequeCurrencyCode" />
                                         </mat-form-field>
                                         <!-- < <master-search></master-search>  -->
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="currencyRate" />
+                                            <input type="text" matInput formControlName="chequeCurrencyRate" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -360,13 +409,13 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountFc" />
+                                            <input type="text" matInput formControlName="chequeAmountFc" />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="amountCc" />
+                                            <input type="text" matInput formControlName="chequeAmountLc" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -374,11 +423,11 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="text" matInput formControlName="chequeRemarks" />
                                         </mat-form-field>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </mat-tab>
                     </mat-tab-group>
                 </div>
