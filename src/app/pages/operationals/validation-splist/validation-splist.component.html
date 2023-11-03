@@ -9,7 +9,7 @@
                 [allowColumnResizing]="true"
                 height="450"
                 [columnAutoWidth]="true" [showRowLines]="true"
-                [showBorders]="true" (onEditingStart)="logEvent('EditingStart')"
+                [showBorders]="true"
                 (onRowInserted)="onSaving($event)"
                 (onRowUpdated)="updateData($event)"
                 (onRowRemoved)="deleteData($event)">

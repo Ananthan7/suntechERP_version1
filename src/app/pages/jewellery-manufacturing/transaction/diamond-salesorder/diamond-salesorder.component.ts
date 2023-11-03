@@ -277,6 +277,8 @@ export class DiamondSalesorderComponent implements OnInit {
           DATA: item
         })
       })
+      console.log( this.detailData);
+      
     }
   }
   // division checkbox change
@@ -371,9 +373,14 @@ export class DiamondSalesorderComponent implements OnInit {
     return []
   }
   private getBOMData() {
-    let bomData = this.detailData[0].DATA
-    bomData = bomData.BOM_DETAILS
-    console.log(bomData, 'summaryData');
+    console.log(this.detailData);
+    
+    let allData = this.detailData[0].DATA
+    let bomData = allData.BOMDETAILS
+
+    let summary = allData.SUMMARYDETAILS
+    console.log(summary);
+    
     let stnmtlDetail:any[] = [];
     for (let index = 0; index < bomData.length; index++) {
       const element = bomData[index];
@@ -381,7 +388,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "UNIQUEID": 0,
         "SRNO": element.SRNO || 0,
         "BRANCH_CODE": this.commonService.branchCode || "",
-        "DESIGN_CODE": "",
+        "DESIGN_CODE": summary[0].designCode || "",
         "METALSTONE": "string",
         "DIVCODE": "string",
         "PRICEID": "string",

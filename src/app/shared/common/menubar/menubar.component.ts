@@ -27,8 +27,7 @@ export class MenubarComponent implements OnInit {
     private router: Router,
     private ChangeDetector: ChangeDetectorRef
   ) {
-    let item: any = localStorage.getItem('MENU_LIST')
-    this.menuList = JSON.parse(item)
+    this.menuList = this.CommonService.getMenuList()
   }
 
   ngOnInit(): void {

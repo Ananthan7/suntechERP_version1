@@ -11,6 +11,11 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 })
 export class MenuUpdationComponent implements OnInit {
   subscriptions: Subscription[] = []
+  menuList:any[] = [];
+  tableData:any[] = []
+  isViewTable: boolean = false;
+  isLoading: boolean = false;
+  menuModule: string = ''
   menuMasterForm: FormGroup = this.formBuilder.group({
     strMenuID: ['',[Validators.required]],
     strPathName: ['',[Validators.required]],
@@ -22,44 +27,37 @@ export class MenuUpdationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private commonService: CommonServiceService,
     private dataService: SuntechAPIService,
-  ) { }
+  ) { 
+    this.menuList = this.commonService.getMenuList()
+  }
 
   ngOnInit(): void {
   }
   //party Code validate
-  updateMenu() {
-    if (this.menuMasterForm.invalid) {
-      this.commonService.showSnackBarMsg('All fields required')
+  updateMenu(event:any) {
+    console.log(event.data,'event');
+    let saveData = event.data
+    if (!saveData.MENU_ID || saveData.MENU_ID == '') {
+      this.commonService.showSnackBarMsg('Menu Id Not found')
       return
     }
     let postData = {
       "SPID": "029",
       "parameter": {
-        "strMenuID": this.menuMasterForm.value.strMenuID?.trim() || '',
-        "strPathName": this.menuMasterForm.value.strPathName || '',
-        "strComponentName": this.menuMasterForm.value.strComponentName || '',
-        "strFormComponentName": this.menuMasterForm.value.strFormComponentName || ''
+        "strMenuID": saveData.MENU_ID || '',
+        "strPathName": saveData.ANG_WEB_PATH_NAME || '',
+        "strComponentName": saveData.ANG_WEB_COMPONENT_NAME || '',
+        "strFormComponentName": saveData.ANG_WEB_FORM_NAME || ''
       }
     }
     this.commonService.showSnackBarMsg('Loading')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
-        console.log(result);
-        
+        this.getSubmenuList({value: ''})
         if (result.status == "Success") {
           let data = result.dynamicData[0]
-//       Swal.fire({
-    //         title: 'SUCCESS!',
-    //         text: 'Registered Successfully!',
-    //         icon: 'success',
-    //         confirmButtonColor: '#336699',
-    //         confirmButtonText: 'Ok'
-    //       }).then((result:any)=>{console.log(result);
-    //         if(result.value){
-    //           this.router.navigate(['/account/login']);
-    //         }
-    //       });
+          console.log(data);
         } else {
          
         }
@@ -68,6 +66,24 @@ export class MenuUpdationComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  getSubmenuList(event: any) {
+    this.tableData = []
+    this.menuModule = event.value != '' ? event.value : this.menuModule
+    this.isLoading = true;
+    let API = `WebMenuModuleWise/${this.menuModule}/${this.commonService.userName}/${this.commonService.branchCode}`
+    let Sub = this.dataService.getDynamicAPI(API).subscribe((response: any) => {
+      if (response.status == 'Success') {
+        this.isLoading = false;
+        this.isViewTable = true;
+        this.tableData = response.response
+        console.log(this.tableData,'this.tableData');
+      }
+    },err=>{
+      this.isLoading = false;
+    })
+    this.subscriptions.push(Sub)
+  }
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

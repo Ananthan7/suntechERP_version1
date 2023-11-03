@@ -70,9 +70,7 @@ export class ValidationSplistComponent implements OnInit {
       })
     this.subscriptions$.push(Sub)
   }
-  logEvent(event: any) {
-    console.log(event, 'e');
-  }
+
   onSaving(e: any) {
     let data: any = e.data;
     if (!data.SP_ID) {

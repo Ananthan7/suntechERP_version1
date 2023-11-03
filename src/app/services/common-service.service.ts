@@ -61,6 +61,10 @@ export class CommonServiceService {
     private snackBar: MatSnackBar,
   ) {
   }
+  getMenuList(){
+    let item: any = localStorage.getItem('MENU_LIST')
+    return JSON.parse(item)
+  }
   showSnackBarMsg(Message: string){
     this.snackBar.open(Message,'Close')
   }
