@@ -9,6 +9,14 @@ import * as FileSaver from "file-saver";
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from "xlsx";
 
+enum DECIMAL_CONSTANTS {
+  AMOUNT = 'AMOUNT',
+  METAL = 'METAL',
+  STONE = 'STONE',
+  PURITY = 'PURITY',
+  RATE = 'RATE',
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -92,19 +100,23 @@ export class CommonServiceService {
     })
     return paramValue
   }
+  getAmount(flag: any){
+    if (flag == DECIMAL_CONSTANTS.AMOUNT) {
+       return this.allbranchMaster?.BAMTDECIMALS
+    } else if (flag == DECIMAL_CONSTANTS.METAL) {
+      return this.allbranchMaster?.BMQTYDECIMALS
+    } else if (flag == DECIMAL_CONSTANTS.STONE) {
+      return this.allbranchMaster?.BSQTYDECIMALS
+    } else if (flag == DECIMAL_CONSTANTS.PURITY) {
+      return 6 //same as .net
+    } else if (flag == DECIMAL_CONSTANTS.RATE) {
+      return 6 //same as .net
+    }
+  }
   /**USE: common fuction to format the Number to limit decimal places from branch master */
   decimalQuantityFormat(value: any, flag: string){
-    if (flag == 'AMOUNT') {
-      this.decimalFormatCount = this.allbranchMaster?.BAMTDECIMALS
-    } else if (flag == 'METAL') {
-      this.decimalFormatCount = this.allbranchMaster?.BMQTYDECIMALS
-    } else if (flag == 'STONE') {
-      this.decimalFormatCount = this.allbranchMaster?.BSQTYDECIMALS
-    } else if (flag == 'PURITY') {
-      this.decimalFormatCount = 6 //same as .net
-    } else if (flag == 'RATE') {
-      this.decimalFormatCount = 6 //same as .net
-    }
+    this.decimalFormatCount = this.getAmount(flag)
+    
     value = Number(value).toFixed(this.decimalFormatCount)
 
     let str = ''

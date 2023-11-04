@@ -794,7 +794,7 @@ export class DiamondSalesorderComponent implements OnInit {
     )
   }
   dateDifference(event: any) {
-    console.log(event);
+    console.log(event.value);
     
   }
   deliveryTypeSelected(event: any) {
