@@ -793,8 +793,6 @@ export class DiamondSalesorderComponent implements OnInit {
       this.commonService.decimalQuantityFormat(event.target.value, 'RATE')
     )
   }
-  // /calculateDateDifference
-  
   dateDifference(event: any) {
     console.log(event);
     
