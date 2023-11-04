@@ -98,6 +98,9 @@
                     <dxi-column dataField="ANG_WEB_COMPONENT_NAME" 
                     width="200" caption="Module">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
+                        <dxo-lookup [dataSource]="menuList"
+                        displayExpr="ANG_CMB_PATH_NAME" valueExpr="ANG_CMB_PATH_NAME">
+                    </dxo-lookup>
                     </dxi-column>
                     <dxi-column dataField="ANG_WEB_PATH_NAME" width="180"
                         caption="Gird Path Name">

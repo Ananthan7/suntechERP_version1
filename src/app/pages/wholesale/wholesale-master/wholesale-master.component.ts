@@ -7,6 +7,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { CostCentreMetalComponent } from './cost-centre-metal/cost-centre-metal.component';
+import { CostcentreMagkingchargesComponent } from './costcentre-magkingcharges/costcentre-magkingcharges.component';
 @Component({
   selector: 'app-wholesale-master',
   templateUrl: './wholesale-master.component.html',
@@ -61,9 +62,9 @@ export class WholesaleMasterComponent implements OnInit {
       case 'CostcentreMetalchargesComponent':
         contents = CostCentreMetalComponent
         break;
-      // case 'WorkerMasterComponent':
-      //   contents = WorkerMasterComponent
-      //   break;
+      case 'CostcentreMagkingchargesComponent':
+        contents = CostcentreMagkingchargesComponent
+        break;
       //continue adding components using case then break
       default:
         this.snackBar.open('Module Not Created', 'Close', {
