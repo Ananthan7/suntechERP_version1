@@ -137,7 +137,7 @@ export class MasterGridComponent implements OnInit {
       .subscribe((resp: any) => {
         this.snackBar.dismiss();
         this.skeltonLoading = false;
-        if (resp.dynamicData[0].length > 0) {
+        if (resp.dynamicData && resp.dynamicData[0].length > 0) {
           this.totalDataCount = resp.dynamicData[0][0].COUNT || 100000
 
           // Replace empty object with an empty string

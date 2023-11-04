@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: 'app-general',
+  templateUrl: './general.component.html',
+  styleUrls: ['./general.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class GeneralComponent implements OnInit {
   menuTitle: any;
   branchCode: any;
   constructor(
     public dataService: SuntechAPIService,
     private CommonService: CommonServiceService,
+    private ChangeDetector: ChangeDetectorRef
   ) {
   }
 

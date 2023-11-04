@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MasterRoutingModule } from './master.routing';
-import { MasterComponent } from './master.component';
+import { WholesaleRoutingModule } from './wholesale.routing';
+import { WholesaleComponent } from './wholesale.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
   declarations: [
-    MasterComponent
+    WholesaleComponent,
   ],
   imports: [
     CommonModule,
-    MasterRoutingModule,
+    WholesaleRoutingModule,
     SharedModule
   ]
 })
-export class MasterModule { }
+export class WholesaleModule { }

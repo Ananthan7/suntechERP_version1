@@ -29,6 +29,10 @@ const routes: Routes = [
     path: 'retail',
     loadChildren: () => import('../pages/retail/retail.module').then(m => m.RetailModule)
   },
+  {
+    path: 'component-wise-diamond',
+    loadChildren: () => import('../pages/wholesale/wholesale.module').then(m => m.WholesaleModule)
+  },
   
   /**Add here new modules from modulelist */
 ];

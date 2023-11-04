@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { GeneralComponent } from './general.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent
+    component: GeneralComponent
   },
   {
     path: 'general-master-grid',
-    loadChildren: () => import('../general/master/master.module').then(m => m.MasterModule)
+    loadChildren: () => import('../general/general-master/general-master.module').then(m => m.GeneralMasterModule)
   },
   // {
   //   path: 'general-transaction-grid',
