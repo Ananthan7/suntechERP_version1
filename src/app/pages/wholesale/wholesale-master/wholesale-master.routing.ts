@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MasterComponent } from '../../jewellery-manufacturing/master/master.component';
+import { WholesaleMasterComponent } from './wholesale-master.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: MasterComponent
-  }
+    component: WholesaleMasterComponent
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class MasterRoutingModule { }
+export class WholesaleMasterRoutingModule { }

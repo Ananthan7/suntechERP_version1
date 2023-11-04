@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: 'wholesale-master-grid',
-    loadChildren: () => import('../wholesale/master/master.module').then(m => m.MasterModule)
+    loadChildren: () => import('../wholesale/wholesale-master/wholesale-master.module').then(m => m.WholesaleMasterModule)
   },
 ];
 
