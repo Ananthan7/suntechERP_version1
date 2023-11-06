@@ -517,7 +517,8 @@ export class AddPosComponent implements OnInit {
     });
 
     this.vocDataForm = this.formBuilder.group({
-      fcn_voc_no: ['', Validators.required],
+      fcn_voc_no: ['', ],
+      // fcn_voc_no: ['', Validators.required],
       sales_person: ['', [Validators.required, this.autoCompleteValidator(() => this.salesPersonOptions, 'SALESPERSON_CODE')]],
       vocdate: ['', Validators.required],
     });
@@ -678,7 +679,7 @@ export class AddPosComponent implements OnInit {
 
     // let randomvocno = Math.floor(Math.random() * 100000000 + 1);
     let randomvocno = Math.floor(Math.random() * 1000000 + 1);
-    this.vocDataForm.controls['fcn_voc_no'].setValue(randomvocno);
+    // this.vocDataForm.controls['fcn_voc_no'].setValue(randomvocno);
     console.log(randomvocno, 'randomvocno');
 
     // this.getArgs();
@@ -2645,7 +2646,7 @@ export class AddPosComponent implements OnInit {
           PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
           VOCTYPE: this.vocType || '',
           YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
-          VOCNO: this.vocDataForm.value.fcn_voc_no || '',
+          VOCNO: this.vocDataForm.value.fcn_voc_no || 0,
           VOCDATE: this.convertDateWithTimeZero(
             new Date(this.vocDataForm.value.vocdate).toISOString()
           ),
@@ -5661,7 +5662,7 @@ export class AddPosComponent implements OnInit {
       this.invReturnSalesTotalNetTotal -
       total_exchange
     );
-    // alert('this.order_items_total_net_amount '+this.order_items_total_net_amount);
+    // alert('this.order_items_total_net_amount ' + this.order_items_total_net_amount);
 
     this.sumReceiptItem();
     // this.prnt_inv_net_total_with_tax = this.order_items_total_net_amount;
@@ -6738,7 +6739,7 @@ export class AddPosComponent implements OnInit {
           PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
           VOCTYPE: this.vocType || '',
           YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
-          VOCNO: this.vocDataForm.value.fcn_voc_no || '',
+          VOCNO: this.vocDataForm.value.fcn_voc_no || 0,
           VOCDATE: this.convertDateWithTimeZero(
             new Date(this.vocDataForm.value.vocdate).toISOString()
           ),
@@ -9633,13 +9634,14 @@ export class AddPosComponent implements OnInit {
     this.balanceAmount =
       this.comFunc.emptyToZero(this.order_items_total_net_amount) - this.comFunc.emptyToZero(this.receiptTotalNetAmt);
 
-      console.log('============this.order_items_total_net_amount========================');
-      console.log(this.order_items_total_net_amount, this.receiptTotalNetAmt);
-      console.log('====================================');
-    if (this.balanceAmount >= 0 &&  this.order_items_total_net_amount != 0.00) {
-      // alert(this.order_items_total_net_amount +" - "+ this.balanceAmount)
-      this.snackBar.open('Invalid Amount', 'Ok');
-    }
+    console.log('============this.order_items_total_net_amount========================');
+    console.log(this.order_items_total_net_amount, this.receiptTotalNetAmt);
+    console.log('====================================');
+    // if (this.balanceAmount >= 0 &&  this.order_items_total_net_amount != 0.00) {
+    // if (this.balanceAmount >= 0) {
+    //   alert(this.balanceAmount + " - " + this.order_items_total_net_amount)
+    //   this.snackBar.open('Invalid Amount', 'Ok');
+    // }
 
     this.prnt_received_amount = this.receiptTotalNetAmt;
     this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);
