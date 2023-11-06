@@ -9,13 +9,7 @@ import * as FileSaver from "file-saver";
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from "xlsx";
 
-enum DECIMAL_CONSTANTS {
-  AMOUNT = 'AMOUNT',
-  METAL = 'METAL',
-  STONE = 'STONE',
-  PURITY = 'PURITY',
-  RATE = 'RATE',
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -100,22 +94,25 @@ export class CommonServiceService {
     })
     return paramValue
   }
-  getAmount(flag: any){
-    if (flag == DECIMAL_CONSTANTS.AMOUNT) {
-       return this.allbranchMaster?.BAMTDECIMALS
-    } else if (flag == DECIMAL_CONSTANTS.METAL) {
-      return this.allbranchMaster?.BMQTYDECIMALS
-    } else if (flag == DECIMAL_CONSTANTS.STONE) {
-      return this.allbranchMaster?.BSQTYDECIMALS
-    } else if (flag == DECIMAL_CONSTANTS.PURITY) {
-      return 6 //same as .net
-    } else if (flag == DECIMAL_CONSTANTS.RATE) {
-      return 6 //same as .net
-    }
+  // formatsDecimal: any = {
+  //   'AMTFORMAT': 'AMTFORMAT',
+  //   'MQTYFORMAT': 'MQTYFORMAT',
+  //   'AMTDECIMALS': 'AMTDECIMALS',
+  //   'MQTYDECIMALS': 'MQTYDECIMALS',
+  //   'POSSHOPCTRLAC': 'POSSHOPCTRLAC',
+  //   'COMPANYCURRENCY': 'COMPANYCURRENCY',
+  //   'POSKARATRATECHANGE': 'POSKARATRATECHANGE',
+  // }
+  DECIMAL_CONSTANTS: any = {
+    'AMOUNT': this.allbranchMaster?.BAMTDECIMALS,
+    'METAL': this.allbranchMaster?.BMQTYDECIMALS,
+    'STONE': this.allbranchMaster?.BSQTYDECIMALS,
+    'PURITY': 6,
+    'RATE': 6,
   }
   /**USE: common fuction to format the Number to limit decimal places from branch master */
   decimalQuantityFormat(value: any, flag: string){
-    this.decimalFormatCount = this.getAmount(flag)
+    this.decimalFormatCount = this.DECIMAL_CONSTANTS[flag]
     
     value = Number(value).toFixed(this.decimalFormatCount)
 
@@ -254,10 +251,9 @@ export class CommonServiceService {
       return this.transformDecimalVB(this.amtDecimals, convertedAmount);
     }
   }
-
+  
   setCompParaValues() {
     this.allCompanyParams.map((data: any) => {
-
       if (data.PARAMETER == 'AMTFORMAT')
         this.amtFormat = data.PARAM_VALUE;
       if (data.PARAMETER == 'MQTYFORMAT')
@@ -298,21 +294,23 @@ export class CommonServiceService {
     return this.divisionMasterList.filter((data:any) => data.DIVISION_CODE == division)[0].DIVISION;
   }
   Null2BitValue(value: any) {
-    value = value.trim();
-    if (value == null || value.toString() == '' || value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0") {
+    value = value.toString().trim();
+    // if (value == null || value.toString() == '' || value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0") {
+    if (value.toString() == '') {
       return false;
-    }
-    else {
+    } else if (value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0"){
+      return false;
+    } else {
       return true;
     }
   }
+
   emptyToZero(value: any) {
     value = typeof (value) == 'number' || value == undefined ? value : value.toString().trim();
-
-    if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
+    // if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
+    if (value.toString() == '') {
       return 0;
-    }
-    else {
+    } else {
       return parseFloat(value);
       // return value;
     }
@@ -408,89 +406,89 @@ export class CommonServiceService {
     throw new Error('Method not implemented.');
   }
   /**Apex chart chart settings */
-  drawChart(divClass: any, graphType: any, labels: any, values: any, colors: any, labelTips: any) {
-    let options = { indexAxis: 'y', responsive: true, legend: {}, scales: {}, plugins: {} };
-    options.legend = {
-      align: "start",
-      position: "bottom",
-    }
-    if (graphType == 'pie') {
-      labelTips = '';
-    } else {
-      options.plugins = {
-        legend: {
-          display: true,
-          position: 'bottom',
-        }
-      }
-      options.scales = {
-        y: {
-          beginAtZero: true
-        }
-      }
+  // drawChart(divClass: any, graphType: any, labels: any, values: any, colors: any, labelTips: any) {
+  //   let options = { indexAxis: 'y', responsive: true, legend: {}, scales: {}, plugins: {} };
+  //   options.legend = {
+  //     align: "start",
+  //     position: "bottom",
+  //   }
+  //   if (graphType == 'pie') {
+  //     labelTips = '';
+  //   } else {
+  //     options.plugins = {
+  //       legend: {
+  //         display: true,
+  //         position: 'bottom',
+  //       }
+  //     }
+  //     options.scales = {
+  //       y: {
+  //         beginAtZero: true
+  //       }
+  //     }
 
-      // colors = colors[0]
-    }
+  //     // colors = colors[0]
+  //   }
 
-    const myChart = new Chart(divClass, {
-      type: graphType,
-      data: {
-        labels: labels,
-        datasets: [{
-          label: labelTips,
-          data: values,
-          backgroundColor: colors,
-          borderColor: colors,
-          borderWidth: 1
-        }]
-      },
-      options: options
-    });
+  //   const myChart = new Chart(divClass, {
+  //     type: graphType,
+  //     data: {
+  //       labels: labels,
+  //       datasets: [{
+  //         label: labelTips,
+  //         data: values,
+  //         backgroundColor: colors,
+  //         borderColor: colors,
+  //         borderWidth: 1
+  //       }]
+  //     },
+  //     options: options
+  //   });
 
-    return myChart;
-  }
+  //   return myChart;
+  // }
   /**Apex chart settings to create chart */
-  createChart(divClass: any, graphType: any, labels: any, values: any, colors: any, labelTips: any) {
-    let options = { indexAxis: 'y', responsive: true, legend: {}, scales: {}, plugins: {} };
-    options.legend = {
-      align: "start",
-      position: "bottom",
-    }
-    if (graphType == 'pie') {
-      labelTips = '';
-    } else {
-      options.plugins = {
-        legend: {
-          display: true,
-          position: 'bottom',
-        }
-      }
-      options.scales = {
-        y: {
-          beginAtZero: true
-        }
-      }
+  // createChart(divClass: any, graphType: any, labels: any, values: any, colors: any, labelTips: any) {
+  //   let options = { indexAxis: 'y', responsive: true, legend: {}, scales: {}, plugins: {} };
+  //   options.legend = {
+  //     align: "start",
+  //     position: "bottom",
+  //   }
+  //   if (graphType == 'pie') {
+  //     labelTips = '';
+  //   } else {
+  //     options.plugins = {
+  //       legend: {
+  //         display: true,
+  //         position: 'bottom',
+  //       }
+  //     }
+  //     options.scales = {
+  //       y: {
+  //         beginAtZero: true
+  //       }
+  //     }
 
-      // colors = colors[0]
-    }
+  //     // colors = colors[0]
+  //   }
 
-    const myChart = new Chart(divClass, {
-      type: graphType,
-      data: {
-        labels: labels,
-        datasets: [{
-          label: labelTips,
-          data: values,
-          backgroundColor: colors,
-          borderColor: colors,
-          borderWidth: 1
-        }]
-      },
-      options: options
-    });
+  //   const myChart = new Chart(divClass, {
+  //     type: graphType,
+  //     data: {
+  //       labels: labels,
+  //       datasets: [{
+  //         label: labelTips,
+  //         data: values,
+  //         backgroundColor: colors,
+  //         borderColor: colors,
+  //         borderWidth: 1
+  //       }]
+  //     },
+  //     options: options
+  //   });
 
-    return myChart;
-  }
+  //   return myChart;
+  // }
 
   padTo2Digits(num: any) {
     return num.toString().padStart(2, '0');
