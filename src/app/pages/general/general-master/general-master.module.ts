@@ -5,12 +5,16 @@ import { GeneralMasterRoutingModule } from './general-master.routing';
 import { GeneralMasterComponent } from './general-master.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ChartOfAccountsComponent } from './chart-of-accounts/chart-of-accounts.component';
+import { LocationMasterComponent } from './location-master/location-master.component';
+import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.component';
 
 
 @NgModule({
   declarations: [
     GeneralMasterComponent,
-    ChartOfAccountsComponent
+    ChartOfAccountsComponent,
+    LocationMasterComponent,
+    JewelleryMasterComponent
   ],
   imports: [
     CommonModule,
