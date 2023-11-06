@@ -7,6 +7,8 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { ChartOfAccountsComponent } from './chart-of-accounts/chart-of-accounts.component';
+import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.component';
+import { LocationMasterComponent } from './location-master/location-master.component';
 @Component({
   selector: 'app-general-master',
   templateUrl: './general-master.component.html',
@@ -61,9 +63,12 @@ export class GeneralMasterComponent implements OnInit {
       case 'ChartOfAccountsComponent':
         contents = ChartOfAccountsComponent
         break;
-      // case 'WorkerMasterComponent':
-      //   contents = WorkerMasterComponent
-      //   break;
+      case 'JewelleryMasterComponent':
+        contents = JewelleryMasterComponent
+        break;
+      case 'LocationMasterComponent':
+        contents = LocationMasterComponent
+        break;
       //continue adding components using case then break
       default:
         this.snackBar.open('Module Not Created', 'Close', {

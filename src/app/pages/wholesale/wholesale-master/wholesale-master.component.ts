@@ -8,6 +8,21 @@ import { ActivatedRoute } from '@angular/router';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { CostCentreMetalComponent } from './cost-centre-metal/cost-centre-metal.component';
 import { CostcentreMagkingchargesComponent } from './costcentre-magkingcharges/costcentre-magkingcharges.component';
+import { ColorStoneMasterComponent } from './color-stone-master/color-stone-master.component';
+import { ComponentSizeMasterComponent } from './component-size-master/component-size-master.component';
+import { ComponentSizeSetComponent } from './component-size-set/component-size-set.component';
+import { ConsumableMasterComponent } from './consumable-master/consumable-master.component';
+import { CostcentreConsumableComponent } from './costcentre-consumable/costcentre-consumable.component';
+import { DesignMasterComponent } from './design-master/design-master.component';
+import { DiamondPrefixMasterComponent } from './diamond-prefix-master/diamond-prefix-master.component';
+import { KaratMasterComponent } from './karat-master/karat-master.component';
+import { LooseStoneMasterComponent } from './loose-stone-master/loose-stone-master.component';
+import { ManufacturedItemsComponent } from './manufactured-items/manufactured-items.component';
+import { MetalDivisionMasterComponent } from './metal-division-master/metal-division-master.component';
+import { MetalPrefixMasterComponent } from './metal-prefix-master/metal-prefix-master.component';
+import { MetalStockMasterComponent } from './metal-stock-master/metal-stock-master.component';
+import { RateTypeComponent } from './rate-type/rate-type.component';
+import { WatchMasterComponent } from './watch-master/watch-master.component';
 @Component({
   selector: 'app-wholesale-master',
   templateUrl: './wholesale-master.component.html',
@@ -54,16 +69,66 @@ export class WholesaleMasterComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
+  
   //  open Jobcard in modal
   openModalView(data?: any) {
     let contents;
-
+    // contents =  this.setComponentName(this.componentName);
+    // contents =  this.componentName == 'CostCentreMetalComponent' ? CostCentreMetalComponent : '';
     switch (this.componentName) {
       case 'CostcentreMetalchargesComponent':
         contents = CostCentreMetalComponent
         break;
       case 'CostcentreMagkingchargesComponent':
         contents = CostcentreMagkingchargesComponent
+        break;
+      case 'ColorStoneMasterComponent':
+        contents = ColorStoneMasterComponent
+        break;
+      case 'ComponentSizeMasterComponent':
+        contents = ComponentSizeMasterComponent
+        break;
+      case 'ComponentSizeSetComponent':
+        contents = ComponentSizeSetComponent
+        break;
+      case 'ConsumableMasterComponent':
+        contents = ConsumableMasterComponent
+        break;
+      case 'CostCentreMetalComponent':
+        contents = CostCentreMetalComponent
+        break;
+      case 'CostcentreConsumableComponent':
+        contents = CostcentreConsumableComponent
+        break;
+      case 'DesignMasterComponent':
+        contents = DesignMasterComponent
+        break;
+      case 'DiamondPrefixMasterComponent':
+        contents = DiamondPrefixMasterComponent
+        break;
+      case 'KaratMasterComponent':
+        contents = KaratMasterComponent
+        break;
+      case 'LooseStoneMasterComponent':
+        contents = LooseStoneMasterComponent
+        break;
+      case 'ManufacturedItemsComponent':
+        contents = ManufacturedItemsComponent
+        break;
+      case 'MetalDivisionMasterComponent':
+        contents = MetalDivisionMasterComponent
+        break;
+      case 'MetalPrefixMasterComponent':
+        contents = MetalPrefixMasterComponent
+        break;
+      case 'MetalStockMasterComponent':
+        contents = MetalStockMasterComponent
+        break;
+      case 'RateTypeComponent':
+        contents = RateTypeComponent
+        break;
+      case 'WatchMasterComponent':
+        contents = WatchMasterComponent
         break;
       //continue adding components using case then break
       default:
