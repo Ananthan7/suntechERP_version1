@@ -65,54 +65,30 @@ export class MasterComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
-  //  open Jobcard in modal
+  private componentDbList: any = {
+    'JobcardComponent': JobcardComponent,
+    'WorkerMasterComponent': WorkerMasterComponent,
+    'DepartmentMasterComponent': DepartmentMasterComponent,
+    'ProcessMasterComponent': ProcessMasterComponent,
+    'SequenceMasterComponent': SequenceMasterComponent,
+    'StonePricingMasterComponent': StonePricingMasterComponent,
+    'LabourChargeMasterComponent': LabourChargeMasterComponent,
+    'MeltingTypeComponent': MeltingTypeComponent,
+    'AlloyMasterComponent': AlloyMasterComponent,
+    'PictureTypeMasterComponent': PictureTypeMasterComponent,
+    'ApprovalMasterComponent': ApprovalMasterComponent,
+    'DesignMasterComponent': DesignMasterComponent,
+    // Add components and update in operationals > menu updation grid form component name
+  }
   openModalView(data?: any) {
     let contents;
-
-    switch (this.componentName) {
-      case 'JobcardComponent':
-        contents = JobcardComponent
-        break;
-      case 'WorkerMasterComponent':
-        contents = WorkerMasterComponent
-        break;
-      case 'DepartmentMasterComponent':
-        contents = DepartmentMasterComponent
-        break;
-      case 'ProcessMasterComponent':
-        contents = ProcessMasterComponent
-        break;
-      case 'SequenceMasterComponent':
-        contents = SequenceMasterComponent
-        break;
-      case 'StonePricingMasterComponent':
-        contents = StonePricingMasterComponent
-        break;
-      case 'LabourChargeMasterComponent':
-        contents = LabourChargeMasterComponent
-        break;
-      case 'MeltingTypeComponent':
-        contents = MeltingTypeComponent
-        break;
-      case 'AlloyMasterComponent':
-        contents = AlloyMasterComponent
-        break;
-      case 'PictureTypeMasterComponent':
-        contents = PictureTypeMasterComponent
-        break;
-      case 'ApprovalMasterComponent':
-        contents = ApprovalMasterComponent
-        break;
-      case 'DesignMasterComponent':
-        contents = DesignMasterComponent
-        break;
-      //continue adding components using case then break
-      default:
-        this.snackBar.open('Module Not Created', 'Close', {
-          duration: 3000,
-        });
+    if (this.componentDbList[this.componentName]) {
+      contents = this.componentDbList[this.componentName]
+    } else {
+      this.snackBar.open('Module Not Created', 'Close', {
+        duration: 3000,
+      });
     }
-
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
       backdrop: true,//'static'

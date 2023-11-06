@@ -23,6 +23,7 @@ import { MetalPrefixMasterComponent } from './metal-prefix-master/metal-prefix-m
 import { MetalStockMasterComponent } from './metal-stock-master/metal-stock-master.component';
 import { RateTypeComponent } from './rate-type/rate-type.component';
 import { WatchMasterComponent } from './watch-master/watch-master.component';
+
 @Component({
   selector: 'app-wholesale-master',
   templateUrl: './wholesale-master.component.html',
@@ -41,6 +42,30 @@ export class WholesaleMasterComponent implements OnInit {
   orderedItemsHead: any[] = [];
   //subscription variable
   subscriptions$!: Subscription;
+
+  private componentDbList: any = {
+    'CostCentreMetalComponent': CostCentreMetalComponent,
+    'CostcentreMagkingchargesComponent': CostcentreMagkingchargesComponent,
+    'ColorStoneMasterComponent': ColorStoneMasterComponent,
+    'ComponentSizeMasterComponent': ComponentSizeMasterComponent,
+    'ComponentSizeSetComponent': ComponentSizeSetComponent,
+    'ConsumableMasterComponent': ConsumableMasterComponent,
+    'DesignMasterComponent': DesignMasterComponent,
+    'CostcentreConsumableComponent': CostcentreConsumableComponent,
+    'DiamondPrefixMasterComponent': DiamondPrefixMasterComponent,
+    'KaratMasterComponent': KaratMasterComponent,
+    'LooseStoneMasterComponent': LooseStoneMasterComponent,
+    'ManufacturedItemsComponent': ManufacturedItemsComponent,
+    'MetalDivisionMasterComponent': MetalDivisionMasterComponent,
+    'MetalPrefixMasterComponent': MetalPrefixMasterComponent,
+    'MetalStockMasterComponent': MetalStockMasterComponent,
+    'RateTypeComponent': RateTypeComponent,
+    'WatchMasterComponent': WatchMasterComponent,
+    /**
+     * continue adding components here then update in 
+     * operationals > menu updation grid form component name
+     */
+  }
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -69,74 +94,17 @@ export class WholesaleMasterComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
-  
+
   //  open Jobcard in modal
   openModalView(data?: any) {
-    let contents;
-    // contents =  this.setComponentName(this.componentName);
-    // contents =  this.componentName == 'CostCentreMetalComponent' ? CostCentreMetalComponent : '';
-    switch (this.componentName) {
-      case 'CostcentreMetalchargesComponent':
-        contents = CostCentreMetalComponent
-        break;
-      case 'CostcentreMagkingchargesComponent':
-        contents = CostcentreMagkingchargesComponent
-        break;
-      case 'ColorStoneMasterComponent':
-        contents = ColorStoneMasterComponent
-        break;
-      case 'ComponentSizeMasterComponent':
-        contents = ComponentSizeMasterComponent
-        break;
-      case 'ComponentSizeSetComponent':
-        contents = ComponentSizeSetComponent
-        break;
-      case 'ConsumableMasterComponent':
-        contents = ConsumableMasterComponent
-        break;
-      case 'CostCentreMetalComponent':
-        contents = CostCentreMetalComponent
-        break;
-      case 'CostcentreConsumableComponent':
-        contents = CostcentreConsumableComponent
-        break;
-      case 'DesignMasterComponent':
-        contents = DesignMasterComponent
-        break;
-      case 'DiamondPrefixMasterComponent':
-        contents = DiamondPrefixMasterComponent
-        break;
-      case 'KaratMasterComponent':
-        contents = KaratMasterComponent
-        break;
-      case 'LooseStoneMasterComponent':
-        contents = LooseStoneMasterComponent
-        break;
-      case 'ManufacturedItemsComponent':
-        contents = ManufacturedItemsComponent
-        break;
-      case 'MetalDivisionMasterComponent':
-        contents = MetalDivisionMasterComponent
-        break;
-      case 'MetalPrefixMasterComponent':
-        contents = MetalPrefixMasterComponent
-        break;
-      case 'MetalStockMasterComponent':
-        contents = MetalStockMasterComponent
-        break;
-      case 'RateTypeComponent':
-        contents = RateTypeComponent
-        break;
-      case 'WatchMasterComponent':
-        contents = WatchMasterComponent
-        break;
-      //continue adding components using case then break
-      default:
-        this.snackBar.open('Module Not Created', 'Close', {
-          duration: 3000,
-        });
+    let contents
+    if (this.componentDbList[this.componentName]) {
+      contents = this.componentDbList[this.componentName]
+    } else {
+      this.snackBar.open('Module Not Created', 'Close', {
+        duration: 3000,
+      });
     }
-
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
       backdrop: true,//'static'

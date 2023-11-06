@@ -45,6 +45,7 @@ export class TransactionComponent implements OnInit {
   menuTitle: any;
   componentName: any;
   PERMISSIONS: any;
+  componentSelected: any;
 
   constructor(
     private CommonService: CommonServiceService,
@@ -70,87 +71,43 @@ export class TransactionComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
+  private componentDbList: any = {
+    'DiamondSalesorderComponent': DiamondSalesorderComponent,
+    'DiamondQuotationComponent': DiamondQuotationComponent,
+    'MeltingProcessComponent': MeltingProcessComponent,
+    'MetalIssueComponent': MetalIssueComponent,
+    'WaxProcessComponent': WaxProcessComponent,
+    'StoneIssueComponent': StoneIssueComponent,
+    'CADProcessingComponent': CADProcessingComponent,
+    'MetalReturnComponent': MetalReturnComponent,
+    'StoneReturnComponent': StoneReturnComponent,
+    'WaxProcessReturnComponent': WaxProcessReturnComponent,
+    'JobCreationComponent': JobCreationComponent,
+    'CastingTreeUpComponent': CastingTreeUpComponent,
+    'MeltingIssueComponent': MeltingIssueComponent,
+    'JewelleryAltrationComponent': JewelleryAltrationComponent,
+    'JewelleryDismantlingComponent': JewelleryDismantlingComponent,
+    'ProcessTransferComponent': ProcessTransferComponent,
+    'JobClosingComponent': JobClosingComponent,
+    'ProductionMfgComponent': ProductionMfgComponent,
+    'QuotationProcessComponent': QuotationProcessComponent,
+    'TreeDownComponent': TreeDownComponent,
+    'MouldMakingComponent': MouldMakingComponent,
+    'LossRecoveryComponent': LossRecoveryComponent,
 
+    // Add components and update in operationals > menu updation grid form component name
+  }
   //  open forms in modal
   openModalView(data?: any) {
-    let contents;
-    switch (this.componentName) {
-      case 'DiamondSalesorderComponent':
-        contents = DiamondSalesorderComponent
-        break;
-      case 'DiamondQuotationComponent':
-        contents = DiamondQuotationComponent
-        break;
-      case 'MeltingProcessComponent':
-        contents = MeltingProcessComponent
-        break;
-      case 'MetalIssueComponent':
-        contents = MetalIssueComponent
-        break;
-      case 'WaxProcessComponent':
-        contents = WaxProcessComponent
-        break;
-      case 'StoneIssueComponent':
-        contents = StoneIssueComponent
-        break;
-      case 'CADProcessingComponent':
-        contents = CADProcessingComponent
-        break;
-      case 'MetalReturnComponent':
-        contents = MetalReturnComponent
-        break;
-      //continue adding components using case then break    
-
-      case 'StoneReturnComponent':
-        contents = StoneReturnComponent
-        break;
-      case 'WaxProcessReturnComponent':
-        contents = WaxProcessReturnComponent
-        break;
-      case 'JobCreationComponent':
-        contents = JobCreationComponent
-        break;
-      case 'CastingTreeUpComponent':
-        contents = CastingTreeUpComponent
-        break;
-      case 'MeltingIssueComponent':
-        contents = MeltingIssueComponent
-        break;
-      case 'JewelleryAltrationComponent':
-        contents = JewelleryAltrationComponent
-        break;
-      case 'JewelleryDismantlingComponent':
-        contents = JewelleryDismantlingComponent
-        break;
-      case 'ProcessTransferComponent':
-        contents = ProcessTransferComponent
-        break;
-      case 'JobClosingComponent':
-        contents = JobClosingComponent
-        break;
-      case 'ProductionMfgComponent':
-        contents = ProductionMfgComponent
-        break;
-      case 'QuotationProcessComponent':
-        contents = QuotationProcessComponent
-        break;
-      case 'TreeDownComponent':
-        contents = TreeDownComponent
-        break;
-      case 'MouldMakingComponent':
-        contents = MouldMakingComponent
-        break;
-      case 'LossRecoveryComponent':
-        contents = LossRecoveryComponent
-        break;
-      //continue adding components using case then break
-      default:
-        this.snackBar.open('Module Not Created', 'Close', {
-          duration: 3000,
-        });
+     if (this.componentDbList[this.componentName]) {
+      this.componentSelected = this.componentDbList[this.componentName]
+    } else {
+      this.snackBar.open('Module Not Created', 'Close', {
+        duration: 3000,
+      });
     }
 
-    const modalRef: NgbModalRef = this.modalService.open(contents, {
+    const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
