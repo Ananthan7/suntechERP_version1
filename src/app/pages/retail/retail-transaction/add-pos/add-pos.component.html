@@ -689,6 +689,14 @@
                             [width]="100"
                             [allowEditing]="false"
                           ></dxi-column>
+
+                          <dxi-column
+                          dataField="metal_rate"
+                          caption="Metal Value"
+                          [width]="100"
+                          [allowEditing]="false"
+                        ></dxi-column>
+                     
                           <dxi-column
                             dataField="total_amount"
                             caption="Mkg amount"
@@ -1207,7 +1215,8 @@
           <div class="col-xl-12 col-md-6">
             <table class="m-t-10 rhs-table-1">
               <tr>
-                <td class="td-w-40">Amount</td>
+                <!-- <td class="td-w-40">Amount</td> -->
+                <td class="td-w-40">Item Total</td>
                 <!-- <td class="td-w-40">Total Amount</td> -->
                 <td>
                   <input
@@ -1236,8 +1245,8 @@
                 </td>
               </tr>
               <tr>
-                <td class="td-w-40">Amount with tax</td>
-                <!-- <td class="td-w-40">Gross Total</td> -->
+                <!-- <td class="td-w-40">Amount with tax</td> -->
+                <td class="td-w-40">Gross Total</td>
                 <td>
                   <input
                     type="text"
@@ -1332,7 +1341,8 @@
                   class="td-w-40"
                   style="background-color: #1a61a9; color: #fff"
                 >
-                  <b>Received</b>
+                  <b>Receipt Total</b>
+                  <!-- <b>Received</b> -->
                 </td>
                 <td>
                   <input
