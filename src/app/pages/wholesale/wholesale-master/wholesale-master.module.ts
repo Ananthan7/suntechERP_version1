@@ -21,6 +21,8 @@ import { ConsumableMasterComponent } from './consumable-master/consumable-master
 import { ManufacturedItemsComponent } from './manufactured-items/manufactured-items.component';
 import { ComponentSizeMasterComponent } from './component-size-master/component-size-master.component';
 import { ComponentSizeSetComponent } from './component-size-set/component-size-set.component';
+import { CustomerPriceSettingComponent } from './customer-price-setting/customer-price-setting.component';
+import { CustomerPricingMasterComponent } from './customer-pricing-master/customer-pricing-master.component';
 
 
 @NgModule({
@@ -43,6 +45,8 @@ import { ComponentSizeSetComponent } from './component-size-set/component-size-s
     ManufacturedItemsComponent,
     ComponentSizeMasterComponent,
     ComponentSizeSetComponent,
+    CustomerPriceSettingComponent,
+    CustomerPricingMasterComponent,
   ],
   imports: [
     CommonModule,

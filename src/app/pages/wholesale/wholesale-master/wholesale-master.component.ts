@@ -23,6 +23,8 @@ import { MetalPrefixMasterComponent } from './metal-prefix-master/metal-prefix-m
 import { MetalStockMasterComponent } from './metal-stock-master/metal-stock-master.component';
 import { RateTypeComponent } from './rate-type/rate-type.component';
 import { WatchMasterComponent } from './watch-master/watch-master.component';
+import { CustomerPricingMasterComponent } from './customer-pricing-master/customer-pricing-master.component';
+import { CustomerPriceSettingComponent } from './customer-price-setting/customer-price-setting.component';
 
 @Component({
   selector: 'app-wholesale-master',
@@ -61,10 +63,10 @@ export class WholesaleMasterComponent implements OnInit {
     'MetalStockMasterComponent': MetalStockMasterComponent,
     'RateTypeComponent': RateTypeComponent,
     'WatchMasterComponent': WatchMasterComponent,
-    /**
-     * continue adding components here then update in 
-     * operationals > menu updation grid form component name
-     */
+    'CustomerPriceSettingComponent': CustomerPriceSettingComponent,
+    'CustomerPricingMasterComponent': CustomerPricingMasterComponent,
+
+    /*add components here and update in form component name menu updation in operationals */
   }
   constructor(
     private CommonService: CommonServiceService,

@@ -69,8 +69,8 @@ export class CommonServiceService {
     let item: any = localStorage.getItem('MENU_LIST')
     return JSON.parse(item)
   }
-  showSnackBarMsg(MessageID: string){
-    this.snackBar.open(this.getMsgByID(MessageID) || MessageID,'Close')
+  showSnackBarMsg(MessageOrID: string){
+    this.snackBar.open(this.getMsgByID(MessageOrID) != '' ? this.getMsgByID(MessageOrID) : MessageOrID,'Close')
   }
   closeSnackBarMsg(){
     this.snackBar.dismiss()
@@ -326,7 +326,7 @@ export class CommonServiceService {
   getMsgByID(id: any) {
     id = id.trim();
     const res = this.allMessageBoxData?.filter((data: any) => data.MSG_ID == id)
-    if (res != null)
+    if (res != null && res[0])
       return res[0].MSG_ENGLISH;
     else
       return '';
