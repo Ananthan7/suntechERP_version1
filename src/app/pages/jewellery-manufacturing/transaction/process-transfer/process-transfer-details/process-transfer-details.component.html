@@ -1,158 +1,165 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Process Transfer Details</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Process Transfer Details</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="row">
-    <div class="col-md-12">
-        <form  [formGroup]="processTransferdetailsForm">
-            <div class="container-fluid pt-3">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row align-items-center mb-2">
-                          <div class="col-sm-2">
-                            <!-- ./../../assets/images/barcode-scanner.png -->
-                            <a><img class="image mx-2" src="../../../../../../assets/images/barcode-scanner.png" /></a>
-                          </div>
-                          <div class="col-sm-7">
-                            <mat-form-field style="width: 100%;">
-                              <input type="text" matInput />
-                            </mat-form-field>
-                          </div>
-                          <div class="col-sm-2">
-                            
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Process</label>
-                              </div>
-                          </div>
-                        </div>
-                        <div class="row mb-2">
-                          <label for="inputPassword" class="col-sm-3 col-form-label">Job No :</label>
-                          <div class="col-sm-3">
-                            <mat-form-field style="width: 100%;">
-                              <input type="text" matInput formControlName="jobno" />
-                            </mat-form-field>
-                          </div>
-                          <div class="col-sm-3">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="jobdes"/>
-                            </mat-form-field>
-                          </div>
-                          
-                        </div>
-                        <div class="row mb-2">
-                          <label for="inputPassword" class="col-sm-3 col-form-label">Sub Job No : </label>
-                          <div class="col-sm-3">
-                            <mat-form-field style="width: 100%;">
-                              <input type="text" matInput formControlName="subjobno" />
-                            </mat-form-field>
-                          </div>
-                          <div class="col-sm-3">
-                            <mat-form-field style="width: 100%;">
-                              <input type="text" matInput formControlName="subjobno" />
-                            </mat-form-field>
-                          </div><br>
-                          <label for="inputPassword" class="col-sm-3 col-form-label"><b>Issue Ref # </b></label>
-                        </div>
-                      </div>
-                      <div class="col-md-4 ">
-                        <h6>Approved Details</h6>
-                        <div class="row mb-2">
-                          <label for="inputPassword" class="col-sm-4 col-form-label">Approved By :</label>
-                          <div class="col-sm-6">
-                            <mat-form-field style="width: 100%;">
-                              <input type="text" matInput formControlName="approvedby" />
-                            </mat-form-field>
-                          </div>
-                        </div>
-                        <div class="row mb-2">
-                          <label for="inputPassword" class="col-sm-4 col-form-label">Approved Date :</label>
-                          <div class="col-sm-6">
-                            <mat-form-field style="width: 100%;">
-                              <input type="date" matInput formControlName="approveddate" />
-                            </mat-form-field>
-                          </div>
-                        </div>
-                      </div>
+  <div class="col-md-12">
+    <form [formGroup]="processTransferdetailsForm">
+      <div class="container-fluid pt-3">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row align-items-center mb-2">
+              <div class="col-sm-2">
+                <!-- ./../../assets/images/barcode-scanner.png -->
+                <img class="image" width="40px" height="40px"
+                  src="../../../../../../assets/images/Icons/barcode-scanner.png" />
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox"
+                    id="flexSwitchCheckDefault">
+                  <label class="form-check-label" for="flexSwitchCheckDefault">Metal</label>
                 </div>
-                <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-                    <mat-tab label="Diamond Jewellery"><br>
-          
-                      <div class="row">
-                        <div class="col-md-9">
-                          <table>
-                            <thead>
-                              <tr>
-                                <th></th>
-                                <th>From</th>
-                                <th>To</th>
-          
-                              </tr>
-                              <tr>
-                                <th>Process</th>
-                                <th></th>
-                                <th></th>
-          
-                              </tr>
-                              <tr>
-                                <th>Worker</th>
-                                <th></th>
-                                <th></th>
-                              </tr>
-                              <tr>
-                                <td>Metal Pcs</td>
-                                <th></th>
-                                <th></th>
-                              </tr>
-                              <tr>
-                                <td>Metal Weight</td>
-                                <th></th>
-                                <th></th>
-                                <th colspan="3" class="text-center">Transfer to</th>
-                                <th>Loss Qty</th>
-                                <td>%</td>
-                                <th colspan="2">Balance</th>
-                              </tr>
-                              <tr>
-                                <td>From Job Pcs</td>
-                                <th></th>
-                                <th></th>
-                                <th>Stock Code</th>
-                                <th>QTY</th>
-                                <td>Location</td>
-                                <th>Std.Loss</th>
-                                <th></th>
-                                <th colspan="2"></th>
-          
-                              </tr>
-                              <tr>
-                                <td>Gross Weight</td>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <td></td>
-                                <th></th>
-                                <th></th>
-                                <th colspan="2"></th>
-          
-                              </tr>
-                              <tr>
-                                <td>Stone Pcs</td>
-                                <th></th>
-                                <th></th>
-                              </tr>
-                              <tr>
-                                <td>Stone Weight</td>
-                                <th></th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <!-- <tbody>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="inputPassword" class="col-sm-3 col-form-label"
+                style="font-weight: bold;">
+                Job No</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput formControlName="jobno" />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput formControlName="jobdes" />
+                </mat-form-field>
+              </div>
+
+            </div>
+            <div class="row mb-2">
+              <label for="inputPassword" class="col-sm-3 col-form-label">Sub Job
+                No : </label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput formControlName="subjobno" />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput formControlName="subjobno" />
+                </mat-form-field>
+              </div><br>
+              <label for="inputPassword" class="col-sm-3 col-form-label"><b>Issue
+                  Ref # </b></label>
+            </div>
+          </div>
+          <div class="col-md-4 ">
+            <h6>Approved Details</h6>
+            <div class="row mb-2">
+              <label for="inputPassword" class="col-sm-4 col-form-label">Approved
+                By :</label>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput formControlName="approvedby" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="inputPassword" class="col-sm-4 col-form-label">Approved
+                Date :</label>
+              <div class="col-sm-6">
+                <mat-form-field style="width: 100%;">
+                  <input type="date" matInput formControlName="approveddate" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+          <mat-tab label="Diamond Jewellery"><br>
+
+            <div class="row">
+              <div class="col-md-9">
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>From</th>
+                      <th>To</th>
+
+                    </tr>
+                    <tr>
+                      <th>Process</th>
+                      <th></th>
+                      <th></th>
+
+                    </tr>
+                    <tr>
+                      <th>Worker</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                    <tr>
+                      <td>Metal Pcs</td>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                    <tr>
+                      <td>Metal Weight</td>
+                      <th></th>
+                      <th></th>
+                      <th colspan="3" class="text-center">Transfer to</th>
+                      <th>Loss Qty</th>
+                      <td>%</td>
+                      <th colspan="2">Balance</th>
+                    </tr>
+                    <tr>
+                      <td>From Job Pcs</td>
+                      <th></th>
+                      <th></th>
+                      <th>Stock Code</th>
+                      <th>QTY</th>
+                      <td>Location</td>
+                      <th>Std.Loss</th>
+                      <th></th>
+                      <th colspan="2"></th>
+
+                    </tr>
+                    <tr>
+                      <td>Gross Weight</td>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <td></td>
+                      <th></th>
+                      <th></th>
+                      <th colspan="2"></th>
+
+                    </tr>
+                    <tr>
+                      <td>Stone Pcs</td>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                    <tr>
+                      <td>Stone Weight</td>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <!-- <tbody>
                             <tr>
                               <td></td>
                               <td></td>
@@ -164,214 +171,217 @@
                               <td></td>
                             </tr>
                           </tbody> -->
-                          </table><br><br>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="square-box"></div>
-                        </div>
-                      </div>
-          
-                    </mat-tab>
-                    <mat-tab label="Metal Jewellery"><br>
-                      <div class="row">
-                        <div class="col-9">
-                          <table class="table w-100">
-                            <thead>
-                              <tr>
-                                <th></th>
-                                <th>From</th>
-                                <th>To</th>
-                                <th>Transfer to Stock</th>
-                                <th>STD Loss</th>
-                                <th></th>
-                              </tr>
-                              <tr>
-                                <th>Process</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th>Act.Loss</th>
-                                <th></th>
-                              </tr>
-                              <tr>
-                                <th>Worker</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th>Gain</th>
-                                <th></th>
-                              </tr>
-                              <tr>
-                                <td>Stock Code</td>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th colspan="2">Balance</th>
-                              </tr>
-                              <tr>
-                                <td>PCS</td>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th colspan="2"></th>
-                              </tr>
-                              <tr>
-                                <td>Gross Weight</td>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th colspan="2"></th>
-                              </tr>
-                              <tr>
-                                <td>Stone Weight</td>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th colspan="2"></th>
-                              </tr>
-                              <tr>
-                                <td>Iron Weight</td>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th colspan="2"></th>
-                              </tr>
-                              <tr>
-                                <td>Net Weight</td>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th colspan="2"></th>
-                              </tr>
-                              <tr>
-                                <td>Pure Weight</td>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th colspan="2"></th>
-                              </tr>
-                            </thead>
-          
-                          </table><br><br>
-                        </div>
-          
-                        <div class="col-3">
-                          <div class="square-box"></div>
-                        </div>
-                      </div>
-                    </mat-tab>
-          
-                  </mat-tab-group>
-                  <div class="row">
-                    <div class="col-md-3">
-                      <div class="row mb-2">
-                        <label for="input" class="col-sm-4 col-form-label">Start Date</label>
-                        <div class="col-sm-7">
-                          <mat-form-field style="width: 100%;">
-                            <input type="date" matInput formControlName="startdate" />
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row mb-2">
-                        <label for="input" class="col-sm-4 col-form-label">End Date</label>
-                        <div class="col-sm-7">
-                          <mat-form-field style="width: 100%;">
-                            <input type="date" matInput formControlName="enddate" />
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="row mb-2">
-                        <label for="input" class="col-sm-4 col-form-label">Std Time</label>
-                        <div class="col-sm-7">
-                          <mat-form-field>
-                            <mat-select>
-                                  <input type="time" matInput formControlName="stdtime" />
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row mb-2">
-                        <label for="input" class="col-sm-4 col-form-label">Time Taken</label>
-                        <div class="col-sm-7">
-                          <mat-form-field>
-                            <mat-select>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="row mb-2">
-                        <label for="input" class="col-sm-4 col-form-label">Consumed</label>
-                        <div class="col-sm-7">
-                          <mat-form-field>
-                            <mat-select>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <label for="input" class="col-sm-4 col-form-label">Variance %</label>
-                        <div class="col-sm-4">
-                          <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="variance" />
-                          </mat-form-field>
-                        </div>
-                        <div class="col-sm-4">
-                          <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="variance" />
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="row mb-2">
-                        <label for="input" class="col-sm-4 col-form-label">Tree No</label>
-                        <div class="col-sm-7">
-                          <mat-form-field>
-                            <mat-select>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row mb-2 justify-content-end">
-                        <div class="col-md-7">
-                          <div class="form-check">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                               Select All
-                              </label>
-                            <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault1">
-                            
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row py-2 border-top">
-                    <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                </table><br><br>
+              </div>
+              <div class="col-md-3">
+                <div class="square-box"></div>
+              </div>
+            </div>
 
-                            <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
-                        </dx-data-grid>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row my-2">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Remarks :</label>
-                            <div class="col-md-9">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
+          </mat-tab>
+          <mat-tab label="Metal Jewellery"><br>
+            <div class="row">
+              <div class="col-9">
+                <table class="table w-100">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Transfer to Stock</th>
+                      <th>STD Loss</th>
+                      <th></th>
+                    </tr>
+                    <tr>
+                      <th>Process</th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th>Act.Loss</th>
+                      <th></th>
+                    </tr>
+                    <tr>
+                      <th>Worker</th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th>Gain</th>
+                      <th></th>
+                    </tr>
+                    <tr>
+                      <td>Stock Code</td>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th colspan="2">Balance</th>
+                    </tr>
+                    <tr>
+                      <td>PCS</td>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th colspan="2"></th>
+                    </tr>
+                    <tr>
+                      <td>Gross Weight</td>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th colspan="2"></th>
+                    </tr>
+                    <tr>
+                      <td>Stone Weight</td>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th colspan="2"></th>
+                    </tr>
+                    <tr>
+                      <td>Iron Weight</td>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th colspan="2"></th>
+                    </tr>
+                    <tr>
+                      <td>Net Weight</td>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th colspan="2"></th>
+                    </tr>
+                    <tr>
+                      <td>Pure Weight</td>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th colspan="2"></th>
+                    </tr>
+                  </thead>
+
+                </table><br><br>
+              </div>
+
+              <div class="col-3">
+                <div class="square-box"></div>
+              </div>
+            </div>
+          </mat-tab>
+
+        </mat-tab-group>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="row mb-2">
+              <label for="input" class="col-sm-4 col-form-label">Start Date</label>
+              <div class="col-sm-7">
+                <mat-form-field style="width: 100%;">
+                  <input type="date" matInput formControlName="startdate" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-4 col-form-label">End Date</label>
+              <div class="col-sm-7">
+                <mat-form-field style="width: 100%;">
+                  <input type="date" matInput formControlName="enddate" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row mb-2">
+              <label for="input" class="col-sm-4 col-form-label">Std Time</label>
+              <div class="col-sm-7">
+                <mat-form-field>
+                  <mat-select>
+                    <input type="time" matInput formControlName="stdtime" />
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-4 col-form-label">Time Taken</label>
+              <div class="col-sm-7">
+                <mat-form-field>
+                  <mat-select>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row mb-2">
+              <label for="input" class="col-sm-4 col-form-label">Consumed</label>
+              <div class="col-sm-7">
+                <mat-form-field>
+                  <mat-select>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="input" class="col-sm-4 col-form-label">Variance %</label>
+              <div class="col-sm-4">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput formControlName="variance" />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput formControlName="variance" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row mb-2">
+              <label for="input" class="col-sm-4 col-form-label">Tree No</label>
+              <div class="col-sm-7">
+                <mat-form-field>
+                  <mat-select>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2 justify-content-end">
+              <div class="col-md-7">
+                <div class="form-check">
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Select All
+                  </label>
+                  <input class="form-check-input" type="checkbox"
+                    name="flexRadioDefault" id="flexRadioDefault1">
+
                 </div>
- 
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row py-2 border-top">
+          <div class="col-md-12">
+            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+              [showBorders]="true">
+              <dxo-paging [enabled]="false"></dxo-paging>
+              <dxo-editing mode="cell" [allowUpdating]="true">
+              </dxo-editing>
+              <dxo-selection mode="multiple"></dxo-selection>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+              <dxi-column *ngFor="let data of columnheader"
+                dataField="{{ data }}" caption="{{ data }}"
+                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+          <div class="col-md-4">
+            <div class="row my-2">
+              <label for="inputPassword" class="col-sm-3 col-form-label">Remarks
+                :</label>
+              <div class="col-md-9">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput formControlName="remarks" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>

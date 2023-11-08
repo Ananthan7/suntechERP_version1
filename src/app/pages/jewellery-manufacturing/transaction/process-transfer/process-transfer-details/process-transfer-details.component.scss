@@ -19,3 +19,33 @@ th {
     height: 289px;
     border: 1px solid black;
 }
+.col-form-label{
+    font-size: 1em !important;
+    padding-top: 16px !important;
+  }
+::ng-deep {
+    .cdk-overlay-container {
+        position: fixed;
+        z-index: 1070 !important;
+    }
+    .mat-form-field{
+      height: 26px !important;
+      margin-bottom: 7px !important;
+      font-weight: 600 !important;
+    }
+    .mat-flat-button{
+      line-height: 0px !important;
+      height: 27px !important;
+      background-color: #0279ba !important;
+      span{
+        color: #ffff;
+        font-size: .9em;
+      }
+    }
+    .mat-tab-body-content{
+      overflow: hidden !important;
+    }
+    .dx-datagrid .dx-header-row {
+      font-size: 12px;
+    }
+  }

@@ -16,6 +16,7 @@ import * as XLSX from "xlsx";
 })
 export class CommonServiceService {
   /** common variables and functions used in all components */
+  currentDate = new Date()
   branchCode: any = localStorage.getItem('userbranch');
   userName: any = localStorage.getItem('username');
   yearSelected: any = localStorage.getItem('YEAR');

@@ -24,7 +24,7 @@ export class DiamondSalesorderComponent implements OnInit {
   tableData: any[] = [];
   grossChecked: boolean = false;
   NetWtChecked: boolean = true;
-  currentDate = new Date();
+  currentDate = this.commonService.currentDate;
   tableItems: any[] = [];
   totalDetailNo: number = 0;
   detailRowToSave: any[] = [];
@@ -873,7 +873,7 @@ export class DiamondSalesorderComponent implements OnInit {
 
   addDays() {
     const daysToAdd = parseInt(this.PartyDetailsOrderForm.value.DeliveryOnDateType);
-    const currentDate = new Date();
+    const currentDate = this.commonService.currentDate;
 
     if (!isNaN(daysToAdd)) {
       const futureDate = new Date(currentDate);
