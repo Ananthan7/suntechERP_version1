@@ -27,7 +27,9 @@ export class DiamondSalesorderComponent implements OnInit {
   currentDate = this.commonService.currentDate;
   tableItems: any[] = [];
   totalDetailNo: number = 0;
-  detailRowToSave: any[] = [];
+  headerDetailGridToSave: any[] = [];
+  bomDetailGridToSave: any[] = [];
+
   Narration: string = '';
   labourDetailGrid: any[] = [];
   divisionDetailGrid: any[] = [];
@@ -122,7 +124,7 @@ export class DiamondSalesorderComponent implements OnInit {
     orderType: ['', [Validators.required]],
     PartyCode: ['', [Validators.required]],
     SalesmanCode: ['', [Validators.required]],
-    SalesmanName: ['', [Validators.required]],
+    SalesmanName: [''],
     FixedMetal: [false,],
     rateType: ['', [Validators.required]],
     wholeSaleRate: ['', [Validators.required]],
@@ -277,21 +279,20 @@ export class DiamondSalesorderComponent implements OnInit {
           DATA: item
         })
       })
-      console.log( this.detailData);
-      
+      this.getAllDetailData()
     }
   }
-  // division checkbox change
+  // division grid selection from header
   selectDivisionGridData(event: any, { data }: any) {
     let division = {
       "UNIQUEID": 0,
-      "BRANCH_CODE": this.commonService.branchCode || "",
-      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
+      "BRANCH_CODE": this.commonService.branchCode.toString(),
+      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType.toString(),
       "VOCNO": 0,
-      "YEARMONTH": this.commonService.yearSelected || "",
-      "SRNO": data.Id || 0,
-      "DIVISION_CODE": data.DIVISION_CODE || "",
-      "DESCRIPTION": data.DESCRIPTION || ""
+      "YEARMONTH": this.commonService.yearSelected.toString(),
+      "SRNO": Number(data.Id),
+      "DIVISION_CODE": data.DIVISION_CODE.toString(),
+      "DESCRIPTION": data.DESCRIPTION.toString()
     }
     if (event.currentTarget.checked) {
       this.headerDivisionList.push(division)
@@ -301,30 +302,31 @@ export class DiamondSalesorderComponent implements OnInit {
       }
     }
   }
+  // division Labour selection from header
   selectLabourGridData(event: any, { data }: any) {
     let headerDetails = {
       "UNIQUEID": 0,
-      "BRANCH_CODE": this.commonService.branchCode || "",
-      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
+      "BRANCH_CODE": this.commonService.branchCode.toString(),
+      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType.toString(),
       "VOCNO": 0,
-      "YEARMONTH": this.commonService.yearSelected || "",
-      "SRNO": data.Id || 0,
-      "LABOUR_CODE": data.LABOUR_CODE || "",
-      "METALSTONE": data.METALSTONE || "",
-      "DIVCODE": data.DIVCODE || "",
-      "DIVISION": data.DIVISION || "",
-      "KARAT_CODE": data.KARAT_CODE || "",
-      "UNITCODE": data.UNITCODE || "",
-      "WASTAGE_PER": data.WASTAGE_PER || 0,
-      "SELLING_PER": data.SELLING_PER || 0,
-      "SELLING_RATE": data.SELLING_RATE || 0,
-      "CURRENCYCODE": data.CURRENCYCODE || "",
-      "CARATWT_FROM": data.CARATWT_FROM || 0,
-      "CARATWT_TO": data.CARATWT_TO || 0,
-      "TYPE_CODE": data.TYPE_CODE || "",
-      "CATEGORY_CODE": data.CATEGORY_CODE || "",
-      "LAB_ACCODE": data.LAB_ACCODE || "",
-      "SHAPE": data.SHAPE || ""
+      "YEARMONTH": this.commonService.yearSelected.toString(),
+      "SRNO": Number(data.Id),
+      "LABOUR_CODE": data.LABOUR_CODE.toString(),
+      "METALSTONE": data.METALSTONE.toString(),
+      "DIVCODE": data.DIVCODE.toString(),
+      "DIVISION": data.DIVISION.toString(),
+      "KARAT_CODE": data.KARAT_CODE.toString(),
+      "UNITCODE": data.UNITCODE.toString(),
+      "WASTAGE_PER": Number(data.WASTAGE_PER),
+      "SELLING_PER": Number(data.SELLING_PER),
+      "SELLING_RATE": Number(data.SELLING_RATE),
+      "CURRENCYCODE": data.CURRENCYCODE.toString(),
+      "CARATWT_FROM": Number(data.CARATWT_FROM),
+      "CARATWT_TO": Number(data.CARATWT_TO),
+      "TYPE_CODE": data.TYPE_CODE.toString(),
+      "CATEGORY_CODE": data.CATEGORY_CODE.toString(),
+      "LAB_ACCODE": data.LAB_ACCODE.toString(),
+      "SHAPE": data.SHAPE.toString()
     }
     if (event.currentTarget.checked) {
       this.headerLaboursList.push(headerDetails)
@@ -372,23 +374,17 @@ export class DiamondSalesorderComponent implements OnInit {
     }]
     return []
   }
+  //**USE: push data from BOM grid in details to headerDetailGridToSave array */
   private getBOMData() {
-    console.log(this.detailData);
-    
-    let allData = this.detailData[0].DATA
-    let bomData = allData.BOMDETAILS
-
-    let summary = allData.SUMMARYDETAILS
-    console.log(summary);
-    
-    let stnmtlDetail:any[] = [];
-    for (let index = 0; index < bomData.length; index++) {
-      const element = bomData[index];
-      stnmtlDetail.push({
+    let bomData = this.detailData[0].DATA['BOMDETAILS']
+    let summary = this.detailData[0].DATA['SUMMARYDETAILS']
+    console.log(bomData,summary);
+    bomData.forEach((element:any) => {
+      this.headerDetailGridToSave.push({
         "UNIQUEID": 0,
-        "SRNO": element.SRNO || 0,
-        "BRANCH_CODE": this.commonService.branchCode || "",
-        "DESIGN_CODE": summary[0].designCode || "",
+        "SRNO": Number(element.SRNO),
+        "BRANCH_CODE": this.commonService.branchCode.toString(),
+        "DESIGN_CODE": summary[0].designCode.toString(),
         "METALSTONE": "string",
         "DIVCODE": "string",
         "PRICEID": "string",
@@ -443,36 +439,35 @@ export class DiamondSalesorderComponent implements OnInit {
         "STONE_TYPE": "string",
         "PURITY": 0
       })
-    }
-    return stnmtlDetail
+    })
   }
+  // getAllDetailData from header grid
   private getAllDetailData() {
-    let summaryData = this.detailData[0].DATA
-    summaryData = summaryData.SUMMARYDETAILS
+    let summaryData = this.detailData[0].DATA['SUMMARYDETAILS']
     let detailArrayValues = {}
     summaryData.forEach((item: any) => {
       detailArrayValues = {
         "UNIQUEID": 0,
-        "SRNO": Number(item.SRNO) || 0,
-        "EXP_PROD_START_DATE": item.ProductionDate.toISOString() || "2023-09-14T14:56:43.961Z",
-        "DELIVERY_DATE": item.DeliveryOnDate.toISOString() || "2023-09-14T14:56:43.961Z",
-        "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode || "",
-        "DESIGN_CODE": item.designCode || "",
-        "KARAT": item.KARAT_CODE || "",
-        "METAL_COLOR": item.COLOR || "",
-        "PCS": Number(item.PCS) || 0,
-        "METAL_WT": Number(item.METAL_WT) || 0,
-        "STONE_WT": Number(item.STONE_WT) || 0,
-        "GROSS_WT": Number(item.GROSS_WT) || 0,
-        "RATEFC": Number(item.RATEFC) || 0,
-        "RATECC": Number(item.RATEFC) || 0,
-        "VALUEFC": Number(item.RATEFC) || 0,
-        "VALUECC": Number(item.RATEFC) || 0,
+        "SRNO": Number(item.SRNO),
+        "EXP_PROD_START_DATE": item.ProductionDate.toISOString().toString(),
+        "DELIVERY_DATE": item.DeliveryOnDate.toISOString().toString(),
+        "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode.toString(),
+        "DESIGN_CODE": item.designCode.toString(),
+        "KARAT": item.KARAT_CODE.toString(),
+        "METAL_COLOR": item.COLOR.toString(),
+        "PCS": Number(item.PCS),
+        "METAL_WT": Number(item.METAL_WT),
+        "STONE_WT": Number(item.STONE_WT),
+        "GROSS_WT": Number(item.GROSS_WT),
+        "RATEFC": Number(item.RATEFC),
+        "RATECC": Number(item.RATEFC),
+        "VALUEFC": Number(item.RATEFC),
+        "VALUECC": Number(item.RATEFC),
         "DISCPER": 0,
         "DISCAMTFC": 0,
         "DISCAMTCC": 0,
-        "NETVALUEFC": Number(item.AMOUNT) || 0,
-        "NETVALUECC": Number(item.AMOUNT) || 0,
+        "NETVALUEFC": Number(item.AMOUNT),
+        "NETVALUECC": Number(item.AMOUNT),
         "LOCTYPE_CODE": "tst",
         "JOBCARD_REF": "tst",
         "JOBCARD_DATE": "2023-09-14T14:56:43.961Z",
@@ -493,8 +488,8 @@ export class DiamondSalesorderComponent implements OnInit {
         "DREFERENCE": "tst",
         "DWIDTH": 0,
         "DTHICKNESS": 0,
-        "CHARGE1FC": Number(item.SETTING) || 0,
-        "CHARGE1LC": Number(item.SETTING) || 0,
+        "CHARGE1FC": Number(item.SETTING),
+        "CHARGE1LC": Number(item.SETTING),
         "CHARGE2FC": 0,
         "CHARGE2LC": 0,
         "CHARGE3FC": 0,
@@ -520,7 +515,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "SORDER_CLOSE": 0,
         "SOREF": "tst",
         "SO_STATUS": 0,
-        "MARKUP_PER": Number(item.MarkupPercentage) || 0,
+        "MARKUP_PER": Number(item.MarkupPercentage),
         "MARKUP_AMTFC": 0,
         "MARKUP_AMTLC": 0,
         "MARGIN_AMTFC": 0,
@@ -536,63 +531,55 @@ export class DiamondSalesorderComponent implements OnInit {
         "DT_VOCNO": 0,
         "DT_YEARMONTH": "tst",
         "TOTAL_LABOUR": 0,
-        "CATEGORY_CODE": item.CATEGORY_CODE || "tst",
+        "CATEGORY_CODE": item.CATEGORY_CODE.toString(),
         "COUNTRY_CODE": "tst",
         "CUT_CODE": "tst",
         "FINISH_CODE": "tst",
         "DYE_CODE": "tst",
         "TYPE_CODE": "tst",
-        "BRAND_CODE": item.BRAND_CODE || "tst",
+        "BRAND_CODE": item.BRAND_CODE.toString(),
         "RHODIUM_COLOR": "tst",
-        "SIZE": item.SIZE || "",
+        "SIZE": item.SIZE.toString(),
         "LENGTH": "tst",
-        "SCREW_FIELD": item.SCREW_FIELD || "",
-        "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "S",
-        "SUBCATEGORY_CODE": item.SUBCATEGORY_CODE || "tst",
+        "SCREW_FIELD": item.SCREW_FIELD.toString(),
+        "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType.toString(),
+        "SUBCATEGORY_CODE": item.SUBCATEGORY_CODE.toString(),
         "DSN_STOCK_CODE": "tst",
         "JOBNO": "tst",
         "ENAMEL_COLOR": "tst",
         "PROD_VARIANCE": 0,
         "SERVICE_ACCCODE": "tst",
-        "DIVISION_CODE": item.DIVCODE || "S",
+        "DIVISION_CODE": item.DIVCODE.toString(),
         "JOB_STATUS": "tst",
         "APPR_REFF": "tst",
         "MAIN_REFF": "tst",
         "SALESPERSON_CODE": "tst",
         "METAL_SALES_REF": "tst",
-        "DELIVERY_TYPE": item.DeliveryType || "tst",
+        "DELIVERY_TYPE": item.DeliveryType.toString(),
         "DELIVERY_DAYS": 0,
         "GOLD_LOSS_WT": 0,
-        "PURITY": Number(item.PURITY) || 0
+        "PURITY": Number(item.PURITY)
       }
-      this.detailRowToSave.push(detailArrayValues)
+      this.headerDetailGridToSave.push(detailArrayValues)
     });
-    return this.detailRowToSave
   }
-  /**USE:  final save API call*/
-  formSubmit(): void {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      // this.selectProcess()
-      // this.updateWorkerMaster()
-      return
-    }
-
+  private postDataToSave(): void{
     let postData = {
       "MID": 0,
-      "BRANCH_CODE": this.commonService.branchCode || "",
-      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType || "",
+      "BRANCH_CODE": this.commonService.branchCode.toString(),
+      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType.toString(),
       "VOCNO": Number(this.PartyDetailsOrderForm.value.voucherNo) || 0,
-      "VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate) || "",
+      "VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate).toString(),
       "EXP_PROD_START_DATE": this.commonService.formatDateTime(this.currentDate) || "2023-09-14T14:56:43.961Z",
-      "DELIVERY_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
-      "YEARMONTH": this.commonService.yearSelected || "",
-      "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode || "",
-      "PARTY_CURRENCY": this.PartyDetailsOrderForm.value.partyCurrencyType || "",
+      "DELIVERY_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate).toString(),
+      "YEARMONTH": this.commonService.yearSelected.toString(),
+      "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode.toString(),
+      "PARTY_CURRENCY": this.PartyDetailsOrderForm.value.partyCurrencyType.toString(),
       "PARTY_CURR_RATE": Number(this.PartyDetailsOrderForm.value.partyCurrencyRate) || 0,
-      "ITEM_CURRENCY": this.PartyDetailsOrderForm.value.ItemCurrency || "",
+      "ITEM_CURRENCY": this.PartyDetailsOrderForm.value.ItemCurrency.toString(),
       "ITEM_CURR_RATE": Number(this.PartyDetailsOrderForm.value.ItemCurrencyRate) || 0,
-      "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate) || "",
-      "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode || "",
+      "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate).toString(),
+      "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode.toString(),
       "METAL_RATE_TYPE": "tst",
       "METAL_RATE": 0,
       "METAL_GRAM_RATE": 0,
@@ -646,24 +633,31 @@ export class DiamondSalesorderComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "AutoPosting": true,
-      "Details": this.getAllDetailData(),
+      "Details": this.headerDetailGridToSave,
       "stnmtlDetail": this.getBOMData(), //component details
       "HeaderLabours": this.headerLaboursList,
       "LabourDetails": this.getLabType4Detail(), //lab type 4
       "HeaderDivisons": this.headerDivisionList
     }
     console.log(postData,'postData');
-    
-    // if (this.PartyDetailsOrderForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
-    this.snackBar.open('Saving...')
+  }
+  /**USE:  final save API call*/
+  formSubmit(): void {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      // this.selectProcess()
+      // this.updateWorkerMaster()
+      return
+    }
+    if (this.PartyDetailsOrderForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+    this.commonService.showSnackBarMsg('Loading....')
     let API = 'DaimondSalesOrder/InsertDaimondSalesOrder'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, this.postDataToSave())
       .subscribe((result) => {
         this.snackBar.dismiss()
-        if (result.status.toUpperCase().trim() == "SUCCESS" || result.status.toUpperCase() == "OK") {
+        if (result.status.toUpperCase().trim() == ("SUCCESS" || "OK")) {
           Swal.fire({
             title: result.message || 'Success',
             text: '',
@@ -671,11 +665,7 @@ export class DiamondSalesorderComponent implements OnInit {
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
           }).then((result: any) => {
-            if (result.value) {
-              // this.PartyDetailsOrderForm.reset()
-              // this.tableData = []
               this.activeModal.close('reloadMainGrid');
-            }
           });
         } else {
           this.toastr.error(result.message, result.message ? result.message : '', {

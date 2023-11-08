@@ -61,7 +61,16 @@ export class ModulelistComponent implements OnInit {
           }
           return 0;
         });
-
+        // let imageUrl = {
+        //   1: '../../assets/images/lp-icons/11.png',
+        //   4: '../../assets/images/lp-icons/12.png',
+        //   5: '../../assets/images/lp-icons/6.png',
+        //   6: '../../assets/images/lp-icons/7.png',
+        //   7: '../../assets/images/lp-icons/11.png',
+        //   8: '../../assets/images/lp-icons/11.png',
+        //   9: '../../assets/images/lp-icons/8.png',
+        //   10: '../../assets/images/lp-icons/4.png'
+        // }
         this.menuList.forEach(data => {
           if (data.MODULE_NAME == 'Boiling') {
             data.imageUrl = '../../assets/images/lp-icons/2.png'

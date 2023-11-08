@@ -17,9 +17,9 @@ import * as XLSX from "xlsx";
 export class CommonServiceService {
   /** common variables and functions used in all components */
   currentDate = new Date()
-  branchCode: any = localStorage.getItem('userbranch');
-  userName: any = localStorage.getItem('username');
-  yearSelected: any = localStorage.getItem('YEAR');
+  branchCode: any = localStorage.getItem('userbranch') || '';
+  userName: any = localStorage.getItem('username')|| '';
+  yearSelected: any = localStorage.getItem('YEAR')|| '';
   menuTitle: any;
   menuName: any;
   componentName: any;
@@ -56,6 +56,7 @@ export class CommonServiceService {
   public creditCardMasterData: any = [];
   public SalespersonMasterData: any = [];
   public VocTypeMasterData: any = [];
+  private DECIMAL_CONSTANTS: any = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -68,8 +69,8 @@ export class CommonServiceService {
     let item: any = localStorage.getItem('MENU_LIST')
     return JSON.parse(item)
   }
-  showSnackBarMsg(Message: string){
-    this.snackBar.open(Message,'Close')
+  showSnackBarMsg(MessageID: string){
+    this.snackBar.open(this.getMsgByID(MessageID) || MessageID,'Close')
   }
   closeSnackBarMsg(){
     this.snackBar.dismiss()
@@ -104,15 +105,16 @@ export class CommonServiceService {
   //   'COMPANYCURRENCY': 'COMPANYCURRENCY',
   //   'POSKARATRATECHANGE': 'POSKARATRATECHANGE',
   // }
-  DECIMAL_CONSTANTS: any = {
-    'AMOUNT': this.allbranchMaster?.BAMTDECIMALS,
-    'METAL': this.allbranchMaster?.BMQTYDECIMALS,
-    'STONE': this.allbranchMaster?.BSQTYDECIMALS,
-    'PURITY': 6,
-    'RATE': 6,
-  }
+ 
   /**USE: common fuction to format the Number to limit decimal places from branch master */
   decimalQuantityFormat(value: any, flag: string){
+    this.DECIMAL_CONSTANTS = {
+      'AMOUNT': Number(this.allbranchMaster.BAMTDECIMALS),
+      'METAL': Number(this.allbranchMaster.BMQTYDECIMALS),
+      'STONE': Number(this.allbranchMaster.BSQTYDECIMALS),
+      'PURITY': 6,
+      'RATE': 6,
+    }
     this.decimalFormatCount = this.DECIMAL_CONSTANTS[flag]
     
     value = Number(value).toFixed(this.decimalFormatCount)
@@ -156,7 +158,6 @@ export class CommonServiceService {
     // this.el.nativeElement.value = value;
     return value
   }
-
   //common Number validation
   isNumeric(event: any) {
     var keyCode = event.which ? event.which : event.keyCode;

@@ -344,6 +344,8 @@ export class AddNewdetailComponent implements OnInit {
       item.LABRATEFC = this.commonService.decimalQuantityFormat(item.LABRATEFC, 'AMOUNT')
       item.PURITY = this.commonService.decimalQuantityFormat(item.PURITY, 'PURITY')
       item.WASTAGE_PER = this.commonService.decimalQuantityFormat(item.WASTAGE_PER, 'AMOUNT')
+      console.log(item.WASTAGE_PER,'item.WASTAGE_PER');
+      
       item.WASTAGE_AMTFC = this.commonService.decimalQuantityFormat(item.WASTAGE_AMTFC, 'METAL')
       item.WASTAGE_WT = this.commonService.decimalQuantityFormat(item.WASTAGE_WT, 'METAL')
       item.LABAMOUNTFC = this.commonService.decimalQuantityFormat(item.LABAMOUNTFC, 'AMOUNT')
@@ -590,20 +592,14 @@ export class AddNewdetailComponent implements OnInit {
             this.commonService.toastErrorByMsgId('MSG1531');
           }
           // 2nd and 3rd result Parts / Components details data
-          if ((result.dynamicData[1] && result.dynamicData[1].length > 0) ||
-            (result.dynamicData[2] && result.dynamicData[2].length > 0)) {
+          if ((result.dynamicData[1]?.length > 0) ||
+            (result.dynamicData[2]?.length > 0)) {
             this.isViewComponentsTab = true;
             this.gridComponents = result.dynamicData[1]
             this.gridParts = result.dynamicData[2]
           } else {
             this.isViewComponentsTab = false;
           }
-          // if (result.dynamicData[2].length > 0 || result.dynamicData[1].length > 0 ||) {
-          //   this.isViewComponentsTab = true;
-          //   this.gridParts = result.dynamicData[2]
-          // } else {
-          //   this.isViewComponentsTab = false;
-          // }
           //4th result is BOM Details data
           if (result.dynamicData[3] && result.dynamicData[3].length > 0) {
             this.isViewBOMTab = true;
