@@ -181,6 +181,18 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  priceSchemeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 86,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Scheme',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
