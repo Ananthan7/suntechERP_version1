@@ -310,12 +310,15 @@ export class CommonServiceService {
   emptyToZero(value: any) {
     value = typeof (value) == 'number' || value == undefined ? value : value.toString().trim();
     // if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
-    if (value.toString() == '') {
+    if (value == '' || value == undefined) {
       return 0;
     } else {
       return parseFloat(value);
-      // return value;
     }
+  }
+
+  nullToString(value: any) {
+    value = value == undefined || value == null ? '' : value.toString();
   }
 
 

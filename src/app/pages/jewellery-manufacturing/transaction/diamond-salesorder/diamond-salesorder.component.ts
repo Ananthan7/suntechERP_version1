@@ -27,14 +27,16 @@ export class DiamondSalesorderComponent implements OnInit {
   currentDate = this.commonService.currentDate;
   tableItems: any[] = [];
   totalDetailNo: number = 0;
+  
   headerDetailGridToSave: any[] = [];
   bomDetailGridToSave: any[] = [];
+  postDataToSave: any[] = [];
 
   Narration: string = '';
   labourDetailGrid: any[] = [];
   divisionDetailGrid: any[] = [];
-  headerLaboursList: any[] = [];
-  headerDivisionList: any[] = [];
+  headerLaboursListToSave: any[] = [];
+  headerDivisionListToSave: any[] = [];
 
   OrderTypeData: MasterSearchModel = {
     PAGENO: 1,
@@ -279,7 +281,10 @@ export class DiamondSalesorderComponent implements OnInit {
           DATA: item
         })
       })
-      this.getAllDetailData()
+      //set datas for saving to arrays
+      this.setHeaderGridData()
+      this.setBOMGridData()
+      this.setPostDataToSave()
     }
   }
   // division grid selection from header
@@ -295,10 +300,10 @@ export class DiamondSalesorderComponent implements OnInit {
       "DESCRIPTION": data.DESCRIPTION.toString()
     }
     if (event.currentTarget.checked) {
-      this.headerDivisionList.push(division)
+      this.headerDivisionListToSave.push(division)
     } else {
-      if (this.headerDivisionList.length > 0) {
-        this.headerDivisionList = this.headerDivisionList.filter((item: any) => item.SRNO != data.Id)
+      if (this.headerDivisionListToSave.length > 0) {
+        this.headerDivisionListToSave = this.headerDivisionListToSave.filter((item: any) => item.SRNO != data.Id)
       }
     }
   }
@@ -329,15 +334,16 @@ export class DiamondSalesorderComponent implements OnInit {
       "SHAPE": data.SHAPE.toString()
     }
     if (event.currentTarget.checked) {
-      this.headerLaboursList.push(headerDetails)
+      this.headerLaboursListToSave.push(headerDetails)
     } else {
-      if (this.headerLaboursList.length > 0) {
-        this.headerLaboursList = this.headerLaboursList.filter((item: any) => item.SRNO != data.Id)
+      if (this.headerLaboursListToSave.length > 0) {
+        this.headerLaboursListToSave = this.headerLaboursListToSave.filter((item: any) => item.SRNO != data.Id)
       }
     }
   }
+  labourDetailsListToSave: any[] = []
   private getLabType4Detail() {
-    let labType4Data = [{
+    this.labourDetailsListToSave.push({
       "UNIQUEID": 0,
       "BRANCH_CODE": "string",
       "DESIGN_CODE": "string",
@@ -371,16 +377,15 @@ export class DiamondSalesorderComponent implements OnInit {
       "WASTAGE_AMT": 0,
       "WASTAGE_RATE": 0,
       "KARAT_CODE": "string"
-    }]
-    return []
+    })
   }
-  //**USE: push data from BOM grid in details to headerDetailGridToSave array */
-  private getBOMData() {
+  //**USE: push data from BOM grid in details to bomDetailGridToSave array */
+  private setBOMGridData() {
     let bomData = this.detailData[0].DATA['BOMDETAILS']
     let summary = this.detailData[0].DATA['SUMMARYDETAILS']
     console.log(bomData,summary);
     bomData.forEach((element:any) => {
-      this.headerDetailGridToSave.push({
+      this.bomDetailGridToSave.push({
         "UNIQUEID": 0,
         "SRNO": Number(element.SRNO),
         "BRANCH_CODE": this.commonService.branchCode.toString(),
@@ -441,20 +446,20 @@ export class DiamondSalesorderComponent implements OnInit {
       })
     })
   }
-  // getAllDetailData from header grid
-  private getAllDetailData() {
+  // bomDetailGridToSave from header grid
+  private setHeaderGridData() {
     let summaryData = this.detailData[0].DATA['SUMMARYDETAILS']
     let detailArrayValues = {}
     summaryData.forEach((item: any) => {
       detailArrayValues = {
         "UNIQUEID": 0,
         "SRNO": Number(item.SRNO),
-        "EXP_PROD_START_DATE": item.ProductionDate.toISOString().toString(),
-        "DELIVERY_DATE": item.DeliveryOnDate.toISOString().toString(),
-        "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode.toString(),
-        "DESIGN_CODE": item.designCode.toString(),
-        "KARAT": item.KARAT_CODE.toString(),
-        "METAL_COLOR": item.COLOR.toString(),
+        "EXP_PROD_START_DATE": item.ProductionDate.toISOString(),
+        "DELIVERY_DATE": item.DeliveryOnDate.toISOString(),
+        "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode,
+        "DESIGN_CODE": this.commonService.nullToString(item.designCode),
+        "KARAT": this.commonService.nullToString(item.KARAT_CODE),
+        "METAL_COLOR": this.commonService.nullToString(item.COLOR),
         "PCS": Number(item.PCS),
         "METAL_WT": Number(item.METAL_WT),
         "STONE_WT": Number(item.STONE_WT),
@@ -531,31 +536,31 @@ export class DiamondSalesorderComponent implements OnInit {
         "DT_VOCNO": 0,
         "DT_YEARMONTH": "tst",
         "TOTAL_LABOUR": 0,
-        "CATEGORY_CODE": item.CATEGORY_CODE.toString(),
+        "CATEGORY_CODE": this.commonService.nullToString(item.CATEGORY_CODE),
         "COUNTRY_CODE": "tst",
         "CUT_CODE": "tst",
         "FINISH_CODE": "tst",
         "DYE_CODE": "tst",
         "TYPE_CODE": "tst",
-        "BRAND_CODE": item.BRAND_CODE.toString(),
+        "BRAND_CODE": this.commonService.nullToString(item.BRAND_CODE),
         "RHODIUM_COLOR": "tst",
-        "SIZE": item.SIZE.toString(),
+        "SIZE": this.commonService.nullToString(item.SIZE),
         "LENGTH": "tst",
-        "SCREW_FIELD": item.SCREW_FIELD.toString(),
+        "SCREW_FIELD": this.commonService.nullToString(item.SCREW_FIELD),
         "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType.toString(),
-        "SUBCATEGORY_CODE": item.SUBCATEGORY_CODE.toString(),
+        "SUBCATEGORY_CODE": this.commonService.nullToString(item.SUBCATEGORY_CODE),
         "DSN_STOCK_CODE": "tst",
         "JOBNO": "tst",
         "ENAMEL_COLOR": "tst",
         "PROD_VARIANCE": 0,
         "SERVICE_ACCCODE": "tst",
-        "DIVISION_CODE": item.DIVCODE.toString(),
+        "DIVISION_CODE": this.commonService.nullToString(item.DIVCODE),
         "JOB_STATUS": "tst",
         "APPR_REFF": "tst",
         "MAIN_REFF": "tst",
         "SALESPERSON_CODE": "tst",
         "METAL_SALES_REF": "tst",
-        "DELIVERY_TYPE": item.DeliveryType.toString(),
+        "DELIVERY_TYPE": this.commonService.nullToString(item.DeliveryType),
         "DELIVERY_DAYS": 0,
         "GOLD_LOSS_WT": 0,
         "PURITY": Number(item.PURITY)
@@ -563,7 +568,9 @@ export class DiamondSalesorderComponent implements OnInit {
       this.headerDetailGridToSave.push(detailArrayValues)
     });
   }
-  private postDataToSave(): void{
+  private setPostDataToSave(): void{
+    let summaryData = this.detailData[0].DATA['SUMMARYDETAILS']
+    console.log(summaryData);
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.commonService.branchCode.toString(),
@@ -583,41 +590,41 @@ export class DiamondSalesorderComponent implements OnInit {
       "METAL_RATE_TYPE": "tst",
       "METAL_RATE": 0,
       "METAL_GRAM_RATE": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_METAL_WT": 0,
-      "TOTAL_STONE_WT": 0,
-      "TOTAL_GROSS_WT": 0,
-      "TOTAL_AMOUNT_FC": 0,
-      "TOTAL_AMOUNT_LC": 0,
-      "MARGIN_PER": 0,
-      "REMARKS": "",
+      "TOTAL_PCS": this.commonService.emptyToZero(summaryData[0].PCS),
+      "TOTAL_METAL_WT": this.commonService.emptyToZero(summaryData[0].METAL_WT),
+      "TOTAL_STONE_WT": this.commonService.emptyToZero(summaryData[0].STONE_WT),
+      "TOTAL_GROSS_WT": this.commonService.emptyToZero(summaryData[0].GROSS_WT),
+      "TOTAL_AMOUNT_FC": this.commonService.emptyToZero(summaryData[0].AMOUNT_FC),
+      "TOTAL_AMOUNT_LC": this.commonService.emptyToZero(summaryData[0].AMOUNT_LC),
+      "MARGIN_PER": this.commonService.emptyToZero(summaryData[0].MarginPercentage),
+      "REMARKS": this.commonService.emptyToZero(summaryData[0].Remarks),
       "SYSTEM_DATE": this.currentDate.toISOString() || "2023-10-26T09:05:45.384Z",
-      "ROUND_VALUE_CC": 0,
+      "ROUND_VALUE_CC": this.commonService.emptyToZero(summaryData[0].AMOUNT).toFixed(),
       "NAVSEQNO": 0,
       "SO_STATUS": true,
       "TOTAL_AMOUNT_PRTY": 0,
-      "FIX_UNFIX": true,
-      "LINKID": "tst",
+      "FIX_UNFIX": this.PartyDetailsOrderForm.value.FixedMetal,
+      "LINKID": "",
       "OUSTATUS": true,
       "OUSTATUSNEW": 0,
-      "ORDER_STATUS": "T",
-      "MARKUP_PER": 0,
+      "ORDER_STATUS": "",
+      "MARKUP_PER": this.commonService.emptyToZero(summaryData[0].MarkupPercentage),
       "GOLD_LOSS_PER": 0,
-      "CR_DAYS": 0,
-      "PARTY_ADDRESS": "tst",
+      "CR_DAYS": Number(this.PartyDetailsOrderForm.value.DeliveryOnDateType),
+      "PARTY_ADDRESS": this.PartyDetailsOrderForm.value.BillToAddress,
       "SALESPERSON_NAME": this.PartyDetailsOrderForm.value.SalesmanName || "",
       "PRINT_COUNT": 0,
-      "SALESORDER_REF": "tst",
+      "SALESORDER_REF": "",
       "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "",
       "JOB_STATUS": "tst",
       "APPR_REFF": "tst",
       "MAIN_REFF": "tst",
-      "PARTY_NAME": "tst",
+      "PARTY_NAME": this.PartyDetailsOrderForm.value.BillToAccountHead,
       "SUBLEDGER_CODE": "tst",
-      "USERDEF1": "tst",
-      "USERDEF2": "tst",
-      "USERDEF3": "tst",
-      "USERDEF4": "tst",
+      "USERDEF1": this.PartyDetailsOrderForm.value.Proposal,
+      "USERDEF2": this.PartyDetailsOrderForm.value.BussinessType,
+      "USERDEF3": this.PartyDetailsOrderForm.value.BillToAccountHead,
+      "USERDEF4": this.PartyDetailsOrderForm.value.BillToAccountHead,
       "DELIVERYADDRESS": "tst",
       "TERMSANDCONDITIONS": "tst",
       "PAYMENTTERMS": "tst",
@@ -633,13 +640,15 @@ export class DiamondSalesorderComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "AutoPosting": true,
-      "Details": this.headerDetailGridToSave,
-      "stnmtlDetail": this.getBOMData(), //component details
-      "HeaderLabours": this.headerLaboursList,
-      "LabourDetails": this.getLabType4Detail(), //lab type 4
-      "HeaderDivisons": this.headerDivisionList
+      "Details": this.headerDetailGridToSave, //main header grid data
+      "stnmtlDetail": this.bomDetailGridToSave, // bom details
+      "HeaderLabours": this.headerLaboursListToSave,
+      "LabourDetails": this.labourDetailsListToSave, //lab type 4
+      "HeaderDivisons": this.headerDivisionListToSave
     }
     console.log(postData,'postData');
+    
+    this.postDataToSave.push(postData)
   }
   /**USE:  final save API call*/
   formSubmit(): void {
@@ -654,7 +663,7 @@ export class DiamondSalesorderComponent implements OnInit {
     }
     this.commonService.showSnackBarMsg('Loading....')
     let API = 'DaimondSalesOrder/InsertDaimondSalesOrder'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, this.postDataToSave())
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, this.postDataToSave)
       .subscribe((result) => {
         this.snackBar.dismiss()
         if (result.status.toUpperCase().trim() == ("SUCCESS" || "OK")) {
