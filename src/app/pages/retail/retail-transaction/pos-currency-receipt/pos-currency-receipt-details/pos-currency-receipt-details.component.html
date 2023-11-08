@@ -1,31 +1,40 @@
 <div>
-    <!-- header section starts -->
-    <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Point Of Sale Currency Receipt Details</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="close()">
-            <i class="feather icon-x close-icon"></i>
-        </button>
-    </div>
-    <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-        (deleteClick)="deleteWorkerMaster()"></modal-header>
-    <!-- content section -->
-    <div class="container-fluid">
-        <!-- form starts -->
-        <form [formGroup]="posCurrencyReceiptDetailsForm">
-            <div class="row">
-                <div class="col-md-8 py-2">
-                    <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Branch :</label>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="branch" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <!-- <div class="row mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Mode Of :</label>
-                        <div class="col-md-3">
+  <!-- header section starts -->
+  <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">
+      Point Of Sale Currency Receipt Details
+    </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"
+    (deleteClick)="deleteWorkerMaster()"
+  ></modal-header>
+  <!-- content section -->
+  <div class="container-fluid">
+    <!-- form starts -->
+    <form [formGroup]="posCurrencyReceiptDetailsForm">
+      <div class="row">
+        <div class="col-md-8 py-2">
+          <div class="row mb-1">
+            <label for="inputPassword" class="col-sm-3 col-form-label"
+              >Branch :</label
+            >
+            <div class="col-md-3">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="branch" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mb-1">
+            <label for="inputPassword" class="col-sm-3 col-form-label"
+              >Mode Of :</label
+            >
+            <!-- <div class="col-md-3">
                             <mat-form-field>
                                 <mat-select formControlName="modeOfSelect">
                                     <mat-option *ngFor="let data of paymentModeList" [value]="data.ENGLISH">{{
@@ -33,498 +42,818 @@
                                 
                                 </mat-select>
                             </mat-form-field>
-                        </div>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="modeOfSearch" />
-                            </mat-form-field>
-                            <master-search [MasterSearchData]="codeData"
-                            (newRowClick)="codeSelected($event)"></master-search>
-                        </div>
-                        <div class="col-md-3">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="modeDesc" />
-                            </mat-form-field>
-                        </div>
-                    </div> -->
-                </div>
-                <div class="col-md-12 mb-2">
-                    <mat-tab-group>
-                        <mat-tab label="Cash">
-                            <form [formGroup]="cashReceiptForm">
-                                <div class="mt-1">
-                                    <div class="row my-1">
-                                        <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
-                                        <div class="col-md-2">
-                                            <mat-form-field style="width: 70%">
-                                                <input type="text" matInput formControlName="cashdebitAmount"
-                                                    (change)="DebitamountChange($event)" />
-                                            </mat-form-field>
-                                            <master-search [MasterSearchData]="debitAmountData"
-                                                (newRowClick)="debitAmountSelected($event)"></master-search>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="cashdebitAmountDesc" />
-                                            </mat-form-field>
-                                            <mat-form-field style="width: 100%;">    
-                                                <input matInput [matDatepicker]="cashDebitAmountDate" name="cashDebitAmountDate"
-                                                    placeholder="DD/MM/YYYY" DateValidation formControlName="cashDebitAmountDate"/>
-                                                <mat-datepicker-toggle matSuffix [for]="cashDebitAmountDate"></mat-datepicker-toggle>
-                                                <mat-datepicker #cashDebitAmountDate></mat-datepicker>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
-                                        <div class="col-md-2">
-                                            <mat-form-field style="width: 70%;">
-                                                <input type="text" matInput formControlName="cashcurrencyCode" />
-                                            </mat-form-field>
-                                            <!-- < <master-search></master-search>  -->
-                                        </div>
-                                        <div class="col-md-5">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="cashcurrencyRate" />
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
-                                        <div class="col-md-2">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="cashAmountFc" />
-                                            </mat-form-field>
-                                        </div>
-                                        <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
-                                        <div class="col-md-2">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="cashAmountLc" />
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
-                                        <div class="col-md-7">
-                                            <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="cashRemarks" />
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                           
-                        </mat-tab>
-                        <mat-tab label="Credit Card">
-                            <form [formGroup]="creditReceiptForm"  class="mt-1">
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-1 col-form-label">Number:</label>
-                                    <div class="col-md-1">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="creditCardNumber" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Holder Name:</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="creditCardName" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-1 col-form-label">Vaild:</label>
-                                    <div class="col-md-1">
-                                        <mat-form-field style="width: 100%;">
-                                            <input matInput [matDatepicker]="creditCardDate" name="creditCardDate"
-                                                placeholder="DD/MM/YYYY" DateValidation formControlName="creditCardDate" />
-                                            <mat-datepicker-toggle matSuffix
-                                                [for]="creditCardDate"></mat-datepicker-toggle>
-                                            <mat-datepicker #creditCardDate></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row my-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%">
-                                            <input type="text" matInput formControlName="creditCardAmount"
-                                                (change)="DebitamountChange($event)" />
-                                        </mat-form-field>
-                                        <master-search [MasterSearchData]="debitAmountData"
-                                            (newRowClick)="debitAmountSelected($event)"></master-search>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="creditCardAmountDesc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="creditCardcurrencyCode" />
-                                        </mat-form-field>
-                                        <!-- < <master-search></master-search>  -->
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="creditCardcurrencyRate" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="creditCardamountFc" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="creditCardAmountLc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
-                                    <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="creditCardRemarks" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </form>
-                        </mat-tab>
-                        <mat-tab label="Others">
-                            <form [formGroup]="otherReceiptForm" class="mt-1">
-                                <div class="row my-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%">
-                                            <input type="text" matInput formControlName="otherdebitAmount"
-                                                (change)="DebitamountChange($event)" />
-                                        </mat-form-field>
-                                        <master-search [MasterSearchData]="debitAmountData"
-                                            (newRowClick)="debitAmountSelected($event)"></master-search>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="otherdebitAmountDesc" />
-                                        </mat-form-field>
-                                        <mat-form-field style="width: 100%;">
-
-                                            <input matInput [matDatepicker]="otherVocDate" name="otherVocDate"
-                                                placeholder="DD/MM/YYYY" DateValidation formControlName="otherVocDate" />
-                                            <mat-datepicker-toggle matSuffix [for]="otherVocDate"></mat-datepicker-toggle>
-                                            <mat-datepicker #otherVocDate></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="otherCurrencyCode" />
-                                        </mat-form-field>
-                                        <!-- < <master-search></master-search>  -->
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="otherCurrencyRate" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="otherAmountFc" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="otherAmountLc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
-                                    <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="otherRemarks" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </form>
-                        </mat-tab>
-                        <mat-tab label="TT">
-                            <form [formGroup]="ttReceiptForm" class="mt-1">
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-1 col-form-label">Number:</label>
-                                    <div class="col-md-1">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="ttNo" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-1 col-form-label">Date:</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input matInput [matDatepicker]="ttDate" name="ttDate"
-                                                placeholder="DD/MM/YYYY" DateValidation formControlName="ttDate" />
-                                            <mat-datepicker-toggle matSuffix [for]="ttDate"></mat-datepicker-toggle>
-                                            <mat-datepicker #ttDate></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-1 col-form-label">Drawn Bank:</label>
-                                    <div class="col-md-1">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="ttDrawnBank" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Deposit Bank:</label>
-                                    <div class="col-md-1">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="ttDepositBank" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row my-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%">
-                                            <input type="text" matInput formControlName="ttAmount"
-                                                (change)="DebitamountChange($event)" />
-                                        </mat-form-field>
-                                        <master-search [MasterSearchData]="debitAmountData"
-                                            (newRowClick)="debitAmountSelected($event)"></master-search>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="ttAmountDesc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="ttCurrencyCode" />
-                                        </mat-form-field>
-                                        <!-- < <master-search></master-search>  -->
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="ttCurrencyRate" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="ttAmountFc" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="ttAmountLc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
-                                    <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="ttRemarks" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </form>
-                        </mat-tab>
-                        <mat-tab label="Cheque">
-                            <form [formGroup]="chequeReceiptForm"class="mt-1">
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-1 col-form-label">Number:</label>
-                                    <div class="col-md-1">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="chequeNumber" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-1 col-form-label">Date:</label>
-                                    <div class="col-md-1">
-                                        <mat-form-field style="width: 100%;">
-                                            <input matInput [matDatepicker]="chequeDate" name="chequeDate"
-                                                placeholder="DD/MM/YYYY" DateValidation formControlName="chequeDate"/>
-                                            <mat-datepicker-toggle matSuffix [for]="chequeDate"></mat-datepicker-toggle>
-                                            <mat-datepicker #chequeDate></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-1 col-form-label">Drawn Bank:</label>
-                                    <div class="col-md-1">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="chequeDrawnBank" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Deposit Bank:</label>
-                                    <div class="col-md-1">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="chequeDepositBank" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row my-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Debit Amount :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%">
-                                            <input type="text" matInput formControlName="chequeAmount"
-                                                (change)="DebitamountChange($event)" />
-                                        </mat-form-field>
-                                        <master-search [MasterSearchData]="debitAmountData"
-                                            (newRowClick)="debitAmountSelected($event)"></master-search>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="chequeAmountDesc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="chequeCurrencyCode" />
-                                        </mat-form-field>
-                                        <!-- < <master-search></master-search>  -->
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="chequeCurrencyRate" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount FC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="chequeAmountFc" />
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="chequeAmountLc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
-                                    <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="chequeRemarks" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </form>
-                        </mat-tab>
-                    </mat-tab-group>
-                </div>
+                        </div> -->
+            <div class="col-md-3">
+              <mat-form-field style="width: 70%">
+                <input type="text" matInput formControlName="modeCODE" />
+              </mat-form-field>
+              <master-search
+                [MasterSearchData]="modeOfData"
+                (newRowClick)="receiptModeSelected($event)"
+              ></master-search>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <div class="box_wrap">
-                        <h5>VAT Details</h5>
-                        <div class="row p-2">
-                            <div class="col-md-4">
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">VAT No :</label>
-                                    <div class="col-md-6">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="vatno"  (change)="  vatDetails($event)"/>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">HSN Code :</label>
-                                    <div class="col-md-6">
-                                        <mat-form-field style="width: 150px;">
-                                            <mat-select formControlName="hsnCode">
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">Invoice No :</label>
-                                    <div class="col-md-6">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="invoiceNo" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">Invoice Date :</label>
-                                    <div class="col-md-6">
-                                        <mat-form-field style="width: 100%;">
-                                            <!-- <input type="date" matInput formControlName="invoiceDate" /> -->
-
-                                                <input matInput [matDatepicker]="invoiceDate" name="invoiceDate"
-                                                    placeholder="DD/MM/YYYY" DateValidation />
-                                                <mat-datepicker-toggle matSuffix [for]="invoiceDate"></mat-datepicker-toggle>
-                                                <mat-datepicker #invoiceDate></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">VAT % :</label>
-                                    <div class="col-md-6">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="vat" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">VAT CC :</label>
-                                    <div class="col-md-6">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="vatcc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">Total FC :</label>
-                                    <div class="col-md-6">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="totalFc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">Total LC :</label>
-                                    <div class="col-md-6">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="totalLc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">Header VAT Amt :</label>
-                                    <div class="col-md-6">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="headerVatAmt" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="col-md-3">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="modeDesc" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 mb-2">
+          <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+            
+            <mat-tab label="Cash">
+              <form [formGroup]="cashReceiptForm">
+                <div class="mt-1">
+                  <div class="row my-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label"
+                      >Debit Amount :</label
+                    >
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 70%">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="cashdebitAmount"
+                          (change)="DebitamountChange($event)"
+                        />
+                      </mat-form-field>
+                      <master-search
+                        [MasterSearchData]="debitAmountData"
+                        (newRowClick)="debitAmountSelected($event)"
+                      ></master-search>
                     </div>
+                    <div class="col-md-5">
+                      <mat-form-field style="width: 100%">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="cashdebitAmountDesc"
+                        />
+                      </mat-form-field>
+                      <mat-form-field style="width: 100%">
+                        <input
+                          matInput
+                          [matDatepicker]="cashDebitAmountDate"
+                          name="cashDebitAmountDate"
+                          placeholder="DD/MM/YYYY"
+                          DateValidation
+                          formControlName="cashDebitAmountDate"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="cashDebitAmountDate"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #cashDebitAmountDate></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label"
+                      >Currency :</label
+                    >
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 70%">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="cashcurrencyCode"
+                        />
+                      </mat-form-field>
+                      <!-- < <master-search></master-search>  -->
+                    </div>
+                    <div class="col-md-5">
+                      <mat-form-field style="width: 100%">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="cashcurrencyRate"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label"
+                      >Amount FC :</label
+                    >
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="cashAmountFc"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label"
+                      >Amount LC :</label
+                    >
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="cashAmountLc"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label"
+                      >Remarks :</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="cashRemarks"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
                 </div>
+              </form>
+            </mat-tab>
+            <mat-tab label="Credit Card">
+              <form [formGroup]="creditReceiptForm" class="mt-1">
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-1 col-form-label"
+                    >Number:</label
+                  >
+                  <div class="col-md-1">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="creditCardNumber"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Holder Name:</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="creditCardName"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-1 col-form-label"
+                    >Vaild:</label
+                  >
+                  <div class="col-md-1">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        matInput
+                        [matDatepicker]="creditCardDate"
+                        name="creditCardDate"
+                        placeholder="DD/MM/YYYY"
+                        DateValidation
+                        formControlName="creditCardDate"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="creditCardDate"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #creditCardDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row my-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Debit Amount :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="creditCardAmount"
+                        (change)="DebitamountChange($event)"
+                      />
+                    </mat-form-field>
+                    <master-search
+                      [MasterSearchData]="debitAmountData"
+                      (newRowClick)="debitAmountSelected($event)"
+                    ></master-search>
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="creditCardAmountDesc"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Currency :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="creditCardcurrencyCode"
+                      />
+                    </mat-form-field>
+                    <!-- < <master-search></master-search>  -->
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="creditCardcurrencyRate"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Amount FC :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="creditCardamountFc"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Amount LC :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="creditCardAmountLc"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Remarks :</label
+                  >
+                  <div class="col-md-7">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="creditCardRemarks"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+            </mat-tab>
+            <mat-tab label="Others">
+              <form [formGroup]="otherReceiptForm" class="mt-1">
+                <div class="row my-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Debit Amount :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="otherdebitAmount"
+                        (change)="DebitamountChange($event)"
+                      />
+                    </mat-form-field>
+                    <master-search
+                      [MasterSearchData]="debitAmountData"
+                      (newRowClick)="debitAmountSelected($event)"
+                    ></master-search>
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="otherdebitAmountDesc"
+                      />
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%">
+                      <input
+                        matInput
+                        [matDatepicker]="otherVocDate"
+                        name="otherVocDate"
+                        placeholder="DD/MM/YYYY"
+                        DateValidation
+                        formControlName="otherVocDate"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="otherVocDate"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #otherVocDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Currency :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="otherCurrencyCode"
+                      />
+                    </mat-form-field>
+                    <!-- < <master-search></master-search>  -->
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="otherCurrencyRate"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Amount FC :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="otherAmountFc"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Amount LC :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="otherAmountLc"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Remarks :</label
+                  >
+                  <div class="col-md-7">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="otherRemarks"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+            </mat-tab>
+            <mat-tab label="TT">
+              <form [formGroup]="ttReceiptForm" class="mt-1">
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-1 col-form-label"
+                    >Number:</label
+                  >
+                  <div class="col-md-1">
+                    <mat-form-field style="width: 100%">
+                      <input type="text" matInput formControlName="ttNo" />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-1 col-form-label"
+                    >Date:</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        matInput
+                        [matDatepicker]="ttDate"
+                        name="ttDate"
+                        placeholder="DD/MM/YYYY"
+                        DateValidation
+                        formControlName="ttDate"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="ttDate"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #ttDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-1 col-form-label"
+                    >Drawn Bank:</label
+                  >
+                  <div class="col-md-1">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="ttDrawnBank"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Deposit Bank:</label
+                  >
+                  <div class="col-md-1">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="ttDepositBank"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row my-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Debit Amount :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="ttAmount"
+                        (change)="DebitamountChange($event)"
+                      />
+                    </mat-form-field>
+                    <master-search
+                      [MasterSearchData]="debitAmountData"
+                      (newRowClick)="debitAmountSelected($event)"
+                    ></master-search>
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="ttAmountDesc"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Currency :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="ttCurrencyCode"
+                      />
+                    </mat-form-field>
+                    <!-- < <master-search></master-search>  -->
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="ttCurrencyRate"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Amount FC :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="ttAmountFc"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Amount LC :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="ttAmountLc"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Remarks :</label
+                  >
+                  <div class="col-md-7">
+                    <mat-form-field style="width: 100%">
+                      <input type="text" matInput formControlName="ttRemarks" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+            </mat-tab>
+            <mat-tab label="Cheque">
+              <form [formGroup]="chequeReceiptForm" class="mt-1">
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-1 col-form-label"
+                    >Number:</label
+                  >
+                  <div class="col-md-1">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeNumber"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-1 col-form-label"
+                    >Date:</label
+                  >
+                  <div class="col-md-1">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        matInput
+                        [matDatepicker]="chequeDate"
+                        name="chequeDate"
+                        placeholder="DD/MM/YYYY"
+                        DateValidation
+                        formControlName="chequeDate"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="chequeDate"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #chequeDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-1 col-form-label"
+                    >Drawn Bank:</label
+                  >
+                  <div class="col-md-1">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeDrawnBank"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Deposit Bank:</label
+                  >
+                  <div class="col-md-1">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeDepositBank"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row my-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Debit Amount :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeAmount"
+                        (change)="DebitamountChange($event)"
+                      />
+                    </mat-form-field>
+                    <master-search
+                      [MasterSearchData]="debitAmountData"
+                      (newRowClick)="debitAmountSelected($event)"
+                    ></master-search>
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeAmountDesc"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Currency :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeCurrencyCode"
+                      />
+                    </mat-form-field>
+                    <master-search></master-search>
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeCurrencyRate"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Amount FC :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeAmountFc"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Amount LC :</label
+                  >
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeAmountLc"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label"
+                    >Remarks :</label
+                  >
+                  <div class="col-md-7">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="chequeRemarks"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="box_wrap">
+            <h5>VAT Details</h5>
+            <div class="row p-2">
+              <div class="col-md-4">
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-6 col-form-label"
+                    >VAT No :</label
+                  >
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%">
+                      <input type="text" matInput formControlName="vatno" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-6 col-form-label"
+                    >HSN Code :</label
+                  >
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 150px">
+                      <mat-select formControlName="hsnCode"> </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-6 col-form-label"
+                    >Invoice No :</label
+                  >
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%">
+                      <input type="text" matInput formControlName="invoiceNo" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-6 col-form-label"
+                    >Invoice Date :</label
+                  >
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%">
+                      <!-- <input type="date" matInput formControlName="invoiceDate" /> -->
+
+                      <input
+                        matInput
+                        [matDatepicker]="invoiceDate"
+                        name="invoiceDate"
+                        placeholder="DD/MM/YYYY"
+                        DateValidation
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="invoiceDate"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #invoiceDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-6 col-form-label"
+                    >VAT % :</label
+                  >
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%">
+                      <input type="text" matInput formControlName="vat" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-6 col-form-label"
+                    >VAT CC :</label
+                  >
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%">
+                      <input type="text" matInput formControlName="vatcc" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-6 col-form-label"
+                    >Total FC :</label
+                  >
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%">
+                      <input type="text" matInput formControlName="totalFc" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-6 col-form-label"
+                    >Total LC :</label
+                  >
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%">
+                      <input type="text" matInput formControlName="totalLc" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-6 col-form-label"
+                    >Header VAT Amt :</label
+                  >
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="headerVatAmt"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
             </div>
-        </form>
-    </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

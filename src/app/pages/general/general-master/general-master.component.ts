@@ -27,6 +27,7 @@ export class GeneralMasterComponent implements OnInit {
   orderedItemsHead: any[] = [];
   //subscription variable
   subscriptions$!: Subscription;
+
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -55,25 +56,22 @@ export class GeneralMasterComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
+  private componentDbList: any = {
+    'ChartOfAccountsComponent': ChartOfAccountsComponent,
+    'JewelleryMasterComponent': JewelleryMasterComponent,
+    'LocationMasterComponent': LocationMasterComponent,
+    // Add components and update in operationals > menu updation grid form component name
+  }
   //  open Jobcard in modal
   openModalView(data?: any) {
     let contents;
-
-    switch (this.componentName) {
-      case 'ChartOfAccountsComponent':
-        contents = ChartOfAccountsComponent
-        break;
-      case 'JewelleryMasterComponent':
-        contents = JewelleryMasterComponent
-        break;
-      case 'LocationMasterComponent':
-        contents = LocationMasterComponent
-        break;
-      //continue adding components using case then break
-      default:
-        this.snackBar.open('Module Not Created', 'Close', {
-          duration: 3000,
-        });
+    if (this.componentDbList[this.componentName]) {
+      contents = this.componentDbList[this.componentName]
+      // add new components in componentDbList then update in database
+    } else {
+      this.snackBar.open('Module Not Created', 'Close', {
+        duration: 3000,
+      });
     }
 
     const modalRef: NgbModalRef = this.modalService.open(contents, {

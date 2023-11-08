@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PosCurrencyReceiptDetailsComponent } from './pos-currency-receipt-details/pos-currency-receipt-details.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 
 @Component({
@@ -18,6 +19,8 @@ import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-cu
   styleUrls: ['./pos-currency-receipt.component.scss']
 })
 export class PosCurrencyReceiptComponent implements OnInit {
+  // @ViewChild(DxDataGridComponent, { static: false }) dataGrid?: DxDataGridComponent;
+
   @Input() content!: any; //use: To get clicked row details from master grid
   // columnhead: any[] = ['Sr#', 'Branch', 'Mode', 'A/c Code', 'Account Head', '', 'Curr.Rate', 'VAT_E_', 'VAT_E_'];
   columnsList: any[] = [
@@ -96,6 +99,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  selectedIndexes: any = [];
 
 
 
@@ -198,6 +202,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "SPID": "001",
       "parameter": {
         "ACCODE": event.target.value || "",
+        "BRANCH_CODE": this.branchCode
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
@@ -272,11 +277,21 @@ export class PosCurrencyReceiptComponent implements OnInit {
       if (postData) {
         console.log('Data from modal:', postData);
         this.posCurrencyDetailsData.push(postData);
+
+        this.posCurrencyDetailsData.forEach((data, index) => data.SRNO = index + 1);
       }
     });
 
   }
 
+  deleteDetailRecord() {
+    // this.selec
+    if(this.selectedIndexes.length > 0){
+      this.posCurrencyDetailsData = this.posCurrencyDetailsData.filter((data, index)=> !this.selectedIndexes.includes(index));
+    }else{
+      this.snackBar.open('Please select record', 'OK', {duration: 2000}); // need proper err msg.
+    }
+  }
 
   posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
     vocType: [''],
@@ -328,7 +343,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "YEARMONTH": this.yearMonth,
       "PARTYCODE": this.posCurrencyReceiptForm.value.partyCode || "",
       "PARTY_CURRENCY": this.posCurrencyReceiptForm.value.partyCurrency || "",
-      "PARTY_CURR_RATE": this.posCurrencyReceiptForm.value.partyCurrencyRate || "",
+      "PARTY_CURR_RATE": this.posCurrencyReceiptForm.value.partyCurrencyRate || "0",
       "TOTAL_AMOUNTFC": this.posCurrencyReceiptForm.value.partyAmount || "",
       "TOTAL_AMOUNTCC": this.posCurrencyReceiptForm.value.partyAmountLc || "",
       "REMARKS": this.posCurrencyReceiptForm.value.narration || "",
@@ -422,6 +437,18 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
   deleteWorkerMaster() {
 
+  }
+
+  onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    let indexes: Number[] = [];
+    this.posCurrencyDetailsData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
   }
 
   update() {

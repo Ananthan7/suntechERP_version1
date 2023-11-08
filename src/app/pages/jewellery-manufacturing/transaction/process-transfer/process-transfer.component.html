@@ -13,49 +13,66 @@
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="col-md-12">
-                        <h6>HO</h6>
+                        <h6>{{branchCode}} - {{companyName}}</h6>
                     </div>
                     <div class="col-md-8">
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-2 col-form-label">Voc Type: </label>
+                            <label for="input" class="col-sm-2 col-form-label">Voucher Type</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="voctype" />
+                                    <input type="text" matInput
+                                        formControlName="voctype" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-2 col-form-label">Voc Date :</label>
+                            <label for="input" class="col-sm-2 col-form-label">Voucher Date</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput formControlName="vocdate" />
+                                <mat-form-field style="width: 100%">
+                                    <!-- <mat-label>Date Of Birth</mat-label> -->
+                                    <input matInput DateValidation
+                                        (dateChange)="formatDate($event)"
+                                        [matDatepicker]="dob"
+                                        formControlName="vocdate"
+                                        placeholder="DD/MM/YYYY" />
+                                    <mat-datepicker-toggle matSuffix
+                                        [for]="dob"></mat-datepicker-toggle>
+                                    <mat-datepicker #dob></mat-datepicker>
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-2 col-form-label">Voc No :</label>
+                            <label for="input" class="col-sm-2 col-form-label">Voucher Number</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="vocno" />
+                                    <input type="text" matInput readonly
+                                        formControlName="vocno" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-2 col-form-label">Salesman : </label>
+                            <label for="input" class="col-sm-2 col-form-label">Salesman</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="salesman" />
+                                <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput
+                                        formControlName="salesman" />
                                 </mat-form-field>
+                                <master-search
+                                    [MasterSearchData]="SalesmanData"
+                                    (newRowClick)="SalesmanSelected($event)">
+                                </master-search>
                             </div>
-                            <label for="input" class="col-sm-2 col-form-label">Currency : </label>
+                            <label for="input" class="col-sm-2 col-form-label">Currency</label>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="currency" />
+                                    <input type="text" matInput
+                                        formControlName="currency" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="currencyrate" />
+                                    <input type="number" matInput
+                                        formControlName="currencyrate" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -67,7 +84,8 @@
                         <div class="row align-items-end mb-2">
                             <div class="col-md-12">
                                 <div class="text-area">
-                                    <textarea class="border-bottom" rows="3" matInput></textarea>
+                                    <textarea class="border-bottom" rows="3"
+                                        matInput></textarea>
                                 </div>
                             </div>
                         </div>
@@ -75,65 +93,76 @@
                     </div>
                 </div>
                 <div class="row py-2 border-top">
-                    <div class="col-md-3 d-flex">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
                         [viewImportBtn]="false"
                         (addClick)="openaddprocesstransfer()"
-                        (deleteClick)="deleteTableData()"
-                        >
+                        (deleteClick)="deleteTableData()">
                     </menu-buttons>
-                    </div>
                     <div class="col-md-12">
-                        <dx-data-grid id="gridContainer" keyExpr="ID" [columnAutoWidth]="true" [showBorders]="true"
+                        <dx-data-grid id="gridContainer" keyExpr="ID"
+                            [columnAutoWidth]="true" [showBorders]="true"
                             [allowColumnReordering]="true">
-                            <dxi-column caption="">
-                                <dxi-column alignment="center" caption="SR NO" dataField="Population_Total"
+                            <dxi-column caption>
+                                <dxi-column alignment="center" caption="SR NO"
+                                    dataField="Population_Total"
                                     format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Job Ref" dataField="Population_Urban"
+                                <dxi-column alignment="center" caption="Job Ref"
+                                    dataField="Population_Urban"
                                     format="percent">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Pcs" dataField="Population_Urban"
+                                <dxi-column alignment="center" caption="Pcs"
+                                    dataField="Population_Urban"
                                     format="percent">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="From">
-                                <dxi-column alignment="center" caption="Process" dataField="Population_Total"
+                                <dxi-column alignment="center" caption="Process"
+                                    dataField="Population_Total"
                                     format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Worker" dataField="Population_Urban"
+                                <dxi-column alignment="center" caption="Worker"
+                                    dataField="Population_Urban"
                                     format="percent">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="To">
-                                <dxi-column alignment="center" caption="Process" dataField="Population_Total"
+                                <dxi-column alignment="center" caption="Process"
+                                    dataField="Population_Total"
                                     format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Worker" dataField="Population_Urban"
+                                <dxi-column alignment="center" caption="Worker"
+                                    dataField="Population_Urban"
                                     format="percent">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Metal">
-                                <dxi-column alignment="center" caption="Psc" dataField="Population_Total"
+                                <dxi-column alignment="center" caption="Psc"
+                                    dataField="Population_Total"
                                     format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Weight" dataField="Population_Urban"
+                                <dxi-column alignment="center" caption="Weight"
+                                    dataField="Population_Urban"
                                     format="percent">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Stone">
-                                <dxi-column alignment="center" caption="Psc" dataField="Population_Total"
+                                <dxi-column alignment="center" caption="Psc"
+                                    dataField="Population_Total"
                                     format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Weight" dataField="Population_Urban"
+                                <dxi-column alignment="center" caption="Weight"
+                                    dataField="Population_Urban"
                                     format="percent">
                                 </dxi-column>
                             </dxi-column>
-                            <dxi-column alignment="center" caption="">
-                                <dxi-column alignment="center" caption="Loss" dataField="Population_Total"
+                            <dxi-column alignment="center" caption>
+                                <dxi-column alignment="center" caption="Loss"
+                                    dataField="Population_Total"
                                     format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Time" dataField="Population_Urban"
+                                <dxi-column alignment="center" caption="Time"
+                                    dataField="Population_Urban"
                                     format="percent">
                                 </dxi-column>
                             </dxi-column>
