@@ -11,7 +11,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteWorkerMaster()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteCurrencyReceipt()"></modal-header>
 </div>
 
 <!-- content section -->
@@ -31,7 +31,7 @@
               </div>
               <div class="col-md-5">
                 <mat-form-field style="width: 100%">
-                  <input type="number" matInput formControlName="vocNo" />
+                  <input type="number" matInput formControlName="vocNo" readonly />
                 </mat-form-field>
               </div>
             </div>
@@ -179,7 +179,7 @@
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
                 [viewImportBtn]="false"
                 (addClick)="openaddposdetails()"
-                (deleteClick)="openaddposdetails()"
+                (deleteClick)="deleteDetailRecord()"
                 >
             </menu-buttons>
                 <!-- <div class="p-2 bd-highlight">
@@ -211,9 +211,11 @@
             </div>
             <div class="row mb-2">
               <div class="col-md-12">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="BRANCH_CODE" 
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" 
                 [dataSource]="posCurrencyDetailsData"
-                [showBorders]="true">
+                [showBorders]="true"
+                (onSelectionChanged)="onSelectionChanged($event)"
+                >
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
