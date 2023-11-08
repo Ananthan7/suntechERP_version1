@@ -1,1 +1,93 @@
-<p>karat-master works!</p>
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Karat Master </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()"></modal-header>
+<div class="row">
+    <div class="col-md-12">
+        <form>
+            <div class="container-fluid pt-3">
+                <div class="row justify-content-between">
+                    <div class="col-md-8">
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Karat Code :</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-8">
+                            <mat-form-field style="width: 100%;">
+                              <input type="text" matInput />
+                            </mat-form-field>
+                          </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Standard Purity :</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Minimum :</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Maximum :</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Sp Gravity :</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">SP.Variance % :</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Division :</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">POS :</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">POP MinMaxAmt:</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2 offset-md-2">
+                            <mat-checkbox class="example-margin">Scrap</mat-checkbox>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-checkbox class="example-margin">Show In Web</mat-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </form>
+    </div>
+</div>
