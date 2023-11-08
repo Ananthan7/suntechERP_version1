@@ -103,6 +103,32 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
 
 
+  posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
+    vocType: [''],
+    vocNo: [''],
+    vocDate: [''],
+    partyCode: [''],
+    partyCodeDesc: [''],  // No
+    partyCurrency: [''],
+    partyCurrencyRate: [''],
+    enteredby: [''], // No
+    enteredbyuser: [''], // No
+    dueDaysdesc: [''],
+    dueDays: [''], // no
+    customerCode: [''],
+    customerName: [''],
+    mobile: [''],
+    email: [''],
+    partyAddress: [''],
+    schemaCode: [''],
+    schemaId: [''],
+    partyAmount: [0.00], // need to remove the value
+    partyAmountLc: [0.00],  // need to remove the value
+    narration: [''],
+    totalTax: [''],
+    total: ['']
+  })
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -133,6 +159,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       this.getArgsData();
   }
   getArgsData() {
+    console.log('this.content', this.content);
+
     this.snackBar.open('Loading...');
     let Sub: Subscription = this.dataService.getDynamicAPI(`AdvanceReceipt/GetAdvanceReceiptWithMID/${this.content.MID}`)
       .subscribe((result) => {
@@ -142,6 +170,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
         console.log('====================================');
         if (result.status == "Success") {
           const data = result.response;
+
           this.posCurrencyDetailsData = data.currencyReceiptDetails;
 
           // set form values
@@ -155,8 +184,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
           this.posCurrencyReceiptForm.controls.enteredby.setValue(data.SALESPERSON_CODE);
           // this.posCurrencyReceiptForm.controls.enteredbyuser.setValue();
-          this.posCurrencyReceiptForm.controls.dueDays.setValue(data.DUEDAYS);
-          // this.posCurrencyReceiptForm.controls.dueDaysdesc.setValue();
+          // this.posCurrencyReceiptForm.controls.dueDays.setValue(data.DUEDAYS);
+          this.posCurrencyReceiptForm.controls.dueDaysdesc.setValue(data.DUEDAYS);
 
           this.posCurrencyReceiptForm.controls.customerCode.setValue(data.POSCUSTOMERCODE);
           this.posCurrencyReceiptForm.controls.customerName.setValue(data.CUSTOMER_NAME);
@@ -168,7 +197,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
           }
 
           this.posCurrencyReceiptForm.controls.partyAddress.setValue(data.PARTY_ADDRESS);
-          this.posCurrencyReceiptForm.controls.partyAmount.setValue(data.CUSTOMER_EMAIL);
+
+          this.posCurrencyReceiptForm.controls.partyAmount.setValue(data.TOTAL_AMOUNTFC);
+          this.posCurrencyReceiptForm.controls.partyAmountLc.setValue(data.TOTAL_AMOUNTCC);
+
 
         }
 
@@ -286,58 +318,32 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   deleteDetailRecord() {
     // this.selec
-    if(this.selectedIndexes.length > 0){
-      this.posCurrencyDetailsData = this.posCurrencyDetailsData.filter((data, index)=> !this.selectedIndexes.includes(index));
-    }else{
-      this.snackBar.open('Please select record', 'OK', {duration: 2000}); // need proper err msg.
+    if (this.selectedIndexes.length > 0) {
+      this.posCurrencyDetailsData = this.posCurrencyDetailsData.filter((data, index) => !this.selectedIndexes.includes(index));
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
     }
   }
 
-  posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
-    vocType: [''],
-    vocNo: ['0'],
-    vocDate: [''],
-    partyCode: [''],
-    partyCodeDesc: [''],  // No
-    partyCurrency: [''],
-    partyCurrencyRate: [''],
-    enteredby: [''], // No
-    enteredbyuser: [''], // No
-    dueDaysdesc: [''],
-    dueDays: [''], // no
-    customerCode: [''],
-    customerName: [''],
-    mobile: [''],
-    email: [''],
-    partyAddress: [''],
-    schemaCode: [''],
-    schemaId: [''],
-    partyAmount: [0.00], // need to remove the value
-    partyAmountLc: [0.00],  // need to remove the value
-    narration: [''],
-    totalTax: [''],
-    total: ['']
-  })
 
   formSubmit() {
 
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
-      return
-    }
+    // if (this.content && this.content.FLAG == 'EDIT') {
+    // this.update()
+    // return
+    // }
+
     if (this.posCurrencyReceiptForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
 
-    let API = 'AdvanceReceipt/InsertAdvanceReceipt'
-    console.log(this.posCurrencyReceiptForm.value.vocDate);
 
     let postData = {
-      "MID": 0,
+      "MID": this.content?.MID || 0,
       "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.posCurrencyReceiptForm.value.vocType,
-      "VOCNO": this.posCurrencyReceiptForm.value.vocNo,
+      "VOCNO": this.posCurrencyReceiptForm.value.vocNo || 0,
       "VOCDATE": this.posCurrencyReceiptForm.value.vocDate,
       "VALUE_DATE": this.posCurrencyReceiptForm.value.vocDate,
       "YEARMONTH": this.yearMonth,
@@ -407,11 +413,27 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "DUEDAYS": this.posCurrencyReceiptForm.value.dueDaysdesc || "",
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "WOOCOMCARDID": "string",
+      "WOOCOMCARDID": "",
       "currencyReceiptDetails": this.posCurrencyDetailsData,
     }
 
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+
+    // let API = 'AdvanceReceipt/InsertAdvanceReceipt'
+
+    if(this.content?.FLAG == 'VIEW')
+    return;
+
+    let apiCtrl;
+    let apiResponse;
+    if (this.content && this.content.FLAG == 'EDIT') {
+      apiCtrl = `AdvanceReceipt/UpdateAdvanceReceipt/${postData.BRANCH_CODE}/${postData.VOCTYPE}/${postData.VOCNO}/${postData.YEARMONTH}`;
+      apiResponse = this.dataService.putDynamicAPI(apiCtrl, postData)
+    } else {
+      apiCtrl = 'AdvanceReceipt/InsertAdvanceReceipt';
+      apiResponse = this.dataService.postDynamicAPI(apiCtrl, postData)
+    }
+
+    let Sub: Subscription = apiResponse
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
@@ -435,9 +457,72 @@ export class PosCurrencyReceiptComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  deleteWorkerMaster() {
 
+  
+  
+
+  deleteCurrencyReceipt() {
+    if (this.content.MID == null) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = `AdvanceReceipt/DeleteAdvanceReceipt/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.close('reloadMainGrid') //reloads data in MainGrid
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.close('reloadMainGrid')
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
+      }
+    });
   }
+  
 
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
@@ -451,10 +536,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.selectedIndexes = indexes;
   }
 
-  update() {
-
-
-  }
 
   /**USE: close modal window */
   close(data?: any) {

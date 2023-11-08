@@ -24,6 +24,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   branchCode?: String;
   paymentModeList: any[] = [];
+  dummyDate = '1900-01-01T00:00:00';
 
   selectedTabIndex = 0;
 
@@ -53,77 +54,45 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
 
-  cashReceiptForm: FormGroup = this.formBuilder.group({
-    cashdebitAmount: [''],
-    cashdebitAmountDesc: [''],
-    cashDebitAmountDate: [''],
-    cashcurrencyCode: [''],
-    cashcurrencyRate: [''],
-    cashAmountFc: [''],
-    cashAmountLc: [''],
-    cashRemarks: [''],
-  });
+  currencyData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 9,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: '',
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  // `CMBRANCH_CODE = '${this.comService.branchCode}'`
 
-  creditReceiptForm: FormGroup = this.formBuilder.group({
-    creditCardNumber: [''],
-    creditCardName: [''],
-    creditCardDate: [''],
-    creditCardAmount: [''],
-    creditCardAmountDesc: [''],
-    creditCardcurrencyCode: [''],
-    creditCardcurrencyRate: [''],
-    creditCardamountFc: [''],
-    creditCardAmountLc: [''],
-    creditCardRemarks: [''],
-  });
-
-  otherReceiptForm: FormGroup = this.formBuilder.group({
-    otherdebitAmount: [''],
-    otherdebitAmountDesc: [''],
-    otherVocDate: [''],
-    ttAmount: [''],
-    ttAmountDesc: [''],
-    otherCurrencyCode: [''],
-    otherCurrencyRate: [''],
-    otherAmountFc: [''],
-    otherAmountLc: [''],
-    otherRemarks: [''],
-  });
-
-  ttReceiptForm: FormGroup = this.formBuilder.group({
-    ttNo: [''],
-    ttDate: [''],
-    ttDrawnBank: [''],
-    ttDepositBank: [''],
-    ttCurrencyCode: [''],
-    ttCurrencyRate: [''],
-    ttAmount: [''],
-    ttAmountDesc: [''],
-    ttAmountFc: [''],
-    ttAmountLc: [''],
-    ttRemarks: [''],
-  });
-
-  chequeReceiptForm: FormGroup = this.formBuilder.group({
-    chequeNumber: [''],
-    chequeDate: [''],
-    chequeDrawnBank: [''],
-    chequeDepositBank: [''],
-    chequeCurrencyCode: [''],
-    chequeCurrencyRate: [''],
-    chequeAmount: [''],
-    chequeAmountDesc: [''],
-    chequeAmountFc: [''],
-    chequeAmountLc: [''],
-    chequeRemarks: [''],
-  });
 
   posCurrencyReceiptDetailsForm: FormGroup = this.formBuilder.group({
     branch: [""],
     modeOfSelect: [""],
     modeCODE: [""], // Not Declaration 
     modeDesc: [""],
-    vatno: [""],
+    debitAmount : [""],
+    debitAmountDesc : [""],
+    debitAmountDate : [""],
+    currencyCode : [""],
+    currencyRate : [""],
+    amountFc : [""],
+    amountCc : [""],
+    creditCardNumber : [""],
+    creditCardName : [""],
+    creditCardDate : [""],
+    ttNumber : [""],
+    ttDate : [""],
+    ttDrawnBank : [""],
+    ttDepositBank : [""],
+    chequeNumber : [""],
+    chequeDate : [""],
+    chequeDrawnBank : [""],
+    chequeDepositBank : [""],
+    remarks : [""],
+    vatNo: [""],
     hsnCode: [""],
     invoiceNo: [""],
     invoiceDate: [""],
@@ -149,6 +118,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.paymentModeList = this.comService.getComboFilterByID('Payment Mode');
     console.log('paymentModeList :', this.paymentModeList);
+    
+    this.posCurrencyReceiptDetailsForm.controls.branch.setValue(this.branchCode);
+
     this.vatDetails();
   }
 
@@ -180,34 +152,13 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   debitAmountSelected(e: any) {
     console.log(e);
-    if (this.selectedTabIndex == 0) {
-       this.cashReceiptForm.controls.cashdebitAmount.setValue(e.ACCODE);
-       this.cashReceiptForm.controls.cashdebitAmountDesc.setValue(e['ACCOUNT HEAD']);
-    }
-    else if (this.selectedTabIndex == 1) {
-      this.creditReceiptForm.controls.creditCardAmount.setValue(e.ACCODE);
-      this.creditReceiptForm.controls.creditCardAmountDesc.setValue(e['ACCOUNT HEAD']);
-    }
-    else if (this.selectedTabIndex == 2) {
-      this.otherReceiptForm.controls.otherdebitAmount.setValue(e.ACCODE);
-      this.otherReceiptForm.controls.otherdebitAmountDesc.setValue(e['ACCOUNT HEAD']);
-  
-    }
-    else if (this.selectedTabIndex == 3) {
-      this.ttReceiptForm.controls.ttAmount.setValue(e.ACCODE);
-      this.ttReceiptForm.controls.ttAmountDesc.setValue(e['ACCOUNT HEAD']);
-  
-    }
-    else if (this.selectedTabIndex == 4) {
-       this.chequeReceiptForm.invalid;
-    } else {
-      //  this.posCurrencyReceiptDetailsForm.invalid;
-    }
-    
-
+       this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
+       this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e['ACCOUNT HEAD']);
     this.DebitamountChange({ target: { value: e.ACCODE } });
+  }
 
-
+  CurrencySelected(e: any) {
+    console.log(e);
   }
 
   receiptModeSelected(e: any) {
@@ -241,9 +192,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
             console.log('data', data);
 
             if (data && data[0].CURRENCY_CODE) {
-              this.cashReceiptForm.controls.cashcurrencyCode.setValue(data[0].CURRENCY_CODE)
+              this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(data[0].CURRENCY_CODE)
               console.log(data[0].CURRENCY_CODE);
-              this.cashReceiptForm.controls.cashcurrencyRate.setValue(data[0].CONV_RATE)
+              this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(data[0].CONV_RATE)
             }
           }
 
@@ -262,21 +213,12 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
   validateReceipt() {
-    if (this.selectedTabIndex == 0) {
-      return this.cashReceiptForm.invalid;
+    if ('this.selectedTabIndex == "TT"') {
+      return this.posCurrencyReceiptDetailsForm.invalid;
     }
-    else if (this.selectedTabIndex == 1) {
-      return this.creditReceiptForm.invalid;
-    }
-    else if (this.selectedTabIndex == 2) {
-      return this.otherReceiptForm.invalid;
-    }
-    else if (this.selectedTabIndex == 3) {
-      return this.ttReceiptForm.invalid;
-    }
-    else if (this.selectedTabIndex == 4) {
-      return this.chequeReceiptForm.invalid;
-    } else {
+    else if ('this.selectedTabIndex == "Cheque"') {
+      return this.posCurrencyReceiptDetailsForm.invalid;
+    }else {
       return this.posCurrencyReceiptDetailsForm.invalid;
     }
   }
@@ -291,103 +233,47 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       this.toastr.error("select all required fields");
       return;
     }
+    
 
-    let API = "AdvanceReceipt/InsertAdvanceReceipt";
     console.log(this.posCurrencyReceiptDetailsForm.value.vocDate);
     const res = this.validateReceipt();
-    if (!res) {
-      var MODE, CURRENCYCODE, CURRENCYRATE, AMOUNTFC, AMOUNTLC, CHEQUENO, CHEQUEDATE, CHEQUEBANK, REMARKS,
-        CARDNO, CARDHOLDER, CARDEXPIRY;
-        MODE = this.posCurrencyReceiptDetailsForm.value.modeCODE;
-      if (this.selectedTabIndex == 0) {
-        CURRENCYCODE = this.cashReceiptForm.value.cashcurrencyCode;
-        CURRENCYRATE = this.cashReceiptForm.value.cashcurrencyRate;
-        AMOUNTFC = this.cashReceiptForm.value.cashAmountFc;
-        AMOUNTLC = this.cashReceiptForm.value.cashAmountLc;
-        REMARKS = this.cashReceiptForm.value.cashRemarks;
-        CHEQUENO = 0;
-        CHEQUEDATE = "";
-        CHEQUEBANK = "";
-        CARDNO = 0;
-        CARDHOLDER = "";
-        CARDEXPIRY = "";
-      } else if (this.selectedTabIndex == 1) {
-        CURRENCYCODE = this.creditReceiptForm.value.creditCardcurrencyCode;
-        CURRENCYRATE = this.creditReceiptForm.value.creditCardcurrencyRate;
-        AMOUNTFC = this.creditReceiptForm.value.creditCardamountFc;
-        AMOUNTLC = this.creditReceiptForm.value.creditCardAmountLc;
-        REMARKS = this.creditReceiptForm.value.creditCardRemarks;
-        CHEQUENO = 0;
-        CHEQUEDATE = "";
-        CHEQUEBANK = "";
-        CARDNO = this.creditReceiptForm.value.creditCardNumber;
-        CARDHOLDER = this.creditReceiptForm.value.creditCardName;
-        CARDEXPIRY = this.creditReceiptForm.value.creditCardDate;
-      } else if (this.selectedTabIndex == 2) {
-        CURRENCYCODE = this.otherReceiptForm.value.otherCurrencyCode;
-        CURRENCYRATE = this.otherReceiptForm.value.otherCurrencyRate;
-        AMOUNTFC = this.otherReceiptForm.value.otherAmountFc;
-        AMOUNTLC = this.otherReceiptForm.value.otherAmountLc;
-        REMARKS = this.otherReceiptForm.value.otherRemarks;
-        CHEQUENO = 0;
-        CHEQUEDATE = "";
-        CHEQUEBANK = "";
-        CARDNO = 0;
-        CARDHOLDER = "";
-        CARDEXPIRY = "";
-      } else if (this.selectedTabIndex == 3) {
-        CURRENCYCODE = this.ttReceiptForm.value.ttCurrencyCode;
-        CURRENCYRATE = this.ttReceiptForm.value.ttCurrencyRate;
-        AMOUNTFC = this.ttReceiptForm.value.ttAmountFc;
-        AMOUNTLC = this.ttReceiptForm.value.ttAmountLc;
-        REMARKS = this.ttReceiptForm.value.ttRemarks;
-        CHEQUENO = 0;
-        CHEQUEDATE = "";
-        CHEQUEBANK = "";
-        CARDNO = 0;
-        CARDHOLDER = "";
-        CARDEXPIRY = "";
-      } else if (this.selectedTabIndex == 4) {
-        CURRENCYCODE = this.chequeReceiptForm.value.chequeCurrencyCode;
-        CURRENCYRATE = this.chequeReceiptForm.value.chequeCurrencyRate;
-        AMOUNTFC = this.chequeReceiptForm.value.chequeAmountFc;
-        AMOUNTLC = this.chequeReceiptForm.value.chequeAmountLc;
-        REMARKS = this.chequeReceiptForm.value.chequeRemarks;
-        CHEQUENO = this.chequeReceiptForm.value.chequeNumber;
-        CHEQUEDATE = this.chequeReceiptForm.value.chequeDate;
-        CHEQUEBANK = this.chequeReceiptForm.value.chequeDrawnBank; // Need To Discuss
-        CARDNO = 0;
-        CARDHOLDER = "";
-        CARDEXPIRY = "";
+    if (!res) {      
+      var CHEQUE_NO,CHEQUE_DATE,CHEQUE_BANK
+      if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == 'TT') {
+        CHEQUE_NO = this.posCurrencyReceiptDetailsForm.value.ttNumber;
+        CHEQUE_DATE= this.posCurrencyReceiptDetailsForm.value.ttDate;
+        CHEQUE_BANK = this.posCurrencyReceiptDetailsForm.value.ttDrawnBank;
+      }else if  (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Cheque') {
+        CHEQUE_NO = this.posCurrencyReceiptDetailsForm.value.chequeNumber;
+        CHEQUE_DATE= this.posCurrencyReceiptDetailsForm.value.chequeDate;
+        CHEQUE_BANK = this.posCurrencyReceiptDetailsForm.value.chequeDrawnBank;
       }
-
-
 
       let postData = {
         "UNIQUEID": 0,
         "SRNO": 0,
         "BRANCH_CODE": this.branchCode,
         "RECPAY_TYPE": "",
-        "MODE": MODE,
+        "MODE": "",
         "ACCODE": this.posCurrencyReceiptDetailsForm.value.debitAmount,
-        "CURRENCY_CODE": CURRENCYCODE,
-        "CURRENCY_RATE": CURRENCYRATE || 0,
-        "AMOUNTFC": AMOUNTFC,
-        "AMOUNTCC": AMOUNTLC,
+        "CURRENCY_CODE": this.posCurrencyReceiptDetailsForm.value.currencyCode,
+        "CURRENCY_RATE":  this.posCurrencyReceiptDetailsForm.value.currencyRate,
+        "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
+        "AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.amountCc,
         "HEADER_AMOUNT": 0,
-        "CHEQUE_NO": CHEQUENO,
-        "CHEQUE_DATE": CHEQUEDATE,
-        "CHEQUE_BANK": CHEQUEBANK,
-        "REMARKS": REMARKS,
+        "CHEQUE_NO": CHEQUE_NO || "",
+        "CHEQUE_DATE": CHEQUE_DATE || this.dummyDate,
+        "CHEQUE_BANK": CHEQUE_BANK || "",
+        "REMARKS": this.posCurrencyReceiptDetailsForm.value.remarks,
         "BANKCODE": "",
         "PDCYN": "s",
         "HDACCOUNT_HEAD": this.posCurrencyReceiptDetailsForm.value.debitAmountDesc,
         "MODEDESC": this.posCurrencyReceiptDetailsForm.value.modeDesc,
         "D_POSSCHEMEID": "",
         "D_POSSCHEMEUNITS": 0,
-        "CARD_NO": CARDNO,
-        "CARD_HOLDER": CARDHOLDER,
-        "CARD_EXPIRY": CARDEXPIRY,
+        "CARD_NO": this.posCurrencyReceiptDetailsForm.value.creditCardNumber,
+        "CARD_HOLDER": this.posCurrencyReceiptDetailsForm.value.creditCardName,
+        "CARD_EXPIRY": this.posCurrencyReceiptDetailsForm.value.creditCardDate || this.dummyDate,
         "PCRMID": 0,
         "BASE_CONV_RATE": 0,
         "SUBLEDJER_CODE": "",
@@ -395,8 +281,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "DT_VOCTYPE": "",
         "DT_VOCNO": 0,
         "DT_YEARMONTH": "",
-        "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalFc,
-        "TOTAL_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.totalLc,
+        "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalFc || 0,
+        "TOTAL_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.totalLc || 0,
         "CGST_PER": 0,
         "CGST_AMOUNTFC": 0,
         "CGST_AMOUNTCC": 0,
@@ -444,15 +330,83 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "AMLSOURCEOFFUNDS": "",
         "AMLTRANSACTION_TYPE": ""
       };
-
+    
       this.close(postData);
     }
+    
   }
-  deleteWorkerMaster() { }
 
+  deleteWorkerMaster() {
+    if (this.content.MID == null) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'AdvanceReceipt/DeleteAdvanceReceipt/' + this.content.WORKER_CODE
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    // this.workerMasterForm.reset()
+                    this.tableData = []
+                    this.close('reloadMainGrid') //reloads data in MainGrid
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    // this.workerMasterForm.reset()
+                    this.tableData = []
+                    this.close('reloadMainGrid')
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
+      }
+    });
+  }
+  
   /**USE: close modal window */
   close(data?: any) {
     // this.activeModal.close();
     this.activeModal.close(data);
   }
+
 }
+
