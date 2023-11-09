@@ -60,7 +60,7 @@ export class MeltingTypeComponent implements OnInit {
         "KARAT_CODE": this.meltingTypeForm.value.karat,
         "PURITY": this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
         "METAL_PER": this.meltingTypeForm.value.metal,
-        "ALLOY_PER": this.meltingTypeForm.value.alloy,
+        "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
         "CREATED_BY": this.userName,
         "COLOR": this.meltingTypeForm.value.color,
         "STOCK_CODE": this.meltingTypeForm.value.stockCode,
@@ -197,6 +197,8 @@ export class MeltingTypeComponent implements OnInit {
     this.meltingTypeForm.controls.stockCode.setValue("");
     this.meltingTypeForm.controls.stockCodeDes.setValue("");
     this.meltingTypeForm.controls.alloy.setValue("");
+    this.meltingTypeForm.controls.color.setValue("");
+    this.meltingTypeForm.controls.metal.setValue("");
 
     
   }
