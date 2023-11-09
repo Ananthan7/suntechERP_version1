@@ -34,6 +34,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: 'VAT_E_.', field: '' },
   ];
 
+  viewOnly?: boolean;
+
   posCurrencyDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
   amlNameValidation?: boolean;
@@ -160,6 +162,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
   getArgsData() {
     console.log('this.content', this.content);
+    if (this.content.FLAG == 'VIEW')
+      this.viewOnly = true;
 
     this.snackBar.open('Loading...');
     let Sub: Subscription = this.dataService.getDynamicAPI(`AdvanceReceipt/GetAdvanceReceiptWithMID/${this.content.MID}`)
@@ -420,8 +424,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     // let API = 'AdvanceReceipt/InsertAdvanceReceipt'
 
-    if(this.content?.FLAG == 'VIEW')
-    return;
+    if (this.content?.FLAG == 'VIEW')
+      return;
 
     let apiCtrl;
     let apiResponse;
@@ -458,8 +462,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  
-  
+
+
 
   deleteCurrencyReceipt() {
     if (this.content.MID == null) {
@@ -522,7 +526,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       }
     });
   }
-  
+
 
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
