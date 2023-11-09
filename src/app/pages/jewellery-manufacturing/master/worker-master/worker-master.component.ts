@@ -21,7 +21,7 @@ export class WorkerMasterComponent implements OnInit {
   viewOnlyFlag: boolean = false;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
-  columnhead: any[] = ['Sr No', 'Process', 'Description'];
+  columnhead: any[] = ['Sr No', 'Process Code', 'Description'];
   selectedProcessArr: any[] = [];
   private subscriptions: Subscription[] = [];
 
@@ -72,6 +72,7 @@ export class WorkerMasterComponent implements OnInit {
     DailyTarget: [false],
     MonthlyTarget: [false],
     YearlyTarget: [false],
+    active : [false],
   })
   constructor(
     private activeModal: NgbActiveModal,
