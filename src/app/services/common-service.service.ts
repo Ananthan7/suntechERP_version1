@@ -239,7 +239,7 @@ export class CommonServiceService {
     let rate = this.getCurrRate(currency);
     currency = currency;
     rate = typeof (rate) == 'number' ? rate : rate;
-    amount = typeof (amount) == 'number' ? amount : amount;
+    amount = typeof (amount) == 'number' ? amount : this.emptyToZero(amount);
 
     let convertedAmount = 0;
 
@@ -318,7 +318,7 @@ export class CommonServiceService {
   }
 
   nullToString(value: any) {
-    value = value == undefined || value == null ? '' : value.toString();
+    value = value == (undefined || null || NaN) ? '' : value;
   }
 
 
