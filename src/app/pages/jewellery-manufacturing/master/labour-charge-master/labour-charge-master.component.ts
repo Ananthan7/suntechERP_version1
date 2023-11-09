@@ -446,7 +446,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   metaldivisionCodeSelected(e:any){
-    this.metallabourMasterForm.controls.division.setValue(e.DIVISION);
+    this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION);
   }
 
  shapeCodeData: MasterSearchModel = {
