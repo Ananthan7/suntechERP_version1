@@ -113,13 +113,14 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-2 col-form-label">Recov. Stock
-                                    Code :</label>
+                                <label for="input" class="col-sm-2 col-form-label">Recov. Stock Code :</label>
                                 <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%">
+                                    <mat-form-field style="width: 90%">
                                         <input type="text" matInput maxlength="6" formControlName="recStockCode" />
                                     </mat-form-field>
-
+                                    <master-search [MasterSearchData]="StockProcessData"
+                                    (newRowClick)="StockProcesSelected($event)">
+                                </master-search>
                                 </div>
                                 <div class="col-sm-3">
                                     <button type="button" *ngIf="false" mat-flat-button color="primary">Pending

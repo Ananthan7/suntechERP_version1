@@ -57,6 +57,18 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  StockProcessData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'RECOV_STOCK_CODE',
+    SEARCH_HEADING: 'Recov Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "RECOV_STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
     processCode: [''],
@@ -198,19 +210,19 @@ export class ProcessMasterComponent implements OnInit {
       "LOSS_ON_GROSS": true,
       "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": 0,
-      "APPLY_SETTING": this.processMasterForm.value.ApplySetting ,
-      "TIMEON_PROCESS": this.processMasterForm.value.TimeCalculateonProcess ? 1 : 0,
-      "STONE_INCLUDED":  this.processMasterForm.value.Metal ? 1 : 0,
-      "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess ? 1 : 0,
-      "ALLOW_METAL": this.processMasterForm.value.Metal ? 1 : 0,
-      "ALLOW_STONE": this.processMasterForm.value.Stone ? 1 : 0 ,
-      "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable ? 1 : 0,
-      "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired ? 1 : 0,
-      "NON_QUANTITY": this.processMasterForm.value.NonQuantity ? 1 : 0,
-      "DF_REFINERY": this.processMasterForm.value.RefineryAutoProcess ? 1 : 0,
-      "AUTO_LOSS": this.processMasterForm.value.ApplyAutoLossToRefinery ? 1 : 0,
+      "APPLY_SETTING": this.processMasterForm.value.ApplySetting || true,
+      "TIMEON_PROCESS": this.processMasterForm.value.TimeCalculateonProcess || true,
+      "STONE_INCLUDED":  this.processMasterForm.value.Metal || true,
+      "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess  || true,
+      "ALLOW_METAL": this.processMasterForm.value.Metal || true,
+      "ALLOW_STONE": this.processMasterForm.value.Stone || true ,
+      "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable || true,
+      "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired || true,
+      "NON_QUANTITY": this.processMasterForm.value.NonQuantity  || true,
+      "DF_REFINERY": this.processMasterForm.value.RefineryAutoProcess || true,
+      "AUTO_LOSS": this.processMasterForm.value.ApplyAutoLossToRefinery || true,
       "ISACCUPDT": true,
-      "TREE_NO": this.processMasterForm.value.HaveTreeNo ? 1 : 0,
+      "TREE_NO": this.processMasterForm.value.HaveTreeNo || true,
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -253,6 +265,10 @@ export class ProcessMasterComponent implements OnInit {
   ACCODESelected(e: any) {
     console.log(e);
     this.processMasterForm.controls.WIP_ACCOUNT.setValue(e.ACCODE);
+  }
+
+  StockProcesSelected(e: any){
+    console.log(e);
   }
 
   updateProcessMaster() {

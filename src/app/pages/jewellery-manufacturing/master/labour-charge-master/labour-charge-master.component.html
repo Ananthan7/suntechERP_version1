@@ -287,7 +287,11 @@
                   </div>
                   <label for="input" class="col-sm-2 col-form-label">Labour A/C :</label>
                   <div class="col-sm-3">
-                    <input class="form-control" type="text" formControlName="labourAc" />
+                    <mat-form-field style="width: 90%">
+                      <input class="form-control" type="text" formControlName="labourAc" />
+                    </mat-form-field>
+                    <master-search [MasterSearchData]="labouracCodeData"
+                      (newRowClick)="labouracSelected($event)"></master-search>
                   </div>
                 </div>
                 <div class="row mb-2">
@@ -404,17 +408,34 @@
                   <div class="col-sm-3">
                     <input class="form-control" type="text" formControlName="wtTo" />
                   </div>
-                  <div class="col-sm-3 form-check mb-2">
-                    <input class="form-check-input" type="radio" formControlName="onGrossWt">
-                    <label class="form-check-label" for="flexRadioDefault1">
+                  <div class="col-sm-3 mb-2">
+                    <!-- <div class="form-check">
+                      <input class="form-check-input" type="radio" formControlName="onGrossWt">
+                    <label class="form-check-label" for="onGrossWt">
                       On Gross Wt
                     </label>
-                  </div>
-                  <div class="col-sm-3 form-check mb-2">
-                    <input class="form-check-input" type="radio" formControlName="forDesignOnly">
-                    <label class="form-check-label" for="flexRadioDefault2">
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" formControlName="forDesignOnly">
+                    <label class="form-check-label" for="forDesignOnly">
                       For Design Only
                     </label>
+                    </div> -->
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio"  formControlName="onGrossWt" id="onGrossWt">
+                      <label class="form-check-label" for="onGrossWt">
+                        On Gross Wt
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" formControlName="forDesignOnly" id="forDesignOnly">
+                      <label class="form-check-label" for="forDesignOnly">
+                        For Design Only
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 form-check mb-2">
+                   
                   </div>
                 </div>
               </form>
