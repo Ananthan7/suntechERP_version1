@@ -149,3 +149,14 @@ button[aria-label="Close"]:focus {
         z-index: 1070 !important;
     }
 }
+
+
+.mat-flat-button.mat-primary{
+  background-color: #428cc9 !important;
+  color: #fff;
+}
+.mat-flat-button.mat-primary:disabled {
+  background-color: #a0a0a0 !important; 
+  color: #666;  
+  cursor: not-allowed;  
+}

@@ -40,14 +40,14 @@
     <tr>
       <td>
         <label style="font-weight: bold">Mobile Mumber</label>
-        <label style="float: right">          {{ this.customerDataForm.value.fcn_customer_mobile }}
+        <label style="float: right">
+          {{ this.customerDataForm.value.fcn_customer_mobile }}
         </label>
       </td>
       <td>
         <label style="font-weight: bold">Salesman</label>
         <label style="float: right">
           {{ this.vocDataForm.value.sales_person }}
-
         </label>
       </td>
     </tr>
@@ -319,9 +319,11 @@
           <div>
             <button
               type="button"
+              color="primary"
               mat-flat-button
-              style="background-color: #428cc9; color: #fff"
               (click)="addNew()"
+              [disabled]="viewOnly"
+
             >
               New
             </button>
@@ -608,11 +610,7 @@
             <div class="col-md-2 justify-content-center">
               <button
                 type="button"
-                style="
-                  font-size: 12px;
-                  padding: 0px 9px;
-                  background-color: #428cc9;
-                "
+                style="font-size: 12px; padding: 0px 9px"
                 (click)="open(more_customer_detail_modal)"
                 mat-flat-button
                 color="primary"
@@ -691,12 +689,12 @@
                           ></dxi-column>
 
                           <dxi-column
-                          dataField="metal_rate"
-                          caption="Metal Value"
-                          [width]="100"
-                          [allowEditing]="false"
-                        ></dxi-column>
-                     
+                            dataField="metal_rate"
+                            caption="Metal Value"
+                            [width]="100"
+                            [allowEditing]="false"
+                          ></dxi-column>
+
                           <dxi-column
                             dataField="total_amount"
                             caption="Mkg amount"
@@ -781,11 +779,11 @@
                         <!-- <button type="submit" [disabled]="this.viewOnly" (click)="open(mymodal)" -->
                         <!-- <button type="submit" (click)="open(mymodal)" [disabled]="this.viewOnly " -->
                         <button
+                          class="btn btn-secondary"
                           type="submit"
+                          [disabled]="this.viewOnly"
                           (click)="open(mymodal)"
                           style="
-                            background-color: #40739c;
-                            color: white;
                             border: none;
                             margin: 10px;
                             width: 20px !important;
@@ -931,8 +929,6 @@
                             (click)="open(adjust_sale_return_modal)"
                             class="btn btn-secondary"
                             style="
-                              background-color: #40739c;
-                              color: white;
                               border: none;
                               margin: 10px;
                               width: 20px !important;
@@ -1068,7 +1064,6 @@
                             (click)="open(oldgoldmodal)"
                             class="btn btn-secondary"
                             style="
-                              background-color: #40739c;
                               color: white;
                               border: none;
                               margin: 10px;
@@ -1095,7 +1090,7 @@
             <div class="card m-t-10">
               <div class="card-header">
                 <b
-                  (click)="open(sales_payment_modal)"
+                  (click)="!viewOnly ? open(sales_payment_modal) : ''"
                   style="
                     color: #0861a9;
                     cursor: pointer;
@@ -1106,9 +1101,9 @@
                 <span style="float: right">
                   <button
                     type="submit"
-                    style="background-color: #2a6494"
                     (click)="open(sales_payment_modal)"
                     class="btn btnsml btn-secondary w-30"
+                    [disabled]="viewOnly"
                   >
                     Add
                   </button></span
