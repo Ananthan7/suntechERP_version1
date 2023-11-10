@@ -69,6 +69,7 @@ import { AmountDecimalDirective } from './directives/format-amount-decimal.direc
 import { MetalDecimalDirective } from './directives/format-metal-decimal.directive';
 import { StoneDecimalDirective } from './directives/format-stone-decimal.directive';
 import { FormatSixDecimalDirective } from './directives/format-six-decimal.directive';
+import { ChartModule } from 'primeng/chart';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -136,7 +137,7 @@ import { FormatSixDecimalDirective } from './directives/format-six-decimal.direc
     MatTooltipModule, MatProgressBarModule, MatDialogModule,
     MatCheckboxModule, MatProgressSpinnerModule,
     OverlayPanelModule,DragDropModule,MatTableModule,
-    MatRadioModule,MatCardModule,
+    MatRadioModule,MatCardModule,ChartModule
   ],
   exports: [
     //component exports
@@ -198,7 +199,7 @@ import { FormatSixDecimalDirective } from './directives/format-six-decimal.direc
     MatDatepickerModule, MatNativeDateModule, MatRippleModule, 
     MatTooltipModule, MatProgressBarModule, MatDialogModule, 
     MatCheckboxModule, MatProgressSpinnerModule,MatRadioModule,MatCardModule,
-    OverlayPanelModule,DragDropModule,MatTableModule
+    OverlayPanelModule,DragDropModule,MatTableModule,ChartModule
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })

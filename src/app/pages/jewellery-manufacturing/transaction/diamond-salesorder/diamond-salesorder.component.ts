@@ -30,7 +30,9 @@ export class DiamondSalesorderComponent implements OnInit {
 
   headerDetailGridToSave: any[] = [];
   bomDetailGridToSave: any[] = [];
+  labourDetailsListToSave: any[] = []
   postDataToSave: any[] = [];
+  compartmentPartDetailsToSave: any[] = [];
 
   Narration: string = '';
   labourDetailGrid: any[] = [];
@@ -150,6 +152,7 @@ export class DiamondSalesorderComponent implements OnInit {
     ShipToDesc: [''],
     SUBLEDGER_CODE: [''],
     PROSP_ORIGIN: [''],
+    AMCPercentage: [''],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -286,20 +289,22 @@ export class DiamondSalesorderComponent implements OnInit {
       //set datas for saving to arrays
       this.setHeaderGridData()
       this.setBOMGridData()
+      this.setLabourTypeDetails()
+      this.setCompartmentPartDetails()
       this.setPostDataToSave()
     }
   }
-  // division grid selection from header
+  /* USE: division grid selection from header to save*/
   selectDivisionGridData(event: any, { data }: any) {
     let division = {
       "UNIQUEID": 0,
-      "BRANCH_CODE": this.commonService.branchCode.toString(),
-      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType.toString(),
+      "BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+      "VOCTYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.voucherType),
       "VOCNO": 0,
-      "YEARMONTH": this.commonService.yearSelected.toString(),
-      "SRNO": Number(data.Id),
-      "DIVISION_CODE": data.DIVISION_CODE.toString(),
-      "DESCRIPTION": data.DESCRIPTION.toString()
+      "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+      "SRNO": this.commonService.emptyToZero(data.Id),
+      "DIVISION_CODE": this.commonService.nullToString(data.DIVISION_CODE),
+      "DESCRIPTION": this.commonService.nullToString(data.DESCRIPTION)
     }
     if (event.currentTarget.checked) {
       this.headerDivisionListToSave.push(division)
@@ -309,31 +314,31 @@ export class DiamondSalesorderComponent implements OnInit {
       }
     }
   }
-  // division Labour selection from header
+  /* USE: Labour grid selection from header to save*/
   selectLabourGridData(event: any, { data }: any) {
     let headerDetails = {
       "UNIQUEID": 0,
-      "BRANCH_CODE": this.commonService.branchCode.toString(),
-      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType.toString(),
+      "BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+      "VOCTYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.voucherType),
       "VOCNO": 0,
-      "YEARMONTH": this.commonService.yearSelected.toString(),
-      "SRNO": Number(data.Id),
-      "LABOUR_CODE": data.LABOUR_CODE.toString(),
-      "METALSTONE": data.METALSTONE.toString(),
-      "DIVCODE": data.DIVCODE.toString(),
-      "DIVISION": data.DIVISION.toString(),
-      "KARAT_CODE": data.KARAT_CODE.toString(),
-      "UNITCODE": data.UNITCODE.toString(),
-      "WASTAGE_PER": Number(data.WASTAGE_PER),
-      "SELLING_PER": Number(data.SELLING_PER),
-      "SELLING_RATE": Number(data.SELLING_RATE),
-      "CURRENCYCODE": data.CURRENCYCODE.toString(),
-      "CARATWT_FROM": Number(data.CARATWT_FROM),
-      "CARATWT_TO": Number(data.CARATWT_TO),
-      "TYPE_CODE": data.TYPE_CODE.toString(),
-      "CATEGORY_CODE": data.CATEGORY_CODE.toString(),
-      "LAB_ACCODE": data.LAB_ACCODE.toString(),
-      "SHAPE": data.SHAPE.toString()
+      "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+      "SRNO": this.commonService.nullToString(data.Id),
+      "LABOUR_CODE": this.commonService.nullToString(data.LABOUR_CODE),
+      "METALSTONE": this.commonService.nullToString(data.METALSTONE),
+      "DIVCODE": this.commonService.nullToString(data.DIVCODE),
+      "DIVISION": this.commonService.nullToString(data.DIVISION),
+      "KARAT_CODE": this.commonService.nullToString(data.KARAT_CODE),
+      "UNITCODE": this.commonService.nullToString(data.UNITCODE),
+      "WASTAGE_PER": this.commonService.emptyToZero(data.WASTAGE_PER),
+      "SELLING_PER": this.commonService.emptyToZero(data.SELLING_PER),
+      "SELLING_RATE": this.commonService.emptyToZero(data.SELLING_RATE),
+      "CURRENCYCODE": this.commonService.nullToString(data.CURRENCYCODE),
+      "CARATWT_FROM": this.commonService.emptyToZero(data.CARATWT_FROM),
+      "CARATWT_TO": this.commonService.emptyToZero(data.CARATWT_TO),
+      "TYPE_CODE": this.commonService.nullToString(data.TYPE_CODE),
+      "CATEGORY_CODE": this.commonService.nullToString(data.CATEGORY_CODE),
+      "LAB_ACCODE": this.commonService.nullToString(data.LAB_ACCODE),
+      "SHAPE": this.commonService.nullToString(data.SHAPE)
     }
     if (event.currentTarget.checked) {
       this.headerLaboursListToSave.push(headerDetails)
@@ -343,42 +348,71 @@ export class DiamondSalesorderComponent implements OnInit {
       }
     }
   }
-  labourDetailsListToSave: any[] = []
-  private getLabType4Detail() {
+  private setCompartmentPartDetails() {
+    let componentData = this.detailData[0].DATA['COMPONENT_DETAILS']
+    let partsData = this.detailData[0].DATA['PART_DETAILS']
+    let summary = this.detailData[0].DATA['SUMMARYDETAILS']
+
+    componentData.forEach((item: any) => {
+      this.compartmentPartDetailsToSave.push({
+        "UNIQUEID": 0,
+        "DT_BRANCH_CODE": this.commonService.branchCode,
+        "DT_VOCTYPE": this.commonService.getqueryParamVocType,
+        "DT_VOCNO": 0,
+        "DT_YEARMONTH": this.commonService.yearSelected,
+        "SRNO": 0,
+        "SLNO": this.commonService.emptyToZero(item.SLNO),
+        "DESIGN_CODE": this.commonService.nullToString(summary[0].designCode),
+        "COMP_TYPE": this.commonService.nullToString(item.COMP_TYPE),
+        "COMP_CODE": this.commonService.nullToString(item.COMP_CODE),
+        "COMP_DESCRIPTION": this.commonService.nullToString(item.COMP_DESCRIPTION),
+        "COMP_SHAPE": this.commonService.nullToString(item.COMP_SHAPE),
+        "TYPE_CODE": this.commonService.nullToString(item.TYPE_CODE),
+        "CATEGORY_CODE": this.commonService.nullToString(item.CATEGORY_CODE),
+        "COMPSIZE_CODE": this.commonService.nullToString(item.COMPSIZE_CODE),
+        "COMPSET_CODE": this.commonService.nullToString(item.COMPSET_CODE),
+        "REMARKS": this.commonService.nullToString(item.TYPE_CODE),
+        "PCS": this.commonService.emptyToZero(item.PCS),
+        "PART_COLOR": this.commonService.nullToString(partsData[0].PART_COLOR)
+      })
+    })
+  }
+  /**USE: set Labour Type Details comming from detail screen for saving */
+  private setLabourTypeDetails() {
     this.labourDetailsListToSave.push({
       "UNIQUEID": 0,
-      "BRANCH_CODE": "string",
-      "DESIGN_CODE": "string",
-      "CODE": "string",
-      "DESCRIPTION": "string",
+      "BRANCH_CODE": "",
+      "DESIGN_CODE": "",
+      "CODE": "",
+      "DESCRIPTION": "",
       "COST": 0,
       "STD_TIME": 0,
       "MAX_TIME": 0,
-      "UNQ_DESIGN_ID": "string",
-      "LOCTYPE_CODE": "string",
-      "VOCTYPE": "string",
+      "UNQ_DESIGN_ID": "",
+      "LOCTYPE_CODE": "",
+      "VOCTYPE": "",
       "VOCNO": 0,
-      "YEARMONTH": "string",
+      "YEARMONTH": "",
       "SRNO": 0,
-      "STOCK_CODE": "string",
-      "METALSTONE": "string",
-      "DIVCODE": "string",
+      "STOCK_CODE": "",
+      "METALSTONE": "",
+      "DIVCODE": "",
       "PCS": 0,
       "GROSS_WT": 0,
-      "LABOUR_CODE": "string",
+      "LABOUR_CODE": "",
       "LAB_RATE": 0,
-      "LAB_ACCODE": "string",
+      "LAB_ACCODE": "",
       "LAB_AMTFC": 0,
-      "UNITCODE": "string",
-      "LABTYPE": "string",
-      "CURRENCYCODE": "string",
+      "UNITCODE": "",
+      "LABTYPE": "",
+      "CURRENCYCODE": "",
       "SLNO": 0,
-      "DIVISION": "string",
+      "DIVISION": "",
       "WASTAGE_PER": 0,
       "WASTAGE_QTY": 0,
       "WASTAGE_AMT": 0,
       "WASTAGE_RATE": 0,
-      "KARAT_CODE": "string"
+      "KARAT_CODE": ""
     })
   }
   //**USE: push data from BOM grid in details to bomDetailGridToSave array */
@@ -393,58 +427,58 @@ export class DiamondSalesorderComponent implements OnInit {
         "BRANCH_CODE": this.commonService.branchCode,
         "DESIGN_CODE": this.commonService.nullToString(summary[0].designCode),
         "METALSTONE": this.commonService.nullToString(item.METALSTONE),
-        "DIVCODE": this.commonService.nullToString(item.METALSTONE),
-        "PRICEID": this.commonService.nullToString(item.METALSTONE),
-        "KARAT_CODE": this.commonService.nullToString(item.METALSTONE),
-        "CARAT": 0,
-        "GROSS_WT": 0,
-        "PCS": 0,
-        "RATE_TYPE": this.commonService.nullToString(item.METALSTONE),
-        "CURRENCY_CODE": this.commonService.nullToString(item.METALSTONE),
-        "AMOUNTFC": 0,
-        "AMOUNTLC": 0,
-        "MAKINGRATE": 0,
-        "MAKINGAMOUNT": 0,
-        "SIEVE": this.commonService.nullToString(item.METALSTONE),
-        "COLOR": this.commonService.nullToString(item.METALSTONE),
-        "CLARITY": this.commonService.nullToString(item.METALSTONE),
-        "SHAPE": this.commonService.nullToString(item.METALSTONE),
-        "SIZE_FROM": this.commonService.nullToString(item.METALSTONE),
-        "SIZE_TO": this.commonService.nullToString(item.METALSTONE),
-        "UNQ_DESIGN_ID": this.commonService.nullToString(item.METALSTONE),
+        "DIVCODE": this.commonService.nullToString(item.DIVCODE),
+        "PRICEID": this.commonService.nullToString(item.PRICEID),
+        "KARAT_CODE": this.commonService.nullToString(item.KARAT_CODE),
+        "CARAT": this.commonService.emptyToZero(item.GROSS_WT),
+        "GROSS_WT": this.commonService.emptyToZero(item.GROSS_WT),
+        "PCS": this.commonService.emptyToZero(item.PCS),
+        "RATE_TYPE": this.commonService.nullToString(item.RATE_TYPE),
+        "CURRENCY_CODE": this.commonService.nullToString(summary[0].CURRENCY_CODE),
+        "AMOUNTFC": this.commonService.emptyToZero(item.AMOUNTFC),
+        "AMOUNTLC": this.commonService.emptyToZero(item.AMOUNTLC),
+        "MAKINGRATE": this.commonService.emptyToZero(item.MAKINGRATE),
+        "MAKINGAMOUNT": this.commonService.emptyToZero(item.MAKINGAMOUNT),
+        "SIEVE": this.commonService.nullToString(item.SIEVE),
+        "COLOR": this.commonService.nullToString(item.COLOR),
+        "CLARITY": this.commonService.nullToString(item.CLARITY),
+        "SHAPE": this.commonService.nullToString(item.SHAPE),
+        "SIZE_FROM": this.commonService.nullToString(item.SIZE_FROM),
+        "SIZE_TO": this.commonService.nullToString(item.SIZE_TO),
+        "UNQ_DESIGN_ID": "",
         "ISSUE_COST": 0,
         "LOCTYPE_CODE": this.commonService.nullToString(item.METALSTONE),
-        "RATELC": 0,
-        "RATEFC": 0,
+        "RATELC": this.commonService.emptyToZero(item.RATELC),
+        "RATEFC": this.commonService.emptyToZero(item.RATEFC),
         "LINKID": this.commonService.nullToString(item.METALSTONE),
         "LABCHGCODE": this.commonService.nullToString(item.METALSTONE),
-        "LABRATEFC": 0,
-        "LABRATELC": 0,
-        "LABAMOUNTFC": 0,
-        "LABAMOUNTLC": 0,
-        "METALPERCENTAGE": 0,
-        "CURRENCY_RATE": 0,
-        "STOCK_CODE": this.commonService.nullToString(item.METALSTONE),
-        "VOCTYPE": this.commonService.nullToString(item.METALSTONE),
-        "VOCNO": 0,
-        "YEARMONTH": this.commonService.nullToString(item.METALSTONE),
+        "LABRATEFC": this.commonService.emptyToZero(item.LABRATEFC),
+        "LABRATELC": this.commonService.emptyToZero(item.LABRATELC),
+        "LABAMOUNTFC": this.commonService.emptyToZero(item.LABAMOUNTFC),
+        "LABAMOUNTLC": this.commonService.emptyToZero(item.LABAMOUNTLC),
+        "METALPERCENTAGE": this.commonService.emptyToZero(item.METALPERCENTAGE),
+        "CURRENCY_RATE": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.ItemCurrencyRate),
+        "STOCK_CODE": this.commonService.nullToString(item.STOCK_CODE),
+        "VOCTYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.voucherType),
+        "VOCNO": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.voucherNo),
+        "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
         "COMPSLNO": 0,
         "TREE_BRANCH_CODE": "",
         "TREE_VOCTYPE": "",
         "TREE_VOCNO": 0,
         "TREE_YEARMONTH": "",
-        "PROCESS_TYPE": this.commonService.nullToString(item.METALSTONE),
-        "SIEVE_SET": this.commonService.nullToString(item.METALSTONE),
-        "DSN_STOCK_CODE": this.commonService.nullToString(item.METALSTONE),
-        "PROD_VARIANCE": 0,
-        "COMP_CODE": this.commonService.nullToString(item.METALSTONE),
+        "PROCESS_TYPE": this.commonService.nullToString(item.PROCESS_TYPE),
+        "SIEVE_SET": this.commonService.nullToString(item.SIEVE_SET),
+        "DSN_STOCK_CODE": '',
+        "PROD_VARIANCE": this.commonService.nullToString(item.PROD_VARIANCE),
+        "COMP_CODE": this.commonService.nullToString(item.COMP_CODE),
         "DEL_DATE": "2023-10-26T09:05:45.384Z",
-        "WASTAGE_PER": 0,
-        "WASTAGE_WT": 0,
-        "WASTAGE_AMTFC": 0,
-        "WASTAGE_AMTLC": 0,
-        "STONE_TYPE": this.commonService.nullToString(item.METALSTONE),
-        "PURITY": 0
+        "WASTAGE_PER": this.commonService.emptyToZero(item.WASTAGE_PER),
+        "WASTAGE_WT": this.commonService.emptyToZero(item.WASTAGE_WT),
+        "WASTAGE_AMTFC": this.commonService.emptyToZero(item.WASTAGE_AMTFC),
+        "WASTAGE_AMTLC": this.commonService.emptyToZero(item.WASTAGE_AMTLC),
+        "STONE_TYPE": this.commonService.nullToString(item.STONE_TYPE),
+        "PURITY": this.commonService.emptyToZero(item.PURITY),
       })
     })
   }
@@ -459,20 +493,20 @@ export class DiamondSalesorderComponent implements OnInit {
     summaryData.forEach((item: any) => {
       //UNQ_DESIGN_ID
       if (item.designCode != "") {
-        UNQ_DESIGN_ID = (this.commonService.branchCode + 
-            this.PartyDetailsOrderForm.value.voucherType + "-"
-          + this.PartyDetailsOrderForm.value.voucherNo + "-" + 
+        UNQ_DESIGN_ID = (this.commonService.branchCode +
+          this.PartyDetailsOrderForm.value.voucherType + "-"
+          + this.PartyDetailsOrderForm.value.voucherNo + "-" +
           this.commonService.nullToString(item.designCode) + "-" +
           this.commonService.nullToString(item.SRNO) + "-" + this.commonService.yearSelected);
       } else {
-        UNQ_DESIGN_ID = (this.commonService.branchCode +  this.PartyDetailsOrderForm.value.voucherType + "-" +
-        this.PartyDetailsOrderForm.value.voucherNo + "-" + this.commonService.nullToString(item.STOCK_CODE) + "-" +
-        this.commonService.nullToString(item.SRNO) + "-" + this.commonService.yearSelected);
+        UNQ_DESIGN_ID = (this.commonService.branchCode + this.PartyDetailsOrderForm.value.voucherType + "-" +
+          this.PartyDetailsOrderForm.value.voucherNo + "-" + this.commonService.nullToString(item.STOCK_CODE) + "-" +
+          this.commonService.nullToString(item.SRNO) + "-" + this.commonService.yearSelected);
       }
-      if(item.CURRENCY_CODE == this.PartyDetailsOrderForm.value.ItemCurrency){
+      if (item.CURRENCY_CODE == this.PartyDetailsOrderForm.value.ItemCurrency) {
         COSTFC = item.STOCK_FCCOST
-      }else{
-        COSTFC = this.commonService.CCToFC((Number(this.PartyDetailsOrderForm.value.ItemCurrencyRate)),Number(item.STOCK_LCCOST))
+      } else {
+        COSTFC = this.commonService.CCToFC((Number(this.PartyDetailsOrderForm.value.ItemCurrencyRate)), Number(item.STOCK_LCCOST))
       }
       detailArrayValues = {
         "UNIQUEID": 0,
@@ -495,7 +529,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "DISCAMTFC": this.commonService.emptyToZero(Number(item.Loading)),
         "DISCAMTCC": this.commonService.FCToCC(this.commonService.compCurrency, this.commonService.emptyToZero(Number(item.Loading))),
         "NETVALUEFC": this.commonService.emptyToZero(Number(item.AMOUNT)),
-        "NETVALUECC": this.commonService.FCToCC(this.commonService.compCurrency,item.AMOUNT),
+        "NETVALUECC": this.commonService.FCToCC(this.commonService.compCurrency, item.AMOUNT),
         "LOCTYPE_CODE": "",
         "JOBCARD_REF": "",
         "JOBCARD_DATE": "2023-09-14T14:56:43.961Z",
@@ -517,12 +551,12 @@ export class DiamondSalesorderComponent implements OnInit {
         "DWIDTH": this.commonService.emptyToZero(item.WIDTH),
         "DTHICKNESS": this.commonService.emptyToZero(item.THICKNESS),
         "CHARGE1FC": this.commonService.emptyToZero(item.SETTING),
-        "CHARGE1LC": this.commonService.FCToCC(this.commonService.compCurrency,item.SETTING),
+        "CHARGE1LC": this.commonService.FCToCC(this.commonService.compCurrency, item.SETTING),
         "CHARGE2FC": this.commonService.emptyToZero(item.POLISHING),
-        "CHARGE2LC": this.commonService.FCToCC(this.commonService.compCurrency,item.POLISHING),
+        "CHARGE2LC": this.commonService.FCToCC(this.commonService.compCurrency, item.POLISHING),
         "CHARGE3FC": this.commonService.emptyToZero(item.RHODIUM),
-        "CHARGE3LC": this.commonService.FCToCC(this.commonService.compCurrency,item.RHODIUM),
-        "CHARGE4FC": this.commonService.FCToCC(this.commonService.compCurrency,item.RHODIUM),
+        "CHARGE3LC": this.commonService.FCToCC(this.commonService.compCurrency, item.RHODIUM),
+        "CHARGE4FC": this.commonService.FCToCC(this.commonService.compCurrency, item.RHODIUM),
         "CHARGE4LC": 0,
         "CHARGE5FC": 0,
         "CHARGE5LC": 0,
@@ -545,12 +579,12 @@ export class DiamondSalesorderComponent implements OnInit {
         "SO_STATUS": 0,
         "MARKUP_PER": this.commonService.emptyToZero(item.MarkupPercentage),
         "MARKUP_AMTFC": this.commonService.emptyToZero(item.Markup),
-        "MARKUP_AMTLC": this.commonService.FCToCC(this.commonService.compCurrency,item.Markup),
+        "MARKUP_AMTLC": this.commonService.FCToCC(this.commonService.compCurrency, item.Markup),
         "MARGIN_AMTFC": this.commonService.emptyToZero(item.Margin),
-        "MARGIN_AMTLC": this.commonService.FCToCC(this.commonService.compCurrency,item.Margin),
+        "MARGIN_AMTLC": this.commonService.FCToCC(this.commonService.compCurrency, item.Margin),
         "GOLD_LOSS_PER": this.commonService.emptyToZero(item.WastagePercentage),
         "GOLD_LOSS_AMTFC": this.commonService.emptyToZero(item.Wastage),
-        "GOLD_LOSS_AMTLC": this.commonService.FCToCC(this.commonService.compCurrency,item.Wastage),
+        "GOLD_LOSS_AMTLC": this.commonService.FCToCC(this.commonService.compCurrency, item.Wastage),
         "COSTFC": this.commonService.emptyToZero(COSTFC),
         "DT_VOCDATE": "2023-09-14T14:56:43.961Z",
         "KARIGAR_CODE": "tst",
@@ -610,8 +644,8 @@ export class DiamondSalesorderComponent implements OnInit {
       "ITEM_CURR_RATE": Number(this.PartyDetailsOrderForm.value.ItemCurrencyRate) || 0,
       "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate).toString(),
       "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode.toString(),
-      "METAL_RATE_TYPE": "tst",
-      "METAL_RATE": 0,
+      "METAL_RATE_TYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.rateType),
+      "METAL_RATE": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.wholeSaleRate),
       "METAL_GRAM_RATE": 0,
       "TOTAL_PCS": this.commonService.emptyToZero(summaryData[0].PCS),
       "TOTAL_METAL_WT": this.commonService.emptyToZero(summaryData[0].METAL_WT),
@@ -639,16 +673,16 @@ export class DiamondSalesorderComponent implements OnInit {
       "PRINT_COUNT": 0,
       "SALESORDER_REF": "",
       "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "",
-      "JOB_STATUS": "tst",
-      "APPR_REFF": "tst",
-      "MAIN_REFF": "tst",
+      "JOB_STATUS": "",
+      "APPR_REFF": "",
+      "MAIN_REFF": "",
       "PARTY_NAME": this.PartyDetailsOrderForm.value.BillToAccountHead,
       "SUBLEDGER_CODE": this.PartyDetailsOrderForm.value.SUBLEDGER_CODE,
       "USERDEF1": this.PartyDetailsOrderForm.value.Proposal,
       "USERDEF2": this.PartyDetailsOrderForm.value.BussinessType,
       "USERDEF3": this.PartyDetailsOrderForm.value.Language,
       "USERDEF4": this.PartyDetailsOrderForm.value.ReferredBy,
-      "DELIVERYADDRESS": "tst",
+      "DELIVERYADDRESS": "",
       "TERMSANDCONDITIONS": this.PartyDetailsOrderForm.value.NotesTerms,
       "PAYMENTTERMS": this.PartyDetailsOrderForm.value.PaymentTerms,
       "DETAILBRANCHCODE": this.commonService.branchCode,
@@ -665,12 +699,11 @@ export class DiamondSalesorderComponent implements OnInit {
       "AutoPosting": true,
       "Details": this.headerDetailGridToSave, //main header grid data
       "stnmtlDetail": this.bomDetailGridToSave, // bom details
-      "HeaderLabours": this.headerLaboursListToSave,
-      "LabourDetails": this.labourDetailsListToSave, //lab type 4
-      "HeaderDivisons": this.headerDivisionListToSave
+      "HeaderLabours": this.headerLaboursListToSave, //header labour
+      "LabourDetails": this.labourDetailsListToSave, // Labour Details
+      "HeaderDivisons": this.headerDivisionListToSave, // Header Divisons
+      "CompartDet": []
     }
-    console.log(postData, 'postData');
-
     this.postDataToSave.push(postData)
   }
   /**USE:  final save API call*/
