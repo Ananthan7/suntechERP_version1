@@ -18,6 +18,8 @@ import { PictureTypeMasterComponent } from './picture-type-master/picture-type-m
 import { ApprovalMasterComponent } from './approval-master/approval-master.component';
 import { DesignMasterComponent } from './design-master/design-master.component';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
+import { OtpMasterComponent } from './otp-master/otp-master.component';
+import { CustomerPriceMasterComponent } from './customer-price-master/customer-price-master.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -78,6 +80,8 @@ export class MasterComponent implements OnInit {
     'PictureTypeMasterComponent': PictureTypeMasterComponent,
     'ApprovalMasterComponent': ApprovalMasterComponent,
     'DesignMasterComponent': DesignMasterComponent,
+    'OtpMasterComponent': OtpMasterComponent,
+    'CustomerPriceMasterComponent': CustomerPriceMasterComponent,
     // Add components and update in operationals > menu updation grid form component name
   }
   openModalView(data?: any) {
