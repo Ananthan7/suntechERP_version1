@@ -162,7 +162,7 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "COLOR SET<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -222,7 +222,7 @@ export class AlloyMasterComponent implements OnInit {
 
   ColorCodeSelected(e:any){
     console.log(e);
-    this.alloyMastereForm.controls.color.setValue(e.CODE);
+    this.alloyMastereForm.controls.color.setValue(e['COLOR SET']);
   }
 
   vendorCodeSelected(e:any){
