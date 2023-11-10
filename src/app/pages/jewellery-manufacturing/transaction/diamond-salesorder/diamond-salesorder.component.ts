@@ -289,9 +289,9 @@ export class DiamondSalesorderComponent implements OnInit {
       //set datas for saving to arrays
       this.setHeaderGridData()
       this.setBOMGridData()
-      this.setLabourTypeDetails()
       this.setCompartmentPartDetails()
       this.setPostDataToSave()
+      // this.setLabourTypeDetails()
     }
   }
   /* USE: division grid selection from header to save*/
@@ -485,7 +485,6 @@ export class DiamondSalesorderComponent implements OnInit {
   /**USE:set Details data from header grid to headerDetailGridToSave array */
   private setHeaderGridData() {
     let summaryData = this.detailData[0].DATA['SUMMARYDETAILS']
-    console.log(summaryData, 'summaryData');
 
     let detailArrayValues = {}
     let UNQ_DESIGN_ID = ''
@@ -572,7 +571,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "DUTY_PER": this.commonService.emptyToZero(item.DutyPercentage),
         "PICTURE_NAME": this.commonService.nullToString(item.PICTURE_NAME),
         "DSO_PICTURE_NAME": this.commonService.nullToString(item.PICTURE_NAME),
-        "DSO_STOCK_CODE": this.commonService.emptyToZero(item.STOCK_CODE),
+        "DSO_STOCK_CODE": this.commonService.nullToString(item.STOCK_CODE),
         "SOBALANCE_PCS": 0,
         "SORDER_CLOSE": 0,
         "SOREF": "tst",
@@ -585,7 +584,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "GOLD_LOSS_PER": this.commonService.emptyToZero(item.WastagePercentage),
         "GOLD_LOSS_AMTFC": this.commonService.emptyToZero(item.Wastage),
         "GOLD_LOSS_AMTLC": this.commonService.FCToCC(this.commonService.compCurrency, item.Wastage),
-        "COSTFC": this.commonService.emptyToZero(COSTFC),
+        "COSTFC": this.commonService.emptyToZero(COSTFC) || 0,
         "DT_VOCDATE": "2023-09-14T14:56:43.961Z",
         "KARIGAR_CODE": "tst",
         "DT_BRANCH_CODE": this.commonService.branchCode,
@@ -627,16 +626,15 @@ export class DiamondSalesorderComponent implements OnInit {
   }
   private setPostDataToSave(): void {
     let summaryData = this.detailData[0].DATA['SUMMARYDETAILS']
-    console.log(summaryData);
     let postData = {
       "MID": 0,
-      "BRANCH_CODE": this.commonService.branchCode.toString(),
-      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType.toString(),
+      "BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType,
       "VOCNO": Number(this.PartyDetailsOrderForm.value.voucherNo) || 0,
       "VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate).toString(),
       "EXP_PROD_START_DATE": this.commonService.formatDateTime(this.currentDate) || "2023-09-14T14:56:43.961Z",
       "DELIVERY_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate).toString(),
-      "YEARMONTH": this.commonService.yearSelected.toString(),
+      "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
       "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode.toString(),
       "PARTY_CURRENCY": this.PartyDetailsOrderForm.value.partyCurrencyType.toString(),
       "PARTY_CURR_RATE": Number(this.PartyDetailsOrderForm.value.partyCurrencyRate) || 0,
@@ -719,7 +717,7 @@ export class DiamondSalesorderComponent implements OnInit {
     }
     this.commonService.showSnackBarMsg('Loading....')
     let API = 'DaimondSalesOrder/InsertDaimondSalesOrder'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, this.postDataToSave)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, this.postDataToSave[0])
       .subscribe((result) => {
         this.snackBar.dismiss()
         if (result.status.toUpperCase().trim() == ("SUCCESS" || "OK")) {
@@ -739,9 +737,7 @@ export class DiamondSalesorderComponent implements OnInit {
         }
       }, err => {
         this.snackBar.dismiss()
-        this.toastr.error(this.commonService.getMsgByID('MSG1531'), err.error ? err.error['title'] : '', {
-          timeOut: 3000,
-        })
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
