@@ -424,8 +424,8 @@ export class LabourChargeMasterComponent implements OnInit {
     purity : [''],
     wtFrom : [''],
     wtTo : [''],
-    onGrossWt : false,
-    forDesignOnly : false
+    onGrossWt : [false],
+    forDesignOnly : [false]
   });
 
   divisionCodeData: MasterSearchModel = {
