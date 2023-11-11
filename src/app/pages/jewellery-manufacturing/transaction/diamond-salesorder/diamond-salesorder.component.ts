@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -158,7 +157,6 @@ export class DiamondSalesorderComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
     private snackBar: MatSnackBar,
@@ -196,15 +194,11 @@ export class DiamondSalesorderComponent implements OnInit {
           let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           this.PartyDetailsOrderForm.controls.METAL_GRAM_RATE.setValue(data[0].METAL_RATE_PERGM)
         } else {
-          this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
-            timeOut: 3000,
-          })
+          this.commonService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
         this.snackBar.dismiss()
-        this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
-          timeOut: 3000,
-        })
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     // this.subscriptions.push(Sub)
   }
@@ -225,15 +219,11 @@ export class DiamondSalesorderComponent implements OnInit {
           this.labourDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           this.divisionDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[1])
         } else {
-          this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
-            timeOut: 3000,
-          })
+          this.commonService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
         this.snackBar.dismiss()
-        this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
-          timeOut: 3000,
-        })
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -326,6 +316,7 @@ export class DiamondSalesorderComponent implements OnInit {
       this.setHeaderGridData()
       this.setBOMGridData()
       this.setCompartmentPartDetails()
+      this.setLabourTypeDetails()
       this.setPostDataToSave()
       // this.setLabourTypeDetails()
     }
@@ -415,48 +406,54 @@ export class DiamondSalesorderComponent implements OnInit {
   }
   /**USE: set Labour Type Details comming from detail screen for saving */
   private setLabourTypeDetails() {
-    let summary = this.detailData[0].DATA['SUMMARYDETAILS']
-    this.labourDetailsListToSave.push({
-      "UNIQUEID": 0,
-      "BRANCH_CODE": this.commonService.branchCode,
-      "DESIGN_CODE": this.commonService.nullToString(summary[0].designCode),
-      "CODE": "",
-      "DESCRIPTION": "",
-      "COST": 0,
-      "STD_TIME": 0,
-      "MAX_TIME": 0,
-      "UNQ_DESIGN_ID": "",
-      "LOCTYPE_CODE": "",
-      "VOCTYPE": "",
-      "VOCNO": 0,
-      "YEARMONTH": "",
-      "SRNO": 0,
-      "STOCK_CODE": "",
-      "METALSTONE": "",
-      "DIVCODE": "",
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "LABOUR_CODE": "",
-      "LAB_RATE": 0,
-      "LAB_ACCODE": "",
-      "LAB_AMTFC": 0,
-      "UNITCODE": "",
-      "LABTYPE": "",
-      "CURRENCYCODE": "",
-      "SLNO": 0,
-      "DIVISION": "",
-      "WASTAGE_PER": 0,
-      "WASTAGE_QTY": 0,
-      "WASTAGE_AMT": 0,
-      "WASTAGE_RATE": 0,
-      "KARAT_CODE": ""
-    })
+    let summary = this.detailData[0]?.DATA['SUMMARYDETAILS']
+    let labourDetails = this.detailData[0]?.DATA['LABOURDETAILS']
+    if(!labourDetails) return
+    labourDetails.forEach((item:any) => {
+      this.labourDetailsListToSave.push({
+        "UNIQUEID": 0,
+        "BRANCH_CODE": this.commonService.branchCode,
+        "DESIGN_CODE": this.commonService.nullToString(summary[0].designCode),
+        "CODE": this.commonService.nullToString(item.CODE),
+        "DESCRIPTION": this.commonService.nullToString(item.DESCRIPTION),
+        "COST": this.commonService.emptyToZero(item.COST),
+        "STD_TIME": this.commonService.emptyToZero(item.STD_TIME),
+        "MAX_TIME": this.commonService.emptyToZero(item.MAX_TIME),
+        "UNQ_DESIGN_ID": this.commonService.nullToString(item.UNQ_DESIGN_ID),
+        "LOCTYPE_CODE": this.commonService.nullToString(item.LOCTYPE_CODE),
+        "VOCTYPE": this.commonService.getqueryParamVocType(),
+        "VOCNO": this.commonService.emptyToZero(item.VOCNO),
+        "YEARMONTH": this.commonService.yearSelected,
+        "SRNO": this.commonService.emptyToZero(item.SRNO),
+        "STOCK_CODE": this.commonService.nullToString(item.STOCK_CODE),
+        "METALSTONE": this.commonService.nullToString(item.METALSTONE),
+        "DIVCODE": this.commonService.nullToString(item.DIVCODE),
+        "PCS": this.commonService.emptyToZero(item.PCS),
+        "GROSS_WT": this.commonService.emptyToZero(item.GROSS_WT),
+        "LABOUR_CODE": "",
+        "LAB_RATE": this.commonService.emptyToZero(item.LAB_RATE),
+        "LAB_ACCODE": "",
+        "LAB_AMTFC": 0,
+        "UNITCODE": "",
+        "LABTYPE": this.commonService.nullToString(item.LABTYPE),
+        "CURRENCYCODE": "",
+        "SLNO": 0,
+        "DIVISION": "",
+        "WASTAGE_PER": this.commonService.emptyToZero(item.WASTAGE_PER),
+        "WASTAGE_QTY": 0,
+        "WASTAGE_AMT": this.commonService.emptyToZero(item.WASTAGE_AMT),
+        "WASTAGE_RATE": 0,
+        "KARAT_CODE": ""
+      })
+    });
+  
   }
   //**USE: push data from BOM grid in details to bomDetailGridToSave array */
   private setBOMGridData() {
-    let bomData = this.detailData[0].DATA['BOMDETAILS']
-    let summary = this.detailData[0].DATA['SUMMARYDETAILS']
-    console.log(bomData, summary);
+    let bomData = this.detailData[0]?.DATA['BOMDETAILS']
+    let summary = this.detailData[0]?.DATA['SUMMARYDETAILS']
+    if(!bomData) return
+
     bomData.forEach((item: any) => {
       this.bomDetailGridToSave.push({
         "UNIQUEID": 0,
@@ -756,7 +753,7 @@ export class DiamondSalesorderComponent implements OnInit {
       return
     }
     if (this.PartyDetailsOrderForm.invalid ) {
-      this.toastr.error('select all required fields')
+      this.commonService.toastErrorByMsgId('MSG1531')
       return
     }
     this.commonService.showSnackBarMsg('Loading....')
@@ -775,9 +772,7 @@ export class DiamondSalesorderComponent implements OnInit {
             this.activeModal.close('reloadMainGrid');
           });
         } else {
-          this.toastr.error(result.message, result.message ? result.message : '', {
-            timeOut: 3000,
-          })
+          this.commonService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
         this.snackBar.dismiss()
@@ -838,20 +833,14 @@ export class DiamondSalesorderComponent implements OnInit {
 
             this.getMetalGramRate() //to get metal gram rate fom db
           } else {
-            this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
-              timeOut: 3000,
-            })
+            this.commonService.toastErrorByMsgId('MSG1531')
           }
         } else {
-          this.toastr.error(this.commonService.getMsgByID('MSG1747'), result.Message ? result.Message : '', {
-            timeOut: 3000,
-          })
+          this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
         this.snackBar.dismiss()
-        this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
-          timeOut: 3000,
-        })
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
