@@ -94,7 +94,7 @@ export class CastingTreeUpComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "COLOR SET<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -198,7 +198,7 @@ userDataSelected(value: any) {
 
 colorCodeSelected(e:any){
   console.log(e);
-  this.castingTreeUpFrom.controls.color.setValue(e.CODE);
+  this.castingTreeUpFrom.controls.color.setValue(e['COLOR SET']);
 }
 
 karatCodeSelected(e:any){
