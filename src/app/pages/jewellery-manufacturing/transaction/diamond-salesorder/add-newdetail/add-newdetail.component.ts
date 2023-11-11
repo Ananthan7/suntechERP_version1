@@ -271,6 +271,8 @@ export class AddNewdetailComponent implements OnInit {
 
   /**USE: to edit detail if already added */
   setInitialValues(): void {
+    console.log(this.content,'DATA COMMING TO DETAIL');
+    
     if (this.content && this.content[0].HEADERDETAILS) {
       this.headerDetails = this.content[0].HEADERDETAILS
     }
@@ -282,7 +284,6 @@ export class AddNewdetailComponent implements OnInit {
     }
     if (this.content && this.content[0].SUMMARYDETAILS) {
       let summaryDetail = this.content[0].SUMMARYDETAILS
-      console.log(summaryDetail,'summaryDetail');
       //details first section
       this.diamondSalesDetailForm.controls.designCode.setValue(summaryDetail[0].designCode)
       this.diamondSalesDetailForm.controls.designDescription.setValue(summaryDetail[0].designDescription)
@@ -433,11 +434,11 @@ export class AddNewdetailComponent implements OnInit {
         };
         result.push(res[value.DIVCODE])
       }
-      res[value.DIVCODE].PCS += value.PCS;
-      res[value.DIVCODE].WEIGHT += value.GROSS_WT;
-      res[value.DIVCODE].WEIGHT_GMS += value.GROSS_WT;
-      res[value.DIVCODE].LABAMOUNTFC += value.LABAMOUNTFC;
-      res[value.DIVCODE].WASTAGE_AMTFC += value.WASTAGE_AMTFC;
+      res[value.DIVCODE].PCS += Number(value.PCS);
+      res[value.DIVCODE].WEIGHT += Number(value.GROSS_WT);
+      res[value.DIVCODE].WEIGHT_GMS += Number(value.GROSS_WT);
+      res[value.DIVCODE].LABAMOUNTFC += Number(value.LABAMOUNTFC);
+      res[value.DIVCODE].WASTAGE_AMTFC += Number(value.WASTAGE_AMTFC);
 
       if (res[value.DIVCODE].DIVCODE == 'G') {
         if (!this.headerDetails.FixedMetal) {
@@ -849,6 +850,8 @@ export class AddNewdetailComponent implements OnInit {
     if(this.gridParts.length>0){
       item.PART_DETAILS = this.gridParts
     }
+    console.log(this.gridComponents,'this.gridComponents');
+    
     if(this.gridComponents.length>0){
       item.COMPONENT_DETAILS = this.gridComponents
     }

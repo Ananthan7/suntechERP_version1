@@ -20,7 +20,6 @@ export class DiamondSalesorderComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   detailData: any[] = [];
-  tableDataHead: any[] = [];
   tableData: any[] = [];
   grossChecked: boolean = false;
   NetWtChecked: boolean = true;
@@ -32,7 +31,7 @@ export class DiamondSalesorderComponent implements OnInit {
   bomDetailGridToSave: any[] = [];
   labourDetailsListToSave: any[] = []
   postDataToSave: any[] = [];
-  compartmentPartDetailsToSave: any[] = [];
+  componentPartDetailsToSave: any[] = [];
 
   Narration: string = '';
   labourDetailGrid: any[] = [];
@@ -132,6 +131,7 @@ export class DiamondSalesorderComponent implements OnInit {
     FixedMetal: [false,],
     rateType: ['', [Validators.required]],
     wholeSaleRate: ['', [Validators.required]],
+    METAL_GRAM_RATE: [''],
     partyCurrencyType: ['', [Validators.required]],
     partyCurrencyRate: ['', [Validators.required]],
     ItemCurrency: ['', [Validators.required]],
@@ -172,7 +172,42 @@ export class DiamondSalesorderComponent implements OnInit {
     this.getRateType()
     this.getLabourChargeGridDetails()
   }
-
+  /**USE: to get metal gram rate from db */
+  getMetalGramRate(){
+    let postData = {
+      "SPID": "039",
+      "parameter": {
+        'dblOutputMetalRateCC': '0',  
+        'dblOutputMetalRatePG': '0',  
+        'strBranchCode': this.commonService.branchCode,  
+        'strRateType': this.PartyDetailsOrderForm.value.rateType,  
+        'dblMetalRate':   this.commonService.nullToString(this.PartyDetailsOrderForm.value.wholeSaleRate),
+        'strPartycurrencyCode': this.PartyDetailsOrderForm.value.partyCurrencyType,
+        'dblPartycurrencyRate': this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
+        'strItemcurrencyCode': this.PartyDetailsOrderForm.value.ItemCurrency,
+        'dblItemcurrencyRate':this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
+      }
+    }
+    this.snackBar.open('Loading...')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.snackBar.dismiss()
+        if (result.status == "Success") {
+          let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+          this.PartyDetailsOrderForm.controls.METAL_GRAM_RATE.setValue(data[0].METAL_RATE_PERGM)
+        } else {
+          this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.snackBar.dismiss()
+        this.toastr.error(this.commonService.getMsgByID('MSG1531'), '', {
+          timeOut: 3000,
+        })
+      })
+    // this.subscriptions.push(Sub)
+  }
   //party Code Change
   getLabourChargeGridDetails() {
     let postData = {
@@ -265,7 +300,7 @@ export class DiamondSalesorderComponent implements OnInit {
     // modalRef.componentInstance.content = data;
   }
   private setValuesToHeaderGrid(result: any): void {
-    console.log(result, 'data comming to header screen');
+    console.log(result, 'DATA COMMING TO HEADER');
     this.totalDetailNo += 1
     //summary details
     let summaryData: any[] = result[0].SUMMARYDETAILS
@@ -277,7 +312,6 @@ export class DiamondSalesorderComponent implements OnInit {
       item.SRNO = this.totalDetailNo
       this.tableData.push(item)
     })
-    this.tableDataHead = Object.keys(this.tableData[0]);
 
     if (result.length > 0) {
       result.forEach((item: any, index: any) => {
@@ -286,6 +320,8 @@ export class DiamondSalesorderComponent implements OnInit {
           DATA: item
         })
       })
+      console.log(this.detailData[0]);
+      
       //set datas for saving to arrays
       this.setHeaderGridData()
       this.setBOMGridData()
@@ -354,7 +390,7 @@ export class DiamondSalesorderComponent implements OnInit {
     let summary = this.detailData[0].DATA['SUMMARYDETAILS']
 
     componentData.forEach((item: any) => {
-      this.compartmentPartDetailsToSave.push({
+      this.componentPartDetailsToSave.push({
         "UNIQUEID": 0,
         "DT_BRANCH_CODE": this.commonService.branchCode,
         "DT_VOCTYPE": this.commonService.getqueryParamVocType,
@@ -379,10 +415,11 @@ export class DiamondSalesorderComponent implements OnInit {
   }
   /**USE: set Labour Type Details comming from detail screen for saving */
   private setLabourTypeDetails() {
+    let summary = this.detailData[0].DATA['SUMMARYDETAILS']
     this.labourDetailsListToSave.push({
       "UNIQUEID": 0,
-      "BRANCH_CODE": "",
-      "DESIGN_CODE": "",
+      "BRANCH_CODE": this.commonService.branchCode,
+      "DESIGN_CODE": this.commonService.nullToString(summary[0].designCode),
       "CODE": "",
       "DESCRIPTION": "",
       "COST": 0,
@@ -437,8 +474,8 @@ export class DiamondSalesorderComponent implements OnInit {
         "CURRENCY_CODE": this.commonService.nullToString(summary[0].CURRENCY_CODE),
         "AMOUNTFC": this.commonService.emptyToZero(item.AMOUNTFC),
         "AMOUNTLC": this.commonService.emptyToZero(item.AMOUNTLC),
-        "MAKINGRATE": this.commonService.emptyToZero(item.MAKINGRATE),
-        "MAKINGAMOUNT": this.commonService.emptyToZero(item.MAKINGAMOUNT),
+        "MAKINGRATE": this.commonService.emptyToZero(item.MAKINGRATE) || 0,
+        "MAKINGAMOUNT": this.commonService.emptyToZero(item.MAKINGAMOUNT)  || 0,
         "SIEVE": this.commonService.nullToString(item.SIEVE),
         "COLOR": this.commonService.nullToString(item.COLOR),
         "CLARITY": this.commonService.nullToString(item.CLARITY),
@@ -470,7 +507,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "PROCESS_TYPE": this.commonService.nullToString(item.PROCESS_TYPE),
         "SIEVE_SET": this.commonService.nullToString(item.SIEVE_SET),
         "DSN_STOCK_CODE": '',
-        "PROD_VARIANCE": this.commonService.nullToString(item.PROD_VARIANCE),
+        "PROD_VARIANCE": this.commonService.emptyToZero(item.PROD_VARIANCE),
         "COMP_CODE": this.commonService.nullToString(item.COMP_CODE),
         "DEL_DATE": "2023-10-26T09:05:45.384Z",
         "WASTAGE_PER": this.commonService.emptyToZero(item.WASTAGE_PER),
@@ -531,9 +568,9 @@ export class DiamondSalesorderComponent implements OnInit {
         "NETVALUECC": this.commonService.FCToCC(this.commonService.compCurrency, item.AMOUNT),
         "LOCTYPE_CODE": "",
         "JOBCARD_REF": "",
-        "JOBCARD_DATE": "2023-09-14T14:56:43.961Z",
+        "JOBCARD_DATE": "",
         "JOBCARD_STATUS": "",
-        "SEQ_CODE": this.commonService.emptyToZero(Number(item.SEQ_CODE)),
+        "SEQ_CODE": this.commonService.emptyToZero(Number(item.SEQ_CODE)) || "",
         "STD_TIME": 0,
         "MAX_TIME": 0,
         "ACT_TIME": 0,
@@ -555,14 +592,14 @@ export class DiamondSalesorderComponent implements OnInit {
         "CHARGE2LC": this.commonService.FCToCC(this.commonService.compCurrency, item.POLISHING),
         "CHARGE3FC": this.commonService.emptyToZero(item.RHODIUM),
         "CHARGE3LC": this.commonService.FCToCC(this.commonService.compCurrency, item.RHODIUM),
-        "CHARGE4FC": this.commonService.FCToCC(this.commonService.compCurrency, item.RHODIUM),
-        "CHARGE4LC": 0,
-        "CHARGE5FC": 0,
-        "CHARGE5LC": 0,
+        "CHARGE4FC": this.commonService.emptyToZero(item.LABOUR),
+        "CHARGE4LC": this.commonService.FCToCC(this.commonService.compCurrency, item.LABOUR),
+        "CHARGE5FC": this.commonService.emptyToZero(item.Misc),
+        "CHARGE5LC": this.commonService.FCToCC(this.commonService.compCurrency, item.Misc),
         "SONO": 0,
         "QUOT": 0,
         "SUFFIX": "",
-        "D_REMARKS": "",
+        "D_REMARKS": this.commonService.nullToString(summaryData[0].Remarks),
         "ENGRAVE_TEXT": this.commonService.nullToString(item.ENGRAVING_TEXT),
         "ENGRAVE_FONT": this.commonService.nullToString(item.ENGRAVE_FONT),
         "DUTY_AMT": this.commonService.emptyToZero(item.Duty),
@@ -574,7 +611,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "DSO_STOCK_CODE": this.commonService.nullToString(item.STOCK_CODE),
         "SOBALANCE_PCS": 0,
         "SORDER_CLOSE": 0,
-        "SOREF": "tst",
+        "SOREF": "",
         "SO_STATUS": 0,
         "MARKUP_PER": this.commonService.emptyToZero(item.MarkupPercentage),
         "MARKUP_AMTFC": this.commonService.emptyToZero(item.Markup),
@@ -585,37 +622,37 @@ export class DiamondSalesorderComponent implements OnInit {
         "GOLD_LOSS_AMTFC": this.commonService.emptyToZero(item.Wastage),
         "GOLD_LOSS_AMTLC": this.commonService.FCToCC(this.commonService.compCurrency, item.Wastage),
         "COSTFC": this.commonService.emptyToZero(COSTFC) || 0,
-        "DT_VOCDATE": "2023-09-14T14:56:43.961Z",
-        "KARIGAR_CODE": "tst",
+        "DT_VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate),
+        "KARIGAR_CODE": "",
         "DT_BRANCH_CODE": this.commonService.branchCode,
         "DT_VOCTYPE": this.PartyDetailsOrderForm.value.voucherType,
         "DT_VOCNO": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.voucherNo),
         "DT_YEARMONTH": this.commonService.yearSelected,
-        "TOTAL_LABOUR": this.commonService.emptyToZero(item.TOTAL_LABOUR),
-        "CATEGORY_CODE": this.commonService.nullToString(item.BRAND_CODE),
+        "TOTAL_LABOUR": this.commonService.emptyToZero(item.Total_Labour),
+        "CATEGORY_CODE": this.commonService.nullToString(item.CATEGORY_CODE),
         "COUNTRY_CODE": this.commonService.nullToString(item.COUNTRY_CODE),
-        "CUT_CODE": "tst",
-        "FINISH_CODE": "tst",
-        "DYE_CODE": "tst",
+        "CUT_CODE": "",
+        "FINISH_CODE": "",
+        "DYE_CODE": "",
         "TYPE_CODE": this.commonService.nullToString(item.TYPE_CODE),
         "BRAND_CODE": this.commonService.nullToString(item.BRAND_CODE),
-        "RHODIUM_COLOR": "tst",
+        "RHODIUM_COLOR": "",
         "SIZE": this.commonService.nullToString(item.SIZE),
         "LENGTH": this.commonService.nullToString(item.LENGTH),
         "SCREW_FIELD": this.commonService.nullToString(item.SCREW_FIELD),
         "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType.toString(),
         "SUBCATEGORY_CODE": this.commonService.nullToString(item.SUBCATEGORY_CODE),
         "DSN_STOCK_CODE": this.commonService.nullToString(item.STOCK_CODE),
-        "JOBNO": "tst",
-        "ENAMEL_COLOR": "tst",
+        "JOBNO": "",
+        "ENAMEL_COLOR": "",
         "PROD_VARIANCE": 0,
-        "SERVICE_ACCCODE": "tst",
+        "SERVICE_ACCCODE": "",
         "DIVISION_CODE": this.commonService.nullToString(item.DIVCODE),
-        "JOB_STATUS": "tst",
-        "APPR_REFF": "tst",
-        "MAIN_REFF": "tst",
+        "JOB_STATUS": "",
+        "APPR_REFF": "",
+        "MAIN_REFF": "",
         "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode,
-        "METAL_SALES_REF": "tst",
+        "METAL_SALES_REF": "",
         "DELIVERY_TYPE": this.commonService.nullToString(item.DeliveryType),
         "DELIVERY_DAYS": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.DeliveryOnDateType),
         "GOLD_LOSS_WT": 0,
@@ -628,23 +665,23 @@ export class DiamondSalesorderComponent implements OnInit {
     let summaryData = this.detailData[0].DATA['SUMMARYDETAILS']
     let postData = {
       "MID": 0,
-      "BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+      "BRANCH_CODE": this.commonService.branchCode || '',
       "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType,
-      "VOCNO": Number(this.PartyDetailsOrderForm.value.voucherNo) || 0,
+      "VOCNO": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.voucherNo),
       "VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate).toString(),
       "EXP_PROD_START_DATE": this.commonService.formatDateTime(this.currentDate) || "2023-09-14T14:56:43.961Z",
       "DELIVERY_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate).toString(),
       "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
       "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode.toString(),
       "PARTY_CURRENCY": this.PartyDetailsOrderForm.value.partyCurrencyType.toString(),
-      "PARTY_CURR_RATE": Number(this.PartyDetailsOrderForm.value.partyCurrencyRate) || 0,
+      "PARTY_CURR_RATE":this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
       "ITEM_CURRENCY": this.PartyDetailsOrderForm.value.ItemCurrency.toString(),
-      "ITEM_CURR_RATE": Number(this.PartyDetailsOrderForm.value.ItemCurrencyRate) || 0,
+      "ITEM_CURR_RATE":this.commonService.nullToString(this.PartyDetailsOrderForm.value.ItemCurrencyRate),
       "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate).toString(),
       "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode.toString(),
       "METAL_RATE_TYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.rateType),
       "METAL_RATE": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.wholeSaleRate),
-      "METAL_GRAM_RATE": 0,
+      "METAL_GRAM_RATE": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.METAL_GRAM_RATE),
       "TOTAL_PCS": this.commonService.emptyToZero(summaryData[0].PCS),
       "TOTAL_METAL_WT": this.commonService.emptyToZero(summaryData[0].METAL_WT),
       "TOTAL_STONE_WT": this.commonService.emptyToZero(summaryData[0].STONE_WT),
@@ -656,21 +693,21 @@ export class DiamondSalesorderComponent implements OnInit {
       "SYSTEM_DATE": this.currentDate.toISOString() || "2023-10-26T09:05:45.384Z",
       "ROUND_VALUE_CC": this.commonService.emptyToZero(summaryData[0].AMOUNT).toFixed(),
       "NAVSEQNO": 0,
-      "SO_STATUS": true,
+      "SO_STATUS": false,
       "TOTAL_AMOUNT_PRTY": 0,
       "FIX_UNFIX": this.PartyDetailsOrderForm.value.FixedMetal,
       "LINKID": "",
       "OUSTATUS": true,
-      "OUSTATUSNEW": 0,
+      "OUSTATUSNEW": 1,
       "ORDER_STATUS": "",
       "MARKUP_PER": this.commonService.emptyToZero(summaryData[0].MarkupPercentage),
       "GOLD_LOSS_PER": 0,
-      "CR_DAYS": Number(this.PartyDetailsOrderForm.value.DeliveryOnDateType),
+      "CR_DAYS": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.DeliveryOnDateType),
       "PARTY_ADDRESS": this.PartyDetailsOrderForm.value.BillToAddress,
-      "SALESPERSON_NAME": this.PartyDetailsOrderForm.value.SalesmanName || "",
+      "SALESPERSON_NAME": this.PartyDetailsOrderForm.value.SalesmanName,
       "PRINT_COUNT": 0,
       "SALESORDER_REF": "",
-      "ORDER_TYPE": this.PartyDetailsOrderForm.value.orderType || "",
+      "ORDER_TYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.orderType),
       "JOB_STATUS": "",
       "APPR_REFF": "",
       "MAIN_REFF": "",
@@ -687,20 +724,20 @@ export class DiamondSalesorderComponent implements OnInit {
       "AMCSTARTDATE": "2023-10-26T09:05:45.384Z",
       "SALESINVPENAMOUNTCC": 0,
       "PROSP_ORIGIN": this.PartyDetailsOrderForm.value.PROSP_ORIGIN,
-      "CANCEL_SALES_ORDER": true,
+      "CANCEL_SALES_ORDER": false,
       "DELIVERY_TYPE": this.PartyDetailsOrderForm.value.DeliveryType,
       "DELIVERY_DAYS": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.DeliveryOnDateType),
-      "MKG_GROSS": true,
+      "MKG_GROSS": false,
       "HTUSERNAME": this.commonService.nullToString(this.commonService.userName),
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "AutoPosting": true,
+      "AutoPosting": false,
       "Details": this.headerDetailGridToSave, //main header grid data
       "stnmtlDetail": this.bomDetailGridToSave, // bom details
       "HeaderLabours": this.headerLaboursListToSave, //header labour
       "LabourDetails": this.labourDetailsListToSave, // Labour Details
       "HeaderDivisons": this.headerDivisionListToSave, // Header Divisons
-      "CompartDet": []
+      "CompartDet": this.componentPartDetailsToSave // components and Parts Details To Save 
     }
     this.postDataToSave.push(postData)
   }
@@ -711,7 +748,14 @@ export class DiamondSalesorderComponent implements OnInit {
       // this.updateWorkerMaster()
       return
     }
-    if (this.PartyDetailsOrderForm.invalid) {
+    let summaryData:any
+    if(this.detailData[0] && this.detailData[0].DATA['SUMMARYDETAILS']){
+      summaryData = this.detailData[0].DATA['SUMMARYDETAILS']
+    }else{
+      this.commonService.toastErrorByMsgId('MSG1041')
+      return
+    }
+    if (this.PartyDetailsOrderForm.invalid ) {
       this.toastr.error('select all required fields')
       return
     }
@@ -744,12 +788,13 @@ export class DiamondSalesorderComponent implements OnInit {
 
 
   deleteClicked(): void {
-    this.tableData = []
+    this.totalDetailNo = 0;
+    this.tableData = [];
   }
   importClicked(): void {
 
   }
-  //party Code validate
+  //partyCode validate
   partyCodeChange(event: any) {
     if (event.target.value == '') return
     if (!this.commonService.branchCode || this.commonService.branchCode == '') {
@@ -790,6 +835,8 @@ export class DiamondSalesorderComponent implements OnInit {
 
             this.PartyDetailsOrderForm.controls.ItemCurrencyRate.setValue(currencyRate)
             this.PartyDetailsOrderForm.controls.partyCurrencyRate.setValue(currencyRate)
+
+            this.getMetalGramRate() //to get metal gram rate fom db
           } else {
             this.toastr.error(this.commonService.getMsgByID('MSG1531'), result.Message ? result.Message : '', {
               timeOut: 3000,

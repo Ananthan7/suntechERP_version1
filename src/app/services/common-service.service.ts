@@ -203,17 +203,15 @@ export class CommonServiceService {
 
     let rate = this.getCurrRate(currency);
     currency = currency;
-    rate = typeof (rate) == 'number' ? rate : rate;
-    amount = typeof (amount) == 'number' ? amount : amount;
+    rate = typeof (rate) == 'number' ? this.emptyToZero(rate) : this.emptyToZero(rate);
+    amount = typeof (amount) == 'number' ? this.emptyToZero(amount) : this.emptyToZero(amount);
     let convertedAmount = 0;
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
     if (result.MUL_DIV == 'M') {
       convertedAmount = amount / rate;
-      console.log('.MUL_DIV == m', convertedAmount);
       return convertedAmount;
     } else {
       convertedAmount = amount * rate;
-      console.log('.MUL_DIV == D', convertedAmount);
       return convertedAmount;
     }
   }
@@ -310,7 +308,7 @@ export class CommonServiceService {
   emptyToZero(value: any) {
     value = typeof (value) == 'number' || value == undefined ? value : value.toString().trim();
     // if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
-    if (value == '' || value == undefined) {
+    if (value == '' || !value) {
       return 0;
     } else {
       return parseFloat(value);
@@ -318,7 +316,8 @@ export class CommonServiceService {
   }
 
   nullToString(value: any) {
-    value = value == (undefined || null || NaN) ? '' : value;
+    value = !value ? '' : value.toString();
+    return value
   }
 
 
