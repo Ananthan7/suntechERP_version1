@@ -17,16 +17,18 @@
                     </div>
                     <div class="col-md-8">
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-2 col-form-label">Voucher Type</label>
+                            <label for="input" class="col-sm-2 col-form-label">Voucher
+                                Type</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput
+                                    <input type="text" matInput readonly
                                         formControlName="voctype" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-2 col-form-label">Voucher Date</label>
+                            <label for="input" class="col-sm-2 col-form-label">Voucher
+                                Date</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%">
                                     <!-- <mat-label>Date Of Birth</mat-label> -->
@@ -42,7 +44,8 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-2 col-form-label">Voucher Number</label>
+                            <label for="input" class="col-sm-2 col-form-label">Voucher
+                                Number</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput readonly
@@ -62,18 +65,25 @@
                                     (newRowClick)="SalesmanSelected($event)">
                                 </master-search>
                             </div>
-                            <label for="input" class="col-sm-2 col-form-label">Currency</label>
-                            <div class="col-sm-2">
+                            <label for="input" class="col-sm-2 pe-2 col-form-label">Currency</label>
+                            <div class="col-sm-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
+                                        (change)="currencyDataSelected($event)"
                                         formControlName="currency" />
                                 </mat-form-field>
                             </div>
-                            <div class="col-sm-2">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
                                     <input type="number" matInput
+                                        SixDecimalInput
+                                        class="text-right" readonly
                                         formControlName="currencyrate" />
                                 </mat-form-field>
+                                <master-search
+                                    [MasterSearchData]="currencyMasterData"
+                                    (newRowClick)="currencyDataSelected($event)">
+                                </master-search>
                             </div>
                         </div>
                     </div>

@@ -14,7 +14,8 @@
                 (onRowUpdated)="updateData($event)"
                 (onRowRemoved)="deleteData($event)">
                 <dxo-paging [pageSize]="tableData.length"> </dxo-paging>
-                <dxo-search-panel [visible]="true"></dxo-search-panel>
+                <!-- <dxo-search-panel [visible]="true"></dxo-search-panel> -->
+                <dxo-filter-row visible="true"></dxo-filter-row>
                 <dxo-editing mode="row" [allowUpdating]="true"
                     [allowAdding]="true"
                     [allowDeleting]="true"

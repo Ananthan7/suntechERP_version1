@@ -46,6 +46,17 @@ export class ProcessTransferComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  currencyMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'CURRENCY MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   /**Procces */
   processTransferFrom: FormGroup = this.formBuilder.group({
     voctype: ['', [Validators.required]],
@@ -70,8 +81,10 @@ export class ProcessTransferComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.setCompanyCurrency()
     this.setInitialValues() //load all initial values
   }
+  
   setInitialValues() {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
@@ -101,6 +114,34 @@ export class ProcessTransferComponent implements OnInit {
   SalesmanSelected(event: any) {
     this.processTransferFrom.controls.salesman.setValue(event.SALESPERSON_CODE)
     this.processTransferFrom.controls.SalesmanName.setValue(event.DESCRIPTION)
+  }
+  /**USE: to set currency on selected change*/
+  currencyDataSelected(event: any) {
+    if(event.target?.value){
+      this.processTransferFrom.controls.currency.setValue((event.target.value).toUpperCase())
+    }else{
+      this.processTransferFrom.controls.currency.setValue(event.CURRENCY_CODE)
+    }
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from company parameter */
+  setCompanyCurrency(){
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.processTransferFrom.controls.currency.setValue(CURRENCY_CODE);
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  setCurrencyRate(){
+    const CURRENCY_RATE:any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.processTransferFrom.value.currency);
+    if(CURRENCY_RATE.length>0){
+      this.processTransferFrom.controls.currencyrate.setValue(
+        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE,'RATE')
+      );
+    }else{
+      this.processTransferFrom.controls.currency.setValue('')
+      this.processTransferFrom.controls.currencyrate.setValue('')
+      this.commonService.toastErrorByMsgId('MSG1531')
+    }
   }
 
   deleteTableData() {

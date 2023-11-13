@@ -33,7 +33,7 @@ export class CommonServiceService {
   basePartyCode: any
   compCurrency: any
   popMetalValueOnNet: any
-  decimalFormatCount: any;
+  FormatCount: any;
   public allMessageBoxData: any;
   public allCompanyParams: any;
   public baseUsername: any;
@@ -70,14 +70,17 @@ export class CommonServiceService {
     return JSON.parse(item)
   }
   showSnackBarMsg(MessageOrID: string){
-    this.snackBar.open(this.getMsgByID(MessageOrID) != '' ? this.getMsgByID(MessageOrID) : MessageOrID,'Close')
+    this.snackBar.open(this.getMsgByID(MessageOrID) || MessageOrID,'Close',{
+      duration: 3000, // Duration in milliseconds (e.g., 3000 for 3 seconds)
+      panelClass: ['custom-snackbar'],
+    });
   }
   closeSnackBarMsg(){
     this.snackBar.dismiss()
   }
   //**USE: common fuction to show toaster By MsgId */
-  toastErrorByMsgId(MsgId: string,Description?: string){
-    this.toastr.error(this.getMsgByID(MsgId), Description ? Description : '', {
+  toastErrorByMsgId(MsgOrId: string,Description?: string){
+    this.toastr.error(this.getMsgByID(MsgOrId) || MsgOrId, Description ? Description : '', {
       timeOut: 3000,
     })
   }
@@ -115,13 +118,13 @@ export class CommonServiceService {
       'PURITY': 6,
       'RATE': 6,
     }
-    this.decimalFormatCount = this.DECIMAL_CONSTANTS[flag]
+    this.FormatCount = this.DECIMAL_CONSTANTS[flag]
     
-    value = Number(value).toFixed(this.decimalFormatCount)
+    value = Number(value).toFixed(this.FormatCount)
 
     let str = ''
     let x = 1
-    while (x <= this.decimalFormatCount) {
+    while (x <= this.FormatCount) {
       str += '0'
       x++;
     }
@@ -140,17 +143,17 @@ export class CommonServiceService {
       fractionalPart += str;
     }
     // Limit the fractional part to 3 decimal places
-    if (fractionalPart.length > this.decimalFormatCount) {
-      fractionalPart = fractionalPart.slice(0, this.decimalFormatCount);
+    if (fractionalPart.length > this.FormatCount) {
+      fractionalPart = fractionalPart.slice(0, this.FormatCount);
     }
     let strzero = ''
     let count = 1
-    let addedzero = (this.decimalFormatCount) - (fractionalPart.length)
+    let addedzero = (this.FormatCount) - (fractionalPart.length)
     while (count <= addedzero) {
       strzero += '0'
       count++;
     }
-    if (fractionalPart && this.decimalFormatCount > fractionalPart.length) {
+    if (fractionalPart && this.FormatCount > fractionalPart.length) {
       fractionalPart += strzero;
     }
     // Reconstruct the value and set it back to the input field

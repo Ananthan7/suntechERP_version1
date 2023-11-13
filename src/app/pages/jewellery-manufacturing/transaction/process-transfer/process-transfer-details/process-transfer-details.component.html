@@ -26,7 +26,8 @@
               <div class="col-sm-2">
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox"
-                    id="flexSwitchCheckDefault">
+                    (change)="toggleSwitchChange($event)"
+                    id="flexSwitchCheckDefault" formControlName="toggleSwitchtIssue">
                   <label class="form-check-label" for="flexSwitchCheckDefault">Metal</label>
                 </div>
               </div>
@@ -34,11 +35,17 @@
             <div class="row mb-2">
               <label for="inputPassword" class="col-sm-3 col-form-label"
                 style="font-weight: bold;">
-                Job No</label>
+                Job Number</label>
               <div class="col-sm-3">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="jobno" />
+                <mat-form-field style="width: 80%;">
+                  <input type="text" matInput 
+                    (focusout)="jobNumberValidate($event)"
+                    formControlName="jobno" />
                 </mat-form-field>
+                <master-search
+                  [MasterSearchData]="jobNoSearch"
+                  (newRowClick)="jobNumberSelected($event)">
+                </master-search>
               </div>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
@@ -48,8 +55,7 @@
 
             </div>
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Sub Job
-                No : </label>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Sub Job Number</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="subjobno" />
@@ -57,7 +63,7 @@
               </div>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="subjobno" />
+                  <input type="text" matInput formControlName="subJobDescription" />
                 </mat-form-field>
               </div><br>
               <label for="inputPassword" class="col-sm-3 col-form-label"><b>Issue
@@ -87,8 +93,7 @@
           </div>
         </div>
         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-          <mat-tab label="Diamond Jewellery"><br>
-
+          <mat-tab label="Transfer Details"><br>
             <div class="row">
               <div class="col-md-9">
                 <table>
@@ -179,7 +184,7 @@
             </div>
 
           </mat-tab>
-          <mat-tab label="Metal Jewellery"><br>
+          <mat-tab label="Other Details"><br>
             <div class="row">
               <div class="col-9">
                 <table class="table w-100">
