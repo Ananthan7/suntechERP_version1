@@ -70,9 +70,9 @@ export class MasterSearchComponent implements OnInit {
       "RECORDS": this.MasterSearchData.RECORDS,
       "LOOKUPID": this.MasterSearchData.LOOKUPID,
       "ORDER_TYPE": this.MasterSearchData.SEARCH_VALUE ? 1 : 0,
-      "WHERECONDITION": this.MasterSearchData.WHERECONDITION || "",
-      "searchField": this.MasterSearchData.SEARCH_FIELD || "",
-      "searchValue": this.MasterSearchData.SEARCH_VALUE || ""
+      "WHERECONDITION": this.MasterSearchData.WHERECONDITION,
+      "searchField": this.MasterSearchData.SEARCH_FIELD,
+      "searchValue": this.MasterSearchData.SEARCH_VALUE
     }
     let APIS = 'MasterLookUp'
     this.isLoading = true;
@@ -80,7 +80,7 @@ export class MasterSearchComponent implements OnInit {
       this.isLoading = false;
       if (result.dynamicData && result.dynamicData[0].length>0) {
         this.dataSource = result.dynamicData[0]
-        let dataCount = result.dynamicData[1] || []
+        let dataCount = result.dynamicData[1]
         this.totalItems = dataCount.COUNT
 
         this.dataSourceHead = Object.keys(this.dataSource[0]);
@@ -100,9 +100,9 @@ export class MasterSearchComponent implements OnInit {
       "RECORDS": this.MasterSearchData.RECORDS,
       "LOOKUPID": this.MasterSearchData.LOOKUPID,
       "ORDER_TYPE": this.MasterSearchData.SEARCH_VALUE ? 1 : 0,
-      "WHERECONDITION": this.MasterSearchData.WHERECONDITION || "",
-      "searchField": this.MasterSearchData.SEARCH_FIELD || "",
-      "searchValue": this.MasterSearchData.SEARCH_VALUE || "",
+      "WHERECONDITION": this.MasterSearchData.WHERECONDITION,
+      "searchField": this.MasterSearchData.SEARCH_FIELD,
+      "searchValue": this.MasterSearchData.SEARCH_VALUE,
     }
     let APIS = 'MasterLookUp'
     this.isLoading = true;
