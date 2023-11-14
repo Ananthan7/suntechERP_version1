@@ -101,22 +101,20 @@ export class MeltingTypeComponent implements OnInit {
   columnheads:any[] = ['Sr','Division','Default Alloy','Description','Alloy %'];
   
 
-  colorCodeData: MasterSearchModel = {
+  colorData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 35,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color Code',
+    SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'COLOR SET'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  ColorCodeSelected(e:any){
-    console.log(e);
-    this.meltingTypeForm.controls.color.setValue(e.CODE);
-
+  colorDataSelected(data: any) {
+    this.meltingTypeForm.controls.color.setValue(data.CODE)
   }
 
   karatCodeData: MasterSearchModel = {
