@@ -517,7 +517,7 @@ export class AddPosComponent implements OnInit {
     });
 
     this.vocDataForm = this.formBuilder.group({
-      fcn_voc_no: ['', ],
+      fcn_voc_no: ['',],
       // fcn_voc_no: ['', Validators.required],
       sales_person: ['', [Validators.required, this.autoCompleteValidator(() => this.salesPersonOptions, 'SALESPERSON_CODE')]],
       vocdate: ['', Validators.required],
@@ -9823,27 +9823,46 @@ export class AddPosComponent implements OnInit {
   // }
 
   changeAdvanceVocNo(event: any) {
-    let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/MOE/${this.advanceReceiptForm.value.advanceRecNo}/${this.advanceReceiptForm.value.advanceYear}`
-    this.suntechApi.getDynamicAPI(API)
-      .subscribe((res) => {
-        if (res['status'] == 'Success') {
-          this.advanceReceiptForm.controls.advanceAmount.setValue(
-            this.comFunc.emptyToZero(res['response']['BALANCE_FC']).toString());
-          this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
-            this.comFunc.emptyToZero(res['response']['GST_TOTALFC']).toString());
-          this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
-            this.comFunc.emptyToZero(res['response']['GST_TOTALCC']).toString());
-          this.advanceReceiptDetails = res['response'];
-        } else {
-          this.advanceReceiptForm.controls.advanceAmount.setValue(
-            this.zeroAmtVal);
-          this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
-            this.zeroAmtVal);
-          this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
-            this.zeroAmtVal);
-          this.advanceReceiptDetails = {};
-        }
-      });
+    // const value = event.target.value;
+    const value = this.advanceReceiptForm.value.advanceRecNo;
+    if (value != '') {
+      this.snackBar.open('Loading...');
+      let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/PCR/${this.advanceReceiptForm.value.advanceYear}/${this.advanceReceiptForm.value.advanceRecNo}`
+      this.suntechApi.getDynamicAPI(API)
+        .subscribe((res) => {
+          this.snackBar.dismiss();
+          if (res['status'] == 'Success') {
+            this.advanceReceiptForm.controls.advanceAmount.setValue(
+              this.comFunc.emptyToZero(res['response']['BALANCE_FC']).toString());
+            this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+              this.comFunc.emptyToZero(res['response']['GST_TOTALFC']).toString());
+            this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+              this.comFunc.emptyToZero(res['response']['GST_TOTALCC']).toString());
+            this.advanceReceiptDetails = res['response'];
+          } else {
+            this.advanceReceiptForm.controls.advanceAmount.setValue(
+              this.zeroAmtVal);
+            this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+              this.zeroAmtVal);
+            this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+              this.zeroAmtVal);
+            this.advanceReceiptDetails = {};
+
+            this.snackBar.open('Invalid Receipt No.', 'OK', {
+              duration: 2000
+            });
+          }
+        });
+    } else {
+      this.advanceReceiptForm.controls.advanceAmount.setValue(
+        this.zeroAmtVal);
+      this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+        this.zeroAmtVal);
+      this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+        this.zeroAmtVal);
+      this.advanceReceiptDetails = {};
+    }
+
   }
 
   changeCustAcCode(value: any) {
