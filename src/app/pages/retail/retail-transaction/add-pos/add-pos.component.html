@@ -323,7 +323,6 @@
               mat-flat-button
               (click)="addNew()"
               [disabled]="viewOnly"
-
             >
               New
             </button>
@@ -1385,10 +1384,7 @@
             </div>
           </div>
 
-          <div
-            class="col-md-6 col-xl-6"
-            (click)="viewOnly ? '' : printInvoice()"
-          >
+          <div class="col-md-6 col-xl-6" (click)="printInvoice()">
             <!-- *ngIf="!viewOnly" -->
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
@@ -1646,6 +1642,8 @@
                   <mat-autocomplete
                     #paymentsAdvance="matAutocomplete"
                     autoActiveFirstOption
+                    (optionSelected)="changeAdvanceVocNo($event)"
+
                   >
                     <mat-option
                       *ngFor="let option of receiptModeAdvanceOthers | async"
@@ -1671,7 +1669,7 @@
                   <input
                     type="text"
                     matInput
-                    formControlName="advanceBranch"
+                     formControlName="advanceBranch"
                     [matAutocomplete]="advanceBranch"
                     id="advanceBranch"
                     (focusout)="changeBranch($event)"
@@ -1680,6 +1678,8 @@
                   <mat-autocomplete
                     #advanceBranch="matAutocomplete"
                     autoActiveFirstOption
+                    (optionSelected)="changeAdvanceVocNo($event)"
+
                   >
                     <mat-option
                       *ngFor="
@@ -1705,17 +1705,20 @@
                 <mat-form-field>
                   <mat-label>Year</mat-label>
                   <input
-                    matInput
+                     matInput
                     type="text"
                     id="advanceYear"
                     formControlName="advanceYear"
                     id="advanceYear"
                     [matAutocomplete]="advanceYear"
                     [readonly]="viewOnly"
+                    
                   />
                   <mat-autocomplete
                     #advanceYear="matAutocomplete"
                     autoActiveFirstOption
+                    (optionSelected)="changeAdvanceVocNo($event)"
+
                   >
                     <mat-option
                       *ngFor="let option of filteredadvanceYear | async"
