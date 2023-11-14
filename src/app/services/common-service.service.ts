@@ -515,6 +515,13 @@ export class CommonServiceService {
     let year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
+  /**purpose: date in order format yyyy-mm-dd */
+  formatYYMMDD(date: any) {
+    let day = date.getDate();
+    let month = (date.getMonth() > 9 ? date.getMonth() : date.getMonth()) + 1;
+    let year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
   /**purpose: date in order format dd-mm-yy */
   formatMMDDYY(date: any) {
     let day = date.getDate();

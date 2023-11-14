@@ -65,7 +65,8 @@
                                     (newRowClick)="salesmanSelected($event)">
                                 </master-search>
                             </div>
-                            <label for="input" class="col-sm-2 pe-2 col-form-label">Currency</label>
+                            <label for="input"
+                                class="col-sm-2 pe-2 col-form-label">Currency</label>
                             <div class="col-sm-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
@@ -112,7 +113,8 @@
                         <dx-data-grid id="gridContainer"
                             [columnAutoWidth]="true" [showBorders]="true"
                             (onRowClick)="onRowClickHandler($event)"
-                            [allowColumnReordering]="true" [dataSource]="tableData">
+                            [allowColumnReordering]="true" height="200"
+                            [dataSource]="tableData">
                             <dxi-column caption>
                                 <dxi-column alignment="center" caption="SR NO"
                                     dataField="SRNO"
@@ -122,20 +124,20 @@
                                     dataField="subjobno">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Pcs"
-                                    dataField="MetalPcsFrom" >
+                                    dataField="MetalPcsFrom">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="From">
                                 <dxi-column alignment="center" caption="Process"
-                                    dataField="processFrom" >
+                                    dataField="processFrom">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Worker"
-                                    dataField="workerFrom" >
+                                    dataField="workerFrom">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="To">
                                 <dxi-column alignment="center" caption="Process"
-                                    dataField="processTo" >
+                                    dataField="processTo">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Worker"
                                     dataField="workerTo">
@@ -173,6 +175,19 @@
                                 <div>Area, km<sup>2</sup></div>
                             </div>
                         </dx-data-grid>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 d-flex">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">Narration
+                            :</label>
+                        <div class="col-md-9">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput
+                                    formControlName="Narration" />
+                            </mat-form-field>
+                        </div>
                     </div>
                 </div>
             </div>
