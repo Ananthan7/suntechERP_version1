@@ -61,10 +61,10 @@ export class ProcessMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 23,
-    SEARCH_FIELD: 'RECOV_STOCK_CODE',
+    SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Recov Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "RECOV_STOCK_CODE<> ''",
+    WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -269,6 +269,8 @@ export class ProcessMasterComponent implements OnInit {
 
   StockProcesSelected(e: any){
     console.log(e);
+    this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
+
   }
 
   updateProcessMaster() {
