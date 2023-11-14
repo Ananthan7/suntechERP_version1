@@ -7,7 +7,6 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { AddNewdetailComponent } from './add-newdetail/add-newdetail.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-diamond-salesorder',
@@ -159,7 +158,6 @@ export class DiamondSalesorderComponent implements OnInit {
     private modalService: NgbModal,
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
-    private snackBar: MatSnackBar,
   ) {
   }
 
@@ -186,10 +184,10 @@ export class DiamondSalesorderComponent implements OnInit {
         'dblItemcurrencyRate':this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
       }
     }
-    this.snackBar.open('Loading...')
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.snackBar.dismiss()
+        this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
           let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           this.PartyDetailsOrderForm.controls.METAL_GRAM_RATE.setValue(data[0].METAL_RATE_PERGM)
@@ -197,7 +195,7 @@ export class DiamondSalesorderComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
-        this.snackBar.dismiss()
+        this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     // this.subscriptions.push(Sub)
@@ -211,10 +209,10 @@ export class DiamondSalesorderComponent implements OnInit {
         "intMid": "",
       }
     }
-    this.snackBar.open('Loading Labour Details...')
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.snackBar.dismiss()
+        this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
           this.labourDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           this.divisionDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[1])
@@ -222,7 +220,7 @@ export class DiamondSalesorderComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
-        this.snackBar.dismiss()
+        this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
@@ -260,7 +258,6 @@ export class DiamondSalesorderComponent implements OnInit {
   */
   addNewDetail(data?: any) {
     if (data) {
-
       data[0].HEADERDETAILS = this.PartyDetailsOrderForm.value;
     } else {
       data = [{ HEADERDETAILS: this.PartyDetailsOrderForm.value }]
@@ -760,7 +757,7 @@ export class DiamondSalesorderComponent implements OnInit {
     let API = 'DaimondSalesOrder/InsertDaimondSalesOrder'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, this.postDataToSave[0])
       .subscribe((result) => {
-        this.snackBar.dismiss()
+        this.commonService.closeSnackBarMsg()
         if (result.status.toUpperCase().trim() == ("SUCCESS" || "OK")) {
           Swal.fire({
             title: result.message || 'Success',
@@ -775,7 +772,7 @@ export class DiamondSalesorderComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
       }, err => {
-        this.snackBar.dismiss()
+        this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
@@ -793,7 +790,7 @@ export class DiamondSalesorderComponent implements OnInit {
   partyCodeChange(event: any) {
     if (event.target.value == '') return
     if (!this.commonService.branchCode || this.commonService.branchCode == '') {
-      this.snackBar.open('Branch Code' + this.commonService.getMsgByID('MSG1531'), 'close')
+      this.commonService.showSnackBarMsg('MSG1531')
       return
     }
     let postData = {
@@ -803,10 +800,10 @@ export class DiamondSalesorderComponent implements OnInit {
         "BRANCH_CODE": this.commonService.branchCode
       }
     }
-    this.snackBar.open('Validating Party Code...')
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.snackBar.dismiss()
+        this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
           let data = result.dynamicData[0]
 
@@ -839,7 +836,7 @@ export class DiamondSalesorderComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.snackBar.dismiss()
+        this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)

@@ -321,7 +321,7 @@ export class IndexedApiService {
   }
 
   getAllMessageBox() {
-    this.suntechApi.getDynamicAPI('Messagebox').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI('MessageBoxNet').subscribe((resp) => {
       if (resp.status == 'Success') {
         this.comFunc.allMessageBoxData = resp.response;
         this.inDb.bulkInsert('messageBox', resp.response);

@@ -17,11 +17,12 @@ import { ProcessTransferDetailsComponent } from './process-transfer-details/proc
 export class ProcessTransferComponent implements OnInit {
   @Input() content!: any;
   tableData: any[] = [];
+  detailData: any[] = [];
   userName = this.commonService.userName;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME']
   branchCode?: String;
   yearMonth?: String;
-
+  tableRowCount: number = 0;
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -43,6 +44,17 @@ export class ProcessTransferComponent implements OnInit {
     SEARCH_HEADING: 'Salesman',
     SEARCH_VALUE: '',
     WHERECONDITION: "SALESPERSON_CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  currencyMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'CURRENCY MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -70,8 +82,10 @@ export class ProcessTransferComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.setCompanyCurrency()
     this.setInitialValues() //load all initial values
   }
+
   setInitialValues() {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
@@ -89,18 +103,81 @@ export class ProcessTransferComponent implements OnInit {
       this.processTransferFrom.controls.vocdate.setValue(new Date(date))
     }
   }
-  openaddprocesstransfer() {
+  openProcessTransferDetails(data?: any) {
+    if (data) {
+      data[0].HEADERDETAILS = this.processTransferFrom.value;
+    } else {
+      data = [{ HEADERDETAILS: this.processTransferFrom.value }]
+    }
     const modalRef: NgbModalRef = this.modalService.open(ProcessTransferDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.content = data;
+    modalRef.result.then((result) => {
+      if (result) {
+        console.log('fired');
 
+        this.setValuesToHeaderGrid(result) //USE: set Values To Detail table
+      }
+    }, (reason) => {
+      // Handle modal dismissal (if needed)
+    });
   }
-  SalesmanSelected(event: any) {
+  /**USE: on clicking row Opens new detail adding screen */
+  onRowClickHandler(event: any) {
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+    console.log(detailRow,'detailRow');
+    let allDataSelected = [detailRow[0].DATA]
+    console.log(this.detailData,'this.detailData');
+    
+    this.openProcessTransferDetails(allDataSelected)
+  }
+
+  setValuesToHeaderGrid(detailDataToParent: any) {
+    this.tableRowCount += 1
+    let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
+    PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+    this.tableData.push(PROCESS_FORMDETAILS)
+
+    if (detailDataToParent) {
+      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+    }
+  }
+  salesmanSelected(event: any) {
     this.processTransferFrom.controls.salesman.setValue(event.SALESPERSON_CODE)
     this.processTransferFrom.controls.SalesmanName.setValue(event.DESCRIPTION)
+  }
+  /**USE: to set currency on selected change*/
+  currencyDataSelected(event: any) {
+    if (event.target?.value) {
+      this.processTransferFrom.controls.currency.setValue((event.target.value).toUpperCase())
+    } else {
+      this.processTransferFrom.controls.currency.setValue(event.CURRENCY_CODE)
+    }
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from company parameter */
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.processTransferFrom.controls.currency.setValue(CURRENCY_CODE);
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  setCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.processTransferFrom.value.currency);
+    if (CURRENCY_RATE.length > 0) {
+      this.processTransferFrom.controls.currencyrate.setValue(
+        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.processTransferFrom.controls.currency.setValue('')
+      this.processTransferFrom.controls.currencyrate.setValue('')
+      this.commonService.toastErrorByMsgId('MSG1531')
+    }
   }
 
   deleteTableData() {

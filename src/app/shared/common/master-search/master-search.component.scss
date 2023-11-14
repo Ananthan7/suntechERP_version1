@@ -21,6 +21,8 @@
 .lazyTable {
   min-width: 40vw;
   th {
+    position: sticky; /* make the table heads sticky */
+    top: 0px; /* table head will be placed from the top of the table and sticks to it */
     font-size: 14px;
     padding: 5px;
     border: 1px solid #e1e1e1;
@@ -37,18 +39,18 @@
     background-color: #f1f1f1;
   }
 }
-.icon-common:hover{
+.icon-common:hover {
   cursor: pointer;
 }
-.letters{
+.letters {
   min-width: 40vw;
-  font-size: 13px; 
+  font-size: 13px;
   color: #0597cb;
   margin-top: 4px;
-  a:not(:first-of-type){
+  a:not(:first-of-type) {
     padding: 0px 6px 0px 6px;
   }
 }
-.letters:hover{
+.letters:hover {
   cursor: pointer;
 }

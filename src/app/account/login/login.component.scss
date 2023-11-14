@@ -42,3 +42,9 @@
     font-size: 20px;
   }
 }
+::ng-deep {
+  .mat-form-field{
+    // height: 26px !important;
+    // margin-bottom: 7px !important;
+  }
+}
