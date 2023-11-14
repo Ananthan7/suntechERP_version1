@@ -62,7 +62,7 @@
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="SalesmanData"
-                                    (newRowClick)="SalesmanSelected($event)">
+                                    (newRowClick)="salesmanSelected($event)">
                                 </master-search>
                             </div>
                             <label for="input" class="col-sm-2 pe-2 col-form-label">Currency</label>
@@ -105,45 +105,40 @@
                 <div class="row py-2 border-top">
                     <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
                         [viewImportBtn]="false"
-                        (addClick)="openaddprocesstransfer()"
+                        (addClick)="openProcessTransferDetails()"
                         (deleteClick)="deleteTableData()">
                     </menu-buttons>
                     <div class="col-md-12">
-                        <dx-data-grid id="gridContainer" keyExpr="ID"
+                        <dx-data-grid id="gridContainer"
                             [columnAutoWidth]="true" [showBorders]="true"
-                            [allowColumnReordering]="true">
+                            (onRowClick)="onRowClickHandler($event)"
+                            [allowColumnReordering]="true" [dataSource]="tableData">
                             <dxi-column caption>
                                 <dxi-column alignment="center" caption="SR NO"
-                                    dataField="Population_Total"
+                                    dataField="SRNO"
                                     format="fixedPoint">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Job Ref"
-                                    dataField="Population_Urban"
-                                    format="percent">
+                                    dataField="subjobno">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Pcs"
-                                    dataField="Population_Urban"
-                                    format="percent">
+                                    dataField="MetalPcsFrom" >
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="From">
                                 <dxi-column alignment="center" caption="Process"
-                                    dataField="Population_Total"
-                                    format="fixedPoint">
+                                    dataField="processFrom" >
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Worker"
-                                    dataField="Population_Urban"
-                                    format="percent">
+                                    dataField="workerFrom" >
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="To">
                                 <dxi-column alignment="center" caption="Process"
-                                    dataField="Population_Total"
-                                    format="fixedPoint">
+                                    dataField="processTo" >
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Worker"
-                                    dataField="Population_Urban"
-                                    format="percent">
+                                    dataField="workerTo">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Metal">
@@ -152,8 +147,7 @@
                                     format="fixedPoint">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Weight"
-                                    dataField="Population_Urban"
-                                    format="percent">
+                                    dataField="Population_Urban">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Stone">
@@ -162,8 +156,7 @@
                                     format="fixedPoint">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Weight"
-                                    dataField="Population_Urban"
-                                    format="percent">
+                                    dataField="Population_Urban">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption>
@@ -172,8 +165,7 @@
                                     format="fixedPoint">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="Time"
-                                    dataField="Population_Urban"
-                                    format="percent">
+                                    dataField="Population_Urban">
                                 </dxi-column>
                             </dxi-column>
 

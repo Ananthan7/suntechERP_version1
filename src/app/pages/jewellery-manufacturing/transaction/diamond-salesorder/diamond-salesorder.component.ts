@@ -258,7 +258,6 @@ export class DiamondSalesorderComponent implements OnInit {
   */
   addNewDetail(data?: any) {
     if (data) {
-
       data[0].HEADERDETAILS = this.PartyDetailsOrderForm.value;
     } else {
       data = [{ HEADERDETAILS: this.PartyDetailsOrderForm.value }]
