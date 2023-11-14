@@ -9,6 +9,8 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class WatchMasterComponent implements OnInit {
   columnhead:any[] = ['Division','Karat','Gross Wt','Rate Type','Metal Rate','',''];
+  columnheader:any[] = ['Div','Shape','Color','Size','PCs','Carat']
+  divisionMS: any = 'ID';
 
   constructor( private activeModal: NgbActiveModal) { }
 
