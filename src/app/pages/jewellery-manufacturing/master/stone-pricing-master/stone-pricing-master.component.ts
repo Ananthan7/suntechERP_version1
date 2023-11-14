@@ -71,7 +71,7 @@ export class StonePricingMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 38,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Size From',
+    SEARCH_HEADING: 'Sieve From',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='SIEVE MASTER'",
     VIEW_INPUT: true,
@@ -79,6 +79,30 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   sievetoData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 38,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Sieve To',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  sizefromData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 38,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Size From',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  sizetoData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 38,
@@ -402,6 +426,7 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
 
   }
+
   colorDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.color.setValue(data.CODE)
   }

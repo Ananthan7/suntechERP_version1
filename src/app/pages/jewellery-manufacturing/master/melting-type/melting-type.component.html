@@ -45,8 +45,8 @@
                                     <mat-form-field style="width: 70%;margin-left: 7px;">
                                         <input type="text" matInput maxlength="6" formControlName="color" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="colorCodeData"
-                                        (newRowClick)="ColorCodeSelected($event)">
+                                    <master-search [MasterSearchData]="colorData"
+                                        (newRowClick)="colorDataSelected($event)">
                                     </master-search>
                                 </div>
                             </div>

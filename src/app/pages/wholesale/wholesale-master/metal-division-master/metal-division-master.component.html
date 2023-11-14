@@ -1,5 +1,5 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Alloy Allocation </h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Metal Division Master</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -11,7 +11,7 @@
         <form>
             <div class="container-fluid pt-3">
                 <div class="row justify-content-between">
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-4">
@@ -19,48 +19,58 @@
                             <input type="text" matInput />
                           </mat-form-field>
                         </div>
-                        <div class="col-md-6">
-                          <mat-form-field style="width: 100%;">
+                        <div class="col-md-5">
+                          <mat-form-field style="width: 90%;">
                             <input type="text" matInput />
                           </mat-form-field>
                         </div>
                       </div>
                       <div class="row align-items-center mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Cost Center :</label>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Cost Center :</label>
                         <div class="col-md-3">
-                          <mat-form-field style="width: 100%;">
+                          <mat-form-field style="width: 80%;">
                             <input type="text" matInput />
                           </mat-form-field>
+                          <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-3 col-form-label">Cost Center (making) :</label>
                         <div class="col-md-3">
-                          <mat-form-field style="width: 100%;">
+                          <mat-form-field style="width: 80%;">
                             <input type="text" matInput />
                           </mat-form-field>
+                          <master-search></master-search>
                         </div>
                       </div>
                       <div class="row align-items-center mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Abbreviation :</label>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Abbreviation :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
                             <input type="text" matInput />
                           </mat-form-field>
                         </div>
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Auto Fix Stock Code :</label>
-                        <div class="col-md-3">
-                          <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row align-items-center mb-1">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Code :</label>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                             <label class="form-check-label" for="flexCheckDefault">
                               Currency
                             </label>
+                          </div>
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Auto Fix Stock Code :</label>
+                        <div class="col-md-2">
+                          <mat-form-field style="width: 80%;">
+                            <input type="text" matInput />
+                          </mat-form-field>
+                          <master-search></master-search>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Code</label>
+                        <div class="col-md-3">
+                          <div class="form-check">
+                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                              Excel Import
+                            </button>
                           </div>
                         </div>
                         </div>

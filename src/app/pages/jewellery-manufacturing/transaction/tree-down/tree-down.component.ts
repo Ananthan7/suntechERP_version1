@@ -87,14 +87,14 @@ export class TreeDownComponent implements OnInit {
   }
   
 
-  colorCodeData: MasterSearchModel = {
+  colorData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 35,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color Code',
+    SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COLOR SET<> ''",
+    WHERECONDITION: "TYPES = 'COLOR SET'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -196,9 +196,8 @@ userDataSelected(value: any) {
   this.treeDownFrom.controls.cylinder.setValue(e.CODE);
 }
 
-colorCodeSelected(e:any){
-  console.log(e);
-  this.treeDownFrom.controls.color.setValue(e['COLOR SET']);
+colorDataSelected(data: any) {
+  this.treeDownFrom.controls.color.setValue(data.CODE)
 }
 
 karatCodeSelected(e:any){

@@ -155,17 +155,18 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  colorCodeData: MasterSearchModel = {
+  colorData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 35,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color Code',
+    SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COLOR SET<> ''",
+    WHERECONDITION: "TYPES = 'COLOR SET'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
 
  
 
@@ -220,10 +221,10 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.brand.setValue(e.CODE);
   }
 
-  ColorCodeSelected(e:any){
-    console.log(e);
-    this.alloyMastereForm.controls.color.setValue(e['COLOR SET']);
+  colorDataSelected(data: any) {
+    this.alloyMastereForm.controls.color.setValue(data.CODE)
   }
+
 
   vendorCodeSelected(e:any){
     console.log(e);
