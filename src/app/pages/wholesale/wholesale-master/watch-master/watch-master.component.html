@@ -11,7 +11,7 @@
     <form>
         <div class="row">
             <div class="col-md-12 ">
-                <mat-tab-group [selectedIndex]="">
+                <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                     <mat-tab label="General">
                         <div class="card metal-sales-card">
                             <div class="card-body sales-card-body p-2">
@@ -255,8 +255,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="p-1  pl-1 bd-highlight">
-                                                    <button type="button"
-                                                        class="btn btn-primary add-btn w-100">
+                                                    <button type="button" class="btn btn-primary add-btn w-100">
                                                         Enquriy
                                                     </button>
                                                 </div>
@@ -443,8 +442,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="p-1 bd-highlight">
-                                                    <button type="button"
-                                                        class="btn btn-primary add-btn w-100">
+                                                    <button type="button" class="btn btn-primary add-btn w-100">
                                                         Item Image
                                                     </button>
                                                 </div>
@@ -461,8 +459,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="p-1 bd-highlight">
-                                                    <button type="button"
-                                                        class="btn btn-primary add-btn w-100">
+                                                    <button type="button" class="btn btn-primary add-btn w-100">
                                                         Tag Line
                                                     </button>
                                                 </div>
@@ -472,8 +469,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="p-1 bd-highlight">
-                                                    <button type="button"
-                                                        class="btn btn-primary add-btn w-100">
+                                                    <button type="button" class="btn btn-primary add-btn w-100">
                                                         Certificate Image
                                                     </button>
                                                 </div>
@@ -490,8 +486,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="p-1 bd-highlight">
-                                                    <button type="button"
-                                                        class="btn btn-primary add-btn w-100">
+                                                    <button type="button" class="btn btn-primary add-btn w-100">
                                                         Cert Details
                                                     </button>
                                                 </div>
@@ -540,13 +535,152 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="UDF Grouping">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </mat-tab>
                 </mat-tab-group>
             </div>
             <div class="col-md-12 mt-2">
                 <mat-tab-group [selectedIndex]="">
                     <mat-tab label="Metal Details">
-
                         <div class="row mt-2">
                             <div class="col-md-8">
                                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false">
@@ -573,8 +707,314 @@
 
                     </mat-tab>
                     <mat-tab label="Stone Details">
+                        <div class="row mt-2">
+                            <div class="col-md-8">
+                                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false">
+                                </menu-buttons>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-md-12">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    </dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                    <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}"
+                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                        backgroundcolor="#000">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
+
+                        </div>
+
                     </mat-tab>
                     <mat-tab label="Component and Labour Charge Summary">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label  text-center">Description
+                                    </label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Pcs </label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Carat
+                                    </label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Grams
+                                    </label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">FC(AED)
+                                    </label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">LC(AED)
+                                    </label>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Diamonds :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Ot Stones :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Total :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center"></label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Type </label>
+                                    <label for="inputPassword"
+                                        class="col-sm-2 col-form-label text-center">Number</label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Date</label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Value</label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Trans
+                                        By</label>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Frist Trans :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword"
+                                                class="col-sm-4 col-form-label  text-center">Lab.Charges
+                                            </label>
+                                            <label for="inputPassword"
+                                                class="col-sm-4 col-form-label text-center">FC(AED)
+                                            </label>
+                                            <label for="inputPassword"
+                                                class="col-sm-4 col-form-label text-center">Lc(AED)
+                                            </label>
+                                        </div>
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword" class="col-sm-2 col-form-label">Settings
+                                                :</label>
+                                            <div class="col-md-2">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword" class="col-sm-3 col-form-label">Polishing
+                                                :</label>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword" class="col-sm-3 col-form-label">Rhodium
+                                                :</label>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword" class="col-sm-3 col-form-label">Making
+                                                :</label>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword" class="col-sm-3 col-form-label">Other
+                                                :</label>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword" class="col-sm-3 col-form-label">Total
+                                                :</label>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword"
+                                                class="col-sm-6 col-form-label">Create By
+                                            </label>
+                                            <div class="col-md-6">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword"
+                                                class="col-sm-6 col-form-label">Create On
+                                            </label>
+                                            <div class="col-md-6">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword"
+                                                class="col-sm-6 col-form-label">Last Edit By
+                                            </label>
+                                            <div class="col-md-6">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center mb-1">
+                                            <label for="inputPassword"
+                                                class="col-sm-6 col-form-label">Last Edit On
+                                            </label>
+                                            <div class="col-md-6">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </mat-tab>
                 </mat-tab-group>
             </div>
