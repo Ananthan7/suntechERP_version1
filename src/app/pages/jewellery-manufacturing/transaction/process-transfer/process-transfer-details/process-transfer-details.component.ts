@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -76,8 +75,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     toggleSwitchtIssue: [false],
     processFrom: [''],
     processTo: [''],
+    processToDescription: [''],
     workerFrom: [''],
     workerTo: [''],
+    workerToDescription: [''],
     MetalPcsFrom: [''],
     MetalPcsTo: [''],
     MetalWeightFrom: [''],
@@ -96,8 +97,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
     StonePcsTo: [''],
     StoneWeighFrom: [''],
     StoneWeightTo: [''],
-    designCode: [''],
     partCode: [''],
+    DESIGN_CODE: [''],
+    JOB_DATE: [''],
+    SEQ_CODE: [''],
+    PROCESSDESC: [''],
+    WORKERDESC: [''],
+    PUREWT: [''],
+    PURITY: [''],
+    METALLAB_TYPE: [''],
   });
   columnheader: any[] = ['Div', 'Stock Code', 'Color', 'Clarity', 'Size', 'Shape', 'Pcs', 'Setted', 'Weight', 'Loss', 'Gain Wt', 'Type', 'Rate ', 'Amount']
 
@@ -105,7 +113,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
     private comService: CommonServiceService,
   ) { }
 
@@ -115,8 +122,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setAllInitialValues() //set all values from parent to child
   }
   setAllInitialValues(){
-    console.log(this.content,'content');
     let dataFromParent = this.content[0].PROCESS_FORMDETAILS
+    if(!dataFromParent) return
     this.processTransferdetailsForm.controls.jobno.setValue(dataFromParent.jobno)
     this.processTransferdetailsForm.controls.jobdes.setValue(dataFromParent.jobdes)
     this.processTransferdetailsForm.controls.subjobno.setValue(dataFromParent.subjobno)
@@ -131,9 +138,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
     this.processTransferdetailsForm.controls.approvedby.setValue(dataFromParent.approvedby)
     this.processTransferdetailsForm.controls.startdate.setValue(dataFromParent.startdate)
-
-
-    
+    this.processTransferdetailsForm.controls.JOB_DATE.setValue(dataFromParent.JOB_DATE)
+    this.processTransferdetailsForm.controls.DESIGN_CODE.setValue(dataFromParent.DESIGN_CODE)
+    this.processTransferdetailsForm.controls.SEQ_CODE.setValue(dataFromParent.SEQ_CODE)
+    this.processTransferdetailsForm.controls.PROCESSDESC.setValue(dataFromParent.PROCESSDESC)
+    this.processTransferdetailsForm.controls.WORKERDESC.setValue(dataFromParent.WORKERDESC)
+    this.processTransferdetailsForm.controls.PUREWT.setValue(dataFromParent.PUREWT)
+    this.processTransferdetailsForm.controls.MetalWeightFrom.setValue(dataFromParent.MetalWeightFrom)
+    this.processTransferdetailsForm.controls.processToDescription.setValue(dataFromParent.processToDescription)
+    this.processTransferdetailsForm.controls.workerToDescription.setValue(dataFromParent.workerToDescription)
+    this.processTransferdetailsForm.controls.PURITY.setValue(dataFromParent.PURITY)
+    this.processTransferdetailsForm.controls.METALLAB_TYPE.setValue(dataFromParent.METALLAB_TYPE)
   }
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
@@ -155,6 +170,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.processTransferdetailsForm.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.processTransferdetailsForm.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
+            this.processTransferdetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+            this.processTransferdetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
+            this.processTransferdetailsForm.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
+            this.processTransferdetailsForm.controls.PROCESSDESC.setValue(data[0].PROCESSDESC)
+            this.processTransferdetailsForm.controls.WORKERDESC.setValue(data[0].WORKERDESC)
+            this.processTransferdetailsForm.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
@@ -185,12 +206,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          console.log(data[0]);
+          
           this.processTransferdetailsForm.controls.processFrom.setValue(data[0].PROCESS)
           this.processTransferdetailsForm.controls.workerFrom.setValue(data[0].WORKER)
+          this.processTransferdetailsForm.controls.MetalWeightFrom.setValue(data[0].METAL)
           this.processTransferdetailsForm.controls.MetalPcsFrom.setValue(data[0].METAL)
           this.processTransferdetailsForm.controls.GrossWeightFrom.setValue(data[0].NETWT)
           this.processTransferdetailsForm.controls.StonePcsFrom.setValue(data[0].STONE)
+          this.processTransferdetailsForm.controls.PUREWT.setValue(data[0].PUREWT)
+          this.processTransferdetailsForm.controls.PURITY.setValue(data[0].PURITY)
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -240,15 +264,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
   /**USE bind selected values*/
   processCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.processFrom.setValue(event.Process_Code)
+    this.processTransferdetailsForm.controls.PROCESSDESC.setValue(event.Description)
   }
   processCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.processTo.setValue(event.Process_Code)
+    this.processTransferdetailsForm.controls.processToDescription.setValue(event.Description)
   }
   workerCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.workerFrom.setValue(event.WORKER_CODE)
   }
   workerCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.workerTo.setValue(event.WORKER_CODE)
+    this.processTransferdetailsForm.controls.workerToDescription.setValue(event.DESCRIPTION)
   }
   jobNumberSelected(event: any) {
     this.processTransferdetailsForm.controls.jobno.setValue(event.job_number)

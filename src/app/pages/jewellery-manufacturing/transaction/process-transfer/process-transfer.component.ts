@@ -28,7 +28,7 @@ export class ProcessTransferComponent implements OnInit {
   labourChargeDetailsToSave: any[] = [];
 
   private subscriptions: Subscription[] = [];
-  
+
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -125,6 +125,10 @@ export class ProcessTransferComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result) {
         this.setValuesToHeaderGrid(result) //USE: set Values To Detail table
+
+        this.setDataFromDetailScreen()
+        this.setHeaderGridDetails()
+        // this.setLabourChargeDetails()
       }
     }, (reason) => {
       // Handle modal dismissal (if needed)
@@ -134,21 +138,33 @@ export class ProcessTransferComponent implements OnInit {
   onRowClickHandler(event: any) {
     let selectedData = event.data
     let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
-    console.log(detailRow,'detailRow');
     let allDataSelected = [detailRow[0].DATA]
-    console.log(this.detailData,'this.detailData');
-    
     this.openProcessTransferDetails(allDataSelected)
   }
 
   setValuesToHeaderGrid(detailDataToParent: any) {
-    this.tableRowCount += 1
     let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
-    PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+    if (PROCESS_FORMDETAILS.SRNO) {
+      console.log('fired');
+      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+    } else {
+      this.tableRowCount += 1
+      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+    }
+
     this.tableData.push(PROCESS_FORMDETAILS)
 
     if (detailDataToParent) {
       this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+    }
+  }
+  /*USE: Function to swap object in array1 with object from array2 at the specified index */
+  swapObjects(array1: any, array2: any, index: number) {
+    // Check if the index is valid
+    if (index >= 0 && index < array1.length) {
+      array1[index] = array2[0];
+    } else {
+      console.error('Invalid index');
     }
   }
   salesmanSelected(event: any) {
@@ -185,40 +201,41 @@ export class ProcessTransferComponent implements OnInit {
   }
 
   deleteTableData() {
-  
+
   }
 
 
   removedata() {
     this.tableData.pop();
   }
-  
-  setLabourChargeDetails(){
+
+  setLabourChargeDetails() {
+
     this.labourChargeDetailsToSave.push(
-       {
-          "REFMID": 0,
-          "BRANCH_CODE": "",
-          "YEARMONTH": "",
-          "VOCTYPE": "",
-          "VOCNO": 0,
-          "SRNO": 0,
-          "JOB_NUMBER": "",
-          "STOCK_CODE": "",
-          "UNQ_JOB_ID": "",
-          "METALSTONE": "",
-          "DIVCODE": "",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "LABOUR_CODE": "",
-          "LAB_RATE": 0,
-          "LAB_ACCODE": "",
-          "LAB_AMTFC": 0,
-          "UNITCODE": ""
-        }
+      {
+        "REFMID": 0,
+        "BRANCH_CODE": "",
+        "YEARMONTH": "",
+        "VOCTYPE": "",
+        "VOCNO": 0,
+        "SRNO": 0,
+        "JOB_NUMBER": "",
+        "STOCK_CODE": "",
+        "UNQ_JOB_ID": "",
+        "METALSTONE": "",
+        "DIVCODE": "",
+        "PCS": 0,
+        "GROSS_WT": 0,
+        "LABOUR_CODE": "",
+        "LAB_RATE": 0,
+        "LAB_ACCODE": "",
+        "LAB_AMTFC": 0,
+        "UNITCODE": ""
+      }
     )
   }
   /**USE: set details from detail screen */
-  setDataFromDetailScreen(){
+  setDataFromDetailScreen() {
     this.detailScreenDataToSave.push({
       "VOCNO": 0,
       "VOCTYPE": "",
@@ -326,12 +343,12 @@ export class ProcessTransferComponent implements OnInit {
       "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z",
       "PUREWTTEMP": 0
     })
-    
+
   }
-  setHeaderGridDetails(){
-    let detailsData = this.detailData[0].PROCESS_FORMDETAILS
-    console.log(detailsData,'detailsData');
-    
+  setHeaderGridDetails() {
+    let detailScreenData = this.detailData[0].DATA
+    detailScreenData = detailScreenData.PROCESS_FORMDETAILS
+
     this.PTFDetailsToSave.push({
       "SRNO": 0,
       "UNIQUEID": 0,
@@ -339,39 +356,39 @@ export class ProcessTransferComponent implements OnInit {
       "VOCDATE": this.commonService.nullToString(this.processTransferFrom.value.vocdate),
       "VOCTYPE": this.commonService.nullToString(this.processTransferFrom.value.voctype),
       "BRANCH_CODE": this.branchCode,
-      "JOB_NUMBER": this.commonService.nullToString(detailsData[0].jobno),
-      "JOB_DATE": "2023-10-21T07:24:35.989Z",
-      "UNQ_JOB_ID": "",
+      "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
+      "JOB_DATE": this.commonService.nullToString(detailScreenData.JOB_DATE),
+      "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.subjobno),
       "UNQ_DESIGN_ID": "",
-      "DESIGN_CODE": "",
-      "SEQ_CODE": "",
+      "DESIGN_CODE": this.commonService.nullToString(detailScreenData.DESIGN_CODE),
+      "SEQ_CODE": this.commonService.nullToString(detailScreenData.SEQ_CODE),
       "JOB_DESCRIPTION": "",
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
-      "FRM_PROCESS_CODE": "",
-      "FRM_PROCESSNAME": "",
-      "FRM_WORKER_CODE": "",
-      "FRM_WORKERNAME": "",
-      "FRM_PCS": 0,
-      "FRM_STONE_WT": 0,
-      "FRM_STONE_PCS": 0,
-      "FRM_METAL_WT": 0,
-      "FRM_METAL_PCS": 0,
-      "FRM_PURE_WT": 0,
-      "FRM_NET_WT": 0,
-      "TO_PROCESS_CODE": "",
-      "TO_PROCESSNAME": "",
-      "TO_WORKER_CODE": "",
-      "TO_WORKERNAME": "",
-      "TO_PCS": 0,
-      "TO_METAL_PCS": 0,
-      "TO_STONE_WT": 0,
-      "TO_STONE_PCS": 0,
-      "TO_METAL_WT": 0,
-      "TO_PURE_WT": 0,
-      "TO_NET_WT": 0,
-      "LOSS_QTY": 0,
-      "LOSS_PURE_QTY": 0,
+      "CURRENCY_CODE":  this.commonService.nullToString(this.processTransferFrom.value.currency),
+      "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
+      "FRM_PROCESS_CODE": this.commonService.nullToString(detailScreenData.processFrom),
+      "FRM_PROCESSNAME": this.commonService.nullToString(detailScreenData.PROCESSDESC),
+      "FRM_WORKER_CODE": this.commonService.nullToString(detailScreenData.workerFrom),
+      "FRM_WORKERNAME": this.commonService.nullToString(detailScreenData.WORKERDESC),
+      "FRM_PCS": this.commonService.emptyToZero(detailScreenData.StoneWeighFrom),
+      "FRM_STONE_WT": this.commonService.emptyToZero(detailScreenData.StoneWeighFrom),
+      "FRM_STONE_PCS": this.commonService.emptyToZero(detailScreenData.StonePcsFrom),
+      "FRM_METAL_WT":  this.commonService.emptyToZero(detailScreenData.MetalWeightFrom),
+      "FRM_METAL_PCS": this.commonService.emptyToZero(detailScreenData.MetalPcsFrom),
+      "FRM_PURE_WT": this.commonService.emptyToZero(detailScreenData.PUREWT),
+      "FRM_NET_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightFrom),
+      "TO_PROCESS_CODE": this.commonService.nullToString(detailScreenData.processTo),
+      "TO_PROCESSNAME": this.commonService.nullToString(detailScreenData.processToDescription),
+      "TO_WORKER_CODE": this.commonService.nullToString(detailScreenData.workerTo),
+      "TO_WORKERNAME": this.commonService.nullToString(detailScreenData.workerToDescription),
+      "TO_PCS": this.commonService.emptyToZero(detailScreenData.MetalPcsTo),
+      "TO_METAL_PCS": this.commonService.emptyToZero(detailScreenData.MetalPcsTo),
+      "TO_STONE_WT": this.commonService.emptyToZero(detailScreenData.StoneWeightTo),
+      "TO_STONE_PCS": this.commonService.emptyToZero(detailScreenData.StonePcsTo),
+      "TO_METAL_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightTo),
+      "TO_PURE_WT": this.commonService.emptyToZero(Number(detailScreenData.MetalWeightTo)*Number(detailScreenData.StonePcsTo)),
+      "TO_NET_WT": this.commonService.emptyToZero(detailScreenData.MetalWeightTo),
+      "LOSS_QTY": this.commonService.emptyToZero(detailScreenData.stdLoss),
+      "LOSS_PURE_QTY": this.commonService.emptyToZero(Number(detailScreenData.stdLoss)*Number(detailScreenData.PURITY)),
       "STONE_AMOUNTFC": 0,
       "STONE_AMOUNTLC": 0,
       "METAL_AMOUNTFC": 0,
@@ -474,6 +491,7 @@ export class ProcessTransferComponent implements OnInit {
       "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z"
     })
   }
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
@@ -483,7 +501,8 @@ export class ProcessTransferComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-
+    let detailScreenData = this.detailData[0].DATA
+    detailScreenData = detailScreenData.PROCESS_FORMDETAILS
     let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ'
     let postData = {
       "MID": 0,
@@ -498,17 +517,20 @@ export class ProcessTransferComponent implements OnInit {
       "CURRENCY_CODE": this.commonService.nullToString(this.processTransferFrom.value.currency),
       "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
       "NAVSEQNO": this.commonService.yearSelected,
-      "LAB_TYPE": 0,
+      "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
       "AUTOPOSTING": 0,
       "POSTDATE": "",
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "SYSTEM_DATE": this.commonService.formatYYMMDD(this.commonService.currentDate),
-      "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave,
-      "JOB_PROCESS_TRN_STNMTL_DJ": this.detailScreenDataToSave,
-      "JOB_PROCESS_TRN_LABCHRG_DJ": this.labourChargeDetailsToSave
+      "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave, //header grid details
+      "JOB_PROCESS_TRN_STNMTL_DJ": this.detailScreenDataToSave, //detail screen data
+      "JOB_PROCESS_TRN_LABCHRG_DJ": this.labourChargeDetailsToSave // labour charge details
     }
+
+    console.log(postData,'postData');
+    return
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -531,7 +553,7 @@ export class ProcessTransferComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err => this.toastr.error('Not saved'))
     this.subscriptions.push(Sub)
   }
 
