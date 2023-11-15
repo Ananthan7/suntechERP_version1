@@ -57,7 +57,8 @@ export class CastingTreeUpComponent implements OnInit {
     SEARCH_VALUE: '',
     WHERECONDITION: "PROCESS_CODE<> ''",
     VIEW_INPUT: true,
-    VIEW_TABLE: true,
+    VIEW_TABLE: true,    
+    LOAD_ONCLICK: true,
   }
  
 
@@ -70,7 +71,8 @@ export class CastingTreeUpComponent implements OnInit {
     SEARCH_VALUE: '',
     WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
-    VIEW_TABLE: true,
+    VIEW_TABLE: true,    
+    LOAD_ONCLICK: true,
   }
   
 
@@ -84,6 +86,7 @@ export class CastingTreeUpComponent implements OnInit {
     WHERECONDITION: "KARAT_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
   
 
@@ -97,6 +100,7 @@ export class CastingTreeUpComponent implements OnInit {
     WHERECONDITION: "TYPES = 'COLOR SET'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
   
@@ -111,6 +115,7 @@ export class CastingTreeUpComponent implements OnInit {
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
  
 
