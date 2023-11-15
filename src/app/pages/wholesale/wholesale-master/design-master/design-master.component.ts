@@ -10,7 +10,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class DesignMasterComponent implements OnInit {
 
   columnhead:any[] = ['Division','Gross Wt','Karat','Rate Type','Rate','Amount..','Amount','Metal Labour','Rate/Gram','MetalPer','Color'];
-
+  divisionMS: any = 'ID';
   constructor( private activeModal: NgbActiveModal) { }
 
   ngOnInit(): void {
