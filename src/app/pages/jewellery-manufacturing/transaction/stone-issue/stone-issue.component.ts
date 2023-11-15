@@ -29,16 +29,16 @@ export class StoneIssueComponent implements OnInit {
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
     user: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'User',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
+      PAGENO: 1,
+      RECORDS: 10,
+      LOOKUPID: 73,
+      SEARCH_FIELD: 'UsersName',
+      SEARCH_HEADING: 'User',
+      SEARCH_VALUE: '',
+      WHERECONDITION: "UsersName<> ''",
+      VIEW_INPUT: true,
+      VIEW_TABLE: true,
+      LOAD_ONCLICK: true,
   }
  
 
@@ -91,17 +91,19 @@ export class StoneIssueComponent implements OnInit {
 
   userDataSelected(value: any) {
     console.log(value);
-       this.stoneissueFrom.controls.enteredBy.setValue(value.UsersName);
+    this.stoneissueFrom.controls.enteredBy.setValue(value.UsersName);
   }
 
   CurrencyCodeSelected(e:any){
     console.log(e);
     this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE);
+    this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE);
   }
 
   WorkerCodeSelected(e:any){
     console.log(e);
     this.stoneissueFrom.controls.worker.setValue(e.WORKER_CODE);
+    this.stoneissueFrom.controls.workername.setValue(e.DESCRIPTION);
   }
 
   openaddstoneissuedetail() {
