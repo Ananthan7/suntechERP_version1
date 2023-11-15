@@ -9,6 +9,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class MetalPrefixMasterComponent implements OnInit {
 
   constructor( private activeModal: NgbActiveModal,) { }
+  divisionMS: any = 'ID';
  
   ngOnInit(): void {
   }
