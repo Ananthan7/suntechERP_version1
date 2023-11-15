@@ -450,6 +450,7 @@ export class AddPosComponent implements OnInit {
 
 
   _exchangeItemchange: any;
+  srCustCode: any = ''; // sales return customer code
   // quaggaConfig: any = Quagga.init({
   //   inputStream: {
   //     willReadFrequently: true,
@@ -583,18 +584,18 @@ export class AddPosComponent implements OnInit {
       fcn_exchange_pcs: [{ value: 0 }],
       // fcn_exchange_pcs: ['', Validators.required],
       fcn_exchange_gross_wt: [{ value: 0 }, Validators.required],
-      fcn_exchange_stone_wt: [{ value: 0 }, Validators.required],
-      fcn_exchange_net_wt: [{ value: 0 }, Validators.required],
+      fcn_exchange_stone_wt: [''],
+      fcn_exchange_net_wt: [''],
       fcn_exchange_purity: [{ value: 0 }, Validators.required],
-      fcn_exchange_pure_weight: [{ value: 0 }, Validators.required],
-      fcn_exchange_purity_diff: [{ value: 0 }, Validators.required],
-      fcn_exchange_stone_rate: [{ value: 0 }, Validators.required],
-      fcn_exchange_stone_amount: [{ value: 0 }, Validators.required],
-      fcn_exchange_metal_rate: [{ value: 0 }, Validators.required],
-      fcn_exchange_metal_amount: [{ value: 0 }, Validators.required],
-      fcn_exchange_chargeable_wt: [{ value: 0 }, Validators.required],
-      fcn_exchange_making_rate: [{ value: 0 }, Validators.required],
-      fcn_exchange_making_amt: [{ value: 0 }, Validators.required],
+      fcn_exchange_pure_weight: [''],
+      fcn_exchange_purity_diff: [''],
+      fcn_exchange_stone_rate: [''],
+      fcn_exchange_stone_amount: [''],
+      fcn_exchange_metal_rate: [''],
+      fcn_exchange_metal_amount: [''],
+      fcn_exchange_chargeable_wt: [''],
+      fcn_exchange_making_rate: [''],
+      fcn_exchange_making_amt: [''],
       fcn_exchange_net_amount: [{ value: 0 }, Validators.required],
     });
 
@@ -5640,8 +5641,8 @@ export class AddPosComponent implements OnInit {
     // this.order_total_sales_returns = this.invReturnSalesTotalNetTotal;
 
     this.exchange_items.forEach(function (item) {
-      // total_exchange = total_exchange + parseFloat(item.net_amount);
-      total_exchange = total_exchange + parseFloat(item.total_amount);
+      total_exchange = total_exchange + parseFloat(item.net_amount);
+      // total_exchange = total_exchange + parseFloat(item.total_amount);
     });
 
     // Metal purchase (Exchange)
@@ -5697,7 +5698,7 @@ export class AddPosComponent implements OnInit {
     });
     if (!this.lineItemForm.invalid) {
       if (
-        this.lineItemForm.controls.fcn_li_net_amount >
+        parseFloat(this.lineItemForm.value.fcn_li_net_amount) >=
         this.lineItemForm.value.fcn_ad_metal_amount
       ) {
         this.updateBtn = false;
@@ -6122,6 +6123,8 @@ export class AddPosComponent implements OnInit {
               this.salesReturnForm.controls['fcn_returns_cust_code'].setValue(
                 _response.POSCUSTCODE
               );
+              this.srCustCode = _response.POSCUSTCODE;
+
               this.salesReturnForm.controls['fcn_returns_cust_mobile'].setValue(
                 _response.MOBILE
               );
@@ -6502,6 +6505,11 @@ export class AddPosComponent implements OnInit {
         this.retailSReturnDataPost = null;
       if (this.currentExchangeMetalPurchase.length == 0)
         this.metalPurchaseDataPost = null;
+
+      if (this.validateSalesReturnCust()) {
+        return;
+      }
+
       const postData = {
         karatRate: this.karatRateDetails,
         customer: {
@@ -6788,7 +6796,7 @@ export class AddPosComponent implements OnInit {
       this.snackBar.open('Processing...');
 
       if (this.editOnly) {
-        let API = `RetailSalesDataInDotnet/UpdateRetailSalesData?strBranchCode=${this.queryParams.branchCode}&strVocType=${this.queryParams.vocType}&strYearMonth=${this.queryParams.yearMonth}&intVocNo=${this.queryParams.vocNo}`
+        let API = `RetailSalesDataInDotnet/UpdateRetailSalesData?strBranchCode=${this.content.BRANCH_CODE}&strVocType=${this.content.VOCTYPE}&strYearMonth=${this.content.YEARMONTH}&intVocNo=${this.content.VOCNO}`
         this.suntechApi.putDynamicAPI(API, postData)
           .subscribe(
             (res) => {
@@ -8579,11 +8587,14 @@ export class AddPosComponent implements OnInit {
     }
     if (this.retailSReturnDataPost != null && this.retailSReturnDataPost != '') {
       this.retailSReturnDataPost.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
-      if (this.retailSReturnDataPost.retailSReturnDetails.length > 0)
+      if (this.retailSReturnDataPost?.retailSReturnDetails?.length > 0) {
         this.retailSReturnDataPost.retailSReturnDetails.forEach((data: any) => {
           data.DTSALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
           data.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
         });
+      }else{
+        this.srCustCode = '';
+      }
     }
   }
 
@@ -9952,6 +9963,24 @@ export class AddPosComponent implements OnInit {
       }
       return null;
     };
+  }
+
+  validateSalesReturnCust(): boolean {
+    if (
+      this.customerDataForm.value.fcn_customer_code !== null &&
+      this.customerDataForm.value.fcn_customer_code !== '' &&
+      this.srCustCode !== null &&
+      this.srCustCode !== ''
+    ) {
+      if (this.customerDataForm.value.fcn_customer_code != this.srCustCode) {
+        this.openDialog('warning', 'Invalid voucher No.', true);
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
 }
