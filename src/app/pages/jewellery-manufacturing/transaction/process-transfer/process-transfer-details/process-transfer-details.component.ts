@@ -106,6 +106,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     PUREWT: [''],
     PURITY: [''],
     METALLAB_TYPE: [''],
+    ISSUE_REF: [''],
+    JOB_SO_NUMBER: [''],
   });
   columnheader: any[] = ['Div', 'Stock Code', 'Color', 'Clarity', 'Size', 'Shape', 'Pcs', 'Setted', 'Weight', 'Loss', 'Gain Wt', 'Type', 'Rate ', 'Amount']
 
@@ -135,7 +137,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.processTo.setValue(dataFromParent.processTo)
     this.processTransferdetailsForm.controls.MetalPcsFrom.setValue(dataFromParent.MetalPcsFrom)
     this.processTransferdetailsForm.controls.MetalPcsTo.setValue(dataFromParent.MetalPcsTo)
-
+    this.processTransferdetailsForm.controls.GrossWeightTo.setValue(dataFromParent.GrossWeightTo)
     this.processTransferdetailsForm.controls.approvedby.setValue(dataFromParent.approvedby)
     this.processTransferdetailsForm.controls.startdate.setValue(dataFromParent.startdate)
     this.processTransferdetailsForm.controls.JOB_DATE.setValue(dataFromParent.JOB_DATE)
@@ -149,6 +151,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.workerToDescription.setValue(dataFromParent.workerToDescription)
     this.processTransferdetailsForm.controls.PURITY.setValue(dataFromParent.PURITY)
     this.processTransferdetailsForm.controls.METALLAB_TYPE.setValue(dataFromParent.METALLAB_TYPE)
+    this.processTransferdetailsForm.controls.remarks.setValue(dataFromParent.remarks)
+    this.processTransferdetailsForm.controls.treeno.setValue(dataFromParent.treeno)
+    this.processTransferdetailsForm.controls.JOB_SO_NUMBER.setValue(dataFromParent.JOB_SO_NUMBER)
   }
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
@@ -215,6 +220,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.processTransferdetailsForm.controls.StonePcsFrom.setValue(data[0].STONE)
           this.processTransferdetailsForm.controls.PUREWT.setValue(data[0].PUREWT)
           this.processTransferdetailsForm.controls.PURITY.setValue(data[0].PURITY)
+          this.processTransferdetailsForm.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
