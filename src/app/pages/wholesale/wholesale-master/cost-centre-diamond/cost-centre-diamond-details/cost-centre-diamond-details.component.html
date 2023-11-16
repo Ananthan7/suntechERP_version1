@@ -1,0 +1,515 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Cost Center Diamond Division</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()"></modal-header>
+<div class="container-fluid pt-3">
+    <form>
+        <div class="row justify-content-between">
+            <div class="col-md-5">
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Branch</label>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-between mb-2 border">
+            <div class="col-md-4">
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label text-center"><b>Purchase A/c</b></label>
+                    <label for="inputPassword" class="col-sm-3 col-form-label text-center">Trading</label>
+                    <label for="inputPassword" class="col-sm-3 col-form-label text-center">Import</label>
+                    <label for="inputPassword" class="col-sm-3 col-form-label text-center">Repair</label>
+
+                </div>
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Purchase</label>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Purchase Return</label>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center"><b>Sales A/c</b></label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Trading</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Retail</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Export</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Repair</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Exhibition</label>
+
+                </div>
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Sales</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Sales</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-12 col-form-label text-center">Other</label>
+                </div>
+                <div class="row align-items-center mb-1">
+                    <div class="col-md-12">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-1">
+                    <div class="col-md-12">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center border">
+            <label for="inputPassword" class="col-sm-10 col-form-label"><b>Other A/c</b></label>
+            <label for="inputPassword" class="col-sm-2 col-form-label"><b>Branch Transfer</b></label>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row justify-content-between mb-2 border">
+                    <div class="col-md-3">
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Opening</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Own Stock</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Closing Stock</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Stone Diff</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Cost Adjustment</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Manufacture</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">S O H Metal Manufacturing</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Wastage</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Dismantling</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Dismantling Loss</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Repair Unfix Purchase</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Lot Mix Account</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Certification Charges</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Plate Charges</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Stk Revalue</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Custom Account</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">IN</label>
+                    <div class="col-md-7">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Out</label>
+                    <div class="col-md-7">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+            <mat-tab label="Diamond Component A/C">
+                <div class="row align-items-center border">
+                    <label for="inputPassword" class="col-sm-6 col-form-label text-center"><b>Purchase</b></label>
+                    <label for="inputPassword" class="col-sm-6 col-form-label text-center"><b>Sales</b></label>
+                </div>
+                <div class="row border">
+                    <div class="row align-items-center border">
+                        <label for="inputPassword" class="col-sm-6 col-form-label text-center"><b>Opening</b></label>
+                        <label for="inputPassword" class="col-sm-6 col-form-label text-center"><b>Trading</b></label>
+                        <label for="inputPassword" class="col-sm-6 col-form-label text-center"><b>Import</b></label>
+                        <label for="inputPassword" class="col-sm-6 col-form-label text-center"><b>Repair</b></label>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Pure Gold in Diamond
+                                Jewellery</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Pure Gold in Diamond Jewellery (Fixed)</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Loose Stone Value in Diamond Jewellery</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Color Stone Value in Diamond Jeweller</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Pearl Value in Diamond Jewellery</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Manufacture A/C">
+
+            </mat-tab>
+        </mat-tab-group>
+    </form>
+</div>

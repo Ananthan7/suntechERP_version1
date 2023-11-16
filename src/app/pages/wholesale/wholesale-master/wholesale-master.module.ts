@@ -24,6 +24,7 @@ import { ComponentSizeSetComponent } from './component-size-set/component-size-s
 import { CustomerPriceSettingComponent } from './customer-price-setting/customer-price-setting.component';
 import { CustomerPricingMasterComponent } from './customer-pricing-master/customer-pricing-master.component';
 import { CostCentreDiamondComponent } from './cost-centre-diamond/cost-centre-diamond.component';
+import { CostCentreDiamondDetailsComponent } from './cost-centre-diamond/cost-centre-diamond-details/cost-centre-diamond-details.component';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { CostCentreDiamondComponent } from './cost-centre-diamond/cost-centre-di
     CustomerPriceSettingComponent,
     CustomerPricingMasterComponent,
     CostCentreDiamondComponent,
+    CostCentreDiamondDetailsComponent,
   ],
   imports: [
     CommonModule,
