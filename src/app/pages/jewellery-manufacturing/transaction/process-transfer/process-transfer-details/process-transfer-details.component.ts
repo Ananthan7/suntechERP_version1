@@ -154,6 +154,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.remarks.setValue(dataFromParent.remarks)
     this.processTransferdetailsForm.controls.treeno.setValue(dataFromParent.treeno)
     this.processTransferdetailsForm.controls.JOB_SO_NUMBER.setValue(dataFromParent.JOB_SO_NUMBER)
+    this.processTransferdetailsForm.controls.stockCode.setValue(dataFromParent.stockCode)
   }
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
@@ -221,6 +222,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.processTransferdetailsForm.controls.PUREWT.setValue(data[0].PUREWT)
           this.processTransferdetailsForm.controls.PURITY.setValue(data[0].PURITY)
           this.processTransferdetailsForm.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
+          this.processTransferdetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
