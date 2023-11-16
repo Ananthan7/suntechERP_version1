@@ -80,7 +80,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 46,
+    LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
@@ -163,7 +163,7 @@ export class MetalReturnDetailsComponent implements OnInit {
 
   stockCodeSelected(e:any){
     console.log(e);
-    
+    this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
   }
   
   close(data?: any) {
