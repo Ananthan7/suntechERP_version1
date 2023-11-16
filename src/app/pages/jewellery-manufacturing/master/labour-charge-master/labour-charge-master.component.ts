@@ -603,21 +603,20 @@ sizeFromCodeData: MasterSearchModel = {
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
   }
 
-  colorCodeData: MasterSearchModel = {
+  colorData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 35,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'COLOR SET'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  colorCodeSelected(e:any){
-    console.log(e); 
-    this.metallabourMasterForm.controls.color.setValue(e.CODE);
+  colorDataSelected(data: any) {
+    this.metallabourMasterForm.controls.color.setValue(data.CODE)
   }
 
   typeCodeData: MasterSearchModel = {
@@ -637,12 +636,36 @@ sizeFromCodeData: MasterSearchModel = {
     this.metallabourMasterForm.controls.typecode.setValue(e.CODE);
   }
 
-  masterCodeData:MasterSearchModel = {
+  categoryCodeData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Master Data',
+    SEARCH_HEADING: 'Category Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  subcategoryCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Subcategory Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  brandCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand Data',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,

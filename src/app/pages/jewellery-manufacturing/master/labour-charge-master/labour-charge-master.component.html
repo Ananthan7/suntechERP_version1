@@ -295,8 +295,8 @@
                     <mat-form-field style="width: 90%">
                       <input type="text" matInput maxlength="6" formControlName="color" />
                     </mat-form-field>
-                    <master-search [MasterSearchData]="colorCodeData"
-                      (newRowClick)="colorCodeSelected($event)"></master-search>
+                    <master-search [MasterSearchData]="colorData"
+                      (newRowClick)="colorDataSelected($event)"></master-search>
                   </div>
                   <label for="input" class="col-sm-2 col-form-label">Cost Rate :</label>
                   <div class="col-sm-3">
@@ -327,7 +327,7 @@
                     <mat-form-field style="width: 90%">
                       <input type="text" matInput maxlength="6" formControlName="category" />
                     </mat-form-field>
-                    <master-search [MasterSearchData]="masterCodeData"
+                    <master-search [MasterSearchData]="categoryCodeData"
                       (newRowClick)="categorySelected($event)"></master-search>
                   </div>
                   <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
@@ -344,7 +344,7 @@
                     <mat-form-field style="width: 90%">
                       <input type="text" matInput maxlength="6" formControlName="subCategory" />
                     </mat-form-field>
-                    <master-search [MasterSearchData]="masterCodeData"
+                    <master-search [MasterSearchData]="subcategoryCodeData"
                       (newRowClick)="subcategorySelected($event)"></master-search>
                   </div>
                   <label for="input" class="col-sm-2 col-form-label">Wastage % :</label>
@@ -360,7 +360,7 @@
                     <mat-form-field style="width: 90%">
                       <input type="text" matInput maxlength="6" formControlName="brand" />
                     </mat-form-field>
-                    <master-search [MasterSearchData]="masterCodeData"
+                    <master-search [MasterSearchData]="brandCodeData"
                       (newRowClick)="brandSelected($event)"></master-search>
                   </div>
                 </div>

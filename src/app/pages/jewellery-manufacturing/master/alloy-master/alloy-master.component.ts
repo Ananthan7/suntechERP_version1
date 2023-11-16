@@ -75,7 +75,7 @@ export class AlloyMasterComponent implements OnInit {
     stockCode: [''],
     stockCodeDes : [''],
     divCode : [''],
-   
+    hsncode: [''],
   });
 
   costCenterData: MasterSearchModel = {
@@ -194,6 +194,18 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  HSNCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'HSN',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -266,6 +278,11 @@ export class AlloyMasterComponent implements OnInit {
   }
   priceFiveCodeSelected(e:any){
     this.alloyMastereForm.controls.price5code.setValue(e.PRICE_CODE);
+  }
+
+  HSNCenterSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.hsncode.setValue(e.CODE);
   }
 
   setFormValues() {
