@@ -8,7 +8,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class JewelleryMasterComponent implements OnInit {
 
+  divisionMS: any = 'ID';
   columnhead:any[] = ['Division','Gross Wt','Karat','Rate Type','Rate','Amount..','Amount','Metal Labour','Rate/Gram','MetalPer','Color'];
+  columnheader:any[] = ['Div', 'Stock Code', 'Shape','Color','Clarity','Sieve','Size','Pcs','Carat','Currency','Pc Code','Lab Rate','Lab Amt','LbCode'];
+  columnheaders:any[] = ['Sr','Description','FC','LC'];
+  columnheaderPartDetails:any[] = ['Sr#','Div','Part Code','Design Code','Pcs','Gross Wt','Rate','Amount']
+
 
   constructor( private activeModal: NgbActiveModal,) { }
  
