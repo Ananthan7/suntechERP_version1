@@ -23,7 +23,7 @@
         <div class="row border-bottom">
           <div class="col-md-5">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">vocher Type :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Voucher Type :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%">
                   <input type="text" matInput formControlName="vocType" />
@@ -36,7 +36,7 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Vocher Date :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Voucher Date :</label>
               <div class="col-md-4">
                 <mat-form-field>
                   <!-- <mat-label></mat-label> -->
@@ -96,16 +96,15 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Due Days :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%">
-                  <input type="text" matInput formControlName="dueDaysdesc" />
+                  <input type="text" matInput formControlName="dueDaysdesc" (change)="updateDueDays($event)" />
                 </mat-form-field>
               </div>
               <div class="col-md-5">
                 <mat-form-field style="width: 100%">
-                  <!-- <mat-label></mat-label> -->
                   <input matInput [matDatepicker]="dueDays" name="dueDays" formControlName="dueDays"
-                    placeholder="DD/MM/YYYY" DateValidation />
+                    placeholder="DD/MM/YYYY" DateValidation (change)="updateDuteDate($event)" />
                   <mat-datepicker-toggle matSuffix [for]="dueDays"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #dueDays></mat-datepicker>
+                  <mat-datepicker [startAt]="currentDate" #dueDays (selectedChanged)="updateDuteDate($event)"></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>

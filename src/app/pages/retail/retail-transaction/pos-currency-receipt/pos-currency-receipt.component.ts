@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { startOfDay } from '@fullcalendar/angular';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -24,7 +26,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   // columnhead: any[] = ['Sr#', 'Branch', 'Mode', 'A/c Code', 'Account Head', '', 'Curr.Rate', 'VAT_E_', 'VAT_E_'];
   columnsList: any[] = [
-    { title: 'branch', field: 'BRANCH_CODE' },
+    { title: 'Sr #', field: 'SRNO' },
+    { title: 'Branch', field: 'BRANCH_CODE' },
     { title: 'Mode', field: 'MODE' },
     { title: 'A/c Code', field: 'ACCODE' },
     { title: 'Account Head', field: 'HDACCOUNT_HEAD' },
@@ -116,7 +119,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     enteredby: [''], // No
     enteredbyuser: [''], // No
     dueDaysdesc: [''],
-    dueDays: [''], // no
+    dueDays: [new Date()], // no
     customerCode: [''],
     customerName: [''],
     mobile: [''],
@@ -139,7 +142,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     private comService: CommonServiceService,
-
+    private datePipe: DatePipe
   ) {
 
   }
@@ -159,7 +162,77 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     if (this.content?.MID != null)
       this.getArgsData();
+
+
+    // this.posCurrencyReceiptForm.get('dueDaysdesc')?.valueChanges.subscribe((newValue) => {
+    //   alert(newValue);
+    //   const parsedDate = this.parseDateString(newValue);
+    //   this.posCurrencyReceiptForm.get('dueDays')?.setValue(parsedDate);
+    // });
+
+    // this.posCurrencyReceiptForm.get('dueDays')?.valueChanges.subscribe((newDate: Date) => {
+    //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(this.formatDate(newDate));
+
+    //   const currentDate = startOfDay(new Date());
+    //   const difference = this.calculateDateDifference(newDate, currentDate);
+    //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
+    // });
+
+    // Subscribe to changes in dueDaysdesc
+    // this.posCurrencyReceiptForm.get('dueDaysdesc')?.valueChanges.subscribe((newValue) => {
+    //   this.updateDueDays(newValue);
+    // });
+
+    // Subscribe to changes in dueDays
+    // this.posCurrencyReceiptForm.get('dueDays')?.valueChanges.subscribe((newDate: Date) => {
+    //   // Calculate and update the difference in days
+    //   const currentDate = new Date();
+    //   const difference = this.calculateDateDifference(newDate, currentDate);
+    //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
+    // });
   }
+
+  updateDueDays(event: any) {
+    let value = event.target.value;
+    if (value != '') {
+      const curDate = new Date();
+      const updatedDate = curDate.getDate() + parseInt(value);
+      curDate.setDate(updatedDate);
+      this.posCurrencyReceiptForm.controls.dueDays.setValue(curDate);
+    } else {
+      this.posCurrencyReceiptForm.controls.dueDays.setValue(this.currentDate);
+    }
+  }
+
+
+  updateDuteDate(event: any) {
+    const inputValue = event.target.value;
+
+    if (inputValue !== '') {
+      const selectedDate = new Date(inputValue);
+      if (!isNaN(selectedDate.getTime())) {
+        const currentDate = new Date();
+        const difference = this.calculateDateDifference(selectedDate, currentDate);
+        this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
+      } else {
+        console.error('Invalid date input. Please enter a valid date.');
+      }
+    }
+  }
+
+  calculateDateDifference(dateA: Date, dateB: Date): number {
+    const timeDifference = dateA.getTime() - dateB.getTime();
+    const dayDifference = timeDifference / (1000 * 3600 * 24);
+    return Math.floor(dayDifference);
+  }
+
+  private formatDate(date: Date): string {
+    // Implement date formatting logic if needed
+    // You may use a date library or Angular's DatePipe for this
+    return date.toISOString(); // Example: Return ISO date string
+  }
+
+
   getArgsData() {
     console.log('this.content', this.content);
     if (this.content.FLAG == 'VIEW')
