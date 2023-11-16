@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -26,7 +25,7 @@ export class ProcessTransferComponent implements OnInit {
   PTFDetailsToSave: any[] = [];
   detailScreenDataToSave: any[] = [];
   labourChargeDetailsToSave: any[] = [];
-
+  currentDate: any = this.commonService.currentDate
   private subscriptions: Subscription[] = [];
 
   user: MasterSearchModel = {
@@ -80,10 +79,8 @@ export class ProcessTransferComponent implements OnInit {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
     private commonService: CommonServiceService
   ) {
-
   }
 
 
@@ -95,8 +92,9 @@ export class ProcessTransferComponent implements OnInit {
   setInitialValues() {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    this.processTransferFrom.controls.vocdate.setValue(this.commonService.currentDate)
-    this.processTransferFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+    this.processTransferFrom.controls.vocdate.setValue(this.currentDate)
+    this.processTransferFrom.controls.voctype.setValue('JPR')
+    //this.commonService.getqueryParamVocType()
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -200,30 +198,27 @@ export class ProcessTransferComponent implements OnInit {
     }
   }
 
-  deleteTableData() {
-
-  }
-
-
   removedata() {
     this.tableData.pop();
   }
 
   setLabourChargeDetails() {
+    let detailScreenData = this.detailData[0].DATA
+    detailScreenData = detailScreenData.PROCESS_FORMDETAILS
 
     this.labourChargeDetailsToSave.push(
       {
         "REFMID": 0,
-        "BRANCH_CODE": "",
-        "YEARMONTH": "",
-        "VOCTYPE": "",
+        "BRANCH_CODE": this.commonService.branchCode,
+        "YEARMONTH": this.commonService.yearSelected,
+        "VOCTYPE": this.processTransferFrom.value.voctype,
         "VOCNO": 0,
         "SRNO": 0,
-        "JOB_NUMBER": "",
-        "STOCK_CODE": "",
-        "UNQ_JOB_ID": "",
-        "METALSTONE": "",
-        "DIVCODE": "",
+        "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
+        "STOCK_CODE": this.commonService.nullToString(detailScreenData.stockCode),
+        "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.subjobno),
+        "METALSTONE": this.commonService.nullToString(detailScreenData.METALSTONE),
+        "DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
         "PCS": 0,
         "GROSS_WT": 0,
         "LABOUR_CODE": "",
@@ -242,16 +237,16 @@ export class ProcessTransferComponent implements OnInit {
     this.detailScreenDataToSave.push({
       "VOCNO": 0,
       "VOCTYPE": this.processTransferFrom.value.voctype,
-      "VOCDATE": this.commonService.formatMMDDYY(this.processTransferFrom.value.vocdate),
+      "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
       "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
       "JOB_SO_NUMBER": this.commonService.emptyToZero(detailScreenData.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.subjobno),
       "JOB_DESCRIPTION": this.commonService.nullToString(detailScreenData.DESCRIPTION),
       "BRANCH_CODE": this.commonService.branchCode,
       "DESIGN_CODE": this.commonService.nullToString(detailScreenData.DESIGN_CODE),
-      "METALSTONE": "",
-      "DIVCODE": "",
-      "STOCK_CODE": "",
+      "METALSTONE": this.commonService.nullToString(detailScreenData.METALSTONE),
+      "DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
+      "STOCK_CODE":  this.commonService.nullToString(detailScreenData.stockCode),
       "STOCK_DESCRIPTION": "",
       "COLOR": "",
       "CLARITY": "",
@@ -263,19 +258,19 @@ export class ProcessTransferComponent implements OnInit {
       "NET_WT": 0,
       "RATE": 0,
       "AMOUNT": 0,
-      "PROCESS_CODE": "",
-      "WORKER_CODE": "",
-      "UNQ_DESIGN_ID": "",
+      "PROCESS_CODE":  this.commonService.nullToString(detailScreenData.processTo),
+      "WORKER_CODE": this.commonService.nullToString(detailScreenData.workerTo),
+      "UNQ_DESIGN_ID": this.commonService.nullToString(detailScreenData.subjobno),
       "REFMID": 0,
       "AMOUNTLC": 0,
       "AMOUNTFC": 0,
       "WASTAGE_QTY": 0,
       "WASTAGE_PER": 0,
       "WASTAGE_AMT": 0,
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
-      "YEARMONTH": "",
-      "LOSS_QTY": 0,
+      "CURRENCY_CODE": this.commonService.nullToString(this.processTransferFrom.value.currency),
+      "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
+      "YEARMONTH": this.commonService.yearSelected,
+      "LOSS_QTY": this.commonService.emptyToZero(detailScreenData.stdLoss),
       "LABOUR_CODE": "",
       "LAB_RATE": 0,
       "LAB_AMT": 0,
@@ -287,21 +282,21 @@ export class ProcessTransferComponent implements OnInit {
       "BRKSTN_AMTFC": 0,
       "BRKSTN_AMTLC": 0,
       "MAIN_WORKER": "",
-      "FRM_WORKER": "",
-      "FRM_PROCESS": "",
+      "FRM_WORKER": this.commonService.nullToString(detailScreenData.workerFrom),
+      "FRM_PROCESS": this.commonService.nullToString(detailScreenData.processFrom),
       "CRACCODE": "",
       "LAB_ACCODE": "",
       "LAB_AMTFC": 0,
-      "TO_PROCESS": "",
-      "TO_WORKER": "",
+      "TO_PROCESS": this.commonService.nullToString(detailScreenData.processTo),
+      "TO_WORKER": this.commonService.nullToString(detailScreenData.workerTo),
       "LAB_RATEFC": 0,
       "RATEFC": 0,
       "PRINTED": true,
-      "PUREWT": 0,
-      "PURITY": 0,
+      "PUREWT": this.commonService.emptyToZero(Number(detailScreenData.MetalWeightFrom)*Number(detailScreenData.StonePcsFrom)),
+      "PURITY": this.commonService.emptyToZero(detailScreenData.PURITY),
       "SQLID": "",
       "ISBROCKEN": 0,
-      "TREE_NO": "",
+      "TREE_NO": this.commonService.nullToString(detailScreenData.treeno),
       "SETTED": true,
       "SETTED_PCS": 0,
       "SIEVE": "string",
@@ -346,7 +341,6 @@ export class ProcessTransferComponent implements OnInit {
       "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z",
       "PUREWTTEMP": 0
     })
-
   }
   setHeaderGridDetails() {
     let detailScreenData = this.detailData[0].DATA
@@ -356,7 +350,7 @@ export class ProcessTransferComponent implements OnInit {
       "SRNO": 0,
       "UNIQUEID": 0,
       "VOCNO": 0,
-      "VOCDATE": this.commonService.nullToString(this.processTransferFrom.value.vocdate),
+      "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
       "VOCTYPE": this.commonService.nullToString(this.processTransferFrom.value.voctype),
       "BRANCH_CODE": this.branchCode,
       "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
@@ -457,20 +451,20 @@ export class ProcessTransferComponent implements OnInit {
       "WORKER_ACCODE": "",
       "PRODLAB_ACCODE": "",
       "DT_BRANCH_CODE": this.commonService.branchCode,
-      "DT_VOCTYPE": this.commonService.getqueryParamVocType(),
+      "DT_VOCTYPE": this.processTransferFrom.value.voctype,
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.commonService.yearSelected,
       "ISSUE_REF": this.commonService.nullToString(detailScreenData.ISSUE_REF),
       "IS_AUTHORISE": true,
       "TIME_CONSUMED": 0,
-      "SCRAP_STOCK_CODE": "",
+      "SCRAP_STOCK_CODE":  this.commonService.nullToString(detailScreenData.stockCode),
       "SCRAP_SUB_STOCK_CODE": "",
       "SCRAP_PURITY": 0,
       "SCRAP_WT": 0,
       "SCRAP_PURE_WT": 0,
       "SCRAP_PUDIFF": 0,
       "SCRAP_ACCODE": "",
-      "APPROVED_DATE": this.commonService.formatYYMMDD(detailScreenData.approveddate),
+      "APPROVED_DATE": this.commonService.formatDateTime(this.currentDate),
       "APPROVED_USER": this.commonService.nullToString(detailScreenData.approvedby),
       "SCRAP_PCS": 0,
       "SCRAP_STONEWT": 0,
@@ -497,11 +491,11 @@ export class ProcessTransferComponent implements OnInit {
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
+      // this.update()
       return
     }
     if (this.processTransferFrom.invalid) {
-      this.toastr.error('select all required fields')
+      this.commonService.toastErrorByMsgId('select all required fields')
       return
     }
     let detailScreenData = this.detailData[0].DATA
@@ -512,7 +506,7 @@ export class ProcessTransferComponent implements OnInit {
       "VOCTYPE": this.commonService.nullToString(this.processTransferFrom.value.voctype),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
       "VOCNO": this.commonService.nullToString(this.processTransferFrom.value.vocno),
-      "VOCDATE": this.commonService.nullToString(this.processTransferFrom.value.vocdate),
+      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(this.processTransferFrom.value.vocdate)),
       "YEARMONTH": this.commonService.nullToString(this.yearMonth),
       "DOCTIME": "2023-10-21T07:24:35.989Z",
       "SMAN": this.commonService.nullToString(this.processTransferFrom.value.salesman),
@@ -521,22 +515,20 @@ export class ProcessTransferComponent implements OnInit {
       "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
       "NAVSEQNO": this.commonService.yearSelected,
       "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
-      "AUTOPOSTING": 0,
+      "AUTOPOSTING": false,
       "POSTDATE": "",
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "SYSTEM_DATE": this.commonService.formatYYMMDD(this.commonService.currentDate),
+      "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave, //header grid details
       "JOB_PROCESS_TRN_STNMTL_DJ": this.detailScreenDataToSave, //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": this.labourChargeDetailsToSave // labour charge details
     }
-
-    console.log(postData,'postData');
-    return
-
+    this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
@@ -546,17 +538,16 @@ export class ProcessTransferComponent implements OnInit {
               confirmButtonColor: '#336699',
               confirmButtonText: 'Ok'
             }).then((result: any) => {
-              if (result.value) {
-                this.processTransferFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
+              this.close('reloadMainGrid')
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG1531')
         }
-      }, err => this.toastr.error('Not saved'))
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -571,335 +562,10 @@ export class ProcessTransferComponent implements OnInit {
     this.processTransferFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
   }
 
-
-  update() {
-    if (this.processTransferFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    let API = 'JobProcessTrnMasterDJ/UpdateJobProcessTrnMasterDJ/' + this.processTransferFrom.value.branchCode + this.processTransferFrom.value.voctype + this.processTransferFrom.value.vocno + this.processTransferFrom.value.yearMonth
-    let postData = {
-      "MID": 0,
-      "VOCTYPE": this.processTransferFrom.value.voctype || "",
-      "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.processTransferFrom.value.vocno || "",
-      "VOCDATE": this.processTransferFrom.value.vocdate || "",
-      "YEARMONTH": this.yearMonth,
-      "DOCTIME": "2023-10-21T07:24:35.989Z",
-      "SMAN": this.processTransferFrom.value.salesman || "",
-      "REMARKS": "",
-      "CURRENCY_CODE": this.processTransferFrom.value.currency || "",
-      "CURRENCY_RATE": this.processTransferFrom.value.currencyrate || "",
-      "NAVSEQNO": 0,
-      "LAB_TYPE": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "",
-      "PRINT_COUNT": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "SYSTEM_DATE": "2023-10-21T07:24:35.989Z",
-      "JOB_PROCESS_TRN_DETAIL_DJ": [
-        {
-          "SRNO": 0,
-          "UNIQUEID": 0,
-          "VOCNO": 0,
-          "VOCDATE": "2023-10-21T07:24:35.989Z",
-          "VOCTYPE": "",
-          "BRANCH_CODE": "",
-          "JOB_NUMBER": "",
-          "JOB_DATE": "2023-10-21T07:24:35.989Z",
-          "UNQ_JOB_ID": "",
-          "UNQ_DESIGN_ID": "",
-          "DESIGN_CODE": "",
-          "SEQ_CODE": "",
-          "JOB_DESCRIPTION": "",
-          "CURRENCY_CODE": "",
-          "CURRENCY_RATE": 0,
-          "FRM_PROCESS_CODE": "",
-          "FRM_PROCESSNAME": "",
-          "FRM_WORKER_CODE": "",
-          "FRM_WORKERNAME": "",
-          "FRM_PCS": 0,
-          "FRM_STONE_WT": 0,
-          "FRM_STONE_PCS": 0,
-          "FRM_METAL_WT": 0,
-          "FRM_METAL_PCS": 0,
-          "FRM_PURE_WT": 0,
-          "FRM_NET_WT": 0,
-          "TO_PROCESS_CODE": "",
-          "TO_PROCESSNAME": "",
-          "TO_WORKER_CODE": "",
-          "TO_WORKERNAME": "",
-          "TO_PCS": 0,
-          "TO_METAL_PCS": 0,
-          "TO_STONE_WT": 0,
-          "TO_STONE_PCS": 0,
-          "TO_METAL_WT": 0,
-          "TO_PURE_WT": 0,
-          "TO_NET_WT": 0,
-          "LOSS_QTY": 0,
-          "LOSS_PURE_QTY": 0,
-          "STONE_AMOUNTFC": 0,
-          "STONE_AMOUNTLC": 0,
-          "METAL_AMOUNTFC": 0,
-          "METAL_AMOUNTLC": 0,
-          "MAKING_RATEFC": 0,
-          "MAKING_RATELC": 0,
-          "MAKING_AMOUNTFC": 0,
-          "MAKING_AMOUNTLC": 0,
-          "LAB_AMOUNTFC": 0,
-          "LAB_AMOUNTLC": 0,
-          "TOTAL_AMOUNTFC": 0,
-          "TOTAL_AMOUNTLC": 0,
-          "COSTFC_PER_PCS": 0,
-          "COSTLC_PER_PCS": 0,
-          "LAB_CODE": "",
-          "LAB_UNIT": "",
-          "LAB_RATEFC": 0,
-          "LAB_RATELC": 0,
-          "LAB_ACCODE": "",
-          "LOSS_ACCODE": "",
-          "FRM_WIP_ACCODE": "",
-          "TO_WIP_ACCODE": "",
-          "RET_METAL_DIVCODE": "",
-          "RET_METAL_STOCK_CODE": "",
-          "RET_STONE_DIVCODE": "",
-          "RET_STONE_STOCK_CODE": "",
-          "RET_METAL_WT": 0,
-          "RET_PURITY": 0,
-          "RET_PURE_WT": 0,
-          "RET_STONE_WT": 0,
-          "RET_METAL_RATEFC": 0,
-          "RET_METAL_RATELC": 0,
-          "RET_METAL_AMOUNTFC": 0,
-          "RET_METAL_AMOUNTLC": 0,
-          "RET_STONE_RATEFC": 0,
-          "RET_STONE_RATELC": 0,
-          "RET_STONE_AMOUNTFC": 0,
-          "RET_STONE_AMOUNTLC": 0,
-          "IN_DATE": "2023-10-21T07:24:35.989Z",
-          "OUT_DATE": "2023-10-21T07:24:35.989Z",
-          "TIME_TAKEN_HRS": 0,
-          "METAL_DIVISION": "",
-          "LOCTYPE_CODE": "",
-          "PICTURE_PATH": "",
-          "AMOUNTLC": 0,
-          "AMOUNTFC": 0,
-          "JOB_PCS": 0,
-          "STONE_WT": 0,
-          "STONE_PCS": 0,
-          "METAL_WT": 0,
-          "METAL_PCS": 0,
-          "PURE_WT": 0,
-          "GROSS_WT": 0,
-          "RET_METAL_PCS": 0,
-          "RET_STONE_PCS": 0,
-          "RET_LOC_MET": "",
-          "RET_LOC_STN": "",
-          "MAIN_WORKER": "",
-          "MKG_LABACCODE": "",
-          "REMARKS": "",
-          "TREE_NO": "",
-          "STD_TIME": 0,
-          "WORKER_ACCODE": "",
-          "PRODLAB_ACCODE": "",
-          "DT_BRANCH_CODE": "",
-          "DT_VOCTYPE": "",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "",
-          "ISSUE_REF": "",
-          "IS_AUTHORISE": true,
-          "TIME_CONSUMED": 0,
-          "SCRAP_STOCK_CODE": "",
-          "SCRAP_SUB_STOCK_CODE": "",
-          "SCRAP_PURITY": 0,
-          "SCRAP_WT": 0,
-          "SCRAP_PURE_WT": 0,
-          "SCRAP_PUDIFF": 0,
-          "SCRAP_ACCODE": "",
-          "APPROVED_DATE": "2023-10-21T07:24:35.989Z",
-          "APPROVED_USER": "",
-          "SCRAP_PCS": 0,
-          "SCRAP_STONEWT": 0,
-          "SCRAP_NETWT": 0,
-          "FROM_IRONWT": 0,
-          "FROM_MSTOCKCODE": "",
-          "TO_MSTOCKCODE": "",
-          "DESIGN_TYPE": "",
-          "TO_IRONWT": 0,
-          "FRM_DIAGROSS_WT": 0,
-          "EXCLUDE_TRANSFER_WT": true,
-          "SCRAP_DIVCODE": "",
-          "IRON_SCRAP_WT": 0,
-          "GAIN_WT": 0,
-          "GAIN_PURE_WT": 0,
-          "GAIN_ACCODE": "",
-          "IS_REJECT": true,
-          "REASON": "",
-          "REJ_REMARKS": "",
-          "ATTACHMENT_FILE": "",
-          "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z"
-        }
-      ],
-      "JOB_PROCESS_TRN_STNMTL_DJ": [
-        {
-          "VOCNO": 0,
-          "VOCTYPE": "",
-          "VOCDATE": "2023-10-21T07:24:35.989Z",
-          "JOB_NUMBER": "",
-          "JOB_SO_NUMBER": 0,
-          "UNQ_JOB_ID": "",
-          "JOB_DESCRIPTION": "",
-          "BRANCH_CODE": "",
-          "DESIGN_CODE": "",
-          "METALSTONE": "",
-          "DIVCODE": "",
-          "STOCK_CODE": "",
-          "STOCK_DESCRIPTION": "",
-          "COLOR": "",
-          "CLARITY": "",
-          "SHAPE": "",
-          "SIZE": "",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "STONE_WT": 0,
-          "NET_WT": 0,
-          "RATE": 0,
-          "AMOUNT": 0,
-          "PROCESS_CODE": "",
-          "WORKER_CODE": "",
-          "UNQ_DESIGN_ID": "",
-          "REFMID": 0,
-          "AMOUNTLC": 0,
-          "AMOUNTFC": 0,
-          "WASTAGE_QTY": 0,
-          "WASTAGE_PER": 0,
-          "WASTAGE_AMT": 0,
-          "CURRENCY_CODE": "",
-          "CURRENCY_RATE": 0,
-          "YEARMONTH": "",
-          "LOSS_QTY": 0,
-          "LABOUR_CODE": "",
-          "LAB_RATE": 0,
-          "LAB_AMT": 0,
-          "BRKSTN_STOCK_CODE": "",
-          "BRKSTN_DIVISION_CODE": "",
-          "BRKSTN_WEIGHT": 0,
-          "BRKSTN_RATEFC": 0,
-          "BRKSTN_RATELC": 0,
-          "BRKSTN_AMTFC": 0,
-          "BRKSTN_AMTLC": 0,
-          "MAIN_WORKER": "",
-          "FRM_WORKER": "",
-          "FRM_PROCESS": "",
-          "CRACCODE": "",
-          "LAB_ACCODE": "",
-          "LAB_AMTFC": 0,
-          "TO_PROCESS": "",
-          "TO_WORKER": "",
-          "LAB_RATEFC": 0,
-          "RATEFC": 0,
-          "PRINTED": true,
-          "PUREWT": 0,
-          "PURITY": 0,
-          "SQLID": "",
-          "ISBROCKEN": 0,
-          "TREE_NO": "",
-          "SETTED": true,
-          "SETTED_PCS": 0,
-          "SIEVE": "string",
-          "FULL_RECOVERY": 0,
-          "RECOVERY_DATE": "2023-10-21T07:24:35.989Z",
-          "RECOV_LOSS": 0,
-          "RECOV_LOSS_PURE": 0,
-          "BROKENSTONE_PCS": 0,
-          "BROKENSTONE_WT": 0,
-          "ISMISSING": 0,
-          "PROCESS_TYPE": "",
-          "IS_AUTHORISE": true,
-          "SUB_STOCK_CODE": "",
-          "KARAT_CODE": "",
-          "SIEVE_SET": "",
-          "SCRAP_STOCK_CODE": "",
-          "SCRAP_SUB_STOCK_CODE": "",
-          "SCRAP_PURITY": 0,
-          "SCRAP_WT": 0,
-          "SCRAP_PURE_WT": 0,
-          "SCRAP_PUDIFF": 0,
-          "SCRAP_ACCODE": "",
-          "SYSTEM_DATE": "2023-10-21T07:24:35.989Z",
-          "ISSUE_GROSS_WT": 0,
-          "ISSUE_STONE_WT": 0,
-          "ISSUE_NET_WT": 0,
-          "JOB_PCS": 0,
-          "DESIGN_TYPE": "",
-          "TO_STOCK_CODE": "",
-          "FROM_STOCK_CODE": "",
-          "FROM_SUB_STOCK_CODE": "",
-          "LOSS_PURE_WT": 0,
-          "EXCLUDE_TRANSFER_WT": true,
-          "IRON_WT": 0,
-          "IRON_SCRAP_WT": 0,
-          "GAIN_WT": 0,
-          "GAIN_PURE_WT": 0,
-          "IS_REJECT": true,
-          "REASON": "",
-          "REJ_REMARKS": "",
-          "ATTACHMENT_FILE": "",
-          "AUTHORIZE_TIME": "2023-10-21T07:24:35.989Z",
-          "PUREWTTEMP": 0
-        }
-      ],
-      "JOB_PROCESS_TRN_LABCHRG_DJ": [
-        {
-          "REFMID": 0,
-          "BRANCH_CODE": "",
-          "YEARMONTH": "",
-          "VOCTYPE": "",
-          "VOCNO": 0,
-          "SRNO": 0,
-          "JOB_NUMBER": "",
-          "STOCK_CODE": "",
-          "UNQ_JOB_ID": "",
-          "METALSTONE": "",
-          "DIVCODE": "",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "LABOUR_CODE": "",
-          "LAB_RATE": 0,
-          "LAB_ACCODE": "",
-          "LAB_AMTFC": 0,
-          "UNITCODE": ""
-        }
-      ]
-    }
-
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.processTransferFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+  deleteTableData(): void {
+    this.tableRowCount = 0;
+    this.tableData = [];
   }
-
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       this.commonService.showSnackBarMsg('Please select Data to delete')
@@ -933,9 +599,6 @@ export class ProcessTransferComponent implements OnInit {
                 confirmButtonText: 'Ok'
               }).then((result: any) => {
                 if (result.value) {
-                  this.processTransferFrom.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
                 }
               });
             } else {
