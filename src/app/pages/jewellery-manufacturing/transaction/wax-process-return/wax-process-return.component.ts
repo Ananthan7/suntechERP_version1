@@ -72,10 +72,10 @@ export class WaxProcessReturnComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID:  3,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Code',
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Wax Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -121,7 +121,7 @@ export class WaxProcessReturnComponent implements OnInit {
 
   WaxCodeSelected(e:any){
     console.log(e);
-    this.waxprocessFrom.controls.waxcode.setValue(e.STOCK_CODE);
+    this.waxprocessFrom.controls.waxcode.setValue(e.CODE);
   }
 
   ProcessCodeSelected(e:any){

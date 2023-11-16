@@ -64,10 +64,10 @@ export class LossRecoveryComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 23,
-    SEARCH_FIELD: "RECOV_STOCK_CODE",
+    SEARCH_FIELD: "STOCK_CODE",
     SEARCH_HEADING: "Stock Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "RECOV_STOCK_CODE<> ''",
+    WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -88,10 +88,10 @@ export class LossRecoveryComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 19,
-    SEARCH_FIELD: "worker",
+    SEARCH_FIELD: "WORKER_CODE",
     SEARCH_HEADING: "Worker Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "worker<> ''",
+    WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -133,11 +133,11 @@ export class LossRecoveryComponent implements OnInit {
   }
 
   stockCodeSelected(e:any){
-    console.log(e);
+    this.lossRecoveryFrom.controls.process.setValue(e.STOCK_CODE);
   }
 
   workCodeSelected(e:any){
-    console.log(e);
+    this.lossRecoveryFrom.controls.process.setValue(e.WORKER_CODE);
   }
 
   locationCodeSelected(e:any){
