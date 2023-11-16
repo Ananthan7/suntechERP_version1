@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -26,7 +25,7 @@ export class ProcessTransferComponent implements OnInit {
   PTFDetailsToSave: any[] = [];
   detailScreenDataToSave: any[] = [];
   labourChargeDetailsToSave: any[] = [];
-
+  currentDate: any = this.commonService.currentDate
   private subscriptions: Subscription[] = [];
 
   user: MasterSearchModel = {
@@ -80,10 +79,8 @@ export class ProcessTransferComponent implements OnInit {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
     private commonService: CommonServiceService
   ) {
-
   }
 
 
@@ -95,8 +92,9 @@ export class ProcessTransferComponent implements OnInit {
   setInitialValues() {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    this.processTransferFrom.controls.vocdate.setValue(this.commonService.currentDate)
-    this.processTransferFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+    this.processTransferFrom.controls.vocdate.setValue(this.currentDate)
+    this.processTransferFrom.controls.voctype.setValue('JPR')
+    //this.commonService.getqueryParamVocType()
   }
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -200,11 +198,6 @@ export class ProcessTransferComponent implements OnInit {
     }
   }
 
-  deleteTableData() {
-
-  }
-
-
   removedata() {
     this.tableData.pop();
   }
@@ -224,8 +217,8 @@ export class ProcessTransferComponent implements OnInit {
         "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
         "STOCK_CODE": this.commonService.nullToString(detailScreenData.stockCode),
         "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.subjobno),
-        "METALSTONE": "",
-        "DIVCODE": "",
+        "METALSTONE": this.commonService.nullToString(detailScreenData.METALSTONE),
+        "DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
         "PCS": 0,
         "GROSS_WT": 0,
         "LABOUR_CODE": "",
@@ -244,15 +237,15 @@ export class ProcessTransferComponent implements OnInit {
     this.detailScreenDataToSave.push({
       "VOCNO": 0,
       "VOCTYPE": this.processTransferFrom.value.voctype,
-      "VOCDATE": this.commonService.formatMMDDYY(this.processTransferFrom.value.vocdate),
+      "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
       "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
       "JOB_SO_NUMBER": this.commonService.emptyToZero(detailScreenData.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.commonService.nullToString(detailScreenData.subjobno),
       "JOB_DESCRIPTION": this.commonService.nullToString(detailScreenData.DESCRIPTION),
       "BRANCH_CODE": this.commonService.branchCode,
       "DESIGN_CODE": this.commonService.nullToString(detailScreenData.DESIGN_CODE),
-      "METALSTONE": "",
-      "DIVCODE": "",
+      "METALSTONE": this.commonService.nullToString(detailScreenData.METALSTONE),
+      "DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
       "STOCK_CODE":  this.commonService.nullToString(detailScreenData.stockCode),
       "STOCK_DESCRIPTION": "",
       "COLOR": "",
@@ -357,7 +350,7 @@ export class ProcessTransferComponent implements OnInit {
       "SRNO": 0,
       "UNIQUEID": 0,
       "VOCNO": 0,
-      "VOCDATE": this.commonService.nullToString(this.processTransferFrom.value.vocdate),
+      "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
       "VOCTYPE": this.commonService.nullToString(this.processTransferFrom.value.voctype),
       "BRANCH_CODE": this.branchCode,
       "JOB_NUMBER": this.commonService.nullToString(detailScreenData.jobno),
@@ -458,7 +451,7 @@ export class ProcessTransferComponent implements OnInit {
       "WORKER_ACCODE": "",
       "PRODLAB_ACCODE": "",
       "DT_BRANCH_CODE": this.commonService.branchCode,
-      "DT_VOCTYPE": this.commonService.getqueryParamVocType(),
+      "DT_VOCTYPE": this.processTransferFrom.value.voctype,
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.commonService.yearSelected,
       "ISSUE_REF": this.commonService.nullToString(detailScreenData.ISSUE_REF),
@@ -471,7 +464,7 @@ export class ProcessTransferComponent implements OnInit {
       "SCRAP_PURE_WT": 0,
       "SCRAP_PUDIFF": 0,
       "SCRAP_ACCODE": "",
-      "APPROVED_DATE": this.commonService.formatYYMMDD(detailScreenData.approveddate),
+      "APPROVED_DATE": this.commonService.formatDateTime(this.currentDate),
       "APPROVED_USER": this.commonService.nullToString(detailScreenData.approvedby),
       "SCRAP_PCS": 0,
       "SCRAP_STONEWT": 0,
@@ -498,11 +491,11 @@ export class ProcessTransferComponent implements OnInit {
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
+      // this.update()
       return
     }
     if (this.processTransferFrom.invalid) {
-      this.toastr.error('select all required fields')
+      this.commonService.toastErrorByMsgId('select all required fields')
       return
     }
     let detailScreenData = this.detailData[0].DATA
@@ -513,7 +506,7 @@ export class ProcessTransferComponent implements OnInit {
       "VOCTYPE": this.commonService.nullToString(this.processTransferFrom.value.voctype),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
       "VOCNO": this.commonService.nullToString(this.processTransferFrom.value.vocno),
-      "VOCDATE": this.commonService.nullToString(this.processTransferFrom.value.vocdate),
+      "VOCDATE": this.commonService.nullToString(this.commonService.formatDateTime(this.processTransferFrom.value.vocdate)),
       "YEARMONTH": this.commonService.nullToString(this.yearMonth),
       "DOCTIME": "2023-10-21T07:24:35.989Z",
       "SMAN": this.commonService.nullToString(this.processTransferFrom.value.salesman),
@@ -522,19 +515,20 @@ export class ProcessTransferComponent implements OnInit {
       "CURRENCY_RATE": this.commonService.emptyToZero(this.processTransferFrom.value.currencyrate),
       "NAVSEQNO": this.commonService.yearSelected,
       "LAB_TYPE": this.commonService.emptyToZero(detailScreenData.METALLAB_TYPE),
-      "AUTOPOSTING": 0,
+      "AUTOPOSTING": false,
       "POSTDATE": "",
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "SYSTEM_DATE": this.commonService.formatYYMMDD(this.commonService.currentDate),
+      "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave, //header grid details
       "JOB_PROCESS_TRN_STNMTL_DJ": this.detailScreenDataToSave, //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": this.labourChargeDetailsToSave // labour charge details
     }
-
+    this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
@@ -544,17 +538,16 @@ export class ProcessTransferComponent implements OnInit {
               confirmButtonColor: '#336699',
               confirmButtonText: 'Ok'
             }).then((result: any) => {
-              if (result.value) {
-                this.processTransferFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
+              this.close('reloadMainGrid')
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG1531')
         }
-      }, err => this.toastr.error('Not saved'))
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
     this.subscriptions.push(Sub)
   }
 
@@ -569,64 +562,10 @@ export class ProcessTransferComponent implements OnInit {
     this.processTransferFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
   }
 
-
-  update() {
-    if (this.processTransferFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    let API = 'JobProcessTrnMasterDJ/UpdateJobProcessTrnMasterDJ/' + this.processTransferFrom.value.branchCode + this.processTransferFrom.value.voctype + this.processTransferFrom.value.vocno + this.processTransferFrom.value.yearMonth
-    let postData = {
-      "MID": 0,
-      "VOCTYPE": this.processTransferFrom.value.voctype || "",
-      "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.processTransferFrom.value.vocno || "",
-      "VOCDATE": this.processTransferFrom.value.vocdate || "",
-      "YEARMONTH": this.yearMonth,
-      "DOCTIME": "2023-10-21T07:24:35.989Z",
-      "SMAN": this.processTransferFrom.value.salesman || "",
-      "REMARKS": "",
-      "CURRENCY_CODE": this.processTransferFrom.value.currency || "",
-      "CURRENCY_RATE": this.processTransferFrom.value.currencyrate || "",
-      "NAVSEQNO": 0,
-      "LAB_TYPE": 0,
-      "AUTOPOSTING": true,
-      "POSTDATE": "",
-      "PRINT_COUNT": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "SYSTEM_DATE": "2023-10-21T07:24:35.989Z",
-      "JOB_PROCESS_TRN_DETAIL_DJ": [],
-      "JOB_PROCESS_TRN_STNMTL_DJ": [],
-      "JOB_PROCESS_TRN_LABCHRG_DJ": []
-    }
-
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.processTransferFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+  deleteTableData(): void {
+    this.tableRowCount = 0;
+    this.tableData = [];
   }
-
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       this.commonService.showSnackBarMsg('Please select Data to delete')
@@ -660,9 +599,6 @@ export class ProcessTransferComponent implements OnInit {
                 confirmButtonText: 'Ok'
               }).then((result: any) => {
                 if (result.value) {
-                  this.processTransferFrom.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
                 }
               });
             } else {
