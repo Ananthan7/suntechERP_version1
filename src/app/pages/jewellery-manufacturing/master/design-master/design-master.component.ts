@@ -118,7 +118,7 @@ export class DesignMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 84,
     SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Type Code',
+    SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "KARAT_CODE<> ''",
     VIEW_INPUT: true,
