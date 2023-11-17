@@ -69,7 +69,7 @@ import { AmountDecimalDirective } from './directives/format-amount-decimal.direc
 import { MetalDecimalDirective } from './directives/format-metal-decimal.directive';
 import { StoneDecimalDirective } from './directives/format-stone-decimal.directive';
 import { FormatSixDecimalDirective } from './directives/format-six-decimal.directive';
-import { ChartModule } from 'primeng/chart';
+import { CalendarModule } from 'primeng/calendar';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -130,14 +130,19 @@ import { ChartModule } from 'primeng/chart';
     InputSwitchModule,
     MatTabsModule,
     FontPickerModule,
-    SkeletonModule,
-    MatFormFieldModule, MatInputModule, MatAutocompleteModule,
-    MatExpansionModule, MatButtonModule, MatSelectModule,
-    MatDatepickerModule, MatNativeDateModule, MatRippleModule,
-    MatTooltipModule, MatProgressBarModule, MatDialogModule,
+    SkeletonModule,CalendarModule,
+    MatFormFieldModule, MatInputModule, 
+    MatAutocompleteModule,
+    MatExpansionModule, MatButtonModule, 
+    MatSelectModule,
+    MatDatepickerModule, MatNativeDateModule, 
+    MatRippleModule,
+    MatTooltipModule, MatProgressBarModule, 
+    MatDialogModule,
     MatCheckboxModule, MatProgressSpinnerModule,
-    OverlayPanelModule,DragDropModule,MatTableModule,
-    MatRadioModule,MatCardModule,ChartModule
+    OverlayPanelModule,DragDropModule,
+    MatTableModule,
+    MatRadioModule,MatCardModule
   ],
   exports: [
     //component exports
@@ -195,11 +200,16 @@ import { ChartModule } from 'primeng/chart';
     FontPickerModule,
     SkeletonModule,
     MatFormFieldModule, MatInputModule, MatAutocompleteModule, 
-    MatExpansionModule, MatButtonModule, MatSelectModule, 
-    MatDatepickerModule, MatNativeDateModule, MatRippleModule, 
-    MatTooltipModule, MatProgressBarModule, MatDialogModule, 
-    MatCheckboxModule, MatProgressSpinnerModule,MatRadioModule,MatCardModule,
-    OverlayPanelModule,DragDropModule,MatTableModule,ChartModule
+    MatExpansionModule, MatButtonModule, 
+    MatSelectModule, 
+    MatDatepickerModule, MatNativeDateModule, 
+    MatRippleModule, 
+    MatTooltipModule, MatProgressBarModule, 
+    MatDialogModule, 
+    MatCheckboxModule, MatProgressSpinnerModule,
+    MatRadioModule,MatCardModule,
+    OverlayPanelModule,DragDropModule,
+    MatTableModule,CalendarModule 
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })

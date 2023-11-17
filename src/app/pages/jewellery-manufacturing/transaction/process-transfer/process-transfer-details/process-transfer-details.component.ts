@@ -111,7 +111,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
     DIVCODE: [''],
     METALSTONE: [''],
   });
-  columnheader: any[] = ['Div', 'Stock Code', 'Color', 'Clarity', 'Size', 'Shape', 'Pcs', 'Setted', 'Weight', 'Loss', 'Gain Wt', 'Type', 'Rate ', 'Amount']
 
   constructor(
     private activeModal: NgbActiveModal,
