@@ -30,16 +30,16 @@ export class ConsumableMasterComponent implements OnInit {
 
   
   consumbleForm: FormGroup = this.formBuilder.group({
-    costcenter:[],
-    category:[],
-    subcategory:[],
-    brand:[],
-    color:[],
-    vendor:[],
-    type:[],
-    country:[],
-    size:[],
-    hsn:[],
+    costcenter:[''],
+    category:[''],
+    subcategory:[''],
+    brand:[''],
+    color:[''],
+    vendor:[''],
+    type:[''],
+    country:[''],
+    size:[''],
+    hsn:[''],
 
   })
 
