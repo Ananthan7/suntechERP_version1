@@ -27,11 +27,10 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-2 col-form-label">Voucher
-                                Date</label>
+                            <label for="input" class="col-sm-2 col-form-label">
+                                Voucher Date</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%">
-                                    <!-- <mat-label>Date Of Birth</mat-label> -->
                                     <input matInput DateValidation
                                         (dateChange)="formatDate($event)"
                                         [matDatepicker]="dob"
