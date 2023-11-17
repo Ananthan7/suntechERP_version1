@@ -26,6 +26,255 @@ export class LabourChargeMasterComponent implements OnInit {
   unitList: any[] = [];
   currencyList : any[] = [];
   divisionMS: any = 'ID';
+
+
+  diamondlabourMasterForm: FormGroup = this.formBuilder.group({
+    mid:[],
+    division: [''],
+    labour_code: [''],
+    labour_description: [''],
+    shape: [''],
+    process: [''],
+    size_from: [''],
+    labour_ac: [''],
+    size_to: [''],
+    cost_rate : [''],
+    sieve : [''],
+    selling_rate : [''],
+    sieve_desc : [''],
+    selling : [''],
+    ctWtFrom : [''],
+    ctWtTo : [''],
+    settingType : [''],
+    labourType : [''],
+    unitList : [''],
+    method : [''],
+    currency : [''],
+    accessories : [''],
+   
+  });
+
+  metallabourMasterForm: FormGroup = this.formBuilder.group({
+    mid:[],
+    metalDivision: [''],
+    stock_code: [''],
+    metallabour_code: [''],
+    metallabour_description: [''],
+    metallabourType: [''],
+    metalcurrency: [''],
+    karat: [''],
+    labourAc: [''],
+    color : [''],
+    costRate : [''],
+    typecode : [''],
+    metalselling_rate : [''],
+    category : [''],
+    metalSelling : [''],
+    subCategory : [''],
+    wastage : [''],
+    brand : [''],
+    metalunitList : [''],
+    purity : [''],
+    wtFrom : [''],
+    wtTo : [''],
+    onGrossWt : [false],
+    forDesignOnly : [false]
+  });
+
+  divisionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+ shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Shape',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+processCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+
+sizeFromCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Size From',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+
+  sizeToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Size To',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  labouracCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 6,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Labour A/C',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  sieveCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 6,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Sieve',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  // metallabourMasterForm
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  currencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 176,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+ 
+
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 17,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+
+  colorData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'COLOR SET'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  categoryCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  subcategoryCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Subcategory Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  brandCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -99,6 +348,89 @@ export class LabourChargeMasterComponent implements OnInit {
     ]
   }
 
+  categorySelected(e:any){
+    console.log(e); 
+    this.metallabourMasterForm.controls.category.setValue(e.CODE);
+  }
+
+  subcategorySelected(e:any){
+    console.log(e); 
+    this.metallabourMasterForm.controls.subCategory.setValue(e.CODE);
+  }
+
+  brandSelected(e:any){
+    console.log(e); 
+    this.metallabourMasterForm.controls.brand.setValue(e.CODE);
+  }
+
+  typeCodeSelected(e:any){
+    console.log(e); 
+    this.metallabourMasterForm.controls.typecode.setValue(e.CODE);
+  }
+
+  colorDataSelected(data: any) {
+    this.metallabourMasterForm.controls.color.setValue(data.CODE)
+  }
+
+  divisionCodeSelected(e:any){
+    console.log(e); 
+    this.diamondlabourMasterForm.controls.division.setValue(e.DIVISION);
+  }
+
+  metaldivisionCodeSelected(e:any){
+    this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION);
+  }
+
+  labouracSelected(e:any){
+    console.log(e); 
+    this.diamondlabourMasterForm.controls.labour_ac.setValue(e.ACCODE);
+  }
+
+  labourAcSelected(e:any){
+    console.log(e); 
+    this.metallabourMasterForm.controls.labourAc.setValue(e.ACCODE);
+  }
+
+  sieveSelected(e:any){
+    console.log(e); 
+    this.diamondlabourMasterForm.controls.sieve.setValue(e.ACCOUNT_MODE);
+  }
+
+  stockCodeSelected(e:any){
+    console.log(e); 
+    this.metallabourMasterForm.controls.stock_code.setValue(e.DIVISION_CODE);
+  }
+
+  currencyCodeSelected(e:any){
+    console.log(e); 
+    this.metallabourMasterForm.controls.metalcurrency.setValue(e.CURRENCY_CODE);
+  }
+  
+  karatCodeSelected(e:any){
+    console.log(e); 
+    this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
+  }
+
+  shapeCodeSelected(e:any){
+    console.log(e); 
+    this.diamondlabourMasterForm.controls.shape.setValue(e.CODE);
+  }
+
+  processCodeSelected(e:any){
+    console.log(e); 
+    this.diamondlabourMasterForm.controls.process.setValue(e.Process_Code);
+  }
+
+  sizeToCodeSelected(e:any){
+    console.log(e); 
+    this.diamondlabourMasterForm.controls.size_to.setValue(e.CODE);
+  }
+
+  sizeFromCodeSelected(e:any){
+      console.log(e); 
+      this.diamondlabourMasterForm.controls.size_from.setValue(e.CODE);
+  }
+  
    // USE: get select options Process TypeMaster
    private getcurrencyOptions():void {
     let API = '/BranchCurrencyMaster/GetBranchCurrencyMasterDetail/'+this.branch;
@@ -170,8 +502,8 @@ export class LabourChargeMasterComponent implements OnInit {
     let postData = {
       "MID": 0,
       "SRNO": 0,
-      "CODE": this.diamondlabourMasterForm.value.labour_code,
-      "DESCRIPTION":  this.diamondlabourMasterForm.value.labour_description,
+      "CODE": this.diamondlabourMasterForm.value.labour_code || "str",
+      "DESCRIPTION":  this.diamondlabourMasterForm.value.labour_description || "str",
       "LABTYPE":  this.diamondlabourMasterForm.value.labourType || "",
       "METHOD":  this.diamondlabourMasterForm.value.method  || "",
       "DIVISION":  this.diamondlabourMasterForm.value.division,
@@ -186,7 +518,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "LAST_SELLING_RATE": 0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE":  "",
-      "DIVISION_CODE": this.metallabourMasterForm.value.division,
+      "DIVISION_CODE": this.metallabourMasterForm.value.division || "S",
       "CURRENCY_CODE":  this.metallabourMasterForm.value.currency  || "",
       "SELLING_PER": this.diamondlabourMasterForm.value.selling,
       "ACCESSORIES": 0,
@@ -375,317 +707,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
  
 
-  diamondlabourMasterForm: FormGroup = this.formBuilder.group({
-    mid:[],
-    division: [''],
-    labour_code: [''],
-    labour_description: [''],
-    shape: [''],
-    process: [''],
-    size_from: [''],
-    labour_ac: [''],
-    size_to: [''],
-    cost_rate : [''],
-    sieve : [''],
-    selling_rate : [''],
-    sieve_desc : [''],
-    selling : [''],
-    ctWtFrom : [''],
-    ctWtTo : [''],
-    settingType : [''],
-    labourType : [''],
-    unitList : [''],
-    method : [''],
-    currency : [''],
-    accessories : [''],
-   
-  });
 
-  metallabourMasterForm: FormGroup = this.formBuilder.group({
-    mid:[],
-    metalDivision: [''],
-    stock_code: [''],
-    metallabour_code: [''],
-    metallabour_description: [''],
-    metallabourType: [''],
-    metalcurrency: [''],
-    karat: [''],
-    labourAc: [''],
-    color : [''],
-    costRate : [''],
-    typecode : [''],
-    metalselling_rate : [''],
-    category : [''],
-    metalSelling : [''],
-    subCategory : [''],
-    wastage : [''],
-    brand : [''],
-    metalunitList : [''],
-    purity : [''],
-    wtFrom : [''],
-    wtTo : [''],
-    onGrossWt : [false],
-    forDesignOnly : [false]
-  });
-
-  divisionCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 18,
-    SEARCH_FIELD: 'DIVISION_CODE',
-    SEARCH_HEADING: 'Division Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  divisionCodeSelected(e:any){
-    console.log(e); 
-    this.diamondlabourMasterForm.controls.division.setValue(e.DIVISION);
-  }
-
-  metaldivisionCodeSelected(e:any){
-    this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION);
-  }
-
- shapeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Shape',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  shapeCodeSelected(e:any){
-    console.log(e); 
-    this.diamondlabourMasterForm.controls.shape.setValue(e.CODE);
-  }
-
-processCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  processCodeSelected(e:any){
-    console.log(e); 
-    this.diamondlabourMasterForm.controls.process.setValue(e.Process_Code);
-  }
-
-sizeFromCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Size From',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  sizeFromCodeSelected(e:any){
-  console.log(e); 
-  this.diamondlabourMasterForm.controls.size_from.setValue(e.CODE);
-  }
-
-  sizeToCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Size To',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  sizeToCodeSelected(e:any){
-    console.log(e); 
-    this.diamondlabourMasterForm.controls.size_to.setValue(e.CODE);
-    }
-
-  labouracCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 6,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Labour A/C',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  labouracSelected(e:any){
-    console.log(e); 
-    this.diamondlabourMasterForm.controls.labour_ac.setValue(e.ACCODE);
-  }
-
-  sieveCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 6,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Sieve',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  sieveSelected(e:any){
-    console.log(e); 
-    this.diamondlabourMasterForm.controls.sieve.setValue(e.ACCODE);
-  }
-
-  // metallabourMasterForm
-  stockCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  stockCodeSelected(e:any){
-    console.log(e); 
-    this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
-  }
-
-  currencyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 176,
-    SEARCH_FIELD: 'CURRENCY_CODE',
-    SEARCH_HEADING: 'Currency',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  currencyCodeSelected(e:any){
-    console.log(e); 
-    this.metallabourMasterForm.controls.metalcurrency.setValue(e.CURRENCY_CODE);
-  }
-
-  karatCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 17,
-    SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Karat',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "KARAT_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  karatCodeSelected(e:any){
-    console.log(e); 
-    this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
-  }
-
-  colorData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 35,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR SET'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  colorDataSelected(data: any) {
-    this.metallabourMasterForm.controls.color.setValue(data.CODE)
-  }
-
-  typeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  typeCodeSelected(e:any){
-    console.log(e); 
-    this.metallabourMasterForm.controls.typecode.setValue(e.CODE);
-  }
-
-  categoryCodeData:MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category Data',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  subcategoryCodeData:MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Subcategory Data',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  brandCodeData:MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Brand Data',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  categorySelected(e:any){
-    console.log(e); 
-    this.metallabourMasterForm.controls.category.setValue(e.CODE);
-  }
-
-  subcategorySelected(e:any){
-    console.log(e); 
-    this.metallabourMasterForm.controls.subCategory.setValue(e.CODE);
-  }
-
-  brandSelected(e:any){
-    console.log(e); 
-    this.metallabourMasterForm.controls.brand.setValue(e.CODE);
-  }
 }
 
 

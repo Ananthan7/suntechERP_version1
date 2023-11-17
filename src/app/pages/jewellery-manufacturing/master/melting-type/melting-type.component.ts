@@ -217,7 +217,6 @@ export class MeltingTypeComponent implements OnInit {
     this.tableData = this.content.MELTING_TYPE_DETAIL;
 
   }
-
  updateMeltingType() {
   let API = 'MeltingType/UpdateMeltingType/'+ this.meltingTypeForm.value.mid;
     let postData=
