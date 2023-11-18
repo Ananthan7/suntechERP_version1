@@ -155,6 +155,8 @@ export class MeltingIssueComponent implements OnInit {
       if (postData) {
         console.log('Data from modal:', postData);       
         this.meltingISsueDetailsData.push(postData);
+        console.log(this.meltingISsueDetailsData);
+        
       }
     });
 
