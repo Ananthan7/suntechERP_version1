@@ -26,19 +26,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   currentDate = new Date();
 
   private subscriptions: Subscription[] = [];
-  user: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: "UsersName",
-    SEARCH_HEADING: "User",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "UsersName<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
+ 
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -101,9 +89,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
   jobnoCodeSelected(e: any) {
     console.log(e);
-    this.productiondetailsFrom.controls.jobno.setValue(e.PREFIX_CODE);
-    // this.productiondetailsFrom.controls.subjobnoDesc.setValue(e.DESCRIPTION);
+    this.productiondetailsFrom.controls.jobno.setValue(e.job_number);
+    this.productiondetailsFrom.controls.jobnoDesc.setValue(e.job_description);
+    console.log(this.productiondetailsFrom.value.jobnoDesc);
   }
+    
 
   locationCodeSelected(e: any) {
     console.log(e);
@@ -112,6 +102,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
   productiondetailsFrom: FormGroup = this.formBuilder.group({
     jobno : [''],
+    jobnoDesc : [''],
     jobDate : [''],
     subjobno : [''],
     subjobnoDesc : [''],

@@ -20,7 +20,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   userName = this.comService.userName;
   branchCode: String = this.comService.branchCode;
   yearMonth: String = this.comService.yearSelected;
-  MetalorProcessFlag: string = 'Metal';
+  MetalorProcessFlag: string = 'Process';
   private subscriptions: Subscription[] = [];
 
   jobNoSearch: MasterSearchModel = {
@@ -72,7 +72,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     variance: [''],
     treeno: [''],
     remarks: [''],
-    toggleSwitchtIssue: [false],
+    toggleSwitchtIssue: [true],
     processFrom: [''],
     processTo: [''],
     processToDescription: [''],
@@ -124,9 +124,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     this.setAllInitialValues() //set all values from parent to child
   }
-  setAllInitialValues(){
+  setAllInitialValues() {
     let dataFromParent = this.content[0].PROCESS_FORMDETAILS
-    if(!dataFromParent) return
+    if (!dataFromParent) return
     this.processTransferdetailsForm.controls.jobno.setValue(dataFromParent.jobno)
     this.processTransferdetailsForm.controls.jobdes.setValue(dataFromParent.jobdes)
     this.processTransferdetailsForm.controls.subjobno.setValue(dataFromParent.subjobno)
@@ -199,6 +199,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   /**USE: subjobnumber validate API call  this.processTransferdetailsForm.value.subjobno*/
   subJobNumberValidate(event?: any) {
     let postData = {
@@ -215,11 +216,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          
+
           this.processTransferdetailsForm.controls.processFrom.setValue(data[0].PROCESS)
           this.processTransferdetailsForm.controls.workerFrom.setValue(data[0].WORKER)
           this.processTransferdetailsForm.controls.MetalWeightFrom.setValue(
-            this.comService.decimalQuantityFormat(data[0].METAL,'METAL'))
+            this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.processTransferdetailsForm.controls.MetalPcsFrom.setValue(data[0].PCS)
           this.processTransferdetailsForm.controls.GrossWeightFrom.setValue(data[0].NETWT)
           this.processTransferdetailsForm.controls.StoneWeighFrom.setValue(data[0].STONE)
@@ -238,16 +239,85 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
+  private fillStoneDetails():void{
+    let postData = {
+      "SPID": "042",
+      "parameter": {
+        strJobNumber: this.processTransferdetailsForm.value.jobno,
+        strUnq_Job_Id: this.processTransferdetailsForm.value.subjobno,             
+        strProcess_Code: this.processTransferdetailsForm.value.processFrom,
+        strWorker_Code: this.processTransferdetailsForm.value.workerFrom,
+        strBranch_Code: this.branchCode
+      }
+    }
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+          console.log(data, 'data');
+            
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  /**USE: barcode Number Validate API call */
+  barcodeNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "041",
+      "parameter": {
+        'BLNPROCESS': this.comService.nullToString(this.processTransferdetailsForm.value.toggleSwitchtIssue ? 1 : 0),
+        'STRBRANCH': this.comService.nullToString(this.branchCode),
+        'STRYEARMONTH': this.comService.nullToString('2008'),
+        'TXTISSUEREF': this.comService.nullToString(event.target.value)
+      }
+    }
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          console.log(data, 'data');
+
+          if (data[0]) {
+
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   toggleSwitchChange(event: any) {
-    if(this.processTransferdetailsForm.value.toggleSwitchtIssue){
+    if (this.processTransferdetailsForm.value.toggleSwitchtIssue) {
       this.MetalorProcessFlag = 'Process'
-    }else{
+    } else {
       this.MetalorProcessFlag = 'Metal'
     }
   }
   /**USE: Process Master Validate */
-  processMasterValidate(event:any,flag:string):void {
-    if(event.target.value == '') return
+  processMasterValidate(event: any, flag: string): void {
+    if (event.target.value == '') return
     event.target.value = (event.target.value).toUpperCase()
     let API: string = `ProcessMasterDj/GetProcessMasterDjWithProcessCode/${event.target.value}`
     this.comService.showSnackBarMsg('MSG81447')
@@ -256,9 +326,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.status == "Success" && result.response) {
           let data = result.response
-          this.setProcessCodeData(data.PROCESS_CODE,flag)
+          this.setProcessCodeData(data.PROCESS_CODE, flag)
         } else {
-          this.setProcessCodeData('',flag)
+          this.setProcessCodeData('', flag)
           this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -268,10 +338,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   /**USE set processcode to form */
-  setProcessCodeData(Code:string,flag:any){
-    if(flag == 'FROM'){
+  setProcessCodeData(Code: string, flag: any) {
+    if (flag == 'FROM') {
       this.processTransferdetailsForm.controls.processFrom.setValue(Code)
-    }else{
+    } else {
       this.processTransferdetailsForm.controls.processTo.setValue(Code)
     }
   }

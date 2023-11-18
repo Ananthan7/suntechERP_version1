@@ -20,7 +20,9 @@
               </div>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput />
+                  <input type="text" matInput 
+                    (focusout)="barcodeNumberValidate($event)"
+                    formControlName="barCodeNumber"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-2">
