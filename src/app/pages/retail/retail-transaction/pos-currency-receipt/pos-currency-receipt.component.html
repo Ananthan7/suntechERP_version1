@@ -102,9 +102,9 @@
               <div class="col-md-5">
                 <mat-form-field style="width: 100%">
                   <input matInput [matDatepicker]="dueDays" name="dueDays" formControlName="dueDays"
-                    placeholder="DD/MM/YYYY" DateValidation (change)="updateDuteDate($event)" />
+                    placeholder="DD/MM/YYYY" DateValidation (dateChange)="changeDueDate($event)" />
                   <mat-datepicker-toggle matSuffix [for]="dueDays"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #dueDays (selectedChanged)="updateDuteDate($event)"></mat-datepicker>
+                  <mat-datepicker [startAt]="currentDate" #dueDays ></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>

@@ -12,7 +12,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { startOfDay } from '@fullcalendar/angular';
-import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -143,7 +142,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     private comService: CommonServiceService,
-    private datePipe: DatePipe
   ) {
 
   }
@@ -163,6 +161,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     if (this.content?.MID != null)
       this.getArgsData();
+    else
+      this.changeDueDate(null);
 
 
     // this.posCurrencyReceiptForm.get('dueDaysdesc')?.valueChanges.subscribe((newValue) => {
@@ -196,24 +196,28 @@ export class PosCurrencyReceiptComponent implements OnInit {
   updateDueDays(event: any) {
     let value = event.target.value;
     if (value != '') {
-      const curDate = new Date();
-      const updatedDate = curDate.getDate() + parseInt(value);
-      curDate.setDate(updatedDate);
-      this.posCurrencyReceiptForm.controls.dueDays.setValue(curDate);
+      const vocDate = new Date(this.posCurrencyReceiptForm.value.vocDate);
+      const updatedDate = vocDate.getDate() + parseInt(value);
+      vocDate.setDate(updatedDate);
+      this.posCurrencyReceiptForm.controls.dueDays.setValue(vocDate);
     } else {
       this.posCurrencyReceiptForm.controls.dueDays.setValue(this.currentDate);
     }
   }
 
 
-  updateDuteDate(event: any) {
-    const inputValue = event.target.value;
+  changeDueDate(event: any) {
+    // const inputValue = event.target.value;
+    const inputValue = this.posCurrencyReceiptForm.value.dueDays;
+    const vocDate = new Date(this.posCurrencyReceiptForm.value.vocDate);
 
     if (inputValue !== '') {
       const selectedDate = new Date(inputValue);
+      selectedDate.setHours(0, 0, 0, 0);
+
       if (!isNaN(selectedDate.getTime())) {
-        const currentDate = new Date();
-        const difference = this.calculateDateDifference(selectedDate, currentDate);
+        vocDate.setHours(0, 0, 0, 0);
+        const difference = this.calculateDateDifference(selectedDate, vocDate);
         this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
       } else {
         console.error('Invalid date input. Please enter a valid date.');
@@ -225,12 +229,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     const timeDifference = dateA.getTime() - dateB.getTime();
     const dayDifference = timeDifference / (1000 * 3600 * 24);
     return Math.floor(dayDifference);
-  }
-
-  private formatDate(date: Date): string {
-    // Implement date formatting logic if needed
-    // You may use a date library or Angular's DatePipe for this
-    return date.toISOString(); // Example: Return ISO date string
   }
 
 
