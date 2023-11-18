@@ -166,7 +166,7 @@
                       <input type="text" matInput maxlength="6" formControlName="sieve_desc" />
                     </mat-form-field>
                   </div>
-                  <label for="input" class="col-sm-2 col-form-label">Selling %:</label>
+                  <label for="input" class="col-sm-2 col-form-label">Selling %*:</label>
                   <div class="col-sm-3">
                     <mat-form-field>
                       <input type="text" matInput maxlength="6" formControlName="selling" />
@@ -285,7 +285,7 @@
                       <input matInput  type="text" formControlName="labourAc" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="labouracCodeData"
-                      (newRowClick)="labouracSelected($event)"></master-search>
+                      (newRowClick)="labourAcSelected($event)"></master-search>
                   </div>
                 </div>
                 <div class="row mb-2">
@@ -347,7 +347,7 @@
                     <master-search [MasterSearchData]="subcategoryCodeData"
                       (newRowClick)="subcategorySelected($event)"></master-search>
                   </div>
-                  <label for="input" class="col-sm-2 col-form-label">Wastage % :</label>
+                  <label for="input" class="col-sm-2 col-form-label">Wastage %* :</label>
                   <div class="col-sm-3">
                     <mat-form-field style="width: 90%">
                       <input  matInput type="text" formControlName="wastage" />

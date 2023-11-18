@@ -33,9 +33,9 @@ export class CostCentreDiamondComponent implements OnInit {
   ngOnInit(): void {
   }
   costcenterdiamondForm: FormGroup = this.formBuilder.group({
-    purchase:[],
-    sales:[],
-    branchtransfer:[],
+    purchase:[''],
+    sales:[''],
+    branchtransfer:[''],
    
 
   })

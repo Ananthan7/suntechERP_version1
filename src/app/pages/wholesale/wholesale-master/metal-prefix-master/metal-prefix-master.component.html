@@ -8,7 +8,7 @@
 <modal-header (cancelClick)="close()"></modal-header>
 <div class="row">
   <div class="col-md-12">
-    <form>
+    <form [formGroup]="metalprefixForm">
       <div class="container-fluid pt-3">
         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
           <mat-tab label="General">
@@ -81,9 +81,11 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Branch :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 70%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="branch"/>
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="BranchCodeData"
+                        (newRowClick)="branchCodeSelected($event)">
+                    </master-search>
                       </div>
                       <div class="col-md-3 offset-md-3">
                         <div class="form-check">
@@ -106,9 +108,11 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">HSN :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 70%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="hsn" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="HSNCodeData"
+                                      (newRowClick)="HSNCenterSelected($event)">
+                                  </master-search>
                       </div>
                     </div>
                   </div>
