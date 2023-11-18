@@ -42,7 +42,7 @@ export class CADProcessingComponent implements OnInit {
   }
 
   cadProcessingForm: FormGroup = this.formBuilder.group({
-    vocType: [''],
+    voctype: [''],
     vocNo: [''],
     vocDate: [''],
     process: [''],
