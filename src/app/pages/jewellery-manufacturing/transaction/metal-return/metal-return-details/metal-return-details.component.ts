@@ -187,7 +187,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     let postData =        {
           "SRNO": 0,
           "VOCNO": 0,
-          "VOCTYPE": "str",
+          "VOCTYPE": "MIS",
           "VOCDATE": "2023-10-06T09:31:04.626Z",
           "JOB_NUMBER": this.metalReturnDetailsForm.value.jobNumber,
           "JOB_DATE": this.metalReturnDetailsForm.value.jobDate,

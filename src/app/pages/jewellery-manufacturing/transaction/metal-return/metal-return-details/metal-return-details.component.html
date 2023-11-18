@@ -39,7 +39,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Sub Job No :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="subJobNo">
+                                    <input type="number" matInput formControlName="subJobNo">
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-6">
@@ -102,17 +102,17 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="makingRateFc" />
+                                    <input type="number" matInput formControlName="makingRateFc" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="makingRateLc"/>
+                                    <input type="number" matInput formControlName="makingRateLc"/>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="makingAmountLC"/>
+                                    <input type="number" matInput formControlName="makingAmountLC"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="makingAmountFC" />
+                                    <input type="number" matInput formControlName="makingAmountFC" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -165,13 +165,13 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Pcs:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="pcs"/>
+                                    <input type="number" matInput formControlName="pcs"/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Purity :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="purity" />
+                                    <input type="number" matInput formControlName="purity" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -179,13 +179,13 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Gross Weight:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="grossWeight"/>
+                                    <input type="number" matInput formControlName="grossWeight"/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Net Weight:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="netWeight"  />
+                                    <input type="number" matInput formControlName="netWeight"  />
                                 </mat-form-field>
                             </div>
 
@@ -197,13 +197,13 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Stone weight:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="stoneWeight" />
+                                    <input type="number" matInput formControlName="stoneWeight" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Pure Weight:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="pureWeight" />
+                                    <input type="number" matInput formControlName="pureWeight" />
                                 </mat-form-field>
                             </div>
 
@@ -222,33 +222,33 @@
                         <div class="row justify-content-end">
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  formControlName="metalGramRateFc" />
+                                    <input type="number" matInput  formControlName="metalGramRateFc" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  formControlName="metalGramRateLc" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row  justify-content-end">
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  formControlName="metalAmountFc" />
+                                    <input type="number" matInput  formControlName="metalGramRateLc" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row  justify-content-end">
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  formControlName="metalAmountLc" />
+                                    <input type="number" matInput  formControlName="metalAmountFc" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row  justify-content-end">
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput   formControlName="totalRateFc"/>
+                                    <input type="number" matInput  formControlName="metalAmountLc" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row  justify-content-end">
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="number" matInput   formControlName="totalRateFc"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -256,12 +256,12 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Purity Diff:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput   formControlName="purityDiff" />
+                                    <input type="number" matInput   formControlName="purityDiff" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3 offset-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  formControlName="totalRateLc" />
+                                    <input type="number" matInput  formControlName="totalRateLc" />
                                 </mat-form-field>
                             </div>
                         </div>
