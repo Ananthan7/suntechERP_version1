@@ -38,7 +38,7 @@
                 style="font-weight: bold;">
                 Job Number</label>
               <div class="col-sm-3">
-                <mat-form-field style="width: 80%;">
+                <mat-form-field style="width: 76%;">
                   <input type="text" matInput
                     (focusout)="jobNumberValidate($event)"
                     formControlName="jobno" />
@@ -390,7 +390,7 @@
                     <tr>
                       <th>Process</th>
                       <td>
-                        <div class="d-flex align-items-center">
+                        <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               (focusout)="processMasterValidate($event,'FROM')"
@@ -400,10 +400,10 @@
                             [MasterSearchData]="processMasterSearch"
                             (newRowClick)="processCodeFromSelected($event)">
                           </master-search>
-                        </div>
+                        </span>
                       </td>
                       <td>
-                        <div class="d-flex align-items-center">
+                        <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               (focusout)="processMasterValidate($event,'TO')"
@@ -413,7 +413,7 @@
                             [MasterSearchData]="processMasterSearch"
                             (newRowClick)="processCodeToSelected($event)">
                           </master-search>
-                        </div>
+                        </span>
                       </td>
                       <td>Act. Loss</td>
                       <td>
@@ -425,7 +425,7 @@
                     <tr><!-- worker row starts-->
                       <th>Worker</th>
                       <td>
-                        <div class="d-flex align-items-center">
+                        <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               formControlName="workerFrom" />
@@ -433,10 +433,10 @@
                           <master-search [MasterSearchData]="workerMasterSearch"
                             (newRowClick)="workerCodeFromSelected($event)">
                           </master-search>
-                        </div>
+                        </span>
                       </td>
                       <td>
-                        <div class="d-flex align-items-center">
+                        <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               formControlName="workerTo" />
@@ -444,7 +444,7 @@
                           <master-search [MasterSearchData]="workerMasterSearch"
                             (newRowClick)="workerCodeToSelected($event)">
                           </master-search>
-                        </div>
+                        </span>
                       </td>
                       <td></td>
                       <th>Gain</th>
