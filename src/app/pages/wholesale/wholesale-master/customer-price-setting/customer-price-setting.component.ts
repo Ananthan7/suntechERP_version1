@@ -91,17 +91,17 @@ export class CustomerPriceSettingComponent implements OnInit {
   approvalCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 97,
-    SEARCH_FIELD: 'APPR_CODE',
-    SEARCH_HEADING: 'Approval Code',
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Approval By',
     SEARCH_VALUE: '',
-    WHERECONDITION: "APPR_CODE<> ''",
+    WHERECONDITION: "UsersName<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   ApprovalCodeSelected(e: any) {
     console.log(e);
-    this.customerpricesettingForm.controls.approvalby.setValue(e.APPR_CODE);
+    this.customerpricesettingForm.controls.approvalby.setValue(e.UsersName);
   }
 
 
