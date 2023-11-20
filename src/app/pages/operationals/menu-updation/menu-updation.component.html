@@ -57,8 +57,9 @@
                     &nbsp;
                     <mat-form-field style="width: 50%">
                         <mat-select placeholder="Select"
-                         (selectionChange)="getSubmenuList($event)">
-                            <mat-option [value]="item.MODULE_NAME" *ngFor="let item of menuList">
+                            (selectionChange)="getSubmenuList($event)">
+                            <mat-option [value]="item.MODULE_NAME"
+                                *ngFor="let item of menuList">
                                 {{item.MODULE_NAME}}
                             </mat-option>
                         </mat-select>
@@ -72,7 +73,7 @@
                     [allowColumnResizing]="true"
                     height="450"
                     [columnAutoWidth]="true" [showRowLines]="true"
-                    [showBorders]="true" 
+                    [showBorders]="true"
                     (onRowUpdated)="updateMenu($event)">
                     <dxo-paging [pageSize]="tableData.length"> </dxo-paging>
                     <!-- <dxo-search-panel [visible]="true"></dxo-search-panel> -->
@@ -84,23 +85,24 @@
                     </dxo-editing>
                     <!-- <dxi-column dataField="slno" caption="#"> </dxi-column> -->
                     <dxi-column dataField="MENU_ID"
-                    width="150" caption="Menu ID" [allowEditing]="false">
+                        width="150" caption="Menu ID" [allowEditing]="false">
                     </dxi-column>
                     <dxi-column dataField="MENU_MODULE"
-                    width="150" caption="Module Name" [allowEditing]="false">
+                        width="150" caption="Module Name" [allowEditing]="false">
                     </dxi-column>
-                    <dxi-column dataField="MENU_SUB_MODULE" 
-                    width="150" caption="Module Type" [allowEditing]="false">
+                    <dxi-column dataField="MENU_SUB_MODULE"
+                        width="150" caption="Module Type" [allowEditing]="false">
                     </dxi-column>
                     <dxi-column dataField="MENU_CAPTION_ENG"
-                    width="200" caption="Form Name" [allowEditing]="false">
+                        width="200" caption="Form Name" [allowEditing]="false">
                     </dxi-column>
-                    <dxi-column dataField="ANG_WEB_COMPONENT_NAME" 
-                    width="200" caption="Module">
+                    <dxi-column dataField="ANG_WEB_COMPONENT_NAME"
+                        width="200" caption="Module">
                         <dxi-validation-rule type="required"></dxi-validation-rule>
                         <dxo-lookup [dataSource]="menuList"
-                        displayExpr="ANG_CMB_PATH_NAME" valueExpr="ANG_CMB_PATH_NAME">
-                    </dxo-lookup>
+                            displayExpr="ANG_CMB_PATH_NAME"
+                            valueExpr="ANG_CMB_PATH_NAME">
+                        </dxo-lookup>
                     </dxi-column>
                     <dxi-column dataField="ANG_WEB_PATH_NAME" width="180"
                         caption="Gird Path Name">
