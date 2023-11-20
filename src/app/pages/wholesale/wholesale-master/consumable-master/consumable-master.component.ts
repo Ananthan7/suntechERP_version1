@@ -30,6 +30,7 @@ export class ConsumableMasterComponent implements OnInit {
 
   
   consumbleForm: FormGroup = this.formBuilder.group({
+    code:[''],
     costcenter:[''],
     category:[''],
     subcategory:[''],
@@ -43,10 +44,22 @@ export class ConsumableMasterComponent implements OnInit {
 
   })
 
+  codeCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Code Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
   brandCodeData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 32,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Brand Data',
     SEARCH_VALUE: '',
@@ -59,7 +72,7 @@ export class ConsumableMasterComponent implements OnInit {
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 30,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Category Code',
     SEARCH_VALUE: '',
@@ -71,7 +84,7 @@ export class ConsumableMasterComponent implements OnInit {
   subcategoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 31,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Subcategory Code',
     SEARCH_VALUE: '',
@@ -81,17 +94,7 @@ export class ConsumableMasterComponent implements OnInit {
   }
  
 
-  BrandCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 32,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Brand Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+
 
   colorData: MasterSearchModel = {
     PAGENO: 1,
@@ -109,10 +112,10 @@ export class ConsumableMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Vendor',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -182,6 +185,12 @@ export class ConsumableMasterComponent implements OnInit {
     this.consumbleForm.controls.subcategory.setValue(e.CODE);
   }
 
+  codeCodeSelected(e:any){
+    console.log(e);
+    this.consumbleForm.controls.code.setValue(e.PREFIX_CODE);
+  }
+
+
   brandCodeSelected(e:any){
     console.log(e);
     this.consumbleForm.controls.brand.setValue(e.CODE);
@@ -193,7 +202,7 @@ export class ConsumableMasterComponent implements OnInit {
 
   vendorCodeSelected(e:any){
     console.log(e);
-    this.consumbleForm.controls.vendor.setValue(e.ACCODE);
+    this.consumbleForm.controls.vendor.setValue(e.CODE);
   }
 
   typeCodeSelected(e:any){

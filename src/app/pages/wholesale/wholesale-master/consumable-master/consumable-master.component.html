@@ -20,7 +20,9 @@
                                       <mat-form-field style="width: 70%;">
                                         <input type="text" matInput />
                                       </mat-form-field>
-                                      <master-search></master-search>
+                                      <master-search [MasterSearchData]="codeCodeData"
+                                      (newRowClick)="codeCodeSelected($event)">
+                                  </master-search>
                                     </div>
                                   </div>
                             </div>
@@ -31,7 +33,7 @@
                                     <label for="inputPassword" class="col-sm-6 col-form-label">Description:</label>
                                     <div class="col-md-6">
                                       <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput />
+                                        <input type="text" matInput formControlName="code" />
                                       </mat-form-field>
                                     </div>
                                   </div>
@@ -101,7 +103,7 @@
                                       <mat-form-field style="width: 70%;">
                                         <input type="text" matInput formControlName="brand" />
                                       </mat-form-field>
-                                      <master-search [MasterSearchData]="BrandCodeData"
+                                      <master-search [MasterSearchData]="brandCodeData"
                                       (newRowClick)="brandCodeSelected($event)">
                                   </master-search>
                                     </div>
