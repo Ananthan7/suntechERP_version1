@@ -17,9 +17,9 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-6 col-form-label">Division :</label>
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Division*:</label>
                       <div class="col-md-6">
-                        <mat-form-field style="width: 80%;">
+                        <mat-form-field style="width: 70%;">
                           <input type="text" matInput formControlName="division"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="divisionCodeData"
@@ -42,7 +42,7 @@
                 <div class="row">
                   <div class="col-md-11">
                     <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Cust/Supp Code:</label>
+                      <label for="inputPassword" class="col-sm-3 col-form-label">Cust/Supp Code*:</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 80%;">
                           <input type="text" matInput />
@@ -50,9 +50,11 @@
                       </div>
                       <div class="col-md-5">
                         <mat-form-field style="width: 80%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="custsupp" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="custsuppCodeData"
+                        (newRowClick)="custsuppCodeSelected($event)">
+                    </master-search>
                       </div>
                     </div>
                   </div>
@@ -60,7 +62,7 @@
                 <div class="row">
                   <div class="col-md-11">
                     <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Price Code:</label>
+                      <label for="inputPassword" class="col-sm-3 col-form-label">Price Code*:</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 80%;">
                           <input type="text" matInput />
@@ -233,7 +235,7 @@
               </div>
               <div class="col-md-4">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-5 col-form-label">Currency :</label>
+                  <label for="inputPassword" class="col-sm-5 col-form-label">Currency*:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="currency" />

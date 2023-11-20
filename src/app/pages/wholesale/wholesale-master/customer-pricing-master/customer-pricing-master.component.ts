@@ -38,7 +38,8 @@ export class CustomerPricingMasterComponent implements OnInit {
     approvalby:[],
     enteredBy:[],
     price:[],
-    currency:[]
+    currency:[],
+    custsupp:[]
   })
 
   user: MasterSearchModel = {
@@ -74,27 +75,43 @@ export class CustomerPricingMasterComponent implements OnInit {
     this.customerpricemasterForm.controls.division.setValue(e.DIVISION);
   }
 
+  custsuppCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 95,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Cust/Supp Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  custsuppCodeSelected(e:any){
+    console.log(e); 
+    this.customerpricemasterForm.controls.custsupp.setValue(e.ACCODE);
+  }
+
   approvalCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 97,
-    SEARCH_FIELD: 'APPR_CODE',
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
     SEARCH_HEADING: 'Approval Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "APPR_CODE<> ''",
+    WHERECONDITION: "UsersName<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   ApprovalCodeSelected(e: any) {
     console.log(e);
-    this.customerpricemasterForm.controls.approvalby.setValue(e.APPR_CODE);
+    this.customerpricemasterForm.controls.approvalby.setValue(e.UsersName);
   }
 
   
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 82,
+    LOOKUPID: 87,
     SEARCH_FIELD: 'PRICE_CODE',
     SEARCH_HEADING: 'Price Code',
     SEARCH_VALUE: '',
