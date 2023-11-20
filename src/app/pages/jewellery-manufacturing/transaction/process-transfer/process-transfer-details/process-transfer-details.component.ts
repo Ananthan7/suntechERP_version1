@@ -17,6 +17,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   divisionMS: any = 'ID';
   tableData: any[] = [];
+  metalDetailData: any[] = [];
+  ProcessTypeList: any[] = [{type: 'GEN'}];
   userName = this.comService.userName;
   branchCode: String = this.comService.branchCode;
   yearMonth: String = this.comService.yearSelected;
@@ -216,11 +218,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-
           this.processTransferdetailsForm.controls.processFrom.setValue(data[0].PROCESS)
           this.processTransferdetailsForm.controls.workerFrom.setValue(data[0].WORKER)
           this.processTransferdetailsForm.controls.MetalWeightFrom.setValue(
-            this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
+          this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.processTransferdetailsForm.controls.MetalPcsFrom.setValue(data[0].PCS)
           this.processTransferdetailsForm.controls.GrossWeightFrom.setValue(data[0].NETWT)
           this.processTransferdetailsForm.controls.StoneWeighFrom.setValue(data[0].STONE)
@@ -230,6 +231,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.processTransferdetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
           this.processTransferdetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.processTransferdetailsForm.controls.METALSTONE.setValue(data[0].METALSTONE)
+          this.fillStoneDetails()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -239,7 +241,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+ 
   private fillStoneDetails():void{
     let postData = {
       "SPID": "042",
@@ -256,10 +258,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0]
-          if (data[0] && data[0].UNQ_JOB_ID != '') {
-          console.log(data, 'data');
-            
+          let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+          if (data) {
+            this.metalDetailData = data
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             return
@@ -370,11 +371,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.tableData.pop();
   }
   formSubmit() {
-    let detailDataToParent = {
-      PROCESS_FORMDETAILS: []
+    let detailDataToParent:any = {
+      PROCESS_FORMDETAILS: [],
+      METAL_DETAIL_DATA: []
     }
 
     detailDataToParent.PROCESS_FORMDETAILS = this.processTransferdetailsForm.value;
+    detailDataToParent.METAL_DETAIL_DATA = this.metalDetailData;
     this.close(detailDataToParent)//USE: passing Detail data to header screen on close
   }
 
