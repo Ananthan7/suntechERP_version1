@@ -18,8 +18,8 @@ export class CommonServiceService {
   /** common variables and functions used in all components */
   currentDate = new Date()
   branchCode: any = localStorage.getItem('userbranch') || '';
-  userName: any = localStorage.getItem('username')|| '';
-  yearSelected: any = localStorage.getItem('YEAR')|| '';
+  userName: any = localStorage.getItem('username') || '';
+  yearSelected: any = localStorage.getItem('YEAR') || '';
   menuTitle: any;
   menuName: any;
   componentName: any;
@@ -65,26 +65,26 @@ export class CommonServiceService {
     private snackBar: MatSnackBar,
   ) {
   }
-  getMenuList(){
+  getMenuList() {
     let item: any = localStorage.getItem('MENU_LIST')
     return JSON.parse(item)
   }
-  showSnackBarMsg(MessageOrID: string){
-    this.snackBar.open(this.getMsgByID(MessageOrID) || MessageOrID,'Close',{
+  showSnackBarMsg(MessageOrID: string) {
+    this.snackBar.open(this.getMsgByID(MessageOrID) || MessageOrID, 'Close', {
       duration: 3000, // Duration in milliseconds (e.g., 3000 for 3 seconds)
       panelClass: ['custom-snackbar'],
     });
   }
-  closeSnackBarMsg(){
+  closeSnackBarMsg() {
     this.snackBar.dismiss()
   }
   //**USE: common fuction to show toaster By MsgId */
-  toastErrorByMsgId(MsgOrId: string,Description?: string){
+  toastErrorByMsgId(MsgOrId: string, Description?: string) {
     this.toastr.error(this.getMsgByID(MsgOrId) || MsgOrId, Description ? Description : '', {
       timeOut: 3000,
     })
   }
-  toastSuccessByMsgId(MsgId: string,Description?: string){
+  toastSuccessByMsgId(MsgId: string, Description?: string) {
     this.toastr.success(this.getMsgByID(MsgId), Description ? Description : '', {
       timeOut: 3000,
     })
@@ -108,9 +108,9 @@ export class CommonServiceService {
   //   'COMPANYCURRENCY': 'COMPANYCURRENCY',
   //   'POSKARATRATECHANGE': 'POSKARATRATECHANGE',
   // }
- 
+
   /**USE: common fuction to format the Number to limit decimal places from branch master */
-  decimalQuantityFormat(value: any, flag: string){
+  decimalQuantityFormat(value: any, flag: string) {
     this.DECIMAL_CONSTANTS = {
       'AMOUNT': Number(this.allbranchMaster.BAMTDECIMALS),
       'METAL': Number(this.allbranchMaster.BMQTYDECIMALS),
@@ -119,7 +119,7 @@ export class CommonServiceService {
       'RATE': 6,
     }
     this.FormatCount = this.DECIMAL_CONSTANTS[flag]
-    
+
     value = Number(value).toFixed(this.FormatCount)
 
     let str = ''
@@ -161,6 +161,19 @@ export class CommonServiceService {
     // this.el.nativeElement.value = value;
     return value
   }
+  getTime() {
+    // Get the current time components
+    let hours = this.currentDate.getHours();
+    let minutes = this.currentDate.getMinutes();
+    let seconds = this.currentDate.getSeconds();
+    // Determine if it's AM or PM
+    let amPm = hours >= 12 ? 'PM' : 'AM';
+    // Convert hours to 12-hour format
+    hours = hours % 12 || 12;
+    // Format the time components as a string
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds} ${amPm}`;
+    // return `${hours}:${minutes}:${seconds}`;
+  }
   //common Number validation
   isNumeric(event: any) {
     var keyCode = event.which ? event.which : event.keyCode;
@@ -169,7 +182,7 @@ export class CommonServiceService {
   }
   //service for ADD POS starts
   stringToBoolean = (string: string) => string != undefined && string != null ? string.toString().toLowerCase() == 'false' ? false : true : false;
-  
+
   formControlSetReadOnly(id: any, isReadonly: boolean) {
     const ele: any = document.getElementById(id);
     console.log('ele ', ele);
@@ -254,7 +267,7 @@ export class CommonServiceService {
       return this.transformDecimalVB(this.amtDecimals, convertedAmount);
     }
   }
-  
+
   setCompParaValues() {
     this.allCompanyParams.map((data: any) => {
       if (data.PARAMETER == 'AMTFORMAT')
@@ -294,14 +307,14 @@ export class CommonServiceService {
   posKARATRATECHANGE: any = '';
 
   getDivisionMS(division: any) {
-    return this.divisionMasterList.filter((data:any) => data.DIVISION_CODE == division)[0].DIVISION;
+    return this.divisionMasterList.filter((data: any) => data.DIVISION_CODE == division)[0].DIVISION;
   }
   Null2BitValue(value: any) {
     value = value.toString().trim();
     // if (value == null || value.toString() == '' || value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0") {
     if (value.toString() == '') {
       return false;
-    } else if (value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0"){
+    } else if (value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0") {
       return false;
     } else {
       return true;
@@ -580,15 +593,15 @@ export class CommonServiceService {
     });
     return dataArray
   }
-  addCommaSeperation(data:any){
+  addCommaSeperation(data: any) {
     if (!Number(data)) return data
     return Number(data).toLocaleString('en-US', { style: 'decimal' })
   }
-  calculateDateDifference(userDateValue:any) {
-    const userDate:any = new Date(userDateValue);
-    const currentDate:any = new Date();
+  calculateDateDifference(userDateValue: any) {
+    const userDate: any = new Date(userDateValue);
+    const currentDate: any = new Date();
     const differenceInMilliseconds = userDate - currentDate;
-  
+
     if (differenceInMilliseconds < 0) {
       return 'Invalid Date';
     } else {

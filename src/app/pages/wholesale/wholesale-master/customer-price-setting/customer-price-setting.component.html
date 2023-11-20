@@ -8,7 +8,7 @@
 <modal-header (cancelClick)="close()"></modal-header>
 <div class="row">
   <div class="col-md-12">
-    <form>
+    <form [formGroup]="customerpricesettingForm">
       <div class="container-fluid pt-3">
         <div class="row">
           <div class="col-md-5">
@@ -53,9 +53,11 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Division:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="division" />
                     </mat-form-field>
-                    <master-search></master-search>
+                    <master-search [MasterSearchData]="divisionCodeData"
+                        (newRowClick)="divisionCodeSelected($event)">
+                    </master-search>
                   </div>
                 </div>
               </div>
@@ -64,9 +66,11 @@
                   <label for="inputPassword" class="col-sm-5 col-form-label">Currency:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="currency" />
                     </mat-form-field>
-                    <master-search></master-search>
+                    <master-search [MasterSearchData]="currencyCodeData"
+                        (newRowClick)="currencyCodeSelected($event)">
+                    </master-search>
                   </div>
                 </div>
               </div>
@@ -77,9 +81,11 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Entered By:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="enteredBy" />
                     </mat-form-field>
-                    <master-search></master-search>
+                    <master-search [MasterSearchData]="user"
+                        (newRowClick)="userDataSelected($event)">
+                    </master-search>
                   </div>
                 </div>
               </div>
@@ -90,9 +96,11 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Approvel By:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="approvalby" />
                     </mat-form-field>
-                    <master-search></master-search>
+                    <master-search [MasterSearchData]="approvalCodeData"
+                        (newRowClick)="ApprovalCodeSelected($event)">
+                    </master-search>
                   </div>
                 </div>
               </div>

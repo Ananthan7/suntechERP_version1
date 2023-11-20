@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { startOfDay } from '@fullcalendar/angular';
 
 
 @Component({
@@ -24,11 +25,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   // columnhead: any[] = ['Sr#', 'Branch', 'Mode', 'A/c Code', 'Account Head', '', 'Curr.Rate', 'VAT_E_', 'VAT_E_'];
   columnsList: any[] = [
-    { title: 'branch', field: 'BRANCH_CODE' },
+    { title: 'Sr #', field: 'SRNO' },
+    { title: 'Branch', field: 'BRANCH_CODE' },
     { title: 'Mode', field: 'MODE' },
     { title: 'A/c Code', field: 'ACCODE' },
     { title: 'Account Head', field: 'HDACCOUNT_HEAD' },
     { title: 'Currency', field: 'CURRENCY_CODE' },
+    { title: 'Amount', field: 'TOTAL_AMOUNTFC' },
     { title: 'Curr.Rate', field: 'CURRENCY_RATE' },
     { title: 'VAT_E_', field: '' },
     { title: 'VAT_E_.', field: '' },
@@ -116,7 +119,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     enteredby: [''], // No
     enteredbyuser: [''], // No
     dueDaysdesc: [''],
-    dueDays: [''], // no
+    dueDays: [new Date()], // no
     customerCode: [''],
     customerName: [''],
     mobile: [''],
@@ -139,7 +142,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     private comService: CommonServiceService,
-
   ) {
 
   }
@@ -159,7 +161,77 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     if (this.content?.MID != null)
       this.getArgsData();
+    else
+      this.changeDueDate(null);
+
+
+    // this.posCurrencyReceiptForm.get('dueDaysdesc')?.valueChanges.subscribe((newValue) => {
+    //   alert(newValue);
+    //   const parsedDate = this.parseDateString(newValue);
+    //   this.posCurrencyReceiptForm.get('dueDays')?.setValue(parsedDate);
+    // });
+
+    // this.posCurrencyReceiptForm.get('dueDays')?.valueChanges.subscribe((newDate: Date) => {
+    //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(this.formatDate(newDate));
+
+    //   const currentDate = startOfDay(new Date());
+    //   const difference = this.calculateDateDifference(newDate, currentDate);
+    //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
+    // });
+
+    // Subscribe to changes in dueDaysdesc
+    // this.posCurrencyReceiptForm.get('dueDaysdesc')?.valueChanges.subscribe((newValue) => {
+    //   this.updateDueDays(newValue);
+    // });
+
+    // Subscribe to changes in dueDays
+    // this.posCurrencyReceiptForm.get('dueDays')?.valueChanges.subscribe((newDate: Date) => {
+    //   // Calculate and update the difference in days
+    //   const currentDate = new Date();
+    //   const difference = this.calculateDateDifference(newDate, currentDate);
+    //   this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
+    // });
   }
+
+  updateDueDays(event: any) {
+    let value = event.target.value;
+    if (value != '') {
+      const vocDate = new Date(this.posCurrencyReceiptForm.value.vocDate);
+      const updatedDate = vocDate.getDate() + parseInt(value);
+      vocDate.setDate(updatedDate);
+      this.posCurrencyReceiptForm.controls.dueDays.setValue(vocDate);
+    } else {
+      this.posCurrencyReceiptForm.controls.dueDays.setValue(this.currentDate);
+    }
+  }
+
+
+  changeDueDate(event: any) {
+    // const inputValue = event.target.value;
+    const inputValue = this.posCurrencyReceiptForm.value.dueDays;
+    const vocDate = new Date(this.posCurrencyReceiptForm.value.vocDate);
+
+    if (inputValue !== '') {
+      const selectedDate = new Date(inputValue);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      if (!isNaN(selectedDate.getTime())) {
+        vocDate.setHours(0, 0, 0, 0);
+        const difference = this.calculateDateDifference(selectedDate, vocDate);
+        this.posCurrencyReceiptForm.get('dueDaysdesc')?.setValue(difference.toString());
+      } else {
+        console.error('Invalid date input. Please enter a valid date.');
+      }
+    }
+  }
+
+  calculateDateDifference(dateA: Date, dateB: Date): number {
+    const timeDifference = dateA.getTime() - dateB.getTime();
+    const dayDifference = timeDifference / (1000 * 3600 * 24);
+    return Math.floor(dayDifference);
+  }
+
+
   getArgsData() {
     console.log('this.content', this.content);
     if (this.content.FLAG == 'VIEW')

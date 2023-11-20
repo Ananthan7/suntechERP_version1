@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Production MFG</h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Production (MFG)</h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
@@ -9,14 +9,16 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="container-fluid">
   <form [formGroup]="productionFrom">
-    <div class="row pt-2">
+    <div class="row p-3">
       <div class="col-md-12">
         <div class="row mb-2">
-          <div class="col-md-7">
-              <h6 class="h6">HO</h6>
+          <div class="col-md-9 d-flex justify-content-start">
+            <div class="p-2">
+              <h6 class="bg-info text-white">{{branchCode}} - {{companyName}}</h6>
+            </div>
           </div>
-          <div class="col-md-3">
-              <h6>Posted</h6>
+          <div class="col-md-1">
+            <h6>Posted</h6>
           </div>
           <div class="col-md-2 text-right">
             <button type="button" class="btn btn-primary add-btn">
@@ -24,106 +26,129 @@
             </button>
           </div>
         </div>
-        <div class="row ">
+        <div class="row">
           <div class="col-md-4">
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Voc Type :</label>
-              <div class="col-md-8">
+              <label class="col-sm-4 col-form-label">
+                Voc Type<b>*</b></label>
+              <div class="col-md-6">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="voctype" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Voc Date :</label>
-              <div class="col-md-8">
-                 <mat-form-field style="width: 100%;">
-                 <!-- <input type="date" matInput formControlName="vocdate" />
+              <label class="col-sm-4 col-form-label">
+                Voc Date*</label>
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%;">
+                  <!-- <input type="date" matInput formControlName="vocdate" />
                 </mat-form-field> -->
-                <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
-                placeholder="YYYY/MM/DD" DateValidation />
-              <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-              <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-            </mat-form-field>
+                  <input matInput [matDatepicker]="vocDate" name="vocDate"
+                    formControlName="vocDate"
+                    placeholder="DD/MM/YYYY" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Voc No :</label>
-              <div class="col-md-8">
+              <label class="col-sm-4 col-form-label">Voc No</label>
+              <div class="col-md-6">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="vocno" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Entered By :</label>
-              <div class="col-md-8">
+              <label class="col-sm-4 col-form-label">Entered
+                By</label>
+              <div class="col-md-6">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="enteredby" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Currency :</label>
-              <div class="col-md-3">
+              <label for="input"
+                class="col-sm-4 pe-2 col-form-label">Currency</label>
+              <div class="col-sm-2">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="currencyrate" />
+                  <input type="text" matInput
+                    (change)="currencyDataSelected($event)"
+                    formControlName="currency" />
                 </mat-form-field>
-
               </div>
-              <div class="col-md-5">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="currency" />
+              <div class="col-sm-5">
+                <mat-form-field style="width: 70%;">
+                  <input type="number" matInput
+                    SixDecimalInput
+                    class="text-right" readonly
+                    formControlName="currencyrate" />
                 </mat-form-field>
+                <master-search
+                  [MasterSearchData]="currencyMasterData"
+                  (newRowClick)="currencyDataSelected($event)">
+                </master-search>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Time :</label>
-              <div class="col-md-8">
+              <label class="col-sm-4 col-form-label">Time</label>
+              <div class="col-md-6">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="time" />
+                  <input type="text" readonly matInput formControlName="time" />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-5">
             <div class="row">
-              <div class="col-md-3 pt-3">
-                <mat-radio-group aria-label="Select an option">
-                  <P><mat-radio-button value="1">Unfix Transaction</mat-radio-button></P>
-                  <P><mat-radio-button value="2">Include Stone Weight</mat-radio-button></P>
-                </mat-radio-group>
+              <div class="col-md-5 pt-3">
+                <mat-checkbox><b>Unfix Transaction</b></mat-checkbox><br>
+                <mat-checkbox><b>Include Stone Weight</b></mat-checkbox>
               </div>
-              <div class="col-md-9">
+              <div class="col-md-7">
                 <div class="row mb-2 pt-2 text-right">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Metal Rate:</label>
-                  <div class="col-md-4">
-                    <mat-form-field style="width: 100%;">
-                      <input type="number" matInput formControlName="metalrate" />
+                  <label class="col-md-4 col-form-label">
+                    Metal Rate</label>
+                  <span class="col-sm-8">
+                    <mat-form-field style="width: 20%">
+                      <input type="text" matInput readonly
+                        formControlName="metalratetype" />
                     </mat-form-field>
-
-                  </div>
-                  <div class="col-md-4">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="metalratetype" />
+                    <mat-form-field
+                      style="width: 40%; margin-left: 7px;">
+                      <input type="text" matInput
+                        SixDecimalInput
+                        class="text-right"
+                        formControlName="metalrate" />
                     </mat-form-field>
-                  </div>
+                    <master-search
+                      [MasterSearchData]="rateTypeMasterData"
+                      (newRowClick)="rateTypeSelected($event)">
+                    </master-search>
+                  </span>
                 </div>
               </div>
+            </div>
+            <div class="row">
               <div class="col-md-12">
                 <div class="row mb-2 pt-5">
-                  <label for="inputPassword" class="col-sm-5 col-form-label">Branch To:</label>
-                  <div class="col-md-7">
+                  <label class="col-sm-3 col-form-label">
+                    Branch To</label>
+                  <div class="col-md-5">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="branchto" />
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row mb-2">
-                  <label for="inputPassword" class="col-sm-5 col-form-label">Base Currency :</label>
-                  <div class="col-md-3">
+                  <label class="col-sm-3 col-form-label">
+                    Base Currency</label>
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
-                      <input type="number" matInput formControlName="basecurrencyrate" />
+                      <input type="number" matInput
+                        formControlName="basecurrencyrate" />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
@@ -140,11 +165,10 @@
           <div class="row pt-3">
             <div class="col-md-12 d-flex">
               <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                        [viewImportBtn]="false"
-                        (addClick)="openproductionentrydetails()"
-                        (deleteClick)="deleteTableData()"
-                        >
-                    </menu-buttons>
+                [viewImportBtn]="false"
+                (addClick)="openproductionentrydetails()"
+                (deleteClick)="deleteTableData()">
+              </menu-buttons>
               <div class="col-sm-3">
                 <mat-form-field style="width: 80%;">
                   <input type="text" matInput />
@@ -158,33 +182,107 @@
                 <mat-tab label="Job Details">
                   <div class="row mt-2">
                     <div class="col-md-12">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
+                        <dxo-selection mode="single"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                        <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        <dxi-column dataField="data" width="auto"  caption="No"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Job #"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Sub Job"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Design"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Pcs"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Metal"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Stone"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Gross Wt"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="St Pcs"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Process"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Worker"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto"  caption="So number"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="WIP A/C"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Loction"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Cost_code"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Supplier Ref"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Customer"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Prefix"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Karat"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Job Description"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="set Ref"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Stock Description"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Process Name"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Worker Name"
+                          alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="data" width="auto" caption="Loss Wt"
+                          alignment="center">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
-
                   </div>
                 </mat-tab>
                 <mat-tab label="Stock Details">
                   <div class="row mt-2">
                     <div class="col-md-12">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer"
+                        [columnAutoWidth]="true"
+                        [allowColumnResizing]="true"
+                        [showRowLines]="true"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                        <dxi-column *ngFor="let data of columnheads" dataField="{{ data }}" caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxi-column *ngFor="let data of columnheads"
+                          dataField="{{ data }}" width="130" caption="{{ data }}"
+                          alignment="center">
                         </dxi-column>
                       </dx-data-grid>
                     </div>
@@ -197,7 +295,7 @@
             <div class="col-md-12">
               <div class="col-md-12 mt-2">
                 <div class="row">
-                  <label for="inputPassword" class="col-sm-1 col-form-label">Narration :</label>
+                  <label for="inputPassword" class="col-sm-1 col-form-label">Narration</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="narration" />

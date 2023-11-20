@@ -18,18 +18,19 @@
             <mat-form-field style="width: 70%;">
               <input type="text" matInput formControlName="jobno" />
             </mat-form-field>
-            <master-search [MasterSearchData]="jobnoCodeData" (newRowClick)="jobnoCodeSelected($event)"></master-search>
+            <master-search [MasterSearchData]="jobnoCodeData" 
+            (newRowClick)="jobnoCodeSelected($event)"></master-search>
           </div>
           <div class="col-sm-5">
-            <!-- <mat-form-field style="width: 100%;">
+            <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="jobnoDesc" />
-            </mat-form-field> -->
-            <mat-form-field style="width: 100%">
+            </mat-form-field>
+            <!-- <mat-form-field style="width: 100%">
               <input matInput [matDatepicker]="jobDate" name="jobDate" formControlName="jobDate"
                 placeholder="YYYY/MM/DD" DateValidation />
               <mat-datepicker-toggle matSuffix [for]="jobDate"></mat-datepicker-toggle>
               <mat-datepicker [startAt]="currentDate" #jobDate></mat-datepicker>
-            </mat-form-field>
+            </mat-form-field> -->
           </div>
 
         </div>
@@ -268,7 +269,7 @@
                   </mat-form-field> -->>
                   <mat-form-field style="width: 100%">
                     <input matInput [matDatepicker]="startdate" name="startdate" formControlName="startdate"
-                      placeholder="YYYY/MM/DD" DateValidation />
+                      placeholder="DD/MM/YYYY" DateValidation />
                     <mat-datepicker-toggle matSuffix [for]="startdate"></mat-datepicker-toggle>
                     <mat-datepicker [startAt]="currentDate" #startdate></mat-datepicker>
                   </mat-form-field>
@@ -280,7 +281,7 @@
                   </mat-form-field> -->
                   <mat-form-field style="width: 100%">
                     <input matInput [matDatepicker]="endDate" name="endDate" formControlName="startdate"
-                      placeholder="YYYY/MM/DD" DateValidation />
+                      placeholder="DD/MM/YYYY" DateValidation />
                     <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                     <mat-datepicker [startAt]="currentDate" #endDate></mat-datepicker>
                   </mat-form-field>
@@ -591,3 +592,4 @@
 
     </div>
   </form>
+</div>

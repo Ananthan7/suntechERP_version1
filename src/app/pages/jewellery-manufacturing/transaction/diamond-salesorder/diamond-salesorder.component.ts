@@ -766,7 +766,7 @@ export class DiamondSalesorderComponent implements OnInit {
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
           }).then((result: any) => {
-            this.activeModal.close('reloadMainGrid');
+            this.close('reloadMainGrid');
           });
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -978,8 +978,8 @@ export class DiamondSalesorderComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  close() {
-    this.activeModal.close();
+  close(data?:string) {
+    this.activeModal.close(data);
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
