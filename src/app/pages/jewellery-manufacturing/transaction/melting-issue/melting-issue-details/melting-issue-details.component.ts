@@ -189,7 +189,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "DT_BRANCH_CODE": this.branchCode,
       "DT_VOCTYPE": "stri",
       "DT_VOCNO": 0,
-      "DT_VOCDATE": "2023-10-21T10:15:43.790Z",
+      "DT_VOCDATE": "2023-11-18T08:55:48.593Z",
       "DT_YEARMONTH": this.yearMonth,
       "JOB_NUMBER": this.meltingIssuedetailsFrom.value.jobno,
       "JOB_DESCRIPTION": this.meltingIssuedetailsFrom.value.jobdes,
@@ -200,7 +200,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "STOCK_CODE": this.meltingIssuedetailsFrom.value.stockcode,
       "STOCK_DESCRIPTION": this.meltingIssuedetailsFrom.value.stockdes,
       "DIVCODE": "s",
-      "KARAT_CODE": "",
+      "KARAT_CODE": "stri",
       "PCS": this.meltingIssuedetailsFrom.value.pcs,
       "GROSS_WT": this.meltingIssuedetailsFrom.value.grossweight,
       "STONE_WT": this.meltingIssuedetailsFrom.value.stoneweight,
@@ -214,14 +214,14 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "STONEDIFF": 0,
       "WAX_WT": this.meltingIssuedetailsFrom.value.waxweight,
       "TREE_NO": this.meltingIssuedetailsFrom.value.treeno,
-      "WIP_ACCODE": "",
-      "CURRENCY_CODE": "",
+      "WIP_ACCODE": "string",
+      "CURRENCY_CODE": "stri",
       "CURRENCY_RATE": 0,
       "MKG_RATEFC": 0,
       "MKG_RATECC": 0,
       "MKGVALUEFC": 0,
       "MKGVALUECC": 0,
-      "DLOC_CODE": "",
+      "DLOC_CODE": "string",
       "REMARKS": this.meltingIssuedetailsFrom.value.remarks,
       "LOCTYPE_CODE": this.meltingIssuedetailsFrom.value.location,
       "TOSTOCKCODE": this.meltingIssuedetailsFrom.value.tostock,
@@ -234,17 +234,16 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "SILVER_PUREWT": 0,
       "TOPURITY": this.meltingIssuedetailsFrom.value.topurity,
       "PUR_PER": 0,
-      "MELTING_TYPE": "",
+      "MELTING_TYPE": "string",
       "ISALLOY": "s",
-      "UNQ_JOB_ID": "",
-      "SUB_STOCK_CODE": "",
+      "UNQ_JOB_ID": "string",
+      "SUB_STOCK_CODE": "string",
       "IS_REJECT": true,
-      "REASON": "",
-      "REJ_REMARKS": "",
-      "ATTACHMENT_FILE": ""
+      "REASON": "string",
+      "REJ_REMARKS": "string",
+      "ATTACHMENT_FILE": "string"
     }
-  
-    this.close({postData});
+    this.close(postData);
   }
 
  
