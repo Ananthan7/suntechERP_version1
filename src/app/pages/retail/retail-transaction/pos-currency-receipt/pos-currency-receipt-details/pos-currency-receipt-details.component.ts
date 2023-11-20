@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Directive, Injectable, Input, OnInit } from "@angular/core";
 import {
   NgbActiveModal,
   NgbModal,
@@ -12,12 +12,16 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+
 
 @Component({
   selector: "app-pos-currency-receipt-details",
   templateUrl: "./pos-currency-receipt-details.component.html",
   styleUrls: ["./pos-currency-receipt-details.component.scss"],
 })
+
+
 export class PosCurrencyReceiptDetailsComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   tableData: any[] = [];
@@ -26,6 +30,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   paymentModeList: any[] = [];
   dummyDate = '1900-01-01T00:00:00';
 
+  
   selectedTabIndex = 0;
 
 

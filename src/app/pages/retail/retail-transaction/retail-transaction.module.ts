@@ -13,12 +13,13 @@ import { AddPaymentComponent } from './common/add-payment/add-payment.component'
 import { PrintInvoiceComponent } from './common/print-invoice/print-invoice.component';
 import { AddPosComponent } from './add-pos/add-pos.component';
 import { PosCurrencyReceiptComponent } from './pos-currency-receipt/pos-currency-receipt.component';
-import { PosCurrencyReceiptDetailsComponent } from './pos-currency-receipt/pos-currency-receipt-details/pos-currency-receipt-details.component';
+import { PosCurrencyReceiptDetailsComponent, } from './pos-currency-receipt/pos-currency-receipt-details/pos-currency-receipt-details.component';
 import { PosCustomerMasterComponent } from './common/pos-customer-master/pos-customer-master.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
+import { CustomDateFormat1, CustomDateFormat2 } from './pos-currency-receipt/pos-currency-receipt-details/cust-dateformats.component';
 
 
 
@@ -36,7 +37,8 @@ import { MatSelectModule } from '@angular/material/select';
     AddPosComponent,
     PosCurrencyReceiptComponent,
     PosCurrencyReceiptDetailsComponent,
-
+    CustomDateFormat1,
+    CustomDateFormat2
   ],
   imports: [
     CommonModule,

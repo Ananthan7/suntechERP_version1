@@ -127,8 +127,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     partyAddress: [''],
     schemaCode: [''],
     schemaId: [''],
-    partyAmount: [0.00], // need to remove the value
-    partyAmountLc: [0.00],  // need to remove the value
+    partyCurr: [], // need to remove the value
+    partyAmountFC: [0.00],  // need to remove the value
     narration: [''],
     totalTax: [''],
     total: ['']
@@ -274,8 +274,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
           this.posCurrencyReceiptForm.controls.partyAddress.setValue(data.PARTY_ADDRESS);
 
-          this.posCurrencyReceiptForm.controls.partyAmount.setValue(data.TOTAL_AMOUNTFC);
-          this.posCurrencyReceiptForm.controls.partyAmountLc.setValue(data.TOTAL_AMOUNTCC);
+          this.posCurrencyReceiptForm.controls.partyCurr.setValue(data.PARTY_CURRENCY);
+          this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(data.TOTAL_AMOUNTFC);
+          // this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(data.TOTAL_AMOUNTCC);
 
 
         }
@@ -326,8 +327,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
               this.posCurrencyReceiptForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE)
               this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
+              this.posCurrencyReceiptForm.controls.partyCurr.setValue(data[0].CURRENCY_CODE)
 
-              // this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
+          // this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
               // this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data[0].CURRENCY_CODE)
               // this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data[0].ACCOUNT_HEAD)
               // this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data[0].ADDRESS)
@@ -426,8 +428,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "PARTYCODE": this.posCurrencyReceiptForm.value.partyCode || "",
       "PARTY_CURRENCY": this.posCurrencyReceiptForm.value.partyCurrency || "",
       "PARTY_CURR_RATE": this.posCurrencyReceiptForm.value.partyCurrencyRate || "0",
-      "TOTAL_AMOUNTFC": this.posCurrencyReceiptForm.value.partyAmount || "",
-      "TOTAL_AMOUNTCC": this.posCurrencyReceiptForm.value.partyAmountLc || "",
+      "TOTAL_AMOUNTFC": this.posCurrencyReceiptForm.value.partyAmountFC || "",
+      "TOTAL_AMOUNTCC": this.posCurrencyReceiptForm.value.partyAmountFC || "",
       "REMARKS": this.posCurrencyReceiptForm.value.narration || "",
       "SYSTEM_DATE": "2023-10-10T11:05:50.756Z",
       "NAVSEQNO": 0,

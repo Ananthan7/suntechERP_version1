@@ -116,11 +116,24 @@
             <label for="inputPassword" class="col-sm-2 col-form-label">Vaild:</label>
             <div class="col-md-2">
               <!-- need to work for mm/yy -->
-              <mat-form-field style="width: 100%">
-                <input matInput [matDatepicker]="creditCardDate" name="creditCardDate" placeholder="MM/YYYY"
+              <mat-form-field style="width: 100%" dateFormat2>
+                <input matInput  [matDatepicker]="creditCardDate" name="creditCardDate"  placeholder="MM/YYYY"
                    formControlName="creditCardDate" />
                 <mat-datepicker-toggle matSuffix [for]="creditCardDate"></mat-datepicker-toggle>
-                <mat-datepicker #creditCardDate startView="multi-year" ></mat-datepicker> 
+                <mat-datepicker #creditCardDate startView="multi-year"  ></mat-datepicker> 
+
+              </mat-form-field>
+
+              <mat-form-field dateFormat1>
+                <input matInput [matDatepicker]="ddMMYYYYPicker" placeholder="DD/MM/YYYY">
+                <mat-datepicker-toggle matSuffix [for]="ddMMYYYYPicker"></mat-datepicker-toggle>
+                <mat-datepicker #ddMMYYYYPicker></mat-datepicker>
+              </mat-form-field>
+              
+              <mat-form-field dateFormat2>
+                <input matInput [matDatepicker]="mmYYYYPicker" placeholder="MM/YYYY">
+                <mat-datepicker-toggle matSuffix [for]="mmYYYYPicker"></mat-datepicker-toggle>
+                <mat-datepicker #mmYYYYPicker startView="multi-year" ></mat-datepicker>
               </mat-form-field>
             </div>
           </div>
