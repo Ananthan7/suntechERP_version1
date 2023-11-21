@@ -4,9 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
-import Swal from 'sweetalert2';
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { take } from 'rxjs/operators';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-process-transfer-details',
   templateUrl: './process-transfer-details.component.html',
@@ -242,7 +240,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
  
-  private fillStoneDetails():void{
+  private fillStoneDetails():void {
     let postData = {
       "SPID": "042",
       "parameter": {
@@ -261,6 +259,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
           if (data) {
             this.metalDetailData = data
+            this.formatMetalDetailDataGrid()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             return
@@ -273,6 +272,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  formatMetalDetailDataGrid(){
+    this.metalDetailData.forEach((element:any) => {
+      element.GROSS_WT = this.comService.decimalQuantityFormat(element.GROSS_WT,'METAL')
+      element.STONE_WT = this.comService.decimalQuantityFormat(element.STONE_WT,'STONE')
+      element.PURITY = this.comService.decimalQuantityFormat(element.PURITY,'PURITY')
+    });
   }
   /**USE: barcode Number Validate API call */
   barcodeNumberValidate(event: any) {

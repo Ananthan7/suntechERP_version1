@@ -1,16 +1,19 @@
 <div class="d-flex ps-2">
     <div class="p-1" *ngIf="viewAddBtn">
-        <button type="button" mat-flat-button (click)="AddBtnClicked()">
+        <button type="button" mat-flat-button class="flatbutton"
+            (click)="AddBtnClicked()">
             <i class="fa fa-plus" style="font-size: 11px;color: #fff;"></i>
         </button>
     </div>
     <div class="p-1" *ngIf="viewDeleteBtn">
-        <button type="button" mat-flat-button (click)="deleteBtnClicked()">
+        <button type="button" mat-flat-button class="flatbutton"
+            (click)="deleteBtnClicked()">
             <i class="fa fa-trash" style="font-size: 11px;color: #fff;"></i>
         </button>
     </div>
     <div class="p-1" *ngIf="viewImportBtn">
-        <button type="button" mat-flat-button (click)="importBtnClicked()">
+        <button type="button" mat-flat-button class="flatbutton"
+            (click)="importBtnClicked()">
             <i class="fa fa-file" style="color: #fff;"></i>
         </button>
     </div>

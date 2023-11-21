@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
@@ -8,17 +7,17 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-
 @Component({
-  selector: 'app-producation-sub-details',
-  templateUrl: './producation-sub-details.component.html',
-  styleUrls: ['./producation-sub-details.component.scss']
+  selector: 'app-production-stock-detail',
+  templateUrl: './production-stock-detail.component.html',
+  styleUrls: ['./production-stock-detail.component.scss']
 })
-export class ProducationSubDetailsComponent implements OnInit {
+export class ProductionStockDetailComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   Data: any[] = [];
   divisionMS: any = 'ID';
+  subJobNumber: string = ''
   columnheads : any[] = ["S.no","Stock Code","Design","Cost","Karat","Gross Wt","M.Pcs","St.Wt","St.value","Labour","Wastage","Total Cost"];
   columnhead: any[] = ["Div","Pcs","Gross Wt"];
   labourColumnhead: any[] = ["Code","Div","Pcs","Qty","Rate","Amount","Wastage %","Wastage Qty","Wastage Amt","Lab A/C","Unit","Lab Type"];
@@ -249,7 +248,7 @@ export class ProducationSubDetailsComponent implements OnInit {
             this.toastr.error("Not saved");
           }
         },
-        (err) => alert(err)
+        (err:any) => alert(err)
       );
     this.subscriptions.push(Sub);
   }

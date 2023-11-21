@@ -16,7 +16,9 @@
           <label for="input" class="col-sm-3 col-form-label">Job No :</label>
           <div class="col-sm-3">
             <mat-form-field style="width: 70%;">
-              <input type="text" matInput formControlName="jobno" />
+              <input type="text" matInput
+              (focusout)="jobNumberValidate($event)"
+               formControlName="jobno" />
             </mat-form-field>
             <master-search [MasterSearchData]="jobnoCodeData" 
             (newRowClick)="jobnoCodeSelected($event)"></master-search>
@@ -95,7 +97,7 @@
               <input type="text" matInput formControlName="parts" />
             </mat-form-field>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-5">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="partsName" />
             </mat-form-field>
@@ -266,7 +268,7 @@
                 <div class="col-sm-2">
                   <!-- <mat-form-field style="width: 100%;">
                     <input type="date" matInput formControlName="startdate" />
-                  </mat-form-field> -->>
+                  </mat-form-field> -->
                   <mat-form-field style="width: 100%">
                     <input matInput [matDatepicker]="startdate" name="startdate" formControlName="startdate"
                       placeholder="DD/MM/YYYY" DateValidation />
