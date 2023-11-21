@@ -13,8 +13,6 @@
             <div class="col-md-12 ">
                 <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                     <mat-tab label="General">
-                        <div class="card metal-sales-card">
-                            <div class="card-body sales-card-body p-2">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="row align-items-center mb-1">
@@ -249,7 +247,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="row align-items-center mb-1">
-                                            <label for="inputPassword" class="col-sm-3 col-form-label">Design :</label>
+                                            <label for="inputPassword" class="col-sm-3 col-form-label">Type :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select>
@@ -260,13 +258,13 @@
                                                 <div class="form-check  mx-2">
                                                     <input class="form-check-input" type="radio" name="radioOne">
                                                     <label class="form-check-label" for="radioOne">
-                                                        Guarenteed
+                                                        Guaranteed
                                                     </label>
                                                 </div>
                                                 <div class="form-check mx-2">
                                                     <input class="form-check-input" type="radio" name="radioOne">
                                                     <label class="form-check-label" for="radioOne">
-                                                        Warranteed
+                                                        Warranted
                                                     </label>
                                                 </div>
                                                 <div class="form-check mx-2">
@@ -288,7 +286,7 @@
                                             <div class="col-md-4">
                                                 <div class="p-1  pl-1 bd-highlight">
                                                     <button type="button" class="btn btn-primary add-btn w-100">
-                                                        Enquriy
+                                                        Enquiry
                                                     </button>
                                                 </div>
                                             </div>
@@ -563,10 +561,16 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row align-items-center">
+                                            <label for="inputPassword" class="col-sm-3 col-form-label">Comments :</label>
+                                            <div class="col-md-9">
+                                                <mat-form-field style="width: 100%;">
+                                                    <textarea  matInput  rows="3"></textarea>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
                     </mat-tab>
                     <mat-tab label="UDF Grouping">
                         <div class="row">
@@ -877,7 +881,7 @@
                                         By</label>
                                 </div>
                                 <div class="row align-items-center mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">Frist Trans :</label>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">First Trans :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput />
@@ -916,7 +920,7 @@
                                                 class="col-sm-4 col-form-label text-center">FC(AED)
                                             </label>
                                             <label for="inputPassword"
-                                                class="col-sm-4 col-form-label text-center">Lc(AED)
+                                                class="col-sm-4 col-form-label text-center">LC(AED)
                                             </label>
                                         </div>
                                         <div class="row align-items-center mb-1">
@@ -1007,7 +1011,7 @@
                                     <div class="col-md-6">
                                         <div class="row align-items-center mb-1">
                                             <label for="inputPassword"
-                                                class="col-sm-6 col-form-label">Create By
+                                                class="col-sm-6 col-form-label">Created By
                                             </label>
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
@@ -1017,7 +1021,7 @@
                                         </div>
                                         <div class="row align-items-center mb-1">
                                             <label for="inputPassword"
-                                                class="col-sm-6 col-form-label">Create On
+                                                class="col-sm-6 col-form-label">Created On
                                             </label>
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
