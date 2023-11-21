@@ -727,7 +727,7 @@
           <div class="col-md-12">
             <dx-data-grid #dataGrid id="gridContainer"
               [showBorders]="true" [dataSource]="metalDetailData"
-              [columnAutoWidth]="true"
+              [columnAutoWidth]="true" (onRowUpdated)="formatMetalDetailDataGrid()"
               [showRowLines]="true">
               <dxo-paging [enabled]="false"></dxo-paging>
               <dxo-editing mode="cell" [allowUpdating]="true">
@@ -749,7 +749,7 @@
               <dxi-column dataField="Type" caption="Type" alignment="right"></dxi-column>
               <dxi-column dataField="Rate" caption="Rate" alignment="right"></dxi-column>
               <dxi-column dataField="Amount" caption="Amount" alignment="right"></dxi-column>
-              <dxi-column dataField="Setted" caption="Setted" alignment="left"
+              <dxi-column dataField="Setted" caption="Setted" alignment="center"
                 cellTemplate="Setted">
                 <div *dxTemplate="let data1 of 'Setted'">
                   <input type="checkbox"
@@ -773,7 +773,7 @@
                 alignment="right"></dxi-column>
               <dxi-column dataField="KARAT_CODE" caption="Karat"
                 alignment="left"></dxi-column>
-              <dxi-column dataField="PURITY" caption="Purity" alignment="left"></dxi-column>
+              <dxi-column dataField="PURITY" caption="Purity" alignment="right"></dxi-column>
               <dxi-column dataField="PUREWT" caption="Gain Pure Wt"
                 alignment="right"></dxi-column>
               <dxi-column dataField="VOCNO" caption="Voucher Number" alignment="left"></dxi-column>

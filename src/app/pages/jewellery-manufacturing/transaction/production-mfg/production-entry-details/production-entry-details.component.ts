@@ -6,8 +6,8 @@ import { ToastrService } from "ngx-toastr";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
-import {  NgbActiveModal,  NgbModal,  NgbModalRef,} from "@ng-bootstrap/ng-bootstrap";
-import { ProducationSubDetailsComponent } from "../producation-sub-details/producation-sub-details.component";
+import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
+import { ProductionStockDetailComponent } from "../production-stock-detail/production-stock-detail.component";
 
 @Component({
   selector: "app-production-entry-details",
@@ -18,7 +18,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
   columnheadBottom: any[] = [""];
-  producationSubDetailData : any[] = [''];
+  producationSubDetailData: any[] = [''];
   @Input() content!: any;
   userName = localStorage.getItem("username");
   branchCode?: String;
@@ -26,7 +26,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   currentDate = new Date();
 
   private subscriptions: Subscription[] = [];
- 
+
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -50,6 +50,75 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+  productiondetailsFrom: FormGroup = this.formBuilder.group({
+    jobno: [''],
+    jobnoDesc: [''],
+    jobDate: [''],
+    subjobno: [''],
+    subjobnoDesc: [''],
+    customer: [''],
+    customerDesc: [''],
+    process: [''],
+    processname: [''],
+    worker: [''],
+    workername: [''],
+    partsName: [''],
+    parts: [''],
+    design: [''],
+    designCode: [''],
+    totalpcs: [''],
+    noofpcs: [''],
+    location: [''],
+    lossqty: [''],
+    grosswt: [''],
+    stonepcs: [''],
+    timetaken: [''],
+    metalwt: [''],
+    stonewt: [''],
+    price1: [''],
+    prefix: [''],
+    prefixNo: [''],
+    otherstone: [''],
+    price2: [''],
+    costcode: [''],
+    setref: [''],
+    price3: [''],
+    karat: [''],
+    venderref: [''],
+    price4: [''],
+    startdate: [''],
+    endDate: [''],
+    price5: [''],
+    remarks: [''],
+    prodpcs: [''],
+    pndpcs: [''],
+    lossone: [''],
+    losswt: [''],
+    fromStockCode: [''],
+    fromStockCodeDesc: [''],
+    toStockCode: [''],
+    toStockCodeDesc: [''],
+    metalpcs: [''],
+    grossWt: [''],
+    stoneWt: [''],
+    purity: [''],
+    netWt: [''],
+    chargableWt: [''],
+    purityPer: [''],
+    pureWt: [''],
+    purityDiff: [''],
+    stoneDiff: [''],
+    loss: [''],
+    mkgRate: [''],
+    lotNo: [''],
+    balwt: [''],
+    mkgValue: [''],
+    barNo: [''],
+    ticketNo: [''],
+    prod: [''],
+    balPcs: [''],
+    jobPurity: [''],
+  });
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -58,10 +127,93 @@ export class ProductionEntryDetailsComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+  }
+
+  /**USE: jobnumber validate API call */
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strJobNumber': this.comService.nullToString(event.target.value),
+        'strCurrenctUser': this.comService.nullToString(this.userName)
+      }
+    }
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.productiondetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
+            this.productiondetailsFrom.controls.subjobnoDesc.setValue(data[0].JOB_DESCRIPTION)
+            // this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+            this.productiondetailsFrom.controls.design.setValue(data[0].DESIGN_CODE)
+            this.productiondetailsFrom.controls.designCode.setValue(data[0].DESCRIPTION)
+            // this.productiondetailsFrom.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
+            // this.productiondetailsFrom.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
+            this.subJobNumberValidate()
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  /**USE: subjobnumber validate API call  this.processTransferdetailsForm.value.subjobno*/
+  subJobNumberValidate(event?: any) {
+    let postData = {
+      "SPID": "040",
+      "parameter": {
+        'strUNQ_JOB_ID': '156516/4/01',
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
+      }
+    }
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          this.productiondetailsFrom.controls.process.setValue(data[0].PROCESS)
+          this.productiondetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
+          this.productiondetailsFrom.controls.worker.setValue(data[0].WORKER)
+          this.productiondetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          this.productiondetailsFrom.controls.metalwt.setValue(
+            this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
+          this.productiondetailsFrom.controls.stonewt.setValue(
+            this.comService.decimalQuantityFormat(data[0].STONE, 'STONE')) 
+          this.productiondetailsFrom.controls.MetalPcsFrom.setValue(data[0].PCS)
+          this.productiondetailsFrom.controls.GrossWeightFrom.setValue(data[0].NETWT)
+          this.productiondetailsFrom.controls.StoneWeighFrom.setValue(data[0].STONE)
+          this.productiondetailsFrom.controls.PUREWT.setValue(data[0].PUREWT)
+          this.productiondetailsFrom.controls.PURITY.setValue(data[0].PURITY)
+          this.productiondetailsFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
+          this.productiondetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.productiondetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
+          this.productiondetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
+          this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
   close(data?: any) {
@@ -71,7 +223,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
   opennewdetails() {
     const modalRef: NgbModalRef = this.modalService.open(
-      ProducationSubDetailsComponent,
+      ProductionStockDetailComponent,
       {
         size: "xl",
         backdrop: true, //'static'
@@ -81,94 +233,22 @@ export class ProductionEntryDetailsComponent implements OnInit {
     );
     modalRef.result.then((postData) => {
       if (postData) {
-        console.log('Data from modal:', postData);
-        this.producationSubDetailData.push(postData);        
+        this.producationSubDetailData.push(postData);
       }
     });
   }
 
   jobnoCodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.jobno.setValue(e.job_number);
     this.productiondetailsFrom.controls.jobnoDesc.setValue(e.job_description);
-    console.log(this.productiondetailsFrom.value.jobnoDesc);
+    this.jobNumberValidate({ target: { value: e.job_number } })
   }
-    
+
 
   locationCodeSelected(e: any) {
     console.log(e);
     this.productiondetailsFrom.controls.location.setValue(e.COUNT);
   }
-
-  productiondetailsFrom: FormGroup = this.formBuilder.group({
-    jobno : [''],
-    jobnoDesc : [''],
-    jobDate : [''],
-    subjobno : [''],
-    subjobnoDesc : [''],
-    customer : [''],
-    customerDesc : [''],
-    process : [''],
-    processname : [''],
-    worker : [''],
-    workername : [''],
-    partsName : [''],    
-    parts : [''],
-    design : [''],
-    designCode :[''],
-    totalpcs : [''],
-    noofpcs : [''],
-    location : [''],
-    lossqty : [''],
-    grosswt : [''],
-    stonepcs : [''],
-    timetaken : [''],
-    metalwt : [''],
-    stonewt : [''],
-    price1 : [''],
-    prefix : [''],
-    prefixNo : [''],
-    otherstone : [''],
-    price2 : [''],
-    costcode : [''],
-    setref : [''],
-    price3 : [''],
-    karat : [''],
-    venderref : [''],
-    price4 :[''],
-    startdate : [''],
-    endDate : [''],
-    price5 :[''],
-    remarks : [''],
-    prodpcs : [''],
-    pndpcs : [''],
-    lossone : [''],
-    losswt : [''],
-    fromStockCode : [''],
-    fromStockCodeDesc : [''],
-    toStockCode : [''],
-    toStockCodeDesc : [''],
-    metalpcs : [''],
-    grossWt : [''],
-    stoneWt : [''],
-    purity : [''],
-    netWt : [''],
-    chargableWt : [''],
-    purityPer : [''],
-    pureWt : [''],
-    purityDiff : [''],
-    stoneDiff : [''],
-    loss : [''],
-    mkgRate : [''],
-    lotNo : [''],
-    balwt : [''],
-    mkgValue :[''],
-    barNo :[''],
-    ticketNo : [''],
-    prod :[''],
-    balPcs : [''],
-    jobPurity : [''],
-    });
 
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -183,7 +263,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
 
   removedata() {
-    
+
   }
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
@@ -194,15 +274,13 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.toastr.error("select all required fields");
       return;
     }
-
-    let API = "JobProductionMaster/InsertJobProductionMaster";
     let postData = {
       "UNIQUEID": 0,
       "SRNO": 0,
       "VOCNO": 0,
       "VOCTYPE": "",
-      "VOCDATE": "2023-10-17T12:41:20.127Z",
-      "BRANCH_CODE":  this.branchCode,
+      "VOCDATE": this.currentDate,
+      "BRANCH_CODE": this.branchCode,
       "JOB_NUMBER": this.productiondetailsFrom.value.jobno,
       "JOB_DATE": this.productiondetailsFrom.value.jobDate,
       "JOB_SO_NUMBER": this.productiondetailsFrom.value.subjobno,
@@ -250,7 +328,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "AMOUNTFC": 0,
       "AMOUNTLC": 0,
       "PROCESS_CODE": this.productiondetailsFrom.value.process,
-      "PROCESS_NAME":this.productiondetailsFrom.value.processname,
+      "PROCESS_NAME": this.productiondetailsFrom.value.processname,
       "WORKER_CODE": this.productiondetailsFrom.value.worker,
       "WORKER_NAME": this.productiondetailsFrom.value.workername,
       "IN_DATE": this.productiondetailsFrom.value.startdate,
@@ -263,10 +341,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "PROD_PROC": this.productiondetailsFrom.value.prodpcs,
       "METAL_DIVISION": "",
       "PRICE1PER": this.productiondetailsFrom.value.price1,
-      "PRICE2PER":  this.productiondetailsFrom.value.price2,
-      "PRICE3PER":  this.productiondetailsFrom.value.price3,
-      "PRICE4PER":  this.productiondetailsFrom.value.price4,
-      "PRICE5PER":  this.productiondetailsFrom.value.price5,
+      "PRICE2PER": this.productiondetailsFrom.value.price2,
+      "PRICE3PER": this.productiondetailsFrom.value.price3,
+      "PRICE4PER": this.productiondetailsFrom.value.price4,
+      "PRICE5PER": this.productiondetailsFrom.value.price5,
       "LOCTYPE_CODE": this.productiondetailsFrom.value.location,
       "WASTAGE_WT": 0,
       "WASTAGE_AMTFC": 0,
@@ -325,11 +403,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "BARCODEDPCS": 0
     }
 
-    this.close({postData, jobProducationSubDetails: [this.producationSubDetailData]});
+    this.close({ postData, jobProducationSubDetails: [this.producationSubDetailData] });
   }
 
   setFormValues() {
-  
+
   }
 
   update() {

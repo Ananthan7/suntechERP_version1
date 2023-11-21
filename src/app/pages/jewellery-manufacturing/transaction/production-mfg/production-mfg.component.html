@@ -14,7 +14,7 @@
         <div class="row mb-2">
           <div class="col-md-9 d-flex justify-content-start">
             <div class="p-2">
-              <h6 class="bg-info text-white">{{branchCode}} - {{companyName}}</h6>
+              <h6>{{branchCode}} - {{companyName}}</h6>
             </div>
           </div>
           <div class="col-md-1">
@@ -166,10 +166,10 @@
             <div class="col-md-12 d-flex">
               <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
                 [viewImportBtn]="false"
-                (addClick)="openproductionentrydetails()"
+                (addClick)="openProductionEntryDetails()"
                 (deleteClick)="deleteTableData()">
               </menu-buttons>
-              <div class="col-sm-3">
+              <div class="col-sm-2">
                 <mat-form-field style="width: 80%;">
                   <input type="text" matInput />
                 </mat-form-field>
@@ -189,79 +189,102 @@
                         </dxo-editing>
                         <dxo-selection mode="single"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column dataField="data" width="auto"  caption="No"
+                        <dxi-column dataField="data" width="auto" caption="No"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Job #"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Job #"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Sub Job"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Sub Job"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Design"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Design"
                           alignment="center">
                         </dxi-column>
                         <dxi-column dataField="data" width="auto" caption="Pcs"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Metal"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Metal"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Stone"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Stone"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Gross Wt"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Gross Wt"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="St Pcs"
+                        <dxi-column dataField="data" width="auto"
+                          caption="St Pcs"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Process"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Process"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Worker"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Worker"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto"  caption="So number"
+                        <dxi-column dataField="data" width="auto"
+                          caption="So number"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="WIP A/C"
+                        <dxi-column dataField="data" width="auto"
+                          caption="WIP A/C"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Loction"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Loction"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Cost_code"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Cost_code"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Supplier Ref"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Supplier Ref"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Customer"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Customer"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Prefix"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Prefix"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Karat"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Karat"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Job Description"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Job Description"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="set Ref"
+                        <dxi-column dataField="data" width="auto"
+                          caption="set Ref"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Stock Description"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Stock Description"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Process Name"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Process Name"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Worker Name"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Worker Name"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Loss Wt"
+                        <dxi-column dataField="data" width="auto"
+                          caption="Loss Wt"
                           alignment="center">
                         </dxi-column>
                       </dx-data-grid>
@@ -281,7 +304,8 @@
                         </dxo-editing>
                         <dxo-selection mode="single"></dxo-selection>
                         <dxi-column *ngFor="let data of columnheads"
-                          dataField="{{ data }}" width="130" caption="{{ data }}"
+                          dataField="{{ data }}" width="130"
+                          caption="{{ data }}"
                           alignment="center">
                         </dxi-column>
                       </dx-data-grid>

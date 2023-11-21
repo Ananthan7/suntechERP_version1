@@ -118,7 +118,7 @@ export class CommonServiceService {
       'PURITY': 6,
       'RATE': 6,
     }
-    this.FormatCount = this.DECIMAL_CONSTANTS[flag]
+    this.FormatCount = this.DECIMAL_CONSTANTS[flag] ? this.DECIMAL_CONSTANTS[flag] : 'METAL'
 
     value = Number(value).toFixed(this.FormatCount)
 

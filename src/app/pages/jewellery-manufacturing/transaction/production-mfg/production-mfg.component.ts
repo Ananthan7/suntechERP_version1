@@ -20,28 +20,28 @@ import { ProductionEntryDetailsComponent } from "./production-entry-details/prod
 })
 export class ProductionMfgComponent implements OnInit {
   columnheads: any[] = [
-      "JOB_NUMBER", "UNQ_JOB_ID", "DESIGN_CODE",
-     "DIVCODE", 'PREFIX', 'STOCK_CODE', 'STOCK_DESCRIPTION', 'SET_REF', 
-     'KARAT_CODE', 'JOB_PCS', 'GROSS_WT', 'METAL_PCS','METAL_WT','STONE_PCS',
-     'STONE_WT','LOSS_WT','NET_WT','PURITY','PURE_WT','RATE_TYPE','METAL_RATE',
-      'CURRENCY_CODE','CURRENCY_RATE','METAL_GRAM_RATEFC','METAL_AMOUNTFC',
-      'METAL_AMOUNTLC','MAKING_RATEFC','MAKING_RATELC','MAKING_AMOUNTFC',
-      'MAKING_AMOUNTLC','STONE_RATEFC','STONE_RATELC','STONE_AMOUNTFC','STONE_AMOUNTLC',
-      'LAB_AMOUNTFC','LAB_AMOUNTLC','RATEFC',
-      'RATELC','AMOUNTFC','AMOUNTLC','PROCESS_CODE',
-      'PROCESS_NAME','WORKER_CODE','WORKER_NAME','IN_DATE','OUT_DATE','TIME_TAKEN_HRS','COST_CODE',
-      'WIP_ACCODE','STK_ACCODE','SOH_ACCODE','PROD_PROC','METAL_DIVISION','PRICE1PER',
-      'PRICE2PER','PRICE3PER','PRICE4PER','PRICE5PER','LOCTYPE_CODE','WASTAGE_WT','WASTAGE_AMTFC',
-      'WASTAGE_AMTLC','PICTURE_NAME','SELLINGRATE','LAB_ACCODE','CUSTOMER_CODE','OUTSIDEJOB',
-      'METAL_LABAMTFC','METAL_LABAMTLC','METAL_LABACCODE','SUPPLIER_REF','TAGLINES','SETTING_CHRG',
-      'POLISH_CHRG','RHODIUM_CHRG','LABOUR_CHRG','MISC_CHRG','SETTING_ACCODE','POLISH_ACCODE',
-      'RHODIUM_ACCODE','LABOUR_ACCODE','MISC_ACCODE','WAST_ACCODE','REPAIRJOB','PRICE1FC',
-      'PRICE2FC','PRICE3FC','PRICE4FC','PRICE5FC','BASE_CONV_RATE','DT_BRANCH_CODE','DT_VOCTYPE',
-      'DT_VOCNO','DT_YEARMONTH','YEARMONTH','OTH_STONE_WT','OTH_STONE_AMT','HANDLING_ACCODE',
-      'FROM_STOCK_CODE','TO_STOCK_CODE','JOB_PURITY','LOSS_PUREWT','PUDIFF','STONEDIFF','CHARGABLEWT',
-      'BARNO','LOTNUMBER','TICKETNO','PROD_PER','DESIGN_TYPE','D_REMARKS',
-      'BARCODEDQTY','BARCODEDPCS','LASTNO'
-    ];
+    "JOB_NUMBER", "UNQ_JOB_ID", "DESIGN_CODE",
+    "DIVCODE", 'PREFIX', 'STOCK_CODE', 'STOCK_DESCRIPTION', 'SET_REF',
+    'KARAT_CODE', 'JOB_PCS', 'GROSS_WT', 'METAL_PCS', 'METAL_WT', 'STONE_PCS',
+    'STONE_WT', 'LOSS_WT', 'NET_WT', 'PURITY', 'PURE_WT', 'RATE_TYPE', 'METAL_RATE',
+    'CURRENCY_CODE', 'CURRENCY_RATE', 'METAL_GRAM_RATEFC', 'METAL_AMOUNTFC',
+    'METAL_AMOUNTLC', 'MAKING_RATEFC', 'MAKING_RATELC', 'MAKING_AMOUNTFC',
+    'MAKING_AMOUNTLC', 'STONE_RATEFC', 'STONE_RATELC', 'STONE_AMOUNTFC', 'STONE_AMOUNTLC',
+    'LAB_AMOUNTFC', 'LAB_AMOUNTLC', 'RATEFC',
+    'RATELC', 'AMOUNTFC', 'AMOUNTLC', 'PROCESS_CODE',
+    'PROCESS_NAME', 'WORKER_CODE', 'WORKER_NAME', 'IN_DATE', 'OUT_DATE', 'TIME_TAKEN_HRS', 'COST_CODE',
+    'WIP_ACCODE', 'STK_ACCODE', 'SOH_ACCODE', 'PROD_PROC', 'METAL_DIVISION', 'PRICE1PER',
+    'PRICE2PER', 'PRICE3PER', 'PRICE4PER', 'PRICE5PER', 'LOCTYPE_CODE', 'WASTAGE_WT', 'WASTAGE_AMTFC',
+    'WASTAGE_AMTLC', 'PICTURE_NAME', 'SELLINGRATE', 'LAB_ACCODE', 'CUSTOMER_CODE', 'OUTSIDEJOB',
+    'METAL_LABAMTFC', 'METAL_LABAMTLC', 'METAL_LABACCODE', 'SUPPLIER_REF', 'TAGLINES', 'SETTING_CHRG',
+    'POLISH_CHRG', 'RHODIUM_CHRG', 'LABOUR_CHRG', 'MISC_CHRG', 'SETTING_ACCODE', 'POLISH_ACCODE',
+    'RHODIUM_ACCODE', 'LABOUR_ACCODE', 'MISC_ACCODE', 'WAST_ACCODE', 'REPAIRJOB', 'PRICE1FC',
+    'PRICE2FC', 'PRICE3FC', 'PRICE4FC', 'PRICE5FC', 'BASE_CONV_RATE', 'DT_BRANCH_CODE', 'DT_VOCTYPE',
+    'DT_VOCNO', 'DT_YEARMONTH', 'YEARMONTH', 'OTH_STONE_WT', 'OTH_STONE_AMT', 'HANDLING_ACCODE',
+    'FROM_STOCK_CODE', 'TO_STOCK_CODE', 'JOB_PURITY', 'LOSS_PUREWT', 'PUDIFF', 'STONEDIFF', 'CHARGABLEWT',
+    'BARNO', 'LOTNUMBER', 'TICKETNO', 'PROD_PER', 'DESIGN_TYPE', 'D_REMARKS',
+    'BARCODEDQTY', 'BARCODEDPCS', 'LASTNO'
+  ];
   @Input() content!: any;
   tableData: any[] = [];
   producationEntryDetailsData: any[] = [];
@@ -121,7 +121,7 @@ export class ProductionMfgComponent implements OnInit {
     this.setCompanyCurrency()
     this.getRateType()
   }
-  setInitialDatas(){
+  setInitialDatas() {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.productionFrom.controls.vocDate.setValue(this.commonService.currentDate)
@@ -178,18 +178,22 @@ export class ProductionMfgComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531')
     }
   }
-  openproductionentrydetails() {
+  openProductionEntryDetails(data?: any) {
+    if (data) {
+      data[0].HEADERDETAILS = this.productionFrom.value;
+    } else {
+      data = [{ HEADERDETAILS: this.productionFrom.value }]
+    }
     const modalRef: NgbModalRef = this.modalService.open(
-      ProductionEntryDetailsComponent,
-      {
-        size: "xl",
-        backdrop: true, //'static'
-        keyboard: false,
-        windowClass: "modal-full-width",
-      }
-    );
+      ProductionEntryDetailsComponent, {
+      size: "xl",
+      backdrop: true, //'static'
+      keyboard: false,
+      windowClass: "modal-full-width",
+    });
+    modalRef.componentInstance.content = data;
+
     modalRef.result.then((res) => {
-      console.log(res);
       if (res) {
         console.log('Data from modal:', res);
         this.producationEntryDetailsData.push(res.postData);
@@ -224,7 +228,7 @@ export class ProductionMfgComponent implements OnInit {
       "VOCNO": this.productionFrom.value.vocno,
       "VOCDATE": this.productionFrom.value.vocDate,
       "YEARMONTH": this.yearMonth,
-      "DOCTIME": this.commonService.formatDateTime(this.currentDate) ||"2023-10-17T12:41:20.126Z",
+      "DOCTIME": this.commonService.formatDateTime(this.currentDate) || "2023-10-17T12:41:20.126Z",
       "CURRENCY_CODE": this.productionFrom.value.currency,
       "CURRENCY_RATE": this.productionFrom.value.currencyrate,
       "METAL_RATE_TYPE": this.productionFrom.value.metalratetype,
