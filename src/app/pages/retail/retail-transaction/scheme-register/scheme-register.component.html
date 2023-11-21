@@ -1,0 +1,159 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Scheme Register</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="savePdf()" (cancelClick)="close()"></modal-header>
+<!-- content section -->
+<div class="container-fluid pt-3">
+    <form>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Branch</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <mat-select>
+                                <mat-option value="HO">HO</mat-option>
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Filter</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">From</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">To</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Show</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <mat-select>
+                                <mat-option value="ALL">ALL</mat-option>
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Date</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="fromDate" [max]="vocMaxDate" name="fromDate"
+                                placeholder="DD/MM/YYYY" DateValidation />
+                            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="toDate" [max]="vocMaxDate" name="toDate"
+                                placeholder="DD/MM/YYYY" DateValidation />
+                            <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Till Date :</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="tillDate" [max]="vocMaxDate" name="tillDate"
+                                placeholder="DD/MM/YYYY" DateValidation />
+                            <mat-datepicker-toggle matSuffix [for]="tillDate"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #tillDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 offset-md-2 col-form-label">Report To</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <mat-select>
+                                <mat-option value="PERVIEW">PERVIEW</mat-option>
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <div id="pdf_container" [hidden]="true">
+    <div class="scheme_register_pdf"  >
+        <div class="row border_bottom">
+            <div class="col-md-6">
+                <div class="left_content">
+                    <h4>Pos Scheme Register</h4>
+                    <p>From 01/01/2023 &nbsp;&nbsp; To 20/11/2023</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="right_content text-end">
+                    <h4>Dhanak Goldmith</h4>
+                    <p>Old Deira, Gold Souq, Deira, Dubai U.A.E P.O. Box:65452</p>
+                </div>
+                <div class="email_address text-end">
+                    <p>Tel : 04-2263775</p>
+                    <p>Fax : 04-2263775</p>
+                    <p>Email : demoho@gmail.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">SI.No</th>
+                                <th scope="col">Scheme Id</th>
+                                <th scope="col">Open Date</th>
+                                <th scope="col">Customer Moblie No</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Unit Value</th>
+                                <th scope="col">No.Of Instal Paid</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Value Paid</th>
+                                <th scope="col">Amt Redm</th>
+                                <th scope="col">Amt Bal</th>
+                                <th scope="col">Plan</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Matured/Cancelled/Redemed Date</th>
+                                <th scope="col">Redeemed Ref.Pos No</th>
+                                <th scope="col">Sales Man</th>
+                                <th scope="col">Last Payment</th>
+    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>

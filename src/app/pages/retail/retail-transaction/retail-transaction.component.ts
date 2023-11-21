@@ -8,6 +8,7 @@ import { NewPosEntryComponent } from './new-pos-entry/new-pos-entry.component';
 import { AddPosComponent } from './add-pos/add-pos.component';
 import { PosCurrencyReceiptComponent } from './pos-currency-receipt/pos-currency-receipt.component';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
+import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -63,6 +64,9 @@ export class RetailTransactionComponent implements OnInit {
       case 'POINT OF SALE CURRENCY RECEIPT':
         contents = PosCurrencyReceiptComponent
         break;
+      case 'Scheme Registration':
+        contents = SchemeRegisterComponent
+        break;
       //continue adding components using case then break
       default:
         this.snackBar.open('No Response Found!', 'Close', {
@@ -76,7 +80,7 @@ export class RetailTransactionComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width'
     });
-  
+
     modalRef.componentInstance.content = data;
 
     modalRef.result.then((result) => {

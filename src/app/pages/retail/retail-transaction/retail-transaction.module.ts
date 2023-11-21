@@ -20,6 +20,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { CustomDateFormat1, CustomDateFormat2 } from './pos-currency-receipt/pos-currency-receipt-details/cust-dateformats.component';
+import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 
 
 
@@ -37,6 +38,7 @@ import { CustomDateFormat1, CustomDateFormat2 } from './pos-currency-receipt/pos
     AddPosComponent,
     PosCurrencyReceiptComponent,
     PosCurrencyReceiptDetailsComponent,
+    SchemeRegisterComponent,
     CustomDateFormat1,
     CustomDateFormat2
   ],

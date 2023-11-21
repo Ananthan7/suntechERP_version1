@@ -13,6 +13,8 @@ import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatDatepicker } from "@angular/material/datepicker";
+import * as _moment from 'moment';
 
 
 @Component({
@@ -30,7 +32,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   paymentModeList: any[] = [];
   dummyDate = '1900-01-01T00:00:00';
 
-  
+
   selectedTabIndex = 0;
 
 
@@ -79,25 +81,25 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     modeOfSelect: [""],
     modeCODE: [""], // Not Declaration 
     modeDesc: [""],
-    debitAmount : [""],
-    debitAmountDesc : [""],
+    debitAmount: [""],
+    debitAmountDesc: [""],
     // debitAmountDate : [new Date()],
-    currencyCode : [""],
-    currencyRate : [""],
-    amountFc : [""],
-    amountCc : [""],
-    creditCardNumber : [""],
-    creditCardName : [""],
-    creditCardDate : [new Date()],
-    ttNumber : [""],
-    ttDate : [""],
-    ttDrawnBank : [""],
-    ttDepositBank : [""],
-    chequeNumber : [""],
-    chequeDate : [new Date()],
-    chequeDrawnBank : [""],
-    chequeDepositBank : [""],
-    remarks : [""],
+    currencyCode: [""],
+    currencyRate: [""],
+    amountFc: [""],
+    amountCc: [""],
+    creditCardNumber: [""],
+    creditCardName: [""],
+    creditCardDate: [new Date()],
+    ttNumber: [""],
+    ttDate: [""],
+    ttDrawnBank: [""],
+    ttDepositBank: [""],
+    chequeNumber: [""],
+    chequeDate: [new Date()],
+    chequeDrawnBank: [""],
+    chequeDepositBank: [""],
+    remarks: [""],
     vatNo: [""],
     hsnCode: [""],
     invoiceNo: [""],
@@ -124,7 +126,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.paymentModeList = this.comService.getComboFilterByID('Payment Mode');
     console.log('paymentModeList :', this.paymentModeList);
-    
+
     this.posCurrencyReceiptDetailsForm.controls.branch.setValue(this.branchCode);
 
     this.vatDetails();
@@ -158,8 +160,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   debitAmountSelected(e: any) {
     console.log(e);
-       this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
-       this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e['ACCOUNT HEAD']);
+    this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
+    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e['ACCOUNT HEAD']);
     this.DebitamountChange({ target: { value: e.ACCODE } });
   }
 
@@ -224,7 +226,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     }
     else if ('this.selectedTabIndex == "Cheque"') {
       return this.posCurrencyReceiptDetailsForm.invalid;
-    }else {
+    } else {
       return this.posCurrencyReceiptDetailsForm.invalid;
     }
   }
@@ -239,19 +241,19 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       this.toastr.error("select all required fields");
       return;
     }
-    
+
 
     console.log(this.posCurrencyReceiptDetailsForm.value.vocDate);
     const res = this.validateReceipt();
-    if (!res) {      
-      var CHEQUE_NO,CHEQUE_DATE,CHEQUE_BANK
+    if (!res) {
+      var CHEQUE_NO, CHEQUE_DATE, CHEQUE_BANK
       if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == 'TT') {
         CHEQUE_NO = this.posCurrencyReceiptDetailsForm.value.ttNumber;
-        CHEQUE_DATE= this.posCurrencyReceiptDetailsForm.value.ttDate;
+        CHEQUE_DATE = this.posCurrencyReceiptDetailsForm.value.ttDate;
         CHEQUE_BANK = this.posCurrencyReceiptDetailsForm.value.ttDrawnBank;
-      }else if  (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Cheque') {
+      } else if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Cheque') {
         CHEQUE_NO = this.posCurrencyReceiptDetailsForm.value.chequeNumber;
-        CHEQUE_DATE= this.posCurrencyReceiptDetailsForm.value.chequeDate;
+        CHEQUE_DATE = this.posCurrencyReceiptDetailsForm.value.chequeDate;
         CHEQUE_BANK = this.posCurrencyReceiptDetailsForm.value.chequeDrawnBank;
       }
 
@@ -263,7 +265,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "MODE": "",
         "ACCODE": this.posCurrencyReceiptDetailsForm.value.debitAmount,
         "CURRENCY_CODE": this.posCurrencyReceiptDetailsForm.value.currencyCode,
-        "CURRENCY_RATE":  this.posCurrencyReceiptDetailsForm.value.currencyRate,
+        "CURRENCY_RATE": this.posCurrencyReceiptDetailsForm.value.currencyRate,
         "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         "AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.amountCc,
         "HEADER_AMOUNT": 0,
@@ -336,10 +338,10 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "AMLSOURCEOFFUNDS": "",
         "AMLTRANSACTION_TYPE": ""
       };
-    
+
       this.close(postData);
     }
-    
+
   }
 
   deleteWorkerMaster() {
@@ -407,7 +409,19 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       }
     });
   }
+
+
+
+  setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
+    const ctrlValue = normalizedMonthAndYear;
+    ctrlValue.month(normalizedMonthAndYear.month());
+    ctrlValue.year(normalizedMonthAndYear.year());
+    this.posCurrencyReceiptDetailsForm.controls.creditCardDate.setValue(ctrlValue);
+    datepicker.close();
+  }
   
+
+
   /**USE: close modal window */
   close(data?: any) {
     // this.activeModal.close();
