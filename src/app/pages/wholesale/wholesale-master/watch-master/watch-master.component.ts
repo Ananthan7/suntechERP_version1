@@ -15,8 +15,8 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./watch-master.component.scss']
 })
 export class WatchMasterComponent implements OnInit {
-  columnhead:any[] = ['Division','Karat','Gross Wt','Rate Type','Metal Rate','',''];
-  columnheader:any[] = ['Div','Shape','Color','Size','PCs','Carat']
+  columnhead:any[] = ['Division','Karat','Gross Wt','Rate Type','Metal Rate','Rate/Gms','Amount FC','Amount LC'];
+  columnheader:any[] = ['Div','Shape','Color','Clarity','Sieve','Size','Pcs','Carat','Crcy','Pc Code','Lb Code','Crt Rt']
   divisionMS: any = 'ID';
 
   constructor(
