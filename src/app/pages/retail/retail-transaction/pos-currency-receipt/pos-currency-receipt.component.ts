@@ -31,8 +31,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: 'A/c Code', field: 'ACCODE' },
     { title: 'Account Head', field: 'HDACCOUNT_HEAD' },
     { title: 'Currency', field: 'CURRENCY_CODE' },
-    { title: 'Amount', field: 'TOTAL_AMOUNTFC' },
     { title: 'Curr.Rate', field: 'CURRENCY_RATE' },
+    { title: 'Amount', field: 'TOTAL_AMOUNTFC' },
     { title: 'VAT_E_', field: '' },
     { title: 'VAT_E_.', field: '' },
   ];
