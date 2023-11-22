@@ -6,11 +6,7 @@ import { ToastrService } from "ngx-toastr";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
-import {
-  NgbActiveModal,
-  NgbModal,
-  NgbModalRef,
-} from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ProductionEntryDetailsComponent } from "./production-entry-details/production-entry-details.component";
 
 @Component({

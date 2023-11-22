@@ -156,6 +156,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
             // this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.productiondetailsFrom.controls.design.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.designCode.setValue(data[0].DESCRIPTION)
+            this.productiondetailsFrom.controls.noofpcs.setValue(data[0].JOB_PCS_TOTAL)
+            this.productiondetailsFrom.controls.customer.setValue(data[0].CUSTOMER_CODE)
             // this.productiondetailsFrom.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
             // this.productiondetailsFrom.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
             this.subJobNumberValidate()
@@ -177,7 +179,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': '156516/4/01',
+        'strUNQ_JOB_ID': this.productiondetailsFrom.value.subjobno,
         'strBranchCode': this.comService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
@@ -195,7 +197,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.metalwt.setValue(
             this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.productiondetailsFrom.controls.stonewt.setValue(
-            this.comService.decimalQuantityFormat(data[0].STONE, 'STONE')) 
+            this.comService.decimalQuantityFormat(data[0].STONE, 'STONE'))
           this.productiondetailsFrom.controls.MetalPcsFrom.setValue(data[0].PCS)
           this.productiondetailsFrom.controls.GrossWeightFrom.setValue(data[0].NETWT)
           this.productiondetailsFrom.controls.StoneWeighFrom.setValue(data[0].STONE)
@@ -206,6 +208,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.productiondetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
           this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
+          this.productiondetailsFrom.controls.prefixNo.setValue(data[0].PREFIX)
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
