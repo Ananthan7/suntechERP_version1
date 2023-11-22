@@ -37,6 +37,7 @@ export class MasterComponent implements OnInit {
   apiCtrl: any
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
+  private componentDbList: any = {}
   //subscription variable
   subscriptions$!: Subscription;
   constructor(
@@ -67,24 +68,24 @@ export class MasterComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
-  private componentDbList: any = {
-    'JobcardComponent': JobcardComponent,
-    'WorkerMasterComponent': WorkerMasterComponent,
-    'DepartmentMasterComponent': DepartmentMasterComponent,
-    'ProcessMasterComponent': ProcessMasterComponent,
-    'SequenceMasterComponent': SequenceMasterComponent,
-    'StonePricingMasterComponent': StonePricingMasterComponent,
-    'LabourChargeMasterComponent': LabourChargeMasterComponent,
-    'MeltingTypeComponent': MeltingTypeComponent,
-    'AlloyMasterComponent': AlloyMasterComponent,
-    'PictureTypeMasterComponent': PictureTypeMasterComponent,
-    'ApprovalMasterComponent': ApprovalMasterComponent,
-    'DesignMasterComponent': DesignMasterComponent,
-    'OtpMasterComponent': OtpMasterComponent,
-    'CustomerPriceMasterComponent': CustomerPriceMasterComponent,
-    // Add components and update in operationals > menu updation grid form component name
-  }
   openModalView(data?: any) {
+    this.componentDbList = {
+      'JobcardComponent': JobcardComponent,
+      'WorkerMasterComponent': WorkerMasterComponent,
+      'DepartmentMasterComponent': DepartmentMasterComponent,
+      'ProcessMasterComponent': ProcessMasterComponent,
+      'SequenceMasterComponent': SequenceMasterComponent,
+      'StonePricingMasterComponent': StonePricingMasterComponent,
+      'LabourChargeMasterComponent': LabourChargeMasterComponent,
+      'MeltingTypeComponent': MeltingTypeComponent,
+      'AlloyMasterComponent': AlloyMasterComponent,
+      'PictureTypeMasterComponent': PictureTypeMasterComponent,
+      'ApprovalMasterComponent': ApprovalMasterComponent,
+      'DesignMasterComponent': DesignMasterComponent,
+      'OtpMasterComponent': OtpMasterComponent,
+      'CustomerPriceMasterComponent': CustomerPriceMasterComponent,
+      // Add components and update in operationals > menu updation grid form component name
+    }
     let contents;
     if (this.componentDbList[this.componentName]) {
       contents = this.componentDbList[this.componentName]

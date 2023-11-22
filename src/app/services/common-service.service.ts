@@ -410,6 +410,13 @@ export class CommonServiceService {
     });
     return queryParamAPI
   }
+  getqueryParamMainVocType() {
+    let queryParamAPI
+    this.route.queryParams.subscribe((data: any) => {
+      queryParamAPI = data.mainVocType;
+    });
+    return queryParamAPI
+  }
   generateNumber() {
     return Math.floor(1000 + Math.random() * 9000)
   }

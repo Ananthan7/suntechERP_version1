@@ -18,13 +18,15 @@ export class GeneralMasterComponent implements OnInit {
   @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
 
   //variables
-  menuTitle: any
-  componentName: any
-  PERMISSIONS: any
-  tableName: any
-  apiCtrl: any
+  menuTitle: any;
+  componentName: any;
+  PERMISSIONS: any;
+  tableName: any;
+  apiCtrl: any;
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
+  private componentDbList: any = {}
+
   //subscription variable
   subscriptions$!: Subscription;
 
@@ -56,14 +58,14 @@ export class GeneralMasterComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
-  private componentDbList: any = {
-    'ChartOfAccountsComponent': ChartOfAccountsComponent,
-    'JewelleryMasterComponent': JewelleryMasterComponent,
-    'LocationMasterComponent': LocationMasterComponent,
-    // Add components and update in operationals > menu updation grid form component name
-  }
   //  open Jobcard in modal
   openModalView(data?: any) {
+    this.componentDbList = {
+      'ChartOfAccountsComponent': ChartOfAccountsComponent,
+      'JewelleryMasterComponent': JewelleryMasterComponent,
+      'LocationMasterComponent': LocationMasterComponent,
+      // Add components and update in operationals > menu updation grid form component name
+    }
     let contents;
     if (this.componentDbList[this.componentName]) {
       contents = this.componentDbList[this.componentName]
