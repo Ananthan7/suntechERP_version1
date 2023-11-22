@@ -229,10 +229,10 @@ export class MetalStockMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 84,
-    SEARCH_FIELD: 'Karat Code',
+    SEARCH_FIELD: 'KARAT_CODE',
     SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Karat Code<> ''",
+    WHERECONDITION: "KARAT_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
