@@ -630,7 +630,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       size: 'lg',
       backdrop: true,
       keyboard: false,
-      // windowClass: 'modal-full-width',
+      windowClass: 'modal-full-width',
     });
     modalRef.componentInstance.customerData = this.customerData;
     modalRef.componentInstance.amlNameValidation = this.amlNameValidation;
