@@ -398,7 +398,7 @@ sizeFromCodeData: MasterSearchModel = {
 
   stockCodeSelected(e:any){
     console.log(e); 
-    this.metallabourMasterForm.controls.stock_code.setValue(e.DIVISION_CODE);
+    this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
   }
 
   currencyCodeSelected(e:any){
