@@ -101,6 +101,7 @@ export class ProductionMfgComponent implements OnInit {
     metalratetype: [""],
     branchto: [""],
     narration: [""],
+    STONE_INCLUDE: [false],
   });
 
   constructor(
@@ -251,17 +252,17 @@ export class ProductionMfgComponent implements OnInit {
       "REMARKS": this.productionFrom.value.narration,
       "NAVSEQNO": this.commonService.emptyToZero(this.yearMonth),
       "FIX_UNFIX": true,
-      "STONE_INCLUDE": true,
+      "STONE_INCLUDE": this.productionFrom.value.STONE_INCLUDE ? 1 : 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",
-      "BASE_CURRENCY": "stri",
-      "BASE_CURR_RATE": this.productionFrom.value.basecurrencyrate,
+      "BASE_CURRENCY": this.commonService.nullToString(this.productionFrom.value.basecurrency),
+      "BASE_CURR_RATE": this.commonService.emptyToZero(this.productionFrom.value.basecurrencyrate),
       "BASE_CONV_RATE": 0,
       "PRINT_COUNT": 0,
       "INTER_BRANCH": "",
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
-      "SYSTEM_DATE": "2023-10-17T12:41:20.126Z",
+      "SYSTEM_DATE": this.commonService.nullToString(this.currentDate),
       "JOB_PRODUCTION_SUB_DJ": this.producationSubItemsData,
       "JOB_PRODUCTION_DETAIL_DJ": this.producationEntryDetailsData,
       "JOB_PRODUCTION_STNMTL_DJ": [

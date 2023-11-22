@@ -81,16 +81,11 @@ export class ProductionStockDetailComponent implements OnInit {
   }
 
   formSubmit(){
-    if (this.content && this.content.FLAG == "EDIT") {
-      this.update();
-      return;
-    }
     if (this.productionItemsDetailsFrom.invalid) {
       this.toastr.error("select all required fields");
       return;
     }
 
-    let API = "JobProductionMaster/InsertJobProductionMaster";
     let postData = {
       "UNIQUEID": 0,
       "SRNO": 0,
@@ -212,45 +207,10 @@ export class ProductionStockDetailComponent implements OnInit {
       "DESIGN_TYPE": "",
       "BASE_CURR_RATE": 0
     }
-    this.close(postData);
-  }
-  update() {
-    if (this.productionItemsDetailsFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
-    }
+    let stockDetailToSave:any = {}
+    stockDetailToSave.STOCK_FORM_DETAILS = this.productionItemsDetailsFrom.value
 
-    let API =
-      "JobProductionMaster/UpdateJobProductionMaster/";
-    let postData = {
-
-    }
-    let Sub: Subscription = this.dataService
-      .putDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.productionItemsDetailsFrom.reset();
-                  this.close("reloadMainGrid");
-                }
-              });
-            }
-          } else {
-            this.toastr.error("Not saved");
-          }
-        },
-        (err:any) => alert(err)
-      );
-    this.subscriptions.push(Sub);
+    this.close(stockDetailToSave);
   }
 
 }
