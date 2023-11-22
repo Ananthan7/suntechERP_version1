@@ -262,8 +262,11 @@ export class DiamondSalesorderComponent implements OnInit {
     } else {
       data = [{ HEADERDETAILS: this.PartyDetailsOrderForm.value }]
     }
+    console.log(data,'data passing to detail screen');
+    
+    //TODO
     // if (this.HeaderValidate() == false){
-    //   return
+    //   return 
     // }
     if (this.PartyDetailsOrderForm.value.PartyCode == '') {
       this.commonService.toastErrorByMsgId('MSG1549');
@@ -286,19 +289,21 @@ export class DiamondSalesorderComponent implements OnInit {
     });
     // modalRef.componentInstance.content = data;
   }
+  // use: save value setting section
   private setValuesToHeaderGrid(result: any): void {
     console.log(result, 'DATA COMMING TO HEADER');
     this.totalDetailNo += 1
-    //summary details
-    let summaryData: any[] = result[0].SUMMARYDETAILS
-
+    
+    let summaryData: any[] = result[0].SUMMARYDETAILS; //summary details
+    
     summaryData.forEach((item: any, index: any) => {
-      if (item.CATEGORY_CODE == '') {
-        return
-      }
+      // if (item.CATEGORY_CODE == '') {
+      //   return
+      // }
       item.SRNO = this.totalDetailNo
       this.tableData.push(item)
     })
+    console.log(this.tableData);
 
     if (result.length > 0) {
       result.forEach((item: any, index: any) => {
@@ -307,7 +312,6 @@ export class DiamondSalesorderComponent implements OnInit {
           DATA: item
         })
       })
-      console.log(this.detailData[0]);
       
       //set datas for saving to arrays
       this.setHeaderGridData()
@@ -562,7 +566,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "NETVALUECC": this.commonService.FCToCC(this.commonService.compCurrency, item.AMOUNT),
         "LOCTYPE_CODE": "",
         "JOBCARD_REF": "",
-        "JOBCARD_DATE": "",
+        "JOBCARD_DATE": this.commonService.formatDateTime(this.currentDate),
         "JOBCARD_STATUS": "",
         "SEQ_CODE": this.commonService.emptyToZero(Number(item.SEQ_CODE)) || "",
         "STD_TIME": 0,

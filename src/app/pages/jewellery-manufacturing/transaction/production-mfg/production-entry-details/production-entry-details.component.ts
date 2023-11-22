@@ -18,7 +18,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
   columnheadBottom: any[] = [""];
-  producationSubDetailData: any[] = [''];
+  producationSubDetailData: any[] = [];
   @Input() content!: any;
   userName = localStorage.getItem("username");
   branchCode?: String;

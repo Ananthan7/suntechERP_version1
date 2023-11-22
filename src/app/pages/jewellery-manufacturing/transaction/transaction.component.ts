@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
@@ -26,8 +25,6 @@ import { MeltingProcessComponent } from './melting-process/melting-process.compo
 import { ProductionMfgComponent } from './production-mfg/production-mfg.component';
 
 import { JewelleryDismantlingComponent } from './jewellery-dismantling/jewellery-dismantling.component';
-import { JewelleryAssemblingComponent } from './jewellery-assembling/jewellery-assembling.component';
-
 import { QuotationProcessComponent } from './quotation-process/quotation-process.component';
 import { TreeDownComponent } from './tree-down/tree-down.component';
 import { MouldMakingComponent } from './mould-making/mould-making.component';
@@ -46,6 +43,7 @@ export class TransactionComponent implements OnInit {
   componentName: any;
   PERMISSIONS: any;
   componentSelected: any;
+  private componentDbList: any = {}
 
   constructor(
     private CommonService: CommonServiceService,
@@ -71,40 +69,38 @@ export class TransactionComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
-  private componentDbList: any = {
-    'DiamondSalesorderComponent': DiamondSalesorderComponent,
-    'DiamondQuotationComponent': DiamondQuotationComponent,
-    'MeltingProcessComponent': MeltingProcessComponent,
-    'MetalIssueComponent': MetalIssueComponent,
-    'WaxProcessComponent': WaxProcessComponent,
-    'StoneIssueComponent': StoneIssueComponent,
-    'CADProcessingComponent': CADProcessingComponent,
-    'MetalReturnComponent': MetalReturnComponent,
-    'StoneReturnComponent': StoneReturnComponent,
-    'WaxProcessReturnComponent': WaxProcessReturnComponent,
-    'JobCreationComponent': JobCreationComponent,
-    'CastingTreeUpComponent': CastingTreeUpComponent,
-    'MeltingIssueComponent': MeltingIssueComponent,
-    'JewelleryAltrationComponent': JewelleryAltrationComponent,
-    'JewelleryDismantlingComponent': JewelleryDismantlingComponent,
-    'ProcessTransferComponent': ProcessTransferComponent,
-    'JobClosingComponent': JobClosingComponent,
-    'ProductionMfgComponent': ProductionMfgComponent,
-    'QuotationProcessComponent': QuotationProcessComponent,
-    'TreeDownComponent': TreeDownComponent,
-    'MouldMakingComponent': MouldMakingComponent,
-    'LossRecoveryComponent': LossRecoveryComponent,
-
-    // Add components and update in operationals > menu updation grid form component name
-  }
   //  open forms in modal
   openModalView(data?: any) {
-     if (this.componentDbList[this.componentName]) {
+    this.componentDbList = {
+      'DiamondSalesorderComponent': DiamondSalesorderComponent,
+      'DiamondQuotationComponent': DiamondQuotationComponent,
+      'MeltingProcessComponent': MeltingProcessComponent,
+      'MetalIssueComponent': MetalIssueComponent,
+      'WaxProcessComponent': WaxProcessComponent,
+      'StoneIssueComponent': StoneIssueComponent,
+      'CADProcessingComponent': CADProcessingComponent,
+      'MetalReturnComponent': MetalReturnComponent,
+      'StoneReturnComponent': StoneReturnComponent,
+      'WaxProcessReturnComponent': WaxProcessReturnComponent,
+      'JobCreationComponent': JobCreationComponent,
+      'CastingTreeUpComponent': CastingTreeUpComponent,
+      'MeltingIssueComponent': MeltingIssueComponent,
+      'JewelleryAltrationComponent': JewelleryAltrationComponent,
+      'JewelleryDismantlingComponent': JewelleryDismantlingComponent,
+      'ProcessTransferComponent': ProcessTransferComponent,
+      'JobClosingComponent': JobClosingComponent,
+      'ProductionMfgComponent': ProductionMfgComponent,
+      'QuotationProcessComponent': QuotationProcessComponent,
+      'TreeDownComponent': TreeDownComponent,
+      'MouldMakingComponent': MouldMakingComponent,
+      'LossRecoveryComponent': LossRecoveryComponent,
+  
+      // Add components and update in operationals > menu updation grid form component name
+    }
+    if (this.componentDbList[this.componentName]) {
       this.componentSelected = this.componentDbList[this.componentName]
     } else {
-      this.snackBar.open('Module Not Created', 'Close', {
-        duration: 3000,
-      });
+      this.CommonService.showSnackBarMsg('Module Not Created')
     }
 
     const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
