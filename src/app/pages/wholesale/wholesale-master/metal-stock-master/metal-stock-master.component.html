@@ -327,9 +327,13 @@
                           </div>
                         </div>
                         <div class="col-md-4">
-                          <div class="box">
-          
-                          </div>
+                         
+                        <div class="image_box">
+                            <!-- <input type="file">Item Image -->
+                            <div class="img_box">
+
+                            </div>
+                        </div>
                         </div>
                       </div>
                       <div class="row align-items-center mb-1">
@@ -375,7 +379,7 @@
                             <input type="text" matInput />
                           </mat-form-field>
                         </div>
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Seq .Code :</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">Seq. Code :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="seqcode" />
@@ -521,7 +525,7 @@
                             </div>
                           </div>
                           <div class="row align-items-center mb-1 pt-2">
-                            <label for="inputPassword" class="col-sm-6 col-form-label">Def.Sale Purity :</label>
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Def. Sale Purity :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
@@ -622,6 +626,7 @@
                                   Dye Strip
                                 </label>
                               </div>
+                             
                               <div class="form-check mb-1">
                                 <input class="form-check-input" type="checkbox">
                                 <label class="form-check-label">
@@ -634,6 +639,7 @@
                                   Block In All Transaction
                                 </label>
                               </div>
+                            
                             </div>
                           </div>
                         </div>
@@ -649,7 +655,13 @@
                               <div class="form-check mb-1">
                                 <input class="form-check-input" type="checkbox">
                                 <label class="form-check-label">
-                                  Block Wt.In Sales
+                                  Block Wt. In Sales
+                                </label>
+                              </div>
+                              <div class="form-check mb-1">
+                                <input class="form-check-input" type="checkbox">
+                                <label class="form-check-label">
+                                 Alloy less Than Cost
                                 </label>
                               </div>
                               <div class="form-check mb-1">
@@ -658,18 +670,27 @@
                                   Finished Item
                                 </label>
                               </div>
+                              
                               <div class="form-check mb-1">
                                 <input class="form-check-input" type="checkbox">
                                 <label class="form-check-label">
                                   Exclude From Transfer Wt
                                 </label>
                               </div>
+                              <div class="row align-items-center mb-1">
+                                <label for="inputPassword" class="col-sm-6 col-form-label">Qty Round Off :</label>
+                                <div class="col-md-4">
+                                  <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput />
+                                  </mat-form-field>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="row align-items-center">
-                             <label for="inputPassword" class="col-sm-6 col-form-label">Master :</label>
+                             <label for="inputPassword" class="col-sm-6 col-form-label">ABC Master :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 80%;">
                                 <input type="text" matInput />
@@ -703,7 +724,7 @@
                           <div class="row align-items-center">
                             <div class="col-md-6">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" matInput value="Approved vendors" />
+                                <input type="text" matInput value="Approved vendors" disabled/>
                               </mat-form-field>
                             </div>
                             <div class="col-md-6">
@@ -725,17 +746,17 @@
                         </div>
                         <div class="col-md-2 text-center">
                           <div class="p-1 bd-highlight">
-                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                            <button type="button" class="w-75 btn btn-outline-primary metal-issue-del-btn">
                               Enquiry
                             </button>
                           </div>
                           <div class="p-1 bd-highlight">
-                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                            <button type="button" class="w-75 btn btn-outline-primary metal-issue-del-btn">
                               View Barcodes
                             </button>
                           </div>
                           <div class="p-1 bd-highlight">
-                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                            <button type="button" class="w-75 btn btn-outline-primary metal-issue-del-btn">
                               Designs
                             </button>
                           </div>
