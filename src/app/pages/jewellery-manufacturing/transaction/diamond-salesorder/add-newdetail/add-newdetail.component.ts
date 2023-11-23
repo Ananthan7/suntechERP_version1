@@ -710,11 +710,11 @@ export class AddNewdetailComponent implements OnInit {
     let txtCharge3FC: number = 0;//todo
     let txtCharge5FC: number = 0;//todo
 
-    if (TotGross_Wt) this.diamondSalesDetailForm.controls.GROSS_WT.setValue(TotGross_Wt);
-    if (TotMetal_Wt) this.diamondSalesDetailForm.controls.METAL_WT.setValue(TotMetal_Wt);
-    if (TotStone_Wt) this.diamondSalesDetailForm.controls.STONE_WT.setValue(TotStone_Wt);
-    if (txtCharge1FC) this.summaryDetailForm.controls.SETTING.setValue(txtCharge1FC);
-    if (txtCharge1FC) this.summaryDetailForm.controls.LABOUR.setValue(txtCharge4FC);
+    this.diamondSalesDetailForm.controls.GROSS_WT.setValue(this.commonService.emptyToZero(TotGross_Wt));
+    this.diamondSalesDetailForm.controls.METAL_WT.setValue(this.commonService.emptyToZero(TotMetal_Wt));
+    this.diamondSalesDetailForm.controls.STONE_WT.setValue(this.commonService.emptyToZero(TotStone_Wt));
+    this.summaryDetailForm.controls.SETTING.setValue(this.commonService.emptyToZero(txtCharge1FC));
+    this.summaryDetailForm.controls.LABOUR.setValue(this.commonService.emptyToZero(txtCharge4FC));
 
     // labourchargetype checking
     if (this.intLabType == 4) {
@@ -794,23 +794,23 @@ export class AddNewdetailComponent implements OnInit {
     let postData = {
       "SPID": "021",
       "parameter": {
-        "Design_Code": this.diamondSalesDetailForm.value.designCode || '',
+        "Design_Code": this.commonService.nullToString(this.diamondSalesDetailForm.value.designCode),
         "strPartyCode": this.headerDetails.PartyCode || '',
-        "strCurr_Code": this.headerDetails.partyCurrencyType || '',
-        "dblCurr_Rate": this.headerDetails.partyCurrencyRate || '',
-        "dblPcs": metalItemData[0].PCS.toString() || 0,
-        "dblGross_Wt": metalItemData[0].GROSS_WT.toString() || 0,
+        "strCurr_Code": this.commonService.nullToString(this.headerDetails.partyCurrencyType),
+        "dblCurr_Rate": this.commonService.nullToString(this.headerDetails.partyCurrencyRate),
+        "dblPcs": this.commonService.emptyToZero(metalItemData[0].PCS.toString()),
+        "dblGross_Wt": this.commonService.emptyToZero(metalItemData[0].GROSS_WT.toString()),
         "strPriceCode": '',
-        "strLabCode": metalItemData[0].LABCHGCODE.toString() || '',
-        "strDivision": metalItemData[0].DIVCODE || '',
+        "strLabCode": this.commonService.nullToString(metalItemData[0].LABCHGCODE.toString()),
+        "strDivision": this.commonService.nullToString(metalItemData[0].DIVCODE),
         "strColorSet": 'N',
-        "strSHAPE": metalItemData[0].SHAPE || '',
-        "strSieve": metalItemData[0].SIEVE || '',
-        "strSieve_Set": metalItemData[0].SIEVE_SET || '',
-        "strColor": metalItemData[0].COLOR || '',
-        "strClarity": metalItemData[0].CLARITY || '',
-        "strSize_From": metalItemData[0].SIZE_FROM || '',
-        "strSize_To": metalItemData[0].SIZE_TO || '',
+        "strSHAPE": this.commonService.nullToString(metalItemData[0].SHAPE),
+        "strSieve": this.commonService.nullToString(metalItemData[0].SIEVE),
+        "strSieve_Set": this.commonService.nullToString(metalItemData[0].SIEVE_SET),
+        "strColor": this.commonService.nullToString(metalItemData[0].COLOR),
+        "strClarity": this.commonService.nullToString(metalItemData[0].CLARITY),
+        "strSize_From": this.commonService.nullToString(metalItemData[0].SIZE_FROM),
+        "strSize_To": this.commonService.nullToString(metalItemData[0].SIZE_TO),
         "strVocDate": '',
       }
     }

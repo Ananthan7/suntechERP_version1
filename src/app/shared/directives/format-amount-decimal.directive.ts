@@ -26,6 +26,7 @@ export class AmountDecimalDirective {
       input.value = `${integerPart}.${fractionalPart}`;
     }
   }
+
   @HostListener('blur', ['$event']) onBlur(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value;
