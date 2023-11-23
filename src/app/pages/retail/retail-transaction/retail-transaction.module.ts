@@ -22,6 +22,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CustomDateFormat1, CustomDateFormat2 } from './pos-currency-receipt/pos-currency-receipt-details/cust-dateformats.component';
 import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
+import { AdvanceReturnComponent } from './advance-return/advance-return.component';
 
 
 
@@ -41,6 +42,7 @@ import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-veri
     PosCurrencyReceiptDetailsComponent,
     SchemeRegisterComponent,
     TouristVatRefundVerificationComponent,
+    AdvanceReturnComponent,
     CustomDateFormat1,
     CustomDateFormat2
   ],
