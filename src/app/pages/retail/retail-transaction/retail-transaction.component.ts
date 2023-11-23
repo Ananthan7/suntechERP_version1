@@ -10,6 +10,7 @@ import { PosCurrencyReceiptComponent } from './pos-currency-receipt/pos-currency
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
+import { AdvanceReturnComponent } from './advance-return/advance-return.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -71,6 +72,9 @@ export class RetailTransactionComponent implements OnInit {
       case 'Tourist VAT Refund Verification':
         contents = TouristVatRefundVerificationComponent
         break;
+        case 'Advance Return':
+          contents = AdvanceReturnComponent
+          break;
       //continue adding components using case then break
       default:
         this.snackBar.open('No Response Found!', 'Close', {
