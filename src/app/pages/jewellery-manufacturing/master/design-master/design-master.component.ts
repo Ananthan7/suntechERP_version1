@@ -27,6 +27,28 @@ export class DesignMasterComponent implements OnInit {
   divisionMS: any = 'ID';
 
   columnhead:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
+  columnheader:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
+  columnheader1:any[] = ['Srno','Division','Stone Type', 'Stock Code','Karat','Shape','Color','Ext.Color','Clarity','Ext.Clarity','Sieve Std.','Description','Sieve From'];
+  columnheader2:any[] = ['Comp.Code','Srno','Division','Stone Type', 'Stock Code','Karat','Int.Color','Ext.Color','Shape','Int.Clarity','Ext.Clarity'];
+  columnheader3:any[] = ['',];
+  columnheader4:any[] = ['SINO','Size Code','Description','Default'];
+  column1:any[] = ['SINO','Model No','Description'];
+  column2:any[] = ['SINO','Country Code','Description'];
+  column3:any[] = ['SINO','Dye Code','Description'];
+  column4:any[] = ['SINO','Wax Model Code','Description'];
+  column5:any[] = ['Sr.No','Accode','Description','Vend Design','Del.Days','Credit Days','Mode Of Payment'];
+  column6:any[] = ['SINO','Color Code','Description'];
+  column7:any[] = ['SINO','Comp Code','Description'];
+  column8:any[] = ['SINO','Width Code','Description'];
+  column9:any[] = ['SINO','Length Code','Description','Default'];
+  column10:any[] = ['SINO','Height Code','Description'];
+  column11:any[] = ['SINO','Karat Code','Description','Default'];
+  column12:any[] = ['SINO','Color Range','Description','Default'];
+  column13:any[] = ['SINO','Billing Code','Description'];
+  column14:any[] = ['SINO','Finishing Code','Description','Default'];
+  column15:any[] = ['Size','Pcs'];
+  columnhead1:any[] = ['Srno','Comp.Code','Description','Pcs', 'Size Set Code','Size Code','Type','Category','Shape','Height','Width','Length','Radious'];
+  columnhead2:any[] = ['DESIGN_C','PART_CODE','PART_DESCRIPTION','METAL_WT', 'LS_PCS','LS_WT','CS_PCS','CS_WT','PL_PCS','PL_WT','OTH_PCS','OTH_WT','TOTAL_PCS'];
 
   seasons: string[] = ['Customer Exclusive', 'Keep on Hold', 'Add Steel'];
 
@@ -66,6 +88,9 @@ export class DesignMasterComponent implements OnInit {
     stockCode: [''],
     stockCodeDes : [''],
     divCode : [''],
+    country : [''],
+    size : [''],
+    sizeset : [''],
    
   });
 
@@ -74,7 +99,7 @@ export class DesignMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 15,
     SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost Code',
+    SEARCH_HEADING: 'Cost Center',
     SEARCH_VALUE: '',
     WHERECONDITION: "COST_CODE<> ''",
     VIEW_INPUT: true,
@@ -82,41 +107,13 @@ export class DesignMasterComponent implements OnInit {
   }
   costCenterSelected(e:any){
     console.log(e);
-    this.designmasterForm.controls.costCenter.setValue(e.COST_CODE);
-  }
-
-  masterCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Master Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
- designCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 56,
-    SEARCH_FIELD: 'DESIGN_CODE',
-    SEARCH_HEADING: 'Design Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "DESIGN_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  designCodeSelected(e:any){
-    console.log(e);
-    this.designmasterForm.controls.design.setValue(e.DESIGN_CODE);
+    this.designmasterForm.controls.costcenter.setValue(e.COST_CODE);
   }
 
   karatCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 84,
+    LOOKUPID: 17,
     SEARCH_FIELD: 'KARAT_CODE',
     SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
@@ -132,7 +129,7 @@ export class DesignMasterComponent implements OnInit {
   typeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 62,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
@@ -156,7 +153,6 @@ export class DesignMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   categoryCodeSelected(e:any){
     console.log(e);
     this.designmasterForm.controls.category.setValue(e.CODE);
@@ -181,7 +177,7 @@ export class DesignMasterComponent implements OnInit {
   BrandCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 32,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Brand Code',
     SEARCH_VALUE: '',
@@ -226,10 +222,10 @@ export class DesignMasterComponent implements OnInit {
     this.designmasterForm.controls.range.setValue(e.CODE);
   }
 
-  colorCodeData: MasterSearchModel = {
+  sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 35,
+    LOOKUPID: 36,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
@@ -237,17 +233,15 @@ export class DesignMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-  ColorCodeSelected(e:any){
+  sizeCodeSelected(e:any){
     console.log(e);
-    this.designmasterForm.controls.color.setValue(e.CODE);
-
+    this.designmasterForm.controls.size.setValue(e.CODE);
   }
 
   countryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 26,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Country Code',
     SEARCH_VALUE: '',
@@ -257,11 +251,24 @@ export class DesignMasterComponent implements OnInit {
   }
   countryCodeSelected(e:any){
     console.log(e);
-    this.designmasterForm.controls.vendor.setValue(e.CODE);
+    this.designmasterForm.controls.country.setValue(e.CODE);
   }
 
-
- 
+  sizesetCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 36,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  sizesetCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.sizeset.setValue(e.CODE);
+  }
 
 
   setFormValues() {
