@@ -498,7 +498,6 @@ export class AddNewdetailComponent implements OnInit {
       this.stockCodeData.LOOKUPID = 4
       this.stockCodeData.WHERECONDITION = `ITEM = '${event.target.value}'`
     }
-
   }
   /**USE: design Code Selection */
   mainStockCodeSelected(data: any): void {

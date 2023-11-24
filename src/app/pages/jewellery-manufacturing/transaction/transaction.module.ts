@@ -43,6 +43,7 @@ import { TreeDownComponent } from './tree-down/tree-down.component';
 import { MeltingProcessDetailsComponent } from './melting-process/melting-process-details/melting-process-details.component';
 import { LossRecoveryComponent } from './loss-recovery/loss-recovery.component';
 import { ProductionStockDetailComponent } from './production-mfg/production-stock-detail/production-stock-detail.component';
+import { CompanyDetailComponent } from './diamond-salesorder/company-detail/company-detail.component';
 
 
 @NgModule({
@@ -87,6 +88,7 @@ import { ProductionStockDetailComponent } from './production-mfg/production-stoc
     MeltingProcessDetailsComponent,
     LossRecoveryComponent,
     ProductionStockDetailComponent,
+    CompanyDetailComponent,
   ],
   imports: [
   CommonModule,

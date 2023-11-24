@@ -7,6 +7,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { AddNewdetailComponent } from './add-newdetail/add-newdetail.component';
+import { CompanyDetailComponent } from './company-detail/company-detail.component';
 
 @Component({
   selector: 'app-diamond-salesorder',
@@ -170,19 +171,19 @@ export class DiamondSalesorderComponent implements OnInit {
     this.getLabourChargeGridDetails()
   }
   /**USE: to get metal gram rate from db */
-  getMetalGramRate(){
+  getMetalGramRate() {
     let postData = {
       "SPID": "039",
       "parameter": {
-        'dblOutputMetalRateCC': '0',  
-        'dblOutputMetalRatePG': '0',  
-        'strBranchCode': this.commonService.branchCode,  
-        'strRateType': this.PartyDetailsOrderForm.value.rateType,  
-        'dblMetalRate':   this.commonService.nullToString(this.PartyDetailsOrderForm.value.wholeSaleRate),
+        'dblOutputMetalRateCC': '0',
+        'dblOutputMetalRatePG': '0',
+        'strBranchCode': this.commonService.branchCode,
+        'strRateType': this.PartyDetailsOrderForm.value.rateType,
+        'dblMetalRate': this.commonService.nullToString(this.PartyDetailsOrderForm.value.wholeSaleRate),
         'strPartycurrencyCode': this.PartyDetailsOrderForm.value.partyCurrencyType,
         'dblPartycurrencyRate': this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
         'strItemcurrencyCode': this.PartyDetailsOrderForm.value.ItemCurrency,
-        'dblItemcurrencyRate':this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
+        'dblItemcurrencyRate': this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')
@@ -263,40 +264,30 @@ export class DiamondSalesorderComponent implements OnInit {
     } else {
       data = [{ HEADERDETAILS: this.PartyDetailsOrderForm.value }]
     }
-    console.log(data,'data passing to detail screen');
-    
-    //TODO
+    console.log(data, 'data passing to detail screen');
+
     // if (this.HeaderValidate() == false){
-    //   return 
+    //   return  //TODO
     // }
     if (this.PartyDetailsOrderForm.value.PartyCode == '') {
       this.commonService.toastErrorByMsgId('MSG1549');
       return
     }
-    const modalRef: NgbModalRef = this.modalService.open(AddNewdetailComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
-    modalRef.componentInstance.content = data;
-
-    modalRef.result.then((result) => {
-      if (result) {
-        this.setValuesToHeaderGrid(result) //USE: set Values To Detail table
-      }
-    }, (reason) => {
-      // Handle modal dismissal (if needed)
-    });
-    // modalRef.componentInstance.content = data;
+    let COMPACCODE = this.commonService.getCompanyParamValue('COMPACCODE')
+    if (COMPACCODE == 'SUNTECH') {
+      this.openDetailForm(CompanyDetailComponent,data)
+    } else {
+      this.openDetailForm(AddNewdetailComponent,data)
+    }
   }
+  
   // use: save value setting section
   private setValuesToHeaderGrid(result: any): void {
     console.log(result, 'DATA COMMING TO HEADER');
     this.totalDetailNo += 1
-    
+
     let summaryData: any[] = result[0].SUMMARYDETAILS; //summary details
-    
+
     summaryData.forEach((item: any, index: any) => {
       // if (item.CATEGORY_CODE == '') {
       //   return
@@ -313,7 +304,7 @@ export class DiamondSalesorderComponent implements OnInit {
           DATA: item
         })
       })
-      
+
       //set datas for saving to arrays
       this.setHeaderGridData()
       this.setBOMGridData()
@@ -410,8 +401,8 @@ export class DiamondSalesorderComponent implements OnInit {
   private setLabourTypeDetails() {
     let summary = this.detailData[0]?.DATA['SUMMARYDETAILS']
     let labourDetails = this.detailData[0]?.DATA['LABOURDETAILS']
-    if(!labourDetails) return
-    labourDetails.forEach((item:any) => {
+    if (!labourDetails) return
+    labourDetails.forEach((item: any) => {
       this.labourDetailsListToSave.push({
         "UNIQUEID": 0,
         "BRANCH_CODE": this.commonService.branchCode,
@@ -448,13 +439,13 @@ export class DiamondSalesorderComponent implements OnInit {
         "KARAT_CODE": ""
       })
     });
-  
+
   }
   //**USE: push data from BOM grid in details to bomDetailGridToSave array */
   private setBOMGridData() {
     let bomData = this.detailData[0]?.DATA['BOMDETAILS']
     let summary = this.detailData[0]?.DATA['SUMMARYDETAILS']
-    if(!bomData) return
+    if (!bomData) return
 
     bomData.forEach((item: any) => {
       this.bomDetailGridToSave.push({
@@ -474,7 +465,7 @@ export class DiamondSalesorderComponent implements OnInit {
         "AMOUNTFC": this.commonService.emptyToZero(item.AMOUNTFC),
         "AMOUNTLC": this.commonService.emptyToZero(item.AMOUNTLC),
         "MAKINGRATE": this.commonService.emptyToZero(item.MAKINGRATE) || 0,
-        "MAKINGAMOUNT": this.commonService.emptyToZero(item.MAKINGAMOUNT)  || 0,
+        "MAKINGAMOUNT": this.commonService.emptyToZero(item.MAKINGAMOUNT) || 0,
         "SIEVE": this.commonService.nullToString(item.SIEVE),
         "COLOR": this.commonService.nullToString(item.COLOR),
         "CLARITY": this.commonService.nullToString(item.CLARITY),
@@ -673,9 +664,9 @@ export class DiamondSalesorderComponent implements OnInit {
       "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
       "PARTYCODE": this.PartyDetailsOrderForm.value.PartyCode.toString(),
       "PARTY_CURRENCY": this.PartyDetailsOrderForm.value.partyCurrencyType.toString(),
-      "PARTY_CURR_RATE":this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
+      "PARTY_CURR_RATE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
       "ITEM_CURRENCY": this.PartyDetailsOrderForm.value.ItemCurrency.toString(),
-      "ITEM_CURR_RATE":this.commonService.nullToString(this.PartyDetailsOrderForm.value.ItemCurrencyRate),
+      "ITEM_CURR_RATE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.ItemCurrencyRate),
       "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate).toString(),
       "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode.toString(),
       "METAL_RATE_TYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.rateType),
@@ -747,14 +738,14 @@ export class DiamondSalesorderComponent implements OnInit {
       // this.updateWorkerMaster()
       return
     }
-    let summaryData:any
-    if(this.detailData[0] && this.detailData[0].DATA['SUMMARYDETAILS']){
+    let summaryData: any
+    if (this.detailData[0] && this.detailData[0].DATA['SUMMARYDETAILS']) {
       summaryData = this.detailData[0].DATA['SUMMARYDETAILS']
-    }else{
+    } else {
       this.commonService.toastErrorByMsgId('MSG1041')
       return
     }
-    if (this.PartyDetailsOrderForm.invalid ) {
+    if (this.PartyDetailsOrderForm.invalid) {
       this.commonService.toastErrorByMsgId('MSG1531')
       return
     }
@@ -983,7 +974,26 @@ export class DiamondSalesorderComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  close(data?:string) {
+
+  openDetailForm(component:any,dataToComponent: any){
+    const modalRef: NgbModalRef = this.modalService.open(component, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+    modalRef.componentInstance.content = dataToComponent;
+
+    modalRef.result.then((result) => {
+      if (result) {
+        this.setValuesToHeaderGrid(result) //USE: set Values To Detail table
+      }
+    }, (reason) => {
+      // Handle modal dismissal (if needed)
+    });
+  }
+
+  close(data?: string) {
     this.activeModal.close(data);
   }
   ngOnDestroy() {

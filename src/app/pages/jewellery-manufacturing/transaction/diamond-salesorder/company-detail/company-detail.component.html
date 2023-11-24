@@ -1,0 +1,173 @@
+<div class="pt-3">
+    <div>
+        <!-- header section starts -->
+        <div class="border-bottom d-flex justify-content-between ps-2 pe-2">
+            <h5>Diamond Sales Order</h5>
+            <button type="button" class="btn btn-close close-btn"
+                (click)="close()">
+                <i class="feather icon-x close-icon"></i>
+            </button>
+        </div>
+        <!-- modal header component -->
+        <modal-header (saveClick)="formSubmit()" [isViewDelete]="false"></modal-header>
+    </div>
+    <!-- content section -->
+    <div class="card m-1 p-2">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row mb-1">
+                    <div class="col-md-4" style="width: 25% !important;">
+                        <div class="form-check  pt-2">
+                            <label class="form-check-label"
+                                for="stockCode">
+                                Stock Code
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput
+                                formControlName="divisionCode"
+                                maxlength="1" placeholder="Div"
+                                (focusout)="changeDivision($event)" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput
+                                placeholder="Code"
+                                formControlName="StockCode" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-5">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput
+                                readonly formControlName="StockCodeDesc" />
+                        </mat-form-field>
+                        <master-search
+                            [MasterSearchData]="stockCodeData"
+                            (newRowClick)="mainStockCodeSelected($event)">
+                        </master-search>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <label for="inputPassword"
+                        class="col-sm-3 col-form-label">Delivery Type*</label>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 50%;">
+                            <input type="text" matInput
+                                formControlName="DeliveryType" />
+                        </mat-form-field>
+                        <mat-form-field
+                            style="width: 40%;margin-left: 3px;">
+                            <input type="text" matInput
+                                formControlName="DeliveryType2" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword"
+                        class="col-sm-3 col-form-label">Production Date</label>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 80%;">
+                            <input matInput DateValidation
+                                [matDatepicker]="ProductionOn"
+                                formControlName="ProductionDate" />
+                            <mat-datepicker-toggle matSuffix
+                                [for]="ProductionOn"></mat-datepicker-toggle>
+                            <mat-datepicker #ProductionOn></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <label for="inputPassword"
+                        class="col-sm-3 col-form-label">Delivery On*</label>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 100%;">
+                            <input matInput DateValidation
+                                [matDatepicker]="DeliveryOn"
+                                formControlName="DeliveryOnDate" />
+                            <mat-datepicker-toggle matSuffix
+                                [for]="DeliveryOn"></mat-datepicker-toggle>
+                            <mat-datepicker #DeliveryOn></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <label for="inputPassword"
+                        class="col-sm-3 col-form-label">Remarks</label>
+                    <div class="col-md-8">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput
+                                formControlName="Remarks" />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Pcs</label>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput
+                                formControlName="PCS"
+                                class="text-right" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Rate</label>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput
+                                formControlName="PCS"
+                                class="text-right" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Amount</label>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput
+                                formControlName="PCS"
+                                class="text-right" />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <dx-data-grid #dataGrid
+                    id="gridContainer"
+                    [allowColumnResizing]="true"
+                    [showBorders]="true"
+                    [showRowLines]="true" height="300">
+                    <dxo-editing mode="cell"
+                        [allowUpdating]="true">
+                    </dxo-editing>
+                    <dxo-selection mode="single"></dxo-selection>
+                    <dxi-column width="160"
+                        [allowEditing]="false"
+                        dataField="CODE"
+                        caption="CODE" alignment="left">
+                    </dxi-column>
+                    <dxi-column width="160"
+                        [allowEditing]="false"
+                        dataField="DESCRIPTION"
+                        caption="DESCRIPTION"
+                        alignment="left">
+                    </dxi-column>
+                    <dxi-column width="160"
+                        [allowEditing]="false"
+                        dataField="DEL_DATE"
+                        caption="DEL DATE"
+                        alignment="left">
+                    </dxi-column>
+                </dx-data-grid>
+            </div>
+        </div>
+    </div>
+</div>
