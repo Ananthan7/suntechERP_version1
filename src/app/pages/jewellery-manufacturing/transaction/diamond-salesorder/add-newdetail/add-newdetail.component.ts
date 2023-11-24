@@ -734,8 +734,11 @@ export class AddNewdetailComponent implements OnInit {
     
     let sumAMOUNT = this.customizeComma({ value: this.diamondSalesDetailForm.value.PCS * dblTotRate })
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(sumAMOUNT)
-    //rate x weight = amount
-    if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarkupPercentage > 0)) {
+    
+    // price factors calculation
+    console.log(this.summaryDetailForm.value.MarkupPercentage);
+    
+    if (this.commonService.emptyToZero(this.summaryDetailForm.value.MarkupPercentage)  > 0) {
       dblMarkup_Amt = (dblDia_Amt * this.summaryDetailForm.value.MarkupPercentage) / 100;
       dblTotRate += dblMarkup_Amt;
     }
@@ -743,11 +746,10 @@ export class AddNewdetailComponent implements OnInit {
     if (this.commonService.emptyToZero(this.summaryDetailForm.value.WastagePercentage) > 0 && dblWastageAmt == 0) {
       dblGold_Loss_Amt = (dblMetal_Amt * this.summaryDetailForm.value.WastagePercentage) / 100;
       dblTotRate += dblGold_Loss_Amt;
+    } else {
+      dblGold_Loss_Amt = dblWastageAmt;
+      dblTotRate += dblGold_Loss_Amt;
     }
-    // else {
-    //   dblGold_Loss_Amt = dblWastageAmt;
-    //   dblTotRate += dblGold_Loss_Amt;
-    // }
 
     if (this.commonService.emptyToZero(this.summaryDetailForm.value.DutyPercentage > 0)) {
       dblDuty_Amt = (dblTotRate * this.summaryDetailForm.value.DutyPercentage) / 100;
@@ -768,13 +770,17 @@ export class AddNewdetailComponent implements OnInit {
       dblDisc_Amt = (dblTotRate * this.summaryDetailForm.value.LoadingPercentage) / 100;
       dblTotRate -= dblDisc_Amt;
     }
-
+    console.log(dblDuty_Amt,'dblDuty_Amt');
+    
     // txtMarkup_Amt = dblMarkup_Amt.ToString();
+    // this.diamondSalesDetailForm.controls.Markup.setValue(this.commonService.emptyToZero(dblMarkup_Amt))
     // txtGold_loss_Amt = dblGold_Loss_Amt.ToString();
     // txtDuty_Amt = dblDuty_Amt.ToString();
     // txtMargin_Amt = dblMargin_Amt.ToString();
     // txtLoad_Amt = dblLoad_Amt.ToString();
     // txtDISCAMTFC = dblDisc_Amt.ToString();
+
+    this.diamondSalesDetailForm.controls.Margin.setValue(this.commonService.emptyToZero(dblDuty_Amt))
     let txtItemRateFC = dblTotRate;
 
     this.diamondSalesDetailForm.controls.RATEFC.setValue(txtItemRateFC)

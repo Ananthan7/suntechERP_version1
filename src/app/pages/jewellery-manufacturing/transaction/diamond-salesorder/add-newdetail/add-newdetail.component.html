@@ -1135,7 +1135,7 @@
                                                                 matInput
                                                                 AmountDecimalInput
                                                                 class="text-right"
-                                                                formControlName="Markup" />
+                                                                formControlName="MarkupPercentage" />
                                                         </mat-form-field>
                                                     </td>
                                                     <td class="textboxcorner">
@@ -1145,7 +1145,7 @@
                                                                 matInput
                                                                 AmountDecimalInput
                                                                 class="text-right"
-                                                                formControlName="MarkupPercentage" />
+                                                                formControlName="Markup" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>
@@ -1155,7 +1155,7 @@
                                                         <mat-form-field
                                                             style="width: 50px;">
                                                             <input type="number"
-                                                                matInput
+                                                                matInput (focusout)="calculateTotal()"
                                                                 AmountDecimalInput
                                                                 class="text-right"
                                                                 formControlName="Duty" />
@@ -1181,7 +1181,7 @@
                                                                 matInput
                                                                 AmountDecimalInput
                                                                 class="text-right"
-                                                                formControlName="Margin" />
+                                                                formControlName="MarginPercentage" />
                                                         </mat-form-field>
                                                     </td>
                                                     <td class="textboxcorner">
@@ -1191,7 +1191,7 @@
                                                                 matInput
                                                                 AmountDecimalInput
                                                                 class="text-right"
-                                                                formControlName="MarginPercentage" />
+                                                                formControlName="Margin" />
                                                         </mat-form-field>
                                                     </td>
                                                 </tr>

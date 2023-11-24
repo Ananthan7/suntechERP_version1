@@ -691,7 +691,7 @@ export class DiamondSalesorderComponent implements OnInit {
       "OUSTATUSNEW": 1,
       "ORDER_STATUS": "",
       "MARKUP_PER": this.commonService.emptyToZero(summaryData[0].MarkupPercentage),
-      "GOLD_LOSS_PER": 0,
+      "GOLD_LOSS_PER": this.commonService.emptyToZero(summaryData[0].WastagePercentage),
       "CR_DAYS": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.DeliveryOnDateType),
       "PARTY_ADDRESS": this.PartyDetailsOrderForm.value.BillToAddress,
       "SALESPERSON_NAME": this.PartyDetailsOrderForm.value.SalesmanName,
