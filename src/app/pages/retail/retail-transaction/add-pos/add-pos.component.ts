@@ -407,7 +407,7 @@ export class AddPosComponent implements OnInit {
   public sales_person_lbl: any = 'Sales Person';
   public customer_name_lbl: any = 'Name';
   public mobile_lbl: any = 'Mobile';
-  public slno_lbl: any = 'SLNo';
+  public slno_lbl: any = 'SL No.';
 
   // Type 1 = Vat, 2 = GST, 3 = No Tax
   public taxType = 1;

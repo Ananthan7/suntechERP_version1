@@ -11,6 +11,7 @@ import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-gr
 import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
+import { PosDailyClosingSummaryComponent } from './pos-daily-closing-summary/pos-daily-closing-summary.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -74,6 +75,9 @@ export class RetailTransactionComponent implements OnInit {
         break;
         case 'Advance Return':
           contents = AdvanceReturnComponent
+          break;
+        case 'Exhibition Sale':
+          contents = PosDailyClosingSummaryComponent
           break;
       //continue adding components using case then break
       default:
