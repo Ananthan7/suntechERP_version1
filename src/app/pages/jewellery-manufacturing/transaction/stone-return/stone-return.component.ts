@@ -147,7 +147,7 @@ removedata(){
     let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
     let postData = {
       "MID": 0,
-      "VOCTYPE": "JWA",
+      "VOCTYPE": this.stonereturnFrom.value.voctype || "",
       "BRANCH_CODE": this.branchCode,
       "VOCNO": this.stonereturnFrom.value.vocno || "",
       "VOCDATE": this.stonereturnFrom.value.vocdate || "",
