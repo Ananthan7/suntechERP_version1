@@ -4,6 +4,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { AlloyAllocationComponent } from './alloy-allocation/alloy-allocation.component';
@@ -19,6 +20,8 @@ export class CADProcessingComponent implements OnInit {
   tableData: any[] = [];  
   columnheadItemDetails:any[] = ['  ',];
   divisionMS: any = 'ID';
+  branchCode?: String;
+  yearMonth?: String;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -27,12 +30,15 @@ export class CADProcessingComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
     if (this.content) {
       // this.setFormValues()
     }
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
   }
 
   
@@ -82,16 +88,16 @@ export class CADProcessingComponent implements OnInit {
     let API = 'JobCadProcessDJ/InsertJobCadProcessDJ'
     let postData ={
       "MID": 0,
-      "BRANCH_CODE": "string",
+      "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.cadProcessingForm.value.voctype,
       "vocNo": this.cadProcessingForm.value.vocNo,
-      "YEARMONTH": "stri",
+      "YEARMONTH": this.yearMonth,
       "SALESPERSON_CODE": "string",
       "SYSTEM_DATE": this.cadProcessingForm.value.date,
       "MACHINEID": "string",
       "DOC_REF": "string",
       "REMARKS": this.cadProcessingForm.value.remarks,
-      "VOCDATE": this.cadProcessingForm.value.VocDate,
+      "VOCDATE": this.cadProcessingForm.value.vocDate,
       "NAVSEQNO": 0,
       "PROCESS_CODE": this.cadProcessingForm.value.process,
       "WORKER_CODE": this.cadProcessingForm.value.worker,
@@ -121,7 +127,7 @@ export class CADProcessingComponent implements OnInit {
           "UNIQUEID": 0,
           "DT_BRANCH_CODE": "string",
           "DT_VOCTYPE": "str",
-          "DT_vocNo": 0,
+          "DT_VOCNO": 0,
           "DT_YEARMONTH": "stri",
           "SRNO": 0,
           "METALSTONE": "s",
@@ -141,6 +147,29 @@ export class CADProcessingComponent implements OnInit {
           "POINTER_WT": 0,
           "STOCK_CODE": "string",
           "COMP_CODE": "string"
+        }
+      ],
+      "Components": [
+        {
+          "REFMID": 0,
+          "SRNO": 0,
+          "COMP_CODE": "string",
+          "COMP_DESCRIPTION": "string",
+          "COMP_SHAPE": "string",
+          "TYPE_CODE": "string",
+          "CATEGORY_CODE": "string",
+          "COMPSIZE_CODE": "string",
+          "COMPSET_CODE": "string",
+          "HEIGHT": 0,
+          "WIDTH": 0,
+          "LENGTH": 0,
+          "RADIUS": 0,
+          "PCS": 0,
+          "REMARKS": "string",
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "str",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "stri"
         }
       ]
      
