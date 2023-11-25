@@ -16,6 +16,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   divisionMS: any = 'ID';
   tableData: any[] = [];
   metalDetailData: any[] = [];
+  jobNumberDetailData: any[] = [];
   ProcessTypeList: any[] = [{type: 'GEN'}];
   userName = this.comService.userName;
   branchCode: String = this.comService.branchCode;
@@ -58,6 +59,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
 
   processTransferdetailsForm: FormGroup = this.formBuilder.group({
+    barCodeNumber: [''],
     jobno: [''],
     jobdes: [''],
     subjobno: [''],
@@ -84,18 +86,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
     MetalWeightFrom: [''],
     MetalWeightTo: [''],
     FromJobPcs: [''],
-    FromJobPcsTo: [''],
+    ToJobPcs: [''],
     GrossWeightFrom: [''],
     GrossWeightTo: [''],
     Balance_WT: [''],
     stockCode: [''],
-    quantity: [''],
+    scrapQuantity: [''],
     location: [''],
     stdLoss: [''],
     stdLossper: [''],
     StonePcsFrom: [''],
     StonePcsTo: [''],
-    StoneWeighFrom: [''],
+    StoneWeightFrom: [''],
     StoneWeightTo: [''],
     partCode: [''],
     DESIGN_CODE: [''],
@@ -110,6 +112,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     JOB_SO_NUMBER: [''],
     DIVCODE: [''],
     METALSTONE: [''],
+    UNQ_DESIGN_ID: [''],
+    JOB_DESCRIPTION: [''],
+    PICTURE_PATH: [''],
   });
 
   constructor(
@@ -177,6 +182,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.jobNumberDetailData = data
             this.processTransferdetailsForm.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.processTransferdetailsForm.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
             this.processTransferdetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
@@ -200,12 +206,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  /**USE: subjobnumber validate API call  this.processTransferdetailsForm.value.subjobno*/
+  /**USE: subjobnumber validate API call   || '156516/4/01'*/
   subJobNumberValidate(event?: any) {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': '156516/4/01',
+        'strUNQ_JOB_ID': this.processTransferdetailsForm.value.subjobno,
         'strBranchCode': this.comService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
@@ -222,13 +228,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.processTransferdetailsForm.controls.MetalPcsFrom.setValue(data[0].PCS)
           this.processTransferdetailsForm.controls.GrossWeightFrom.setValue(data[0].NETWT)
-          this.processTransferdetailsForm.controls.StoneWeighFrom.setValue(data[0].STONE)
+          this.processTransferdetailsForm.controls.StoneWeightFrom.setValue(data[0].STONE)
           this.processTransferdetailsForm.controls.PUREWT.setValue(data[0].PUREWT)
           this.processTransferdetailsForm.controls.PURITY.setValue(data[0].PURITY)
           this.processTransferdetailsForm.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
           this.processTransferdetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
           this.processTransferdetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.processTransferdetailsForm.controls.METALSTONE.setValue(data[0].METALSTONE)
+          this.processTransferdetailsForm.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
+          this.processTransferdetailsForm.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
           this.fillStoneDetails()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
@@ -379,11 +387,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
   formSubmit() {
     let detailDataToParent:any = {
       PROCESS_FORMDETAILS: [],
-      METAL_DETAIL_DATA: []
+      METAL_DETAIL_DATA: [],
+      JOB_VALIDATE_DATA: []
     }
 
     detailDataToParent.PROCESS_FORMDETAILS = this.processTransferdetailsForm.value;
     detailDataToParent.METAL_DETAIL_DATA = this.metalDetailData;
+    detailDataToParent.JOB_VALIDATE_DATA = this.jobNumberDetailData;
     this.close(detailDataToParent)//USE: passing Detail data to header screen on close
   }
 

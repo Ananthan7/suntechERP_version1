@@ -56,7 +56,7 @@ export class CommonServiceService {
   public creditCardMasterData: any = [];
   public SalespersonMasterData: any = [];
   public VocTypeMasterData: any = [];
-  private DECIMAL_CONSTANTS: any = {};
+  private DECIMAL_CONSTANTS_FLAG: any = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -111,14 +111,14 @@ export class CommonServiceService {
 
   /**USE: common fuction to format the Number to limit decimal places from branch master */
   decimalQuantityFormat(value: any, flag: string) {
-    this.DECIMAL_CONSTANTS = {
+    this.DECIMAL_CONSTANTS_FLAG = {
       'AMOUNT': Number(this.allbranchMaster.BAMTDECIMALS),
       'METAL': Number(this.allbranchMaster.BMQTYDECIMALS),
       'STONE': Number(this.allbranchMaster.BSQTYDECIMALS),
       'PURITY': 6,
       'RATE': 6,
     }
-    this.FormatCount = this.DECIMAL_CONSTANTS[flag] ? this.DECIMAL_CONSTANTS[flag] : 'METAL'
+    this.FormatCount = this.DECIMAL_CONSTANTS_FLAG[flag] ? this.DECIMAL_CONSTANTS_FLAG[flag] : 'METAL'
 
     value = Number(value).toFixed(this.FormatCount)
 
@@ -600,7 +600,7 @@ export class CommonServiceService {
     });
     return dataArray
   }
-  addCommaSeperation(data: any) {
+  commaSeperation(data: any) {
     if (!Number(data)) return data
     return Number(data).toLocaleString('en-US', { style: 'decimal' })
   }
