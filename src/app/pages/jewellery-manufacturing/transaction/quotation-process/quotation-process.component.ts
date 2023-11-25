@@ -109,10 +109,10 @@ export class QuotationProcessComponent implements OnInit {
         {
           "UNIQUEID": 0,
           "SRNO": 0,
-          "DT_BRANCH_CODE": "",
-          "DT_VOCTYPE": "",
+          "DT_BRANCH_CODE": "dm3",
+          "DT_VOCTYPE": "MIS",
           "DT_VOCNO": 0,
-          "DT_YEARMONTH": "",
+          "DT_YEARMONTH": "stri",
           "TRANS_TYPE": "",
           "DT_RESON_TYPE": "",
           "DT_REMARKS": "",

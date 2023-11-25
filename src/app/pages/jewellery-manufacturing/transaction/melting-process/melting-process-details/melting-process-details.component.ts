@@ -76,6 +76,34 @@ export class MeltingProcessDetailsComponent implements OnInit {
 
 
   meltingprocessdetailsForm: FormGroup = this.formBuilder.group({
+    jobno : [''],
+    jobdes : [''],
+    jobpurity : [''],
+    process : [''],
+    processdes : [''],
+    worker : [''],
+    workerdes : [''],
+    treeno : [''],
+    waxweight : [''],
+    location : [''],
+    stockcode : [''],
+    stockcodedes : [''],
+    tostockcode : [''],
+    grossweight : [''],
+    stoneweight : [''],
+    pcs : [''],
+    netweight : [''],
+    purity : [''],
+    purityper : [''],
+    pureweight : [''],
+    purediff : [''],
+    remark : [''],
+    lossweight : [''],
+    lotno : [''],
+    barno : [''],
+    ticketno : [''],
+    tgold: [''],
+    sliver: [''],
 
   });
 
@@ -90,57 +118,69 @@ export class MeltingProcessDetailsComponent implements OnInit {
       return
     }
   
-    let API = 'DiamondDismantle/InsertDiamondDismantle'
+    let API = 'JobMeltingProcessDJ/InsertJobMeltingProcessDJ'
     let postData = {
-      "MID": 0,
-      "MELTYPE_CODE": this.meltingprocessdetailsForm.value.meltingType,
-      "MELTYPE_DESCRIPTION": "",
-      "KARAT_CODE": "",
-      "PURITY": 0,
-      "METAL_PER": 0,
-      "ALLOY_PER": 0,
-      "CREATED_BY": "",
-      "COLOR": this.meltingprocessdetailsForm.value.color,
-      "STOCK_CODE": "string",
-      "MELTING_TYPE_DETAIL": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "MELTYPE_CODE": "string",
-          "MELTYPE_DESCRIPTION": "string",
-          "KARAT_CODE": "string",
-          "PURITY": 0,
-          "DIVISION_CODE": "string",
-          "DEF_ALLOY_STOCK": "string",
-          "DEF_ALLOY_DESCRIPTION": "string",
-          "ALLOY_PER": 0
-        }
-      ]
+      "UNIQUEID": 0,
+      "SRNO": 0,
+      "DT_BRANCH_CODE": "string",
+      "DT_VOCTYPE": "stri",
+      "DT_VOCNO": 0,
+      "DT_VOCDATE": "2023-11-25T05:04:56.703Z",
+      "DT_YEARMONTH": "string",
+      "JOB_NUMBER": this.meltingprocessdetailsForm.value.jobno,
+      "JOB_DESCRIPTION": this.meltingprocessdetailsForm.value.jobdes,
+      "PROCESS_CODE": this.meltingprocessdetailsForm.value.process,
+      "PROCESS_DESC": this.meltingprocessdetailsForm.value.processdes,
+      "WORKER_CODE": this.meltingprocessdetailsForm.value.worker,
+      "WORKER_DESC": this.meltingprocessdetailsForm.value.workerdes,
+      "STOCK_CODE": this.meltingprocessdetailsForm.value.stockcode,
+      "STOCK_DESCRIPTION": this.meltingprocessdetailsForm.value.stockcodedes,
+      "DIVCODE": "s",
+      "KARAT_CODE": "stri",
+      "PCS": this.meltingprocessdetailsForm.value.pcs,
+      "GROSS_WT": this.meltingprocessdetailsForm.value.grossweight,
+      "STONE_WT": this.meltingprocessdetailsForm.value.stoneweight,
+      "PURITY": this.meltingprocessdetailsForm.value.purity,
+      "PUREWT": this.meltingprocessdetailsForm.value.pureweight,
+      "PUDIFF": this.meltingprocessdetailsForm.value.purediff,
+      "IRON_WT": 0,
+      "NET_WT": this.meltingprocessdetailsForm.value.netweight,
+      "TOTAL_WEIGHT": 0,
+      "IRON_PER": 0,
+      "STONEDIFF": 0,
+      "WAX_WT": this.meltingprocessdetailsForm.value.waxweight,
+      "TREE_NO": this.meltingprocessdetailsForm.value.treeno,
+      "WIP_ACCODE": "string",
+      "CURRENCY_CODE": "stri",
+      "CURRENCY_RATE": 0,
+      "MKG_RATEFC": 0,
+      "MKG_RATECC": 0,
+      "MKGVALUEFC": 0,
+      "MKGVALUECC": 0,
+      "DLOC_CODE": "string",
+      "REMARKS": this.meltingprocessdetailsForm.value.remark,
+      "LOCTYPE_CODE": this.meltingprocessdetailsForm.value.location,
+      "TOSTOCKCODE": this.meltingprocessdetailsForm.value.tostockcode,
+      "LOSSWT": this.meltingprocessdetailsForm.value.lossweight,
+      "TODIVISION_CODE": "s",
+      "LOT_NO": this.meltingprocessdetailsForm.value.lotno,
+      "BAR_NO": this.meltingprocessdetailsForm.value.barno,
+      "TICKET_NO": this.meltingprocessdetailsForm.value.ticketno,
+      "SILVER_PURITY": this.meltingprocessdetailsForm.value.sliver,
+      "SILVER_PUREWT": 0,
+      "TOPURITY": 0,
+      "PUR_PER": this.meltingprocessdetailsForm.value.purityper,
+      "MELTING_TYPE": "string",
+      "ISALLOY": "s",
+      "BALANCE_WT": 0,
+      "BALANCE_PURE_WT": 0,
+      "LOSS_PURE_WT": 0,
+      "IS_REJECT": true,
+      "REASON": "string",
+      "REJ_REMARKS": "string",
+      "ATTACHMENT_FILE": "string"
     }
-    
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if(result.status == "Success"){
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.meltingprocessdetailsForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+    this.close(postData);
   }
 
   setFormValues() {
