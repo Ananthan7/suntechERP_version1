@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MeltingProcessDetailsComponent } from './melting-process-details/melting-process-details.component';
 
+
 @Component({
   selector: 'app-melting-process',
   templateUrl: './melting-process.component.html',
@@ -22,6 +23,7 @@ export class MeltingProcessComponent implements OnInit {
   yearMonth?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  meltingprocessDetailsData : any[] = [];
   private subscriptions: Subscription[] = [];
 
 
@@ -173,6 +175,16 @@ export class MeltingProcessComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
 
+    modalRef.result.then((postData) => {
+      console.log(postData);      
+      if (postData) {
+        console.log('Data from modal:', postData);       
+        this.meltingprocessDetailsData.push(postData);
+        console.log(this.meltingprocessDetailsData);
+        
+      }
+    });
+
   }
 
   deleteTableData(){
@@ -248,69 +260,7 @@ export class MeltingProcessComponent implements OnInit {
       "PUDIFF": 0,
       "SCP_PUDIFF": 0,
       "SYSTEM_DATE": "2023-10-30T13:03:04.860Z",
-      "Details": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "stri",
-          "DT_VOCNO": 0,
-          "DT_VOCDATE": "2023-10-30T13:03:04.860Z",
-          "DT_YEARMONTH": "string",
-          "JOB_NUMBER": "string",
-          "JOB_DESCRIPTION": "string",
-          "PROCESS_CODE": "string",
-          "PROCESS_DESC": "string",
-          "WORKER_CODE": "string",
-          "WORKER_DESC": "string",
-          "STOCK_CODE": "string",
-          "STOCK_DESCRIPTION": "string",
-          "DIVCODE": "s",
-          "KARAT_CODE": "stri",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "STONE_WT": 0,
-          "PURITY": 0,
-          "PUREWT": 0,
-          "PUDIFF": 0,
-          "IRON_WT": 0,
-          "NET_WT": 0,
-          "TOTAL_WEIGHT": 0,
-          "IRON_PER": 0,
-          "STONEDIFF": 0,
-          "WAX_WT": 0,
-          "TREE_NO": "string",
-          "WIP_ACCODE": "string",
-          "CURRENCY_CODE": "stri",
-          "CURRENCY_RATE": 0,
-          "MKG_RATEFC": 0,
-          "MKG_RATECC": 0,
-          "MKGVALUEFC": 0,
-          "MKGVALUECC": 0,
-          "DLOC_CODE": "string",
-          "REMARKS": "string",
-          "LOCTYPE_CODE": "string",
-          "TOSTOCKCODE": "string",
-          "LOSSWT": 0,
-          "TODIVISION_CODE": "s",
-          "LOT_NO": "string",
-          "BAR_NO": "string",
-          "TICKET_NO": "string",
-          "SILVER_PURITY": 0,
-          "SILVER_PUREWT": 0,
-          "TOPURITY": 0,
-          "PUR_PER": 0,
-          "MELTING_TYPE": "string",
-          "ISALLOY": "s",
-          "BALANCE_WT": 0,
-          "BALANCE_PURE_WT": 0,
-          "LOSS_PURE_WT": 0,
-          "IS_REJECT": true,
-          "REASON": "string",
-          "REJ_REMARKS": "string",
-          "ATTACHMENT_FILE": "string"
-        }
-      ]
+      "Details":this.meltingprocessDetailsData
     }
     
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)

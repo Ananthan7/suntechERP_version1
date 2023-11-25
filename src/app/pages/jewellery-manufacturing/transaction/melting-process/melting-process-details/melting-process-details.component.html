@@ -17,12 +17,12 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Job Number :</label>
                             <div class="col-sm-9 d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobNumber" />
+                                    <input type="text" matInput formControlName="jobno" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="jobnoCodeData"
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>&nbsp;
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobNumberDesc" />
+                                    <input type="text" matInput formControlName="jobdes" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -30,12 +30,12 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Process : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="process" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="processdes" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="workerDesc" />
+                                    <input type="text" matInput formControlName="workerdes" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -56,13 +56,13 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Tree No : </label>
                             <div class="col-sm-3 d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="treeno" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Wax Weight: </label>
                             <div class="col-sm-3 d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="waxweight" />
                                 </mat-form-field>&nbsp;
                             </div>
                         </div>
@@ -70,17 +70,17 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Stock Code : </label>
                             <div class="col-sm-3 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="stockcode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="stockcodedes" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="tostockcode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -89,14 +89,14 @@
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="grossweight" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Stone Weight:
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="stoneweight" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -104,14 +104,14 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Purity : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="purity" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label"> Purity %:
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="purityper" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -120,14 +120,14 @@
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="purediff" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-2 col-form-label">Remarks:
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <textarea matInput rows="3"></textarea>
+                                    <textarea matInput rows="3" formControlName="remark"></textarea>
                                 </mat-form-field>
 
                             </div>
@@ -138,7 +138,7 @@
                             </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="lossweight" />
                                 </mat-form-field>&nbsp;
                             </div>
                         </div>
@@ -146,17 +146,17 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Lot No:</label>
                             <div class="col-sm-9 d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="lotno" />
                                 </mat-form-field>&nbsp;
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Bar No:</label>
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="barno" />
                                 </mat-form-field>&nbsp;
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Ticket No:
                                 </label>
                                 <div class="col-sm-8 d-flex">
                                     <mat-form-field style="width: 40%;">
-                                        <input type="text" matInput />
+                                        <input type="text" matInput formControlName="ticketno" />
                                     </mat-form-field>
                                     <div class="row mb-1 ">
                                         <div class="form-check">
@@ -175,13 +175,13 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">T Gold:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="tgold" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Sliver:</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="sliver" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -192,7 +192,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Job Purity:</label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="jobpurity" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -200,16 +200,16 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Diff Grwt:</label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput  />
                                 </mat-form-field>
 
                             </div>
                         </div>
-                        <div class="row mb-1 location">
+                        <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-3 col-form-label">Location:</label>
                             <div class="col-sm-8 d-flex">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="location" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="locationCodeData"
                                     (newRowClick)="locationCodeSelected($event)">
@@ -220,7 +220,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Pcs: </label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput  formControlName="pcs" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -228,7 +228,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Net Weight: </label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="netweight" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -236,7 +236,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Pure Weight: </label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="pureweight" />
                                 </mat-form-field>
                             </div>
                         </div>
