@@ -17,6 +17,10 @@ export class OtpMasterComponent implements OnInit {
 
   columnheader:any[] = ['S.No','Level','User', 'Mobile Number','Mobile Number','Email'];
 
+  subscriptions: any;
+  @Input() content!: any; 
+  tableData: any[] = [];
+
   constructor( 
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -51,6 +55,162 @@ export class OtpMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  formSubmit(){
 
+    if(this.content && this.content.FLAG == 'EDIT'){
+      this.update()
+      return
+    }
+    if (this.otpForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+  
+    let API = 'OTPMaster/InsertOTPMaster'
+    let postData = {
+      "BRANCH_CODE": "string",
+      "BRANCH_DESCRIPTION": "string",
+      "OTP_LEVEL": "string",
+      "LEVEL_USER": "string",
+      "LEVEL_MOBILE1": "string",
+      "LEVEL_MOBILE2": "string",
+      "LEVEL_EMAIL": "string",
+      "SYSTEM_DATE": "2023-11-27T09:50:31.796Z",
+      "MID": 0
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if(result.status == "Success"){
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.otpForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  update(){
+    if (this.otpForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+  
+    let API = 'OTPMaster/UpdateOTPMaster/'+this.content.MID
+    let postData = 
+    {
+      "BRANCH_CODE": "string",
+      "BRANCH_DESCRIPTION": "string",
+      "OTP_LEVEL": "string",
+      "LEVEL_USER": "string",
+      "LEVEL_MOBILE1": "string",
+      "LEVEL_MOBILE2": "string",
+      "LEVEL_EMAIL": "string",
+      "SYSTEM_DATE": "2023-11-27T09:54:58.976Z",
+      "MID": 0
+    }
+    
+  
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if(result.status == "Success"){
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.otpForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  deleteRecord() {
+    if (!this.content.MID) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'OTPMaster/DeleteOTPMaster/' + this.content.MID
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.otpForm.reset()
+                    this.tableData = []
+                    this.close('reloadMainGrid')
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.otpForm.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
+      }
+    });
+  }
 
 }
