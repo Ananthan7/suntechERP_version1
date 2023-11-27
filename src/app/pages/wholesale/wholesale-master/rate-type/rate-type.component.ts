@@ -27,6 +27,37 @@ export class RateTypeComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) { }
+
+  metalCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Metal Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  metalCodeSelected(e:any){
+    console.log(e);
+    this.metalrateFrom.controls.metal.setValue(e.COST_CODE);
+  }
+  
+
+  metalrateFrom: FormGroup = this.formBuilder.group({
+    metal:[''],
+    rateType:[''],
+    convFactGMS:[''],
+    currency:[''],
+    currRate:[''],
+    rateVariance:[''],
+    posMarginMin:[''],
+    posMarginMax:[''],
+    convFactOZ:[''],
+    addOnRate:[''],
+  });
  
   ngOnInit(): void {
   }

@@ -7,6 +7,8 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { EnterMetalDetailsComponent } from './enter-metal-details/enter-metal-details.component';
+import { EnterStoneDetailsComponent } from './enter-stone-details/enter-stone-details.component';
 
 
 @Component({
@@ -48,7 +50,15 @@ export class WatchMasterComponent implements OnInit {
     movment: [''],
     sub: [''],
     stonetype: [''],
-    by: ['']
+    by: [''],
+    price1: [''],
+    price2: [''],
+    price3: [''],
+    price4: [''],
+    price5: [''],
+    weight: [''],
+    vendorRef: ['']
+
   
   })
 
@@ -201,7 +211,7 @@ export class WatchMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Status',
+    SEARCH_HEADING: 'HSN',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -211,6 +221,120 @@ export class WatchMasterComponent implements OnInit {
     console.log(e);
     this.watchForm.controls.hsn.setValue(e.CODE);
   }
+
+  weightCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Weight',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  weightCodeSelected(e:any){
+    console.log(e);
+    this.watchForm.controls.weight.setValue(e.CODE);
+  }
+
+  vendorRefCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Vendor Ref',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  vendorRefCodeSelected(e:any){
+    console.log(e);
+    this.watchForm.controls.vendorRef.setValue(e.CODE);
+  }
+
+  price1CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price 1',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price1CodeSelected(e:any){
+    console.log(e);
+    this.watchForm.controls.price1.setValue(e.PRICE_CODE);
+  }
+
+  price2CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price 2',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price2CodeSelected(e:any){
+    console.log(e);
+    this.watchForm.controls.price2.setValue(e.PRICE_CODE);
+  }
+
+  price3CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price 3',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price3CodeSelected(e:any){
+    console.log(e);
+    this.watchForm.controls.price3.setValue(e.PRICE_CODE);
+  }
+
+  price4CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price 4',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price4CodeSelected(e:any){
+    console.log(e);
+    this.watchForm.controls.price4.setValue(e.PRICE_CODE);
+  }
+
+  price5CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price 5',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price5CodeSelected(e:any){
+    console.log(e);
+    this.watchForm.controls.price5.setValue(e.PRICE_CODE);
+  }
+
+
 
   strapcolorCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -326,6 +450,31 @@ export class WatchMasterComponent implements OnInit {
 
   formSubmit() {
 
+  }
+
+  openAddmetaldetails() {
+    const modalRef: NgbModalRef = this.modalService.open(EnterMetalDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+
+  }
+
+  openAddstonedetails() {
+    const modalRef: NgbModalRef = this.modalService.open(EnterStoneDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+
+  }
+
+  deleteTableData(){
+ 
+    
   }
 
   close(data?: any) {
