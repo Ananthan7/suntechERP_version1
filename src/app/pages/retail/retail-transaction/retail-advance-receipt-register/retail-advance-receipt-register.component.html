@@ -7,7 +7,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="savePdf()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form>
@@ -86,7 +86,7 @@
         </div>
     </form>
 
-    <div id="pdf_container" [hidden]="false">
+    <div id="pdf_container" [hidden]="true">
         <div class="scheme_register_pdf">
             <div class="row border_bottom">
                 <div class="col-md-6">

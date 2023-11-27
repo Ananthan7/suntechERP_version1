@@ -81,7 +81,7 @@ export class RetailTransactionComponent implements OnInit {
       case 'Exhibition Sale':
         contents = PosDailyClosingSummaryComponent
         break;
-      case 'Order Lock Or Unlock':
+      case 'Gift Voucher Issue':
         contents = RetailAdvanceReceiptRegisterComponent
         break;
       case 'Pos Sales Order Cancellation':
