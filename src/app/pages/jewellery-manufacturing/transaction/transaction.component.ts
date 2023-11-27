@@ -1,13 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
-import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 
 import { DiamondSalesorderComponent } from './diamond-salesorder/diamond-salesorder.component';
 import { DiamondQuotationComponent } from './diamond-quotation/diamond-quotation.component';
-import { JobCardComponent } from './job-card/job-card.component';
 import { MetalIssueComponent } from './metal-issue/metal-issue.component';
 import { WaxProcessComponent } from './wax-process/wax-process.component';
 import { StoneIssueComponent } from './stone-issue/stone-issue.component';
@@ -30,7 +27,6 @@ import { TreeDownComponent } from './tree-down/tree-down.component';
 import { MouldMakingComponent } from './mould-making/mould-making.component';
 import { LossRecoveryComponent } from './loss-recovery/loss-recovery.component';
 
-
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
@@ -47,8 +43,6 @@ export class TransactionComponent implements OnInit {
 
   constructor(
     private CommonService: CommonServiceService,
-    private dataService: SuntechAPIService,
-    private snackBar: MatSnackBar,
     private modalService: NgbModal,
     // private ChangeDetector: ChangeDetectorRef,
   ) {
