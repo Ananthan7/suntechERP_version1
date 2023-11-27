@@ -108,16 +108,18 @@ export class CommonServiceService {
   //   'COMPANYCURRENCY': 'COMPANYCURRENCY',
   //   'POSKARATRATECHANGE': 'POSKARATRATECHANGE',
   // }
-
-  /**USE: common fuction to format the Number to limit decimal places from branch master */
-  decimalQuantityFormat(value: any, flag: string) {
+  private initializeDecimalConstantsFlag() {
     this.DECIMAL_CONSTANTS_FLAG = {
       'AMOUNT': Number(this.allbranchMaster.BAMTDECIMALS),
       'METAL': Number(this.allbranchMaster.BMQTYDECIMALS),
       'STONE': Number(this.allbranchMaster.BSQTYDECIMALS),
       'PURITY': 6,
       'RATE': 6,
-    }
+    };
+  }
+  /**USE: common fuction to format the Number to limit decimal places from branch master */
+  decimalQuantityFormat(value: any, flag: string) {
+    this.initializeDecimalConstantsFlag();
     this.FormatCount = this.DECIMAL_CONSTANTS_FLAG[flag] ? this.DECIMAL_CONSTANTS_FLAG[flag] : 'METAL'
 
     value = Number(value).toFixed(this.FormatCount)

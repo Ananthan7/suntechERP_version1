@@ -164,7 +164,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.DIVCODE.setValue(dataFromParent.DIVCODE)
     this.processTransferdetailsForm.controls.METALSTONE.setValue(dataFromParent.METALSTONE)
   }
-  /**USE: jobnumber validate API call */
+  /**USE: jobnumber validate API call
+   * TODO: DESIGN_TYPE validation if empty diamond 
+   */
   jobNumberValidate(event: any) {
     if (event.target.value == '') return
     let postData = {

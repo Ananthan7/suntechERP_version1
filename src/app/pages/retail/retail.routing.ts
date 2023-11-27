@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'retail-transaction',
     loadChildren: () => import('../retail/retail-transaction/retail-transaction.module').then(m => m.RetailTransactionModule)
   },
+  {
+    path: 'retail-reports',
+    loadChildren: () => import('../retail/retail-reports/retail-reports.module').then(m => m.RetailReportsModule)
+  },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
