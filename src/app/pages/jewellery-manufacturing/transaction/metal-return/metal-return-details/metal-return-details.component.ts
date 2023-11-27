@@ -164,6 +164,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   stockCodeSelected(e:any){
     console.log(e);
     this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
+    this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(e.DESCRIPTION);
   }
   
   close(data?: any) {
