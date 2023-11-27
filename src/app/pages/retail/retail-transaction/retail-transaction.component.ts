@@ -12,6 +12,8 @@ import { SchemeRegisterComponent } from './scheme-register/scheme-register.compo
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
 import { PosDailyClosingSummaryComponent } from './pos-daily-closing-summary/pos-daily-closing-summary.component';
+import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
+import { RetailAdvanceReceiptRegisterComponent } from './retail-advance-receipt-register/retail-advance-receipt-register.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -73,12 +75,18 @@ export class RetailTransactionComponent implements OnInit {
       case 'Tourist VAT Refund Verification':
         contents = TouristVatRefundVerificationComponent
         break;
-        case 'Advance Return':
-          contents = AdvanceReturnComponent
-          break;
-        case 'Exhibition Sale':
-          contents = PosDailyClosingSummaryComponent
-          break;
+      case 'Advance Return':
+        contents = AdvanceReturnComponent
+        break;
+      case 'Exhibition Sale':
+        contents = PosDailyClosingSummaryComponent
+        break;
+      case 'Order Lock Or Unlock':
+        contents = RetailAdvanceReceiptRegisterComponent
+        break;
+      case 'Pos Sales Order Cancellation':
+        contents = PosSalesOrderCancellationComponent
+        break;
       //continue adding components using case then break
       default:
         this.snackBar.open('No Response Found!', 'Close', {
