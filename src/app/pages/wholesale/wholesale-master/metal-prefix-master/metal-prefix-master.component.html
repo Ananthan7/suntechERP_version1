@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="metalprefixForm">
@@ -20,12 +20,12 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Prefix Code :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="prefixcode" />
                         </mat-form-field>
                       </div>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="prefixcodedes" />
                         </mat-form-field>
                       </div>
                     </div>
@@ -33,12 +33,12 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Last No :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="lastno" />
                         </mat-form-field>
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
+                          <input class="form-check-input" type="checkbox" formControlName="jobcardprefix">
                           <label class="form-check-label">
                             Exclusive For Job Card
                           </label>
@@ -46,7 +46,7 @@
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
+                          <input class="form-check-input" type="checkbox" formControlName="schemeprefix">
                           <label class="form-check-label">
                             Exclusive For Scheme
                           </label>
@@ -57,12 +57,12 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Tag Wt :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="tagWt" />
                         </mat-form-field>
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
+                          <input class="form-check-input" type="checkbox" formControlName="setrefprefix">
                           <label class="form-check-label">
                             Set Ref Prefix
                           </label>
@@ -70,7 +70,7 @@
                       </div>
                       <div class="col-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
+                          <input class="form-check-input" type="checkbox" formControlName="refinervprefix">
                           <label class="form-check-label">
                             Exclusive For Refinerv
                           </label>
@@ -89,7 +89,7 @@
                       </div>
                       <div class="col-md-3 offset-md-3">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
+                          <input class="form-check-input" type="checkbox" formControlName="designprefix">
                           <label class="form-check-label">
                             Design Perfix
                           </label>
@@ -100,7 +100,7 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Suffix Code :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
+                          <input type="text" matInput formControlName="suffixcode" />
                         </mat-form-field>
                       </div>
                     </div>
@@ -127,7 +127,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_1" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -136,7 +136,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_2" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -145,7 +145,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_3" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -154,7 +154,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_4" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -163,7 +163,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_5" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -172,7 +172,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_6" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -183,7 +183,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_7" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -192,7 +192,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_8" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -201,7 +201,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_9" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -210,7 +210,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_10" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -219,7 +219,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_11" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -228,7 +228,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_12" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -237,7 +237,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_13" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -246,7 +246,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_14" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
@@ -255,7 +255,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
                   <div class="col-md-8">
                     <mat-form-field style="width: 70%;">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="userdefined_15" />
                     </mat-form-field>
                     <master-search></master-search>
                   </div>
