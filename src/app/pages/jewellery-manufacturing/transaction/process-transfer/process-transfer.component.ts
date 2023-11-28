@@ -23,7 +23,7 @@ export class ProcessTransferComponent implements OnInit {
   yearMonth?: String;
   tableRowCount: number = 0;
   PTFDetailsToSave: any[] = [];
-  detailScreenDataToSave: any[] = [];
+  metalGridDataToSave: any[] = [];
   labourChargeDetailsToSave: any[] = [];
   currentDate: any = this.commonService.currentDate;
   sequenceDetails: any[] = []
@@ -231,11 +231,12 @@ export class ProcessTransferComponent implements OnInit {
       }
     )
   }
+  checkScrapStockCode(){
+    // SCRAP_STOCK_CODE
+  }
   /**USE: set details from detail screen */
   setDataFromDetailScreen() {
     let detailScreenData = this.detailData[0].DATA
-    console.log(detailScreenData,'this.detailData[0].DATA');
-    
     let PROCESS_FORMDETAILS = detailScreenData.PROCESS_FORMDETAILS
     
     let METAL_DETAIL_GRID = detailScreenData.METAL_DETAIL_GRID
@@ -245,7 +246,7 @@ export class ProcessTransferComponent implements OnInit {
     let seqData = this.sequenceDetails.filter((item:any) => item.PROCESS_CODE == detailScreenData.workerFrom);
     
     METAL_DETAIL_GRID.forEach((element:any) => {
-      this.detailScreenDataToSave.push({
+      this.metalGridDataToSave.push({
         "VOCNO": 0,
         "VOCTYPE": this.processTransferFrom.value.voctype,
         "VOCDATE": this.commonService.formatDateTime(this.processTransferFrom.value.vocdate),
@@ -401,10 +402,8 @@ export class ProcessTransferComponent implements OnInit {
     let LOSS_PURE_QTY = this.calculateLossPureQty(detailScreenData);
     let stoneAmount = this.calculateMetalGridSum(METAL_DETAIL_GRID,'STONEAMOUNT');
     let metalAmount = this.calculateMetalGridSum(METAL_DETAIL_GRID,'METALAMOUNT');
-    console.log(detailScreenData.workerFrom,'sequenceDetails');
     let seqData = this.sequenceDetails.filter((item:any) => item.PROCESS_CODE == detailScreenData.workerFrom);
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity)*Number(detailScreenData.SCRAP_PURITY))
-    console.log(detailScreenData.consumed,'sequenceDetails');
     this.PTFDetailsToSave.push({
       "SRNO": 0,
       "UNIQUEID": 0,
@@ -588,7 +587,7 @@ export class ProcessTransferComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_PROCESS_TRN_DETAIL_DJ": this.PTFDetailsToSave, //header grid details
-      "JOB_PROCESS_TRN_STNMTL_DJ": this.detailScreenDataToSave, //detail screen data
+      "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": this.labourChargeDetailsToSave // labour charge details
     }
    
