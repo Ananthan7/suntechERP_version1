@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header  (cancelClick)="close()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="consumbleForm">
@@ -18,7 +18,7 @@
                                     <label for="inputPassword" class="col-sm-6 col-form-label">Code :</label>
                                     <div class="col-md-6">
                                       <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput />
+                                        <input type="text" matInput formControlName="code" />
                                       </mat-form-field>
                                       <master-search [MasterSearchData]="codeCodeData"
                                       (newRowClick)="codeCodeSelected($event)">
@@ -33,7 +33,7 @@
                                     <label for="inputPassword" class="col-sm-6 col-form-label">Description:</label>
                                     <div class="col-md-6">
                                       <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="code" />
+                                        <input type="text" matInput  />
                                       </mat-form-field>
                                     </div>
                                   </div>
