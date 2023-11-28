@@ -31,10 +31,16 @@ export class LocationMasterComponent implements OnInit {
   }
 
   locationForm: FormGroup = this.formBuilder.group({
+    code:[''],
+    codedesc:[''],
     type:[''],
     division:[''],
     branch:[''],
-    PLACCode:['']
+    PLACCode1:[''],
+    PLACCode2:[''],
+    PLACCode3:[''],
+    PLACCode4:['']
+
   })
 
   typeCodeData: MasterSearchModel = {
@@ -118,10 +124,10 @@ export class LocationMasterComponent implements OnInit {
     let API = 'LocationMaster/InsertLocationMaster'
     let postData = {
       "MID": 0,
-      "LOCATION_CODE": "string",
-      "DESCRIPTION": "string",
-      "DIVISION_CODE": "string",
-      "LOCTYPE_CODE": "string",
+      "LOCATION_CODE": this.locationForm.value.code || "",
+      "DESCRIPTION": this.locationForm.value.codedesc || "",
+      "DIVISION_CODE": this.locationForm.value.division || "",
+      "LOCTYPE_CODE": this.locationForm.value.type || "",
       "PIECES": 0,
       "ALWAYS_FULL": true,
       "SYSTEM_DATE": "2023-11-27T07:10:12.051Z",
@@ -130,11 +136,11 @@ export class LocationMasterComponent implements OnInit {
       "PROFIT1_PER": 0,
       "PROFIT2_PER": 0,
       "PROFIT3_PER": 0,
-      "PROFIT_ACCODE1": "string",
-      "PROFIT_ACCODE2": "string",
-      "PROFIT_ACCODE3": "string",
-      "PROFIT_CREDITACCODE": "string",
-      "LOC_BRANCHCODE": "string",
+      "PROFIT_ACCODE1": this.locationForm.value.PLACCode1 || "",
+      "PROFIT_ACCODE2": this.locationForm.value.PLACCode2 || "",
+      "PROFIT_ACCODE3": this.locationForm.value.PLACCode3 || "",
+      "PROFIT_CREDITACCODE":this.locationForm.value.PLACCode4 || "",
+      "LOC_BRANCHCODE": this.locationForm.value.branch || "",
       "BOXDETAIL_VALUE": true,
       "MAIN_LOC": true
     }
@@ -173,23 +179,23 @@ export class LocationMasterComponent implements OnInit {
     let postData = 
     {
       "MID": 0,
-      "LOCATION_CODE": "string",
-      "DESCRIPTION": "string",
-      "DIVISION_CODE": "string",
-      "LOCTYPE_CODE": "string",
+      "LOCATION_CODE": this.locationForm.value.code || "",
+      "DESCRIPTION": this.locationForm.value.codedesc || "",
+      "DIVISION_CODE": this.locationForm.value.division || "",
+      "LOCTYPE_CODE": this.locationForm.value.type || "",
       "PIECES": 0,
       "ALWAYS_FULL": true,
-      "SYSTEM_DATE": "2023-11-27T07:15:45.594Z",
+      "SYSTEM_DATE": "2023-11-27T07:10:12.051Z",
       "INTRANSIT_LOC": true,
       "AVOIDFORSALES": true,
       "PROFIT1_PER": 0,
       "PROFIT2_PER": 0,
       "PROFIT3_PER": 0,
-      "PROFIT_ACCODE1": "string",
-      "PROFIT_ACCODE2": "string",
-      "PROFIT_ACCODE3": "string",
-      "PROFIT_CREDITACCODE": "string",
-      "LOC_BRANCHCODE": "string",
+      "PROFIT_ACCODE1": this.locationForm.value.PLACCode1 || "",
+      "PROFIT_ACCODE2": this.locationForm.value.PLACCode2 || "",
+      "PROFIT_ACCODE3": this.locationForm.value.PLACCode3 || "",
+      "PROFIT_CREDITACCODE":this.locationForm.value.PLACCode4 || "",
+      "LOC_BRANCHCODE": this.locationForm.value.branch || "",
       "BOXDETAIL_VALUE": true,
       "MAIN_LOC": true
     }

@@ -20,7 +20,7 @@ export class ComponentSizeSetComponent implements OnInit {
 subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
-  componentsizesetmasterForm: any;
+  
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -32,6 +32,12 @@ subscriptions: any;
  
   ngOnInit(): void {
   }
+  componentsizesetmasterForm: FormGroup = this.formBuilder.group({
+    code:[''],
+    description  : [''],
+  
+   });
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -58,8 +64,8 @@ subscriptions: any;
     let API = 'ComponentSizeSetMaster/InsertComponentSizeSetMaster'
     let postData = {
       "MID": 0,
-      "COMPSET_CODE": "string",
-      "DESCRIPTION": "string",
+      "COMPSET_CODE":  this.componentsizesetmasterForm.value.toprocess || "",
+      "DESCRIPTION":  this.componentsizesetmasterForm.value.toprocess || "",
       "detail": [
         {
           "UNIQUEID": 0,
