@@ -33,6 +33,8 @@ export class CostcentreMagkingchargesComponent implements OnInit {
   }
 
   costcentermakingForm: FormGroup = this.formBuilder.group({
+    costcode:[''],
+    description:[''],
     purchase:[''],
     sales:[''],
     branchtransfer:[''],
@@ -103,6 +105,7 @@ export class CostcentreMagkingchargesComponent implements OnInit {
   deleteTableData(){
    
   }
+
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -118,17 +121,17 @@ export class CostcentreMagkingchargesComponent implements OnInit {
     let postData = {
       "MID": 0,
       "TYPE": "string",
-      "COST_CODE": "string",
-      "COST_DESCRIPTION": "string",
+      "COST_CODE": this.costcentermakingForm.value.costcode || "",
+      "COST_DESCRIPTION": this.costcentermakingForm.value.description || "",
       "SYSTEM_DATE": "2023-11-24T10:19:27.287Z",
-      "PURCHASE_GST": "string",
-      "SALES_GST": "string",
-      "BRANCH_TRANSFER_GST": "string",
+      "PURCHASE_GST": this.costcentermakingForm.value.purchase || "",
+      "SALES_GST": this.costcentermakingForm.value.sales || "",
+      "BRANCH_TRANSFER_GST": this.costcentermakingForm.value.branchtransfer || "",
       "DIVISION_CODE": "string",
       "costCenterDetail": [
         {
           "UNIQUE_ID": 0,
-          "COST_CODE": "string",
+          "COST_CODE": "md3",
           "TYPE": "string",
           "BRANCH_CODE": "string",
           "ADJUSTMENT": "string",

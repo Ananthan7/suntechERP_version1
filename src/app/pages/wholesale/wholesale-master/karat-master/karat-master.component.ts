@@ -30,10 +30,47 @@ export class KaratMasterComponent implements OnInit {
  
   ngOnInit(): void {
   }
+
+  karatMaster: FormGroup = this.formBuilder.group({
+    division :['']
+  })
+
+  divisionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  divisionCodeSelected(e:any){
+    console.log(e);
+    this.karatMaster.controls.division.setValue(e.DIVISION_CODE);
+  }
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  karatForm: FormGroup = this.formBuilder.group({
+    karatcode:[''],
+    karatcodedes:[''],
+    standardpurity:[''],
+    minimum :[''],
+    maximum:[''],
+    sp_gravity:[''],
+    sp_variance:[''],
+    division:[''],
+    pos :[''],
+    pop_minmaxamt:[''],
+    scrap:[''],
+    showinweb:[''],
+  })
+
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -47,21 +84,21 @@ export class KaratMasterComponent implements OnInit {
   
     let API = 'karatMaster/InsertKaratMaster'
     let postData = {
-      "KARAT_CODE": "stri",
-      "STD_PURITY": 0,
+      "KARAT_CODE": this.karatForm.value.karatcode || "",
+      "STD_PURITY": this.karatForm.value.standardpurity || "",
       "PURITY_FROM": 0,
       "PURITY_TO": 0,
       "MID": 0,
       "SYSTEM_DATE": "2023-11-24T10:50:27.839Z",
-      "KARAT_DESC": "string",
-      "SPGRVT": 0,
-      "POSMINMAXAMT": 0,
-      "DIVISION_CODE": "s",
-      "POPMINMAXAMT": 0,
-      "SPGRVT_VAR": 0,
+      "KARAT_DESC": this.karatForm.value.karatcodedes || "",
+      "SPGRVT": this.karatForm.value.sp_gravity || "",
+      "POSMINMAXAMT": this.karatForm.value.pos || "",
+      "DIVISION_CODE": this.karatForm.value.division || "",
+      "POPMINMAXAMT":this.karatForm.value.pop_minmaxamt || "",
+      "SPGRVT_VAR": this.karatForm.value.sp_variance || "",
       "KARAT_DESC_AR": "string",
-      "IS_SCRAP": true,
-      "SHOWINWEB": true
+      "IS_SCRAP": this.karatForm.value.scrap || "",
+      "SHOWINWEB": this.karatForm.value.showinweb || "",
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
