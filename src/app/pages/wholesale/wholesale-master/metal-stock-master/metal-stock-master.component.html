@@ -15,9 +15,12 @@
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Metal Type :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                          <mat-form-field style="width: 70%;">
+                            <input type="text" matInput formControlName="metalType" />
                           </mat-form-field>
+                          <master-search [MasterSearchData]="metalTypeCodeData"
+                          (newRowClick)="metalTypeCodeSelected($event)">
+                      </master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-2">
@@ -72,7 +75,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Unit :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="unit"/>
                           </mat-form-field>
                         </div>
                       </div>
@@ -491,9 +494,12 @@
                           <div class="row align-items-center mb-1 pt-2">
                             <label for="inputPassword" class="col-sm-6 col-form-label">Prefix :</label>
                             <div class="col-md-6">
-                              <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                              <mat-form-field style="width: 70%;">
+                                <input type="text" matInput  formControlName="prefix"/>
                               </mat-form-field>
+                              <master-search [MasterSearchData]="prefixCodeData"
+                              (newRowClick)="prefixCodeSelected($event)">
+                          </master-search>
                             </div>
                           </div>
                         </div>
@@ -661,7 +667,7 @@
                               <div class="form-check mb-1">
                                 <input class="form-check-input" type="checkbox">
                                 <label class="form-check-label">
-                                 Alloy less Than Cost
+                                 Allow less Than Cost
                                 </label>
                               </div>
                               <div class="form-check mb-1">
@@ -693,9 +699,11 @@
                              <label for="inputPassword" class="col-sm-6 col-form-label">ABC Master :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 80%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="abcMaster" />
                               </mat-form-field>
-                              <master-search></master-search>
+                              <master-search [MasterSearchData]="abcMasterCodeData"
+                              (newRowClick)="abcMasterCodeSelected($event)">
+                          </master-search>
                             </div>
                           </div>
                         </div>
@@ -737,10 +745,10 @@
                             </div>
                             <label for="inputPassword" class="col-sm-6 col-form-label">Stamp Rate :</label>
                             <div class="col-md-6">
-                              <mat-form-field style="width: 80%;">
+                              <mat-form-field style="width: 100%;">
                                 <input type="text" matInput />
                               </mat-form-field>
-                              <master-search></master-search>
+                    
                             </div>
                           </div>
                         </div>

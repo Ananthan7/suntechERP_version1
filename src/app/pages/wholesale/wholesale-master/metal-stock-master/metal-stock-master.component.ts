@@ -57,7 +57,10 @@ export class MetalStockMasterComponent implements OnInit {
     hsmaster:[''],
     seqcode:[''],
     linksub:[''],
-    design:['']
+    design:[''],
+    metalType:[''],
+    unit:[''],
+    abcMaster:['']
   });
 
   costCenterData: MasterSearchModel = {
@@ -68,6 +71,43 @@ export class MetalStockMasterComponent implements OnInit {
     SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  metalTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Metal Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  
+  prefixCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Prefix',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
+  abcMasterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 189,
+    SEARCH_FIELD: 'workerToDescription',
+    SEARCH_HEADING: 'ABC Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "workerToDescription<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -174,6 +214,18 @@ export class MetalStockMasterComponent implements OnInit {
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'HSN',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  HSmasterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 188,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'HS Master',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -288,17 +340,7 @@ export class MetalStockMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  HSmasterCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 188,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'HS Master',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+
 
   metalrCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -339,6 +381,21 @@ export class MetalStockMasterComponent implements OnInit {
   branchCodeSelected(e:any){
     console.log(e);
     this.metalstockForm.controls.branch.setValue(e.BRANCH_CODE);
+  }
+
+  abcMasterCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.abcMaster.setValue(e.workerToDescription);
+  }
+
+  metalTypeCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.metalType.setValue(e.DIVISION_CODE);
+  }
+ 
+  prefixCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.prefix.setValue(e.PREFIX_CODE);
   }
 
 
@@ -412,6 +469,11 @@ export class MetalStockMasterComponent implements OnInit {
     this.metalstockForm.controls.hsncode.setValue(e.CODE);
   }
 
+  HSmasterCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.hsmaster.setValue(e.CODE);
+  }
+  
   countryCodeSelected(e:any){
     console.log(e);
     this.metalstockForm.controls.country.setValue(e.CODE);
@@ -435,11 +497,6 @@ export class MetalStockMasterComponent implements OnInit {
   modelCodeSelected(e:any){
     console.log(e);
     this.metalstockForm.controls.modelcode.setValue(e.processToDescription);
-  }
-
- HSmasterCodeSelected(e:any){
-    console.log(e);
-    this.metalstockForm.controls.hsmaster.setValue(e.CODE);
   }
 
   metalCodeSelected(e:any){
