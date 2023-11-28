@@ -115,6 +115,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     UNQ_DESIGN_ID: [''],
     JOB_DESCRIPTION: [''],
     PICTURE_PATH: [''],
+    MAIN_STOCK_CODE: [''],
+    SCRAP_PURITY: [''],
   });
 
   constructor(
@@ -235,6 +237,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.processTransferdetailsForm.controls.PURITY.setValue(data[0].PURITY)
           this.processTransferdetailsForm.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
           this.processTransferdetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.stockCodeScrapValidate()
           this.processTransferdetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.processTransferdetailsForm.controls.METALSTONE.setValue(data[0].METALSTONE)
           this.processTransferdetailsForm.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
@@ -249,7 +252,32 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
- 
+  //stockCode Scrap Validate
+  stockCodeScrapValidate(){
+    if(this.comService.nullToString(this.processTransferdetailsForm.value.stockCode == '')) return
+    let postData = {
+      "SPID": "044",
+      "parameter": {
+        'STRSTOCKCODE': this.comService.nullToString(this.processTransferdetailsForm.value.stockCode)
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          this.processTransferdetailsForm.controls.MAIN_STOCK_CODE.setValue(data[0].MAIN_STOCK_CODE)
+          this.processTransferdetailsForm.controls.SCRAP_PURITY.setValue(data[0].PURITY)
+          
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   private fillStoneDetails():void {
     let postData = {
       "SPID": "042",
@@ -389,12 +417,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
   formSubmit() {
     let detailDataToParent:any = {
       PROCESS_FORMDETAILS: [],
-      METAL_DETAIL_DATA: [],
+      METAL_DETAIL_GRID: [],
       JOB_VALIDATE_DATA: []
     }
 
     detailDataToParent.PROCESS_FORMDETAILS = this.processTransferdetailsForm.value;
-    detailDataToParent.METAL_DETAIL_DATA = this.metalDetailData;
+    detailDataToParent.METAL_DETAIL_GRID = this.metalDetailData; //grid data
     detailDataToParent.JOB_VALIDATE_DATA = this.jobNumberDetailData;
     this.close(detailDataToParent)//USE: passing Detail data to header screen on close
   }
