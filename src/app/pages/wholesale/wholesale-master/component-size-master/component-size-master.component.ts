@@ -17,7 +17,7 @@ export class ComponentSizeMasterComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
-  componentsizemasterForm: any;
+  
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -29,6 +29,15 @@ export class ComponentSizeMasterComponent implements OnInit {
  
   ngOnInit(): void {
   }
+  componentsizemasterForm: FormGroup = this.formBuilder.group({
+    code:[''],
+    desc : [''],
+    height:[''],
+    width : [''],
+    length:[''],
+    radius:[''],
+
+   });
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -47,12 +56,12 @@ export class ComponentSizeMasterComponent implements OnInit {
     let API = 'ComponentSizeMaster/InsertComponentSizeMaster'
     let postData = {
       "MID": 0,
-      "COMPSIZE_CODE": "string",
-      "DESCRIPTION": "string",
-      "RADIUS": 0,
-      "LENGTH": 0,
-      "WIDTH": 0,
-      "HEIGHT": 0
+      "COMPSIZE_CODE": this.componentsizemasterForm.value.code || "",
+      "DESCRIPTION": this.componentsizemasterForm.value.desc || "",
+      "RADIUS":this.componentsizemasterForm.value.radius || "",
+      "LENGTH": this.componentsizemasterForm.value.length || "",
+      "WIDTH": this.componentsizemasterForm.value.width || "",
+      "HEIGHT": this.componentsizemasterForm.value.height || ""
     }
     
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -89,12 +98,12 @@ export class ComponentSizeMasterComponent implements OnInit {
     let postData = 
     {
       "MID": 0,
-      "COMPSIZE_CODE": "string",
-      "DESCRIPTION": "string",
-      "RADIUS": 0,
-      "LENGTH": 0,
-      "WIDTH": 0,
-      "HEIGHT": 0
+      "COMPSIZE_CODE": this.componentsizemasterForm.value.code || "",
+      "DESCRIPTION": this.componentsizemasterForm.value.desc || "",
+      "RADIUS":this.componentsizemasterForm.value.radius || "",
+      "LENGTH": this.componentsizemasterForm.value.length || "",
+      "WIDTH": this.componentsizemasterForm.value.width || "",
+      "HEIGHT": this.componentsizemasterForm.value.height || ""
     }
     
   

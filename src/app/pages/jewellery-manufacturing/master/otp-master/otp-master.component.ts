@@ -32,7 +32,9 @@ export class OtpMasterComponent implements OnInit {
   ngOnInit(): void {
   }
   otpForm: FormGroup = this.formBuilder.group({
-    brand:[],
+  
+    branch:[],
+    branchdesc:[],
 
   })
   brandCodeData:MasterSearchModel = {
@@ -68,8 +70,8 @@ export class OtpMasterComponent implements OnInit {
   
     let API = 'OTPMaster/InsertOTPMaster'
     let postData = {
-      "BRANCH_CODE": "string",
-      "BRANCH_DESCRIPTION": "string",
+      "BRANCH_CODE":this.otpForm.value.branch || "",
+      "BRANCH_DESCRIPTION": this.otpForm.value.branchdesc || "",
       "OTP_LEVEL": "string",
       "LEVEL_USER": "string",
       "LEVEL_MOBILE1": "string",
