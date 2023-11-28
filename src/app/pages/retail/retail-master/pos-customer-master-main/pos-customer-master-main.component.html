@@ -1,0 +1,941 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> Pos Customer Master
+    </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()"></modal-header>
+<!-- content section -->
+<div class="container-fluid pt-3">
+    <form>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row mb-1 ">
+                    <div class="col-md-4">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Code</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Parent Pos Code</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 70%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Ref By</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 70%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-8">
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Name</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field>
+                                            <mat-select>
+                                                <mat-option value="Cash">Cash</mat-option>
+                                                <mat-option></mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row mb-1">
+                            <div class="col-md-6 pt-3">
+                                <mat-checkbox>Credit Limit</mat-checkbox>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-2">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Gender</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width:100%">
+                                    <mat-select>
+                                        <mat-option value="Male">Male</mat-option>
+                                        <mat-option></mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-7 col-form-label">Marital St.</label>
+                            <div class="col-md-5">
+                                <mat-form-field style="width:100%">
+                                    <mat-select>
+                                        <mat-option value="Single">Single</mat-option>
+                                        <mat-option></mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Date of Birth</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width:100%">
+                                    <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="dob"
+                                        placeholder="DD/MM/YYYY" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Wedding Date</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width:100%">
+                                    <input matInput [matDatepicker]="weddate" [max]="vocMaxDate" name="weddate"
+                                        placeholder="DD/MM/YYYY" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="weddate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #weddate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-4">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Country(R)</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 70%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Mobile</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Mobile 1</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Email ID</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Tel.(R)</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Tel.(O)</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Fax No.</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Cust. Type</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Nationality</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">State</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">City</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Language</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Fav. Celebration</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 70%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row border">
+                            <div class="col-md-12 p-3 text-center">
+                                <h6>Tax Registration Details</h6>
+                            </div>
+                            <div class="row mb-1 m-1">
+                                <label for="inputPassword" class="col-sm-5 col-form-label">VAT</label>
+                                <div class="col-md-7">
+                                    <mat-form-field style="width: 100%;">
+                                        <input matInput="text" name="voctype" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row mb-1 m-1">
+                                <label for="inputPassword" class="col-sm-5 col-form-label">PAN NO</label>
+                                <div class="col-md-7">
+                                    <mat-form-field style="width: 100%;">
+                                        <input matInput="text" name="voctype" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Whatsapp</label>
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput="text" name="voctype" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <mat-tab-group>
+                            <mat-tab label="Other Detail">
+                                <div class="row mb-1">
+                                    <div class="col-md-12">
+                                        <div class="row mb-1">
+                                            <div class="col-md-6">
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword"
+                                                        class="col-sm-5 col-form-label">Spouse</label>
+                                                    <div class="col-md-7">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword"
+                                                        class="col-sm-5 col-form-label">Company</label>
+                                                    <div class="col-md-7">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-sm-5 col-form-label">Zodiac
+                                                        Sign</label>
+                                                    <div class="col-md-7">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-sm-5 col-form-label">No. of
+                                                        Children</label>
+                                                    <div class="col-md-7">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword"
+                                                        class="col-sm-5 col-form-label">Religion</label>
+                                                    <div class="col-md-7">
+                                                        <mat-form-field style="width: 70%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                        <master-search></master-search>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword"
+                                                        class="col-sm-5 col-form-label">Category</label>
+                                                    <div class="col-md-7">
+                                                        <mat-form-field style="width: 70%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                        <master-search></master-search>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-sm-5 col-form-label">Cust
+                                                        Status</label>
+                                                    <div class="col-md-7">
+                                                        <mat-form-field style="width: 70%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                        <master-search></master-search>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword"
+                                                        class="col-sm-5 col-form-label">Income</label>
+                                                    <div class="col-md-6">
+                                                        <mat-form-field style="width: 70%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-sm-5 col-form-label">Blood
+                                                        Group</label>
+                                                    <div class="col-md-5">
+                                                        <mat-form-field style="width: 70%;">
+                                                            <mat-select>
+                                                                <mat-option value="Cash">Cash</mat-option>
+                                                                <mat-option></mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-sm-5 col-form-label">Cust. ID
+                                                        Type</label>
+                                                    <div class="col-md-6">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-sm-5 col-form-label">Cust.
+                                                        ID</label>
+                                                    <div class="col-md-6">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-sm-5 col-form-label">Cust ID
+                                                        Exp Date</label>
+                                                    <div class="col-md-6">
+                                                        <mat-form-field>
+                                                            <input matInput [matDatepicker]="cust" [max]="vocMaxDate"
+                                                                name="cust" placeholder="DD/MM/YYYY" DateValidation />
+                                                            <mat-datepicker-toggle matSuffix
+                                                                [for]="cust"></mat-datepicker-toggle>
+                                                            <mat-datepicker [startAt]="currentDate"
+                                                                #cust></mat-datepicker>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword"
+                                                        class="col-sm-5 col-form-label">P.O.Box</label>
+                                                    <div class="col-md-6">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <input matInput="text" name="voctype" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword"
+                                                        class="col-form-label">Address(Personal)</label>
+                                                </div>
+                                                <div class="row">
+                                                    <textarea style="width: 90%;height: 100px;
+                                                    margin-left: 7px;margin-top: 7px;" formControlName="BillToAddress">
+                                               </textarea>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-form-label">Official
+                                                        Address</label>
+                                                </div>
+                                                <div class="row">
+                                                    <textarea style="width: 90%;height: 100px;
+                                                    margin-left: 7px;margin-top: 7px;" formControlName="BillToAddress">
+                                               </textarea>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-form-label">Delivery
+                                                        Address</label>
+                                                </div>
+                                                <div class="row">
+                                                    <textarea style="width: 90%;height: 100px;
+                                                             margin-left: 7px;margin-top: 7px;"
+                                                        formControlName="BillToAddress">
+                                                        </textarea>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <label for="inputPassword" class="col-form-label">Remarks</label>
+                                                </div>
+                                                <div class="row">
+                                                    <textarea style="width: 90%;height: 100px;
+                                                    margin-left: 7px;margin-top: 7px;" formControlName="BillToAddress">
+                                               </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Preference">
+                                <div class="row mb-1">
+                                    <div class="col-md-6 border">
+                                        <div class="row mb-1">
+                                            <div class="col-md-12">
+                                                <h6>Prefered Contact</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>SMS</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>PHONE CALL</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>EMAIL</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>WHATSAPP</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>NOT INTERESTED</mat-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 border">
+                                        <div class="row mb-1">
+                                            <div class="row mb-1">
+                                                <div class="col-md-12">
+                                                    <h6>Known About</h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="col-md-5 pt-3">
+                                                    <mat-checkbox>SMS</mat-checkbox>
+                                                </div>
+                                                <div class="col-md-5 pt-3">
+                                                    <mat-checkbox>PHONE CALL</mat-checkbox>
+                                                </div>
+                                                <div class="col-md-5 pt-3">
+                                                    <mat-checkbox>EMAIL</mat-checkbox>
+                                                </div>
+                                                <div class="col-md-5 pt-3">
+                                                    <mat-checkbox>WHATSAPP</mat-checkbox>
+                                                </div>
+                                                <div class="col-md-5 pt-3">
+                                                    <mat-checkbox>NOT INTERESTED</mat-checkbox>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="col-md-5 pt-3">
+                                                    <mat-checkbox>NEWSPAPER</mat-checkbox>
+                                                </div>
+                                                <div class="col-md-5 pt-3">
+                                                    <mat-checkbox>RADIO</mat-checkbox>
+                                                </div>
+                                                <div class="col-md-5 pt-3">
+                                                    <mat-checkbox>OTHERS</mat-checkbox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </mat-tab>
+                            <mat-tab label="Interested In">
+                                <div class="row mb-1">
+                                    <div class="col-md-12">
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>Promotional Offers</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>Sports Events</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>Charity Events</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>Stage Shows</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>Seminars</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-5 pt-3">
+                                            <mat-checkbox>Personal Skills</mat-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Opinion">
+                                <div class="row mb-1">
+                                    <div class="col-md-10">
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-5 col-form-label">Product
+                                                Selection</label>
+                                            <div class="col-md-7">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-5 col-form-label">Service</label>
+                                            <div class="col-md-7">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-5 col-form-label">Making
+                                                Changes</label>
+                                            <div class="col-md-7">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-5 col-form-label">Brand
+                                                Name</label>
+                                            <div class="col-md-7">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-5 col-form-label">Buy-Back
+                                                Policy</label>
+                                            <div class="col-md-7">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-5 col-form-label">Location and
+                                                Parking Facility</label>
+                                            <div class="col-md-7">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Rating">
+                                <div class="row mb-1">
+                                    <div class="col-md-12 p-5">
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Staff
+                                                Courtesy</label>
+                                            <div class="col-md-6">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Product knowledge
+                                                of our staff</label>
+                                            <div class="col-md-6">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Location and
+                                                ambience of shop</label>
+                                            <div class="col-md-6">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Variety and
+                                                quality of jewellery</label>
+                                            <div class="col-md-6">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Overall
+                                                experience</label>
+                                            <div class="col-md-6">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Showroom
+                                                Accessibility</label>
+                                            <div class="col-md-6">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-6 col-form-label">Product Range
+                                                Availability</label>
+                                            <div class="col-md-6">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Other Details">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="row mb-1">
+                                            <h6>Other Details</h6>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <h6>Details</h6>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">Reason of
+                                                Purchase</label>
+                                            <div class="col-md-8">
+                                                <mat-form-field>
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">Gift Purchased
+                                                For</label>
+                                            <div class="col-md-8">
+                                                <mat-form-field style="width: 70%;">
+                                                    <input matInput="text" name="voctype" />
+                                                </mat-form-field>
+                                                <master-search></master-search>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">Occasion Of
+                                                Purchase</label>
+                                            <div class="col-md-8">
+                                                <mat-form-field style="width: 70%;">
+                                                    <input matInput="text" name="voctype" />
+                                                </mat-form-field>
+                                                <master-search></master-search>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">Age Group</label>
+                                            <div class="col-md-8">
+                                                <mat-form-field style="width: 70%;">
+                                                    <input matInput="text" name="voctype" />
+                                                </mat-form-field>
+                                                <master-search></master-search>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-7 col-form-label">Did You Get What
+                                                You Are Looking For</label>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-md-12">
+                                                <mat-form-field style="width:70%">
+                                                    <mat-select>
+                                                        <mat-option value="Cash">Cash</mat-option>
+                                                        <mat-option></mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword" class="col-sm-7 col-form-label">Will See You in
+                                                Next Visit Within:</label>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col-md-12">
+                                                <mat-form-field style="width: 70%;">
+                                                    <input matInput="text" name="voctype" />
+                                                </mat-form-field>
+                                                <master-search></master-search>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label for="inputPassword"
+                                                class="col-sm-4 col-form-label">Occupation</label>
+                                            <div class="col-md-8">
+                                                <mat-form-field style="width: 70%;">
+                                                    <input matInput="text" name="voctype" />
+                                                </mat-form-field>
+                                                <master-search></master-search>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-2">
+                <div class="row mb-1">
+                    <div class="col-md-10 p-2 mt-1">
+                        <div class="icons">
+                            <div class="image_box"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-6">
+                        <div class="text-center d-flex justify-content-between mt-2">
+                            <div class="p-1 bd-highlight">
+                                <button type="button" class="btn btn-primary add-btn">
+                                    <i class="fas fa-camera-retro"></i>  
+                                </button>
+                            </div>
+                            <div class="p-1 bd-highlight">
+                                <button type="button" class="btn btn-primary add-btn">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Created Branch</label>
+                    <div class="col-md-8">
+                        <mat-form-field style="width: 100%;">
+                            <input matInput="text" name="voctype" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Opened On</label>
+                    <div class="col-md-8">
+                        <mat-form-field style="width:100%">
+                            <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="dob" placeholder="DD/MM/YYYY"
+                                DateValidation />
+                            <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-11 border">
+                        <div class="row mb-1 text-center">
+                            <label for="inputPassword" class="col-form-label">Last Sales Details</label>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-12">
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Voucher</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 100%;">
+                                            <input matInput="text" name="voctype" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Date</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 100%;">
+                                            <input matInput="text" name="voctype" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Branch Loc.</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 100%;">
+                                            <input matInput="text" name="voctype" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Amount</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 100%;">
+                                            <input matInput="text" name="voctype" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">TotalSales</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 100%;">
+                                            <input matInput="text" name="voctype" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
