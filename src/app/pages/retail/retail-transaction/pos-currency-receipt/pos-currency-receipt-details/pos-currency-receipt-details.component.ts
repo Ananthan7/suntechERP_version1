@@ -266,7 +266,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "ACCODE": this.posCurrencyReceiptDetailsForm.value.debitAmount,
         "CURRENCY_CODE": this.posCurrencyReceiptDetailsForm.value.currencyCode,
         "CURRENCY_RATE": this.posCurrencyReceiptDetailsForm.value.currencyRate,
-        "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
+        "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountCc, // functionalities not started so assigned like this
+        // "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         "AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.amountCc,
         "HEADER_AMOUNT": 0,
         "CHEQUE_NO": CHEQUE_NO || "",
@@ -289,7 +290,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "DT_VOCTYPE": "",
         "DT_VOCNO": 0,
         "DT_YEARMONTH": "",
-        "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalFc || 0,
+        "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalLc || 0,
+        // "TOTAL_AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.totalFc || 0,
         "TOTAL_AMOUNTCC": this.posCurrencyReceiptDetailsForm.value.totalLc || 0,
         "CGST_PER": 0,
         "CGST_AMOUNTFC": 0,
@@ -410,6 +412,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     });
   }
 
+  changeAmountLc(event: any){
+
+  }
 
 
   setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
+import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-customer-master-main.component';
 @Component({
   selector: 'app-retail-master',
   templateUrl: './retail-master.component.html',
@@ -19,6 +20,9 @@ export class RetailMasterComponent implements OnInit {
   orderedItemsHead: any[] = [];
   tableName: any;
   PERMISSIONS: any
+  componentName: any;
+  private componentDbList: any = {}
+  componentSelected: any;
 
   constructor(
     private CommonService: CommonServiceService,
@@ -28,6 +32,10 @@ export class RetailMasterComponent implements OnInit {
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
     this.getMasterGridData()
+    this.menuTitle = this.CommonService.getModuleName()
+
+    this.componentName = this.CommonService.getFormComponentName()
+
   }
 
   ngOnInit(): void {
@@ -65,20 +73,31 @@ export class RetailMasterComponent implements OnInit {
       this.menuTitle = data
     }
     let contents: any;
-    switch (this.menuTitle) {
-      case 'Sale':
-        // contents = AddPosComponent
-        break;
-      case 'POINT OF SALE CURRENCY RECEIPT':
-        // contents = PosCurrencyReceiptComponent
-        break;
-      //continue adding components using case then break
-      default:
-        this.snackBar.open('No Response Found!', 'Close', {
-          duration: 3000,
-        });
-        return;
+    // switch (this.menuTitle) {
+    //   case 'Sale':
+    //     // contents = AddPosComponent
+    //     break;
+    //   case 'POINT OF SALE CURRENCY RECEIPT':
+    //     // contents = PosCurrencyReceiptComponent
+    //     break;
+    //   //continue adding components using case then break
+    //   default:
+    //     this.snackBar.open('No Response Found!', 'Close', {
+    //       duration: 3000,
+    //     });
+    //     return;
+    // }
+    this.componentDbList = {
+      'PosCustomerMaster': PosCustomerMasterMainComponent, // not getting from api
+  
+      // Add components and update in operationals > menu updation grid form component name
     }
+    if (this.componentDbList[this.componentName]) {
+      this.componentSelected = this.componentDbList[this.componentName]
+    } else {
+      this.CommonService.showSnackBarMsg('Module Not Created')
+    }
+
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
       backdrop: 'static',

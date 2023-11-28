@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
+import { PosDailyClosingSummaryComponent } from './pos-daily-closing-summary/pos-daily-closing-summary.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -41,8 +42,8 @@ export class RetailReportsComponent implements OnInit {
   //  open forms in modal
   openModalView(data?: any) {
     this.componentDbList = {
-      // 'DiamondSalesorderComponent': DiamondSalesorderComponent,
-      // 'DiamondQuotationComponent': DiamondQuotationComponent,
+      'PosDailyclosingSummary': PosDailyClosingSummaryComponent,
+      // 'DiamondQuotationComponent': RetailAdvanceReceiptRegisterComponent,
   
       // Add components and update in operationals > menu updation grid form component name
     }

@@ -110,7 +110,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
     vocType: [''],
-    vocNo: [''],
+    vocNo: ['1'],
     vocDate: [''],
     partyCode: [''],
     partyCodeDesc: [''],  // No

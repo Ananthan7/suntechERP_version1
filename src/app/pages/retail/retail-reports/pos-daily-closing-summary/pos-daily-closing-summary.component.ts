@@ -11,11 +11,13 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   columnhead:any[] = ['No.Inv','Amt.Rcvd','Gold','Dia & Other'];
-  columnheadTransaction:any[] = ['Vouchar','No.Inv','Amount'];
-  columnheadMetal:any[] = ['Division','Type','Pcs','Pure Wt','St.Qty','St.Amt','Mkg.Rate','Mkg.Value','Metal Value','Total Amount'];
+  columnheadTransaction:any[] = ['Voucher','No.Inv','Amount'];
+  columnheadMetal:any[] = ['Division','Type','Pcs','Gms','Pure Wt','St.Qty','St.Amt','Mkg.Rate','Mkg.Value','Metal Value','Total Amount'];
   columnheadDiamond:any[] = ['Division','Type','Pcs','Weight',' Amount'];
   columnheadReceipt:any[] = ['Rcvd.In',' Amount'];
   columnheadScrap:any[] = ['Item Code','Gross Wt',' Amount'];
+  columnheadSales:any[] = ['Salesman','#Docs','Tot Amount','Gold','Dia & Others','Mkg.Value'];
+
   divisionMS: any = 'ID';
 
   constructor(
