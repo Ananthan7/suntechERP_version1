@@ -275,12 +275,12 @@ export class DiamondSalesorderComponent implements OnInit {
     }
     let COMPACCODE = this.commonService.getCompanyParamValue('COMPACCODE')
     if (COMPACCODE == 'SUNTECH') {
-      this.openDetailForm(CompanyDetailComponent,data)
+      this.openDetailForm(CompanyDetailComponent, data)
     } else {
-      this.openDetailForm(AddNewdetailComponent,data)
+      this.openDetailForm(AddNewdetailComponent, data)
     }
   }
-  
+
   // use: save value setting section
   private setValuesToHeaderGrid(result: any): void {
     console.log(result, 'DATA COMMING TO HEADER');
@@ -785,10 +785,8 @@ export class DiamondSalesorderComponent implements OnInit {
   //partyCode validate
   partyCodeChange(event: any) {
     if (event.target.value == '') return
-    if (!this.commonService.branchCode || this.commonService.branchCode == '') {
-      this.commonService.showSnackBarMsg('MSG1531')
-      return
-    }
+    if (!this.validateNotEmpty(this.commonService.branchCode, 'MSG1531')) return;
+
     let postData = {
       "SPID": "001",
       "parameter": {
@@ -903,51 +901,27 @@ export class DiamondSalesorderComponent implements OnInit {
     this.SalesmanData.SEARCH_VALUE = event.target.value
   }
 
-
   private HeaderValidate(): boolean {
-    if (this.PartyDetailsOrderForm.value.voucherType == '') {
-      this.commonService.toastErrorByMsgId('MSG1942');
-      // txtVocType.Focus();
-      return false;
-    }
-    // if (txtVocNumber.Text.Trim() == string.Empty) {
-    //   MessageBox.Show(objCommonFunctions.GetMessage("MSG1940"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);//"Voucher Number Cannot Be Empty"
-    //   txtVocNumber.Focus();
-    //   return false;
-    // }
-    if (this.PartyDetailsOrderForm.value.voucherType == '') {
-      this.commonService.toastErrorByMsgId('MSG1549');
-      return false;
-    }
-    if (this.PartyDetailsOrderForm.value.partyCurrencyRate == '') {
-      this.commonService.toastErrorByMsgId('MSG1552');
-      return false;
-    }
-    if (this.PartyDetailsOrderForm.value.ItemCurrencyRate == '') {
-      this.commonService.toastErrorByMsgId('MSG1353');
-      return false;
-    }
-    if (this.PartyDetailsOrderForm.value.ItemCurrency == '') {
-      this.commonService.toastErrorByMsgId('MSG1352');
-      return false;
-    }
-    if (this.PartyDetailsOrderForm.value.partyCurrencyRate == '') {
-      this.commonService.toastErrorByMsgId('MSG1550');
-      return false;
-    }
-    if (this.PartyDetailsOrderForm.value.SalesmanCode == '') {
-      this.commonService.toastErrorByMsgId('MSG1767');
-      return false;
-    }
-    if (this.PartyDetailsOrderForm.value.orderType == '') {
-      this.commonService.toastErrorByMsgId('MSG1550');
-      return false;
-    }
-    // if (StaticValues.strCOMPANYACCODE == "SUNTECH" && objSqlObjectTrans.Empty2zero(txtAmc_Per.Text) <= 0 && strMainVocType.Trim() == "DSO") {
-    //   this.commonService.toastErrorByMsgId('MSG1550');
-    //   return false;
-    // }
+    const formValue = this.PartyDetailsOrderForm.value;
 
+    if (!this.validateNotEmpty(formValue.voucherType, 'MSG1942')) return false;
+    if (!this.validateNotEmpty(formValue.partyCurrencyRate, 'MSG1552')) return false;
+    if (!this.validateNotEmpty(formValue.ItemCurrencyRate, 'MSG1353')) return false;
+    if (!this.validateNotEmpty(formValue.ItemCurrency, 'MSG1352')) return false;
+    if (!this.validateNotEmpty(formValue.partyCurrencyRate, 'MSG1550')) return false;
+    if (!this.validateNotEmpty(formValue.SalesmanCode, 'MSG1767')) return false;
+    if (!this.validateNotEmpty(formValue.orderType, 'MSG1550')) return false;
+
+    // Additional conditions can be added here
+
+    return true;
+  }
+
+  private validateNotEmpty(value: string, errorMessageId: string): boolean {
+    if (!value) {
+      this.commonService.toastErrorByMsgId(errorMessageId);
+      return false;
+    }
     return true;
   }
 
@@ -975,7 +949,7 @@ export class DiamondSalesorderComponent implements OnInit {
   }
 
 
-  openDetailForm(component:any,dataToComponent: any){
+  openDetailForm(component: any, dataToComponent: any) {
     const modalRef: NgbModalRef = this.modalService.open(component, {
       size: 'xl',
       backdrop: true,//'static'

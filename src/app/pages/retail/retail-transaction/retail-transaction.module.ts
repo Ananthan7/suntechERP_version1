@@ -24,6 +24,8 @@ import { SchemeRegisterComponent } from './scheme-register/scheme-register.compo
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
 import { PosDailyClosingSummaryComponent } from './pos-daily-closing-summary/pos-daily-closing-summary.component';
+import { RetailAdvanceReceiptRegisterComponent } from './retail-advance-receipt-register/retail-advance-receipt-register.component';
+import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
 
 
 
@@ -45,6 +47,8 @@ import { PosDailyClosingSummaryComponent } from './pos-daily-closing-summary/pos
     TouristVatRefundVerificationComponent,
     AdvanceReturnComponent,
     PosDailyClosingSummaryComponent,
+    RetailAdvanceReceiptRegisterComponent,
+    PosSalesOrderCancellationComponent,
     CustomDateFormat1,
     CustomDateFormat2
   ],

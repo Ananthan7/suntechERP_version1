@@ -696,9 +696,11 @@ export class AddNewdetailComponent implements OnInit {
     let TotStone_Wt: any = (dblStone_Wt * this.diamondSalesDetailForm.value.PCS);
     let TotGross_Wt: any = (dblMetal_Wt + (dblStone_Wt / 5)) * this.diamondSalesDetailForm.value.PCS;
 
-    TotMetal_Wt = this.commonService.decimalQuantityFormat(TotMetal_Wt, 'METAL')
-    TotStone_Wt = this.commonService.decimalQuantityFormat(TotStone_Wt, 'STONE')
-    TotGross_Wt = this.commonService.decimalQuantityFormat(TotGross_Wt, 'METAL')
+    TotMetal_Wt = this.commonService.emptyToZero (TotMetal_Wt)
+    TotStone_Wt = this.commonService.emptyToZero(TotStone_Wt)
+    TotGross_Wt = this.commonService.emptyToZero(TotGross_Wt)
+    console.log(TotGross_Wt);
+    
     this.summaryDetailData.TotMetal_Wt = TotMetal_Wt
     this.summaryDetailData.TotStone_Wt = TotStone_Wt
 
@@ -709,9 +711,9 @@ export class AddNewdetailComponent implements OnInit {
     let txtCharge3FC: number = 0;//todo
     let txtCharge5FC: number = 0;//todo
 
-    this.diamondSalesDetailForm.controls.GROSS_WT.setValue(this.commonService.emptyToZero(TotGross_Wt));
-    this.diamondSalesDetailForm.controls.METAL_WT.setValue(this.commonService.emptyToZero(TotMetal_Wt));
-    this.diamondSalesDetailForm.controls.STONE_WT.setValue(this.commonService.emptyToZero(TotStone_Wt));
+    this.diamondSalesDetailForm.controls.GROSS_WT.setValue(this.commonService.decimalQuantityFormat(TotGross_Wt, 'METAL'));
+    this.diamondSalesDetailForm.controls.METAL_WT.setValue(this.commonService.decimalQuantityFormat(TotMetal_Wt, 'METAL'));
+    this.diamondSalesDetailForm.controls.STONE_WT.setValue(this.commonService.decimalQuantityFormat(TotStone_Wt, 'STONE'));
     this.summaryDetailForm.controls.SETTING.setValue(this.commonService.emptyToZero(txtCharge1FC));
     this.summaryDetailForm.controls.LABOUR.setValue(this.commonService.emptyToZero(txtCharge4FC));
 
@@ -732,7 +734,9 @@ export class AddNewdetailComponent implements OnInit {
     this.diamondSalesDetailForm.controls.RATEFC.setValue(this.customizeComma({ value: dblTotRate }))
     this.summaryDetailData.dblTotRate = dblTotRate
     
-    let sumAMOUNT = this.customizeComma({ value: this.diamondSalesDetailForm.value.PCS * dblTotRate })
+    let sumAMOUNT = this.commonService.commaSeperation(this.diamondSalesDetailForm.value.PCS * dblTotRate)
+    console.log(sumAMOUNT);
+    
     this.diamondSalesDetailForm.controls.AMOUNT.setValue(sumAMOUNT)
     
     // price factors calculation
@@ -780,7 +784,7 @@ export class AddNewdetailComponent implements OnInit {
     // txtLoad_Amt = dblLoad_Amt.ToString();
     // txtDISCAMTFC = dblDisc_Amt.ToString();
 
-    this.diamondSalesDetailForm.controls.Margin.setValue(this.commonService.emptyToZero(dblDuty_Amt))
+    // this.diamondSalesDetailForm.controls.Margin.setValue(this.commonService.emptyToZero(dblDuty_Amt))
     let txtItemRateFC = dblTotRate;
 
     this.diamondSalesDetailForm.controls.RATEFC.setValue(txtItemRateFC)

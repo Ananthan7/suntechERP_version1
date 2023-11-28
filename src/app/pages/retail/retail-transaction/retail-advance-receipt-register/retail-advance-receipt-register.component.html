@@ -1,0 +1,146 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> Retail Advance Receipt Register
+    </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="savePdf()" (cancelClick)="close()"></modal-header>
+<!-- content section -->
+<div class="container-fluid pt-3">
+    <form>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Branch</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <mat-select>
+                                <mat-option value="HO">HO</mat-option>
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Filter</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">From</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">To</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Show</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <mat-select>
+                                <mat-option value="ALL">ALL</mat-option>
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Date</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="fromDate" [max]="vocMaxDate" name="fromDate"
+                                placeholder="DD/MM/YYYY" DateValidation />
+                            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="toDate" [max]="vocMaxDate" name="toDate"
+                                placeholder="DD/MM/YYYY" DateValidation />
+                            <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">SalesMan :</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <input matInput ="text"  name="salesman"
+                               />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <input matInput ="text"  name="salesman"
+                               />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Report To</label>
+                    <div class="col-md-2">
+                        <mat-form-field>
+                            <mat-select>
+                                <mat-option value="PERVIEW">PERVIEW</mat-option>
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <div id="pdf_container" [hidden]="true">
+        <div class="scheme_register_pdf">
+            <div class="row border_bottom">
+                <div class="col-md-6">
+                    <div class="left_content">
+                        <h4>POS ADVANCE RECEIPT REGISTER</h4>
+                        <P>From 01/01/2023 To 20/11/2023</P>
+                        <p>Salesman Range :TO SM</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="right_content text-end">
+                        <h4>DAVINCI JEWLERRY -HAWALLY</h4>
+                        <p>Hawallly, Lbn Khaldoun St, Block 1,'Al Nafisy Building 10</p>
+                    </div>
+                    <div class="email_address text-end">
+                        <p>Tel :</p>
+                        <p>Fax :</p>
+                        <p>Email :</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Voc.No</th>
+                                    <th scope="col">Voc.Date</th>
+                                    <th scope="col">Sales Man Name</th>
+                                    <th scope="col">Customer Details</th>
+                                    <th scope="col">Remarks</th>
+                                    <th scope="col">Recieved Amount</th>
+                                    <th scope="col">Balance Amount</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

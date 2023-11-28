@@ -25,6 +25,8 @@ import { CustomerPriceSettingComponent } from './customer-price-setting/customer
 import { CustomerPricingMasterComponent } from './customer-pricing-master/customer-pricing-master.component';
 import { CostCentreDiamondComponent } from './cost-centre-diamond/cost-centre-diamond.component';
 import { CostCentreDiamondDetailsComponent } from './cost-centre-diamond/cost-centre-diamond-details/cost-centre-diamond-details.component';
+import { EnterMetalDetailsComponent } from './watch-master/enter-metal-details/enter-metal-details.component';
+import { EnterStoneDetailsComponent } from './watch-master/enter-stone-details/enter-stone-details.component';
 
 
 @NgModule({
@@ -51,6 +53,8 @@ import { CostCentreDiamondDetailsComponent } from './cost-centre-diamond/cost-ce
     CustomerPricingMasterComponent,
     CostCentreDiamondComponent,
     CostCentreDiamondDetailsComponent,
+    EnterMetalDetailsComponent,
+    EnterStoneDetailsComponent,
   ],
   imports: [
     CommonModule,

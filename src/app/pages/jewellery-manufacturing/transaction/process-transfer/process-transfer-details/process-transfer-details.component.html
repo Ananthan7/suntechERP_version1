@@ -9,7 +9,7 @@
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="processTransferdetailsForm">
-      <div class="container-fluid pt-3">
+      <div class="p-3">
         <div class="row">
           <div class="col-md-6">
             <div class="row align-items-center mb-2">
@@ -219,7 +219,7 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="FromJobPcsTo" />
+                            formControlName="ToJobPcs" />
                         </mat-form-field>
                       </td>
                       <th>Stock Code</th>
@@ -260,7 +260,7 @@
                       <!-- quantity -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="text" matInput formControlName="scrapQuantity" />
                         </mat-form-field>
                       </td>
                       <!-- location -->
@@ -500,14 +500,14 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="FromJobPcs" />
+                            formControlName="GrossWeightFrom" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="FromJobPcsTo" />
+                            formControlName="GrossWeightTo" />
                         </mat-form-field>
                       </td>
                       <td>
@@ -523,14 +523,14 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="GrossWeightFrom" />
+                            formControlName="StoneWeightFrom" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="GrossWeightTo" />
+                            formControlName="StoneWeightTo" />
                         </mat-form-field>
                       </td>
                       <!-- stockcode -->
