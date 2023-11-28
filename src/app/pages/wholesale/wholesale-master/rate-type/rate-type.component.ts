@@ -42,21 +42,23 @@ export class RateTypeComponent implements OnInit {
 
   metalCodeSelected(e:any){
     console.log(e);
-    this.metalrateFrom.controls.metal.setValue(e.COST_CODE);
+    this.ratetypeFrom.controls.metal.setValue(e.COST_CODE);
   }
   
 
-  metalrateFrom: FormGroup = this.formBuilder.group({
+ ratetypeFrom: FormGroup = this.formBuilder.group({
     metal:[''],
-    rateType:[''],
-    convFactGMS:[''],
+    ratetype:[''],
+    convfactGMS:[''],
     currency:[''],
-    currRate:[''],
-    rateVariance:[''],
-    posMarginMin:[''],
-    posMarginMax:[''],
-    convFactOZ:[''],
-    addOnRate:[''],
+    status :[''],
+    currrate:[''],
+    ratevariance:[''],
+    posmarginmin:[''],
+    posmarginmax:[''],
+    convfactOZ:[''],
+    addonrate:[''],
+    defaultratetype:[''],
   });
  
   ngOnInit(): void {
@@ -78,24 +80,24 @@ export class RateTypeComponent implements OnInit {
   
     let API = 'RateTypeMaster/InsertRateTypeMaster'
     let postData = {
-      "RATE_TYPE": "string",
+      "RATE_TYPE": this.ratetypeFrom.value.ratetype || "",
       "DIVISION_CODE": "s",
-      "VARIANCE": 0,
-      "POS_MARGIN_MIN": 0,
-      "POS_MARGIN_MAX": 0,
-      "CONV_FACTOR": 0,
-      "CONV_FACTOR_OZ": 0,
-      "CURRENCY_CODE": "stri",
+      "VARIANCE": this.ratetypeFrom.value.ratevariance || "",
+      "POS_MARGIN_MIN": this.ratetypeFrom.value.posmarginmin || "",
+      "POS_MARGIN_MAX": this.ratetypeFrom.value.posmarginmax || "",
+      "CONV_FACTOR": this.ratetypeFrom.value.convfactGMS || "",
+      "CONV_FACTOR_OZ": this.ratetypeFrom.value.convfactOZ || "",
+      "CURRENCY_CODE": this.ratetypeFrom.value.currency || "",
       "MUL_DIV": "s",
-      "CURRENCY_RATE": 0,
-      "DEFAULT_RTYPE": true,
+      "CURRENCY_RATE": this.ratetypeFrom.value.currrate || "",
+      "DEFAULT_RTYPE": this.ratetypeFrom.value.defaultratetype || "",
       "WHOLESALE_RATE": 0,
       "POS_RATE": 0,
       "MID": 0,
       "SYSTEM_DATE": "2023-11-24T12:15:04.814Z",
       "RTMBRANCH_CODE": "string",
       "POP_RATE": 0,
-      "ADD_ON_RATE": 0
+      "ADD_ON_RATE": this.ratetypeFrom.value.addonrate || "",
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -131,24 +133,24 @@ export class RateTypeComponent implements OnInit {
     let API = '/RateTypeMaster/UpdateRateTypeMaster/'+this.content.RATE_TYPE
     let postData = 
     {
-      "RATE_TYPE": "string",
+      "RATE_TYPE": this.ratetypeFrom.value.ratetype || "",
       "DIVISION_CODE": "s",
-      "VARIANCE": 0,
-      "POS_MARGIN_MIN": 0,
-      "POS_MARGIN_MAX": 0,
-      "CONV_FACTOR": 0,
-      "CONV_FACTOR_OZ": 0,
-      "CURRENCY_CODE": "stri",
+      "VARIANCE": this.ratetypeFrom.value.ratevariance || "",
+      "POS_MARGIN_MIN": this.ratetypeFrom.value.posmarginmin || "",
+      "POS_MARGIN_MAX": this.ratetypeFrom.value.posmarginmax || "",
+      "CONV_FACTOR": this.ratetypeFrom.value.convfactGMS || "",
+      "CONV_FACTOR_OZ": this.ratetypeFrom.value.convfactOZ || "",
+      "CURRENCY_CODE": this.ratetypeFrom.value.currency || "",
       "MUL_DIV": "s",
-      "CURRENCY_RATE": 0,
-      "DEFAULT_RTYPE": true,
+      "CURRENCY_RATE": this.ratetypeFrom.value.currrate || "",
+      "DEFAULT_RTYPE": this.ratetypeFrom.value.defaultratetype || "",
       "WHOLESALE_RATE": 0,
       "POS_RATE": 0,
       "MID": 0,
-      "SYSTEM_DATE": "2023-11-24T12:16:27.639Z",
+      "SYSTEM_DATE": "2023-11-24T12:15:04.814Z",
       "RTMBRANCH_CODE": "string",
       "POP_RATE": 0,
-      "ADD_ON_RATE": 0
+      "ADD_ON_RATE": this.ratetypeFrom.value.addonrate || "",
     }
     
   
