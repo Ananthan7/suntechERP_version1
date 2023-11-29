@@ -43,7 +43,7 @@ export class RetailTransactionComponent implements OnInit {
 
   ngOnInit(): void {
     if (localStorage.getItem('AddNewFlag') && localStorage.getItem('AddNewFlag') == '1') {
-      this.openModalView('Sale')
+      this.openModalView()
       localStorage.removeItem('AddNewFlag')
     }
   }
@@ -61,9 +61,6 @@ export class RetailTransactionComponent implements OnInit {
   }
   /**USE: open form components in modal*/
   openModalView(data?: any) {
-    if (data && data == 'Sale') {
-      this.menuTitle = data
-    }
     this.componentDbList = {
       'AddPosComponent': AddPosComponent,
       'PosCurrencyReceiptComponent': PosCurrencyReceiptComponent,
