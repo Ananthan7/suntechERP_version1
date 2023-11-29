@@ -55,11 +55,6 @@ import { DxDataGridModule } from 'devextreme-angular';
     CommonModule,
     RetailTransactionRoutingModule,
     SharedModule,
-    MatAutocompleteModule,
-    MatDatepickerModule,
-    MatSelectModule,
-    DxDataGridModule,
-
   ],
 
 
