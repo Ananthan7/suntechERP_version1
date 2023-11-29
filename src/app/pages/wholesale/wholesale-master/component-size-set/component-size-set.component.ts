@@ -64,8 +64,8 @@ subscriptions: any;
     let API = 'ComponentSizeSetMaster/InsertComponentSizeSetMaster'
     let postData = {
       "MID": 0,
-      "COMPSET_CODE":  this.componentsizesetmasterForm.value.toprocess || "",
-      "DESCRIPTION":  this.componentsizesetmasterForm.value.toprocess || "",
+      "COMPSET_CODE":  this.componentsizesetmasterForm.value.code || "",
+      "DESCRIPTION":  this.componentsizesetmasterForm.value.description || "",
       "detail": [
         {
           "UNIQUEID": 0,

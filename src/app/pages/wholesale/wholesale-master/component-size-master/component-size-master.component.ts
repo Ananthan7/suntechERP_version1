@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-component-size-master',
   templateUrl: './component-size-master.component.html',
@@ -32,7 +33,7 @@ export class ComponentSizeMasterComponent implements OnInit {
   componentsizemasterForm: FormGroup = this.formBuilder.group({
     code:[''],
     desc : [''],
-    height:[''],
+    height:[],
     width : [''],
     length:[''],
     radius:[''],
@@ -43,7 +44,8 @@ export class ComponentSizeMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
   formSubmit(){
-
+  console.log(this.componentsizemasterForm.value);
+  
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
@@ -58,10 +60,10 @@ export class ComponentSizeMasterComponent implements OnInit {
       "MID": 0,
       "COMPSIZE_CODE": this.componentsizemasterForm.value.code || "",
       "DESCRIPTION": this.componentsizemasterForm.value.desc || "",
-      "RADIUS":this.componentsizemasterForm.value.radius || "",
-      "LENGTH": this.componentsizemasterForm.value.length || "",
-      "WIDTH": this.componentsizemasterForm.value.width || "",
-      "HEIGHT": this.componentsizemasterForm.value.height || ""
+      "RADIUS":this.componentsizemasterForm.value.radius || 0,
+      "LENGTH": this.componentsizemasterForm.value.length || 0,
+      "WIDTH": this.componentsizemasterForm.value.width || 0,
+      "HEIGHT": this.componentsizemasterForm.value.height || 0
     }
     
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
