@@ -24,6 +24,8 @@ import { SchemeRegisterComponent } from './scheme-register/scheme-register.compo
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
   import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
+import { PcrSelectionComponent } from './advance-return/pcr-selection/pcr-selection.component';
+import { DxDataGridModule } from 'devextreme-angular';
 
 
 
@@ -45,6 +47,7 @@ import { AdvanceReturnComponent } from './advance-return/advance-return.componen
     TouristVatRefundVerificationComponent,
     AdvanceReturnComponent,
     PosSalesOrderCancellationComponent,
+    PcrSelectionComponent,
     CustomDateFormat1,
     CustomDateFormat2
   ],
@@ -54,7 +57,9 @@ import { AdvanceReturnComponent } from './advance-return/advance-return.componen
     SharedModule,
     MatAutocompleteModule,
     MatDatepickerModule,
-    MatSelectModule
+    MatSelectModule,
+    DxDataGridModule,
+
   ],
 
 
