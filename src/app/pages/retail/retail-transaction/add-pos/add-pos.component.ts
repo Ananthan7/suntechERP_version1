@@ -831,6 +831,8 @@ export class AddPosComponent implements OnInit {
     console.log(this.content);
     console.log('====================================');
 
+    if(this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW'){
+
     this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
     this.strBranchcode = this.content.BRANCH_CODE;
     this.vocType = this.content.VOCTYPE;
@@ -838,9 +840,13 @@ export class AddPosComponent implements OnInit {
     this.getRetailSalesMaster(this.content);
     if (this.content.FLAG == "EDIT") {
       this.editOnly = true
-    } else {
+    } 
+    if( this.content.FLAG == 'VIEW') {
       this.viewOnly = true;
     }
+
+  }
+
     // this.acRoute.queryParams.subscribe((params) => {
     //   if (params.vocNo) {
     //     this.queryParams = params;
@@ -6882,6 +6888,7 @@ export class AddPosComponent implements OnInit {
 
   addNew() {
     localStorage.setItem('AddNewFlag', '1')
+    this.content.FLAG = null;
     location.reload();
 
     // if (this.router.url.includes('edit-pos')) this.router.navigateByUrl('/add-pos');

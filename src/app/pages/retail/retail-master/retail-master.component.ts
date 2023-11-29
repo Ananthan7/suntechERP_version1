@@ -98,7 +98,7 @@ export class RetailMasterComponent implements OnInit {
       this.CommonService.showSnackBarMsg('Module Not Created')
     }
 
-    const modalRef: NgbModalRef = this.modalService.open(contents, {
+    const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
       size: 'xl',
       backdrop: 'static',
       keyboard: false,
