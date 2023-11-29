@@ -96,7 +96,9 @@
             </div>
           </div>
         </div>
+        <!-- Tab section starts -->
         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+          <!-- Diamond section starts -->
           <mat-tab label="Diamond Jewellery" *ngIf="designType == 'DIAMOND'">
             <div class="row">
               <div class="p-3">
@@ -123,10 +125,10 @@
                               (focusout)="processMasterValidate($event,'FROM')"
                               formControlName="processFrom" />
                           </mat-form-field>
-                          <!-- <master-search
+                          <master-search
                             [MasterSearchData]="processMasterSearch"
                             (newRowClick)="processCodeFromSelected($event)">
-                          </master-search> -->
+                          </master-search>
                         </div>
                       </td>
                       <td>
@@ -204,7 +206,7 @@
                       <th colspan="3" class="text-center">Transfer to</th>
                       <th>Loss Qty</th>
                       <td><b>%</b></td>
-                      <th rowspan="2">Balance</th>
+                      <th rowspan="2" style="text-align: center;">Balance</th>
                     </tr>
                     <tr>
                       <td>From Job Pcs</td>
@@ -367,7 +369,8 @@
             </div>
 
           </mat-tab>
-          <mat-tab label="Metal Jewellery" *ngIf="designType == 'METAL'">
+          <!-- Metal TAB section starts -->
+          <mat-tab label="Metal Jewellery" *ngIf="designType == 'DIAMOND'">
             <div class="row">
               <div class="p-3">
                 <b>Transfer Details</b>
@@ -387,7 +390,7 @@
                       <th>Std Loss</th>
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="text" matInput formControlName="METAL_quantity" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -398,7 +401,7 @@
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               (focusout)="processMasterValidate($event,'FROM')"
-                              formControlName="processFrom" />
+                              formControlName="METAL_processFrom" />
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
@@ -411,7 +414,7 @@
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
                               (focusout)="processMasterValidate($event,'TO')"
-                              formControlName="processTo" />
+                              formControlName="METAL_processTo" />
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
@@ -422,7 +425,7 @@
                       <td>Act. Loss</td>
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="text" matInput formControlName="METAL_LossBooked" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -432,7 +435,7 @@
                         <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              formControlName="workerFrom" />
+                              formControlName="METAL_workerFrom" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
                             (newRowClick)="workerCodeFromSelected($event)">
@@ -443,18 +446,24 @@
                         <span>
                           <mat-form-field style="width: 110px;">
                             <input type="text" matInput
-                              formControlName="workerTo" />
+                              formControlName="METAL_workerTo" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
                             (newRowClick)="workerCodeToSelected($event)">
                           </master-search>
                         </span>
                       </td>
-                      <td></td>
+                      <td>
+                        <mat-form-field style="width: 110px;">
+                          <input type="text" matInput class="text-right"
+                            MetalDecimalInput
+                            formControlName="METAL_ScrapLocCode" />
+                        </mat-form-field>
+                      </td>
                       <th>Gain</th>
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="text" matInput formControlName="METAL_GainGrWt" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -464,88 +473,112 @@
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="MetalPcsFrom" />
+                            formControlName="METAL_FromStockCode" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="MetalPcsTo" />
+                            formControlName="METAL_ToStockCode" />
                         </mat-form-field>
                       </td>
-                      <td></td>
+                      <td>
+                        <mat-form-field style="width: 110px;">
+                          <input type="text" matInput class="text-right"
+                            MetalDecimalInput
+                            formControlName="METAL_ScrapStockCode" />
+                        </mat-form-field>
+                      </td>
                       <td colspan="2">Balance</td>
                     </tr>
                     <tr><!-- PCS row starts-->
                       <td>PCS</td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="number" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="MetalWeightFrom" />
+                            formControlName="METAL_FromPCS" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="number" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="MetalWeightTo" />
+                            formControlName="METAL_ToPCS" />
                         </mat-form-field>
                       </td>
-                      <td></td>
-                      <td colspan="2"></td>
+                      <td>
+                        <mat-form-field style="width: 110px;">
+                          <input type="number" matInput class="text-right"
+                            MetalDecimalInput
+                            formControlName="METAL_ScrapPCS" />
+                        </mat-form-field>
+                      </td>
+                      <td colspan="2">
+                        <mat-form-field style="width: 110px;">
+                          <input type="number" matInput class="text-right"
+                            MetalDecimalInput
+                            formControlName="METAL_BalPCS" />
+                        </mat-form-field>
+                      </td>
                     </tr>
                     <tr><!-- Gross Weight starts-->
                       <td>Gross Weight</td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="number" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="GrossWeightFrom" />
+                            formControlName="METAL_GrossWeightFrom" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="number" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="GrossWeightTo" />
+                            formControlName="METAL_GrossWeightTo" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="number" matInput formControlName="METAL_ScrapGrWt" />
                         </mat-form-field>
                       </td>
-                      <td colspan="2"></td>
+                      <td colspan="2">
+                        <mat-form-field style="width: 110px;">
+                          <input type="number" matInput class="text-right"
+                            MetalDecimalInput
+                            formControlName="METAL_BalGrWt" />
+                        </mat-form-field>
+                      </td>
                     </tr>
                     <tr><!-- Stone Weight starts-->
                       <th>Stone Weight</th>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
-                            MetalDecimalInput
-                            formControlName="StoneWeightFrom" />
+                          <input type="number" matInput class="text-right"
+                            StoneDecimalInput
+                            formControlName="METAL_StoneWeightFrom" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
-                            MetalDecimalInput
-                            formControlName="StoneWeightTo" />
+                          <input type="number" matInput class="text-right"
+                            StoneDecimalInput
+                            formControlName="METAL_StoneWeightTo" />
                         </mat-form-field>
                       </td>
-                      <!-- stockcode -->
+                      <!-- ScrapStoneWt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput
-                            formControlName="stockCode" />
+                          <input type="number" matInput
+                            formControlName="METAL_ScrapStoneWt" />
                         </mat-form-field>
                       </td>
-                      <!-- quantity -->
+                      <!-- BalStoneWt -->
                       <td colspan="2">
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="number" matInput formControlName="METAL_BalStoneWt" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -553,24 +586,26 @@
                       <td>Iron Weight</td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
-                            formControlName="StonePcsFrom" />
+                          <input type="number" matInput class="text-right"
+                            formControlName="METAL_FromIronWeight" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
-                            formControlName="StonePcsTo" />
+                          <input type="number" matInput class="text-right"
+                            formControlName="METAL_ToIronWt" />
                         </mat-form-field>
                       </td>
+                      <!-- ToIronScrapWt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="number" matInput formControlName="METAL_ToIronScrapWt" />
                         </mat-form-field>
                       </td>
+                      <!-- BalIronWt -->
                       <td colspan="2">
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="number" matInput formControlName="METAL_BalIronWt" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -578,26 +613,28 @@
                       <td>Net Weight</td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="number" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="StoneWeighFrom" />
+                            formControlName="METAL_FromNetWeight" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="number" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="StoneWeightTo" />
+                            formControlName="METAL_ToNetWt" />
                         </mat-form-field>
                       </td>
+                      <!-- METAL_ScrapNetWt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="number" matInput formControlName="METAL_ScrapNetWt" />
                         </mat-form-field>
                       </td>
+                      <!-- BalNetWt -->
                       <td colspan="2">
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="number" matInput formControlName="METAL_BalNetWt" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -605,26 +642,27 @@
                       <td>Pure Weight</td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="number" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="StoneWeighFrom" />
+                            formControlName="METAL_FromPureWt" />
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field style="width: 110px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="number" matInput class="text-right"
                             MetalDecimalInput
-                            formControlName="StoneWeightTo" />
+                            formControlName="METAL_ToPureWt" />
                         </mat-form-field>
                       </td>
+                      <!-- ScrapPureWt -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="number" matInput formControlName="METAL_ScrapPureWt" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="quantity" />
+                          <input type="number" matInput formControlName="METAL_BalPureWt" />
                         </mat-form-field>
                       </td>
                     </tr>
