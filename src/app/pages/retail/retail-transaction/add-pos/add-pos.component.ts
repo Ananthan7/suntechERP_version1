@@ -6887,10 +6887,11 @@ export class AddPosComponent implements OnInit {
   }
 
   addNew() {
-    localStorage.setItem('AddNewFlag', '1')
-    this.content.FLAG = null;
-    location.reload();
-
+    // localStorage.setItem('AddNewFlag', '1')
+    // this.content.FLAG = null;
+    // location.reload();
+    this.modalService.dismissAll('OpenModal');
+    
     // if (this.router.url.includes('edit-pos')) this.router.navigateByUrl('/add-pos');
     // if (this.router.url.includes('view-pos')) this.router.navigateByUrl('/add-pos');
     // else location.reload();

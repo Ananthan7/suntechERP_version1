@@ -88,10 +88,14 @@ export class RetailTransactionComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
+      } else if(result == 'OpenModal'){
+        this.openModalView()
       }
     }, (reason) => {
       if (reason === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
+      }else if(reason == 'OpenModal'){
+        this.openModalView()
       }
       // Handle modal dismissal (if needed)
     });
