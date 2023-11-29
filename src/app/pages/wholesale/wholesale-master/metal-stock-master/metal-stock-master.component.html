@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metalstockForm">
@@ -25,7 +25,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="code" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Branch :</label>
@@ -42,7 +42,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Description :</label>
                         <div class="col-md-9">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="description" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -59,7 +59,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Std Purity :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="number" matInput formControlName="stdpurity" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -67,7 +67,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Making Charge :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 80%;">
-                            <mat-select>
+                            <mat-select formControlName="makingcharge">
           
                             </mat-select>
                           </mat-form-field>
@@ -103,7 +103,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Other Desc :</label>
                         <div class="col-md-9">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="otherdesc" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -240,7 +240,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Vendor Ref :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="vendorref" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -343,7 +343,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Details :</label>
                         <div class="col-md-9">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="details" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -351,13 +351,13 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Standard Cost (MC) :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="number" matInput formControlName="standardcostMC" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-3 col-form-label">Pur Cost/Gms :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="number" matInput formControlName="purcostGms" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -365,13 +365,13 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Sales Discount % :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="number" matInput formControlName="salesdiscount" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-3 col-form-label">Sales Price/Gms :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="number" matInput formControlName="salespriceGms" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -379,7 +379,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Maximum Stock :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="maximumstock" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-3 col-form-label">Seq. Code :</label>
@@ -396,7 +396,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Reorder Level :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="number" matInput formControlName="reorderlevel" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-3 col-form-label">Location :</label>
@@ -413,13 +413,13 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Reorder Quantity :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="number" matInput formControlName="reorderquantity" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-3 col-form-label">Create On :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="createon" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -427,7 +427,7 @@
                         <label for="inputPassword" class="col-sm-3 offset-md-6 col-form-label">By :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="by" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -435,13 +435,13 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">First Transaction :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="firsttransaction" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-3 col-form-label">Last Transaction :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="lasttransaction" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -456,7 +456,7 @@
                         </div>
                         <div class="col-md-4  offset-md-8">
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox">
+                            <input class="form-check-input" type="checkbox" formControlName="MTinclusive">
                             <label class="form-check-label">
                               MT% Inclusive
                             </label>
@@ -470,13 +470,13 @@
                       <div class="row">
                         <div class="col-md-3 pt-2">
                           <div class="form-check pt-2">
-                            <input class="form-check-input" type="checkbox">
+                            <input class="form-check-input" type="checkbox" formControlName="Inpieces">
                             <label class="form-check-label">
                               In Pieces
                             </label>
                           </div>
                           <div class="form-check pt-5">
-                            <input class="form-check-input" type="checkbox">
+                            <input class="form-check-input" type="checkbox" formControlName="createbarcodes">
                             <label class="form-check-label">
                               Create Barcodes
                             </label>
@@ -487,7 +487,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">1Pc = Gms :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="number" matInput formControlName="PcGms" />
                               </mat-form-field>
                             </div>
                           </div>
@@ -508,7 +508,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">OZ Conv.Factor :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="number" matInput formControlName="OZconvfactor" />
                               </mat-form-field>
                             </div>
                           </div>
@@ -516,7 +516,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Std. Packing Size :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="number" matInput formControlName="Stdpackingsize" />
                               </mat-form-field>
                             </div>
                           </div>
@@ -526,7 +526,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Fine Oz :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="fineoz" />
                               </mat-form-field>
                             </div>
                           </div>
@@ -534,7 +534,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Def. Sale Purity :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="number" matInput formControlName="defsalepurity" />
                               </mat-form-field>
                             </div>
                           </div>
@@ -543,31 +543,31 @@
                           <div class="row align-items-center mb-1">
                             <div class="col-md-12">
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="passpuritydifference">
                                 <label class="form-check-label">
                                   Pass Purity Difference
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="includestoneweight">
                                 <label class="form-check-label">
                                   Include Stone Weight
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="askpercentage">
                                 <label class="form-check-label">
                                   Ask Percentage
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="excludetaxonmetal">
                                 <label class="form-check-label">
                                   Exclude Tax on Metal Value
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="avoidalloy">
                                 <label class="form-check-label">
                                   Avoid Alloy
                                 </label>
@@ -579,31 +579,31 @@
                           <div class="row align-items-center mb-1">
                             <div class="col-md-12">
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="asksupplier">
                                 <label class="form-check-label">
                                   Ask Supplier
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="alloyitem">
                                 <label class="form-check-label">
                                   Alloy Item
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="dustitem">
                                 <label class="form-check-label">
                                   Dust Item
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="excludetax">
                                 <label class="form-check-label">
                                   Exclude Tax
                                 </label>
                               </div>
-                              <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                              <div class="form-check mb-1"> 
+                                <input class="form-check-input" type="checkbox" formControlName="blockinallreports">
                                 <label class="form-check-label">
                                   Block In All Reports
                                 </label>
@@ -615,32 +615,32 @@
                           <div class="row align-items-center mb-1">
                             <div class="col-md-12">
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="askwastage">
                                 <label class="form-check-label">
                                   Ask Wastage
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="makingnetWt">
                                 <label class="form-check-label">
                                   Making NetWt
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="dyestrip">
                                 <label class="form-check-label">
                                   Dye Strip
                                 </label>
                               </div>
                              
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="kundan">
                                 <label class="form-check-label">
                                   Kundan
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="blockinalltransaction">
                                 <label class="form-check-label">
                                   Block In All Transaction
                                 </label>
@@ -653,32 +653,32 @@
                           <div class="row align-items-center mb-1">
                             <div class="col-md-12">
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="allownegativestock">
                                 <label class="form-check-label">
                                   Allow Negative Stock
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="blockWtinsales">
                                 <label class="form-check-label">
                                   Block Wt. In Sales
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="allowlessthancost">
                                 <label class="form-check-label">
                                  Allow less Than Cost
                                 </label>
                               </div>
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="finisheditem">
                                 <label class="form-check-label">
                                   Finished Item
                                 </label>
                               </div>
                               
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="excludefromtransfer">
                                 <label class="form-check-label">
                                   Exclude From Transfer Wt
                                 </label>
@@ -687,7 +687,7 @@
                                 <label for="inputPassword" class="col-sm-6 col-form-label">Qty Round Off :</label>
                                 <div class="col-md-4">
                                   <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="number" matInput formControlName="Qtyroundoff" />
                                   </mat-form-field>
                                 </div>
                               </div>
@@ -737,7 +737,7 @@
                             </div>
                             <div class="col-md-6">
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox">
+                                <input class="form-check-input" type="checkbox" formControlName="POPstockfilter">
                                 <label class="form-check-label">
                                   POP Stock Filter
                                 </label>
