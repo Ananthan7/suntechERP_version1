@@ -254,13 +254,15 @@
                       <td>
                         <mat-form-field style="width: 100px;">
                           <input type="text" matInput
+                            (focusout)="stockCodeScrapValidate()"
                             formControlName="stockCode" />
                         </mat-form-field>
                       </td>
                       <!-- quantity -->
                       <td>
                         <mat-form-field style="width: 100px;">
-                          <input type="text" matInput formControlName="scrapQuantity" />
+                          <input type="number" matInput
+                            formControlName="scrapQuantity" />
                         </mat-form-field>
                       </td>
                       <!-- location -->
@@ -682,7 +684,8 @@
               <label for="input" class="col-sm-4 col-form-label">Consumed</label>
               <div class="col-sm-7">
                 <mat-form-field>
-                  <input type="time" matInput formControlName="consumed" />
+                  <input type="time" matInput
+                    formControlName="consumed" />
                 </mat-form-field>
               </div>
             </div>
@@ -727,7 +730,8 @@
           <div class="col-md-12">
             <dx-data-grid #dataGrid id="gridContainer"
               [showBorders]="true" [dataSource]="metalDetailData"
-              [columnAutoWidth]="true" (onRowUpdated)="formatMetalDetailDataGrid()"
+              [columnAutoWidth]="true"
+              (onRowUpdated)="formatMetalDetailDataGrid()"
               [showRowLines]="true">
               <dxo-paging [enabled]="false"></dxo-paging>
               <dxo-editing mode="cell" [allowUpdating]="true">
@@ -748,8 +752,9 @@
               <dxi-column dataField="Div" caption="Gain Wt" alignment="right"></dxi-column>
               <dxi-column dataField="Type" caption="Type" alignment="right"></dxi-column>
               <dxi-column dataField="Rate" caption="Rate" alignment="right"></dxi-column>
-              <dxi-column dataField="Amount" caption="Amount" alignment="right"></dxi-column>
-              <dxi-column dataField="Setted" caption="Setted" alignment="center"
+              <dxi-column dataField="AMOUNTFC" caption="Amount" alignment="right"></dxi-column>
+              <dxi-column dataField="Setted" [allowEditing]="false"
+                caption="Setted" alignment="center"
                 cellTemplate="Setted">
                 <div *dxTemplate="let data1 of 'Setted'">
                   <input type="checkbox"
@@ -776,9 +781,12 @@
               <dxi-column dataField="PURITY" caption="Purity" alignment="right"></dxi-column>
               <dxi-column dataField="PUREWT" caption="Gain Pure Wt"
                 alignment="right"></dxi-column>
-              <dxi-column dataField="VOCNO" caption="Voucher Number" alignment="left"></dxi-column>
-              <dxi-column dataField="VOCTYPE" caption="Voucher Type" alignment="left"></dxi-column>
-              <dxi-column dataField="VOCDATE" caption="Voucher Date" alignment="left"></dxi-column>
+              <dxi-column dataField="VOCNO" caption="Voucher Number"
+                alignment="left"></dxi-column>
+              <dxi-column dataField="VOCTYPE" caption="Voucher Type"
+                alignment="left"></dxi-column>
+              <dxi-column dataField="VOCDATE" caption="Voucher Date"
+                alignment="left"></dxi-column>
               <dxi-column dataField="JOB_NUMBER" caption="Job Number"
                 alignment="left"></dxi-column>
               <dxi-column dataField="JOB_SO_NUMBER" caption="Job So Number"
@@ -796,14 +804,16 @@
               <dxi-column dataField="DIVCODE" caption="DIVCODE" alignment="left"></dxi-column>
               <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"
                 alignment="left"></dxi-column>
-              <dxi-column dataField="STOCK_DESCRIPTION" caption="STOCK_DESCRIPTION"
+              <dxi-column dataField="STOCK_DESCRIPTION"
+                caption="STOCK_DESCRIPTION"
                 alignment="left"></dxi-column>
               <dxi-column dataField="COLOR" caption="COLOR" alignment="left"></dxi-column>
               <dxi-column dataField="CLARITY" caption="CLARITY" alignment="left"></dxi-column>
               <dxi-column dataField="SHAPE" caption="SHAPE" alignment="left"></dxi-column>
               <dxi-column dataField="SIZE" caption="SIZE" alignment="left"></dxi-column>
               <dxi-column dataField="PCS" caption="PCS" alignment="left"></dxi-column>
-              <dxi-column dataField="GROSS_WT" caption="GROSS WT" alignment="right"></dxi-column>
+              <dxi-column dataField="GROSS_WT" caption="GROSS WT"
+                alignment="right"></dxi-column>
               <dxi-column dataField="Rate" caption="Rate" alignment="right"></dxi-column>
               <dxi-column dataField="Amount" caption="Amount" alignment="right"></dxi-column>
               <dxi-column dataField="PROCESS_CODE" caption="Process Code"

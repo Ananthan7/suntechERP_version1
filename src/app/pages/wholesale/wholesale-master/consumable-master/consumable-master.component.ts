@@ -51,7 +51,7 @@ export class ConsumableMasterComponent implements OnInit {
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Code Data',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "PREFIX_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

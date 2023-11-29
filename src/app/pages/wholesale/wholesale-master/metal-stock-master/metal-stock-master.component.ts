@@ -113,6 +113,7 @@ export class MetalStockMasterComponent implements OnInit {
     excludefromtransfer:[''],
     POPstockfilter:[''],
     Qtyroundoff:[''],
+ 
   });
 
   costCenterData: MasterSearchModel = {

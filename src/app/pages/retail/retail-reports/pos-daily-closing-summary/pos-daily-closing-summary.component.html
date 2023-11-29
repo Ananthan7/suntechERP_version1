@@ -11,11 +11,11 @@
 <div class="container-fluid pt-3">
     <form>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-12 col-form-label">Branch</label>
+                            <label for="inputPassword" class="col-sm-12 col-form-label">Branches</label>
                             <label for="inputPassword" class="col-sm-4 col-form-label">Transaction</label>
                             <div class="col-md-8">
                                 <mat-form-field>
@@ -74,7 +74,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="text-center mt-2">
+                                <div class="text-center d-flex justify-content-between mt-2">
                                     <div class="p-1 bd-highlight">
                                         <button type="button" class="btn btn-primary add-btn">
                                             <i class="fas fa-sync-alt"></i>
@@ -96,7 +96,7 @@
                                 Summary</label> -->
                             <div class="col-md-12">
                                 <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
-                                    <mat-tab label="Pending                    Summary">
+                                    <mat-tab label="Pending Sales Order Summary">
                                         <div class="my-2">
                                             <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
                                                 [showBorders]="true">
@@ -120,7 +120,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
                     <mat-tab label="Transaction wise                    Summary">
                         <div class="row my-2">
@@ -241,7 +241,7 @@
                                     <dxo-selection mode="multiple"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column *ngFor="let data of columnheadMetal" dataField="{{ data }}"
+                                    <dxi-column *ngFor="let data of columnheadScrap" dataField="{{ data }}"
                                         caption="{{ data }}" [allowEditing]="true" alignment="center"
                                         backgroundcolor="#000">
                                     </dxi-column>
@@ -267,7 +267,7 @@
                                     <dxo-selection mode="multiple"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column *ngFor="let data of columnheadMetal" dataField="{{ data }}"
+                                    <dxi-column *ngFor="let data of columnheadSales" dataField="{{ data }}"
                                         caption="{{ data }}" [allowEditing]="true" alignment="center"
                                         backgroundcolor="#000">
                                     </dxi-column>
