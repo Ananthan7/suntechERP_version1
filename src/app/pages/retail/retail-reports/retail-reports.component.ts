@@ -3,6 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { PosDailyClosingSummaryComponent } from './pos-daily-closing-summary/pos-daily-closing-summary.component';
+import { RetailAdvanceReceiptRegisterComponent } from './retail-advance-receipt-register/retail-advance-receipt-register.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -22,6 +23,7 @@ export class RetailReportsComponent implements OnInit {
     private modalService: NgbModal,
     // private ChangeDetector: ChangeDetectorRef,
   ) {
+    this.getMasterGridData()
     this.menuTitle = this.CommonService.getModuleName()
     this.componentName = this.CommonService.getFormComponentName()
   }
@@ -43,7 +45,7 @@ export class RetailReportsComponent implements OnInit {
   openModalView(data?: any) {
     this.componentDbList = {
       'PosDailyclosingSummary': PosDailyClosingSummaryComponent,
-      // 'DiamondQuotationComponent': RetailAdvanceReceiptRegisterComponent,
+      'RetailAdvanceReceiptRegisterComponent': RetailAdvanceReceiptRegisterComponent,
   
       // Add components and update in operationals > menu updation grid form component name
     }

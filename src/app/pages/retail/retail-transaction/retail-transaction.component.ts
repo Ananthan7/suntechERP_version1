@@ -11,8 +11,8 @@ import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-gr
 import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
- import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
- 
+import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
+
 @Component({
   selector: 'app-retail-transaction',
   templateUrl: './retail-transaction.component.html',
@@ -25,6 +25,9 @@ export class RetailTransactionComponent implements OnInit {
   menuTitle: string = '';
   tableName: any;
   PERMISSIONS: any
+  componentSelected: any;
+  private componentDbList: any = {}
+  componentName: any;
 
   constructor(
     private CommonService: CommonServiceService,
@@ -34,6 +37,8 @@ export class RetailTransactionComponent implements OnInit {
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
     this.getMasterGridData()
+    this.menuTitle = this.CommonService.getModuleName()
+    this.componentName = this.CommonService.getFormComponentName()
   }
 
   ngOnInit(): void {
@@ -54,45 +59,27 @@ export class RetailTransactionComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
-  //  open Jobcard in modal
+  /**USE: open form components in modal*/
   openModalView(data?: any) {
     if (data && data == 'Sale') {
       this.menuTitle = data
     }
-    let contents: any;
-    switch (this.menuTitle) {
-      case 'Sale':
-        contents = AddPosComponent
-        break;
-      case 'POINT OF SALE CURRENCY RECEIPT':
-        contents = PosCurrencyReceiptComponent
-        break;
-      case 'Scheme Registration':
-        contents = SchemeRegisterComponent
-        break;
-      case 'Tourist VAT Refund Verification':
-        contents = TouristVatRefundVerificationComponent
-        break;
-      case 'Advance Return':
-        contents = AdvanceReturnComponent
-        break;
-      // case 'Exhibition Sale':
-      //   contents = PosDailyClosingSummaryComponent
-      //   break;
-      // case 'Gift Voucher Issue':
-      //   contents = RetailAdvanceReceiptRegisterComponent
-      //   break;
-      case 'Pos Sales Order Cancellation':
-        contents = PosSalesOrderCancellationComponent
-        break;
-      //continue adding components using case then break
-      default:
-        this.snackBar.open('No Response Found!', 'Close', {
-          duration: 3000,
-        });
-        return;
+    this.componentDbList = {
+      'AddPosComponent': AddPosComponent,
+      'PosCurrencyReceiptComponent': PosCurrencyReceiptComponent,
+      'SchemeRegisterComponent': SchemeRegisterComponent,
+      'TouristVatRefundVerificationComponent': TouristVatRefundVerificationComponent,
+      'AdvanceReturnComponent': AdvanceReturnComponent,
+      'PosSalesOrderCancellationComponent': PosSalesOrderCancellationComponent,
+
+      // Add components and update in operationals > menu updation grid form component name
     }
-    const modalRef: NgbModalRef = this.modalService.open(contents, {
+    if (this.componentDbList[this.componentName]) {
+      this.componentSelected = this.componentDbList[this.componentName]
+    } else {
+      this.CommonService.showSnackBarMsg('Module Not Created')
+    }
+    const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
       size: 'xl',
       backdrop: true,
       keyboard: false,
@@ -102,32 +89,32 @@ export class RetailTransactionComponent implements OnInit {
     modalRef.componentInstance.content = data;
 
     modalRef.result.then((result) => {
-      console.log('result', result);
-
       if (result === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
       }
-
     }, (reason) => {
-      // console.log('reason', reason);
       if (reason === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
       }
       // Handle modal dismissal (if needed)
     });
-
-
   }
-
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     if (data) {
-      this.menuTitle = data.MENU_CAPTION_ENG;
+      if (data.MENU_CAPTION_ENG) {
+        this.menuTitle = data.MENU_CAPTION_ENG;
+        this.PERMISSIONS = data.PERMISSION;
+      } else {
+        this.menuTitle = this.CommonService.getModuleName()
+      }
+      if (data.ANG_WEB_FORM_NAME) {
+        this.componentName = data.ANG_WEB_FORM_NAME;
+      } else {
+        this.componentName = this.CommonService.getFormComponentName()
+      }
       this.PERMISSIONS = data.PERMISSION;
-    } else {
-      this.menuTitle = this.CommonService.getModuleName()
     }
     this.masterGridComponent?.getMasterGridData(data)
   }
-
 }
