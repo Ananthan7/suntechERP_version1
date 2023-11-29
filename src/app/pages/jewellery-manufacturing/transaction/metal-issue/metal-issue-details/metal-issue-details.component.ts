@@ -20,6 +20,21 @@ export class MetalIssueDetailsComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   
+ 
+
+  constructor(
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService,
+    private dataService: SuntechAPIService,
+  ) { }
+
+  ngOnInit(): void {
+    if (this.content) {
+      this.setFormValues()
+    }
+  }
+
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -36,18 +51,99 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.location.setValue(e.LOCATION_CODE);
   }
 
-  constructor(
-    private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
-    private toastr: ToastrService,
-    private dataService: SuntechAPIService,
-  ) { }
-
-  ngOnInit(): void {
-    if (this.content) {
-      this.setFormValues()
-    }
+  jobNumberCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
+  jobNumberCodeSelected(e:any){
+    console.log(e);
+    this.metalIssueDetailsForm.controls.jobNumber.setValue(e.job_number);
+    this.metalIssueDetailsForm.controls.jobNumDes.setValue(e.job_description);
+    
+  }
+
+  subJobNoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  subJobNoCodeSelected(e:any){
+    console.log(e);
+    this.metalIssueDetailsForm.controls.subJobNo.setValue(e.job_number);
+    this.metalIssueDetailsForm.controls.subJobNoDes.setValue(e.job_description);
+    
+  }
+
+  processCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'Process_Code',
+    SEARCH_HEADING: 'Process Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Process_Code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  processCodeSelected(e:any){
+    console.log(e);
+    this.metalIssueDetailsForm.controls.processCode.setValue(e.Process_Code);
+    this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.Description);
+    
+  }
+
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  workerCodeSelected(e:any){
+    console.log(e);
+    this.metalIssueDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
+    this.metalIssueDetailsForm.controls.workerCodeDes.setValue(e.WORKER_CODE);
+    
+  }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stockCodeSelected(e:any){
+    console.log(e); 
+    this.metalIssueDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
+    this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.STOCK_CODE);
+    this.metalIssueDetailsForm.controls.subStockCode.setValue(e.DESCRIPTION);
+    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
+    
+  }
+
 
 
   close(data?: any) {
@@ -57,7 +153,7 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   metalIssueDetailsForm: FormGroup = this.formBuilder.group({
     jobNumber: [''],
-    jobDate: [''],
+    jobNumDes: [''],
     subJobNo: [''],
     subJobNoDes: [''],
     processCode: [''],
@@ -348,10 +444,6 @@ export class MetalIssueDetailsComponent implements OnInit {
       }
     });
   }
-
- 
-
-
 }
 
 
