@@ -19,8 +19,8 @@ export class MetalReturnComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   currentFilter: any;
   divisionMS: any = 'ID';
-  tableData: any[] = [];
-  metalReturnDetailsData : any[] = [];
+  tableData: any[] = ['Process','Worker','Job No','Sub.Job No','Design','Stock Code','Gross Wt.','Net Wt.','Purity','Pure Wt.'];
+  metalReturnDetailsData : any[] = ['Job id','Unq job id','Process','Design','Stock Code','Worker',' Description','Carat','Rate','Division','Amount'];
   columnhead: any[] = [''];
   branchCode?: String;
   yearMonth?: String;

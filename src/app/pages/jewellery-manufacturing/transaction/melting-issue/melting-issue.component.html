@@ -28,9 +28,14 @@
                         </div>
                         <div class="row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Voc Date*:</label>
-                            <div class="col-md-8">
+                            <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="vocdate" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="time" matInput formControlName="voctime" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -40,7 +45,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="meltingtype" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="MeltingCodeData" (newRowClick)="MeltingCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="MeltingCodeData"
+                                    (newRowClick)="MeltingCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
@@ -51,7 +57,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="jobno" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="jobnoCodeData" (newRowClick)="jobnoCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="jobnoCodeData"
+                                    (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
@@ -65,7 +72,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="processcode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="ProcessCodeData"
+                                    (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
@@ -79,7 +87,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="worker" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="WorkerCodeData"
+                                    (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
@@ -117,33 +126,55 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="time" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="timeCodeData" (newRowClick)="timeCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row py-2 border-top">
+                <div class="row py-2 border-top justify-content-between">
                     <div class="col-md-3 d-flex">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                        [viewImportBtn]="false"
-                        (addClick)="openaddMeltingIssueDetails()"
-                        (deleteClick)="deleteTableData()"
-                        >
-                    </menu-buttons>
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                            (addClick)="openaddMeltingIssueDetails()" (deleteClick)="deleteTableData()">
+                        </menu-buttons>
                     </div>
-                    <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
-                        </dx-data-grid>
+                    <div class="col-md-3 text-end">
+                        <button class="btn btn-primary add-btn">allocate</button>
                     </div>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
+                                        caption="{{ data }}" [allowEditing]="true" alignment="left"
+                                        backgroundcolor="#000">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="inputPassword"
+                                    class="col-sm-12  col-form-label text-center border border-light bg-light text-dark">Pure
+                                    / Alloy Ratio</label>
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxi-column *ngFor="let data of columnhead1" dataField="{{ data }}"
+                                        caption="{{ data }}" [allowEditing]="true" alignment="left"
+                                        backgroundcolor="#000">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row py-2 border-top">
                     <div class="col-md-12">
@@ -158,6 +189,42 @@
                                 [allowEditing]="true" alignment="center" backgroundcolor="#000">
                             </dxi-column>
                         </dx-data-grid>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Total>></label>
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Issued:</label>
+                            <div class="col-md-1">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="issued" />
+                                </mat-form-field>
+                            </div>
+
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Required:</label>
+                            <div class="col-md-1">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="required" />
+                                </mat-form-field>
+                            </div>
+
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Allocated:</label>
+                            <div class="col-md-1">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="allocated" />
+                                </mat-form-field>
+                            </div>
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Balance:</label>
+                            <div class="col-md-1">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="balance" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                               <div class="pt-3">
+                                <button class="btn btn-primary add-btn">Reset</button>
+                               </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row my-2">

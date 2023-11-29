@@ -16,12 +16,13 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class CustomerPriceMasterComponent implements OnInit {
 
   divisionMS: any = 'ID';
-  columnheader:any[] = ['','',];
-
+  columnheader:any[] = ['SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER','WEIGHT_FROM','WEIGHT_TO','CUSTOMER','PRICE_TYPE','CUSTOMER_CODE','DT_VALID_FROM'];
+  columnheader1:any[] = ['LABOUR_CODE','DIVISION_CODE','SHAPE','DIVISION','METHOD','UNITCODE','CURRENCY_CODE','CRACCODE','COST_RATE','SELLING_RATE','CARATWT_FROM','CARATWT_TO','CUSTOMER_CODE','REFMID','DT_VALID_FROM'];
+  columnheader2:any[] = ['DESIGN_CODE','LABOUR_CODE','LABTYPE','METHOD','DIVISION','CURRENCY_CODE','UNITCODE','COST_RATE','SELLING_RATE','CRACCODE','DIVISION_CODE','SELLING_RATE','CUSTOMER','REFMID','DT_VALID_FROM'];
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
-  customerpricemasterForm: any;
+ 
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -33,6 +34,15 @@ export class CustomerPriceMasterComponent implements OnInit {
  
   ngOnInit(): void {
   }
+  customerpricemasterForm: FormGroup = this.formBuilder.group({
+    customercode :[''],
+    desc :[''],
+    pricecode : [''],
+    labourtype:[''],
+    addonrate : [''],
+    margin:[''],
+    
+   });
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -50,18 +60,18 @@ export class CustomerPriceMasterComponent implements OnInit {
     let API = 'CustomerPriceMaster/InsertCustomerPriceMaster'
     let postData = {
       "MID": 0,
-      "CUSTOMER_CODE": "string",
-      "DESCRIPTION": "string",
+      "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode || "",
+      "DESCRIPTION":  this.customerpricemasterForm.value.desc || "",
       "GOLD_LOSS_PER": 0,
       "UPDATE_ON": "2023-11-28T05:47:14.177Z",
-      "PRICECODE": "string",
-      "MARGIN_PER": 0,
-      "LAB_TYPE": "string",
+      "PRICECODE": this.customerpricemasterForm.value.pricecode || "",
+      "MARGIN_PER":0,
+      "LAB_TYPE": this.customerpricemasterForm.value.labourtype || "",
       "MARKUP_PER": 0,
-      "CUSTOMER_NAME": "string",
+      "CUSTOMER_NAME": "",
       "PRINT_COUNT": 0,
       "VALID_FROM": "2023-11-28T05:47:14.177Z",
-      "ADD_ON_RATE": 0,
+      "ADD_ON_RATE":0,
       "CURRENCY_CODE": "stri",
       "CURRENCY_RATE": 0,
       "MAIN_VOCTYPE": "string",
