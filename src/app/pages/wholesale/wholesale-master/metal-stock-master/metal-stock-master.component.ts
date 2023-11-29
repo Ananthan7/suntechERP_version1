@@ -33,31 +33,86 @@ export class MetalStockMasterComponent implements OnInit {
   }
 
   metalstockForm: FormGroup = this.formBuilder.group({
+    metalType:[''],
+    code:[''],
     branch:[''],
+    description:[''],
+    karat: [''],
+    makingcharge: [''],
+    parent:[''],
+    otherdesc:[''],
     costCenter: [''],
-    type: [''],
-    vendor:[''],
     category: [''],
+    type: [''],
+    design:[''],
+    vendor:[''],
+    hsncode: [''],
+    hsmaster:[''],
+    stdpurity:[''],
+    unit:[''],
+    modelcode:[''],
+    metal: [''],
     subCategory: [''],
     brand: [''],
+    country:[''],
+    size:[''],
+    color: [''],
+    vendorref: [''],
+    PcGms: [''],
+    prefix: [''],
     price1: [''],
     price2: [''],
     price3: [''],
     price4: [''],
-    price5: [''],
-    metal: [''],
-    color: [''],
-    karat: [''],
-    hsncode: [''],
-    country:[''],
-    size:[''],
-    location:[''],
-    parent:[''],
-    modelcode:[''],
-    hsmaster:[''],
+    price5: [''],      
+    details: [''],      
+    standardcostMC: [''],      
+    salesdiscount: [''],      
+    maximumstock: [''],      
+    reorderlevel: [''],      
+    reorderquantity: [''],      
+    firsttransaction: [''],      
+    OZconvfactor: [''],      
+    Stdpackingsize: [''],      
+    purcostGms: [''],      
+    salespriceGms: [''],      
     seqcode:[''],
+    location:[''],      
+    createon: [''],      
+    by: [''],   
+    lasttransaction: [''],   
+    MTratetype: [''],   
+    fineoz: [''],   
+    defsalepurity: [''],
+    abcMaster:[''],   
+    kundanrate:[''],   
     linksub:[''],
-    design:['']
+    stamprate:[''],
+    MTinclusive:[''],
+    Inpieces:[''],
+    createbarcodes:[''],
+    passpuritydifference:[''],
+    includestoneweight:[''],
+    askpercentage:[''],
+    excludetaxonmetal:[''],
+    avoidalloy:[''],
+    asksupplier:[''],
+    alloyitem:[''],
+    dustitem:[''],
+    excludetax:[''],
+    blockinallreports:[''],
+    askwastage:[''],
+    makingnetWt:[''],
+    dyestrip:[''],
+    kundan:[''],
+    blockinalltransaction:[''],
+    allownegativestock:[''],
+    blockWtinsales:[''],
+    allowlessthancost:[''],
+    finisheditem:[''],
+    excludefromtransfer:[''],
+    POPstockfilter:[''],
+    Qtyroundoff:[''],
   });
 
   costCenterData: MasterSearchModel = {
@@ -68,6 +123,43 @@ export class MetalStockMasterComponent implements OnInit {
     SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  metalTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Metal Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  
+  prefixCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Prefix',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
+  abcMasterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 189,
+    SEARCH_FIELD: 'workerToDescription',
+    SEARCH_HEADING: 'ABC Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "workerToDescription<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -174,6 +266,18 @@ export class MetalStockMasterComponent implements OnInit {
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'HSN',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  HSmasterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 188,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'HS Master',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -288,17 +392,7 @@ export class MetalStockMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  HSmasterCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 188,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'HS Master',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+
 
   metalrCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -339,6 +433,21 @@ export class MetalStockMasterComponent implements OnInit {
   branchCodeSelected(e:any){
     console.log(e);
     this.metalstockForm.controls.branch.setValue(e.BRANCH_CODE);
+  }
+
+  abcMasterCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.abcMaster.setValue(e.workerToDescription);
+  }
+
+  metalTypeCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.metalType.setValue(e.DIVISION_CODE);
+  }
+ 
+  prefixCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.prefix.setValue(e.PREFIX_CODE);
   }
 
 
@@ -412,6 +521,11 @@ export class MetalStockMasterComponent implements OnInit {
     this.metalstockForm.controls.hsncode.setValue(e.CODE);
   }
 
+  HSmasterCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.hsmaster.setValue(e.CODE);
+  }
+  
   countryCodeSelected(e:any){
     console.log(e);
     this.metalstockForm.controls.country.setValue(e.CODE);
@@ -435,11 +549,6 @@ export class MetalStockMasterComponent implements OnInit {
   modelCodeSelected(e:any){
     console.log(e);
     this.metalstockForm.controls.modelcode.setValue(e.processToDescription);
-  }
-
- HSmasterCodeSelected(e:any){
-    console.log(e);
-    this.metalstockForm.controls.hsmaster.setValue(e.CODE);
   }
 
   metalCodeSelected(e:any){
@@ -477,89 +586,89 @@ export class MetalStockMasterComponent implements OnInit {
       "MID": 0,
       "DIVISION_CODE": "s",
       "STOCK_CODE": "string",
-      "DESCRIPTION": "string",
-      "UNIT_CODE": "string",
-      "CC_MAKING": "string",
-      "CC_METAL": "string",
-      "KARAT_CODE": "stri",
-      "PURITY": 0,
-      "VENDOR_CODE": "string",
-      "VENDOR_REF": "string",
-      "TYPE_CODE": "string",
-      "BRAND_CODE": "string",
-      "CATEGORY_CODE": "string",
-      "COUNTRY_CODE": "string",
-      "PRICE_CODE1": "string",
-      "PRICE_CODE2": "string",
-      "PRICE_CODE3": "string",
-      "PRICE_CODE4": "string",
-      "PRICE_CODE5": "string",
+      "DESCRIPTION": this.metalstockForm.value.description || "",
+      "UNIT_CODE": this.metalstockForm.value.unit || "",
+      "CC_MAKING":  "md3",
+      "CC_METAL": this.metalstockForm.value.metal || "",
+      "KARAT_CODE": this.metalstockForm.value.karat || "",
+      "PURITY": this.metalstockForm.value.stdpurity || "",
+      "VENDOR_CODE": this.metalstockForm.value.vendor || "",
+      "VENDOR_REF": this.metalstockForm.value.vendorref || "",
+      "TYPE_CODE": this.metalstockForm.value.type || "",
+      "BRAND_CODE": this.metalstockForm.value.brand || "",
+      "CATEGORY_CODE": this.metalstockForm.value.category || "",
+      "COUNTRY_CODE": this.metalstockForm.value.country || "",
+      "PRICE_CODE1":this.metalstockForm.value.price1 || "",
+      "PRICE_CODE2": this.metalstockForm.value.price2 || "",
+      "PRICE_CODE3": this.metalstockForm.value.price3 || "",
+      "PRICE_CODE4": this.metalstockForm.value.price4 || "",
+      "PRICE_CODE5": this.metalstockForm.value.price5 || "",
       "STONE": true,
-      "CONV_FACTOR_OZ": 0,
+      "CONV_FACTOR_OZ": this.metalstockForm.value.OZconvfactor || "",
       "AUTO_PL": true,
-      "INPIECES": true,
+      "INPIECES": this.metalstockForm.value.Inpieces || "",
       "SUBCODE": true,
-      "PCS2GMS": 0,
-      "STD_COST": 0,
+      "PCS2GMS": this.metalstockForm.value.PcGms || "",
+      "STD_COST":this.metalstockForm.value.standardcostMC || "",
       "MIN_QTY": 0,
       "MAX_QTY": 0,
-      "DISCOUNT": 0,
-      "RO_LEVEL": 0,
-      "RO_QTY": 0,
+      "DISCOUNT": this.metalstockForm.value.salesdiscount || "",
+      "RO_LEVEL":this.metalstockForm.value.reorderlevel || "",
+      "RO_QTY": this.metalstockForm.value.reorderquantity || "",
       "AVG_COST": 0,
-      "DETAILS": "string",
+      "DETAILS": this.metalstockForm.value.details || "",
       "OPENED_ON": "2023-11-24T10:59:37.316Z",
       "OPENED_BY": "string",
-      "FIRST_TRN": "string",
-      "LAST_TRN": "string",
+      "FIRST_TRN": this.metalstockForm.value.firsttransaction || "",
+      "LAST_TRN": this.metalstockForm.value.lasttransaction || "",
       "PRINTED": true,
-      "ASK_SUPPLIER": true,
-      "PREFIX_CODE": "string",
-      "BLOCK_GRWT": true,
+      "ASK_SUPPLIER": this.metalstockForm.value.asksupplier || "",
+      "PREFIX_CODE": this.metalstockForm.value.prefix || "",
+      "BLOCK_GRWT": this.metalstockForm.value.blockWtinsales || "",
       "PICTURE_PATH": "string",
-      "ASK_WASTAGE": true,
-      "DUST_ITEM": true,
-      "LESSTHANCOST": true,
+      "ASK_WASTAGE": this.metalstockForm.value.askwastage || "",
+      "DUST_ITEM": this.metalstockForm.value.dustitem || "",
+      "LESSTHANCOST": this.metalstockForm.value.allowlessthancost || "",
       "BLNPERCENTAGE": true,
       "PICTURE_NAME": "string",
-      "ALLOW_NEGATIVE": true,
-      "SEQ_CODE": "string",
-      "LOC_CODE": "string",
+      "ALLOW_NEGATIVE": this.metalstockForm.value.allownegativestock || "",
+      "SEQ_CODE": this.metalstockForm.value.seqcode || "",
+      "LOC_CODE": this.metalstockForm.value.location || "",
       "BLNSTUDDEDJEW": true,
-      "SUBCATEGORY_CODE": "string",
-      "MKGPURCOST": 0,
-      "MKGSALEPRICE": 0,
+      "SUBCATEGORY_CODE": this.metalstockForm.value.subCategory || "",
+      "MKGPURCOST":this.metalstockForm.value.purcostGms || "",
+      "MKGSALEPRICE": this.metalstockForm.value.salespriceGms || "",
       "EXCLUDEGSTVAT": true,
       "DESCRIPTION_OTHERS": "string",
       "LOYALTY_ITEM": true,
       "EXCLUDE_PROMOTION": 0,
       "UNIT_CODESAL": 0,
-      "ASK_PERCENTAGE": true,
+      "ASK_PERCENTAGE": this.metalstockForm.value.askpercentage || "",
       "ASK_NEGETIVESTOCK": true,
       "STRGROUPFILTER": "string",
       "STRFILTER1": "string",
       "STRFILTER2": "string",
       "SUB_CATEGORY_CODE": "string",
-      "DESIGN": "string",
-      "HS_CODE": "string",
-      "ABC_CODE": "string",
+      "DESIGN": this.metalstockForm.value.design || "",
+      "HS_CODE": this.metalstockForm.value.hsmaster || "",
+      "ABC_CODE": this.metalstockForm.value.abcMaster || "",
       "PCS2OZ": 0,
-      "BLOCKFORTRANSACTION": true,
-      "ALLOY_ITEM": true,
+      "BLOCKFORTRANSACTION": this.metalstockForm.value.blockinalltransaction || "",
+      "ALLOY_ITEM": this.metalstockForm.value.alloyitem || "",
       "PRINT_COUNT": 0,
       "MKGCALC_NETWT": true,
-      "HSN_CODE": "string",
-      "BRANCH_CODE": "string",
+      "HSN_CODE": this.metalstockForm.value.hsncode || "",
+      "BRANCH_CODE": this.metalstockForm.value.branch || "",
       "UNIT_CONVERSION": "string",
-      "PARENT_STOCK_CODE": "string",
-      "DYE_STRIP": true,
+      "PARENT_STOCK_CODE": this.metalstockForm.value.parent || "",
+      "DYE_STRIP": this.metalstockForm.value.dyestrip || "",
       "GSTVATONMAKING": true,
-      "D_SIZE": "string",
-      "COLOR_CODE": "string",
-      "MT5_RATE_TYPE": "string",
-      "MT5_INCLUSIVE": true,
-      "KUNDAN_UNIT_CODE": "string",
-      "KUNDAN": true,
+      "D_SIZE": this.metalstockForm.value.size || "",
+      "COLOR_CODE": this.metalstockForm.value.color || "",
+      "MT5_RATE_TYPE": this.metalstockForm.value.MTratetype || "",
+      "MT5_INCLUSIVE": this.metalstockForm.value.MTinclusive || "",
+      "KUNDAN_UNIT_CODE":  "str",
+      "KUNDAN": this.metalstockForm.value.kundan || "",
       "UDF1": "string",
       "UDF2": "string",
       "UDF3": "string",
@@ -575,16 +684,16 @@ export class MetalStockMasterComponent implements OnInit {
       "UDF13": "string",
       "UDF14": "string",
       "UDF15": "string",
-      "FINISHED_ITEM": true,
-      "MODEL_CODE": "string",
-      "AVOID_ALLOY": true,
-      "STAMPCHARGES": 0,
-      "SALPURITY": 0,
-      "POPSTOCKFILTER": true,
-      "STD_PACKINGSIZE": 0,
-      "QTY_ROUNDOFF": 0,
-      "LINKSUBCODE": "string",
-      "EXCLUDE_TRANSFER_WT": true,
+      "FINISHED_ITEM": this.metalstockForm.value.finisheditem || "",
+      "MODEL_CODE": this.metalstockForm.value.modelcode || "",
+      "AVOID_ALLOY": this.metalstockForm.value.avoidalloy || "",
+      "STAMPCHARGES": this.metalstockForm.value.stamprate || "",
+      "SALPURITY": this.metalstockForm.value.defsalepurity || "",
+      "POPSTOCKFILTER": this.metalstockForm.value.POPstockfilter || "",
+      "STD_PACKINGSIZE": this.metalstockForm.value.Stdpackingsize || "",
+      "QTY_ROUNDOFF": this.metalstockForm.value.Qtyroundoff || "",
+      "LINKSUBCODE": this.metalstockForm.value.linksub || "",
+      "EXCLUDE_TRANSFER_WT": this.metalstockForm.value.excludefromtransfer || "",
       "BRANCH_DESC": "string",
       "KARAT_DESC": "string",
       "PARENT_STOCK_DESC": "string",

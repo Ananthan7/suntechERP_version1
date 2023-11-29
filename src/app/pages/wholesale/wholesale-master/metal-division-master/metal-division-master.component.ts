@@ -33,9 +33,13 @@ export class MetalDivisionMasterComponent implements OnInit {
   }
 
   metaldivisionForm: FormGroup = this.formBuilder.group({
+    code:[''],
+    codedes:[''],
     costcenter:[''],
     stockcode:[''],
-    costcentermaking:['']
+    costcentermaking:[''],
+    Abbreviation:[''],
+    currency:[''],
   })
 
 
@@ -105,20 +109,20 @@ export class MetalDivisionMasterComponent implements OnInit {
     let API = 'DivisionMaster/InsertDivisionMaster'
     let postData = {
       "MID": 0,
-      "DIVISION_CODE": "s",
-      "DESCRIPTION": "string",
+      "DIVISION_CODE": this.metaldivisionForm.value.code || "",
+      "DESCRIPTION":this.metaldivisionForm.value.codedes || "",
       "DIVISION": "s",
       "REPORT_DEFAULT": "s",
-      "ABBREVIATION": "stri",
+      "ABBREVIATION": this.metaldivisionForm.value.Abbreviation || "",
       "SYSTEM_DATE": "2023-11-24T12:22:11.425Z",
-      "COSTCODE_METAL": "string",
-      "ISCURRENCY": true,
+      "COSTCODE_METAL": this.metaldivisionForm.value.costcenter || "",
+      "ISCURRENCY": this.metaldivisionForm.value.currency || "",
       "DESCRIPTION_OTHER": "string",
-      "COSTCODE_MAKING": "string",
+      "COSTCODE_MAKING":this.metaldivisionForm.value.costcentermaking || "",
       "METAL_PURITY": 0,
       "DESCRIPTION_CHINESE": "string",
       "DESCRIPTION_TURKISH": "string",
-      "AUTOFIXSTOCK": "string"
+      "AUTOFIXSTOCK": this.metaldivisionForm.value.stockcode || "",
     }
     
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -155,20 +159,20 @@ export class MetalDivisionMasterComponent implements OnInit {
     let postData = 
     {
       "MID": 0,
-      "DIVISION_CODE": "s",
-      "DESCRIPTION": "string",
+      "DIVISION_CODE": this.metaldivisionForm.value.code || "",
+      "DESCRIPTION":this.metaldivisionForm.value.codedes || "",
       "DIVISION": "s",
       "REPORT_DEFAULT": "s",
-      "ABBREVIATION": "stri",
-      "SYSTEM_DATE": "2023-11-24T12:23:04.648Z",
-      "COSTCODE_METAL": "string",
-      "ISCURRENCY": true,
+      "ABBREVIATION": this.metaldivisionForm.value.Abbreviation || "",
+      "SYSTEM_DATE": "2023-11-24T12:22:11.425Z",
+      "COSTCODE_METAL": this.metaldivisionForm.value.costcenter || "",
+      "ISCURRENCY": this.metaldivisionForm.value.currency || "",
       "DESCRIPTION_OTHER": "string",
-      "COSTCODE_MAKING": "string",
+      "COSTCODE_MAKING":this.metaldivisionForm.value.costcentermaking || "",
       "METAL_PURITY": 0,
       "DESCRIPTION_CHINESE": "string",
       "DESCRIPTION_TURKISH": "string",
-      "AUTOFIXSTOCK": "string"
+      "AUTOFIXSTOCK": this.metaldivisionForm.value.stockcode || "",
     }
     
   
