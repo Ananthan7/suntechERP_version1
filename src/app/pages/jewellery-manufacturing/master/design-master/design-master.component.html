@@ -6,7 +6,8 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+(deleteClick)="deleteRecord()"></modal-header>
 <!-- content section -->
 
 
