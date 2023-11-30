@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -11,12 +12,22 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
 
+  retailAdvanceReceiptRegisterForm: FormGroup = this.formBuilder.group({
+    branch : [''],
+    show : [''],
+    fromDate : [''],
+    toDate : [''],
+    salesman : [''],
+    salesmanCode : [''],
+    reportTo : ['']
+  })
 
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   // private cssFilePath = 'assets/scheme_register_pdf.scss';
 
   constructor(
     private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
   ) { }
 
   ngOnInit(): void {
