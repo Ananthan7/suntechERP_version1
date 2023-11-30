@@ -15,7 +15,7 @@
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Metal Type :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
+                          <mat-form-field style="width: 60%;">
                             <input type="text" matInput formControlName="metalType" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="metalTypeCodeData"
@@ -746,7 +746,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Stamp Rate :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="number" matInput formControlName="stamprate" />
                               </mat-form-field>
                     
                             </div>
