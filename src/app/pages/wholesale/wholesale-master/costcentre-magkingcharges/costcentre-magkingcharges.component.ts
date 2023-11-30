@@ -131,7 +131,7 @@ export class CostcentreMagkingchargesComponent implements OnInit {
       "costCenterDetail": [
         {
           "UNIQUE_ID": 0,
-          "COST_CODE": "md3",
+          "COST_CODE": this.costcentermakingForm.value.costcode || "",
           "TYPE": "string",
           "BRANCH_CODE": "string",
           "ADJUSTMENT": "string",

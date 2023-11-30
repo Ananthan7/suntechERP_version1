@@ -34,6 +34,59 @@ export class CostCentreMetalComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  purchaseCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 49,
+    SEARCH_FIELD: 'GST_CODE',
+    SEARCH_HEADING: 'Purchase',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "GST_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
+
+  salesCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 49,
+    SEARCH_FIELD: 'GST_CODE',
+    SEARCH_HEADING: 'Sales',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "GST_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
+
+  branchtransferCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 49,
+    SEARCH_FIELD: 'GST_CODE',
+    SEARCH_HEADING: 'Branch Transfer',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "GST_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
+ 
+  purchaseCodeSelected(e:any){
+    console.log(e);
+    this.costcentermetalForm.controls.purchase.setValue(e.GST_CODE);
+  }
+
+  salesCodeSelected(e:any){
+    console.log(e);
+    this.costcentermetalForm.controls.sales.setValue(e.GST_CODE);
+  }
+
+  branchtransferDataSelected(data: any) {
+    this.costcentermetalForm.controls.branchtransfer.setValue(data.GST_CODE)
+  }
+
 
   addTableData(){
 
@@ -76,7 +129,7 @@ export class CostCentreMetalComponent implements OnInit {
       "costCenterDetail": [
         {
           "UNIQUE_ID": 0,
-          "COST_CODE": "md3",
+          "COST_CODE": this.costcentermetalForm.value.costcode || "",
           "TYPE": "string",
           "BRANCH_CODE": "string",
           "ADJUSTMENT": "string",
