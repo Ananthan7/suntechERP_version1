@@ -1,5 +1,5 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Process Transfer Details</h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Process Transfer(MFG) Details</h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
@@ -508,6 +508,7 @@
                             formControlName="METAL_ToPCS" />
                         </mat-form-field>
                       </td>
+                      <!-- scrap pcs -->
                       <td>
                         <mat-form-field style="width: 110px;">
                           <input type="number" matInput class="text-right"
@@ -775,22 +776,33 @@
               <dxo-editing mode="cell" [allowUpdating]="true">
               </dxo-editing>
               <dxo-selection mode="single"></dxo-selection>
-              <dxi-column dataField="DIVCODE" caption="Div" alignment="left"></dxi-column>
+              <dxi-column dataField="DIVCODE" caption="Div"
+                [allowEditing]="false" alignment="left"></dxi-column>
               <dxi-column dataField="STOCK_CODE" caption="Stock Code"
-                alignment="left"></dxi-column>
-              <dxi-column dataField="COLOR" caption="Color" alignment="left"></dxi-column>
+                [allowEditing]="false" alignment="left"></dxi-column>
+              <dxi-column dataField="COLOR" caption="Color" 
+                [allowEditing]="false" alignment="left"></dxi-column>
               <dxi-column dataField="CLARITY" caption="Clarity"
-                alignment="left"></dxi-column>
-              <dxi-column dataField="SIZE" caption="Size" alignment="left"></dxi-column>
-              <dxi-column dataField="PCS" caption="Pcs" alignment="left"></dxi-column>
+                [allowEditing]="false" alignment="left"></dxi-column>
+              <dxi-column dataField="SIZE" caption="Size" 
+                [allowEditing]="false" alignment="left"></dxi-column>
+              <dxi-column dataField="SHAPE" caption="Shape" 
+                [allowEditing]="false" alignment="left"></dxi-column>
+              <dxi-column dataField="PCS" caption="Pcs" 
+                  alignment="left"></dxi-column>
               <dxi-column dataField="PCS" caption="Setted" alignment="center"></dxi-column>
               <dxi-column dataField="GROSS_WT" caption="Weight"
                 alignment="right"></dxi-column>
-              <dxi-column dataField="LOSS_QTY" caption="Loss" alignment="right"></dxi-column>
-              <dxi-column dataField="Div" caption="Gain Wt" alignment="right"></dxi-column>
-              <dxi-column dataField="Type" caption="Type" alignment="right"></dxi-column>
-              <dxi-column dataField="Rate" caption="Rate" alignment="right"></dxi-column>
-              <dxi-column dataField="AMOUNTFC" caption="Amount" alignment="right"></dxi-column>
+              <dxi-column dataField="LOSS_QTY" caption="Loss" 
+                [allowEditing]="false" alignment="right"></dxi-column>
+              <dxi-column dataField="Div" caption="Gain Wt" 
+                [allowEditing]="false" alignment="right"></dxi-column>
+              <dxi-column dataField="Type" caption="Type" 
+                [allowEditing]="false" alignment="right"></dxi-column>
+              <dxi-column dataField="Rate" caption="Rate" 
+                [allowEditing]="false" alignment="right"></dxi-column>
+              <dxi-column dataField="AMOUNTFC" caption="Amount" 
+                [allowEditing]="false" alignment="right"></dxi-column>
               <dxi-column dataField="SETTED_FLAG" [allowEditing]="false"
                 caption="Setted" alignment="center"
                 cellTemplate="Setted">
@@ -807,7 +819,7 @@
                 </dxo-lookup>
               </dxi-column>
               <dxi-column dataField="SIEVE_SET" caption="Sieve Set"
-                alignment="left"></dxi-column>
+                [allowEditing]="false" alignment="left"></dxi-column>
               <dxi-column dataField="GROSS_WT" caption="Issue Gross Wt"
                 alignment="right"></dxi-column>
               <dxi-column dataField="STONE_WT" caption="Issue Stone Wt"
