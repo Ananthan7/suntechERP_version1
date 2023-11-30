@@ -10,14 +10,14 @@
 <modal-header (saveClick)="savePdf()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
-    <form>
+    <form [formGroup]="retailAdvanceReceiptRegisterForm">
         <div class="row">
             <div class="col-md-12">
                 <div class="row mb-1 ">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Branch</label>
                     <div class="col-md-2">
                         <mat-form-field>
-                            <mat-select>
+                            <mat-select formControlName="branch">
                                 <mat-option value="HO">HO</mat-option>
                                 <mat-option></mat-option>
                             </mat-select>
@@ -31,7 +31,7 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Show</label>
                     <div class="col-md-2">
                         <mat-form-field>
-                            <mat-select>
+                            <mat-select formControlName="show">
                                 <mat-option value="ALL">ALL</mat-option>
                                 <mat-option></mat-option>
                             </mat-select>
@@ -43,7 +43,7 @@
                     <div class="col-md-2">
                         <mat-form-field>
                             <input matInput [matDatepicker]="fromDate" [max]="vocMaxDate" name="fromDate"
-                                placeholder="DD/MM/YYYY" DateValidation />
+                                placeholder="DD/MM/YYYY" DateValidation  formControlName="fromDate"/>
                             <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
                         </mat-form-field>
@@ -51,7 +51,7 @@
                     <div class="col-md-2">
                         <mat-form-field>
                             <input matInput [matDatepicker]="toDate" [max]="vocMaxDate" name="toDate"
-                                placeholder="DD/MM/YYYY" DateValidation />
+                                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" />
                             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
                         </mat-form-field>
@@ -61,20 +61,18 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">SalesMan :</label>
                     <div class="col-md-2">
                         <mat-form-field>
-                            <input matInput ="text"  name="salesman"
-                               />
+                            <input matInput ="text"  formControlName="salesman"                               />
                         </mat-form-field>
                     </div>
                     <div class="col-md-2">
                         <mat-form-field>
-                            <input matInput ="text"  name="salesman"
-                               />
+                            <input matInput ="text"  formControlName="salesmanCode"                               />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Report To</label>
                     <div class="col-md-2">
                         <mat-form-field>
-                            <mat-select>
+                            <mat-select formControlName="reportTo">
                                 <mat-option value="PERVIEW">PERVIEW</mat-option>
                                 <mat-option></mat-option>
                             </mat-select>

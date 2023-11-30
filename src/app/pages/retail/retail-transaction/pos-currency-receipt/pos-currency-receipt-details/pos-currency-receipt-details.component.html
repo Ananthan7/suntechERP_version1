@@ -15,7 +15,7 @@
     <!-- form starts -->
     <form [formGroup]="posCurrencyReceiptDetailsForm">
       <div class="row">
-        <div class="col-md-8 py-2">
+        <div class="col-md-6 py-2">
           <div class="row mb-1">
             <label for="inputPassword" class="col-sm-3 col-form-label">Branch :</label>
             <div class="col-md-3">
@@ -27,7 +27,7 @@
           <div class="row mb-1">
             <label for="inputPassword" class="col-sm-3 col-form-label">Mode Of :</label>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 100%;">
                 <mat-select formControlName="modeOfSelect">
                   <mat-option *ngFor="let data of paymentModeList" [value]="data.ENGLISH">{{
                     data.ENGLISH }}</mat-option>
@@ -191,7 +191,7 @@
             </div>
           </div>
           <div class="row mb-1">
-            <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :</label>
+            <label for="inputPassword" class="col-sm-3 col-form-label">Remarks :</label>
             <div class="col-md-7">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="remarks" />
