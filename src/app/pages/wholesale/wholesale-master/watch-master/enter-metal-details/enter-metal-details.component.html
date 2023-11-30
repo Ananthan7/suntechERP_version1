@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> -->
 <!-- content section -->
 
 <div class="container-fluid pt-3">
@@ -19,20 +19,20 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Division :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="division"/>
+                                    <input type="text" matInput formControlName="division" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="divisionCodeData"
-                                            (newRowClick)="divisionCodeSelected($event)">
-                                        </master-search>
+                                    (newRowClick)="divisionCodeSelected($event)">
+                                </master-search>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Karat :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="karat"/>
+                                    <input type="text" matInput formControlName="karat" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="karatCodeData"
-                                (newRowClick)="karatCodeSelected($event)">
-                            </master-search>
+                                    (newRowClick)="karatCodeSelected($event)">
+                                </master-search>
                             </div>
                         </div>
 
@@ -40,35 +40,44 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Rate Type :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="rateType"/>
+                                    <input type="text" matInput formControlName="rateType" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="rateTypeCodeData"
-                                (newRowClick)="rateTypeCodeSelected($event)">
-                            </master-search>
+                                    (newRowClick)="rateTypeCodeSelected($event)">
+                                </master-search>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Rate :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="rate" />
                                 </mat-form-field>
                             </div>
                         </div>
 
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Amount FC :</label>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
-                                </mat-form-field>
+                        <form [formGroup]="myForm">
+                            <div class="form-row">
+                                <div class="row align-items-center mb-1">
+                                    <label for="amountLC" class="col-sm-3 col-form-label">Amount LC:</label>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="amountLC" [disabled]="true">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="amountFC" class="col-sm-3 col-form-label">Amount FC:</label>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="amountFC">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Amount LC :</label>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
-                                </mat-form-field>
-                            </div>
-                        </div>
+                        </form>
+
+
                     </div>
+
                     <div class="col-md-6">
                         <div class="row align-items-center mb-1">
                             <label for="inputPassword" class="col-sm-3 col-form-label">Gross Wt
@@ -99,6 +108,22 @@
                         </div>
                     </div>
 
+                    <div class="col-md-6">
+                        <div class="row mb-2">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary  text-center"
+                                    (saveClick)="formSubmit()">Save</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary text-center"
+                                    (cancelClick)="close()">Cancel</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary text-center"
+                                    (continueClick)="continue()">Continue</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

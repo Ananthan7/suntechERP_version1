@@ -15,15 +15,15 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class StoneIssueDetailComponent implements OnInit {
 
-  columnhead1:any[] = ['Div','Stock Code','Shape','Color','Clarity','Size','Sieve Set','Pcs'];
+  columnhead1: any[] = ['Div', 'Stock Code', 'Shape', 'Color', 'Clarity', 'Size', 'Sieve Set', 'Pcs'];
 
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
-    user: MasterSearchModel = {
+  user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 73,
@@ -47,7 +47,55 @@ export class StoneIssueDetailComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
+  jobNumberCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  processCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'Process_Code',
+    SEARCH_HEADING: 'Process Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Process_Code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -63,9 +111,36 @@ export class StoneIssueDetailComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
   }
 
-  locationCodeSelected(e:any){
+  locationCodeSelected(e: any) {
     console.log(e);
     this.stoneissuedetailsFrom.controls.location.setValue(e.LOCATION_CODE);
+  }
+
+  jobNumberCodeSelected(e: any) {
+    console.log(e);
+    this.stoneissuedetailsFrom.controls.jobNumber.setValue(e.job_number);
+    this.stoneissuedetailsFrom.controls.jobDes.setValue(e.job_description);
+    this.stoneissuedetailsFrom.controls.subjobnumber.setValue(e.job_number);
+    this.stoneissuedetailsFrom.controls.subjobDes.setValue(e.job_description);
+  }
+
+  processCodeSelected(e: any) {
+    console.log(e);
+    this.stoneissuedetailsFrom.controls.process.setValue(e.Process_Code);
+    this.stoneissuedetailsFrom.controls.processname.setValue(e.Description);
+  }
+
+  workerCodeSelected(e: any) {
+    console.log(e);
+    this.stoneissuedetailsFrom.controls.worker.setValue(e.WORKER_CODE);
+    this.stoneissuedetailsFrom.controls.workername.setValue(e.WORKER_CODE);
+  }
+  
+  stockCodeSelected(e: any) {
+    console.log(e);
+    this.stoneissuedetailsFrom.controls.stock.setValue(e.DIVISION_CODE);
+    this.stoneissuedetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
+    this.stoneissuedetailsFrom.controls.stockDes.setValue(e.DESCRIPTION);
   }
 
   close(data?: any) {
@@ -77,42 +152,45 @@ export class StoneIssueDetailComponent implements OnInit {
 
 
   stoneissuedetailsFrom: FormGroup = this.formBuilder.group({
-    jobnumber:[''],
-    jobdes:[''],
-    subjobnumber:[''],
-   designcode:[''],
-   partcode:[''],
-   salesorderno:[''],
-   process:[''],
-   processname:[''],
-    worker:[''],
-    workername:[''],
-    stock:[''],
-    batchid:[''],
-    location:[''],
-    pieces:[''],
-    shape:[''],
-    clarity:[''],
-    karat:[''],
-    size:[''],
-    sieveset:[''],
-    unitrate:[''],
-    sieve:[''],
-    amount:[''],
-    color:[''],
-    stockbal:[''],
-    pointerwt:[''],
-    otheratt:[''],
-    remarks:[''],
+    jobNumber: [''],
+    jobDes: [''],
+    subjobnumber: [''],
+    subjobDes: [''],
+    designcode: [''],
+    partcode: [''],
+    salesorderno: [''],
+    process: [''],
+    processname: [''],
+    worker: [''],
+    workername: [''],
+    stock: [''],
+    stockCode: [''],
+    stockDes: [''],
+    batchid: [''],
+    location: [''],
+    pieces: [''],
+    shape: [''],
+    clarity: [''],
+    karat: [''],
+    size: [''],
+    sieveset: [''],
+    unitrate: [''],
+    sieve: [''],
+    amount: [''],
+    color: [''],
+    stockbal: [''],
+    pointerwt: [''],
+    otheratt: [''],
+    remarks: [''],
   });
 
 
-removedata(){
-  this.tableData.pop();
-}
-  formSubmit(){
+  removedata() {
+    this.tableData.pop();
+  }
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -120,7 +198,7 @@ removedata(){
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'JobStoneIssueMasterDJ/InsertJobStoneIssueMasterDJ'
     let postData = {
       "SRNO": 0,
@@ -138,8 +216,8 @@ removedata(){
       "STOCK_CODE": this.stoneissuedetailsFrom.value.stock || "",
       "STOCK_DESCRIPTION": this.stoneissuedetailsFrom.value.stock || "",
       "SIEVE": this.stoneissuedetailsFrom.value.sieve || "",
-      "SHAPE":this.stoneissuedetailsFrom.value.shape || "",
-      "COLOR":this.stoneissuedetailsFrom.value.color || "",
+      "SHAPE": this.stoneissuedetailsFrom.value.shape || "",
+      "COLOR": this.stoneissuedetailsFrom.value.color || "",
       "CLARITY": this.stoneissuedetailsFrom.value.clarity || "",
       "SIZE": this.stoneissuedetailsFrom.value.size || "",
       "JOB_PCS": 0,
@@ -173,16 +251,16 @@ removedata(){
       "D_REMARKS": "Str",
       "SIEVE_DESC": "0",
       "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "", 
+      "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "",
     }
-  
+
     this.close(postData);
   }
 
   setFormValues() {
-    if(!this.content) return
+    if (!this.content) return
     console.log(this.content);
-    
+
     this.stoneissuedetailsFrom.controls.jobnumber.setValue(this.content.JOB_NUMBER)
     this.stoneissuedetailsFrom.controls.jobdes.setValue(this.content.JOB_DESCRIPTION)
     this.stoneissuedetailsFrom.controls.subjobnumber.setValue(this.content.JOB_SO_NUMBER)
@@ -213,13 +291,13 @@ removedata(){
   }
 
 
-  update(){
+  update() {
     if (this.stoneissuedetailsFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/'+ this.stoneissuedetailsFrom.value.branchCode + this.stoneissuedetailsFrom.value.yearMonth
+
+    let API = 'JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/' + this.stoneissuedetailsFrom.value.branchCode + this.stoneissuedetailsFrom.value.yearMonth
     let postData = {
       "SRNO": 0,
       "VOCNO": 0,
@@ -236,8 +314,8 @@ removedata(){
       "STOCK_CODE": this.stoneissuedetailsFrom.value.stock || "",
       "STOCK_DESCRIPTION": this.stoneissuedetailsFrom.value.stock || "",
       "SIEVE": this.stoneissuedetailsFrom.value.sieve || "",
-      "SHAPE":this.stoneissuedetailsFrom.value.shape || "",
-      "COLOR":this.stoneissuedetailsFrom.value.color || "",
+      "SHAPE": this.stoneissuedetailsFrom.value.shape || "",
+      "COLOR": this.stoneissuedetailsFrom.value.color || "",
       "CLARITY": this.stoneissuedetailsFrom.value.clarity || "",
       "SIZE": this.stoneissuedetailsFrom.value.size || "",
       "JOB_PCS": 0,
@@ -271,13 +349,13 @@ removedata(){
       "D_REMARKS": "Str",
       "SIEVE_DESC": "0",
       "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "",  
+      "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "",
     }
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -298,7 +376,7 @@ removedata(){
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       Swal.fire({
@@ -364,7 +442,7 @@ removedata(){
       }
     });
   }
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

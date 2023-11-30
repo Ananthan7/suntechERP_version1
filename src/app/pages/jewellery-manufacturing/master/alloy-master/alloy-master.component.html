@@ -15,7 +15,7 @@
                 <div class="check_radio_btn">
                     <div class="row">
                         <div class="col-md-3">
-                             <div class="row mb-1">
+                            <div class="row mb-1">
                                 <label for="input" class="col-sm-5 col-form-label">Code :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
@@ -31,7 +31,7 @@
                                         <input type="text" matInput formControlName="costCenter" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="costCenterData"
-                                    (newRowClick)="costCenterSelected($event)"></master-search>
+                                        (newRowClick)="costCenterSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
@@ -41,7 +41,7 @@
                                         <input type="text" matInput formControlName="type" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="typeCodeData"
-                                    (newRowClick)="typeCodeSelected($event)"></master-search>
+                                        (newRowClick)="typeCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
@@ -51,7 +51,7 @@
                                         <input type="text" matInput formControlName="category" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="categoryCodeData"
-                                    (newRowClick)="categoryCodeSelected($event)"></master-search>
+                                        (newRowClick)="categoryCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
@@ -61,7 +61,7 @@
                                         <input type="text" matInput formControlName="subCategory" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="subcategoryCodeData"
-                                    (newRowClick)="subcategoryCodeSelected($event)"></master-search>
+                                        (newRowClick)="subcategoryCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
@@ -71,7 +71,7 @@
                                         <input type="text" matInput formControlName="brand" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="BrandCodeData"
-                                    (newRowClick)="brandCodeSelected($event)"></master-search>
+                                        (newRowClick)="brandCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
@@ -116,7 +116,7 @@
                                         <input type="text" matInput formControlName="vendor" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="vendorCodeData"
-                                    (newRowClick)="vendorCodeSelected($event)"></master-search>
+                                        (newRowClick)="vendorCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
@@ -190,7 +190,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="price_box">
-                                        <a>PriceScheme</a>  <master-search [MasterSearchData]="priceSchemeData"
+                                        <a>PriceScheme</a> <master-search [MasterSearchData]="priceSchemeData"
                                             (newRowClick)="vendorCodeSelected($event)"></master-search>
                                     </div>
                                 </div>
@@ -221,7 +221,7 @@
                                         <input type="text" matInput formControlName="price1code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceOneCodeSelected($event)"></master-search>
+                                        (newRowClick)="priceOneCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
@@ -248,7 +248,7 @@
                                         <input type="text" matInput formControlName="price2code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceTwoCodeSelected($event)"></master-search>
+                                        (newRowClick)="priceTwoCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
@@ -275,7 +275,7 @@
                                         <input type="text" matInput formControlName="price3code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceThreeCodeSelected($event)"></master-search>
+                                        (newRowClick)="priceThreeCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
@@ -302,7 +302,7 @@
                                         <input type="text" matInput formControlName="price4code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceFourCodeSelected($event)"></master-search>
+                                        (newRowClick)="priceFourCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
@@ -329,7 +329,7 @@
                                         <input type="text" matInput formControlName="price5code" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="priceCodeData"
-                                    (newRowClick)="priceFiveCodeSelected($event)"></master-search>
+                                        (newRowClick)="priceFiveCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
@@ -356,7 +356,7 @@
                                         <input type="text" matInput formControlName="hsncode" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="HSNCodeData"
-                                    (newRowClick)="HSNCenterSelected($event)"></master-search>
+                                        (newRowClick)="HSNCenterSelected($event)"></master-search>
                                 </div>
                             </div>
                         </div>
@@ -366,9 +366,7 @@
                                 <input type="file" name="uploadproduct" class="uploadproduct">
                             </div>
                             <div class="image_box">
-                                <!-- <input type="file">Item Image -->
                                 <div class="img_box">
-
                                 </div>
                             </div>
                         </div>
