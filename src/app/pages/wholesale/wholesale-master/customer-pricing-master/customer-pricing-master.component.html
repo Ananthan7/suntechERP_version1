@@ -5,7 +5,8 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+(deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="customerpricemasterForm">

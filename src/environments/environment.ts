@@ -3,22 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  app_version: '0.5.4',
+  app_version: '0.5.7',
   api_SignumApiPath_url: 'http://34.242.202.25:93/api/',
   baseUrl: 'http://94.200.156.234:85/api/',
   baseImageUrl: 'http://94.200.156.234:85/',
   production: false,
-  defaultauth: 'fake-backend',
-  firebaseConfig: {
-    apiKey: '',
-    authDomain: '',
-    databaseURL: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: '',
-    appId: '',
-    measurementId: ''
-  }
+ 
 };
 
 /*

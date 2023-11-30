@@ -92,7 +92,7 @@ export class MetalReturnDetailsComponent implements OnInit {
 
   metalReturnDetailsForm: FormGroup = this.formBuilder.group({
     jobNumber : [''],
-    jobDate : [''],
+    jobDes : [''],
     subJobNo : [''],
     subJobNoDes : [''],
     processCode : [''],
@@ -154,6 +154,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   jobnoCodeSelected(e:any){
     console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
+    this.metalReturnDetailsForm.controls.jobDes.setValue(e.job_description);
   }
   ProcessCodeSelected(e:any){
     console.log(e);

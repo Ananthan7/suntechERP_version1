@@ -33,9 +33,7 @@ export class RetailMasterComponent implements OnInit {
   ) {
     this.getMasterGridData()
     this.menuTitle = this.CommonService.getModuleName()
-
     this.componentName = this.CommonService.getFormComponentName()
-
   }
 
   ngOnInit(): void {
@@ -73,20 +71,6 @@ export class RetailMasterComponent implements OnInit {
       this.menuTitle = data
     }
     let contents: any;
-    // switch (this.menuTitle) {
-    //   case 'Sale':
-    //     // contents = AddPosComponent
-    //     break;
-    //   case 'POINT OF SALE CURRENCY RECEIPT':
-    //     // contents = PosCurrencyReceiptComponent
-    //     break;
-    //   //continue adding components using case then break
-    //   default:
-    //     this.snackBar.open('No Response Found!', 'Close', {
-    //       duration: 3000,
-    //     });
-    //     return;
-    // }
     this.componentDbList = {
       'PosCustomerMaster': PosCustomerMasterMainComponent, // not getting from api
   
@@ -98,7 +82,7 @@ export class RetailMasterComponent implements OnInit {
       this.CommonService.showSnackBarMsg('Module Not Created')
     }
 
-    const modalRef: NgbModalRef = this.modalService.open(contents, {
+    const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
       size: 'xl',
       backdrop: 'static',
       keyboard: false,

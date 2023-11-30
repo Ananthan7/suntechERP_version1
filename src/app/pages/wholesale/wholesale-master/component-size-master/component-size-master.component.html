@@ -5,12 +5,15 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+(deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
+
     <div class="col-md-12">
-        <form>
+        <form  [formGroup]="componentsizemasterForm">
             <div class="container-fluid pt-3">
                 <div class="row">
+              
                     <div class="col-md-9">
                         <div class="row">
                             <div class="col-md-10">
@@ -18,7 +21,8 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Code*:</label>
                                     <div class="col-md-4">
                                       <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput />
+                                        <input type="text" matInput  class="text-left"
+                                        formControlName="code" />
                                       </mat-form-field>
                                     </div>
                                   </div>
@@ -30,7 +34,8 @@
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Description*:</label>
                                     <div class="col-md-9">
                                       <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput />
+                                        <input type="text" matInput  class="text-left"
+                                    formControlName="desc" />
                                       </mat-form-field>
                                     </div>
                                   </div>
@@ -50,7 +55,8 @@
                                         <label for="inputPassword" class="col-sm-3 col-form-label">Height*:</label>
                                         <div class="col-md-5">
                                           <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput  class="text-left"
+                                    formControlName="height" />
                                           </mat-form-field>
                                          
                                         </div>
@@ -61,7 +67,8 @@
                                         <label for="inputPassword" class="col-sm-3 col-form-label">Length*:</label>
                                         <div class="col-md-5">
                                           <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput  class="text-left"
+                                            formControlName="length" />
                                           </mat-form-field>
                                          
                                         </div>
@@ -75,7 +82,8 @@
                                         <label for="inputPassword" class="col-sm-3 col-form-label">Width*:</label>
                                         <div class="col-md-5">
                                           <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput  class="text-left"
+                                    formControlName="width" />
                                           </mat-form-field>
                                         </div>
                                       </div>
@@ -85,7 +93,8 @@
                                         <label for="inputPassword" class="col-sm-3 col-form-label">Radius*:</label>
                                         <div class="col-md-5">
                                           <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput  class="text-left"
+                                            formControlName="radius" />
                                           </mat-form-field>
                                         </div>
                                       </div>
@@ -101,4 +110,3 @@
             </div>
         </form>
     </div>
-</div>

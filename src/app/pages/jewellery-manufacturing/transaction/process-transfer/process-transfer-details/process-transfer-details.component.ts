@@ -22,8 +22,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   branchCode: String = this.comService.branchCode;
   yearMonth: String = this.comService.yearSelected;
   MetalorProcessFlag: string = 'Process';
+  designType: string = 'DIAMOND';
   private subscriptions: Subscription[] = [];
-
   jobNoSearch: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -75,6 +75,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     treeno: [''],
     remarks: [''],
     toggleSwitchtIssue: [true],
+    //DIAMOND DETAIL STARTS
     processFrom: [''],
     processTo: [''],
     processToDescription: [''],
@@ -117,6 +118,45 @@ export class ProcessTransferDetailsComponent implements OnInit {
     PICTURE_PATH: [''],
     MAIN_STOCK_CODE: [''],
     SCRAP_PURITY: [''],
+    DESIGN_TYPE: [''],
+    //METAL DETAILS STARTS
+    METAL_quantity: [''],
+    METAL_processFrom: [''],
+    METAL_processTo: [''],
+    METAL_processToDescription: [''],
+    METAL_workerFrom: [''],
+    METAL_workerTo: [''],
+    METAL_workerToDescription: [''],
+    METAL_LossBooked: [''],
+    METAL_ScrapLocCode: [''],
+    METAL_GainGrWt: [''],
+    METAL_FromStockCode: [''],
+    METAL_ToStockCode: [''],
+    METAL_ScrapStockCode: [''],
+    METAL_FromPCS: [''],
+    METAL_ToPCS: [''],
+    METAL_ScrapPCS: [''],
+    METAL_BalPCS: [''],
+    METAL_GrossWeightFrom: [''],
+    METAL_GrossWeightTo: [''],
+    METAL_ScrapGrWt: [''],
+    METAL_BalGrWt: [''],
+    METAL_StoneWeightFrom: [''],
+    METAL_StoneWeightTo: [''],
+    METAL_ScrapStoneWt: [''],
+    METAL_BalStoneWt: [''],
+    METAL_FromIronWeight: [''],
+    METAL_ToIronWt: [''],
+    METAL_ToIronScrapWt: [''],
+    METAL_BalIronWt: [''],
+    METAL_FromNetWeight: [''],
+    METAL_ToNetWt: [''],
+    METAL_ScrapNetWt: [''],
+    METAL_BalNetWt: [''],
+    METAL_FromPureWt: [''],
+    METAL_ToPureWt: [''],
+    METAL_ScrapPureWt: [''],
+    METAL_BalPureWt: [''],
   });
 
   constructor(
@@ -195,6 +235,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
             this.processTransferdetailsForm.controls.PROCESSDESC.setValue(data[0].PROCESSDESC)
             this.processTransferdetailsForm.controls.WORKERDESC.setValue(data[0].WORKERDESC)
             this.processTransferdetailsForm.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
+            if(data[0].DESIGN_TYPE != '' && (data[0].DESIGN_TYPE).toUpperCase() == 'METAL') this.designType = 'METAL';
+
+            this.processTransferdetailsForm.controls.DESIGN_TYPE.setValue(this.designType)
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
@@ -278,6 +321,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  /**USE: fillStoneDetails grid data */
   private fillStoneDetails():void {
     let postData = {
       "SPID": "042",
@@ -313,6 +357,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   formatMetalDetailDataGrid(){
     this.metalDetailData.forEach((element:any) => {
+      element.SETTED_FLAG = false
       element.GROSS_WT = this.comService.decimalQuantityFormat(element.GROSS_WT,'METAL')
       element.STONE_WT = this.comService.decimalQuantityFormat(element.STONE_WT,'STONE')
       element.PURITY = this.comService.decimalQuantityFormat(element.PURITY,'PURITY')

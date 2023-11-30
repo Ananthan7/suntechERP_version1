@@ -243,7 +243,7 @@ export class ProcessTransferComponent implements OnInit {
     let JOB_VALIDATE_DATA = detailScreenData.JOB_VALIDATE_DATA
     console.log(METAL_DETAIL_GRID,'METAL_DETAIL_GRID');
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity)*Number(detailScreenData.SCRAP_PURITY))
-    let seqData = this.sequenceDetails.filter((item:any) => item.PROCESS_CODE == detailScreenData.workerFrom);
+    let seqData = this.sequenceDetails.filter((item:any) => item.PROCESS_CODE == detailScreenData.processFrom);
     
     METAL_DETAIL_GRID.forEach((element:any) => {
       this.metalGridDataToSave.push({
@@ -309,8 +309,8 @@ export class ProcessTransferComponent implements OnInit {
         "SQLID": "",
         "ISBROCKEN": 0,
         "TREE_NO": 0,
-        "SETTED": false,
-        "SETTED_PCS": 0,
+        "SETTED": element.SETTED_FLAG,
+        "SETTED_PCS": this.commonService.emptyToZero(element.Setted),
         "SIEVE": this.commonService.nullToString(element.SIEVE),
         "FULL_RECOVERY": 0,
         "RECOVERY_DATE": "2023-10-21T07:24:35.989Z",
@@ -355,6 +355,7 @@ export class ProcessTransferComponent implements OnInit {
       })
     });
   }
+  /**USE: get SEQUENCE_DETAIL_DJ table data */
   getSequenceDetailData(formData:any){
     let API = `SequenceMasterDJ/GetSequenceMasterDJDetail/${formData.SEQ_CODE}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -402,7 +403,8 @@ export class ProcessTransferComponent implements OnInit {
     let LOSS_PURE_QTY = this.calculateLossPureQty(detailScreenData);
     let stoneAmount = this.calculateMetalGridSum(METAL_DETAIL_GRID,'STONEAMOUNT');
     let metalAmount = this.calculateMetalGridSum(METAL_DETAIL_GRID,'METALAMOUNT');
-    let seqData = this.sequenceDetails.filter((item:any) => item.PROCESS_CODE == detailScreenData.workerFrom);
+    let seqDataFrom = this.sequenceDetails.filter((item:any) => item.PROCESS_CODE == detailScreenData.processFrom);
+    let seqDataTo = this.sequenceDetails.filter((item:any) => item.PROCESS_CODE == detailScreenData.processTo);
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity)*Number(detailScreenData.SCRAP_PURITY))
     this.PTFDetailsToSave.push({
       "SRNO": 0,
@@ -463,9 +465,9 @@ export class ProcessTransferComponent implements OnInit {
       "LAB_RATEFC": 0,
       "LAB_RATELC": 0,
       "LAB_ACCODE": "",
-      "LOSS_ACCODE": seqData.length>0 ? this.commonService.nullToString(seqData[0].LOSS_ACCODE) : '',
-      "FRM_WIP_ACCODE": seqData.length>0 ? this.commonService.nullToString(seqData[0].wip_accode) : '',
-      "TO_WIP_ACCODE": seqData.length>0 ? this.commonService.nullToString(seqData[0].wip_accode) : '',
+      "LOSS_ACCODE": seqDataFrom.length>0 ? this.commonService.nullToString(seqDataFrom[0].LOSS_ACCODE) : '',
+      "FRM_WIP_ACCODE": seqDataFrom.length>0 ? this.commonService.nullToString(seqDataFrom[0].wip_accode) : '',
+      "TO_WIP_ACCODE": seqDataTo.length>0 ? this.commonService.nullToString(seqDataTo[0].wip_accode) : '',
       "RET_METAL_DIVCODE": "",
       "RET_METAL_STOCK_CODE": "",
       "RET_STONE_DIVCODE": "",
@@ -521,7 +523,7 @@ export class ProcessTransferComponent implements OnInit {
       "SCRAP_WT": this.commonService.emptyToZero(detailScreenData.scrapQuantity),
       "SCRAP_PURE_WT": scrapPureWt,
       "SCRAP_PUDIFF": this.commonService.emptyToZero((Number(detailScreenData.scrapQuantity)-Number(detailScreenData.PURITY))*scrapPureWt),
-      "SCRAP_ACCODE": seqData.length>0 ? this.commonService.nullToString(seqData[0].GAIN_AC) : '',
+      "SCRAP_ACCODE": seqDataFrom.length>0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
       "APPROVED_DATE": this.commonService.formatDateTime(this.currentDate),
       "APPROVED_USER": this.commonService.nullToString(detailScreenData.approvedby),
       "SCRAP_PCS": 0,
@@ -538,7 +540,7 @@ export class ProcessTransferComponent implements OnInit {
       "IRON_SCRAP_WT": 0,
       "GAIN_WT": 0,
       "GAIN_PURE_WT": 0,
-      "GAIN_ACCODE": seqData.length>0 ? this.commonService.nullToString(seqData[0].GAIN_AC) : '',
+      "GAIN_ACCODE": seqDataFrom.length>0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
       "IS_REJECT": true,
       "REASON": "",
       "REJ_REMARKS": "",

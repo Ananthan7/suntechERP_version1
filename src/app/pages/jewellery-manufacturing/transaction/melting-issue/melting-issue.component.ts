@@ -16,8 +16,9 @@ import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-is
 })
 export class MeltingIssueComponent implements OnInit {
  
-  columnhead:any[] = ['Sr','Div','Job No','Stock Code','Main Stock','Process','Worker','Pcs','Gross Wt','Purity','Purity Wt']
-  columnheader : any[] = ['S','SO No','Party Code','Party Name','Job Number','Job Description','Design Code','UNQ Design ID','Process','Worker','Metal Required','Metal Allocation','Allocated Purity','Job Pcs']
+  columnhead:any[] = ['Sr','Div','Job No','Stock Code','Main Stock','Process','Worker','Pcs','Gross Wt','Purity','Purity Wt','Rate','Amount']
+  columnheader : any[] = ['Sr#','SO No','Party Code','Party Name','Job Number','Job Description','Design Code','UNQ Design ID','Process','Worker','Metal Required','Metal Allocated','Allocated Pure','Job Pcs']
+  columnhead1 : any[] = ['Sr#','Ingredients','Qty']
   @Input() content!: any;
   tableData: any[] = [];
   meltingISsueDetailsData : any[] = [];
@@ -37,7 +38,6 @@ export class MeltingIssueComponent implements OnInit {
     WHERECONDITION: "UsersName<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
 
   WorkerCodeData: MasterSearchModel = {
@@ -107,6 +107,7 @@ export class MeltingIssueComponent implements OnInit {
   jobnoCodeSelected(e:any){
     console.log(e);
     this.meltingIssueFrom.controls.jobno.setValue(e.job_number);
+    this.meltingIssueFrom.controls.jobdes.setValue(e.job_description);
   }
 
   timeCodeData: MasterSearchModel = {
@@ -162,8 +163,6 @@ export class MeltingIssueComponent implements OnInit {
 
   }
 
- 
-  
   deleteTableData(){
    
   }
@@ -172,6 +171,7 @@ export class MeltingIssueComponent implements OnInit {
     voctype:[''],
     vocno:[''],
     vocdate:[''],
+    voctime:[''],
     meltingtype:[''],
     jobno:[''],
     jobdes:[''],
@@ -183,6 +183,11 @@ export class MeltingIssueComponent implements OnInit {
     color:[''],
     time:[''],  // Not in table
     remarks:[''],
+    issued:[''],
+    required:[''],
+    allocated:[''],
+    balance:['']
+
   });
 
   formSubmit(){

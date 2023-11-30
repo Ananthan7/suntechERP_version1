@@ -31,7 +31,7 @@ export class LocationMasterComponent implements OnInit {
   }
 
   locationForm: FormGroup = this.formBuilder.group({
-    code:[''],
+    locationcode:[''],
     codedesc:[''],
     type:[''],
     division:[''],
@@ -124,7 +124,7 @@ export class LocationMasterComponent implements OnInit {
     let API = 'LocationMaster/InsertLocationMaster'
     let postData = {
       "MID": 0,
-      "LOCATION_CODE": this.locationForm.value.code || "",
+      "LOCATION_CODE": "",
       "DESCRIPTION": this.locationForm.value.codedesc || "",
       "DIVISION_CODE": this.locationForm.value.division || "",
       "LOCTYPE_CODE": this.locationForm.value.type || "",
