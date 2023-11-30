@@ -5,10 +5,10 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="row">
   <div class="col-md-12">
-    <form>
+    <form [formGroup]="costcenterconsumbleForm">
       <div class="container-fluid pt-3">
         <div class="row justify-content-between">
           <div class="col-md-6">
@@ -16,7 +16,7 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Cost Code :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput />
+                  <input type="text" matInput formControlName="costcode" />
                 </mat-form-field>
               </div>
             </div>
@@ -24,7 +24,7 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Description :</label>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput />
+                  <input type="text" matInput formControlName="description" />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
@@ -42,7 +42,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Purchase :</label>
               <div class="col-md-7">
                 <mat-form-field style="width: 80%;">
-                  <input type="text" matInput />
+                  <input type="text" matInput formControlName="purchase" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="purchaseCodeData"
                 (newRowClick)="purchaseCodeSelected($event)">
@@ -53,7 +53,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Sales :</label>
               <div class="col-md-7">
                 <mat-form-field style="width: 80%;">
-                  <input type="text" matInput />
+                  <input type="text" matInput formControlName="sales" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="salesCodeData"
                         (newRowClick)="salesCodeSelected($event)">
@@ -64,7 +64,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Branch Transfer :</label>
               <div class="col-md-7">
                 <mat-form-field style="width: 80%;">
-                  <input type="text" matInput />
+                  <input type="text" matInput formControlName="branchtransfer" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="branchtransferCodeData"
                 (newRowClick)="branchtransferDataSelected($event)">
