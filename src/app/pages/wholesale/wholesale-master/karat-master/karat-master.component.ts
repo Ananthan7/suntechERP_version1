@@ -18,7 +18,7 @@ export class KaratMasterComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
-  karatmasterForm: any;
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -31,8 +31,19 @@ export class KaratMasterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  karatMaster: FormGroup = this.formBuilder.group({
-    division :['']
+  karatmasterFrom: FormGroup = this.formBuilder.group({
+    division :[''],
+    karatcode:[''],
+    karatcodedes:[''],
+    standardpurity:[''],
+    minimum :[''],
+    maximum:[''],
+    sp_gravity:[''],
+    sp_variance:[''],
+    pos :[''],
+    pop_minmaxamt:[''],
+    scrap:[''],
+    showinweb:[''],
   })
 
   divisionCodeData: MasterSearchModel = {
@@ -48,7 +59,7 @@ export class KaratMasterComponent implements OnInit {
   }
   divisionCodeSelected(e:any){
     console.log(e);
-    this.karatMaster.controls.division.setValue(e.DIVISION_CODE);
+    this.karatmasterFrom.controls.division.setValue(e.DIVISION_CODE);
   }
 
   close(data?: any) {
@@ -56,20 +67,7 @@ export class KaratMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  karatForm: FormGroup = this.formBuilder.group({
-    karatcode:[''],
-    karatcodedes:[''],
-    standardpurity:[''],
-    minimum :[''],
-    maximum:[''],
-    sp_gravity:[''],
-    sp_variance:[''],
-    division:[''],
-    pos :[''],
-    pop_minmaxamt:[''],
-    scrap:[''],
-    showinweb:[''],
-  })
+
 
   formSubmit(){
 
@@ -77,28 +75,28 @@ export class KaratMasterComponent implements OnInit {
       this.update()
       return
     }
-    if (this.karatmasterForm.invalid) {
+    if (this.karatmasterFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
   
     let API = 'karatMaster/InsertKaratMaster'
     let postData = {
-      "KARAT_CODE": this.karatForm.value.karatcode || "",
-      "STD_PURITY": this.karatForm.value.standardpurity || "",
+      "KARAT_CODE": this.karatmasterFrom.value.karatcode || "",
+      "STD_PURITY": this.karatmasterFrom.value.standardpurity || "",
       "PURITY_FROM": 0,
       "PURITY_TO": 0,
       "MID": 0,
       "SYSTEM_DATE": "2023-11-24T10:50:27.839Z",
-      "KARAT_DESC": this.karatForm.value.karatcodedes || "",
-      "SPGRVT": this.karatForm.value.sp_gravity || "",
-      "POSMINMAXAMT": this.karatForm.value.pos || "",
-      "DIVISION_CODE": this.karatForm.value.division || "",
-      "POPMINMAXAMT":this.karatForm.value.pop_minmaxamt || "",
-      "SPGRVT_VAR": this.karatForm.value.sp_variance || "",
+      "KARAT_DESC": this.karatmasterFrom.value.karatcodedes || "",
+      "SPGRVT": this.karatmasterFrom.value.sp_gravity || "",
+      "POSMINMAXAMT": this.karatmasterFrom.value.pos || "",
+      "DIVISION_CODE": this.karatmasterFrom.value.division || "",
+      "POPMINMAXAMT":this.karatmasterFrom.value.pop_minmaxamt || "",
+      "SPGRVT_VAR": this.karatmasterFrom.value.sp_variance || "",
       "KARAT_DESC_AR": "string",
-      "IS_SCRAP": this.karatForm.value.scrap || "",
-      "SHOWINWEB": this.karatForm.value.showinweb || "",
+      "IS_SCRAP": this.karatmasterFrom.value.scrap || "",
+      "SHOWINWEB": this.karatmasterFrom.value.showinweb || "",
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -113,7 +111,7 @@ export class KaratMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.karatmasterForm.reset()
+                this.karatmasterFrom.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -126,7 +124,7 @@ export class KaratMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   update(){
-    if (this.karatmasterForm.invalid) {
+    if (this.karatmasterFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
@@ -164,7 +162,7 @@ export class KaratMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.karatmasterForm.reset()
+                this.karatmasterFrom.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -213,7 +211,7 @@ export class KaratMasterComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.karatmasterForm.reset()
+                    this.karatmasterFrom.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -227,7 +225,7 @@ export class KaratMasterComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.karatmasterForm.reset()
+                    this.karatmasterFrom.reset()
                     this.tableData = []
                     this.close()
                   }
