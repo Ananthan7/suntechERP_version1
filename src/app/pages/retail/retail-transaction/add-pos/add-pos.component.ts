@@ -2874,7 +2874,7 @@ export class AddPosComponent implements OnInit {
               // this.snackBar.open('Loading...');
 
               // this.suntechApi.getAMLValidation(payload).subscribe(async (data) => {
-              //   this.isCustProcessing = false;
+                this.isCustProcessing = false;
 
               //   this.snackBar.open('Loading...');
 
@@ -2907,7 +2907,7 @@ export class AddPosComponent implements OnInit {
               //       this.openDialog('Warning', 'We cannot proceed', true);
               //       this.dialogBox.afterClosed().subscribe((data) => {
               //         if (data == 'OK') {
-              //           this.modalReference.close();
+                        this.modalReference.close();
               //         }
               //       });
               //       // need to use put api

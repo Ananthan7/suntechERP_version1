@@ -15,6 +15,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class EnterStoneDetailsComponent implements OnInit {
   divisionMS: any = 'ID';
+  myForm!: FormGroup ;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -23,9 +24,19 @@ export class EnterStoneDetailsComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {
+    this.myForm = this.fb.group({
+      amountLC: [{ value: '', disabled: true }, Validators.required], // Set disabled to true
+      amountFC: ['']
+  });
+
+  this.myForm.get('amountFC')?.valueChanges.subscribe(value => {
+    // Update amountFC whenever amountLC changes
+    this.myForm.get('amountLC')?.setValue(value);
+  });
   }
 
 
@@ -39,6 +50,8 @@ export class EnterStoneDetailsComponent implements OnInit {
     shape: [''],
     priceCode: [''],
     LCode: [''],
+    amountLC: [''],
+    amountFC: ['']
   })
 
   divisionCodeData: MasterSearchModel = {
@@ -157,16 +170,16 @@ export class EnterStoneDetailsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 99,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'Code',
     SEARCH_HEADING: 'L Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "Code<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   LCodeCodeSelected(e:any){
     console.log(e);
-    this.enterStoneDetailsForm.controls.LCode.setValue(e.CODE);
+    this.enterStoneDetailsForm.controls.LCode.setValue(e.Code);
   }
 
 
@@ -177,5 +190,9 @@ export class EnterStoneDetailsComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+
+  continue(){
+    
   }
 }

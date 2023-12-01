@@ -167,6 +167,7 @@ export class DiamondSalesorderComponent implements OnInit {
     this.PartyDetailsOrderForm.controls.voucherDate.setValue(this.currentDate)
     this.PartyDetailsOrderForm.controls.DeliveryOnDate.setValue(this.currentDate)
     this.PartyDetailsOrderForm.controls.voucherType.setValue(this.commonService.getqueryParamVocType())
+    this.PartyDetailsOrderForm.controls.AMCSTARTDATE.setValue(this.currentDate)
     this.getRateType()
     this.getLabourChargeGridDetails()
   }
@@ -711,7 +712,7 @@ export class DiamondSalesorderComponent implements OnInit {
       "TERMSANDCONDITIONS": this.PartyDetailsOrderForm.value.NotesTerms,
       "PAYMENTTERMS": this.PartyDetailsOrderForm.value.PaymentTerms,
       "DETAILBRANCHCODE": this.commonService.branchCode,
-      "AMCSTARTDATE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.AMCSTARTDATE),
+      "AMCSTARTDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.AMCSTARTDATE),
       "SALESINVPENAMOUNTCC": 0,
       "PROSP_ORIGIN": this.PartyDetailsOrderForm.value.PROSP_ORIGIN,
       "CANCEL_SALES_ORDER": false,
@@ -785,7 +786,7 @@ export class DiamondSalesorderComponent implements OnInit {
   //partyCode validate
   partyCodeChange(event: any) {
     if (event.target.value == '') return
-    if (!this.validateNotEmpty(this.commonService.branchCode, 'MSG1531')) return;
+    if (!this.commonService.validateNotEmpty(this.commonService.branchCode, 'MSG1531')) return;
 
     let postData = {
       "SPID": "001",
@@ -903,27 +904,25 @@ export class DiamondSalesorderComponent implements OnInit {
 
   private HeaderValidate(): boolean {
     const formValue = this.PartyDetailsOrderForm.value;
-
-    if (!this.validateNotEmpty(formValue.voucherType, 'MSG1942')) return false;
-    if (!this.validateNotEmpty(formValue.partyCurrencyRate, 'MSG1552')) return false;
-    if (!this.validateNotEmpty(formValue.ItemCurrencyRate, 'MSG1353')) return false;
-    if (!this.validateNotEmpty(formValue.ItemCurrency, 'MSG1352')) return false;
-    if (!this.validateNotEmpty(formValue.partyCurrencyRate, 'MSG1550')) return false;
-    if (!this.validateNotEmpty(formValue.SalesmanCode, 'MSG1767')) return false;
-    if (!this.validateNotEmpty(formValue.orderType, 'MSG1550')) return false;
+    if (!this.commonService.validateNotEmpty(formValue.voucherType, 'MSG1942')) return false;
+    if (!this.commonService.validateNotEmpty(formValue.partyCurrencyRate, 'MSG1552')) return false;
+    if (!this.commonService.validateNotEmpty(formValue.ItemCurrencyRate, 'MSG1353')) return false;
+    if (!this.commonService.validateNotEmpty(formValue.ItemCurrency, 'MSG1352')) return false;
+    if (!this.commonService.validateNotEmpty(formValue.partyCurrencyRate, 'MSG1550')) return false;
+    if (!this.commonService.validateNotEmpty(formValue.SalesmanCode, 'MSG1767')) return false;
+    if (!this.commonService.validateNotEmpty(formValue.orderType, 'MSG1550')) return false;
 
     // Additional conditions can be added here
-
     return true;
   }
 
-  private validateNotEmpty(value: string, errorMessageId: string): boolean {
-    if (!value) {
-      this.commonService.toastErrorByMsgId(errorMessageId);
-      return false;
-    }
-    return true;
-  }
+  // private validateNotEmpty(value: string, errorMessageId: string): boolean {
+  //   if (!value || value == '') {
+  //     this.commonService.toastErrorByMsgId(errorMessageId);
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   addDays() {
     const daysToAdd = parseInt(this.PartyDetailsOrderForm.value.DeliveryOnDateType);

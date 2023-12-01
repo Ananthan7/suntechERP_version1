@@ -19,14 +19,16 @@
                 <div class="col-md-4">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="jobnumber" />
+                      <input type="text" matInput formControlName="jobNumber" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="jobNumberCodeData"
+                    (newRowClick)="jobNumberCodeSelected($event)"></master-search>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="jobdes" />
+                      <input type="text" matInput formControlName="jobDes" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -44,7 +46,7 @@
                 <div class="col-md-4">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="subjobnumber" />
+                      <input type="text" matInput formControlName="subjobDes" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -87,6 +89,8 @@
                     <mat-form-field style="width: 90%;">
                       <input type="text" matInput formControlName="process" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="processCodeData"
+                    (newRowClick)="processCodeSelected($event)"></master-search>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -104,6 +108,8 @@
                     <mat-form-field style="width: 90%;">
                       <input type="text" matInput formControlName="worker" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="workerCodeData"
+                    (newRowClick)="workerCodeSelected($event)"></master-search>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -121,19 +127,21 @@
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="stock" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="stockCodeData"
+                    (newRowClick)="stockCodeSelected($event)"></master-search>
                   </div>
                 </div>
                 <div class="col-md-2">
                     <div class="position-relative d-flex">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="stock" />
+                        <input type="text" matInput formControlName="stockCode" />
                       </mat-form-field>
                     </div>
                   </div>
                 <div class="col-md-3">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 95%;">
-                      <input type="text" matInput formControlName="stock" />
+                      <input type="text" matInput formControlName="stockDes" />
                     </mat-form-field>
                   </div>
                 </div>

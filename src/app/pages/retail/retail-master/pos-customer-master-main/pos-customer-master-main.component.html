@@ -10,7 +10,7 @@
 <modal-header (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
-    <form>
+    <form [formGroup]="posCustomerMasterMainForm">
         <div class="row">
             <div class="col-md-10">
                 <div class="row mb-1 ">
@@ -19,7 +19,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Code</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="code" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -29,7 +29,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Parent Pos Code</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="parentPosCode" />
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>
@@ -40,7 +40,7 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Ref By</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="refBy" />
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>
@@ -55,7 +55,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Name</label>
                                     <div class="col-md-8">
                                         <mat-form-field>
-                                            <mat-select>
+                                            <mat-select formControlName="name">
                                                 <mat-option value="Cash">Cash</mat-option>
                                                 <mat-option></mat-option>
                                             </mat-select>
@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="nameDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -73,11 +73,11 @@
                     <div class="col-md-4">
                         <div class="row mb-1">
                             <div class="col-md-6 pt-3">
-                                <mat-checkbox>Credit Limit</mat-checkbox>
+                                <mat-checkbox formControlName="creditCardLimitCheck">Credit Limit</mat-checkbox>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="creditCardLimit" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -89,9 +89,9 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Gender</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width:100%">
-                                    <mat-select>
+                                    <mat-select formControlName="gender">
                                         <mat-option value="Male">Male</mat-option>
-                                        <mat-option></mat-option>
+                                        <mat-option value="Female">Female</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -103,7 +103,7 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Marital St.</label>
                             <div class="col-md-5">
                                 <mat-form-field style="width:100%">
-                                    <mat-select>
+                                    <mat-select formControlName="maritalSt">
                                         <mat-option value="Single">Single</mat-option>
                                         <mat-option></mat-option>
                                     </mat-select>
@@ -117,7 +117,7 @@
                             <div class="col-md-6">
                                 <mat-form-field style="width:100%">
                                     <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="dob"
-                                        placeholder="DD/MM/YYYY" DateValidation />
+                                        placeholder="DD/MM/YYYY" DateValidation formControlName="dob" />
                                     <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
                                 </mat-form-field>
@@ -130,7 +130,7 @@
                             <div class="col-md-6">
                                 <mat-form-field style="width:100%">
                                     <input matInput [matDatepicker]="weddate" [max]="vocMaxDate" name="weddate"
-                                        placeholder="DD/MM/YYYY" DateValidation />
+                                        placeholder="DD/MM/YYYY" DateValidation formControlName="weddate" />
                                     <mat-datepicker-toggle matSuffix [for]="weddate"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #weddate></mat-datepicker>
                                 </mat-form-field>
@@ -144,26 +144,27 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Country(R)</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="country" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="countryCode" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="countryCode"
+                                (newRowClick)="countrySelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Mobile</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="moblieCountry" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="moblieNumber" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -171,12 +172,12 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Mobile 1</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="moblie1Country" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="moblie1Number" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -184,7 +185,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Email ID</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="emailId" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -192,12 +193,12 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Tel.(R)</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="telRCountry" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="telRNumber" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -205,12 +206,12 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Tel.(O)</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="tel0Country" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="tel0number" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -218,7 +219,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Fax No.</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="faxNo" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -226,7 +227,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Cust. Type</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="custType" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -234,7 +235,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Nationality</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 70%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="nationality" />
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>
@@ -243,16 +244,17 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">State</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 70%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="state" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="stateCode"
+                                (newRowClick)="stateSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-4 col-form-label">City</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 70%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="city" />
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>
@@ -261,7 +263,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Language</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 70%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="language" />
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>
@@ -270,7 +272,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Fav. Celebration</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 70%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="favCelebration" />
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>
@@ -283,7 +285,7 @@
                                 <label for="inputPassword" class="col-sm-5 col-form-label">VAT</label>
                                 <div class="col-md-7">
                                     <mat-form-field style="width: 100%;">
-                                        <input matInput="text" name="voctype" />
+                                        <input matInput="text" formControlName="vat" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -291,7 +293,7 @@
                                 <label for="inputPassword" class="col-sm-5 col-form-label">PAN NO</label>
                                 <div class="col-md-7">
                                     <mat-form-field style="width: 100%;">
-                                        <input matInput="text" name="voctype" />
+                                        <input matInput="text" formControlName="panNo" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -300,12 +302,12 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Whatsapp</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="whatsappCountryCode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput="text" name="voctype" />
+                                    <input matInput="text" formControlName="whatsappNumber" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -322,7 +324,7 @@
                                                         class="col-sm-5 col-form-label">Spouse</label>
                                                     <div class="col-md-7">
                                                         <mat-form-field style="width: 100%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="spouse" />
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -331,7 +333,7 @@
                                                         class="col-sm-5 col-form-label">Company</label>
                                                     <div class="col-md-7">
                                                         <mat-form-field style="width: 100%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="company" />
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -340,7 +342,7 @@
                                                         Sign</label>
                                                     <div class="col-md-7">
                                                         <mat-form-field style="width: 100%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="zodiacSign" />
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -349,7 +351,7 @@
                                                         Children</label>
                                                     <div class="col-md-7">
                                                         <mat-form-field style="width: 100%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="noOfChildren" />
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -358,7 +360,7 @@
                                                         class="col-sm-5 col-form-label">Religion</label>
                                                     <div class="col-md-7">
                                                         <mat-form-field style="width: 70%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="religion" />
                                                         </mat-form-field>
                                                         <master-search></master-search>
                                                     </div>
@@ -368,9 +370,10 @@
                                                         class="col-sm-5 col-form-label">Category</label>
                                                     <div class="col-md-7">
                                                         <mat-form-field style="width: 70%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="category" />
                                                         </mat-form-field>
-                                                        <master-search></master-search>
+                                                        <master-search [MasterSearchData]="categoryCode"
+                                                        (newRowClick)="categorySelected($event)"></master-search>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-1">
@@ -378,7 +381,7 @@
                                                         Status</label>
                                                     <div class="col-md-7">
                                                         <mat-form-field style="width: 70%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="custStatus" />
                                                         </mat-form-field>
                                                         <master-search></master-search>
                                                     </div>
@@ -388,7 +391,7 @@
                                                         class="col-sm-5 col-form-label">Income</label>
                                                     <div class="col-md-6">
                                                         <mat-form-field style="width: 70%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="income" />
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -397,8 +400,7 @@
                                                         Group</label>
                                                     <div class="col-md-5">
                                                         <mat-form-field style="width: 70%;">
-                                                            <mat-select>
-                                                                <mat-option value="Cash">Cash</mat-option>
+                                                            <mat-select formControlName="bloodGroup">
                                                                 <mat-option></mat-option>
                                                             </mat-select>
                                                         </mat-form-field>
@@ -409,7 +411,7 @@
                                                         Type</label>
                                                     <div class="col-md-6">
                                                         <mat-form-field style="width: 100%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="custIdType" />
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -418,7 +420,7 @@
                                                         ID</label>
                                                     <div class="col-md-6">
                                                         <mat-form-field style="width: 100%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="custID" />
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -427,12 +429,14 @@
                                                         Exp Date</label>
                                                     <div class="col-md-6">
                                                         <mat-form-field>
-                                                            <input matInput [matDatepicker]="cust" [max]="vocMaxDate"
-                                                                name="cust" placeholder="DD/MM/YYYY" DateValidation />
+                                                            <input matInput [matDatepicker]="custDate"
+                                                                [max]="vocMaxDate" name="custDate"
+                                                                placeholder="DD/MM/YYYY" DateValidation
+                                                                formControlName="custDate" />
                                                             <mat-datepicker-toggle matSuffix
-                                                                [for]="cust"></mat-datepicker-toggle>
+                                                                [for]="custDate"></mat-datepicker-toggle>
                                                             <mat-datepicker [startAt]="currentDate"
-                                                                #cust></mat-datepicker>
+                                                                #custDate></mat-datepicker>
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -441,7 +445,7 @@
                                                         class="col-sm-5 col-form-label">P.O.Box</label>
                                                     <div class="col-md-6">
                                                         <mat-form-field style="width: 100%;">
-                                                            <input matInput="text" name="voctype" />
+                                                            <input matInput="text" formControlName="POBox" />
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -449,39 +453,43 @@
                                             <div class="col-md-6">
                                                 <div class="row mb-1">
                                                     <label for="inputPassword"
-                                                        class="col-form-label">Address(Personal)</label>
-                                                </div>
-                                                <div class="row">
-                                                    <textarea style="width: 90%;height: 100px;
-                                                    margin-left: 7px;margin-top: 7px;" formControlName="BillToAddress">
-                                               </textarea>
+                                                        class="col-form-label col-sm-12">Address(Personal)</label>
+                                                    <div class="col-sm-12">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <textarea matInput rows="3"
+                                                                formControlName="address"></textarea>
+                                                        </mat-form-field>
+                                                    </div>
                                                 </div>
                                                 <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-form-label">Official
+                                                    <label for="inputPassword" class="col-form-label col-sm-12">Official
                                                         Address</label>
-                                                </div>
-                                                <div class="row">
-                                                    <textarea style="width: 90%;height: 100px;
-                                                    margin-left: 7px;margin-top: 7px;" formControlName="BillToAddress">
-                                               </textarea>
+                                                    <div class="col-md-12">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <textarea matInput rows="3"
+                                                                formControlName="officialAddress"></textarea>
+                                                        </mat-form-field>
+                                                    </div>
                                                 </div>
                                                 <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-form-label">Delivery
+                                                    <label for="inputPassword" class="col-form-label col-sm-12">Delivery
                                                         Address</label>
-                                                </div>
-                                                <div class="row">
-                                                    <textarea style="width: 90%;height: 100px;
-                                                             margin-left: 7px;margin-top: 7px;"
-                                                        formControlName="BillToAddress">
-                                                        </textarea>
+                                                    <div class="col-sm-12">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <textarea matInput rows="3"
+                                                                formControlName="deliveryAddress"></textarea>
+                                                        </mat-form-field>
+                                                    </div>
                                                 </div>
                                                 <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-form-label">Remarks</label>
-                                                </div>
-                                                <div class="row">
-                                                    <textarea style="width: 90%;height: 100px;
-                                                    margin-left: 7px;margin-top: 7px;" formControlName="BillToAddress">
-                                               </textarea>
+                                                    <label for="inputPassword"
+                                                        class="col-form-label col-sm-12">Remarks</label>
+                                                    <div class="col-sm-12">
+                                                        <mat-form-field style="width: 100%;">
+                                                            <textarea matInput rows="3"
+                                                                formControlName="remarks"></textarea>
+                                                        </mat-form-field>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -489,7 +497,7 @@
                                 </div>
                             </mat-tab>
                             <mat-tab label="Preference">
-                                <div class="row mb-1">
+                                <div class="row my-1">
                                     <div class="col-md-6 border">
                                         <div class="row mb-1">
                                             <div class="col-md-12">
@@ -497,19 +505,19 @@
                                             </div>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>SMS</mat-checkbox>
+                                            <mat-checkbox formControlName="sms">SMS</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>PHONE CALL</mat-checkbox>
+                                            <mat-checkbox formControlName="phoneCall">PHONE CALL</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>EMAIL</mat-checkbox>
+                                            <mat-checkbox formControlName="email">EMAIL</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>WHATSAPP</mat-checkbox>
+                                            <mat-checkbox formControlName="whatsapp">WHATSAPP</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>NOT INTERESTED</mat-checkbox>
+                                            <mat-checkbox formControlName="notInterested">NOT INTERESTED</mat-checkbox>
                                         </div>
                                     </div>
                                     <div class="col-md-6 border">
@@ -520,32 +528,31 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-
                                                 <div class="col-md-5 pt-3">
-                                                    <mat-checkbox>SMS</mat-checkbox>
+                                                    <mat-checkbox formControlName="aboutsms">SMS</mat-checkbox>
                                                 </div>
                                                 <div class="col-md-5 pt-3">
-                                                    <mat-checkbox>PHONE CALL</mat-checkbox>
+                                                    <mat-checkbox formControlName="aboutphoneCall">PHONE CALL</mat-checkbox>
                                                 </div>
                                                 <div class="col-md-5 pt-3">
-                                                    <mat-checkbox>EMAIL</mat-checkbox>
+                                                    <mat-checkbox formControlName="aboutemail">EMAIL</mat-checkbox>
                                                 </div>
                                                 <div class="col-md-5 pt-3">
-                                                    <mat-checkbox>WHATSAPP</mat-checkbox>
+                                                    <mat-checkbox formControlName="aboutwhatsapp">WHATSAPP</mat-checkbox>
                                                 </div>
                                                 <div class="col-md-5 pt-3">
-                                                    <mat-checkbox>NOT INTERESTED</mat-checkbox>
+                                                    <mat-checkbox formControlName="aboutnotInterested">NOT INTERESTED</mat-checkbox>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="col-md-5 pt-3">
-                                                    <mat-checkbox>NEWSPAPER</mat-checkbox>
+                                                    <mat-checkbox formControlName="newspaper">NEWSPAPER</mat-checkbox>
                                                 </div>
                                                 <div class="col-md-5 pt-3">
-                                                    <mat-checkbox>RADIO</mat-checkbox>
+                                                    <mat-checkbox formControlName="radio">RADIO</mat-checkbox>
                                                 </div>
                                                 <div class="col-md-5 pt-3">
-                                                    <mat-checkbox>OTHERS</mat-checkbox>
+                                                    <mat-checkbox formControlName="other">OTHERS</mat-checkbox>
                                                 </div>
                                             </div>
                                         </div>
@@ -557,22 +564,22 @@
                                 <div class="row mb-1">
                                     <div class="col-md-12">
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>Promotional Offers</mat-checkbox>
+                                            <mat-checkbox formControlName="promotionalOffers">Promotional Offers</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>Sports Events</mat-checkbox>
+                                            <mat-checkbox formControlName="sportsEvents">Sports Events</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>Charity Events</mat-checkbox>
+                                            <mat-checkbox formControlName="charityEvents">Charity Events</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>Stage Shows</mat-checkbox>
+                                            <mat-checkbox formControlName="stageShows">Stage Shows</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>Seminars</mat-checkbox>
+                                            <mat-checkbox formControlName="seminars">Seminars</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox>Personal Skills</mat-checkbox>
+                                            <mat-checkbox formControlName="personalSkills">Personal Skills</mat-checkbox>
                                         </div>
                                     </div>
                                 </div>
@@ -584,9 +591,8 @@
                                             <label for="inputPassword" class="col-sm-5 col-form-label">Product
                                                 Selection</label>
                                             <div class="col-md-7">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="productSelection">                    
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -595,9 +601,8 @@
                                         <div class="row mb-1">
                                             <label for="inputPassword" class="col-sm-5 col-form-label">Service</label>
                                             <div class="col-md-7">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="service">                    
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -607,9 +612,8 @@
                                             <label for="inputPassword" class="col-sm-5 col-form-label">Making
                                                 Changes</label>
                                             <div class="col-md-7">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="makingChanges">                    
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -619,10 +623,9 @@
                                             <label for="inputPassword" class="col-sm-5 col-form-label">Brand
                                                 Name</label>
                                             <div class="col-md-7">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
-                                                        <mat-option></mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="brand">
+                                                      <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -631,9 +634,8 @@
                                             <label for="inputPassword" class="col-sm-5 col-form-label">Buy-Back
                                                 Policy</label>
                                             <div class="col-md-7">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="buyBackPolicy">                    
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -643,9 +645,8 @@
                                             <label for="inputPassword" class="col-sm-5 col-form-label">Location and
                                                 Parking Facility</label>
                                             <div class="col-md-7">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="loactionandParkingFacility">                    
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -661,9 +662,8 @@
                                             <label for="inputPassword" class="col-sm-6 col-form-label">Staff
                                                 Courtesy</label>
                                             <div class="col-md-6">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;" >
+                                                    <mat-select formControlName="staffCourtesy">
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -673,9 +673,8 @@
                                             <label for="inputPassword" class="col-sm-6 col-form-label">Product knowledge
                                                 of our staff</label>
                                             <div class="col-md-6">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="productKnowledgeOfOurStaff">
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -685,9 +684,8 @@
                                             <label for="inputPassword" class="col-sm-6 col-form-label">Location and
                                                 ambience of shop</label>
                                             <div class="col-md-6">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="locationandAmbienceOfShop">
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -697,9 +695,8 @@
                                             <label for="inputPassword" class="col-sm-6 col-form-label">Variety and
                                                 quality of jewellery</label>
                                             <div class="col-md-6">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="varietyAndQualityOfJewellery">
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -709,9 +706,8 @@
                                             <label for="inputPassword" class="col-sm-6 col-form-label">Overall
                                                 experience</label>
                                             <div class="col-md-6">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="overallExperience">
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -721,9 +717,8 @@
                                             <label for="inputPassword" class="col-sm-6 col-form-label">Showroom
                                                 Accessibility</label>
                                             <div class="col-md-6">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="showroomAccessibility">
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -733,9 +728,8 @@
                                             <label for="inputPassword" class="col-sm-6 col-form-label">Product Range
                                                 Availability</label>
                                             <div class="col-md-6">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="productRangeAvailability">
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -757,9 +751,8 @@
                                             <label for="inputPassword" class="col-sm-4 col-form-label">Reason of
                                                 Purchase</label>
                                             <div class="col-md-8">
-                                                <mat-form-field>
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;">
+                                                    <mat-select formControlName="reasonOfPurchase">
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -770,7 +763,7 @@
                                                 For</label>
                                             <div class="col-md-8">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input matInput="text" name="voctype" />
+                                                    <input matInput="text" formControlName="gifrPurchased" />
                                                 </mat-form-field>
                                                 <master-search></master-search>
                                             </div>
@@ -780,7 +773,7 @@
                                                 Purchase</label>
                                             <div class="col-md-8">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input matInput="text" name="voctype" />
+                                                    <input matInput="text" formControlName="occasionOfPurchase" />
                                                 </mat-form-field>
                                                 <master-search></master-search>
                                             </div>
@@ -789,7 +782,7 @@
                                             <label for="inputPassword" class="col-sm-4 col-form-label">Age Group</label>
                                             <div class="col-md-8">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input matInput="text" name="voctype" />
+                                                    <input matInput="text" formControlName="ageGroup" />
                                                 </mat-form-field>
                                                 <master-search></master-search>
                                             </div>
@@ -800,9 +793,8 @@
                                         </div>
                                         <div class="row mb-1">
                                             <div class="col-md-12">
-                                                <mat-form-field style="width:70%">
-                                                    <mat-select>
-                                                        <mat-option value="Cash">Cash</mat-option>
+                                                <mat-form-field style="width: 100%;" style="width:70%">
+                                                    <mat-select formControlName="lookingFor">
                                                         <mat-option></mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
@@ -815,7 +807,7 @@
                                         <div class="row mb-1">
                                             <div class="col-md-12">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input matInput="text" name="voctype" />
+                                                    <input matInput="text" formControlName="nextVisit" />
                                                 </mat-form-field>
                                                 <master-search></master-search>
                                             </div>
@@ -825,7 +817,7 @@
                                                 class="col-sm-4 col-form-label">Occupation</label>
                                             <div class="col-md-8">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input matInput="text" name="voctype" />
+                                                    <input matInput="text" formControlName="occupation" />
                                                 </mat-form-field>
                                                 <master-search></master-search>
                                             </div>
@@ -851,7 +843,7 @@
                         <div class="text-center d-flex justify-content-between mt-2">
                             <div class="p-1 bd-highlight">
                                 <button type="button" class="btn btn-primary add-btn">
-                                    <i class="fas fa-camera-retro"></i>  
+                                    <i class="fas fa-camera-retro"></i>
                                 </button>
                             </div>
                             <div class="p-1 bd-highlight">
@@ -859,7 +851,7 @@
                                     <i class="fas fa-image"></i>
                                 </button>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -867,7 +859,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Created Branch</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input matInput="text" name="voctype" />
+                            <input matInput="text" formControlName="createdBranch" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -875,10 +867,10 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Opened On</label>
                     <div class="col-md-8">
                         <mat-form-field style="width:100%">
-                            <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="dob" placeholder="DD/MM/YYYY"
-                                DateValidation />
-                            <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                            <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
+                            <input matInput [matDatepicker]="openedOn" [max]="vocMaxDate" name="openedOn" placeholder="DD/MM/YYYY"
+                                DateValidation formControlName="openedOn" />
+                            <mat-datepicker-toggle matSuffix [for]="openedOn"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #openedOn></mat-datepicker>
                         </mat-form-field>
                     </div>
                 </div>
@@ -893,7 +885,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input matInput="text" name="voctype" />
+                                            <input matInput="text" formControlName="voucher" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -901,7 +893,10 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Date</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input matInput="text" name="voctype" />
+                                            <input matInput [matDatepicker]="date" [max]="vocMaxDate" name="date" placeholder="DD/MM/YYYY"
+                                            DateValidation formControlName="date" />
+                                        <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                                        <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -909,7 +904,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Branch Loc.</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input matInput="text" name="voctype" />
+                                            <input matInput="text" formControlName="branchLoc" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -917,24 +912,22 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Amount</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input matInput="text" name="voctype" />
+                                            <input matInput="text" formControlName="amount" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label">TotalSales</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Total Sales</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input matInput="text" name="voctype" />
+                                            <input matInput="text" formControlName="totalSale" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </form>

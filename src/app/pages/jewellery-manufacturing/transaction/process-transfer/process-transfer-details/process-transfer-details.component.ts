@@ -119,6 +119,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     MAIN_STOCK_CODE: [''],
     SCRAP_PURITY: [''],
     DESIGN_TYPE: [''],
+    EXCLUDE_TRANSFER_WT: [false],
     //METAL DETAILS STARTS
     METAL_quantity: [''],
     METAL_processFrom: [''],
@@ -130,6 +131,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     METAL_LossBooked: [''],
     METAL_ScrapLocCode: [''],
     METAL_GainGrWt: [''],
+    METAL_GainPureWt: [''],
     METAL_FromStockCode: [''],
     METAL_ToStockCode: [''],
     METAL_ScrapStockCode: [''],
@@ -206,9 +208,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.DIVCODE.setValue(dataFromParent.DIVCODE)
     this.processTransferdetailsForm.controls.METALSTONE.setValue(dataFromParent.METALSTONE)
   }
-  /**USE: jobnumber validate API call
-   * TODO: DESIGN_TYPE validation if empty diamond 
-   */
+  /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
     if (event.target.value == '') return
     let postData = {
@@ -253,7 +253,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  /**USE: subjobnumber validate API call   || '156516/4/01'*/
+  /**USE: subjobnumber validate API call subjobvalidate  '156516/4/01'*/
   subJobNumberValidate(event?: any) {
     let postData = {
       "SPID": "040",
@@ -285,6 +285,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.processTransferdetailsForm.controls.METALSTONE.setValue(data[0].METALSTONE)
           this.processTransferdetailsForm.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
           this.processTransferdetailsForm.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
+          this.processTransferdetailsForm.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
           this.fillStoneDetails()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
@@ -459,19 +460,32 @@ export class ProcessTransferDetailsComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
+  /**USE: SUBMIT detail */
   formSubmit() {
     let detailDataToParent:any = {
       PROCESS_FORMDETAILS: [],
       METAL_DETAIL_GRID: [],
       JOB_VALIDATE_DATA: []
     }
+    this.calculateGain()
 
     detailDataToParent.PROCESS_FORMDETAILS = this.processTransferdetailsForm.value;
     detailDataToParent.METAL_DETAIL_GRID = this.metalDetailData; //grid data
     detailDataToParent.JOB_VALIDATE_DATA = this.jobNumberDetailData;
     this.close(detailDataToParent)//USE: passing Detail data to header screen on close
   }
-
+  /**USE: to calculate gain detail */
+  private calculateGain(){
+    let formValues = this.processTransferdetailsForm.value;
+    let gainGrWt = this.calculateGainGrWt(formValues.METAL_GrossWeightTo,formValues.METAL_GrossWeightFrom,formValues.METAL_ScrapGrWt)
+    this.processTransferdetailsForm.controls.METAL_GainGrWt.setValue(gainGrWt)
+    let gainPureWt = this.calculateGainGrWt(formValues.METAL_ToPureWt,formValues.METAL_FromPureWt,formValues.METAL_ScrapPureWt);
+    this.processTransferdetailsForm.controls.METAL_GainPureWt.setValue(gainPureWt)
+  }
+  calculateGainGrWt(a:any,b:any,c:any){
+    if(!Number(a) && !Number(a) && !Number(a)) return 0
+    return (this.comService.emptyToZero(a)-(this.comService.decimalQuantityFormat((Number(b)+Number(c)),'METAL')))
+  }
   setFormValues() {
     if (!this.content) return
     this.processTransferdetailsForm.controls.jobno.setValue(this.content.JOB_NUMBER)

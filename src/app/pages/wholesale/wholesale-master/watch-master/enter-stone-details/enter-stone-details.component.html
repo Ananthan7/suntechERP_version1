@@ -1,11 +1,11 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Add Metal Details</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Add Stone Details</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> -->
 <!-- content section -->
 
 <div class="container-fluid pt-3">
@@ -52,8 +52,8 @@
                                     <input type="text" matInput formControlName="clarity" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="clarityCodeData"
-                                (newRowClick)="clarityCodeSelected($event)">
-                            </master-search>
+                                    (newRowClick)="clarityCodeSelected($event)">
+                                </master-search>
                             </div>
                         </div>
 
@@ -61,20 +61,20 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Sieve :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="sieve"/>
+                                    <input type="text" matInput formControlName="sieve" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="sieveCodeData"
-                                (newRowClick)="sieveCodeSelected($event)">
-                            </master-search>
+                                    (newRowClick)="sieveCodeSelected($event)">
+                                </master-search>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">Size :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="size"/>
+                                    <input type="text" matInput formControlName="size" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="sizeCodeData"
-                                (newRowClick)="sizeCodeSelected($event)">
-                            </master-search>
+                                    (newRowClick)="sizeCodeSelected($event)">
+                                </master-search>
                             </div>
                         </div>
                     </div>
@@ -84,20 +84,20 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">Price Code :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="priceCode"/>
+                                    <input type="text" matInput formControlName="priceCode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="priceCodeCodeData"
-                                (newRowClick)="priceCodeCodeSelected($event)">
-                            </master-search>
+                                    (newRowClick)="priceCodeCodeSelected($event)">
+                                </master-search>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label">L Code :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="LCode"/>
+                                    <input type="text" matInput formControlName="LCode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="LCodeCodeData"
-                                (newRowClick)="LCodeCodeSelected($event)">
-                            </master-search>
+                                    (newRowClick)="LCodeCodeSelected($event)">
+                                </master-search>
                             </div>
                         </div>
 
@@ -123,7 +123,7 @@
                                     <input type="text" matInput />
                                 </mat-form-field>
                             </div>
-                         
+
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput />
@@ -142,25 +142,42 @@
                                 </mat-form-field>
                             </div>
                         </div>
-
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Amount FC :</label>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
-                                </mat-form-field>
+                        <form [formGroup]="myForm">
+                            <div class="form-row">
+                                <div class="row align-items-center mb-1">
+                                    <label for="amountLC" class="col-sm-3 col-form-label">Amount LC:</label>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="amountLC" [disabled]="true">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="amountFC" class="col-sm-3 col-form-label">Amount FC:</label>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="amountFC">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-2">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary  text-center"
+                                    (saveClick)="formSubmit()">Save</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary text-center"
+                                    (cancelClick)="close()">Cancel</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary text-center"
+                                    (continueClick)="continue()">Continue</button>
                             </div>
                         </div>
-
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Amount LC :</label>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
-                                </mat-form-field>
-                            </div>
-                        </div>
-
                     </div>
 
                 </div>

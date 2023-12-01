@@ -89,6 +89,13 @@ export class CommonServiceService {
       timeOut: 3000,
     })
   }
+  validateNotEmpty(value: string, errorMessageId: string): boolean {
+    if (!value || value == '') {
+      this.toastErrorByMsgId(errorMessageId);
+      return false;
+    }
+    return true;
+  }
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
     let paramValue: any;

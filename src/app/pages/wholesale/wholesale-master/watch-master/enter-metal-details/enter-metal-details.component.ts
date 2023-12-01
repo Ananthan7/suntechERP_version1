@@ -14,6 +14,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class EnterMetalDetailsComponent implements OnInit {
   divisionMS: any = 'ID';
+  myForm!: FormGroup ;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -22,17 +23,30 @@ export class EnterMetalDetailsComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {
-  }
+    this.myForm = this.fb.group({
+      amountLC: [{ value: '', disabled: true }, Validators.required], // Set disabled to true
+      amountFC: ['']
+    });
 
+
+this.myForm.get('amountFC')?.valueChanges.subscribe(value => {
+  // Update amountFC whenever amountLC changes
+  this.myForm.get('amountLC')?.setValue(value);
+});
+}
 
 
   enterMetalDetailsForm: FormGroup = this.formBuilder.group({
     division :[''],
     karat : [''],
     rateType: [''],
+    rate: [''],
+    amountLC: [''],
+    amountFC: [''],
   })
 
   divisionCodeData: MasterSearchModel = {
@@ -92,5 +106,9 @@ export class EnterMetalDetailsComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+
+  continue(){
+    
   }
 }
