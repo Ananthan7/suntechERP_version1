@@ -19,10 +19,10 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Branch*:</label>
                                     <div class="col-md-3">
                                       <mat-form-field style="width: 80%;">
-                                        <input type="text" matInput formControlName="brand"/>
+                                        <input type="text" matInput formControlName="branch"/>
                                       </mat-form-field>
-                                      <master-search [MasterSearchData]="brandCodeData"
-                    (newRowClick)="brandSelected($event)"></master-search>
+                                      <master-search [MasterSearchData]="branchCodeData"
+                    (newRowClick)="branchSelected($event)"></master-search>
                                     </div>
                                     <div class="col-md-4">
                                         <mat-form-field style="width: 100%;">
