@@ -124,7 +124,7 @@ export class LocationMasterComponent implements OnInit {
     let API = 'LocationMaster/InsertLocationMaster'
     let postData = {
       "MID": 0,
-      "LOCATION_CODE": "",
+      "LOCATION_CODE": this.locationForm.value.locationcode || "",
       "DESCRIPTION": this.locationForm.value.codedesc || "",
       "DIVISION_CODE": this.locationForm.value.division || "",
       "LOCTYPE_CODE": this.locationForm.value.type || "",
