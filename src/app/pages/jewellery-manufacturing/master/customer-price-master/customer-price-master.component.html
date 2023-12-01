@@ -8,7 +8,7 @@
 <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
     <div class="col-md-12">
-        <form>
+      <form [formGroup]="customerpricemasterForm">
             <div class="container-fluid pt-3">
                 <div class="row justify-content-between">
                     <div class="col-md-12">
@@ -18,7 +18,7 @@
                                  <label for="inputPassword" class="col-sm-5 col-form-label">Customer Code :</label>
                                  <div class="col-md-7">
                                    <mat-form-field style="width: 100%;">
-                                     <input type="text" matInput />
+                                     <input type="text" matInput formControlName="customercode" />
                                    </mat-form-field>
                                  </div>
                              </div>
@@ -26,7 +26,7 @@
                                  <label for="inputPassword" class="col-sm-5 col-form-label">Price Code*:</label>
                                  <div class="col-md-7">
                                    <mat-form-field style="width: 100%;">
-                                     <input type="text" matInput />
+                                     <input type="text" matInput formControlName="pricecode"/>
                                    </mat-form-field>
                                  </div>
                              </div>
