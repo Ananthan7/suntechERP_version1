@@ -67,10 +67,10 @@ export class AdvanceReturnComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 9,
-    SEARCH_FIELD: "CURRENCY_CODE",
-    SEARCH_HEADING: "CURRENCY CODE",
+    SEARCH_FIELD: "Currency",
+    SEARCH_HEADING: "Party Currency",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CURRENCY_CODE<> ''",
+    WHERECONDITION: "Currency <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };

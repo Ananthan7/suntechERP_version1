@@ -75,8 +75,7 @@
               <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="currencyCode" />
               </mat-form-field>
-              <master-search [MasterSearchData]="currencyData"
-                (newRowClick)="CurrencySelected($event)"></master-search>
+              <master-search [MasterSearchData]="currencyData" (newRowClick)="CurrencySelected($event)"></master-search>
             </div>
             <div class="col-md-6">
               <mat-form-field style="width: 100%">
@@ -98,98 +97,99 @@
               </mat-form-field>
             </div>
           </div>
-          <!-- Credit Card -->
-          <div class="row mb-1" *ngIf="posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Credit Card'">
-            <label for="inputPassword" class="col-sm-12 col-form-label"> <b> Credit Card Details</b></label>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Number:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="creditCardNumber" />
-              </mat-form-field>
-            </div>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Holder Name:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="creditCardName" />
-              </mat-form-field>
-            </div>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Vaild:</label>
-            <div class="col-md-2">
-              <!-- need to work for mm/yy -->
-              <mat-form-field style="width: 100%" dateFormat2>
-                <input matInput  [matDatepicker]="creditCardDate" name="creditCardDate"  placeholder="MM/YYYY"
-                   formControlName="creditCardDate" />
-                <mat-datepicker-toggle matSuffix [for]="creditCardDate"></mat-datepicker-toggle>
-                <mat-datepicker #creditCardDate startView="multi-year"  (monthSelected)="setMonthAndYear($event, creditCardDate)"></mat-datepicker> 
+            <!-- Credit Card -->
+            <div class="row mb-1 box_wrap_card" *ngIf="posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Credit Card'">
+              <label for="inputPassword" class="col-sm-12 col-form-label col_header"> Credit Card Details</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Number:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="creditCardNumber" />
+                </mat-form-field>
+              </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Holder Name:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="creditCardName" />
+                </mat-form-field>
+              </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Vaild:</label>
+              <div class="col-md-3">
+                <!-- need to work for mm/yy -->
+                <mat-form-field style="width: 100%" dateFormat2>
+                  <input matInput [matDatepicker]="creditCardDate" name="creditCardDate" placeholder="MM/YYYY"
+                    formControlName="creditCardDate" />
+                  <mat-datepicker-toggle matSuffix [for]="creditCardDate"></mat-datepicker-toggle>
+                  <mat-datepicker #creditCardDate startView="multi-year"
+                    (monthSelected)="setMonthAndYear($event, creditCardDate)"></mat-datepicker>
 
-              </mat-form-field>
-     
-            </div>
-          </div>
+                </mat-form-field>
 
-          <!-- TT -->
-          <div class="row mb-1" *ngIf="posCurrencyReceiptDetailsForm.value.modeOfSelect == 'TT'">
-            <label for="inputPassword" class="col-sm-12 col-form-label"> <b> TT Details</b> </label>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Number:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="ttNumber" />
-              </mat-form-field>
+              </div>
             </div>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Date:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input matInput [matDatepicker]="ttDate" name="ttDate" placeholder="DD/MM/YYYY" DateValidation
-                  formControlName="ttDate" />
-                <mat-datepicker-toggle matSuffix [for]="ttDate"></mat-datepicker-toggle>
-                <mat-datepicker #ttDate></mat-datepicker>
-              </mat-form-field>
-            </div>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Drawn Bank:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="ttDrawnBank" />
-              </mat-form-field>
-            </div>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Deposit Bank:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="ttDepositBank" />
-              </mat-form-field>
-            </div>
-          </div>
 
-          <!-- Cheque -->
-          <div class="row mb-1" *ngIf="posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Cheque'">
-            <label for="inputPassword" class="col-sm-12 col-form-label"> <b> Cheque Details</b>  </label>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Number:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="chequeNumber" />
-              </mat-form-field>
+            <!-- TT -->
+            <div class="row mb-1 box_wrap_card" *ngIf="posCurrencyReceiptDetailsForm.value.modeOfSelect == 'TT'">
+              <label for="inputPassword" class="col-sm-12 col-form-label col_header"> TT Details </label>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Number:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="ttNumber" />
+                </mat-form-field>
+              </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Date:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input matInput [matDatepicker]="ttDate" name="ttDate" placeholder="DD/MM/YYYY" DateValidation
+                    formControlName="ttDate" />
+                  <mat-datepicker-toggle matSuffix [for]="ttDate"></mat-datepicker-toggle>
+                  <mat-datepicker #ttDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Drawn Bank:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="ttDrawnBank" />
+                </mat-form-field>
+              </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Deposit Bank:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="ttDepositBank" />
+                </mat-form-field>
+              </div>
             </div>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Date:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input matInput [matDatepicker]="chequeDate" name="chequeDate" placeholder="DD/MM/YYYY" DateValidation
-                  formControlName="chequeDate" />
-                <mat-datepicker-toggle matSuffix [for]="chequeDate"></mat-datepicker-toggle>
-                <mat-datepicker #chequeDate></mat-datepicker>
-              </mat-form-field>
+
+            <!-- Cheque -->
+            <div class="row mb-1 box_wrap_card" *ngIf="posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Cheque'">
+              <label for="inputPassword" class="col-sm-12 col-form-label col_header"> Cheque Details </label>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Number:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="chequeNumber" />
+                </mat-form-field>
+              </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Date:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input matInput [matDatepicker]="chequeDate" name="chequeDate" placeholder="DD/MM/YYYY" DateValidation
+                    formControlName="chequeDate" />
+                  <mat-datepicker-toggle matSuffix [for]="chequeDate"></mat-datepicker-toggle>
+                  <mat-datepicker #chequeDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Drawn Bank:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="chequeDrawnBank" />
+                </mat-form-field>
+              </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Deposit Bank:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%">
+                  <input type="text" matInput formControlName="chequeDepositBank" />
+                </mat-form-field>
+              </div>
             </div>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Drawn Bank:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="chequeDrawnBank" />
-              </mat-form-field>
-            </div>
-            <label for="inputPassword" class="col-sm-2 col-form-label">Deposit Bank:</label>
-            <div class="col-md-2">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="chequeDepositBank" />
-              </mat-form-field>
-            </div>
-          </div>
           <div class="row mb-1">
             <label for="inputPassword" class="col-sm-3 col-form-label">Remarks :</label>
             <div class="col-md-7">
@@ -267,7 +267,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Total FC :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="totalFc" readonly/>
+                      <input type="text" matInput formControlName="totalFc" readonly />
                     </mat-form-field>
                   </div>
                 </div>

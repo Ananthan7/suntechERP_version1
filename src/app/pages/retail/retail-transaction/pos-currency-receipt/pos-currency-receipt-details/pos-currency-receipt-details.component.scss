@@ -1,12 +1,27 @@
-.box_wrap{
-    border: 1px solid #ddd;
+.box_wrap {
+  border: 1px solid #ddd;
 }
 
-.box_wrap h5{
-    
-        background: #edeff6;
-        padding: 5px;
-        text-align: center;
-        font-size: 16px;
-        font-weight: 300;
-    }
+.box_wrap h5 {
+  background: #edeff6;
+  padding: 5px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.box_wrap_card {
+  border: 1px solid #ddd;
+  margin-left: 1px;
+}
+
+.box_wrap_card .col_header {
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    background: #415a77;
+    color: #fff;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-family: 'Poppins',sans-serif;
+}

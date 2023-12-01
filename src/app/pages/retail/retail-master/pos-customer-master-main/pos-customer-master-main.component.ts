@@ -27,18 +27,125 @@ export class PosCustomerMasterMainComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
-  stateCode: MasterSearchModel = {
+  parentPosCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 48,
-    SEARCH_FIELD: 'STATE_CODE',
-    SEARCH_HEADING: 'STATE CODE',
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Parent Pos Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STATE_CODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+
+  refByCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Ref By Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  nationalityCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Nationality Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+
+  stateCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 27,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'STATE CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+
+  cityCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 28,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'City CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  languageCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Language CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  favCelebrationCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Fav Celebration CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  religionCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Religion CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  custStatusCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Religion CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
 
   categoryCode: MasterSearchModel = {
     PAGENO: 1,
@@ -169,11 +276,52 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   stateSelected(e: any) {
     console.log(e);
+    this.posCustomerMasterMainForm.controls.stateCode.setValue(e.CODE);
   }
 
   categorySelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.category.setValue(e.CODE);
+  }
+
+  parentPosSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.parentPosCode.setValue(e.CODE);
+  }
+
+  refBySelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.refByCode.setValue(e.CODE);
+  }
+
+  nationalitySelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.nationalityCode.setValue(e.CODE);
+  }
+
+  citySelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.cityCode.setValue(e.CODE);
+  }
+
+  languageSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.languageCode.setValue(e.CODE);
+  }
+
+  favCelebrationSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.favCelebrationCode.setValue(e.CODE);
+  }
+
+  religionSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.religionCode.setValue(e.CODE);
+  }
+
+  custStatusSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.custStatusCode.setValue(e.CODE);
   }
 
   close(data?: any) {
