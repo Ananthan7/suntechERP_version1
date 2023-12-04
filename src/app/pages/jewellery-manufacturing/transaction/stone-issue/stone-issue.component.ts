@@ -96,8 +96,18 @@ export class StoneIssueComponent implements OnInit {
 
   CurrencyCodeSelected(e:any){
     console.log(e);
-    this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE);
-    this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE);
+    // this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE);
+    // this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE);
+    if (e.CURRENCY_CODE) {
+      this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE)
+      this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE)
+    }
+    if (e.Currency) {
+      this.stoneissueFrom.controls.currency.setValue(e.Currency)
+      this.stoneissueFrom.controls.currencyrate.setValue(
+        this.comService.decimalQuantityFormat(e['Conv Rate'], 'RATE')
+      )
+    }
   }
 
   WorkerCodeSelected(e:any){

@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> -->
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metalIssueDetailsForm">
@@ -212,15 +212,25 @@
                                         </mat-form-field>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-1">
                                     <div class="col-md-3">
                                         <div class="pt-2">
-                                            <button class="btn btn-primary metal-issue-add-btn">Change Job</button>
+                                            <button class="btn btn-primary">Change Job</button>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="pt-2">
-                                            <button class="btn btn-primary metal-issue-add-btn">Continue</button>
+                                            <button class="btn btn-primary">Continue</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="pt-2">
+                                            <button class="btn btn-primary">Save</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="pt-2">
+                                            <button class="btn btn-primary">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
