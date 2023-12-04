@@ -18,7 +18,7 @@ export class RateTypeComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
-  ratetypeForm: any;
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -67,13 +67,14 @@ export class RateTypeComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
     }
-    if (this.ratetypeForm.invalid) {
+    if (this.ratetypeFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
@@ -112,7 +113,7 @@ export class RateTypeComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.ratetypeForm.reset()
+                this.ratetypeFrom.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -125,7 +126,7 @@ export class RateTypeComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   update(){
-    if (this.ratetypeForm.invalid) {
+    if (this.ratetypeFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
@@ -166,7 +167,7 @@ export class RateTypeComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.ratetypeForm.reset()
+                this.ratetypeFrom.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -215,7 +216,7 @@ export class RateTypeComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.ratetypeForm.reset()
+                    this.ratetypeFrom.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -229,7 +230,7 @@ export class RateTypeComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.ratetypeForm.reset()
+                    this.ratetypeFrom.reset()
                     this.tableData = []
                     this.close()
                   }

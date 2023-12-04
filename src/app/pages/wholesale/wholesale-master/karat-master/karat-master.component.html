@@ -8,7 +8,7 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="row">
     <div class="col-md-12">
-        <form [formGroup]="karatForm">
+        <form [formGroup]="karatmasterFrom">
             <div class="container-fluid pt-3">
                 <div class="row justify-content-between">
                     <div class="col-md-8">
@@ -29,7 +29,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Standard Purity :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="standardpurity" />
+                            <input type="number" matInput formControlName="standardpurity" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Minimum :</label>
@@ -49,13 +49,13 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Sp Gravity :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="sp_gravity" />
+                            <input type="number" matInput formControlName="sp_gravity" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">SP.Variance % :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="sp_variance" />
+                            <input type="number" matInput formControlName="sp_variance" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Division :</label>
@@ -69,13 +69,13 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">POS :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="pos" />
+                            <input type="number" matInput formControlName="pos" />
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">POP MinMaxAmt:</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="pop_minmaxamt" />
+                            <input type="number" matInput formControlName="pop_minmaxamt" />
                           </mat-form-field>
                         </div>
                         <div class="col-md-2 offset-md-2">

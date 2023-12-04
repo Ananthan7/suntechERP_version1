@@ -42,6 +42,9 @@ export class ProductionMfgComponent implements OnInit {
   tableData: any[] = [];
   producationEntryDetailsData: any[] = [];
   producationSubItemsData: any[] = [];
+  STRNMTLdataSetToSave: any[] = [];
+  labourChargeDetailToSave: any[] = [];
+  productionMetalRateToSave: any[] = [];
 
   userName = this.commonService.userName;
   branchCode?: string;
@@ -102,6 +105,7 @@ export class ProductionMfgComponent implements OnInit {
     branchto: [""],
     narration: [""],
     STONE_INCLUDE: [false],
+    UnfixTransaction: [false],
   });
 
   constructor(
@@ -207,6 +211,126 @@ export class ProductionMfgComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
+  
+  /**USE: production metal rate data setup */
+  productionMetalRate(){
+    this.productionMetalRateToSave.push({
+      "REFMID": 0,
+      "SRNO": 0,
+      "RATE_TYPE": "",
+      "METAL_RATE": 0,
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "",
+      "DIVISION_CODE": "",
+      "SYSTEM_DATE": "2023-10-17T12:41:20.127Z",
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
+      "CONV_FACTOR": 0
+    })
+  }
+  /**Labour charge detail data to save */
+  setLabourChargeDetailToSave(){
+    this.labourChargeDetailToSave.push({
+      "REFMID": 0,
+      "BRANCH_CODE": "",
+      "YEARMONTH": "",
+      "VOCTYPE": "",
+      "VOCNO": 0,
+      "SRNO": 0,
+      "JOB_NUMBER": "",
+      "STOCK_CODE": "",
+      "UNQ_JOB_ID": "",
+      "METALSTONE": "",
+      "DIVCODE": "",
+      "PCS": 0,
+      "GROSS_WT": 0,
+      "LABOUR_CODE": "",
+      "LAB_RATE": 0,
+      "LAB_ACCODE": "",
+      "LAB_AMTFC": 0,
+      "UNITCODE": "",
+      "DIVISION": "",
+      "WASTAGE_PER": 0,
+      "WASTAGE_QTY": 0,
+      "WASTAGE_AMT": 0,
+      "WASTAGE_RATE": 0,
+      "KARAT_CODE": ""
+    })
+  }
+  /**STRNMTL data set to save */
+  setSTRNMTLdataSet() {
+    this.STRNMTLdataSetToSave.push({
+      "VOCNO": 0,
+      "VOCTYPE": this.commonService.nullToString(this.productionFrom.value.voctype),
+      "VOCDATE": this.commonService.formatDateTime(this.productionFrom.value.vocDate),
+      "JOB_NUMBER": "",
+      "JOB_SO_NUMBER": 0,
+      "UNQ_JOB_ID": "",
+      "JOB_DESCRIPTION": "",
+      "BRANCH_CODE": "",
+      "DESIGN_CODE": "",
+      "METALSTONE": "",
+      "DIVCODE": "",
+      "STOCK_CODE": "",
+      "STOCK_DESCRIPTION": "",
+      "COLOR": "",
+      "CLARITY": "",
+      "SHAPE": "",
+      "SIZE": "",
+      "PCS": 0,
+      "GROSS_WT": 0,
+      "RATELC": 0,
+      "RATEFC": 0,
+      "AMOUNT": 0,
+      "PROCESS_CODE": "",
+      "WORKER_CODE": "",
+      "UNQ_DESIGN_ID": "",
+      "REFMID": 0,
+      "AMOUNTLC": 0,
+      "AMOUNTFC": 0,
+      "WASTAGE_QTY": 0,
+      "WASTAGE_PER": 0,
+      "WASTAGE_AMTFC": 0,
+      "WASTAGE_AMTLC": 0,
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
+      "YEARMONTH": "",
+      "LOSS_QTY": 0,
+      "LABOUR_CODE": "",
+      "LAB_RATE": 0,
+      "LAB_AMTLC": 0,
+      "LAB_AMTFC": 0,
+      "LAB_ACCODE": "",
+      "SELLINGRATE": 0,
+      "SELLINGVALUE": 0,
+      "CUSTOMER_CODE": "",
+      "PUREWT": 0,
+      "PURITY": 0,
+      "SQLID": "",
+      "SIEVE": "",
+      "SRNO": 0,
+      "MAIN_STOCK_CODE": "",
+      "STONE_WT": 0,
+      "NET_WT": 0,
+      "CONSIGNMENT": 0,
+      "LOCTYPE_CODE": "",
+      "HANDLING_CHARGEFC": 0,
+      "HANDLING_CHARGELC": 0,
+      "HANDLING_RATEFC": 0,
+      "HANDLING_RATELC": 0,
+      "PRICECODE": "",
+      "SUB_STOCK_CODE": "",
+      "SIEVE_SET": "",
+      "KARAT_CODE": "",
+      "PROCESS_TYPE": "",
+      "SOH_ACCODE": "",
+      "STK_ACCODE": "",
+      "OTHER_ATTR": "",
+      "PUREWTTEMP": 0
+    })
+  }
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
@@ -251,9 +375,9 @@ export class ProductionMfgComponent implements OnInit {
       "SMAN": this.productionFrom.value.enteredby,
       "REMARKS": this.productionFrom.value.narration,
       "NAVSEQNO": this.commonService.emptyToZero(this.yearMonth),
-      "FIX_UNFIX": true,
+      "FIX_UNFIX": this.productionFrom.value.UnfixTransaction ? true : false,
       "STONE_INCLUDE": this.productionFrom.value.STONE_INCLUDE ? 1 : 0,
-      "AUTOPOSTING": true,
+      "AUTOPOSTING": false,
       "POSTDATE": "",
       "BASE_CURRENCY": this.commonService.nullToString(this.productionFrom.value.basecurrency),
       "BASE_CURR_RATE": this.commonService.emptyToZero(this.productionFrom.value.basecurrencyrate),
@@ -265,122 +389,9 @@ export class ProductionMfgComponent implements OnInit {
       "SYSTEM_DATE": this.commonService.nullToString(this.currentDate),
       "JOB_PRODUCTION_SUB_DJ": this.producationSubItemsData,
       "JOB_PRODUCTION_DETAIL_DJ": this.producationEntryDetailsData,
-      "JOB_PRODUCTION_STNMTL_DJ": [
-        {
-          "VOCNO": 0,
-          "VOCTYPE": "",
-          "VOCDATE": "2023-10-17T12:41:20.127Z",
-          "JOB_NUMBER": "",
-          "JOB_SO_NUMBER": 0,
-          "UNQ_JOB_ID": "",
-          "JOB_DESCRIPTION": "",
-          "BRANCH_CODE": "",
-          "DESIGN_CODE": "",
-          "METALSTONE": "",
-          "DIVCODE": "",
-          "STOCK_CODE": "",
-          "STOCK_DESCRIPTION": "",
-          "COLOR": "",
-          "CLARITY": "",
-          "SHAPE": "",
-          "SIZE": "",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "RATELC": 0,
-          "RATEFC": 0,
-          "AMOUNT": 0,
-          "PROCESS_CODE": "",
-          "WORKER_CODE": "",
-          "UNQ_DESIGN_ID": "",
-          "REFMID": 0,
-          "AMOUNTLC": 0,
-          "AMOUNTFC": 0,
-          "WASTAGE_QTY": 0,
-          "WASTAGE_PER": 0,
-          "WASTAGE_AMTFC": 0,
-          "WASTAGE_AMTLC": 0,
-          "CURRENCY_CODE": "",
-          "CURRENCY_RATE": 0,
-          "YEARMONTH": "",
-          "LOSS_QTY": 0,
-          "LABOUR_CODE": "",
-          "LAB_RATE": 0,
-          "LAB_AMTLC": 0,
-          "LAB_AMTFC": 0,
-          "LAB_ACCODE": "",
-          "SELLINGRATE": 0,
-          "SELLINGVALUE": 0,
-          "CUSTOMER_CODE": "",
-          "PUREWT": 0,
-          "PURITY": 0,
-          "SQLID": "",
-          "SIEVE": "",
-          "SRNO": 0,
-          "MAIN_STOCK_CODE": "",
-          "STONE_WT": 0,
-          "NET_WT": 0,
-          "CONSIGNMENT": 0,
-          "LOCTYPE_CODE": "",
-          "HANDLING_CHARGEFC": 0,
-          "HANDLING_CHARGELC": 0,
-          "HANDLING_RATEFC": 0,
-          "HANDLING_RATELC": 0,
-          "PRICECODE": "",
-          "SUB_STOCK_CODE": "",
-          "SIEVE_SET": "",
-          "KARAT_CODE": "",
-          "PROCESS_TYPE": "",
-          "SOH_ACCODE": "",
-          "STK_ACCODE": "",
-          "OTHER_ATTR": "",
-          "PUREWTTEMP": 0
-        }
-      ],
-      "JOB_PRODUCTION_LABCHRG_DJ": [
-        {
-          "REFMID": 0,
-          "BRANCH_CODE": "",
-          "YEARMONTH": "",
-          "VOCTYPE": "",
-          "VOCNO": 0,
-          "SRNO": 0,
-          "JOB_NUMBER": "",
-          "STOCK_CODE": "",
-          "UNQ_JOB_ID": "",
-          "METALSTONE": "",
-          "DIVCODE": "",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "LABOUR_CODE": "",
-          "LAB_RATE": 0,
-          "LAB_ACCODE": "",
-          "LAB_AMTFC": 0,
-          "UNITCODE": "",
-          "DIVISION": "",
-          "WASTAGE_PER": 0,
-          "WASTAGE_QTY": 0,
-          "WASTAGE_AMT": 0,
-          "WASTAGE_RATE": 0,
-          "KARAT_CODE": ""
-        }
-      ],
-      "JOB_PRODUCTION_METALRATE_DJ": [
-        {
-          "REFMID": 0,
-          "SRNO": 0,
-          "RATE_TYPE": "",
-          "METAL_RATE": 0,
-          "DT_BRANCH_CODE": "",
-          "DT_VOCTYPE": "",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "",
-          "DIVISION_CODE": "",
-          "SYSTEM_DATE": "2023-10-17T12:41:20.127Z",
-          "CURRENCY_CODE": "",
-          "CURRENCY_RATE": 0,
-          "CONV_FACTOR": 0
-        }
-      ]
+      "JOB_PRODUCTION_STNMTL_DJ": this.STRNMTLdataSetToSave,
+      "JOB_PRODUCTION_LABCHRG_DJ": this.labourChargeDetailToSave,
+      "JOB_PRODUCTION_METALRATE_DJ": this.productionMetalRateToSave
     }
     let Sub: Subscription = this.dataService
       .postDynamicAPI(API, postData)
