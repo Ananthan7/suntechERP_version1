@@ -26,6 +26,7 @@ import { AdvanceReturnComponent } from './advance-return/advance-return.componen
   import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
 import { PcrSelectionComponent } from './advance-return/pcr-selection/pcr-selection.component';
 import { DxDataGridModule } from 'devextreme-angular';
+import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
 
 
 
@@ -49,7 +50,8 @@ import { DxDataGridModule } from 'devextreme-angular';
     PosSalesOrderCancellationComponent,
     PcrSelectionComponent,
     CustomDateFormat1,
-    CustomDateFormat2
+    CustomDateFormat2,
+    SalesEstimationComponent
   ],
   imports: [
     CommonModule,
