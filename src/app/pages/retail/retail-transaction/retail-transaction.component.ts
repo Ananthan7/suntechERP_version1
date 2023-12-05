@@ -13,6 +13,7 @@ import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-veri
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
 import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
 import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
+import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -70,6 +71,7 @@ export class RetailTransactionComponent implements OnInit {
       'AdvanceReturnComponent': AdvanceReturnComponent,
       'PosSalesOrderCancellationComponent': PosSalesOrderCancellationComponent,
       'SalesEstimationComponent': SalesEstimationComponent,
+      'PointOfSalesOrderComponent': PointOfSalesOrderComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     }
@@ -90,13 +92,13 @@ export class RetailTransactionComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
-      } else if(result == 'OpenModal'){
+      } else if (result == 'OpenModal') {
         this.openModalView()
       }
     }, (reason) => {
       if (reason === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
-      }else if(reason == 'OpenModal'){
+      } else if (reason == 'OpenModal') {
         this.openModalView()
       }
       // Handle modal dismissal (if needed)

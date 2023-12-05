@@ -27,6 +27,7 @@ import { AdvanceReturnComponent } from './advance-return/advance-return.componen
 import { PcrSelectionComponent } from './advance-return/pcr-selection/pcr-selection.component';
 import { DxDataGridModule } from 'devextreme-angular';
 import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
+import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
 
 
 
@@ -51,7 +52,8 @@ import { SalesEstimationComponent } from './sales-estimation/sales-estimation.co
     PcrSelectionComponent,
     CustomDateFormat1,
     CustomDateFormat2,
-    SalesEstimationComponent
+    SalesEstimationComponent,
+    PointOfSalesOrderComponent
   ],
   imports: [
     CommonModule,

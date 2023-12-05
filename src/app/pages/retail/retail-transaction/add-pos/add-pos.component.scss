@@ -164,3 +164,23 @@ button[aria-label="Close"]:focus {
   border-color: #7e8790 !important;
   cursor: not-allowed !important;
 }
+
+fieldset {
+  padding: 10px;
+  border: solid 1px #949494;
+  position: relative;
+  margin-top: 25px;
+
+  legend {
+    color: #333334;
+    position: absolute;
+    top: -13px;
+    background: #fff;
+    width: 80px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+
+}
