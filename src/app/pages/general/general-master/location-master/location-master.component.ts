@@ -39,7 +39,8 @@ export class LocationMasterComponent implements OnInit {
     PLACCode1:[''],
     PLACCode2:[''],
     PLACCode3:[''],
-    PLACCode4:['']
+    PLACCode4:[''],
+    divisionDesc:[''],
 
   })
 
@@ -73,6 +74,7 @@ export class LocationMasterComponent implements OnInit {
   divisionCodeSelected(e:any){
     console.log(e);
     this.locationForm.controls.division.setValue(e.DIVISION_CODE);
+    this.locationForm.controls.divisionDesc.setValue(e.DESCRIPTION)
   }
 
   branchCodeData: MasterSearchModel = {
@@ -96,7 +98,7 @@ export class LocationMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 7,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'P/LACCode',
+    SEARCH_HEADING: 'P/L Ac Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE<> ''",
     VIEW_INPUT: true,
