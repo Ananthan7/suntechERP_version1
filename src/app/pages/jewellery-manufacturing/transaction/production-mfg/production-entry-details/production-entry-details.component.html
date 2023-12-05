@@ -253,7 +253,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Vender Ref :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="venderref" />
+                    <input type="text" matInput formControlName="VenderRef" />
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Price 4 :</label>
@@ -264,11 +264,34 @@
                 </div>
               </div>
               <div class="row mb-2">
+                <label for="input" class="col-sm-2 col-form-label">Purity :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="karat" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Job Purity :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="Job_Purity" />
+                  </mat-form-field>
+                </div>
+                <label for="input" class="col-sm-2 col-form-label">Price 5 :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="price4" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <label for="input" class="col-sm-2 col-form-label">Pure Wt :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="Pure_Wt" />
+                  </mat-form-field>
+                </div>
                 <label for="input" class="col-sm-2 col-form-label">Start Date :</label>
                 <div class="col-sm-2">
-                  <!-- <mat-form-field style="width: 100%;">
-                    <input type="date" matInput formControlName="startdate" />
-                  </mat-form-field> -->
                   <mat-form-field style="width: 100%">
                     <input matInput [matDatepicker]="startdate" name="startdate" formControlName="startdate"
                       placeholder="DD/MM/YYYY" DateValidation />
@@ -276,22 +299,21 @@
                     <mat-datepicker [startAt]="currentDate" #startdate></mat-datepicker>
                   </mat-form-field>
                 </div>
+              </div>
+              <div class="row mb-2">
+                <label for="input" class="col-sm-2 col-form-label">Purity Diff :</label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="PurityDiff" />
+                  </mat-form-field>
+                </div>
                 <label for="input" class="col-sm-2 col-form-label">End Date :</label>
                 <div class="col-sm-2">
-                  <!-- <mat-form-field style="width: 100%;">
-                    <input type="date" matInput formControlName="enddate" />
-                  </mat-form-field> -->
                   <mat-form-field style="width: 100%">
                     <input matInput [matDatepicker]="endDate" name="endDate" formControlName="startdate"
                       placeholder="DD/MM/YYYY" DateValidation />
                     <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                     <mat-datepicker [startAt]="currentDate" #endDate></mat-datepicker>
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 5 :</label>
-                <div class="col-sm-2">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="price5" />
                   </mat-form-field>
                 </div>
               </div>
@@ -404,7 +426,7 @@
                 <label for="input" class="col-sm-2 col-form-label">Purity :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%;" >
-                    <input type="text" matInput formControlName="purity" />
+                    <input type="text" matInput formControlName="PURITY" />
                   </mat-form-field>
                 </div>
                 <label for="input" class="col-sm-2 col-form-label">Net Wt :</label>
