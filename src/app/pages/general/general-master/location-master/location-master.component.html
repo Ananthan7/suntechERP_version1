@@ -41,12 +41,12 @@
                         <label for="inputPassword" class="col-sm-1 col-form-label">Division :</label>
                         <div class="col-md-2">
                             <mat-form-field style="width: 70%;">
-                              <input type="text" matInput />
+                              <input type="text" matInput formControlName="division"/>
                             </mat-form-field>
                           </div>
                         <div class="col-md-2">
                           <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="division" />
+                            <input type="text" matInput formControlName="divisionDesc" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="divisionCodeData"
                           (newRowClick)="divisionCodeSelected($event)">
@@ -65,10 +65,9 @@
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">No. Of Pieces :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
+                          <mat-form-field style="width: 100%;">
                             <input type="text" matInput />
                           </mat-form-field>
-                          <master-search></master-search>
                         </div>
                         <div class="col-md-2">
                             <mat-checkbox class="example-margin">Always Full</mat-checkbox>
