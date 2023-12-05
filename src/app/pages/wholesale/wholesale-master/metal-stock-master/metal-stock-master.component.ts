@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -19,7 +19,8 @@ export class MetalStockMasterComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
- 
+  isDisplayed: boolean = false;
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -31,6 +32,11 @@ export class MetalStockMasterComponent implements OnInit {
  
   ngOnInit(): void {
   }
+
+  showHideText() {
+    this.isDisplayed = !this.isDisplayed;
+  }
+
 
   metalstockForm: FormGroup = this.formBuilder.group({
     metalType:[''],
