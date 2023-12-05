@@ -164,6 +164,11 @@ export class ProductionMfgComponent implements OnInit {
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
     this.productionFrom.controls.currency.setValue(CURRENCY_CODE);
+    this.productionFrom.controls.basecurrencyrate.setValue(CURRENCY_CODE);
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency);
+    this.productionFrom.controls.basecurrency.setValue(
+      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+    );
     this.setCurrencyRate()
   }
   /**USE: to set currency from branch currency master */
@@ -179,7 +184,7 @@ export class ProductionMfgComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531')
     }
   }
-  openProductionEntryDetails(data?: any) {
+  openProductionEntryDetails(data?:any) {
     if (data) {
       data[0].HEADERDETAILS = this.productionFrom.value;
     } else {
@@ -196,11 +201,141 @@ export class ProductionMfgComponent implements OnInit {
 
     modalRef.result.then((res) => {
       if (res) {
-        console.log('Data from modal:', res);
-        this.producationEntryDetailsData.push(res.postData);
+        this.setFormDataDetails(res.FORM_DATA) //detail screen form data set to save
         this.producationSubItemsData.push(res.jobProducationSubDetails);
       }
     });
+  }
+  /*USE: detail screen form data set to save */
+  setFormDataDetails(formValues: any) {
+    this.producationEntryDetailsData.push({
+      "UNIQUEID": 0,
+      "SRNO": 0,
+      "VOCNO": 0,
+      "VOCTYPE": "",
+      "VOCDATE": this.currentDate,
+      "BRANCH_CODE": this.branchCode,
+      "JOB_NUMBER": formValues.value.jobno,
+      "JOB_DATE": formValues.value.jobDate,
+      "JOB_SO_NUMBER": formValues.value.subjobno,
+      "UNQ_JOB_ID": "",
+      "JOB_DESCRIPTION": formValues.value.subjobnoDesc,
+      "UNQ_DESIGN_ID": "",
+      "DESIGN_CODE": formValues.value.design,
+      "DIVCODE": "",
+      "PREFIX": formValues.value.prefix,
+      "STOCK_CODE": "",
+      "STOCK_DESCRIPTION": "",
+      "SET_REF": formValues.value.setref,
+      "KARAT_CODE": formValues.value.karat,
+      "MULTI_STOCK_CODE": true,
+      "JOB_PCS": 0,
+      "GROSS_WT": formValues.value.grosswt,
+      "METAL_PCS": formValues.value.metalpcs,
+      "METAL_WT": formValues.value.metalwt,
+      "STONE_PCS": formValues.value.stonepcs,
+      "STONE_WT": formValues.value.stonewt,
+      "LOSS_WT": formValues.value.lossone,
+      "NET_WT": 0,
+      "PURITY": formValues.value.purity,
+      "PURE_WT": formValues.value.pureWt,
+      "RATE_TYPE": formValues.value.mkgRate,
+      "METAL_RATE": 0,
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
+      "METAL_GRM_RATEFC": 0,
+      "METAL_GRM_RATELC": 0,
+      "METAL_AMOUNTFC": 0,
+      "METAL_AMOUNTLC": 0,
+      "MAKING_RATEFC": 0,
+      "MAKING_RATELC": 0,
+      "MAKING_AMOUNTFC": 0,
+      "MAKING_AMOUNTLC": 0,
+      "STONE_RATEFC": 0,
+      "STONE_RATELC": 0,
+      "STONE_AMOUNTFC": 0,
+      "STONE_AMOUNTLC": 0,
+      "LAB_AMOUNTFC": 0,
+      "LAB_AMOUNTLC": 0,
+      "RATEFC": 0,
+      "RATELC": 0,
+      "AMOUNTFC": 0,
+      "AMOUNTLC": 0,
+      "PROCESS_CODE": formValues.value.process,
+      "PROCESS_NAME": formValues.value.processname,
+      "WORKER_CODE": formValues.value.worker,
+      "WORKER_NAME": formValues.value.workername,
+      "IN_DATE": formValues.value.startdate,
+      "OUT_DATE": formValues.value.endDate,
+      "TIME_TAKEN_HRS": formValues.value.timetaken,
+      "COST_CODE": formValues.value.costcode,
+      "WIP_ACCODE": "",
+      "STK_ACCODE": "",
+      "SOH_ACCODE": "",
+      "PROD_PROC": formValues.value.prodpcs,
+      "METAL_DIVISION": "",
+      "PRICE1PER": formValues.value.price1,
+      "PRICE2PER": formValues.value.price2,
+      "PRICE3PER": formValues.value.price3,
+      "PRICE4PER": formValues.value.price4,
+      "PRICE5PER": formValues.value.price5,
+      "LOCTYPE_CODE": formValues.value.location,
+      "WASTAGE_WT": 0,
+      "WASTAGE_AMTFC": 0,
+      "WASTAGE_AMTLC": 0,
+      "PICTURE_NAME": "",
+      "SELLINGRATE": 0,
+      "CUSTOMER_CODE": formValues.value.customer,
+      "OUTSIDEJOB": true,
+      "LAB_ACCODE": "",
+      "METAL_LABAMTFC": 0,
+      "METAL_LABAMTLC": 0,
+      "METAL_LABACCODE": "",
+      "SUPPLIER_REF": "",
+      "TAGLINES": "",
+      "SETTING_CHRG": 0,
+      "POLISH_CHRG": 0,
+      "RHODIUM_CHRG": 0,
+      "LABOUR_CHRG": 0,
+      "MISC_CHRG": 0,
+      "SETTING_ACCODE": "",
+      "POLISH_ACCODE": "",
+      "RHODIUM_ACCODE": "",
+      "LABOUR_ACCODE": "",
+      "MISC_ACCODE": "",
+      "WAST_ACCODE": "",
+      "REPAIRJOB": 0,
+      "PRICE1FC": 0,
+      "PRICE2FC": 0,
+      "PRICE3FC": 0,
+      "PRICE4FC": 0,
+      "PRICE5FC": 0,
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "",
+      "YEARMONTH": "",
+      "BASE_CONV_RATE": 0,
+      "OTH_STONE_WT": formValues.value.otherstone,
+      "OTH_STONE_AMT": 0,
+      "HANDLING_ACCODE": "",
+      "FROM_STOCK_CODE": formValues.value.fromStockCode,
+      "TO_STOCK_CODE": formValues.value.toStockCode,
+      "JOB_PURITY": formValues.value.jobPurity,
+      "LOSS_PUREWT": formValues.value.loss,
+      "PUDIFF": formValues.value.purityDiff,
+      "STONEDIFF": formValues.value.stoneDiff,
+      "CHARGABLEWT": formValues.value.chargableWt,
+      "BARNO": formValues.value.barNo,
+      "LOTNUMBER": formValues.value.lotNo,
+      "TICKETNO": formValues.value.ticketNo,
+      "PROD_PER": formValues.value.prod,
+      "PURITY_PER": formValues.value.purityPer,
+      "DESIGN_TYPE": formValues.value.designCode,
+      "D_REMARKS": formValues.value.remarks,
+      "BARCODEDQTY": 0,
+      "BARCODEDPCS": 0
+    })
   }
 
 
@@ -211,9 +346,9 @@ export class ProductionMfgComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
-  
+
   /**USE: production metal rate data setup */
-  productionMetalRate(){
+  productionMetalRate() {
     this.productionMetalRateToSave.push({
       "REFMID": 0,
       "SRNO": 0,
@@ -231,7 +366,7 @@ export class ProductionMfgComponent implements OnInit {
     })
   }
   /**Labour charge detail data to save */
-  setLabourChargeDetailToSave(){
+  setLabourChargeDetailToSave() {
     this.labourChargeDetailToSave.push({
       "REFMID": 0,
       "BRANCH_CODE": "",
@@ -375,8 +510,8 @@ export class ProductionMfgComponent implements OnInit {
       "SMAN": this.productionFrom.value.enteredby,
       "REMARKS": this.productionFrom.value.narration,
       "NAVSEQNO": this.commonService.emptyToZero(this.yearMonth),
-      "FIX_UNFIX": this.productionFrom.value.UnfixTransaction ? true : false,
-      "STONE_INCLUDE": this.productionFrom.value.STONE_INCLUDE ? 1 : 0,
+      "FIX_UNFIX": this.productionFrom.value.UnfixTransaction,
+      "STONE_INCLUDE": this.productionFrom.value.STONE_INCLUDE,
       "AUTOPOSTING": false,
       "POSTDATE": "",
       "BASE_CURRENCY": this.commonService.nullToString(this.productionFrom.value.basecurrency),

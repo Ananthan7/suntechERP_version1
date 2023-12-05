@@ -70,10 +70,40 @@ export class ProductionStockDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.getComponentDetails()
   }
 
-
+  getComponentDetails(){
+    console.log(this.content,'content');
+    // if (event.target.value == '') return
+    let postData = {
+      "SPID": "045",
+      "parameter": {
+        'strUnq_Job_Id': this.comService.nullToString(this.content.subjobno),
+        'strProcess_Code': this.comService.nullToString(this.content.process),
+        'strWorker_Code': this.comService.nullToString(this.content.worker),
+        'strBranch_Code': this.comService.nullToString(this.comService.branchCode),
+        'strVocdate': this.comService.formatDateTime(this.content.VOCDATE),
+        'dblPurity': this.comService.nullToString(this.content.PURITY),
+        'dblJobPurity': this.comService.nullToString(this.content.PURITY),
+      }
+    }
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -212,5 +242,10 @@ export class ProductionStockDetailComponent implements OnInit {
 
     this.close(stockDetailToSave);
   }
-
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
+  }
 }
