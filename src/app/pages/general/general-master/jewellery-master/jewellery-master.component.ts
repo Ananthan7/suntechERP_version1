@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import themes from 'devextreme/ui/themes';
 
 @Component({
   selector: 'app-jewellery-master',
@@ -23,6 +24,8 @@ export class JewelleryMasterComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
+  checkBoxesMode: string;
+  allMode: string;
  
   constructor(
     private activeModal: NgbActiveModal,
@@ -31,7 +34,11 @@ export class JewelleryMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-  ) { }
+
+  ) { 
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+  }
  
   ngOnInit(): void {
   }
