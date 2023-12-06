@@ -19,7 +19,7 @@
                 <div class="col-md-4">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="jobNumber" />
+                      <input type="text" matInput formControlName="jobNumber" (focusout)="jobNumberValidate($event)" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="jobNumberCodeData"
                     (newRowClick)="jobNumberCodeSelected($event)"></master-search>
