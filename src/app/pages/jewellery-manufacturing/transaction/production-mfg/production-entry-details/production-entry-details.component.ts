@@ -175,7 +175,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.productiondetailsFrom.controls.prefix.setValue(data[0].PREFIX)
             this.productiondetailsFrom.controls.prefixNo.setValue(data[0].PREFIX_NUMBER)
             this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
-
             // this.productiondetailsFrom.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
             // this.productiondetailsFrom.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
             this.subJobNumberValidate()
@@ -231,6 +230,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
           this.productiondetailsFrom.controls.PURE_WT.setValue(data[0].PURE_WT)
           this.productiondetailsFrom.controls.KARAT.setValue(data[0].KARAT)
+          this.productiondetailsFrom.controls.totalpcs.setValue(data[0].PCS)
         } else {
           this.comService.toastErrorByMsgId('MSG1747');
         }
@@ -273,8 +273,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
 
   locationCodeSelected(e: any) {
-    console.log(e);
-    this.productiondetailsFrom.controls.location.setValue(e.COUNT);
+    this.productiondetailsFrom.controls.location.setValue(e.LOCATION_CODE);
   }
 
   formatDate(event: any) {
