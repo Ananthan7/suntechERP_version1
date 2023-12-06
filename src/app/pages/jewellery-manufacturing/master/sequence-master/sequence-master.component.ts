@@ -22,6 +22,7 @@ export class SequenceMasterComponent implements OnInit {
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
+  selectAll = false
 
   private subscriptions: Subscription[] = [];
 
@@ -56,6 +57,13 @@ export class SequenceMasterComponent implements OnInit {
       this.setFormValues()
     }
   }
+
+  checkAll() {
+    console.log(this.dataSource);
+    this.dataSource.forEach((item:any)=>item.isChecked = this.selectAll )
+}
+
+
   /**USE: drag and drop event */
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);

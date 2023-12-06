@@ -20,7 +20,7 @@ export class StoneIssueComponent implements OnInit {
 
   divisionMS: any = 'ID';
 
-  columnhead:any[] = ['SR NO','JOB NO','UNQ JOD ID', 'Design','Stock Code','Description ','Division','Carat','Rate','Amount'];
+  columnhead:any[] = ['SR NO','JOB NO','UNQ JOD ID', 'Design','Stock Code','Division','Description ','Carat','Rate','Process','Amount','Worker','Sieve Set'];
   @Input() content!: any; 
   tableData: any[] = [];
   stoneIssueData : any[] =[];
