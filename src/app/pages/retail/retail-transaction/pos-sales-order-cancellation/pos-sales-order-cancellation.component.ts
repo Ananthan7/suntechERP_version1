@@ -41,31 +41,31 @@ export class PosSalesOrderCancellationComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  // enteredByCode: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 1,
-  //   SEARCH_FIELD: 'SALESPERSON_CODE',
-  //   SEARCH_HEADING: '',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: "SALESPERSON_CODE<> ''",
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
+  orderCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 60,
+    SEARCH_FIELD: 'OrderCancellation',
+    SEARCH_HEADING: '',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "OrderCancellation<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
 
-  // enteredByCode: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 1,
-  //   SEARCH_FIELD: 'SALESPERSON_CODE',
-  //   SEARCH_HEADING: '',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: "SALESPERSON_CODE<> ''",
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
+  orderCancelCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: '',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
 
   posSalesOrderCancellationForm: FormGroup = this.formBuilder.group({
     vocType: [''],
@@ -105,7 +105,8 @@ export class PosSalesOrderCancellationComponent implements OnInit {
 
   enteredBySelected(e: any) {
     console.log(e);
-    
+    this.posSalesOrderCancellationForm.controls.enteredBy.setValue(e.SALESPERSON_CODE);
+    this.posSalesOrderCancellationForm.controls.enteredBy.setValue(e.DESCRIPTION);
   }
 
   customerCodeSelected(e: any) {
@@ -114,6 +115,17 @@ export class PosSalesOrderCancellationComponent implements OnInit {
     
   }
 
+  orderCodeSelected(e: any) {
+    console.log(e);
+    // this.posSalesOrderCancellationForm.controls.customer.setValue(e.NAME); 
+    
+  }
+
+  orderCancelSelected(e: any) {
+    console.log(e);
+    // this.posSalesOrderCancellationForm.controls.customer.setValue(e.NAME); 
+    
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing

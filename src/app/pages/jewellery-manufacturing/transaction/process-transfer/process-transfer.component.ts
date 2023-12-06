@@ -304,7 +304,7 @@ export class ProcessTransferComponent implements OnInit {
         "PURITY": this.commonService.emptyToZero(element.PURITY),
         "SQLID": "",
         "ISBROCKEN": 0,
-        "TREE_NO": 0,
+        "TREE_NO": '',
         "SETTED": element.SETTED_FLAG,
         "SETTED_PCS": this.commonService.emptyToZero(element.Setted),
         "SIEVE": this.commonService.nullToString(element.SIEVE),
@@ -316,7 +316,7 @@ export class ProcessTransferComponent implements OnInit {
         "BROKENSTONE_WT": 0,
         "ISMISSING": 0,
         "PROCESS_TYPE": "",
-        "IS_AUTHORISE": true,
+        "IS_AUTHORISE": false,
         "SUB_STOCK_CODE": this.commonService.nullToString(element.SUB_STOCK_CODE),
         "KARAT_CODE": this.commonService.nullToString(element.KARAT_CODE),
         "SIEVE_SET": this.commonService.nullToString(element.SIEVE_SET),
@@ -328,20 +328,20 @@ export class ProcessTransferComponent implements OnInit {
         "SCRAP_PUDIFF": this.commonService.emptyToZero((Number(detailScreenData.scrapQuantity) - Number(detailScreenData.PURITY)) * scrapPureWt),
         "SCRAP_ACCODE": seqData.length > 0 ? this.commonService.nullToString(seqData[0].GAIN_AC) : '',
         "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-        "ISSUE_GROSS_WT": 0,
-        "ISSUE_STONE_WT": 0,
-        "ISSUE_NET_WT": 0,
-        "JOB_PCS": 0,
-        "DESIGN_TYPE": "",
-        "TO_STOCK_CODE": "",
-        "FROM_STOCK_CODE": "",
-        "FROM_SUB_STOCK_CODE": "",
-        "LOSS_PURE_WT": 0,
-        "EXCLUDE_TRANSFER_WT": true,
-        "IRON_WT": 0,
-        "IRON_SCRAP_WT": 0,
-        "GAIN_WT": 0,
-        "GAIN_PURE_WT": 0,
+        "ISSUE_GROSS_WT": this.commonService.emptyToZero(element.GROSS_WT),
+        "ISSUE_STONE_WT": this.commonService.emptyToZero(element.STONE_WT),
+        "ISSUE_NET_WT": this.commonService.emptyToZero(element.NET_WT),
+        "JOB_PCS": 1,
+        "DESIGN_TYPE": this.commonService.nullToString(detailScreenData.DESIGN_TYPE),
+        "TO_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_ToStockCode),
+        "FROM_STOCK_CODE": this.commonService.nullToString(detailScreenData.METAL_FromStockCode),
+        "FROM_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.SUB_STOCK_CODE),
+        "LOSS_PURE_WT": this.commonService.emptyToZero(detailScreenData.LOSS_QTY*detailScreenData.PURITY),
+        "EXCLUDE_TRANSFER_WT": detailScreenData.EXCLUDE_TRANSFER_WT,
+        "IRON_WT": this.commonService.emptyToZero(element.IRON_WT),
+        "IRON_SCRAP_WT": this.commonService.emptyToZero(detailScreenData.METAL_ToIronScrapWt),
+        "GAIN_WT": this.commonService.emptyToZero(detailScreenData.METAL_GainGrWt),
+        "GAIN_PURE_WT": this.commonService.emptyToZero(detailScreenData.METAL_GainPureWt),
         "IS_REJECT": true,
         "REASON": "",
         "REJ_REMARKS": "",
@@ -410,6 +410,10 @@ export class ProcessTransferComponent implements OnInit {
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.processFrom);
     let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == detailScreenData.processTo);
     let scrapPureWt = this.commonService.emptyToZero(Number(detailScreenData.scrapQuantity) * Number(detailScreenData.SCRAP_PURITY))
+    let amountFC = this.commonService.FCToCC(this.processTransferFrom.value.currency, stoneAmount)
+    
+    console.log(this.commonService.timeToMinutes(detailScreenData.consumed),'time consumed');
+    
     this.PTFDetailsToSave.push({
       "SRNO": 0,
       "UNIQUEID": 0,
@@ -495,7 +499,7 @@ export class ProcessTransferComponent implements OnInit {
       "LOCTYPE_CODE": "",
       "PICTURE_PATH": this.commonService.nullToString(detailScreenData.PICTURE_PATH),
       "AMOUNTLC": this.commonService.emptyToZero(stoneAmount),
-      "AMOUNTFC": this.commonService.FCToCC(this.processTransferFrom.value.currency, stoneAmount),
+      "AMOUNTFC": 0,
       "JOB_PCS": 0,
       "STONE_WT": this.commonService.emptyToZero(detailScreenData.StoneWeightTo),
       "STONE_PCS": this.commonService.emptyToZero(detailScreenData.StonePcsTo),
@@ -519,8 +523,8 @@ export class ProcessTransferComponent implements OnInit {
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.commonService.yearSelected,
       "ISSUE_REF": this.commonService.nullToString(detailScreenData.barCodeNumber),
-      "IS_AUTHORISE": 0,
-      "TIME_CONSUMED": this.commonService.timeToMinutes(detailScreenData.consumed),
+      "IS_AUTHORISE": false,
+      "TIME_CONSUMED": this.commonService.emptyToZero(detailScreenData.consumed),
       "SCRAP_STOCK_CODE": this.commonService.nullToString(detailScreenData.stockCode),
       "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(detailScreenData.MAIN_STOCK_CODE),
       "SCRAP_PURITY": this.commonService.emptyToZero(detailScreenData.SCRAP_PURITY),
@@ -540,7 +544,7 @@ export class ProcessTransferComponent implements OnInit {
       "TO_IRONWT": this.commonService.emptyToZero(detailScreenData.METAL_ToIronWt),
       "FRM_DIAGROSS_WT": this.commonService.emptyToZero(detailScreenData.METAL_GrossWeightFrom),
       "EXCLUDE_TRANSFER_WT": detailScreenData.EXCLUDE_TRANSFER_WT,
-      "SCRAP_DIVCODE": this.commonService.emptyToZero(detailScreenData.DIVCODE),
+      "SCRAP_DIVCODE": this.commonService.nullToString(detailScreenData.DIVCODE),
       "IRON_SCRAP_WT": this.calculateIronScrapWeight(detailScreenData),
       "GAIN_WT": this.commonService.emptyToZero(detailScreenData.METAL_GainGrWt),
       "GAIN_PURE_WT": this.commonService.emptyToZero(detailScreenData.METAL_GainPureWt),
@@ -575,9 +579,9 @@ export class ProcessTransferComponent implements OnInit {
       this.commonService.toastErrorByMsgId('select all required fields')
       return
     }
-    let detailScreenData = this.detailData[0].DATA
-    detailScreenData = detailScreenData.PROCESS_FORMDETAILS
-    let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ'
+    let detailScreenData = this.detailData[0].DATA;
+    detailScreenData = detailScreenData.PROCESS_FORMDETAILS;
+    let API = 'JobProcessTrnMasterDJ/InsertJobProcessTrnMasterDJ';
     let postData = {
       "MID": 0,
       "VOCTYPE": this.commonService.nullToString(this.processTransferFrom.value.voctype),
@@ -602,7 +606,6 @@ export class ProcessTransferComponent implements OnInit {
       "JOB_PROCESS_TRN_STNMTL_DJ": this.metalGridDataToSave, //detail screen data
       "JOB_PROCESS_TRN_LABCHRG_DJ": this.labourChargeDetailsToSave // labour charge details
     }
-
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {

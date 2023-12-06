@@ -15,17 +15,17 @@ import Swal from 'sweetalert2';
 })
 export class WaxProcessComponent implements OnInit {
 
-  columnhead:any[] = ['SRNO','Job Number','Design', 'Party','S.O','SO.Date ','Del.Date','Gross.Wt','Metal Wt','Stone.Wt','Ord.Pcs','Issue Pcs'];
+  // columnhead:any[] = ['SR No','Job Number','Design', 'Party','SO','SO Date ','Del Date','Gross Wt','Metal Wt','Stone Wt','Ord Pcs','Issue Pcs'];
   branchCode?: String;
   yearMonth?: String;
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   vocMaxDate = new Date();
   currentDate = new Date();
-  
+
   userName = localStorage.getItem('username');
-    user: MasterSearchModel = {
+  user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 73,
@@ -38,9 +38,21 @@ export class WaxProcessComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
+  jobNumberCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'JOB NUMBER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
 
 
- ProcessCodeData: MasterSearchModel = {
+  ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 20,
@@ -64,7 +76,7 @@ export class WaxProcessComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -74,243 +86,327 @@ export class WaxProcessComponent implements OnInit {
     private commonService: CommonServiceService,
   ) { }
 
-  ngOnInit(): void {
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
-  }
 
-
-
-  waxprocessFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocdate:[''],
-    vocno:[''],
-    processcode:[''],
-    workercode:[''],
-    enteredBy : [''],
-    remarks:[''],
-  });
 
   userDataSelected(value: any) {
     console.log(value);
-       this.waxprocessFrom.controls.enteredBy.setValue(value.UsersName);
+    this.waxprocessFrom.controls.enteredBy.setValue(value.UsersName);
   }
 
-  ProcessCodeSelected(e:any){
+  ProcessCodeSelected(e: any) {
     console.log(e);
     this.waxprocessFrom.controls.processcode.setValue(e.Process_Code);
 
   }
 
-  
-  WorkerCodeSelected(e:any){
+  WorkerCodeSelected(e: any) {
     console.log(e);
     this.waxprocessFrom.controls.workercode.setValue(e.WORKER_CODE);
   }
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
-  addTableData(){ 
-  
-  }
-  
-  deleteTableData(){
-   
+  jobNumberDataSelected(data: any, value: any) {
+    console.log(value);
+    console.log(data);
+    this.tableData[value.data.SRNO - 1].job_number = data.jobNumber;
   }
 
-formSubmit(){
-
-  if(this.content && this.content.FLAG == 'EDIT'){
-    this.update()
-    return
-  }
-  if (this.waxprocessFrom.invalid) {
-    this.toastr.error('select all required fields')
-    return
+  designtextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].job_description = data.design;
   }
 
-  let API = 'JobWaxIssue/InsertJobWaxIssue'
-  let postData = {
-  "MID": 0,
-  "VOCTYPE": this.waxprocessFrom.value.voctype,
-  "BRANCH_CODE": this.branchCode,
-  "VOCNO": this.waxprocessFrom.value.vocno,
-  "VOCDATE": this.waxprocessFrom.value.vocdate,
-  "YEARMONTH": this.yearMonth,
-  "DOCTIME": "2023-10-20T10:24:24.037Z",
-  "PROCESS_CODE": this.waxprocessFrom.value.processcode,
-  "WORKER_CODE": this.waxprocessFrom.value.workercode,
-  "TOTAL_PCS": 0,
-  "TOTAL_GROSS_WT": 0,
-  "TOTAL_STONE_WT": 0,
-  "SMAN": this.waxprocessFrom.value.enteredBy,
-  "REMARKS": this.waxprocessFrom.value.remarks,
-  "NAVSEQNO": 0,
-  "AUTOPOSTING": true,
-  "POSTDATE": "",
-  "PRINT_COUNT": 0,
-  "SYSTEM_DATE": "2023-10-20T10:24:24.037Z",
-  "Details": [
-    {
-      "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
-      "DT_BRANCH_CODE": this.branchCode,
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": this.yearMonth,
-      "SRNO": 0,
-      "JOB_NUMBER": "str",
-      "UNQ_JOB_ID": "",
-      "PROCESS_CODE": "",
-      "WORKER_CODE": "",
-      "DESIGN_CODE": "",
-      "PARTYCODE": "",
-      "ISSUE_PCS": 0,
-      "TOTAL_PCS": 0,
-      "UNQ_DESIGN_ID": "",
-      "GROSS_WT": 0,
-      "METAL_WT": 0,
-      "STONE_WT": 0
+  partytextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].party = data.party;
+  }
+
+  Sotextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].So = data.So;
+  }
+
+  SoDatetextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].SoDate = data.SoDate;
+  }
+
+  DelDatetextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].DelDate = data.DelDate;
+  }
+
+  GrossWttextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].GrossWt = data.GrossWt;
+  }
+
+  MetalWttextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].MetalWt = data.MetalWt;
+  }
+
+  StoneWttextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].StoneWt = data.StoneWt;
+  }
+
+  OrderPcstextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].OrderPcs = data.OrderPcs;
+  }
+
+  IssuePcstextevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].IssuePcs = data.IssuePcs;
+  }
+
+  ngOnInit(): void {
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
+    console.log(this.content);
+    if (this.content) {
+      this.setFormValues()
     }
-  ]
-}
-
-  let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-    .subscribe((result) => {
-      if (result.response) {
-        if(result.status == "Success"){
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.waxprocessFrom.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
-        }
-      } else {
-        this.toastr.error('Not saved')
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
-}
-
-update(){
-  if (this.waxprocessFrom.invalid) {
-    this.toastr.error('select all required fields')
-    return
   }
 
-  let API = 'ApprovalMaster/UpdateApprovalMaster/'+this.content.APPR_CODE
-  let postData = {
-    "APPR_CODE": this.waxprocessFrom.value.code || "",
-    "APPR_DESCRIPTION": this.waxprocessFrom.value.description || "",
-    "MID": this.content.MID,
-    "approvalDetails": this.tableData,  
-  }
+  setFormValues() {
+    if (!this.content) return
+    this.waxprocessFrom.controls.job_number.setValue(this.content.APPR_CODE)
+    this.waxprocessFrom.controls.design.setValue(this.content.job_description)
 
-  let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-    .subscribe((result) => {
-      if (result.response) {
-        if(result.status == "Success"){
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.waxprocessFrom.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
-        }
-      } else {
-        this.toastr.error('Not saved')
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
-}
 
-deleteRecord() {
-  if (!this.content.MID) {
-    Swal.fire({
-      title: '',
-      text: 'Please Select data to delete!',
-      icon: 'error',
-      confirmButtonColor: '#336699',
-      confirmButtonText: 'Ok'
-    }).then((result: any) => {
-      if (result.value) {
+    this.dataService.getDynamicAPI('JobWaxIssue/GetJobWaxIssue/' + this.content.job_number).subscribe((data) => {
+      if (data.status == 'Success') {
+
+        this.tableData = data.response.WaxProcessDetails;
+
+
       }
     });
-    return
-  }
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      let API = 'ApprovalMaster/DeleteApprovalMaster/' + this.content.APPR_CODE
-      let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-        .subscribe((result) => {
-          if (result) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.waxprocessFrom.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            } else {
-              Swal.fire({
-                title: result.message || 'Error please try again',
-                text: '',
-                icon: 'error',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.waxprocessFrom.reset()
-                  this.tableData = []
-                  this.close()
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not deleted')
-          }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
-    }
-  });
-}
 
-ngOnDestroy() {
-  if (this.subscriptions.length > 0) {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
-    this.subscriptions = []; // Clear the array
   }
-}
+
+  waxprocessFrom: FormGroup = this.formBuilder.group({
+    voctype: [''],
+    vocdate: [''],
+    vocno: [''],
+    processcode: [''],
+    workercode: [''],
+    enteredBy: [''],
+    remarks: [''],
+  });
+
+  adddata() {
+    let length = this.tableData.length;
+    let srno = length + 1;
+    let data = {
+      "UNIQUEID": 12345,
+      "WAX_CODE": "test",
+      "SRNO": srno,
+      "job_number": "",
+      "design": "",
+      "party": "",
+      "So": "",
+      "SoDate": "",
+      "DelDate": "",
+      "GrossWt": "0.000",
+      "MetalWt": "0.000",
+      "StoneWt": "0.000",
+      "OrderPcs": "",
+      "IssuePcs": ""
+
+    };
+    this.tableData.push(data);
+  }
+  removedata() {
+    this.tableData.pop();
+  }
+
+  formSubmit() {
+
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.update()
+      return
+    }
+    if (this.waxprocessFrom.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'JobWaxIssue/InsertJobWaxIssue'
+    let postData = {
+      "MID": 0,
+      "VOCTYPE": this.waxprocessFrom.value.voctype,
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.waxprocessFrom.value.vocno,
+      "VOCDATE": this.waxprocessFrom.value.vocdate,
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2023-10-20T10:24:24.037Z",
+      "PROCESS_CODE": this.waxprocessFrom.value.processcode,
+      "WORKER_CODE": this.waxprocessFrom.value.workercode,
+      "TOTAL_PCS": 0,
+      "TOTAL_GROSS_WT": 0,
+      "TOTAL_STONE_WT": 0,
+      "SMAN": this.waxprocessFrom.value.enteredBy,
+      "REMARKS": this.waxprocessFrom.value.remarks,
+      "NAVSEQNO": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "PRINT_COUNT": 0,
+      "SYSTEM_DATE": "2023-10-20T10:24:24.037Z",
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "DT_VOCTYPE": "str",
+          "DT_BRANCH_CODE": this.branchCode,
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": this.yearMonth,
+          "SRNO": 0,
+          "job_number": "",
+          "design": "",
+          "party": "",
+          "So": "",
+          "SoDate": "",
+          "DelDate": "",
+          "GrossWt": "0.000",
+          "MetalWt": "0.000",
+          "StoneWt": "0.000",
+          "OrderPcs": "",
+          "IssuePcs": ""
+        }
+      ]
+    }
+
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.waxprocessFrom.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+  update() {
+    if (this.waxprocessFrom.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'ApprovalMaster/UpdateApprovalMaster/' + this.content.APPR_CODE
+    let postData = {
+      "APPR_CODE": this.waxprocessFrom.value.code || "",
+      "APPR_DESCRIPTION": this.waxprocessFrom.value.description || "",
+      "MID": this.content.MID,
+      "approvalDetails": this.tableData,
+    }
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.waxprocessFrom.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+  deleteRecord() {
+    if (!this.content.MID) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
+        }
+      });
+      return
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'ApprovalMaster/DeleteApprovalMaster/' + this.content.APPR_CODE
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.waxprocessFrom.reset()
+                    this.tableData = []
+                    this.close('reloadMainGrid')
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.waxprocessFrom.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
+  }
 }

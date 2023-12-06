@@ -73,7 +73,7 @@
                         <mat-form-field style="width: 70%;">
                             <input matInput="text" formControlName="order" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="orderCodeData"  (newRowClick)="orderCodeSelected($event)"></master-search>
                     </div>
                 </div>
             </div>
@@ -240,7 +240,7 @@
                         <mat-form-field style="width:70%">
                             <input matInput="text" formControlName="orderCancel" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="orderCancelCode" (newRowClick)="orderCancelSelected($event)"></master-search>
                     </div>
                 </div>
             </div>

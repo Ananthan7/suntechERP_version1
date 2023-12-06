@@ -1,0 +1,244 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Point Of Sales Order</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()"></modal-header>
+<!-- content section -->
+<div class="container-fluid pt-3">
+    <form [formGroup]="posofSalesOrderForm">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Type</label>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="vocType" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="vocTypeDescription" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date</label>
+                    <div class="col-md-8">
+                        <mat-form-field style="width: 100%;">
+                            <input matInput [matDatepicker]="vocDate" [max]="vocDate" formControlName="vocDate"
+                                placeholder="DD/MM/YYYY" DateValidation />
+                            <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Salesman</label>
+                    <div class="col-md-8">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput formControlName="salesMan" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Currency</label>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="currency" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput formControlName="currencyCode" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Credit A/C</label>
+                    <div class="col-md-8">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput formControlName="creditAc" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Moblie No</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="moblieCountryCode" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="moblieNo" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Landline</label>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="landline" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Customer Code</label>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput formControlName="customerCode" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <mat-select formControlName="customerSelect">
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="custDesc" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="email" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">P.O.Box</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="poBox" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">ID Proof</label>
+                    <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="idProof" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Type</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="type" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Nationality</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="nationality" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">City</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="city" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">State</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="state" />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-2">
+                    <button type="button" class="btn btn-primary add-btn w-100">
+                        Load Metal Rates
+                    </button>
+                </div>
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing>
+                    <dxo-selection mode="multiple"></dxo-selection>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                    </dxi-column>
+                </dx-data-grid>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="row mb-1 ">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Remarks</label>
+                            <div class="col-md-5">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="remarks" />
+                                </mat-form-field>
+                            </div>
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Delivery Date</label>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput [matDatepicker]="deliveryDate" [max]="deliveryDate"
+                                        formControlName="deliveryDate" placeholder="DD/MM/YYYY" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="deliveryDate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #deliveryDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="row mb-1 align-items-center">
+                            <div class="col-md-4">
+                                <mat-checkbox class="example-margin" formControlName="fixMetalRate">Fix Metal
+                                    Rate</mat-checkbox>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-checkbox class="example-margin" formControlName="holdforSalesTill">hold for Sales
+                                    Till</mat-checkbox>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput [matDatepicker]="normalDate" [max]="normalDate"
+                                        formControlName="normalDate" placeholder="DD/MM/YYYY" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="normalDate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #normalDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-3 d-flex mb-2">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false">
+                </menu-buttons>
+            </div>
+            <div class="col-md-12">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing>
+                    <dxo-selection mode="multiple"></dxo-selection>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <dxi-column *ngFor="let data of columnheadDetails"
+                        dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+                        alignment="center" backgroundcolor="#000">
+                    </dxi-column>
+                </dx-data-grid>
+            </div>
+        </div>
+    </form>
+</div>

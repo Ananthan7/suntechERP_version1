@@ -448,6 +448,7 @@ export class AddPosComponent implements OnInit {
   nationalityMasterOptions!: Observable<any[]>;
   genderList: any = [];
 
+  enableJawahara: boolean =  false;
 
   _exchangeItemchange: any;
   srCustCode: any = ''; // sales return customer code
@@ -597,6 +598,13 @@ export class AddPosComponent implements OnInit {
       fcn_exchange_making_rate: [''],
       fcn_exchange_making_amt: [''],
       fcn_exchange_net_amount: [{ value: 0 }, Validators.required],
+      fcn_exchange_scrap_bag_no: [''],
+      fcn_exchange_scrap_bag_desc: [''],
+      fcn_exchange_location: [''],
+      fcn_exchange_jawahara:[''],
+      fcn_exchange_resale_recycle:[''],
+      fcn_exchange_cash_exchange:[''],
+      
     });
 
     this.customerDetailForm = this.formBuilder.group({
@@ -686,6 +694,9 @@ export class AddPosComponent implements OnInit {
     // this.getArgs();
     this.indexedDb.getAllData('compparams').subscribe((data) => {
       if (data.length > 0) {
+        console.log('==============compparams======================');
+        console.log(data);
+        console.log('====================================');
         this.comFunc.allCompanyParams = data;
         this.comFunc.setCompParaValues();
         this.getArgs();
@@ -4254,8 +4265,8 @@ export class AddPosComponent implements OnInit {
       SUPPLIER: '', // need_input
       BATCHSRNO: 0, // need_input
       STOCK_DOCDESC: this.exchangeForm.value.fcn_exchange_item_desc || '',
-      BAGNO: '',
-      BAGREMARKS: '',
+      BAGNO: this.exchangeForm.value.fcn_exchange_scrap_bag_no || '', 
+      BAGREMARKS: this.exchangeForm.value.fcn_exchange_scrap_bag_desc || '',
       WASTAGEPER: 0.0,
       WASTAGEQTY: 0.0,
       WASTAGEAMOUNTFC: 0.0,
@@ -4311,9 +4322,9 @@ export class AddPosComponent implements OnInit {
       DT_YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
       SUPPLIERDISC: '',
       DTKarat: 0,
-      JAWAHARAYN: 0,
-      RESALERECYCLE: 0,
-      CASHEXCHANGE: 0,
+      JAWAHARAYN: this.exchangeForm.value.fcn_exchange_jawahara ||  0,
+      RESALERECYCLE: this.exchangeForm.value.fcn_exchange_resale_recycle || 0,
+      CASHEXCHANGE: this.exchangeForm.value.fcn_exchange_cash_exchange || 0,
       C1_CATEGORY: '',
       C2_CATEGORY: '',
       C3_CATEGORY: '',

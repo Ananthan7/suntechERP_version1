@@ -22,8 +22,8 @@ export class CastingTreeUpComponent implements OnInit {
   closeResult:any;
   pageTitle: any;
   currentFilter: any;
-  columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Wt.','Metal Wt','Stone Wt','RCVD Gross Weight','RCVD Metal Weight','Process code','Worker Code',];
-  columnheader : any[] = ['type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
+  columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Weight','Metal Weight','Stone Weight','RCVD Gross Weight','Karat Code','Purity','Pure Weight','Metal Color','RCVD Pure Weight','Stock Code','Pieces','Job Pcs','Loss Wt','Loss Pure'];
+  columnheader : any[] = ['Type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
 
    @Input() content!: any;
 

@@ -34,6 +34,8 @@ export class CommonServiceService {
   compCurrency: any
   popMetalValueOnNet: any
   FormatCount: any;
+  enableJawahara: boolean = false;
+
   public allMessageBoxData: any;
   public allCompanyParams: any;
   public baseUsername: any;
@@ -294,6 +296,10 @@ export class CommonServiceService {
       if (data.PARAMETER == 'COMPANYCURRENCY') {
         this.compCurrency = data.PARAM_VALUE;
       }
+      // parameter want
+      // if (data.PARAMETER == 'COMPANYCURRENCY') {
+      //   this.enableJawahara = data.PARAM_VALUE;
+      // }
       if (data.Parameter == 'POSKARATRATECHANGE') {
         this.posKARATRATECHANGE = data.Param_Value;
         if (this.posKARATRATECHANGE.toString() == '0') {

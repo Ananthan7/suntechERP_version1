@@ -31,7 +31,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input matInput="text" formControlName="parentPosCode" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="parentPosCode"
+                                (newRowClick)="parentPosSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
@@ -42,7 +43,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input matInput="text" formControlName="refBy" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="refByCode"
+                                (newRowClick)="refBySelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
@@ -56,7 +58,6 @@
                                     <div class="col-md-8">
                                         <mat-form-field>
                                             <mat-select formControlName="name">
-                                                <mat-option value="Cash">Cash</mat-option>
                                                 <mat-option></mat-option>
                                             </mat-select>
                                         </mat-form-field>
@@ -237,7 +238,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input matInput="text" formControlName="nationality" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="nationalityCode"
+                                (newRowClick)="nationalitySelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -256,7 +258,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input matInput="text" formControlName="city" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="cityCode"
+                                (newRowClick)="citySelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -265,7 +268,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input matInput="text" formControlName="language" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="languageCode"
+                                (newRowClick)="languageSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -274,7 +278,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input matInput="text" formControlName="favCelebration" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="favCelebrationCode"
+                                (newRowClick)="favCelebrationSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row border">
@@ -362,7 +367,8 @@
                                                         <mat-form-field style="width: 70%;">
                                                             <input matInput="text" formControlName="religion" />
                                                         </mat-form-field>
-                                                        <master-search></master-search>
+                                                        <master-search [MasterSearchData]="religionCode"
+                                                        (newRowClick)="religionSelected($event)"></master-search>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-1">
@@ -383,7 +389,8 @@
                                                         <mat-form-field style="width: 70%;">
                                                             <input matInput="text" formControlName="custStatus" />
                                                         </mat-form-field>
-                                                        <master-search></master-search>
+                                                        <master-search [MasterSearchData]="custStatusCode"
+                                                        (newRowClick)="custStatusSelected($event)"></master-search>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-1">

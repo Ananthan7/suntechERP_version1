@@ -43,12 +43,12 @@ export class CustomerPriceSettingComponent implements OnInit {
     currency:[''],
     approvalby:[''],
     enteredBy:[''],
-    group1:[''],
-    group2:[''],
-    group3:[''],
-    group4:[''],
-    group5:[''],
-    group6:[''],
+    // group1:[''],
+    // group2:[''],
+    // group3:[''],
+    // group4:[''],
+    // group5:[''],
+    // group6:[''],
   })
 
 
@@ -102,20 +102,20 @@ export class CustomerPriceSettingComponent implements OnInit {
     this.customerpricesettingForm.controls.currency.setValue(e.CURRENCY_CODE);
   }
 
-  approvalCodeData: MasterSearchModel = {
+  approvedbyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 73,
     SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'Approval By',
+    SEARCH_HEADING: 'Approved By',
     SEARCH_VALUE: '',
     WHERECONDITION: "UsersName<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  ApprovalCodeSelected(e: any) {
+  ApprovedbyCodeSelected(e: any) {
     console.log(e);
-    this.customerpricesettingForm.controls.approvalby.setValue(e.UsersName);
+    this.customerpricesettingForm.controls.approvedby.setValue(e.UsersName);
   }
 
 
@@ -147,16 +147,16 @@ export class CustomerPriceSettingComponent implements OnInit {
       "ENTERED_BY":this.customerpricesettingForm.value.enteredby || "",
       "IS_STOCK_CODE": true,
       "APPROVED_BY": this.customerpricesettingForm.value.approvedby || "",
-      "GROUP1": this.customerpricesettingForm.value.group1 || "",
-      "GROUP2": this.customerpricesettingForm.value.group2 || "",
-      "GROUP3": this.customerpricesettingForm.value.group3 || "",
+      "GROUP1": "string",
+      "GROUP2": "string",
+      "GROUP3": "string",
       "IS_ACTIVE": true,
       "BRANCH_CODE": "string",
       "DEFAULT_CUST": true,
       "DEFAULT_SUPP": true,
-      "GROUP4": this.customerpricesettingForm.value.group4 || "",
-      "GROUP5": this.customerpricesettingForm.value.group5 || "",
-      "GROUP6": this.customerpricesettingForm.value.group6 || "",
+      "GROUP4": "string",
+      "GROUP5": "string",
+      "GROUP6": "string",
       "MIN_MKGAMT": 0,
       "IS_PLATE_CHARGE": true,
       "PLATE_CHARGES": 0,
