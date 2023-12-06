@@ -449,9 +449,19 @@
                         <label for="inputPassword" class="col-sm-3 offset-md-6 col-form-label">MT% Rate Type :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <mat-select>
-    
-                            </mat-select>
+                            <select matNativeControl required >
+                              <option value="18K">18K</option>
+                              <option value="995">995</option>
+                              <option value="GMS">GMS</option>
+                              <option value="GMS$">GMS$</option>
+                              <option value="GOZ">GOZ</option>
+                              <option value="GOZ$">GOZ$</option>
+                              <option value="GOZ2">GOZ2</option>
+                              <option value="GOZ2.5">GOZ2.5</option>
+                              <option value="GOZ3">GOZ3</option>
+                              <option value="KB">KB</option>
+                              <option value="TTB">TTB</option>
+                            </select>
                           </mat-form-field>
                         </div>
                         <div class="col-md-4  offset-md-8">
@@ -634,7 +644,7 @@
                               </div>
                              
                               <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox" formControlName="kundan">
+                                <input class="form-check-input" type="checkbox" formControlName="kundan" (change)="showHideText();">
                                 <label class="form-check-label">
                                   Kundan
                                 </label>
@@ -709,12 +719,14 @@
                         </div>
                         <div class="col-md-3">
                           <div class="row align-items-center">
-                             <label for="inputPassword" class="col-sm-6 col-form-label">Kundan Rate :</label>
-                            <div class="col-md-6">
+                             <label for="inputPassword" class="col-sm-6 col-form-label" *ngIf="isDisplayed">Kundan Rate :</label>
+                            <div class="col-md-6" *ngIf="isDisplayed">
                               <mat-form-field style="width: 80%;">
-                                <mat-select>
-        
-                                </mat-select>
+                                <select matNativeControl required >
+                                  <option value="PCS">PCS</option>
+                                  <option value="CARAT">CARAT</option>
+                                  <option value="GMS">GMS</option>
+                                </select>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-6 col-form-label">Link Sub Code :</label>

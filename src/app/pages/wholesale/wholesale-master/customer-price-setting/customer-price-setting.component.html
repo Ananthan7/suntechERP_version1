@@ -28,8 +28,11 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Date :</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="date" matInput />
+                    <mat-form-field style="width: 72%;">
+                      <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
+                      placeholder="YYYY/MM/DD" [value]="currentDate.value" DateValidation />
+                    <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                     </mat-form-field>
                   </div>
                 </div>
@@ -94,7 +97,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-6 col-form-label">Approvel By:</label>
+                  <label for="inputPassword" class="col-sm-6 col-form-label">Approved By:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="approvedby" />
@@ -130,44 +133,68 @@
             <div class="row">
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-label></mat-label>
-                  <mat-select>
-                  </mat-select>
+                  <select matNativeControl required formControlName="group1" >
+                    <option value="none">None</option>
+                    <option value="category">Category</option>
+                    <option value="subcategory">Sub Category</option>
+                    <option value="brandcode">Brand Code</option>
+                    <option value="type">Type</option>
+                  </select>
                 </mat-form-field>
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-label></mat-label>
-                  <mat-select>
-                  </mat-select>
+                  <select matNativeControl required formControlName="group2" >
+                    <option value="none">None</option>
+                    <option value="category">Category</option>
+                    <option value="subcategory">Sub Category</option>
+                    <option value="brandcode">Brand Code</option>
+                    <option value="type">Type</option>
+                  </select>
                 </mat-form-field>
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-label></mat-label>
-                  <mat-select>
-                  </mat-select>
+                  <select matNativeControl required formControlName="group3" >
+                    <option value="none">None</option>
+                    <option value="category">Category</option>
+                    <option value="subcategory">Sub Category</option>
+                    <option value="brandcode">Brand Code</option>
+                    <option value="type">Type</option>
+                  </select>
                 </mat-form-field>
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-label></mat-label>
-                  <mat-select>
-                  </mat-select>
+                  <select matNativeControl required formControlName="group4" >
+                    <option value="none">None</option>
+                    <option value="category">Category</option>
+                    <option value="subcategory">Sub Category</option>
+                    <option value="brandcode">Brand Code</option>
+                    <option value="type">Type</option>
+                  </select>
                 </mat-form-field>
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-label></mat-label>
-                  <mat-select>
-                  </mat-select>
+                  <select matNativeControl required formControlName="group5" >
+                    <option value="none">None</option>
+                    <option value="category">Category</option>
+                    <option value="subcategory">Sub Category</option>
+                    <option value="brandcode">Brand Code</option>
+                    <option value="type">Type</option>
+                  </select>
                 </mat-form-field>
               </div>
               <div class="col-2">
                 <mat-form-field style="width: 80%;">
-                  <mat-label></mat-label>
-                  <mat-select>
-                  </mat-select>
+                  <select matNativeControl required formControlName="group6" >
+                    <option value="none">None</option>
+                    <option value="category">Category</option>
+                    <option value="subcategory">Sub Category</option>
+                    <option value="brandcode">Brand Code</option>
+                    <option value="type">Type</option>
+                  </select>
                 </mat-form-field>
               </div>
             </div>
@@ -243,12 +270,12 @@
             <div class="d-flex pl-2">
               <div class="p-2 bd-highlight">
                 <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                  Approved
+                  Approve
                 </button>
               </div>
               <div class="p-2 bd-highlight">
                 <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                  Add Mission
+                  Add Missing
                 </button>
               </div>
             </div>

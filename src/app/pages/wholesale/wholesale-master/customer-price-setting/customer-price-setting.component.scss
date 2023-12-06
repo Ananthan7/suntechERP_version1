@@ -20,3 +20,10 @@
     list-style-type: none;
     margin-top: 4px;
   }
+
+  ::ng-deep {
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
+  }

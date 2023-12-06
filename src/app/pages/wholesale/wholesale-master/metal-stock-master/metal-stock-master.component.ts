@@ -19,6 +19,7 @@ export class MetalStockMasterComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
+  isDisplayed: boolean = false;
  
   constructor(
     private activeModal: NgbActiveModal,
@@ -30,6 +31,10 @@ export class MetalStockMasterComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+  }
+
+  showHideText() {
+    this.isDisplayed = !this.isDisplayed;
   }
 
   metalstockForm: FormGroup = this.formBuilder.group({

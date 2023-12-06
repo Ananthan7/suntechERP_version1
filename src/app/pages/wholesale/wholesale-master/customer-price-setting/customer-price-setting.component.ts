@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -16,13 +16,14 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class CustomerPriceSettingComponent implements OnInit {
 
   divisionMS: any = 'ID';
-  columnheader:any[] = ['SrNo','Group 1','Group 2', 'Group 3','Group 4','Group 5','Group 6','Apply On U','Mkg On %','Std Mkg','Mkg Rate','Mkg Rate','Variance'];
+  columnheader:any[] = ['SrNo','Group 1','Group 2', 'Group 3','Group 4','Group 5','Group 6','Apply On Unit','Mkg On %','Std Mkg Rate','Mkg Rate Min','Mkg Rate Max','Variance (+/-)','Wastage %','Min Wastage Qty','Markup %','Stamp Charge','Apply on Weight'];
   columnheaderweightRange:any[] = ['SrNo','Division','Apply on Unit', 'From Weight','To Weight','Making Rate'];
   columnheaderTransaction : any[] = ['SrNo','Karat','Std Purity','Sales Purity','Purchase Purity'];
 
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
+  currentDate = new FormControl(new Date());
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -49,6 +50,8 @@ export class CustomerPriceSettingComponent implements OnInit {
     group5:[''],
     group6:[''],
   })
+
+
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -80,7 +83,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
   divisionCodeSelected(e:any){
     console.log(e); 
-    this.customerpricesettingForm.controls.division.setValue(e.DIVISION);
+    this.customerpricesettingForm.controls.division.setValue(e.DIVISION_CODE);
   }
 
   currencyCodeData: MasterSearchModel = {
