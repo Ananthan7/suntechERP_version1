@@ -17,7 +17,7 @@
             <div class="row m-2">
               <div class="col-md-6">
                 <div class=" row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Voucher Type*:</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Voucher*:</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="voctype" />
@@ -63,12 +63,12 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Currency :</label>
                   <div class="col-md-4">
                     <mat-form-field style="width: 80%;">
-                      <input type="text" matInput formControlName="currencyrate" />
+                      <input type="text" matInput formControlName="currency" />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
                     <mat-form-field style="width: 80%;">
-                      <input type="text" matInput formControlName="currency" />
+                      <input type="text" matInput formControlName="currencyrate" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="CurrencyCodeData" (newRowClick)="CurrencyCodeSelected($event)">
                     </master-search>

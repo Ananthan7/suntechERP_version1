@@ -374,11 +374,11 @@ sizeFromCodeData: MasterSearchModel = {
 
   divisionCodeSelected(e:any){
     console.log(e); 
-    this.diamondlabourMasterForm.controls.division.setValue(e.DIVISION);
+    this.diamondlabourMasterForm.controls.division.setValue(e.DIVISION_CODE);
   }
 
   metaldivisionCodeSelected(e:any){
-    this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION);
+    this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
   }
 
   labouracSelected(e:any){

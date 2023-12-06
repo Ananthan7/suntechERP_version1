@@ -15,7 +15,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class StoneIssueDetailComponent implements OnInit {
 
-  columnhead1: any[] = ['Div', 'Stock Code', 'Shape', 'Color', 'Clarity', 'Size', 'Sieve Set', 'Pcs'];
+  columnhead1: any[] = ['Div', 'Stock Code','Shape', 'Color', 'Clarity', 'Size', 'Sieve Set', 'Pcs'];
 
   @Input() content!: any;
   tableData: any[] = [];
@@ -75,7 +75,7 @@ export class StoneIssueDetailComponent implements OnInit {
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
+    LOOKUPID: 19,
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
@@ -133,7 +133,7 @@ export class StoneIssueDetailComponent implements OnInit {
   workerCodeSelected(e: any) {
     console.log(e);
     this.stoneissuedetailsFrom.controls.worker.setValue(e.WORKER_CODE);
-    this.stoneissuedetailsFrom.controls.workername.setValue(e.WORKER_CODE);
+    this.stoneissuedetailsFrom.controls.workername.setValue(e.DESCRIPTION);
   }
   
   stockCodeSelected(e: any) {
