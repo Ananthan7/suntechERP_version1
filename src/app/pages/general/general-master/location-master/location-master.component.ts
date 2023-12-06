@@ -104,6 +104,7 @@ export class LocationMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
   PLACCodeCodeSelected(e:any){
     console.log(e);
     this.locationForm.controls.PLACCode.setValue(e.ACCODE);
