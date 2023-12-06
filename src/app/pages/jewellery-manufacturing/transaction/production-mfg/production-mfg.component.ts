@@ -164,9 +164,9 @@ export class ProductionMfgComponent implements OnInit {
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
     this.productionFrom.controls.currency.setValue(CURRENCY_CODE);
-    this.productionFrom.controls.basecurrencyrate.setValue(CURRENCY_CODE);
+    this.productionFrom.controls.basecurrency.setValue(CURRENCY_CODE);
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency);
-    this.productionFrom.controls.basecurrency.setValue(
+    this.productionFrom.controls.basecurrencyrate.setValue(
       this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
     );
     this.setCurrencyRate()

@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    [isViewDelete]="false"></modal-header>
 <div class="container-fluid">
     <form [formGroup]="productionItemsDetailsFrom">
         <div class="row mt-2">

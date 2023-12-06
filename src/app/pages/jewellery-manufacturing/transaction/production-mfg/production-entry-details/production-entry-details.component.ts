@@ -83,7 +83,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     costcode: [''],
     setref: [''],
     price3: [''],
-    karat: [''],
+    KARAT: [''],
     venderref: [''],
     price4: [''],
     startdate: [''],
@@ -105,7 +105,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     netWt: [''],
     chargableWt: [''],
     purityPer: [''],
-    pureWt: [''],
+    PUREWT: [''],
     purityDiff: [''],
     stoneDiff: [''],
     loss: [''],
@@ -118,11 +118,15 @@ export class ProductionEntryDetailsComponent implements OnInit {
     prod: [''],
     balPcs: [''],
     jobPurity: [''],
-    Pure_Wt: [''],
+    PURE_WT: [''],
     PurityDiff: [''],
     Job_Purity: [''],
     VenderRef: [''],
     VOCDATE: [''],
+    METALSTONE: [''],
+    DIVCODE: [''],
+    stockCode: [''],
+    JOB_SO_NUMBER: [''],
   });
 
   constructor(
@@ -170,6 +174,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.productiondetailsFrom.controls.customer.setValue(data[0].CUSTOMER_CODE)
             this.productiondetailsFrom.controls.prefix.setValue(data[0].PREFIX)
             this.productiondetailsFrom.controls.prefixNo.setValue(data[0].PREFIX_NUMBER)
+            this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
 
             // this.productiondetailsFrom.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
             // this.productiondetailsFrom.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
@@ -187,7 +192,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  /**USE: subjobnumber validate API call  this.processTransferdetailsForm.value.subjobno*/
+  /**USE: subjobnumber validate API call*/
   subJobNumberValidate(event?: any) {
     let postData = {
       "SPID": "040",
@@ -197,12 +202,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
         'strCurrenctUser': ''
       }
     }
-    this.comService.showSnackBarMsg('MSG81447')
+    this.comService.showSnackBarMsg('MSG81447')//loading msg
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          console.log(data[0],'data[0]');
+          
           this.productiondetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.productiondetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.productiondetailsFrom.controls.worker.setValue(data[0].WORKER)
@@ -211,22 +218,25 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.productiondetailsFrom.controls.stonewt.setValue(
             this.comService.decimalQuantityFormat(data[0].STONE, 'STONE'))
-          this.productiondetailsFrom.controls.MetalPcsFrom.setValue(data[0].PCS)
-          this.productiondetailsFrom.controls.GrossWeightFrom.setValue(data[0].NETWT)
-          this.productiondetailsFrom.controls.StoneWeighFrom.setValue(data[0].STONE)
+          this.productiondetailsFrom.controls.grossWt.setValue(
+            this.comService.decimalQuantityFormat(Number(data[0].NETWT), 'METAL'))
           this.productiondetailsFrom.controls.PUREWT.setValue(data[0].PUREWT)
-          this.productiondetailsFrom.controls.PURITY.setValue(data[0].PURITY)
+          this.productiondetailsFrom.controls.PURITY.setValue(
+            this.comService.decimalQuantityFormat(data[0].PURITY,'PURITY'))
+          this.productiondetailsFrom.controls.Job_Purity.setValue(
+            this.comService.decimalQuantityFormat(data[0].PURITY,'PURITY'))
           this.productiondetailsFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
           this.productiondetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
           this.productiondetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.productiondetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
-          this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
+          this.productiondetailsFrom.controls.PURE_WT.setValue(data[0].PURE_WT)
+          this.productiondetailsFrom.controls.KARAT.setValue(data[0].KARAT)
         } else {
-          this.comService.toastErrorByMsgId('MSG1747')
+          this.comService.toastErrorByMsgId('MSG1747');
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.comService.closeSnackBarMsg();
+        this.comService.toastErrorByMsgId('MSG1531');
       })
     this.subscriptions.push(Sub)
   }
