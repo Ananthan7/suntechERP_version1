@@ -13,7 +13,11 @@ export class PointOfSalesOrderComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   columnhead:any[] = ['Karat','Rate','Purchase'];
+  columnheadSoldItems:any[] = ['Mode','Currency','Currency','Amount'];
   columnheadDetails:any[] = ['Sr','Stock Code','Division','Description','Quantity','Rate','Amount','Disc Amount','Net Amount'];
+  divisionMS: any = 'ID';
+
+
   posofSalesOrderForm: FormGroup = this.formBuilder.group({
     vocType :[''],
     vocTypeDescription: [''],
@@ -39,7 +43,15 @@ export class PointOfSalesOrderComponent implements OnInit {
     deliveryDate:[''],
     holdforSalesTill:[false],
     fixMetalRate:[false],
-    normalDate:['']
+    normalDate:[''],
+    invoiceTotal:[''],
+    returns:[''],
+    exchanges:[''],
+    advanceReceived:[''],
+    roundOffAmount:[''],
+    netTotal:[''],
+    receiptTotal:[''],
+    refundDue:[''],
   })
 
   constructor(
