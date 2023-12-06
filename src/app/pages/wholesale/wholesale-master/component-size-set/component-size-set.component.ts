@@ -14,7 +14,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class ComponentSizeSetComponent implements OnInit {
 
-  columnheader:any[] = ['SN','Code','From', 'To'];
+  columnheader:any[] = ['SN','Code','Description'];
 
 
 subscriptions: any;

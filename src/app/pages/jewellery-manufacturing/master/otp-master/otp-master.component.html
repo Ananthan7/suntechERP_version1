@@ -22,11 +22,11 @@
                                         <input type="text" matInput formControlName="branch"/>
                                       </mat-form-field>
                                       <master-search [MasterSearchData]="branchCodeData"
-                    (newRowClick)="branchSelected($event)"></master-search>
+                                         (newRowClick)="branchSelected($event)"></master-search>
                                     </div>
                                     <div class="col-md-4">
                                         <mat-form-field style="width: 100%;">
-                                          <input type="text" matInput />
+                                          <input type="text" matInput formControlName="branchdesc" />
                                         </mat-form-field>
                                       </div>
                                   </div>

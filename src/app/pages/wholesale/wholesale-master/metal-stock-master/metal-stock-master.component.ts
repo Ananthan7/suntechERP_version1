@@ -36,8 +36,7 @@ export class MetalStockMasterComponent implements OnInit {
   showHideText() {
     this.isDisplayed = !this.isDisplayed;
   }
-
-
+  
   metalstockForm: FormGroup = this.formBuilder.group({
     metalType:[''],
     code:[''],

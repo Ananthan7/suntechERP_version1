@@ -40,17 +40,18 @@ export class OtpMasterComponent implements OnInit {
   branchCodeData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 5,
+    SEARCH_FIELD: 'BRANCH_CODE',
     SEARCH_HEADING: 'Branch Data',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "BRANCH_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   branchSelected(e:any){
     console.log(e); 
-    this.otpForm.controls.branch.setValue(e.CODE);
+    this.otpForm.controls.branch.setValue(e.BRANCH_CODE);
+    this.otpForm.controls.branchdesc.setValue(e.BRANCH_NAME);
   }
 
   close(data?: any) {
