@@ -28,6 +28,7 @@ import { PcrSelectionComponent } from './advance-return/pcr-selection/pcr-select
 import { DxDataGridModule } from 'devextreme-angular';
 // import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
 import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
+import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-direct.component';
 
 
 
@@ -53,7 +54,9 @@ import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sale
     CustomDateFormat1,
     CustomDateFormat2,
     // SalesEstimationComponent,
-    PointOfSalesOrderComponent
+    PointOfSalesOrderComponent,
+    PointOfSalesOrderComponent,
+    PosPurchaseDirectComponent
   ],
   imports: [
     CommonModule,
