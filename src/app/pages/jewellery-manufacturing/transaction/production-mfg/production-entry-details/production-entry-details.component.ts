@@ -8,6 +8,7 @@ import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
 import { ProductionStockDetailComponent } from "../production-stock-detail/production-stock-detail.component";
+import { DataToSave } from "../data-to-save";
 
 @Component({
   selector: "app-production-entry-details",
@@ -19,7 +20,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
   columnheadBottom: any[] = [""];
-  producationSubDetailData: any[] = [];
+  StockDetailData: DataToSave = {
+    DETAIL_FORM_DATA: [],
+    DETAIL_METAL_DATA: [],
+    STOCK_FORM_DETAILS: [],
+    STOCKCODE_MAIN_GRID: [],
+    STOCK_COMPONENT_GRID: [],
+    STOCK_GROUPED_GRID: [],
+  }
   userName = localStorage.getItem("username");
   branchCode?: String;
   vocMaxDate = new Date();
@@ -258,9 +266,12 @@ export class ProductionEntryDetailsComponent implements OnInit {
     );
     modalRef.componentInstance.content = this.productiondetailsFrom.value;
 
-    modalRef.result.then((postData) => {
-      if (postData) {
-        this.producationSubDetailData.push(postData);
+    modalRef.result.then((dataFromStockScreen) => {
+      if (dataFromStockScreen) {
+        console.log(dataFromStockScreen,'data comming from stock detail screen');
+        
+        this.StockDetailData.STOCK_FORM_DETAILS = dataFromStockScreen.STOCK_FORM_DETAILS;
+        this.StockDetailData.STOCK_COMPONENT_GRID = dataFromStockScreen.STOCK_COMPONENT_GRID;
       }
     });
   }
@@ -288,21 +299,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
     }
   }
 
-  removedata() {
-
-  }
   formSubmit() {
-    // if (this.productiondetailsFrom.invalid) {
-    //   this.toastr.error("select all required fields");
-    //   return;
-    // }
-    
-
-    this.close({ FORM_DATA: this.productiondetailsFrom.value, jobProducationSubDetails: [this.producationSubDetailData] });
-  }
-
-  setFormValues() {
-
+    this.StockDetailData.DETAIL_FORM_DATA.push(this.productiondetailsFrom.value)
+    this.close(this.StockDetailData);
   }
 
   update() {

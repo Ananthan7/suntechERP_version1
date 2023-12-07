@@ -8,6 +8,7 @@ import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { NgbActiveModal, NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ProductionEntryDetailsComponent } from "./production-entry-details/production-entry-details.component";
+import { DataToSave } from "./data-to-save";
 
 @Component({
   selector: "app-production-mfg",
@@ -200,60 +201,21 @@ export class ProductionMfgComponent implements OnInit {
     });
     modalRef.componentInstance.content = data;
 
-    modalRef.result.then((res) => {
-      if (res) {
-        this.setFormDataDetails(res.FORM_DATA) //detail screen form data set to save
-        this.producationSubItemsData.push(res.jobProducationSubDetails);
+    modalRef.result.then((dataFromDetailScreen: DataToSave) => {
+      if (dataFromDetailScreen) {
+        console.log(dataFromDetailScreen,'data From Detail Screen');
+        
+        this.setFormDataDetails(dataFromDetailScreen.DETAIL_FORM_DATA) //detail screen form data set to save
+        this.producationSubItemsData.push(dataFromDetailScreen.STOCK_FORM_DETAILS);
       }
     });
   }
   BaseCurrencyRateVisibility(txtPCurr: any, txtPCurrRate: any) {
-    // try
-    // {
     let BaseConvRate = '';
     let dtConvRate: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency || item.CMBRANCH_CODE == this.branchCode)
     console.log(dtConvRate);
   }
 
-  //       if (txtPCurr.Text == dtConvRate.strGCC_Currency)
-  //       {
-  //           if (dtConvRate.length > 0)
-  //           {
-  //               switch (dtConvRate.["MUL_DIV"])
-  //               {
-  //                   case "M":
-  //                       let txtBaseCurrRate:any = dtConvRate[0]["CONV_RATE"];// (1 / Convert.ToDouble(dtConvRate.Rows[0]["CONV_RATE"]));
-  //                       BaseConvRate = dtConvRate["CONV_RATE"];
-  //                       break;
-  //                   case "D":
-  //                       let txtBaseCurrRate:any = dtConvRate[0]["CONV_RATE"];
-  //                       BaseConvRate = (1 / Number(dtConvRate["CONV_RATE"])).toString();
-  //                       break;
-  //                   default:
-  //                       break;
-  //               }
-  //           }
-
-  //           // txtBaseCurrRate = false;
-  //       }
-  //       else if (txtPCurr.Text == dtConvRate.strGCC_Currency)
-  //       {
-  //           BaseConvRate = (1 / Convert.ToDouble(dtConvRate.Rows[0]["CONV_RATE"].ToString())).ToString();
-  //           txtBaseCurrRate = txtPCurrRate.Text;
-  //           txtBaseCurrRate = false;
-  //       }
-  //       else
-  //       {
-  //           BaseConvRate = (1 / Convert.ToDouble(dtConvRate.Rows[0]["CONV_RATE"].ToString())).ToString();
-  //           txtBaseCurrRate.Enabled = true;
-  //       }
-  //       return BaseConvRate;
-  //   }
-  //   catch (err:any)
-  //   {
-  //       return null;
-  //   }
-  // }
   /*USE: detail screen form data set to save */
   setFormDataDetails(formValues: any) {
     this.producationEntryDetailsData.push({

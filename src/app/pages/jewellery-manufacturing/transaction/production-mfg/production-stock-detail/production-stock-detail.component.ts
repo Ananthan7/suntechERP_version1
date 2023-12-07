@@ -24,6 +24,10 @@ export class ProductionStockDetailComponent implements OnInit {
   componentsColumnhead: any[] = ["Sr.No","Div","Stock Code","Color","Clarity","Shape","Size","Sieve","Pcs","Gross Wt","Stone","Net Wt","Rate","Amount","%","Qty","Amt","s.Rate","S.Value"];
 
   componentDataList:any[] = [];
+  componentGroupedList:any[] = [];
+  stockCodeDataList:any[] = [];
+  formDataToSave:any[] = [];
+  
   productionItemsDetailsFrom: FormGroup = this.formBuilder.group({
     stockCode  : [''],
     tagLines : [''],
@@ -107,16 +111,14 @@ export class ProductionStockDetailComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
   formSubmit(){
     if (this.productionItemsDetailsFrom.invalid) {
       this.toastr.error("select all required fields");
       return;
     }
-
+    this.formDataToSave.push(this.productionItemsDetailsFrom.value)
     let postData = {
       "UNIQUEID": 0,
       "SRNO": 0,
@@ -239,7 +241,8 @@ export class ProductionStockDetailComponent implements OnInit {
       "BASE_CURR_RATE": 0
     }
     let stockDetailToSave:any = {}
-    stockDetailToSave.STOCK_FORM_DETAILS = this.productionItemsDetailsFrom.value
+    stockDetailToSave.STOCK_FORM_DETAILS = this.formDataToSave
+    stockDetailToSave.STOCK_COMPONENT_GRID = this.componentDataList
 
     this.close(stockDetailToSave);
   }
