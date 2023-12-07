@@ -12,7 +12,7 @@ import { SchemeRegisterComponent } from './scheme-register/scheme-register.compo
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
 import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
-// import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
+import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
 import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
 
 @Component({
@@ -70,7 +70,7 @@ export class RetailTransactionComponent implements OnInit {
       'TouristVatRefundVerificationComponent': TouristVatRefundVerificationComponent,
       'AdvanceReturnComponent': AdvanceReturnComponent,
       'PosSalesOrderCancellationComponent': PosSalesOrderCancellationComponent,
-      // 'SalesEstimationComponent': SalesEstimationComponent,
+      'SalesEstimationComponent': SalesEstimationComponent,
       'PointOfSalesOrderComponent': PointOfSalesOrderComponent,
 
       // Add components and update in operationals > menu updation grid form component name

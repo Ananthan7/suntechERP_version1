@@ -39,7 +39,7 @@ import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 
 import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 
 const dbConfig: DBConfig = {
   name: 'suntechPos',
@@ -183,6 +183,7 @@ const dbConfig: DBConfig = {
     { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     { provide: NgChartsConfiguration, useValue: { generateColors: false }},
     DecimalPipe,
+    DatePipe,
 
   ],
   bootstrap: [AppComponent]
