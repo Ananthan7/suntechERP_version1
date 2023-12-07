@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -20,6 +20,7 @@ export class WatchMasterComponent implements OnInit {
   columnhead:any[] = ['Division','Karat','Gross Wt','Rate Type','Metal Rate','Rate/Gms','Amount FC','Amount LC'];
   columnheader:any[] = ['Div','Shape','Color','Clarity','Sieve','Size','Pcs','Carat','Crcy','Pc Code','Lb Code','Crt Rt']
   divisionMS: any = 'ID';
+  currentDate = new FormControl(new Date());
 
   constructor(
     private activeModal: NgbActiveModal,

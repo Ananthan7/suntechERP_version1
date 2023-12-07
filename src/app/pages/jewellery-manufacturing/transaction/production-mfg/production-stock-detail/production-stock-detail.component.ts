@@ -21,8 +21,9 @@ export class ProductionStockDetailComponent implements OnInit {
   columnheads : any[] = ["S.no","Stock Code","Design","Cost","Karat","Gross Wt","M.Pcs","St.Wt","St.value","Labour","Wastage","Total Cost"];
   columnhead: any[] = ["Div","Pcs","Gross Wt"];
   labourColumnhead: any[] = ["Code","Div","Pcs","Qty","Rate","Amount","Wastage %","Wastage Qty","Wastage Amt","Lab A/C","Unit","Lab Type"];
-  componentsColumnhead: any[] = ["Sr.No","Div","Stock Code","Color","Clarity","Shape","Size","Sileve","Pcs","Gross Wt","Stone","Net Wt","Rate","Amount","%","Qty","Amt","s.Rate","S.Value"];
+  componentsColumnhead: any[] = ["Sr.No","Div","Stock Code","Color","Clarity","Shape","Size","Sieve","Pcs","Gross Wt","Stone","Net Wt","Rate","Amount","%","Qty","Amt","s.Rate","S.Value"];
 
+  componentDataList:any[] = [];
   productionItemsDetailsFrom: FormGroup = this.formBuilder.group({
     stockCode  : [''],
     tagLines : [''],
@@ -83,9 +84,7 @@ export class ProductionStockDetailComponent implements OnInit {
         'strProcess_Code': this.comService.nullToString(this.content.process),
         'strWorker_Code': this.comService.nullToString(this.content.worker),
         'strBranch_Code': this.comService.nullToString(this.comService.branchCode),
-        'strVocdate': this.comService.formatDateTime(this.content.VOCDATE),
-        'dblPurity': this.comService.nullToString(this.content.PURITY),
-        'dblJobPurity': this.comService.nullToString(this.content.PURITY),
+        'strVocdate': this.comService.formatDate(this.content.VOCDATE),
       }
     }
     this.comService.showSnackBarMsg('MSG81447')
@@ -93,8 +92,10 @@ export class ProductionStockDetailComponent implements OnInit {
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0]
-          
+          this.componentDataList = result.dynamicData[0]
+          this.componentDataList.forEach((item:any,index:number)=>{
+            item.SRNO = index+1
+          })
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }

@@ -448,9 +448,9 @@ export class AddPosComponent implements OnInit {
   nationalityMasterOptions!: Observable<any[]>;
   genderList: any = [];
 
-  enableJawahara: boolean =  false;
+  enableJawahara: boolean = false;
 
-  _exchangeItemchange: any;
+  _exchangeItemchange: any = {};
   srCustCode: any = ''; // sales return customer code
   // quaggaConfig: any = Quagga.init({
   //   inputStream: {
@@ -601,10 +601,10 @@ export class AddPosComponent implements OnInit {
       fcn_exchange_scrap_bag_no: [''],
       fcn_exchange_scrap_bag_desc: [''],
       fcn_exchange_location: [''],
-      fcn_exchange_jawahara:[''],
-      fcn_exchange_resale_recycle:[''],
-      fcn_exchange_cash_exchange:[''],
-      
+      fcn_exchange_jawahara: [''],
+      fcn_exchange_resale_recycle: [''],
+      fcn_exchange_cash_exchange: [''],
+
     });
 
     this.customerDetailForm = this.formBuilder.group({
@@ -694,11 +694,12 @@ export class AddPosComponent implements OnInit {
     // this.getArgs();
     this.indexedDb.getAllData('compparams').subscribe((data) => {
       if (data.length > 0) {
-        console.log('==============compparams======================');
-        console.log(data);
-        console.log('====================================');
+        // console.log('==============compparams======================');
+        // console.log(data);
+        // console.log('====================================');
         this.comFunc.allCompanyParams = data;
         this.comFunc.setCompParaValues();
+        this.enableJawahara = this.comFunc.enableJawahara;
         this.getArgs();
       } else {
         this.getArgs();
@@ -842,21 +843,21 @@ export class AddPosComponent implements OnInit {
     console.log(this.content);
     console.log('====================================');
 
-    if(this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW'){
+    if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
 
-    this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
-    this.strBranchcode = this.content.BRANCH_CODE;
-    this.vocType = this.content.VOCTYPE;
-    this.baseYear = this.content.YEARMONTH;
-    this.getRetailSalesMaster(this.content);
-    if (this.content.FLAG == "EDIT") {
-      this.editOnly = true
-    } 
-    if( this.content.FLAG == 'VIEW') {
-      this.viewOnly = true;
+      this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
+      this.strBranchcode = this.content.BRANCH_CODE;
+      this.vocType = this.content.VOCTYPE;
+      this.baseYear = this.content.YEARMONTH;
+      this.getRetailSalesMaster(this.content);
+      if (this.content.FLAG == "EDIT") {
+        this.editOnly = true
+      }
+      if (this.content.FLAG == 'VIEW') {
+        this.viewOnly = true;
+      }
+
     }
-
-  }
 
     // this.acRoute.queryParams.subscribe((params) => {
     //   if (params.vocNo) {
@@ -2335,6 +2336,26 @@ export class AddPosComponent implements OnInit {
     this.exchangeForm.controls.fcn_exchange_chargeable_wt.setValue(
       value.CHARGABLEWT
     );
+    // for jawahara
+    this.exchangeForm.controls.fcn_exchange_scrap_bag_no.setValue(
+      value.BAGNO
+    );
+    this.exchangeForm.controls.fcn_exchange_scrap_bag_desc.setValue(
+      value.BAGREMARKS
+    );
+    this.exchangeForm.controls.fcn_exchange_location.setValue(
+      value.LOCTYPE_CODE
+    );
+    this.exchangeForm.controls.fcn_exchange_jawahara.setValue(
+      value.JAWAHARAYN.toString()
+    );
+    this.exchangeForm.controls.fcn_exchange_resale_recycle.setValue(
+      value.RESALERECYCLE.toString()
+    );
+    this.exchangeForm.controls.fcn_exchange_cash_exchange.setValue(
+      value.CASHEXCHANGE.toString()
+    );
+
     this._exchangeItemchange.METAL_RATE_TYPE = value.RATE_TYPE;
     this._exchangeItemchange.METAL_RATE = value.METAL_RATE;
     this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT =
@@ -2885,7 +2906,7 @@ export class AddPosComponent implements OnInit {
               // this.snackBar.open('Loading...');
 
               // this.suntechApi.getAMLValidation(payload).subscribe(async (data) => {
-                this.isCustProcessing = false;
+              this.isCustProcessing = false;
 
               //   this.snackBar.open('Loading...');
 
@@ -2918,7 +2939,7 @@ export class AddPosComponent implements OnInit {
               //       this.openDialog('Warning', 'We cannot proceed', true);
               //       this.dialogBox.afterClosed().subscribe((data) => {
               //         if (data == 'OK') {
-                        this.modalReference.close();
+              this.modalReference.close();
               //         }
               //       });
               //       // need to use put api
@@ -4260,12 +4281,13 @@ export class AddPosComponent implements OnInit {
       PUDIFF: this.exchangeForm.value.fcn_exchange_purity_diff || 0, // need_input
       STONEDIFF: 0.0, //need_input
       PONO: 0, // need_input
-      LOCTYPE_CODE: '', // need_input
+      LOCTYPE_CODE: this.exchangeForm.value.fcn_exchange_location || '', // need_input
+      // LOCTYPE_CODE: '', // need_input
       OZWT: data.ozWeight || 0, // need_input
       SUPPLIER: '', // need_input
       BATCHSRNO: 0, // need_input
       STOCK_DOCDESC: this.exchangeForm.value.fcn_exchange_item_desc || '',
-      BAGNO: this.exchangeForm.value.fcn_exchange_scrap_bag_no || '', 
+      BAGNO: this.exchangeForm.value.fcn_exchange_scrap_bag_no.toString() || '',
       BAGREMARKS: this.exchangeForm.value.fcn_exchange_scrap_bag_desc || '',
       WASTAGEPER: 0.0,
       WASTAGEQTY: 0.0,
@@ -4322,7 +4344,7 @@ export class AddPosComponent implements OnInit {
       DT_YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
       SUPPLIERDISC: '',
       DTKarat: 0,
-      JAWAHARAYN: this.exchangeForm.value.fcn_exchange_jawahara ||  0,
+      JAWAHARAYN: this.exchangeForm.value.fcn_exchange_jawahara || 0,
       RESALERECYCLE: this.exchangeForm.value.fcn_exchange_resale_recycle || 0,
       CASHEXCHANGE: this.exchangeForm.value.fcn_exchange_cash_exchange || 0,
       C1_CATEGORY: '',
@@ -6902,7 +6924,7 @@ export class AddPosComponent implements OnInit {
     // this.content.FLAG = null;
     // location.reload();
     this.modalService.dismissAll('OpenModal');
-    
+
     // if (this.router.url.includes('edit-pos')) this.router.navigateByUrl('/add-pos');
     // if (this.router.url.includes('view-pos')) this.router.navigateByUrl('/add-pos');
     // else location.reload();
@@ -8611,7 +8633,7 @@ export class AddPosComponent implements OnInit {
           data.DTSALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
           data.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
         });
-      }else{
+      } else {
         this.srCustCode = '';
       }
     }

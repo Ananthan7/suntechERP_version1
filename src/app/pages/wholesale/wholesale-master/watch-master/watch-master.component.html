@@ -566,9 +566,12 @@
                                             <label for="inputPassword" class="col-sm-6 col-form-label">Date
                                                 :</label>
                                             <div class="col-md-6">
-                                                <mat-form-field style="width: 100%;">
-                                                    <input type="date" matInput />
-                                                </mat-form-field>
+                                                <mat-form-field style="width: 72%;">
+                                                    <input matInput [matDatepicker]="date"  formControlName="date"
+                                                    placeholder="YYYY/MM/DD" [value]="currentDate.value" DateValidation />
+                                                  <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                                                  <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
+                                                  </mat-form-field>
                                             </div>
                                         </div>
                                         <div class="row align-items-center">

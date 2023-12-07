@@ -224,7 +224,7 @@ export class CommonServiceService {
   }
   getCurrRate(currency: any) {
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
-    return result.length>0 ? result[0]?.CONV_RATE : 0;
+    return result.length > 0 ? result[0]?.CONV_RATE : 0;
   }
   CCToFC(currency: any, amount: any) {
 
@@ -296,10 +296,10 @@ export class CommonServiceService {
       if (data.PARAMETER == 'COMPANYCURRENCY') {
         this.compCurrency = data.PARAM_VALUE;
       }
-      // parameter want
-      // if (data.PARAMETER == 'COMPANYCURRENCY') {
-      //   this.enableJawahara = data.PARAM_VALUE;
-      // }
+      // for jawahara
+      if (data.PARAMETER == 'SCRAPMGMTMODULE') {
+        this.enableJawahara = data.PARAM_VALUE.toString() == '1' ? true : false;
+      }
       if (data.Parameter == 'POSKARATRATECHANGE') {
         this.posKARATRATECHANGE = data.Param_Value;
         if (this.posKARATRATECHANGE.toString() == '0') {
@@ -352,7 +352,7 @@ export class CommonServiceService {
   }
 
   timeToMinutes(timeString: string) {
-    if(this.nullToString(timeString) == '') return ''
+    if (this.nullToString(timeString) == '') return ''
     // Split the time string into hours and minutes
     var timeComponents = timeString.split(':');
 

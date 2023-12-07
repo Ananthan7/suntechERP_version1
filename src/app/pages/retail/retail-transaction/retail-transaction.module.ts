@@ -26,7 +26,7 @@ import { AdvanceReturnComponent } from './advance-return/advance-return.componen
   import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
 import { PcrSelectionComponent } from './advance-return/pcr-selection/pcr-selection.component';
 import { DxDataGridModule } from 'devextreme-angular';
-import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
+// import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
 import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
 
 
@@ -52,7 +52,7 @@ import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sale
     PcrSelectionComponent,
     CustomDateFormat1,
     CustomDateFormat2,
-    SalesEstimationComponent,
+    // SalesEstimationComponent,
     PointOfSalesOrderComponent
   ],
   imports: [

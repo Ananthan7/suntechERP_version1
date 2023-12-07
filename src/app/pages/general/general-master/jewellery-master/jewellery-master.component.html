@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="jewellerymasterForm">
@@ -16,7 +16,7 @@
               <div class="col-md-5">
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Item Code :</label>
-                  <div class="col-md-3">
+                  <div class="col-md-5">
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="itemcode" />
                     </mat-form-field>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Design :</label>
-                  <div class="col-md-3">
+                  <div class="col-md-5">
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="design" />
                     </mat-form-field>
@@ -255,43 +255,54 @@
               </div>
               <div class="col-md-5">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 offset-md-3 col-form-label">Currency</label>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Cost(AED)</label>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Cost(AED)</label>
+                  <label for="inputPassword" class="col-sm-2 offset-md-3 col-form-label">Currency</label>
+                  <label for="inputPassword" class="col-sm-2  col-form-label">%</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Cost(AED)</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Cost(AED)</label>
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label"><a href="#">Print Scheme</a></label>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="printscheme" />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput  />
+                      <input type="text" matInput />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput  />
+                      <input type="text" matInput />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput />
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Price 1 :</label>
-                  <div class="col-md-3">
-                    <mat-form-field style="width: 70%;">
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="price1" />
                     </mat-form-field>
                     <master-search>
                     </master-search>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="price1per" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price1FC" />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price1LC" />
                     </mat-form-field>
@@ -299,19 +310,25 @@
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Price 2 :</label>
-                  <div class="col-md-3">
-                    <mat-form-field style="width: 70%;">
+
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="price2" />
                     </mat-form-field>
                     <master-search>
                     </master-search>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="price2per" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price2FC" />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price2LC" />
                     </mat-form-field>
@@ -319,19 +336,24 @@
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Price 3 :</label>
-                  <div class="col-md-3">
-                    <mat-form-field style="width: 70%;">
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="price3" />
                     </mat-form-field>
                     <master-search>
                     </master-search>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="price3per" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price3FC" />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price3LC" />
                     </mat-form-field>
@@ -339,19 +361,24 @@
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Price 4 :</label>
-                  <div class="col-md-3">
-                    <mat-form-field style="width: 70%;">
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="price4" />
                     </mat-form-field>
                     <master-search>
                 </master-search>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="price4per" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price4FC" />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price4LC" />
                     </mat-form-field>
@@ -359,26 +386,31 @@
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Price 5 :</label>
-                  <div class="col-md-3">
-                    <mat-form-field style="width: 70%;">
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="price5" />
                     </mat-form-field>
                     <master-search>
                     </master-search>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="price5per" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price5FC" />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="price5LC" />
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Lander Cost:</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Landed cost:</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="landercost" />
@@ -427,7 +459,7 @@
                       <input type="text" matInput formControlName="certificateno" />
                     </mat-form-field>
                   </div>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">CertificateBy :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Certified By :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="certificateby" />
@@ -441,7 +473,7 @@
                       <input type="text" matInput formControlName="certificateno1" />
                     </mat-form-field>
                   </div>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Certificate By 1 :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Certified By 1 :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="certificateby1" />
@@ -452,19 +484,19 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Cert.Date :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
-                      <input matInput [matDatepicker]="certdate"  formControlName="certdate"
-                      placeholder="YYYY/MM/DD"  DateValidation />
-                    <mat-datepicker-toggle matSuffix [for]="certdate"></mat-datepicker-toggle>
-                    <mat-datepicker [startAt]="currentDate" #certdate></mat-datepicker>
+                      <input matInput [matDatepicker]="certdate" [max]="certdate" formControlName="certdate"
+                        placeholder="DD/MM/YYYY" DateValidation />
+                      <mat-datepicker-toggle matSuffix [for]="certdate"></mat-datepicker-toggle>
+                      <mat-datepicker [startAt]="currentDate" #certdate></mat-datepicker>
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Cert.Date1 :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
-                      <input matInput [matDatepicker]="certdate1"  formControlName="certdate1"
-                      placeholder="YYYY/MM/DD"  DateValidation />
-                    <mat-datepicker-toggle matSuffix [for]="certdate1"></mat-datepicker-toggle>
-                    <mat-datepicker [startAt]="currentDate" #certdate1></mat-datepicker>
+                      <input matInput [matDatepicker]="certdate1" [max]="certdate1" formControlName="certdate1"
+                        placeholder="DD/MM/YYYY" DateValidation />
+                      <mat-datepicker-toggle matSuffix [for]="certdate1"></mat-datepicker-toggle>
+                      <mat-datepicker [startAt]="currentDate" #certdate1></mat-datepicker>
                     </mat-form-field>
                   </div>
                 </div>
@@ -472,7 +504,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">No Of Cert :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
-                      <input type="number" matInput formControlName="noofcert" />
+                      <input type="text" matInput formControlName="noofcert" />
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-6 col-form-label"><a href="">Manufacture
@@ -518,13 +550,13 @@
                 <div class="icons">
                   <div class="image_box"></div>
                   <div class="icons_footer">
-                    <i class="fa-solid fa-backward-fast icon-common"></i>
-                    <i class="fa-solid fa-caret-left icon-common"></i>
+                    <i class="fas fa-step-backward icon-common"></i>
+                    <i class="fas fa-caret-right icon-common"></i>
                     <span>0/10</span>
-                    <i class="fa-solid fa-caret-right icon-common"></i>
-                    <i class="fa-solid fa-forward-fast icon-common"></i>
-                    <i class="fa-solid fa-xmark icon-common text-danger"></i>
-                    <i class="fa-solid fa-plus icon-common"></i>
+                    <i class="fas fa-caret-right icon-common"></i>
+                    <i class="fas fa-step-forward icon-common"></i>
+                    <i class="fas fa-times icon-common text-danger"></i>
+                    <i class="fas fa-plus icon-common"></i>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -540,9 +572,16 @@
                     Tag Details
                   </button>
                 </div>
-                <div class="box-wrap">
-
+                <div class="row">
+                  <div class="col-md-12">
+                    <mat-form-field style="width: 100%;">
+                      <textarea matInput rows="3" formControlName="tagDetails"></textarea>
+                  </mat-form-field>
+                  </div>
                 </div>
+                <!-- <div class="box-wrap">
+
+                </div> -->
               </div>
             </div>
             <mat-tab-group [selectedIndex]="">
@@ -556,7 +595,7 @@
                       <dxo-selection mode="multiple" [deferred]="true"> </dxo-selection>
                       <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                      <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                      <dxi-column *ngFor="let data of columnheaderMetailDetails" dataField="{{ data }}" caption="{{ data }}"
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
                       </dxi-column>
                     </dx-data-grid>
@@ -573,9 +612,10 @@
                                 (deleteClick)="removeData()"
                                 >
                             </menu-buttons>
-                    </div>
-                  </div>
+ 
                 </div>
+              </div>
+            </div>
                
               </mat-tab>
               <mat-tab label="Stone Details">
@@ -971,8 +1011,15 @@
                     Comments
                   </button>
                 </div>
-                <div class="box-wrap">
+                <div class="row">
+                  <div class="col-md-12">
+                    <mat-form-field style="width: 100%;">
+                      <textarea matInput rows="4" formControlName="tagDetails"></textarea>
+                  </mat-form-field>
+                  </div>
                 </div>
+                <!-- <div class="box-wrap">
+                </div> -->
               </div>
               <div class="col-md-3 text-center">
                 <div class="p-1  pl-1 bd-highlight">
@@ -980,8 +1027,15 @@
                     Sales Tag Details
                   </button>
                 </div>
-                <div class="box-wrap">
+                <div class="row">
+                  <div class="col-md-12">
+                    <mat-form-field style="width: 100%;">
+                      <textarea matInput rows="4" formControlName="tagDetails"></textarea>
+                  </mat-form-field>
+                  </div>
                 </div>
+                <!-- <div class="box-wrap">
+                </div> -->
               </div>
             </div>
           </mat-tab>

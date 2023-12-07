@@ -18,7 +18,9 @@ import { StoneDetailsComponent } from './stone-details/stone-details.component';
 })
 export class JewelleryMasterComponent implements OnInit {
 
+  currentDate = new Date();
   divisionMS: any = 'ID';
+  columnheaderMetailDetails:any[]=['Div','Karat','Stock Code','Gross Wt','Purity','Pure Wt','Rate Type','Metal Rate','Rate Gms','Amount','Lab Rate','Lab Amount','Markup%','Sale Value'];
   columnhead:any[] = ['Division','Gross Wt','Karat','Rate Type','Rate','Amount..','Amount','Metal Labour','Rate/Gram','MetalPer','Color'];
   columnheader:any[] = ['Div', 'Stock Code', 'Shape','Color','Clarity','Sieve','Size','Pcs','Carat','Currency','Pc Code','Lab Rate','Lab Amt','LbCode'];
   columnheaders:any[] = ['Sr','Description','FC','LC'];
@@ -104,6 +106,11 @@ export class JewelleryMasterComponent implements OnInit {
     price3:[''],
     price4:[''],
     price5:[''],
+    price1per:[''],
+    price2per:[''],
+    price3per:[''],
+    price4per:[''],
+    price5per:[''],
     price1FC:[''],
     price1LC:[''],
     price2FC:[''],
@@ -182,6 +189,7 @@ export class JewelleryMasterComponent implements OnInit {
     userdefined_13:[''],
     userdefined_14:[''],
     userdefined_15:[''],
+    tagDetails:[''],
    });
   close(data?: any) {
     //TODO reset forms and data before closing

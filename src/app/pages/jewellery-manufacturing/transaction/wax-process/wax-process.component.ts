@@ -25,6 +25,12 @@ export class WaxProcessComponent implements OnInit {
   currentDate = new Date();
 
   userName = localStorage.getItem('username');
+  userbranch = localStorage.getItem('userbranch');
+  branchParmeter:any= localStorage.getItem('BRANCH_PARAMETER');
+
+  
+
+  
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -75,6 +81,7 @@ export class WaxProcessComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  description: any;
 
 
   constructor(
@@ -157,12 +164,21 @@ export class WaxProcessComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.branchParmeter);
+
+    let data = this.branchParmeter.split(',');
+
+    this.description = data[4].substring(15);
+    
+
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    console.log(this.content);
+
+    // console.log(this.content);
     if (this.content) {
       this.setFormValues()
     }
+   
   }
 
   setFormValues() {

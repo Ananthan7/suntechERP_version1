@@ -164,9 +164,9 @@ export class ProductionMfgComponent implements OnInit {
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
     this.productionFrom.controls.currency.setValue(CURRENCY_CODE);
-    this.productionFrom.controls.basecurrencyrate.setValue(CURRENCY_CODE);
+    this.productionFrom.controls.basecurrency.setValue(CURRENCY_CODE);
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency);
-    this.productionFrom.controls.basecurrency.setValue(
+    this.productionFrom.controls.basecurrencyrate.setValue(
       this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
     );
     this.setCurrencyRate()
@@ -183,8 +183,9 @@ export class ProductionMfgComponent implements OnInit {
       this.productionFrom.controls.currencyrate.setValue('')
       this.commonService.toastErrorByMsgId('MSG1531')
     }
+    this.BaseCurrencyRateVisibility(this.productionFrom.value.currency, this.productionFrom.value.currencyrate)
   }
-  openProductionEntryDetails(data?:any) {
+  openProductionEntryDetails(data?: any) {
     if (data) {
       data[0].HEADERDETAILS = this.productionFrom.value;
     } else {
@@ -206,6 +207,53 @@ export class ProductionMfgComponent implements OnInit {
       }
     });
   }
+  BaseCurrencyRateVisibility(txtPCurr: any, txtPCurrRate: any) {
+    // try
+    // {
+    let BaseConvRate = '';
+    let dtConvRate: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency || item.CMBRANCH_CODE == this.branchCode)
+    console.log(dtConvRate);
+  }
+
+  //       if (txtPCurr.Text == dtConvRate.strGCC_Currency)
+  //       {
+  //           if (dtConvRate.length > 0)
+  //           {
+  //               switch (dtConvRate.["MUL_DIV"])
+  //               {
+  //                   case "M":
+  //                       let txtBaseCurrRate:any = dtConvRate[0]["CONV_RATE"];// (1 / Convert.ToDouble(dtConvRate.Rows[0]["CONV_RATE"]));
+  //                       BaseConvRate = dtConvRate["CONV_RATE"];
+  //                       break;
+  //                   case "D":
+  //                       let txtBaseCurrRate:any = dtConvRate[0]["CONV_RATE"];
+  //                       BaseConvRate = (1 / Number(dtConvRate["CONV_RATE"])).toString();
+  //                       break;
+  //                   default:
+  //                       break;
+  //               }
+  //           }
+
+  //           // txtBaseCurrRate = false;
+  //       }
+  //       else if (txtPCurr.Text == dtConvRate.strGCC_Currency)
+  //       {
+  //           BaseConvRate = (1 / Convert.ToDouble(dtConvRate.Rows[0]["CONV_RATE"].ToString())).ToString();
+  //           txtBaseCurrRate = txtPCurrRate.Text;
+  //           txtBaseCurrRate = false;
+  //       }
+  //       else
+  //       {
+  //           BaseConvRate = (1 / Convert.ToDouble(dtConvRate.Rows[0]["CONV_RATE"].ToString())).ToString();
+  //           txtBaseCurrRate.Enabled = true;
+  //       }
+  //       return BaseConvRate;
+  //   }
+  //   catch (err:any)
+  //   {
+  //       return null;
+  //   }
+  // }
   /*USE: detail screen form data set to save */
   setFormDataDetails(formValues: any) {
     this.producationEntryDetailsData.push({
