@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
+import { EnterMetalDetailsComponent } from './enter-metal-details/enter-metal-details.component';
+import { StoneDetailsComponent } from './stone-details/stone-details.component';
 
 @Component({
   selector: 'app-jewellery-master',
@@ -26,6 +28,10 @@ export class JewelleryMasterComponent implements OnInit {
   tableData: any[] = [];
   checkBoxesMode: string;
   allMode: string;
+  currentDate = new FormControl(new Date());
+  isDisplayed: boolean = false;
+  disabled = true;
+  checked = true;
  
   constructor(
     private activeModal: NgbActiveModal,
@@ -42,6 +48,30 @@ export class JewelleryMasterComponent implements OnInit {
  
   ngOnInit(): void {
   }
+
+  showHideText() {
+    this.isDisplayed = !this.isDisplayed;
+    this.disabled = !this.disabled;
+  }
+
+  openenteraddmetaldetails() {
+    const modalRef: NgbModalRef = this.modalService.open(EnterMetalDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openstonedetails() {
+    const modalRef: NgbModalRef = this.modalService.open(StoneDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
   jewellerymasterForm: FormGroup = this.formBuilder.group({
     itemcode:[''],
     design : [''],
@@ -89,14 +119,14 @@ export class JewelleryMasterComponent implements OnInit {
     POScus:[''],
     certificateno:[''],
     certificateno1:[''],
-    certdate:[''],
+    certdate:[new Date(),''],
     noofcert:[''],
     hallmarking:[''],
     foreigncost:[''],
     grossWt:[''],
     certificateby:[''],
     certificateby1:[''],
-    certdate1:[''],
+    certdate1:[new Date(),''],
     Type:[''],
     diamondsPcs:[''],
     diamondsCarat:[''],
@@ -157,6 +187,14 @@ export class JewelleryMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  addData(){
+
+  }
+
+  removeData(){
+
+  }
+
   formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()

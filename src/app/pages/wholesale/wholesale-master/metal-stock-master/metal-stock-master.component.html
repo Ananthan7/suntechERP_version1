@@ -449,19 +449,19 @@
                         <label for="inputPassword" class="col-sm-3 offset-md-6 col-form-label">MT% Rate Type :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;">
-                            <select matNativeControl required >
-                              <option value="18K">18K</option>
-                              <option value="995">995</option>
-                              <option value="GMS">GMS</option>
-                              <option value="GMS$">GMS$</option>
-                              <option value="GOZ">GOZ</option>
-                              <option value="GOZ$">GOZ$</option>
-                              <option value="GOZ2">GOZ2</option>
-                              <option value="GOZ2.5">GOZ2.5</option>
-                              <option value="GOZ3">GOZ3</option>
-                              <option value="KB">KB</option>
-                              <option value="TTB">TTB</option>
-                            </select>
+                            <mat-select>
+                              <mat-option value="1">18K</mat-option>
+                              <mat-option value="2">995</mat-option>
+                              <mat-option value="3">GMS</mat-option>
+                              <mat-option value="4">GMS$</mat-option>
+                              <mat-option value="5">GOZ</mat-option>
+                              <mat-option value="6">GOZ$</mat-option>
+                              <mat-option value="7">GOZ2</mat-option>
+                              <mat-option value="8">GOZ2.5</mat-option>
+                              <mat-option value="9">GOZ3</mat-option>
+                              <mat-option value="10">KB</mat-option>
+                              <mat-option value="11">TTB</mat-option>
+                            </mat-select>
                           </mat-form-field>
                         </div>
                         <div class="col-md-4  offset-md-8">
@@ -722,11 +722,11 @@
                              <label for="inputPassword" class="col-sm-6 col-form-label" *ngIf="isDisplayed">Kundan Rate :</label>
                             <div class="col-md-6" *ngIf="isDisplayed">
                               <mat-form-field style="width: 80%;">
-                                <select matNativeControl required >
-                                  <option value="PCS">PCS</option>
-                                  <option value="CARAT">CARAT</option>
-                                  <option value="GMS">GMS</option>
-                                </select>
+                                <mat-select>
+                                  <mat-option value="1">PCS</mat-option>
+                                  <mat-option value="2">CARAT</mat-option>
+                                  <mat-option value="3">GMS</mat-option>
+                                </mat-select>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-6 col-form-label">Link Sub Code :</label>
