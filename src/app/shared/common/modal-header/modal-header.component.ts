@@ -12,6 +12,9 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewDelete: boolean = true;
   @Input() isViewMore: boolean = true;
   @Input() isViewArrow: boolean = true;
+
+  branchCode: any = localStorage.getItem('userbranch')
+  userName: any = localStorage.getItem('username')
   constructor() { }
 
   ngOnInit(): void {

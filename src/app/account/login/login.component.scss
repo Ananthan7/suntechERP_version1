@@ -31,20 +31,30 @@
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (max-width: 600px) {
-  .description{
+  .description {
     font-size: 8px;
   }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-  .description{
+  .description {
     font-size: 20px;
   }
 }
 ::ng-deep {
-  .mat-form-field{
-    // height: 26px !important;
-    // margin-bottom: 7px !important;
-  }
+  // .mat-form-field {
+  //   height: 26px !important;
+  //   margin-bottom: 7px !important;
+  //   font-weight: 600 !important;
+  //   font-size: 15px !important;
+  // }
+  // .mat-form-field {
+  //   font-size: inherit !important;
+  //   font-weight: 400 !important;
+  //   line-height: 1.125 !important;
+  //   margin-bottom: 0px !important;
+  //   font-family: Roboto, "Helvetica Neue", sans-serif;
+  //   letter-spacing: normal;
+  // }
 }

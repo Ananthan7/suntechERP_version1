@@ -1,4 +1,4 @@
-export interface DataToSave {
+export interface SavedataModel {
     DETAIL_FORM_DATA: any;
     DETAIL_METAL_DATA: any;
     STOCK_FORM_DETAILS: any;

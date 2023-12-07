@@ -8,7 +8,7 @@ import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
 import { ProductionStockDetailComponent } from "../production-stock-detail/production-stock-detail.component";
-import { DataToSave } from "../data-to-save";
+import { SavedataModel } from "../savedata-model";
 
 @Component({
   selector: "app-production-entry-details",
@@ -20,7 +20,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
   columnheadBottom: any[] = [""];
-  StockDetailData: DataToSave = {
+  StockDetailData: SavedataModel = {
     DETAIL_FORM_DATA: [],
     DETAIL_METAL_DATA: [],
     STOCK_FORM_DETAILS: [],
@@ -264,7 +264,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
-    modalRef.componentInstance.content = this.productiondetailsFrom.value;
+    this.content[0].DETAILSCREEN_DATA = this.productiondetailsFrom.value
+    modalRef.componentInstance.content = this.content[0];
 
     modalRef.result.then((dataFromStockScreen) => {
       if (dataFromStockScreen) {

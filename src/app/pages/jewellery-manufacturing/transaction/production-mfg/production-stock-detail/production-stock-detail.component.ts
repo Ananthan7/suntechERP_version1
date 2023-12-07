@@ -4,7 +4,6 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
-import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -27,7 +26,7 @@ export class ProductionStockDetailComponent implements OnInit {
   componentGroupedList:any[] = [];
   stockCodeDataList:any[] = [];
   formDataToSave:any[] = [];
-  
+  DETAILSCREEN_DATA:any = {}
   productionItemsDetailsFrom: FormGroup = this.formBuilder.group({
     stockCode  : [''],
     tagLines : [''],
@@ -76,10 +75,15 @@ export class ProductionStockDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.getComponentDetails()
+    this.setInitialValues()
+  }
+  setInitialValues(){
+    console.log(this.content,'this.content');
+    
+    this.DETAILSCREEN_DATA = this.content.DETAILSCREEN_DATA
   }
 
   getComponentDetails(){
-    console.log(this.content,'content');
     // if (event.target.value == '') return
     let postData = {
       "SPID": "045",
@@ -118,12 +122,11 @@ export class ProductionStockDetailComponent implements OnInit {
       this.toastr.error("select all required fields");
       return;
     }
-    this.formDataToSave.push(this.productionItemsDetailsFrom.value)
-    let postData = {
+    this.formDataToSave.push({
       "UNIQUEID": 0,
       "SRNO": 0,
       "DT_VOCNO": 0,
-      "DT_VOCTYPE": "",
+      "DT_VOCTYPE": this.comService.nullToString(this.DETAILSCREEN_DATA),
       "DT_VOCDATE": "2023-10-17T12:41:20.126Z",
       "DT_BRANCH_CODE": "",
       "DT_NAVSEQNO": "",
@@ -144,7 +147,7 @@ export class ProductionStockDetailComponent implements OnInit {
       "KARAT_CODE": "",
       "MULTI_STOCK_CODE": true,
       "JOB_PCS": 0,
-      "GROSS_WT": this.productionItemsDetailsFrom.value.grossWt,
+      "GROSS_WT": this.comService.emptyToZero(this.productionItemsDetailsFrom.value.grossWt),
       "METAL_PCS": 0,
       "METAL_WT": 0,
       "STONE_PCS": 0,
@@ -239,7 +242,7 @@ export class ProductionStockDetailComponent implements OnInit {
       "PURITY_PER": 0,
       "DESIGN_TYPE": "",
       "BASE_CURR_RATE": 0
-    }
+    })
     let stockDetailToSave:any = {}
     stockDetailToSave.STOCK_FORM_DETAILS = this.formDataToSave
     stockDetailToSave.STOCK_COMPONENT_GRID = this.componentDataList
