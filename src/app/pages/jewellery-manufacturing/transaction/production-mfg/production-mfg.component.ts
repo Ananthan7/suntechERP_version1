@@ -42,8 +42,8 @@ export class ProductionMfgComponent implements OnInit {
   @Input() content!: any;
   tableData: any[] = [];
   DetailScreenDataToSave: any[] = [];
-  producationSubItemsData: any[] = [];
-  STRNMTLdataSetToSave: any[] = [];
+  STOCK_FORM_DETAILS: any[] = [];
+  STOCK_COMPONENT_GRID: any[] = [];
   labourChargeDetailToSave: any[] = [];
   productionMetalRateToSave: any[] = [];
 
@@ -100,6 +100,7 @@ export class ProductionMfgComponent implements OnInit {
     currencyrate: [""],
     basecurrency: [""],
     basecurrencyrate: [""],
+    baseConvRate: [""],
     time: [""],
     metalrate: [""],
     metalratetype: [""],
@@ -187,9 +188,9 @@ export class ProductionMfgComponent implements OnInit {
     this.BaseCurrencyRateVisibility(this.productionFrom.value.currency, this.productionFrom.value.currencyrate)
   }
   BaseCurrencyRateVisibility(txtPCurr: any, txtPCurrRate: any) {
-    let BaseConvRate = '';
-    let dtConvRate: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency || item.CMBRANCH_CODE == this.branchCode)
-    console.log(dtConvRate);
+    let ConvRateArr: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency && item.CMBRANCH_CODE == this.branchCode)
+    let baseConvRate = 1/ConvRateArr[0].CONV_RATE
+    this.productionFrom.controls.baseConvRate.setValue(baseConvRate)
   }
 
   openProductionEntryDetails(data?: any) {
@@ -212,45 +213,48 @@ export class ProductionMfgComponent implements OnInit {
         console.log(responseDetail,'data From Detail Screen');
         //detail screen form data set to save
         this.setFormDataDetails(responseDetail.DETAIL_FORM_DATA); //headerscreen
-        this.producationSubItemsData = responseDetail.STOCK_FORM_DETAILS; //stockscreen
+        this.STOCK_FORM_DETAILS = responseDetail.STOCK_FORM_DETAILS; //stockscreen
+        this.STOCK_COMPONENT_GRID = responseDetail.STOCK_COMPONENT_GRID; //stockscreen
       }
     });
   }
   /*USE: detail screen form data set to save */
   setFormDataDetails(DETAIL_FORM_DATA: any) {
+    console.log(DETAIL_FORM_DATA);
+    
     DETAIL_FORM_DATA.forEach((element:any) => {
       this.DetailScreenDataToSave.push({
         "UNIQUEID": 0,
         "SRNO": 0,
         "VOCNO": 0,
         "VOCTYPE": "",
-        "VOCDATE": this.currentDate,
-        "BRANCH_CODE": this.branchCode,
-        "JOB_NUMBER": (element.jobno),
-        "JOB_DATE": (element.jobDate),
-        "JOB_SO_NUMBER": (element.subjobno),
-        "UNQ_JOB_ID": this.commonService.nullToString((element.subjobno)),
-        "JOB_DESCRIPTION": (element.subjobnoDesc),
+        "VOCDATE": this.commonService.formatDate(this.currentDate),
+        "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
+        "JOB_NUMBER": this.commonService.nullToString(element.jobno),
+        "JOB_DATE": this.commonService.nullToString(element.jobDate),
+        "JOB_SO_NUMBER": this.commonService.emptyToZero(element.subjobno),
+        "UNQ_JOB_ID": this.commonService.nullToString(element.subjobno),
+        "JOB_DESCRIPTION": this.commonService.nullToString(element.subjobnoDesc),
         "UNQ_DESIGN_ID": "",
-        "DESIGN_CODE": (element.design),
+        "DESIGN_CODE": this.commonService.nullToString(element.design),
         "DIVCODE": "",
-        "PREFIX": (element.prefix),
+        "PREFIX": this.commonService.nullToString(element.prefix),
         "STOCK_CODE": "",
         "STOCK_DESCRIPTION": "",
-        "SET_REF": (element.setref),
-        "KARAT_CODE": (element.karat),
+        "SET_REF": this.commonService.nullToString(element.setref),
+        "KARAT_CODE": this.commonService.nullToString(element.karat),
         "MULTI_STOCK_CODE": true,
         "JOB_PCS": 0,
-        "GROSS_WT": (element.grosswt),
-        "METAL_PCS": (element.metalpcs),
-        "METAL_WT": (element.metalwt),
-        "STONE_PCS": (element.stonepcs),
-        "STONE_WT": (element.stonewt),
-        "LOSS_WT": (element.lossone),
+        "GROSS_WT": this.commonService.emptyToZero(element.grosswt),
+        "METAL_PCS": this.commonService.emptyToZero(element.metalpcs),
+        "METAL_WT": this.commonService.emptyToZero(element.metalwt),
+        "STONE_PCS": this.commonService.emptyToZero(element.stonepcs),
+        "STONE_WT": this.commonService.emptyToZero(element.stonewt),
+        "LOSS_WT": this.commonService.emptyToZero(element.lossone),
         "NET_WT": 0,
-        "PURITY": (element.purity),
-        "PURE_WT": (element.pureWt),
-        "RATE_TYPE": (element.mkgRate),
+        "PURITY": this.commonService.emptyToZero(element.purity),
+        "PURE_WT": this.commonService.emptyToZero(element.pureWt),
+        "RATE_TYPE": this.commonService.nullToString(element.mkgRate),
         "METAL_RATE": 0,
         "CURRENCY_CODE": "",
         "CURRENCY_RATE": 0,
@@ -272,31 +276,31 @@ export class ProductionMfgComponent implements OnInit {
         "RATELC": 0,
         "AMOUNTFC": 0,
         "AMOUNTLC": 0,
-        "PROCESS_CODE": (element.process),
-        "PROCESS_NAME": (element.processname),
-        "WORKER_CODE": (element.worker),
-        "WORKER_NAME": (element.workername),
-        "IN_DATE": (element.startdate),
-        "OUT_DATE": (element.endDate),
-        "TIME_TAKEN_HRS": (element.timetaken),
-        "COST_CODE": (element.costcode),
+        "PROCESS_CODE": this.commonService.nullToString(element.process),
+        "PROCESS_NAME": this.commonService.nullToString(element.processname),
+        "WORKER_CODE": this.commonService.nullToString(element.worker),
+        "WORKER_NAME": this.commonService.nullToString(element.workername),
+        "IN_DATE": this.commonService.nullToString(element.startdate),
+        "OUT_DATE": this.commonService.nullToString(element.endDate),
+        "TIME_TAKEN_HRS": this.commonService.emptyToZero(element.timetaken),
+        "COST_CODE": this.commonService.nullToString(element.costcode),
         "WIP_ACCODE": "",
         "STK_ACCODE": "",
         "SOH_ACCODE": "",
-        "PROD_PROC": (element.prodpcs),
+        "PROD_PROC": this.commonService.nullToString(element.prodpcs),
         "METAL_DIVISION": "",
-        "PRICE1PER": (element.price1),
-        "PRICE2PER": (element.price2),
-        "PRICE3PER": (element.price3),
-        "PRICE4PER": (element.price4),
-        "PRICE5PER": (element.price5),
-        "LOCTYPE_CODE": (element.location),
+        "PRICE1PER": this.commonService.nullToString(element.price1),
+        "PRICE2PER": this.commonService.nullToString(element.price2),
+        "PRICE3PER": this.commonService.nullToString(element.price3),
+        "PRICE4PER": this.commonService.nullToString(element.price4),
+        "PRICE5PER": this.commonService.nullToString(element.price5),
+        "LOCTYPE_CODE": this.commonService.nullToString(element.location),
         "WASTAGE_WT": 0,
         "WASTAGE_AMTFC": 0,
         "WASTAGE_AMTLC": 0,
         "PICTURE_NAME": "",
         "SELLINGRATE": 0,
-        "CUSTOMER_CODE": (element.customer),
+        "CUSTOMER_CODE": this.commonService.nullToString(element.customer),
         "OUTSIDEJOB": true,
         "LAB_ACCODE": "",
         "METAL_LABAMTFC": 0,
@@ -327,23 +331,23 @@ export class ProductionMfgComponent implements OnInit {
         "DT_YEARMONTH": "",
         "YEARMONTH": "",
         "BASE_CONV_RATE": 0,
-        "OTH_STONE_WT": (element.otherstone),
+        "OTH_STONE_WT": this.commonService.emptyToZero(element.otherstone),
         "OTH_STONE_AMT": 0,
         "HANDLING_ACCODE": "",
-        "FROM_STOCK_CODE": (element.fromStockCode),
-        "TO_STOCK_CODE": (element.toStockCode),
-        "JOB_PURITY": (element.jobPurity),
-        "LOSS_PUREWT": (element.loss),
-        "PUDIFF": (element.purityDiff),
-        "STONEDIFF": (element.stoneDiff),
-        "CHARGABLEWT": (element.chargableWt),
-        "BARNO": (element.barNo),
-        "LOTNUMBER": (element.lotNo),
-        "TICKETNO": (element.ticketNo),
-        "PROD_PER": (element.prod),
-        "PURITY_PER": (element.purityPer),
-        "DESIGN_TYPE": (element.designCode),
-        "D_REMARKS": (element.remarks),
+        "FROM_STOCK_CODE": this.commonService.nullToString(element.fromStockCode),
+        "TO_STOCK_CODE": this.commonService.nullToString(element.toStockCode),
+        "JOB_PURITY": this.commonService.emptyToZero(element.jobPurity),
+        "LOSS_PUREWT": this.commonService.emptyToZero(element.loss),
+        "PUDIFF": this.commonService.emptyToZero(element.purityDiff),
+        "STONEDIFF": this.commonService.emptyToZero(element.stoneDiff),
+        "CHARGABLEWT": this.commonService.emptyToZero(element.chargableWt),
+        "BARNO": this.commonService.nullToString(element.barNo),
+        "LOTNUMBER": this.commonService.nullToString(element.lotNo),
+        "TICKETNO": this.commonService.nullToString(element.ticketNo),
+        "PROD_PER": this.commonService.emptyToZero(element.prod),
+        "PURITY_PER": this.commonService.emptyToZero(element.purityPer),
+        "DESIGN_TYPE": this.commonService.nullToString(element.designCode),
+        "D_REMARKS": this.commonService.nullToString(element.remarks),
         "BARCODEDQTY": 0,
         "BARCODEDPCS": 0
       })
@@ -407,79 +411,10 @@ export class ProductionMfgComponent implements OnInit {
       "KARAT_CODE": ""
     })
   }
-  /**STRNMTL data set to save */
-  setSTRNMTLdataSet() {
-    this.STRNMTLdataSetToSave.push({
-      "VOCNO": 0,
-      "VOCTYPE": this.commonService.nullToString(this.productionFrom.value.voctype),
-      "VOCDATE": this.commonService.formatDateTime(this.productionFrom.value.vocDate),
-      "JOB_NUMBER": "",
-      "JOB_SO_NUMBER": 0,
-      "UNQ_JOB_ID": "",
-      "JOB_DESCRIPTION": "",
-      "BRANCH_CODE": "",
-      "DESIGN_CODE": "",
-      "METALSTONE": "",
-      "DIVCODE": "",
-      "STOCK_CODE": "",
-      "STOCK_DESCRIPTION": "",
-      "COLOR": "",
-      "CLARITY": "",
-      "SHAPE": "",
-      "SIZE": "",
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "RATELC": 0,
-      "RATEFC": 0,
-      "AMOUNT": 0,
-      "PROCESS_CODE": "",
-      "WORKER_CODE": "",
-      "UNQ_DESIGN_ID": "",
-      "REFMID": 0,
-      "AMOUNTLC": 0,
-      "AMOUNTFC": 0,
-      "WASTAGE_QTY": 0,
-      "WASTAGE_PER": 0,
-      "WASTAGE_AMTFC": 0,
-      "WASTAGE_AMTLC": 0,
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
-      "YEARMONTH": "",
-      "LOSS_QTY": 0,
-      "LABOUR_CODE": "",
-      "LAB_RATE": 0,
-      "LAB_AMTLC": 0,
-      "LAB_AMTFC": 0,
-      "LAB_ACCODE": "",
-      "SELLINGRATE": 0,
-      "SELLINGVALUE": 0,
-      "CUSTOMER_CODE": "",
-      "PUREWT": 0,
-      "PURITY": 0,
-      "SQLID": "",
-      "SIEVE": "",
-      "SRNO": 0,
-      "MAIN_STOCK_CODE": "",
-      "STONE_WT": 0,
-      "NET_WT": 0,
-      "CONSIGNMENT": 0,
-      "LOCTYPE_CODE": "",
-      "HANDLING_CHARGEFC": 0,
-      "HANDLING_CHARGELC": 0,
-      "HANDLING_RATEFC": 0,
-      "HANDLING_RATELC": 0,
-      "PRICECODE": "",
-      "SUB_STOCK_CODE": "",
-      "SIEVE_SET": "",
-      "KARAT_CODE": "",
-      "PROCESS_TYPE": "",
-      "SOH_ACCODE": "",
-      "STK_ACCODE": "",
-      "OTHER_ATTR": "",
-      "PUREWTTEMP": 0
-    })
-  }
+ 
   formSubmit() {
+    console.log(this.DetailScreenDataToSave,'this.DetailScreenDataToSave');
+    
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
       return;
@@ -528,20 +463,19 @@ export class ProductionMfgComponent implements OnInit {
       "POSTDATE": "",
       "BASE_CURRENCY": this.commonService.nullToString(this.productionFrom.value.basecurrency),
       "BASE_CURR_RATE": this.commonService.emptyToZero(this.productionFrom.value.basecurrencyrate),
-      "BASE_CONV_RATE": 0,
+      "BASE_CONV_RATE": this.commonService.emptyToZero(this.productionFrom.value.baseConvRate),
       "PRINT_COUNT": 0,
       "INTER_BRANCH": "",
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "SYSTEM_DATE": this.commonService.nullToString(this.currentDate),
-      "JOB_PRODUCTION_SUB_DJ": this.producationSubItemsData,
+      "JOB_PRODUCTION_SUB_DJ": this.STOCK_FORM_DETAILS,
       "JOB_PRODUCTION_DETAIL_DJ": this.DetailScreenDataToSave,
-      "JOB_PRODUCTION_STNMTL_DJ": this.STRNMTLdataSetToSave,
+      "JOB_PRODUCTION_STNMTL_DJ": this.STOCK_COMPONENT_GRID, //component grid from stockscreen
       "JOB_PRODUCTION_LABCHRG_DJ": this.labourChargeDetailToSave,
       "JOB_PRODUCTION_METALRATE_DJ": this.productionMetalRateToSave
     }
-    console.log(postData,'postData submit');
-    return
+    // console.log(postData,'postData submit');
     let Sub: Subscription = this.dataService
       .postDynamicAPI(API, postData)
       .subscribe(

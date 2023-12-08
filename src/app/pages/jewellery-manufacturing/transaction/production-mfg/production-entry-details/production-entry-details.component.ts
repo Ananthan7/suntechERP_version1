@@ -265,7 +265,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       }
     );
     this.content[0].DETAILSCREEN_DATA = this.productiondetailsFrom.value
-    modalRef.componentInstance.content = this.content[0];
+    modalRef.componentInstance.content = this.content;
 
     modalRef.result.then((dataFromStockScreen) => {
       if (dataFromStockScreen) {
