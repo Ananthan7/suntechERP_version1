@@ -28,6 +28,7 @@ export class ProductionStockDetailComponent implements OnInit {
   stockCodeDataList:any[] = [];
   STOCK_FORM_DETAILS:any[] = [];
   DETAILSCREEN_DATA:any;
+  currentDate: any = new Date();
   HEADERDETAILS:any;
   productionItemsDetailsFrom: FormGroup = this.formBuilder.group({
     stockCode  : [''],
@@ -176,8 +177,9 @@ export class ProductionStockDetailComponent implements OnInit {
       "DT_NAVSEQNO": "",
       "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
       "JOB_NUMBER": this.commonService.nullToString(this.DETAILSCREEN_DATA.jobno),
-      "JOB_DATE": "2023-10-17T12:41:20.126Z",
+      "JOB_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_SO_NUMBER": this.commonService.emptyToZero(this.DETAILSCREEN_DATA.JOB_SO_NUMBER),
+      "UNQ_JOB_ID": this.commonService.emptyToZero(this.DETAILSCREEN_DATA.subjobno),
       "JOB_DESCRIPTION": "",
       "UNQ_DESIGN_ID": "",
       "DESIGN_CODE": "",
