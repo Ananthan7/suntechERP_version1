@@ -12,6 +12,8 @@ import { map, pairwise, startWith } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 // import { NgxBarcodeScannerService } from '@eisberg-labs/ngx-barcode-scanner';
 // import { round } from 'lodash';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 import {
   FormBuilder,
@@ -39,6 +41,9 @@ interface VocTypesEx {
 })
 export class AddPosComponent implements OnInit {
   @Input() content!: any;
+
+  @ViewChild('print_invoice', { static: true }) printInvoiceDiv!: ElementRef;
+
 
   @ViewChild('mymodal') public mymodal!: NgbModal;
   @ViewChild('adjust_sale_return_modal')
@@ -227,6 +232,8 @@ export class AddPosComponent implements OnInit {
   othersReceiptForm: FormGroup;
   giftReceiptForm: FormGroup;
   customerReceiptForm: FormGroup;
+
+  boardingPassForm: FormGroup;
 
 
   advanceReceiptDetails: any;
@@ -675,6 +682,19 @@ export class AddPosComponent implements OnInit {
       customerAmtFC: ['', [Validators.required, Validators.min(0.1)]],
       // customerAccode: ['', Validators.required],
     });
+
+    this.boardingPassForm = this.formBuilder.group({
+      passDetails: ['', Validators.required],
+      flightNo: ['', Validators.required],
+      boardingTo: ['', [Validators.required]],
+      boardingDate: ['', [Validators.required ]],
+      invoiceNo: ['', [Validators.required ]],
+      invoiceDate: ['', [Validators.required ]],
+      vocType: ['', [Validators.required ]],
+      serviceInv: ['', [Validators.required ]],
+      lifeTimeWarr: ['', [Validators.required ]],
+    });
+
     /**End Receipt forms  */
 
     this.inv_customer_name = 'Test Customer';
@@ -6942,6 +6962,56 @@ export class AddPosComponent implements OnInit {
   backToList() {
     this.router.navigateByUrl('/pos');
   }
+
+
+  async sendToEmail() {
+    try {
+
+      let _validate: any = this.validateBeforePrint();
+      if (_validate[0]) {
+        const printContent: any = this.printInvoiceDiv.nativeElement;
+        const canvas = await html2canvas(printContent);
+        const imageData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imageData, 'PNG', 10, 10, 190, 0);
+        const pdfContent = pdf.output('datauristring');
+        const mailtoLink = document.createElement('a');
+        mailtoLink.href = 'mailto:?subject=Invoice&body=Please find attached invoice.'
+        // +'&attachment='
+          + encodeURIComponent(this.printInvoiceDiv.nativeElement.innerHtml);
+          // + encodeURIComponent(pdfContent);
+        window.location.href = mailtoLink.href;
+
+      } else {
+        console.log(_validate[1]);
+      }
+
+
+    } catch (error) {
+      console.log('======error email==============================');
+      console.log(error);
+      console.log('====================================');
+    }
+  }
+
+  // async generatePdf(printContent: HTMLElement): Promise<string> {
+  //   try {
+  //     const pdf = new jsPDF();
+  //     const pdfPromise = new Promise<string>((resolve) => {
+  //       pdf.html(printContent.innerHTML, {
+  //         callback: () => {
+  //           resolve(pdf.output('datauristring'));
+  //         },
+  //       });
+  //     });
+
+  //     return await pdfPromise;
+  //   } catch (error) {
+  //     return '';
+  //   }
+  // }
+
+
   printInvoice() {
     let _validate: any = this.validateBeforePrint();
     if (_validate[0]) {
@@ -6965,6 +7035,9 @@ export class AddPosComponent implements OnInit {
       WindowPrt.document.write('</div></body></html>');
       WindowPrt.document.close();
       WindowPrt.focus();
+
+
+
       setTimeout(() => {
         WindowPrt.print();
       }, 800);
