@@ -687,7 +687,7 @@
               <label for="input" class="col-sm-4 col-form-label">Start Date</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="startdate" />
+                  <input type="date" matInput formControlName="startdate" id="startdate"  (change)="onStartDateChange()"/>
                 </mat-form-field>
               </div>
             </div>
@@ -695,8 +695,11 @@
               <label for="input" class="col-sm-4 col-form-label">End Date</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="enddate" />
+                  <input type="date" matInput formControlName="enddate" id="enddate"/>
                 </mat-form-field>
+              </div>
+              <div *ngIf="processTransferdetailsForm.hasError('dateError')">
+                <p class="error-message">End date cannot be before the start date.</p>
               </div>
             </div>
           </div>
