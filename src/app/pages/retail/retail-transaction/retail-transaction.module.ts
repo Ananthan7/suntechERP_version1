@@ -26,9 +26,11 @@ import { AdvanceReturnComponent } from './advance-return/advance-return.componen
   import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
 import { PcrSelectionComponent } from './advance-return/pcr-selection/pcr-selection.component';
 import { DxDataGridModule } from 'devextreme-angular';
-// import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
+import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
 import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
+import { PointOfSalesOrderDetailsComponent } from './point-of-sales-order/point-of-sales-order-details/point-of-sales-order-details.component';
 import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-direct.component';
+import { PosPurchaseDirectDetailComponent } from './pos-purchase-direct/pos-purchase-direct-detail/pos-purchase-direct-detail.component';
 
 
 
@@ -53,11 +55,12 @@ import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-d
     PcrSelectionComponent,
     CustomDateFormat1,
     CustomDateFormat2,
-    // SalesEstimationComponent,
+    SalesEstimationComponent,
     PointOfSalesOrderComponent,
-    PointOfSalesOrderComponent,
-    PosPurchaseDirectComponent
-  ],
+    PointOfSalesOrderDetailsComponent,
+    PosPurchaseDirectComponent,
+    PosPurchaseDirectDetailComponent
+    ],
   imports: [
     CommonModule,
     RetailTransactionRoutingModule,
