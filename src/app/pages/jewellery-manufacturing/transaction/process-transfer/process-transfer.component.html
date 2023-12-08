@@ -21,8 +21,7 @@
                                 Type</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput readonly
-                                        formControlName="voctype" />
+                                    <input type="text" matInput readonly formControlName="voctype" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -31,13 +30,9 @@
                                 Voucher Date</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%">
-                                    <input matInput DateValidation
-                                        (dateChange)="formatDate($event)"
-                                        [matDatepicker]="dob"
-                                        formControlName="vocdate"
-                                        placeholder="DD/MM/YYYY" />
-                                    <mat-datepicker-toggle matSuffix
-                                        [for]="dob"></mat-datepicker-toggle>
+                                    <input matInput DateValidation (dateChange)="formatDate($event)"
+                                        [matDatepicker]="dob" formControlName="vocdate" placeholder="DD/MM/YYYY" />
+                                    <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
                                     <mat-datepicker #dob></mat-datepicker>
                                 </mat-form-field>
                             </div>
@@ -47,8 +42,7 @@
                                 Number</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput readonly
-                                        formControlName="vocno" />
+                                    <input type="text" matInput readonly formControlName="vocno" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -56,32 +50,25 @@
                             <label for="input" class="col-sm-2 col-form-label">Salesman</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 85%;">
-                                    <input type="text" matInput
-                                        formControlName="salesman" />
+                                    <input type="text" matInput formControlName="salesman" />
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="SalesmanData"
+                                <master-search [MasterSearchData]="SalesmanData"
                                     (newRowClick)="salesmanSelected($event)">
                                 </master-search>
                             </div>
-                            <label for="input"
-                                class="col-sm-2 pe-2 col-form-label">Currency</label>
+                            <label for="input" class="col-sm-2 pe-2 col-form-label">Currency</label>
                             <div class="col-sm-1">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput
-                                        (change)="currencyDataSelected($event)"
+                                    <input type="text" matInput (change)="currencyDataSelected($event)"
                                         formControlName="currency" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="number" matInput
-                                        SixDecimalInput
-                                        class="text-right" readonly
+                                    <input type="number" matInput SixDecimalInput class="text-right" readonly
                                         formControlName="currencyrate" />
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="currencyMasterData"
+                                <master-search [MasterSearchData]="currencyMasterData"
                                     (newRowClick)="currencyDataSelected($event)">
                                 </master-search>
                             </div>
@@ -94,8 +81,7 @@
                         <div class="row align-items-end mb-2">
                             <div class="col-md-12">
                                 <div class="text-area">
-                                    <textarea class="border-bottom" rows="3"
-                                        matInput></textarea>
+                                    <textarea class="border-bottom" rows="3" matInput></textarea>
                                 </div>
                             </div>
                         </div>
@@ -103,152 +89,104 @@
                     </div>
                 </div>
                 <div class="row py-2 border-top">
-                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                        [viewImportBtn]="false"
-                        (addClick)="openProcessTransferDetails()"
-                        (deleteClick)="deleteTableData()">
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        (addClick)="openProcessTransferDetails()" (deleteClick)="deleteTableData()">
                     </menu-buttons>
                     <div class="col-md-12">
-                        <dx-data-grid id="gridContainer"
-                            [columnAutoWidth]="true" [showBorders]="true"
-                            [showRowLines]="true"
-                            (onRowClick)="onRowClickHandler($event)"
-                            [allowColumnReordering]="true" height="200"
-                            [dataSource]="tableData">
+                        <dx-data-grid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
+                            [showRowLines]="true" (onRowClick)="onRowClickHandler($event)"
+                            [allowColumnReordering]="true" height="200" [dataSource]="tableData">
                             <dxi-column caption>
-                                <dxi-column alignment="center" caption="SR NO"
-                                    dataField="SRNO"
-                                    format="fixedPoint">
+                                <dxi-column alignment="center" caption="SR NO" dataField="SRNO" format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Job Ref"
-                                    dataField="subjobno">
+                                <dxi-column alignment="center" caption="Job Ref" dataField="subjobno">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Pcs"
-                                    dataField="MetalPcsFrom">
+                                <dxi-column alignment="center" caption="Pcs" dataField="MetalPcsFrom">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="From">
-                                <dxi-column alignment="center" caption="Process"
-                                    dataField="processFrom">
+                                <dxi-column alignment="center" caption="Process" dataField="processFrom">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Worker"
-                                    dataField="workerFrom">
+                                <dxi-column alignment="center" caption="Worker" dataField="workerFrom">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="To">
-                                <dxi-column alignment="center" caption="Process"
-                                    dataField="processTo">
+                                <dxi-column alignment="center" caption="Process" dataField="processTo">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Worker"
-                                    dataField="workerTo">
+                                <dxi-column alignment="center" caption="Worker" dataField="workerTo">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Metal">
-                                <dxi-column alignment="center" caption="Psc"
-                                    dataField="MetalPcsTo"
-                                    format="fixedPoint">
+                                <dxi-column alignment="center" caption="Psc" dataField="MetalPcsTo" format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Weight"
-                                    dataField="MetalWeightTo">
+                                <dxi-column alignment="center" caption="Weight" dataField="MetalWeightTo">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption="Stone">
-                                <dxi-column alignment="center" caption="Psc"
-                                    dataField="StonePcsTo"
-                                    format="fixedPoint">
+                                <dxi-column alignment="center" caption="Psc" dataField="StonePcsTo" format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Weight"
-                                    dataField="StoneWeightTo">
+                                <dxi-column alignment="center" caption="Weight" dataField="StoneWeightTo">
                                 </dxi-column>
                             </dxi-column>
                             <dxi-column alignment="center" caption>
-                                <dxi-column alignment="center" caption="Loss"
-                                    dataField="Population_Total"
+                                <dxi-column alignment="center" caption="Loss" dataField="Population_Total"
                                     format="fixedPoint">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Time"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Time" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Return Metal"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Return Metal" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Return Stone"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Return Stone" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Scrap Div"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Scrap Div" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Gain Wt"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Gain Wt" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Gain Pure Wt"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Gain Pure Wt" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="Gain AC"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="Gain AC" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="UNIQUEID"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="UNIQUEID" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="VOCNO"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="VOCNO" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="VOCDATE"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="VOCDATE" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="VOCTYPE"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="VOCTYPE" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="BRANCH_CODE"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="BRANCH_CODE" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="JOB_NUMBER"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="JOB_NUMBER" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="JOB_DATE"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="JOB_DATE" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="UNQ_DESIGN_ID"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="UNQ_DESIGN_ID" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="DESIGN_CODE"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="DESIGN_CODE" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="SEQ_CODE"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="SEQ_CODE" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="JOB_DESCRIPTION"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="JOB_DESCRIPTION" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="CURRENCY_CODE"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="CURRENCY_CODE" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="CURRENCY_RATE"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="CURRENCY_RATE" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_PROCESS_CODE"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_PROCESS_CODE" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_PROCESSNAME"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_PROCESSNAME" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_WORKERNAME"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_WORKERNAME" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_STONE_PCS"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_STONE_PCS" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="FRM_METAL_PCS"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="FRM_METAL_PCS" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="TO_PROCESSNAME"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="TO_PROCESSNAME" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="TO_WORKERNAME"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="TO_WORKERNAME" dataField="Population_Urban">
                                 </dxi-column>
-                                <dxi-column alignment="center" caption="TO_PCS"
-                                    dataField="Population_Urban">
+                                <dxi-column alignment="center" caption="TO_PCS" dataField="Population_Urban">
                                 </dxi-column>
                                 <dxi-column alignment="center" caption="TO_METAL_PCS"
                                     dataField="Population_Urban"></dxi-column>
@@ -257,8 +195,6 @@
                                 <dxi-column alignment="center" caption="TO_STONE_PCS"
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="TO_METAL_WT"
-                                    dataField="Population_Urban"></dxi-column>
-                                <dxi-column alignment="center" caption="STONE_AMOUNTFC"
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="STONE_AMOUNTFC"
                                     dataField="Population_Urban"></dxi-column>
@@ -280,7 +216,11 @@
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="TOTAL_AMOUNTFC"
                                     dataField="Population_Urban"></dxi-column>
+                                <dxi-column alignment="center" caption="TOTAL_AMOUNT_LC"
+                                    dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="COSTFC_PER_PCS"
+                                    dataField="Population_Urban"></dxi-column>
+                                <dxi-column alignment="center" caption="COST_FC_PER_PCS"
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="LAB_CODE"
                                     dataField="Population_Urban"></dxi-column>
@@ -291,6 +231,8 @@
                                 <dxi-column alignment="center" caption="LAB_RATELC"
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="LAB_ACCODE"
+                                    dataField="Population_Urban"></dxi-column>
+                                <dxi-column alignment="center" caption="LOSS_ACCCODE"
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="FRM_WIP_ACCODE"
                                     dataField="Population_Urban"></dxi-column>
@@ -370,6 +312,8 @@
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="DT_VOCTYPE"
                                     dataField="Population_Urban"></dxi-column>
+                                <dxi-column alignment="center" caption="DT_VOUCHER_NO"
+                                    dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="DT_YEARMONTH"
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="ISSUE_REF"
@@ -381,6 +325,8 @@
                                 <dxi-column alignment="center" caption="SCRAP_SUB_STOCK_CODE"
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="SCRAP_PURITY"
+                                    dataField="Population_Urban"></dxi-column>
+                                <dxi-column alignment="center" caption="SCRAP_PUDIFF"
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="SCRAP_ACCODE"
                                     dataField="Population_Urban"></dxi-column>
@@ -406,6 +352,8 @@
                                     dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="ATTACHMENT_FILE"
                                     dataField="Population_Urban"></dxi-column>
+                                <dxi-column alignment="center" caption="AUTHORISED_TIME"
+                                    dataField="Population_Urban"></dxi-column>
                                 <dxi-column alignment="center" caption="REPAIR_PROCESS"
                                     dataField="Population_Urban"></dxi-column>
                             </dxi-column>
@@ -414,13 +362,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 d-flex">
-                        <label for="inputPassword"
-                            class="col-sm-3 col-form-label">Narration
+                        <label for="inputPassword" class="col-sm-3 col-form-label">Narration
                             :</label>
                         <div class="col-md-9">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput
-                                    formControlName="Narration" />
+                                <input type="text" matInput formControlName="Narration" />
                             </mat-form-field>
                         </div>
                     </div>
