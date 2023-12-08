@@ -28,133 +28,172 @@
         </div>
         <div class="row">
           <div class="col-md-4">
-            <div class="row mb-2">
-              <label class="col-sm-4 col-form-label">
-                Voc Type<b>*</b></label>
-              <div class="col-md-6">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="voctype" />
-                </mat-form-field>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                  <label class="col-sm-4 col-form-label">
+                    Voc Type<b>*</b></label>
+                  <mat-form-field style="width: 50%;">
+                    <input type="text" matInput formControlName="voctype" />
+                  </mat-form-field>
+                </div>
               </div>
             </div>
             <div class="row mb-2">
-              <label class="col-sm-4 col-form-label">
-                Voc Date*</label>
-              <div class="col-md-6">
-                <mat-form-field style="width: 100%;">
-                  <!-- <input type="date" matInput formControlName="vocdate" />
-                </mat-form-field> -->
-                  <input matInput [matDatepicker]="vocDate" name="vocDate"
-                    formControlName="vocDate"
-                    placeholder="DD/MM/YYYY" DateValidation />
-                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-                </mat-form-field>
+              <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                  <label class="col-sm-4 col-form-label">
+                    Voc Date*</label>
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%;">
+                      <!-- <input type="date" matInput formControlName="vocdate" />
+                        </mat-form-field> -->
+                      <input matInput [matDatepicker]="vocDate" name="vocDate"
+                        formControlName="vocDate"
+                        placeholder="DD/MM/YYYY" DateValidation />
+                      <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                      <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row mb-2">
-              <label class="col-sm-4 col-form-label">Voc No</label>
-              <div class="col-md-6">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="vocno" />
-                </mat-form-field>
+              <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                  <label class="col-sm-4 col-form-label">Voc No</label>
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="vocno" />
+                    </mat-form-field>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row mb-2">
-              <label class="col-sm-4 col-form-label">Entered
-                By</label>
-              <div class="col-md-6">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="enteredby" />
-                </mat-form-field>
+              <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                  <label class="col-sm-4 col-form-label">Entered
+                    By</label>
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="enteredby" />
+                    </mat-form-field>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input"
-                class="col-sm-4 pe-2 col-form-label">Currency</label>
-              <div class="col-sm-2">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput
-                    (change)="currencyDataSelected($event)"
-                    formControlName="currency" />
-                </mat-form-field>
-              </div>
-              <div class="col-sm-5">
-                <mat-form-field style="width: 70%;">
-                  <input type="number" matInput
-                    SixDecimalInput
-                    class="text-right" readonly
-                    formControlName="currencyrate" />
-                </mat-form-field>
-                <master-search
-                  [MasterSearchData]="currencyMasterData"
-                  (newRowClick)="currencyDataSelected($event)">
-                </master-search>
+              <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                  <label for="input"
+                    class="col-sm-4 pe-2 col-form-label">Currency</label>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput
+                        (change)="currencyDataSelected($event)"
+                        formControlName="currency" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-5">
+                    <mat-form-field style="width: 70%;">
+                      <input type="number" matInput
+                        SixDecimalInput
+                        class="text-right" readonly
+                        formControlName="currencyrate" />
+                    </mat-form-field>
+                    <master-search
+                      [MasterSearchData]="currencyMasterData"
+                      (newRowClick)="currencyDataSelected($event)">
+                    </master-search>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row mb-2">
-              <label class="col-sm-4 col-form-label">Time</label>
-              <div class="col-md-6">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" readonly matInput formControlName="time" />
-                </mat-form-field>
+              <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                  <label class="col-sm-4 col-form-label">Time</label>
+                  <div class="col-md-6">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" readonly matInput
+                        formControlName="time" />
+                    </mat-form-field>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div class="col-md-5">
             <div class="row">
               <div class="col-md-5 pt-3">
-                <mat-checkbox formControlName="UnfixTransaction"><b>Unfix Transaction</b></mat-checkbox><br>
-                <mat-checkbox formControlName="STONE_INCLUDE"><b>Include Stone Weight</b></mat-checkbox>
+                <mat-checkbox formControlName="UnfixTransaction"><b>Unfix
+                    Transaction</b></mat-checkbox><br>
+                <mat-checkbox formControlName="STONE_INCLUDE"><b>Include Stone
+                    Weight</b></mat-checkbox>
               </div>
               <div class="col-md-7">
                 <div class="row mb-2 pt-2 text-right">
-                  <label class="col-md-4 col-form-label">
-                    Metal Rate</label>
-                  <span class="col-sm-8">
-                    <mat-form-field style="width: 20%">
-                      <input type="text" matInput readonly
-                        formControlName="metalratetype" />
-                    </mat-form-field>
-                    <mat-form-field
-                      style="width: 40%; margin-left: 7px;">
-                      <input type="text" matInput
-                        SixDecimalInput
-                        class="text-right"
-                        formControlName="metalrate" />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="rateTypeMasterData"
-                      (newRowClick)="rateTypeSelected($event)">
-                    </master-search>
-                  </span>
+                  <div class="col-md-12">
+                    <div class="d-flex align-items-center">
+                      <label class="col-md-4 col-form-label">
+                        Metal Rate</label>
+                      <div class="col-sm-8">
+                        <mat-form-field style="width: 20%">
+                          <input type="text" matInput readonly
+                            formControlName="metalratetype" />
+                        </mat-form-field>
+                        <mat-form-field
+                          style="width: 40%; margin-left: 7px;">
+                          <input type="text" matInput
+                            SixDecimalInput
+                            class="text-right"
+                            formControlName="metalrate" />
+                        </mat-form-field>
+                        <master-search
+                          [MasterSearchData]="rateTypeMasterData"
+                          (newRowClick)="rateTypeSelected($event)">
+                        </master-search>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="col-md-12">
                 <div class="row mb-2 pt-5">
-                  <label class="col-sm-3 col-form-label">
-                    Branch To</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
-                      <input type="number" matInput formControlName="branchto" />
-                    </mat-form-field>
+                  <div class="col-md-12">
+                    <div class="d-flex align-items-center">
+                      <label class="col-sm-3 col-form-label">
+                        Branch To</label>
+                      <div class="col-md-5">
+                        <mat-form-field style="width: 100%;">
+                          <input type="number" matInput
+                            formControlName="branchto" />
+                        </mat-form-field>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="row mb-2">
-                  <label class="col-sm-3 col-form-label">
-                    Base Currency</label>
-                  <div class="col-md-2">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput
-                        formControlName="basecurrency" />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-4">
-                    <mat-form-field style="width: 100%;">
-                      <input type="number" matInput formControlName="basecurrencyrate" />
-                    </mat-form-field>
+                  <div class="col-md-12">
+                    <div class="d-flex align-items-center">
+                      <label class="col-sm-3 col-form-label">
+                        Base Currency</label>
+                      <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput
+                            formControlName="basecurrency" />
+                        </mat-form-field>
+                      </div> &nbsp;
+                      <div class="col-md-4">
+                        <mat-form-field style="width: 100%;">
+                          <input type="number" matInput
+                            formControlName="basecurrencyrate" />
+                        </mat-form-field>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -178,12 +217,15 @@
               </div>
             </div>
             <div class="col-md-12">
+              <!-- JOB DETAILS TAB STARTS -->
               <mat-tab-group>
                 <mat-tab label="Job Details">
                   <div class="row mt-2">
                     <div class="col-md-12">
                       <dx-data-grid #dataGrid id="gridContainer"
-                        [showBorders]="true">
+                        [showRowLines]="true"
+                        [showBorders]="true"
+                        [dataSource]="DetailScreenDataToSave">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -192,26 +234,24 @@
                         <dxi-column dataField="data" width="auto" caption="No"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto"
-                          caption="Job #"
-                          alignment="center">
+                        <dxi-column dataField="JOB_NUMBER" width="auto"
+                          caption="Job #" alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto"
-                          caption="Sub Job"
-                          alignment="center">
+                        <dxi-column dataField="UNQ_JOB_ID" width="auto"
+                          caption="Sub Job" alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto"
+                        <dxi-column dataField="DESIGN_CODE" width="auto"
                           caption="Design"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto" caption="Pcs"
+                        <dxi-column dataField="JOB_PCS" width="auto" caption="Pcs"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto"
+                        <dxi-column dataField="METAL_WT" width="auto"
                           caption="Metal"
                           alignment="center">
                         </dxi-column>
-                        <dxi-column dataField="data" width="auto"
+                        <dxi-column dataField="STONE_WT" width="auto"
                           caption="Stone"
                           alignment="center">
                         </dxi-column>

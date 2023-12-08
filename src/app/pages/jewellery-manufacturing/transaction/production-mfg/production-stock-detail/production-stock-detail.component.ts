@@ -4,7 +4,6 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
-import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -24,6 +23,13 @@ export class ProductionStockDetailComponent implements OnInit {
   componentsColumnhead: any[] = ["Sr.No","Div","Stock Code","Color","Clarity","Shape","Size","Sieve","Pcs","Gross Wt","Stone","Net Wt","Rate","Amount","%","Qty","Amt","s.Rate","S.Value"];
 
   componentDataList:any[] = [];
+  STRNMTLdataSetToSave:any[] = [];
+  componentGroupedList:any[] = [];
+  stockCodeDataList:any[] = [];
+  STOCK_FORM_DETAILS:any[] = [];
+  DETAILSCREEN_DATA:any;
+  currentDate: any = new Date();
+  HEADERDETAILS:any;
   productionItemsDetailsFrom: FormGroup = this.formBuilder.group({
     stockCode  : [''],
     tagLines : [''],
@@ -67,69 +73,113 @@ export class ProductionStockDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private comService: CommonServiceService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.setInitialValues()
+  }
+  setInitialValues(){
+    console.log(this.content,'this.content');
+    this.DETAILSCREEN_DATA = this.content[0].DETAILSCREEN_DATA
+    this.HEADERDETAILS = this.content[0].HEADERDETAILS
+    this.setStockCodeGrid()
     this.getComponentDetails()
   }
-
+  setStockCodeGrid(){
+    this.stockCodeDataList.push({
+      STOCK_CODE:`${this.DETAILSCREEN_DATA.prefix}${this.DETAILSCREEN_DATA.prefixNo}`,
+      DESIGN: this.DETAILSCREEN_DATA.design,
+      KARAT: this.DETAILSCREEN_DATA.KARAT,
+      grossWt: this.DETAILSCREEN_DATA.grossWt,
+      MetalPCS: 1,
+      metalwt: this.DETAILSCREEN_DATA.metalwt,
+      // MetalValue: this.DETAILSCREEN_DATA.metalwt,
+      StonePcs: this.DETAILSCREEN_DATA.stonepcs,
+      stonewt: this.DETAILSCREEN_DATA.stonewt,
+      jobno: this.DETAILSCREEN_DATA.jobno,
+      subjobno: this.DETAILSCREEN_DATA.subjobno,
+      DIVCODE: this.DETAILSCREEN_DATA.DIVCODE,
+      PURE_WT: this.DETAILSCREEN_DATA.PURE_WT,
+      jobPurity: this.DETAILSCREEN_DATA.jobPurity,
+    })
+    this.stockCodeDataList.forEach((item:any,index:number)=> item.SRNO = index+1)
+    console.log(this.stockCodeDataList,'this.stockCodeDataList');
+  }
+  groupBomDetailsData() {
+    let result: any[] = []
+    this.componentDataList.reduce((res: any, value: any) => {
+      if (!res[value.DIVCODE]) {
+        res[value.DIVCODE] = {
+          DIVCODE: value.DIVCODE,
+          PCS: 0,
+          GROSS_WT: 0,
+          AMOUNT_FC: 0,
+        };
+        result.push(res[value.DIVCODE])
+      }
+      res[value.DIVCODE].PCS += Number(value.PCS);
+      res[value.DIVCODE].GROSS_WT += Number(value.NET_WT);
+      res[value.DIVCODE].AMOUNT_FC += Number(value.AMOUNTFC);
+      return res;
+    }, {});
+    result.forEach((item:any)=>{
+      item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT,'METAL')
+      item.AMOUNT_FC = this.commonService.decimalQuantityFormat(item.AMOUNT_FC,'AMOUNT')
+    })
+    this.componentGroupedList = result
+  }
   getComponentDetails(){
-    console.log(this.content,'content');
-    // if (event.target.value == '') return
     let postData = {
       "SPID": "045",
       "parameter": {
-        'strUnq_Job_Id': this.comService.nullToString(this.content.subjobno),
-        'strProcess_Code': this.comService.nullToString(this.content.process),
-        'strWorker_Code': this.comService.nullToString(this.content.worker),
-        'strBranch_Code': this.comService.nullToString(this.comService.branchCode),
-        'strVocdate': this.comService.formatDate(this.content.VOCDATE),
+        'strUnq_Job_Id': this.commonService.nullToString(this.DETAILSCREEN_DATA.subjobno),
+        'strProcess_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.process),
+        'strWorker_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.worker),
+        'strBranch_Code': this.commonService.nullToString(this.commonService.branchCode),
+        'strVocdate': this.commonService.formatDate(this.DETAILSCREEN_DATA.VOCDATE),
       }
     }
-    this.comService.showSnackBarMsg('MSG81447')
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           this.componentDataList = result.dynamicData[0]
           this.componentDataList.forEach((item:any,index:number)=>{
             item.SRNO = index+1
           })
+          this.groupBomDetailsData()
         } else {
-          this.comService.toastErrorByMsgId('MSG1747')
+          this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
+  formDetailCount: number = 0;
   formSubmit(){
-    if (this.productionItemsDetailsFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
-    }
-
-    let postData = {
+    this.setSTRNMTLdataSet();
+    this.formDetailCount+=1
+    this.STOCK_FORM_DETAILS.push({
       "UNIQUEID": 0,
-      "SRNO": 0,
+      "SRNO": this.formDetailCount,
       "DT_VOCNO": 0,
-      "DT_VOCTYPE": "",
-      "DT_VOCDATE": "2023-10-17T12:41:20.126Z",
-      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": this.commonService.nullToString(this.HEADERDETAILS.voctype),
+      "DT_VOCDATE": this.commonService.formatDateTime(this.HEADERDETAILS.vocDate),
+      "DT_BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
       "DT_NAVSEQNO": "",
-      "DT_YEARMONTH": "",
-      "JOB_NUMBER": "",
-      "JOB_DATE": "2023-10-17T12:41:20.126Z",
-      "JOB_SO_NUMBER": 0,
-      "UNQ_JOB_ID": "",
+      "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+      "JOB_NUMBER": this.commonService.nullToString(this.DETAILSCREEN_DATA.jobno),
+      "JOB_DATE": this.commonService.formatDateTime(this.currentDate),
+      "JOB_SO_NUMBER": this.commonService.emptyToZero(this.DETAILSCREEN_DATA.JOB_SO_NUMBER),
+      "UNQ_JOB_ID": this.commonService.emptyToZero(this.DETAILSCREEN_DATA.subjobno),
       "JOB_DESCRIPTION": "",
       "UNQ_DESIGN_ID": "",
       "DESIGN_CODE": "",
@@ -142,7 +192,7 @@ export class ProductionStockDetailComponent implements OnInit {
       "KARAT_CODE": "",
       "MULTI_STOCK_CODE": true,
       "JOB_PCS": 0,
-      "GROSS_WT": this.productionItemsDetailsFrom.value.grossWt,
+      "GROSS_WT": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.grossWt),
       "METAL_PCS": 0,
       "METAL_WT": 0,
       "STONE_PCS": 0,
@@ -237,11 +287,87 @@ export class ProductionStockDetailComponent implements OnInit {
       "PURITY_PER": 0,
       "DESIGN_TYPE": "",
       "BASE_CURR_RATE": 0
-    }
+    })
     let stockDetailToSave:any = {}
-    stockDetailToSave.STOCK_FORM_DETAILS = this.productionItemsDetailsFrom.value
+    stockDetailToSave.STOCK_FORM_DETAILS = this.STOCK_FORM_DETAILS
+    stockDetailToSave.STOCK_COMPONENT_GRID = this.STRNMTLdataSetToSave
 
     this.close(stockDetailToSave);
+  }
+
+   /**STRNMTL data set to save */
+  setSTRNMTLdataSet() {
+    this.componentDataList.forEach((item:any)=>{
+      this.STRNMTLdataSetToSave.push({
+        "VOCNO": 0,
+        "VOCTYPE": this.commonService.nullToString(this.HEADERDETAILS.voctype),
+        "VOCDATE": this.commonService.formatDateTime(this.HEADERDETAILS.vocDate),
+        "JOB_NUMBER": "",
+        "JOB_SO_NUMBER": 0,
+        "UNQ_JOB_ID": "",
+        "JOB_DESCRIPTION": "",
+        "BRANCH_CODE": "",
+        "DESIGN_CODE": "",
+        "METALSTONE": "",
+        "DIVCODE": "",
+        "STOCK_CODE": "",
+        "STOCK_DESCRIPTION": "",
+        "COLOR": "",
+        "CLARITY": "",
+        "SHAPE": "",
+        "SIZE": "",
+        "PCS": 0,
+        "GROSS_WT": 0,
+        "RATELC": 0,
+        "RATEFC": 0,
+        "AMOUNT": 0,
+        "PROCESS_CODE": "",
+        "WORKER_CODE": "",
+        "UNQ_DESIGN_ID": "",
+        "REFMID": 0,
+        "AMOUNTLC": 0,
+        "AMOUNTFC": 0,
+        "WASTAGE_QTY": 0,
+        "WASTAGE_PER": 0,
+        "WASTAGE_AMTFC": 0,
+        "WASTAGE_AMTLC": 0,
+        "CURRENCY_CODE": "",
+        "CURRENCY_RATE": 0,
+        "YEARMONTH": "",
+        "LOSS_QTY": 0,
+        "LABOUR_CODE": "",
+        "LAB_RATE": 0,
+        "LAB_AMTLC": 0,
+        "LAB_AMTFC": 0,
+        "LAB_ACCODE": "",
+        "SELLINGRATE": 0,
+        "SELLINGVALUE": 0,
+        "CUSTOMER_CODE": "",
+        "PUREWT": 0,
+        "PURITY": 0,
+        "SQLID": "",
+        "SIEVE": "",
+        "SRNO": 0,
+        "MAIN_STOCK_CODE": "",
+        "STONE_WT": 0,
+        "NET_WT": 0,
+        "CONSIGNMENT": 0,
+        "LOCTYPE_CODE": "",
+        "HANDLING_CHARGEFC": 0,
+        "HANDLING_CHARGELC": 0,
+        "HANDLING_RATEFC": 0,
+        "HANDLING_RATELC": 0,
+        "PRICECODE": "",
+        "SUB_STOCK_CODE": "",
+        "SIEVE_SET": "",
+        "KARAT_CODE": "",
+        "PROCESS_TYPE": "",
+        "SOH_ACCODE": "",
+        "STK_ACCODE": "",
+        "OTHER_ATTR": "",
+        "PUREWTTEMP": 0
+      })
+    })
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
