@@ -30,7 +30,7 @@ export class JewelleryMasterComponent implements OnInit {
   tableData: any[] = [];
   checkBoxesMode: string;
   allMode: string;
-  currentDate = new FormControl(new Date());
+  // currentDate = new FormControl(new Date());
   isDisplayed: boolean = false;
   disabled = true;
   checked = true;
