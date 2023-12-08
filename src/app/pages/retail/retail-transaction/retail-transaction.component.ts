@@ -14,6 +14,7 @@ import { AdvanceReturnComponent } from './advance-return/advance-return.componen
 import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
 import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
 import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
+import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-direct.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -72,6 +73,7 @@ export class RetailTransactionComponent implements OnInit {
       'PosSalesOrderCancellationComponent': PosSalesOrderCancellationComponent,
       'SalesEstimationComponent': SalesEstimationComponent,
       'PointOfSalesOrderComponent': PointOfSalesOrderComponent,
+      'PosPurchaseDirectComponent':PosPurchaseDirectComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     }

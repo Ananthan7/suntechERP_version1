@@ -29,6 +29,8 @@ import { DxDataGridModule } from 'devextreme-angular';
 import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
 import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
 import { PointOfSalesOrderDetailsComponent } from './point-of-sales-order/point-of-sales-order-details/point-of-sales-order-details.component';
+import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-direct.component';
+import { PosPurchaseDirectDetailComponent } from './pos-purchase-direct/pos-purchase-direct-detail/pos-purchase-direct-detail.component';
 
 
 
@@ -55,8 +57,10 @@ import { PointOfSalesOrderDetailsComponent } from './point-of-sales-order/point-
     CustomDateFormat2,
     SalesEstimationComponent,
     PointOfSalesOrderComponent,
-    PointOfSalesOrderDetailsComponent
-  ],
+    PointOfSalesOrderDetailsComponent,
+    PosPurchaseDirectComponent,
+    PosPurchaseDirectDetailComponent
+    ],
   imports: [
     CommonModule,
     RetailTransactionRoutingModule,
