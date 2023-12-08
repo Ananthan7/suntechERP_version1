@@ -44,12 +44,28 @@ subscriptions: any;
   }
   
   addTableData(){
+    let length = this.tableData.length;
+    let sn = length + 1;
+    let data =  {
+      "SN": sn,
+      "CODE": "",
+      "DESCRIPTION": "",
+    };
+    this.tableData.push(data);
+  }
 
+  codedataselected(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].Code = data.target.value;
+  }
+
+  descriptiontemp(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].Description = data.target.value;
   }
   
   deleteTableData(){
-   
+    this.tableData.pop();
   }
+  
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){
