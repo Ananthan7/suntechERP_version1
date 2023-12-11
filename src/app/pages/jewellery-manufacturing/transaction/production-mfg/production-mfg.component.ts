@@ -218,6 +218,129 @@ export class ProductionMfgComponent implements OnInit {
       }
     });
   }
+  setDetailFormData(data:any){
+    // data.push({
+    //   "UNIQUEID": 0,
+    //   "SRNO": this.formDetailCount,
+    //   "DT_VOCNO": 0,
+    //   "DT_VOCTYPE": this.commonService.nullToString(this.HEADERDETAILS.voctype),
+    //   "DT_VOCDATE": this.commonService.formatDateTime(this.HEADERDETAILS.vocDate),
+    //   "DT_BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+    //   "DT_NAVSEQNO": "",
+    //   "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+    //   "JOB_NUMBER": this.commonService.nullToString(this.productiondetailsFrom.value.jobno),
+    //   "JOB_DATE": this.commonService.formatDateTime(this.currentDate),
+    //   "JOB_SO_NUMBER": this.commonService.emptyToZero(this.productiondetailsFrom.value.JOB_SO_NUMBER),
+    //   "UNQ_JOB_ID": this.commonService.emptyToZero(this.productiondetailsFrom.value.subjobno),
+    //   "JOB_DESCRIPTION": this.commonService.emptyToZero(this.productiondetailsFrom.value.design),
+    //   "UNQ_DESIGN_ID": this.commonService.emptyToZero(this.productiondetailsFrom.value.DESIGN_CODE),
+    //   "DESIGN_CODE": this.commonService.emptyToZero(this.productiondetailsFrom.value.DESIGN_CODE),
+    //   "PART_CODE": "",
+    //   "DIVCODE": "",
+    //   "PREFIX": "",
+    //   "STOCK_CODE": this.productiondetailsFrom.value.stockCode,
+    //   "STOCK_DESCRIPTION": "",
+    //   "SET_REF": "",
+    //   "KARAT_CODE": "",
+    //   "MULTI_STOCK_CODE": true,
+    //   "JOB_PCS": 0,
+    //   "GROSS_WT": this.commonService.emptyToZero(this.productiondetailsFrom.value.grossWt),
+    //   "METAL_PCS": 0,
+    //   "METAL_WT": 0,
+    //   "STONE_PCS": 0,
+    //   "STONE_WT": 0,
+    //   "LOSS_WT": 0,
+    //   "NET_WT": 0,
+    //   "PURITY": 0,
+    //   "PURE_WT": 0,
+    //   "RATE_TYPE": "",
+    //   "METAL_RATE": 0,
+    //   "CURRENCY_CODE": "",
+    //   "CURRENCY_RATE": 0,
+    //   "METAL_GRM_RATEFC": 0,
+    //   "METAL_GRM_RATELC": 0,
+    //   "METAL_AMOUNTFC": 0,
+    //   "METAL_AMOUNTLC": 0,
+    //   "MAKING_RATEFC": 0,
+    //   "MAKING_RATELC": 0,
+    //   "MAKING_AMOUNTFC": 0,
+    //   "MAKING_AMOUNTLC": 0,
+    //   "STONE_RATEFC": 0,
+    //   "STONE_RATELC": 0,
+    //   "STONE_AMOUNTFC": 0,
+    //   "STONE_AMOUNTLC": 0,
+    //   "LAB_AMOUNTFC": 0,
+    //   "LAB_AMOUNTLC": 0,
+    //   "RATEFC": 0,
+    //   "RATELC": 0,
+    //   "AMOUNTFC": 0,
+    //   "AMOUNTLC": 0,
+    //   "PROCESS_CODE": "",
+    //   "PROCESS_NAME": "",
+    //   "WORKER_CODE": "",
+    //   "WORKER_NAME": "",
+    //   "IN_DATE": "2023-10-17T12:41:20.126Z",
+    //   "OUT_DATE": "2023-10-17T12:41:20.126Z",
+    //   "TIME_TAKEN_HRS": 0,
+    //   "COST_CODE": "",
+    //   "WIP_ACCODE": "",
+    //   "STK_ACCODE": "",
+    //   "SOH_ACCODE": "",
+    //   "PROD_PROC": "",
+    //   "METAL_DIVISION": this.productiondetailsFrom.value.metalValue,
+    //   "PRICE1PER": this.productiondetailsFrom.value.price1per,
+    //   "PRICE2PER": this.productiondetailsFrom.value.price2per,
+    //   "PRICE3PER": this.productiondetailsFrom.value.price3per,
+    //   "PRICE4PER": this.productiondetailsFrom.value.price4per,
+    //   "PRICE5PER": this.productiondetailsFrom.value.price5per,
+    //   "LOCTYPE_CODE": "",
+    //   "WASTAGE_WT": this.productiondetailsFrom.value.wastage,
+    //   "WASTAGE_AMTFC": 0,
+    //   "WASTAGE_AMTLC": 0,
+    //   "PICTURE_NAME": "",
+    //   "SELLINGRATE": 0,
+    //   "LAB_ACCODE": "",
+    //   "CUSTOMER_CODE": "",
+    //   "OUTSIDEJOB": true,
+    //   "METAL_LABAMTFC": 0,
+    //   "METAL_LABAMTLC": 0,
+    //   "METAL_LABACCODE": "",
+    //   "SUPPLIER_REF": this.productiondetailsFrom.value.totalLabour,
+    //   "TAGLINES": "",
+    //   "SETTING_CHRG": this.productiondetailsFrom.value.settingChrg,
+    //   "POLISH_CHRG": this.productiondetailsFrom.value.polishChrg,
+    //   "RHODIUM_CHRG": this.productiondetailsFrom.value.rhodiumChrg,
+    //   "LABOUR_CHRG": this.productiondetailsFrom.value.labourChrg,
+    //   "MISC_CHRG": this.productiondetailsFrom.value.miscChrg,
+    //   "SETTING_ACCODE": this.productiondetailsFrom.value.settingChrgDesc,
+    //   "POLISH_ACCODE": this.productiondetailsFrom.value.polishChrgDesc,
+    //   "RHODIUM_ACCODE": this.productiondetailsFrom.value.rhodiumChrgDesc,
+    //   "LABOUR_ACCODE": this.productiondetailsFrom.value.labourChrgDesc,
+    //   "MISC_ACCODE": this.productiondetailsFrom.value.miscChrgDesc,
+    //   "WAST_ACCODE": this.productiondetailsFrom.value.wastage,
+    //   "REPAIRJOB": 0,
+    //   "PRICE1FC": this.productiondetailsFrom.value.price1fc,
+    //   "PRICE2FC": this.productiondetailsFrom.value.price2fc,
+    //   "PRICE3FC": this.productiondetailsFrom.value.price3fc,
+    //   "PRICE4FC": this.productiondetailsFrom.value.price4fc,
+    //   "PRICE5FC": this.productiondetailsFrom.value.price5fc,
+    //   "BASE_CONV_RATE": 0,
+    //   "FROM_STOCK_CODE": "",
+    //   "TO_STOCK_CODE": "",
+    //   "JOB_PURITY": 0,
+    //   "LOSS_PUREWT": 0,
+    //   "PUDIFF": 0,
+    //   "STONEDIFF": 0,
+    //   "CHARGABLEWT": 0,
+    //   "BARNO": "",
+    //   "LOTNUMBER": "",
+    //   "TICKETNO": "",
+    //   "PROD_PER": 0,
+    //   "PURITY_PER": 0,
+    //   "DESIGN_TYPE": "",
+    //   "BASE_CURR_RATE": 0
+    // })
+  }
   /*USE: detail screen form data set to save */
   setFormDataDetails(DETAIL_FORM_DATA: any) {
     console.log(DETAIL_FORM_DATA);
@@ -413,8 +536,6 @@ export class ProductionMfgComponent implements OnInit {
   }
  
   formSubmit() {
-    console.log(this.DetailScreenDataToSave,'this.DetailScreenDataToSave');
-    
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
       return;
@@ -423,7 +544,7 @@ export class ProductionMfgComponent implements OnInit {
       this.toastr.error("select all required fields");
       return;
     }
-    let API = "JobProductionMaster/InsertJobProductionMaster";
+
     let postData = {
       "MID": 0,
       "VOCTYPE": this.commonService.nullToString(this.productionFrom.value.voctype),
@@ -475,9 +596,9 @@ export class ProductionMfgComponent implements OnInit {
       "JOB_PRODUCTION_LABCHRG_DJ": this.labourChargeDetailToSave,
       "JOB_PRODUCTION_METALRATE_DJ": this.productionMetalRateToSave
     }
-    // console.log(postData,'postData submit');
+    
     let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, postData)
+      .postDynamicAPI("JobProductionMaster/InsertJobProductionMaster", postData)
       .subscribe(
         (result) => {
           if (result.response) {

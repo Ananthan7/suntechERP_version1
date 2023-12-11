@@ -165,7 +165,9 @@ export class ProductionStockDetailComponent implements OnInit {
   }
   formDetailCount: number = 0;
   formSubmit(){
-    this.setSTRNMTLdataSet();
+    // this.setSTRNMTLdataSet(); //TODO
+    console.log(this.DETAILSCREEN_DATA);
+    
     this.formDetailCount+=1
     this.STOCK_FORM_DETAILS.push({
       "UNIQUEID": 0,
@@ -180,9 +182,9 @@ export class ProductionStockDetailComponent implements OnInit {
       "JOB_DATE": this.commonService.formatDateTime(this.currentDate),
       "JOB_SO_NUMBER": this.commonService.emptyToZero(this.DETAILSCREEN_DATA.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.commonService.emptyToZero(this.DETAILSCREEN_DATA.subjobno),
-      "JOB_DESCRIPTION": "",
-      "UNQ_DESIGN_ID": "",
-      "DESIGN_CODE": "",
+      "JOB_DESCRIPTION": this.commonService.emptyToZero(this.DETAILSCREEN_DATA.design),
+      "UNQ_DESIGN_ID": this.commonService.emptyToZero(this.DETAILSCREEN_DATA.DESIGN_CODE),
+      "DESIGN_CODE": this.commonService.emptyToZero(this.DETAILSCREEN_DATA.DESIGN_CODE),
       "PART_CODE": "",
       "DIVCODE": "",
       "PREFIX": "",
@@ -289,9 +291,11 @@ export class ProductionStockDetailComponent implements OnInit {
       "BASE_CURR_RATE": 0
     })
     let stockDetailToSave:any = {}
-    stockDetailToSave.STOCK_FORM_DETAILS = this.STOCK_FORM_DETAILS
-    stockDetailToSave.STOCK_COMPONENT_GRID = this.STRNMTLdataSetToSave
-
+    //STOCK_FORM_DETAILS is only saving to API
+    stockDetailToSave.STOCK_FORM_DETAILS = this.STOCK_FORM_DETAILS;
+    stockDetailToSave.STOCK_COMPONENT_GRID = this.STRNMTLdataSetToSave;
+    console.log(this.STOCK_FORM_DETAILS,'this.STOCK_FORM_DETAILS');
+    
     this.close(stockDetailToSave);
   }
 
