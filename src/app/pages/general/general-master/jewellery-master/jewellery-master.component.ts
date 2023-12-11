@@ -18,7 +18,7 @@ import { StoneDetailsComponent } from './stone-details/stone-details.component';
 })
 export class JewelleryMasterComponent implements OnInit {
 
-
+  currentDate = new Date();
   divisionMS: any = 'ID';
   columnheaderMetailDetails:any[]=['Div','Karat','Stock Code','Gross Wt','Purity','Pure Wt','Rate Type','Metal Rate','Rate Gms','Amount','Lab Rate','Lab Amount','Markup%','Sale Value'];
   columnhead:any[] = ['Division','Gross Wt','Karat','Rate Type','Rate','Amount..','Amount','Metal Labour','Rate/Gram','MetalPer','Color'];
