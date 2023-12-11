@@ -12,12 +12,11 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ProcessTransferDetailsComponent implements OnInit {
   @Input() content!: any;
-
   divisionMS: any = 'ID';
   tableData: any[] = [];
   metalDetailData: any[] = [];
   jobNumberDetailData: any[] = [];
-  ProcessTypeList: any[] = [{type: 'GEN'}];
+  ProcessTypeList: any[] = [{ type: 'GEN' }];
   userName = this.comService.userName;
   branchCode: String = this.comService.branchCode;
   yearMonth: String = this.comService.yearSelected;
@@ -159,20 +158,72 @@ export class ProcessTransferDetailsComponent implements OnInit {
     METAL_ToPureWt: [''],
     METAL_ScrapPureWt: [''],
     METAL_BalPureWt: [''],
+    
   });
+
 
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService,
-  ) { }
+  ) {
+    // this.processTransferdetailsForm = this.formBuilder.group({
+    //   startdate: ['', Validators.required],
+    //   enddate: ['', Validators.required]
+    // }, { validators: this.dateValidator });
+
+  }
+
+  // dateValidator(formGroup: FormGroup) {
+  //   const startdate = formGroup.get('startdate').value;
+  //   const enddate = formGroup.get('enddate').value;
+
+  //   if (startdate && enddate && startdate > enddate) {
+  //     return { dateError: true };
+  //   }
+
+  //   return null;
+  // }
+
+  // updateMinDate() {
+  //   const startDateControl = this.processTransferdetailsForm.get('startdate');
+  //   const endDateControl = this.processTransferdetailsForm.get('enddate');
+
+  //   if (startDateControl.value) {
+  //     endDateControl.setValidators([Validators.required]);
+  //     endDateControl.updateValueAndValidity();
+  //     endDateControl.setValidators([Validators.required, this.dateValidator.bind(this.processTransferdetailsForm)]);
+  //     endDateControl.updateValueAndValidity();
+
+  //     const startDate = new Date(startDateControl.value);
+  //     this.processTransferdetailsForm.get('endDate').setValidators([Validators.required, Validators.min(startDate)]);
+  //     this.processTransferdetailsForm.get('endDate').updateValueAndValidity();
+  //   } else {
+  //     endDateControl.clearValidators();
+  //     endDateControl.updateValueAndValidity();
+  //   }
+  // }
+
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.setAllInitialValues() //set all values from parent to child
+    this.processTransferdetailsForm.controls['enddate'].disable();
   }
+  onStartDateChange() {
+
+    // Enable end date input if start date has a value
+    // You can also set some default value or logic here if needed
+    this.processTransferdetailsForm.controls['enddate'].enable();
+  
+}
+  // changeEnddate(event: any) {
+  //   console.log(event);
+  //   this.processTransferdetailsForm.controls['enddate'].setValue("");
+  // }
+
   setAllInitialValues() {
     let dataFromParent = this.content[0].PROCESS_FORMDETAILS
     if (!dataFromParent) return
@@ -190,6 +241,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.GrossWeightTo.setValue(dataFromParent.GrossWeightTo)
     this.processTransferdetailsForm.controls.approvedby.setValue(dataFromParent.approvedby)
     this.processTransferdetailsForm.controls.startdate.setValue(dataFromParent.startdate)
+    this.processTransferdetailsForm.controls.enddate.setValue(dataFromParent.enddate)
     this.processTransferdetailsForm.controls.JOB_DATE.setValue(dataFromParent.JOB_DATE)
     this.processTransferdetailsForm.controls.DESIGN_CODE.setValue(dataFromParent.DESIGN_CODE)
     this.processTransferdetailsForm.controls.SEQ_CODE.setValue(dataFromParent.SEQ_CODE)
@@ -208,6 +260,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.DIVCODE.setValue(dataFromParent.DIVCODE)
     this.processTransferdetailsForm.controls.METALSTONE.setValue(dataFromParent.METALSTONE)
   }
+  
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
     if (event.target.value == '') return
@@ -235,7 +288,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
             this.processTransferdetailsForm.controls.PROCESSDESC.setValue(data[0].PROCESSDESC)
             this.processTransferdetailsForm.controls.WORKERDESC.setValue(data[0].WORKERDESC)
             this.processTransferdetailsForm.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
-            if(data[0].DESIGN_TYPE != '' && (data[0].DESIGN_TYPE).toUpperCase() == 'METAL') this.designType = 'METAL';
+            if (data[0].DESIGN_TYPE != '' && (data[0].DESIGN_TYPE).toUpperCase() == 'METAL') this.designType = 'METAL';
 
             this.processTransferdetailsForm.controls.DESIGN_TYPE.setValue(this.designType)
             this.subJobNumberValidate()
@@ -272,7 +325,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.processTransferdetailsForm.controls.processFrom.setValue(data[0].PROCESS)
           this.processTransferdetailsForm.controls.workerFrom.setValue(data[0].WORKER)
           this.processTransferdetailsForm.controls.MetalWeightFrom.setValue(
-          this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
+            this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.processTransferdetailsForm.controls.MetalPcsFrom.setValue(data[0].PCS)
           this.processTransferdetailsForm.controls.GrossWeightFrom.setValue(data[0].NETWT)
           this.processTransferdetailsForm.controls.StoneWeightFrom.setValue(data[0].STONE)
@@ -297,8 +350,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   //stockCode Scrap Validate
-  stockCodeScrapValidate(){
-    if(this.comService.nullToString(this.processTransferdetailsForm.value.stockCode == '')) return
+  stockCodeScrapValidate() {
+    if (this.comService.nullToString(this.processTransferdetailsForm.value.stockCode == '')) return
     let postData = {
       "SPID": "044",
       "parameter": {
@@ -312,7 +365,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           this.processTransferdetailsForm.controls.MAIN_STOCK_CODE.setValue(data[0].MAIN_STOCK_CODE)
           this.processTransferdetailsForm.controls.SCRAP_PURITY.setValue(data[0].PURITY)
-          
+
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -323,12 +376,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   /**USE: fillStoneDetails grid data */
-  private fillStoneDetails():void {
+  private fillStoneDetails(): void {
     let postData = {
       "SPID": "042",
       "parameter": {
         strJobNumber: this.processTransferdetailsForm.value.jobno,
-        strUnq_Job_Id: this.processTransferdetailsForm.value.subjobno,             
+        strUnq_Job_Id: this.processTransferdetailsForm.value.subjobno,
         strProcess_Code: this.processTransferdetailsForm.value.processFrom,
         strWorker_Code: this.processTransferdetailsForm.value.workerFrom,
         strBranch_Code: this.branchCode
@@ -356,12 +409,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  formatMetalDetailDataGrid(){
-    this.metalDetailData.forEach((element:any) => {
+  formatMetalDetailDataGrid() {
+    this.metalDetailData.forEach((element: any) => {
       element.SETTED_FLAG = false
-      element.GROSS_WT = this.comService.decimalQuantityFormat(element.GROSS_WT,'METAL')
-      element.STONE_WT = this.comService.decimalQuantityFormat(element.STONE_WT,'STONE')
-      element.PURITY = this.comService.decimalQuantityFormat(element.PURITY,'PURITY')
+      element.GROSS_WT = this.comService.decimalQuantityFormat(element.GROSS_WT, 'METAL')
+      element.STONE_WT = this.comService.decimalQuantityFormat(element.STONE_WT, 'STONE')
+      element.PURITY = this.comService.decimalQuantityFormat(element.PURITY, 'PURITY')
     });
   }
   /**USE: barcode Number Validate API call */
@@ -462,7 +515,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   /**USE: SUBMIT detail */
   formSubmit() {
-    let detailDataToParent:any = {
+    let detailDataToParent: any = {
       PROCESS_FORMDETAILS: [],
       METAL_DETAIL_GRID: [],
       JOB_VALIDATE_DATA: []
@@ -475,16 +528,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.close(detailDataToParent)//USE: passing Detail data to header screen on close
   }
   /**USE: to calculate gain detail */
-  private calculateGain(){
+  private calculateGain() {
     let formValues = this.processTransferdetailsForm.value;
-    let gainGrWt = this.calculateGainGrWt(formValues.METAL_GrossWeightTo,formValues.METAL_GrossWeightFrom,formValues.METAL_ScrapGrWt)
+    let gainGrWt = this.calculateGainGrWt(formValues.METAL_GrossWeightTo, formValues.METAL_GrossWeightFrom, formValues.METAL_ScrapGrWt)
     this.processTransferdetailsForm.controls.METAL_GainGrWt.setValue(gainGrWt)
-    let gainPureWt = this.calculateGainGrWt(formValues.METAL_ToPureWt,formValues.METAL_FromPureWt,formValues.METAL_ScrapPureWt);
+    let gainPureWt = this.calculateGainGrWt(formValues.METAL_ToPureWt, formValues.METAL_FromPureWt, formValues.METAL_ScrapPureWt);
     this.processTransferdetailsForm.controls.METAL_GainPureWt.setValue(gainPureWt)
   }
-  calculateGainGrWt(a:any,b:any,c:any){
-    if(!Number(a) && !Number(a) && !Number(a)) return 0
-    return (this.comService.emptyToZero(a)-(this.comService.decimalQuantityFormat((Number(b)+Number(c)),'METAL')))
+  calculateGainGrWt(a: any, b: any, c: any) {
+    if (!Number(a) && !Number(a) && !Number(a)) return 0
+    return (this.comService.emptyToZero(a) - (this.comService.decimalQuantityFormat((Number(b) + Number(c)), 'METAL')))
   }
   setFormValues() {
     if (!this.content) return

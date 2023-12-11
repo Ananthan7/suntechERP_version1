@@ -213,11 +213,33 @@ karatCodeSelected(e:any){
 }
 
 addTableData(){ 
-  
+  // let data = {
+  //   "Job_Code": "str",
+  //   "Unique_job_ID": "",
+  //   "Design_Code": "",
+  //   "Gross_Weight": "",
+  //   "Metal_Weight": 0,
+  //   "Stone_Weight": 0,
+  //   "RCVD_Gross_Weight":0,
+  //   "Karat Code": "",
+  //   "Purity": 0,
+  //   "Pure_Weight": 0,
+  //   "Metal_Color": 0,
+  //   "RCVD_Pure_Weight": "",
+  //   "Stock_Code": "",
+  //   "Pieces": 0,
+  //   "Job_Pcs": "",
+  //   "Loss_Wt": 0,
+  //   "Loss_Pure": 0,
+  // }
+  let length = this.tableData.length;
+  let srno = length + 1;
+  let data =  {};
+  this.tableData.push(data);
 }
 
 deleteTableData(){
- 
+  this.tableData.pop();
 }
 
  removedata(){
