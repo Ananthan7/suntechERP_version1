@@ -70,6 +70,7 @@ export class AddPosComponent implements OnInit {
 
   selectedTabIndex = 0;
 
+  showBoarding: boolean = false;
 
   private onChangeCallback: (_: any) => void = noop;
 
@@ -456,6 +457,7 @@ export class AddPosComponent implements OnInit {
   genderList: any = [];
 
   enableJawahara: boolean = false;
+  posIdNoCompulsory: boolean = false;
 
   _exchangeItemchange: any = {};
   srCustCode: any = ''; // sales return customer code
@@ -523,6 +525,7 @@ export class AddPosComponent implements OnInit {
       fcn_customer_id_number: ['', Validators.required],
       fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
       fcn_customer_code: ['',],
+      fcn_customer_exp_date: ['',],
     });
 
     this.vocDataForm = this.formBuilder.group({
@@ -639,7 +642,7 @@ export class AddPosComponent implements OnInit {
       fcn_cust_detail_state: ['', [this.autoCompleteValidator(() => this.stateMaster, 'CODE')]],
 
       fcn_mob_code: ['', [Validators.required]],
-
+      fcn_customer_exp_date: ['',],
     });
 
     /** Start Receipt forms  */
@@ -720,6 +723,12 @@ export class AddPosComponent implements OnInit {
         this.comFunc.allCompanyParams = data;
         this.comFunc.setCompParaValues();
         this.enableJawahara = this.comFunc.enableJawahara;
+        this.posIdNoCompulsory = this.comFunc.posIdNoCompulsory;
+        if(this.posIdNoCompulsory){
+          const validations = [Validators.required];
+          this.addValidationsForForms(this.customerDataForm, 'fcn_customer_exp_date', validations);
+          this.addValidationsForForms(this.customerDetailForm, 'fcn_customer_exp_date', validations);
+        }
         this.getArgs();
       } else {
         this.getArgs();
@@ -1037,6 +1046,14 @@ export class AddPosComponent implements OnInit {
             this.openDialog('Warning', 'Pending for approval', true);
           }
         /**end set customer data */
+
+        this.boardingPassForm.controls.passDetails.setValue( retailSaleData.BOARDINGPASS   );
+        this.boardingPassForm.controls.flightNo.setValue( retailSaleData.FLIGHTNO   );
+        this.boardingPassForm.controls.boardingDate.setValue( retailSaleData.BOARDINGDATE   );
+        this.boardingPassForm.controls.boardingTo.setValue( retailSaleData.BOARDINGFROM   );
+        this.boardingPassForm.controls.boardingTo.setValue( retailSaleData.BOARDINGFROM   );
+        this.boardingPassForm.controls.lifeTimeWarr.setValue( retailSaleData.LIFETIMEWARRANTY   );
+        this.boardingPassForm.controls.serviceInv.setValue( retailSaleData.SERVICE_INVOICE   );
 
         /**start set line item*/
         if (retailSaleData != null && retailSaleData.RetailDetails != null)
@@ -1898,6 +1915,9 @@ export class AddPosComponent implements OnInit {
         this.customerDetailForm.controls.fcn_cust_detail_idType.setValue(
           this.customerDataForm.value.fcn_customer_id_type
         );
+        this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+          this.customerDataForm.value.fcn_customer_exp_date
+        );
         setTimeout(() => {
           if (custForm == true)
             this.renderer.selectRootElement('#fcn_customer_detail_name')?.focus();
@@ -2465,6 +2485,12 @@ export class AddPosComponent implements OnInit {
         control.markAsTouched();
       });
 
+      
+      if(this.posIdNoCompulsory && (this.customerDetailForm.value.fcn_customer_exp_date < this.currentDate)){
+        this.snackBar.open('Invalid Expiry Date', 'OK');
+        return;
+      }
+      
       if (!this.customerDetailForm.invalid) {
 
         const posCustomer = {
@@ -6549,6 +6575,15 @@ export class AddPosComponent implements OnInit {
       control.markAsTouched();
     });
 
+    // console.log('==================fcn_customer_exp_date,currentDate==================');
+    //   console.log(this.customerDataForm.value.fcn_customer_exp_date, this.currentDate);
+    //   console.log('====================================');
+
+    if(this.posIdNoCompulsory && (this.customerDataForm.value.fcn_customer_exp_date < this.currentDate)){
+      this.snackBar.open('Invalid Expiry Date', 'OK');
+      return;
+    }
+
     if (
       !this.vocDataForm.invalid &&
       this.customerDataForm.value.fcn_customer_mobile != '' &&
@@ -8917,14 +8952,14 @@ export class AddPosComponent implements OnInit {
       RSLOGINMID: '0',
       TRAYNREFUND: false,
       TRAYNREFUNDDATE: this.dummyDate, //need
-      SERVICE_INVOICE: false,
+      SERVICE_INVOICE:  this.boardingPassForm.value.serviceInv || false,
       GJVREFERENCE: '',
       GJVMID: 0, //need
       holdbarcode: false,
       PROMO_CODE: '',
       VATAMOUNTFCROUND: 0,
       VATAMOUNTFCROUNDCC: 0,
-      LIFETIMEWARRANTY: false,
+      LIFETIMEWARRANTY: this.boardingPassForm.value.lifeTimeWarr || false,
       SALESORDER_VALIDITYDATE: this.dummyDate, //need
       EmiratesSkywardsMile: false,
       ONLINERATE: false,
@@ -8935,11 +8970,11 @@ export class AddPosComponent implements OnInit {
       VoucherRedeemed: '',
       QRCODEIMAGE: '',
       QRCODEVALUE: '',
-      BOARDINGPASS: '',
+      BOARDINGPASS: this.boardingPassForm.value.passDetails || '',
       WITHOUTVAT: false,
-      FLIGHTNO: '',
-      BOARDINGFROM: '',
-      BOARDINGDATE: this.dummyDate, //need
+      FLIGHTNO: this.boardingPassForm.value.flightNo || '',
+      BOARDINGFROM:  this.boardingPassForm.value.boardingTo || '',
+      BOARDINGDATE:this.boardingPassForm.value.boardingDate || this.dummyDate, //need
       // new values
       CITY:
         this.customerDetailForm.value.fcn_cust_detail_city ||
@@ -9557,11 +9592,11 @@ export class AddPosComponent implements OnInit {
       QRCODEIMAGE: '',
       QRCODEVALUE: '',
       CERTIFICATEPRINTED: 0,
-      BOARDINGPASS: '',
+      BOARDINGPASS:   '',
       WITHOUTVAT: false,
-      FLIGHTNO: '',
+      FLIGHTNO:   '',
       BOARDINGFROM: '',
-      BOARDINGDATE: this.dummyDate, //need
+      BOARDINGDATE:  this.dummyDate, 
       BOOKVOCNO: '',
 
       CITY:

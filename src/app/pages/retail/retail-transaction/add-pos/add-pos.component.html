@@ -623,6 +623,40 @@
               </button>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-md-2">
+              <mat-form-field>
+                <mat-label>Expiry Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="expDate"
+                  name="fcn_customer_exp_date"
+                  formControlName="fcn_customer_exp_date"
+                  placeholder="DD/MM/YYYY"
+                  [readonly]="viewOnly"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="expDate"
+                ></mat-datepicker-toggle>
+                <mat-datepicker
+                  [startAt]="currentDate"
+                  #expDate
+                ></mat-datepicker>
+
+                <mat-error
+                  *ngIf="
+                    customerDataForm.controls.fcn_customer_exp_date.hasError(
+                      'required'
+                    )
+                  "
+                >
+                  Expiry date is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
         </form>
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
@@ -1164,8 +1198,14 @@
             </div>
           </div>
 
-          <div class="col-md-6" *ngIf="enableJawahara">
-            <div class="card m-t-10">
+          <!-- <div class="col-md-6" *ngIf="enableJawahara"> -->
+          <div class="col-md-6">
+            <div class="row">
+              <mat-checkbox color="primary" [(ngModel)]="showBoarding"
+                >Boarding Pass Details</mat-checkbox
+              >
+            </div>
+            <div class="card m-t-10" *ngIf="showBoarding">
               <div class="card-header">
                 <b>Boarding Pass Details</b>
               </div>
@@ -1266,16 +1306,20 @@
                       </mat-form-field>
 
                       <div class="row">
-                        <mat-checkbox color="primary" formControlName="serviceInv"
+                        <mat-checkbox
+                          color="primary"
+                          formControlName="serviceInv"
                           >Service Invoice</mat-checkbox
                         >
                       </div>
                       <div class="row">
-                        <mat-checkbox color="primary"  formControlName="lifeTimeWarr"
+                        <mat-checkbox
+                          color="primary"
+                          formControlName="lifeTimeWarr"
                           >Life Time Warranty</mat-checkbox
                         >
                       </div>
-                      <div class="row">
+                      <!-- <div class="row">
                         <div class="col-md-6">
                           <button
                           class="rounded"
@@ -1295,19 +1339,18 @@
                             Boarding Pass Details
                           </button>
                         </div>
-                      </div>
+                      </div> -->
 
                       <div class="text-center">
-
                         <button
-                        class="mt-2"
-                        mat-flat-button
-                        color="primary"
-                        [disabled]="viewOnly"
+                          class="mt-2"
+                          mat-flat-button
+                          color="primary"
+                          [disabled]="viewOnly"
                         >
-                        Get Customer Details
-                      </button>
-                    </div>
+                          Get Customer Details
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -1535,7 +1578,7 @@
             </div>
           </div>
 
-          <div class="col-md-6 col-xl-6" (click)="printInvoice()">
+          <div class="col-md-6 col-xl-6" (click)=" this.viewOnly || this.editOnly ? printInvoice() : ''">
             <!-- *ngIf="!viewOnly" -->
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
@@ -1543,7 +1586,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-xl-6" (click)="sendToEmail()">
+          <div class="col-md-6 col-xl-6 mt-2" (click)="this.viewOnly || this.editOnly ? sendToEmail(): '' ">
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
                 <i class="fa fa-print"></i> <span> Send Email</span>
@@ -3679,6 +3722,37 @@
                   formControlName="fcn_cust_detail_company"
                   [readonly]="viewOnly"
                 />
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <mat-form-field>
+                <mat-label>Expiry Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="expDateCust"
+                  name="fcn_customer_exp_date"
+                  formControlName="fcn_customer_exp_date"
+                  placeholder="DD/MM/YYYY"
+                  [readonly]="viewOnly"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="expDateCust"
+                ></mat-datepicker-toggle>
+                <mat-datepicker
+                  [startAt]="currentDate"
+                  #expDateCust
+                ></mat-datepicker>
+
+                <mat-error
+                  *ngIf="
+                  customerDetailForm.controls.fcn_customer_exp_date.hasError(
+                      'required'
+                    )
+                  "
+                >
+                  Expiry date is <strong>required</strong>
+                </mat-error>
               </mat-form-field>
             </div>
           </div>

@@ -35,6 +35,7 @@ export class CommonServiceService {
   popMetalValueOnNet: any
   FormatCount: any;
   enableJawahara: boolean = false;
+  posIdNoCompulsory: boolean = false;
 
   public allMessageBoxData: any;
   public allCompanyParams: any;
@@ -301,6 +302,9 @@ export class CommonServiceService {
       // for jawahara
       if (data.PARAMETER == 'SCRAPMGMTMODULE') {
         this.enableJawahara = data.PARAM_VALUE.toString() == '1' ? true : false;
+      }
+      if (data.PARAMETER == 'POSIDNOCOMPULSORY') {
+        this.posIdNoCompulsory = data.PARAM_VALUE.toString() == '1' ? true : false;
       }
       if (data.Parameter == 'POSKARATRATECHANGE') {
         this.posKARATRATECHANGE = data.Param_Value;
