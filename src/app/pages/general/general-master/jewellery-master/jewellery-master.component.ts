@@ -18,7 +18,7 @@ import { StoneDetailsComponent } from './stone-details/stone-details.component';
 })
 export class JewelleryMasterComponent implements OnInit {
 
-  currentDate = new Date();
+
   divisionMS: any = 'ID';
   columnheaderMetailDetails:any[]=['Div','Karat','Stock Code','Gross Wt','Purity','Pure Wt','Rate Type','Metal Rate','Rate Gms','Amount','Lab Rate','Lab Amount','Markup%','Sale Value'];
   columnhead:any[] = ['Division','Gross Wt','Karat','Rate Type','Rate','Amount..','Amount','Metal Labour','Rate/Gram','MetalPer','Color'];
@@ -33,7 +33,9 @@ export class JewelleryMasterComponent implements OnInit {
   currentDate = new FormControl(new Date());
   isDisplayed: boolean = false;
   disabled = true;
+  isdisabled : boolean = true;
   checked = true;
+  
  
   constructor(
     private activeModal: NgbActiveModal,
@@ -46,15 +48,21 @@ export class JewelleryMasterComponent implements OnInit {
   ) { 
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+    
   }
  
   ngOnInit(): void {
+    
   }
+
+
 
   showHideText() {
     this.isDisplayed = !this.isDisplayed;
     this.disabled = !this.disabled;
   }
+
+
 
   openenteraddmetaldetails() {
     const modalRef: NgbModalRef = this.modalService.open(EnterMetalDetailsComponent, {
@@ -135,7 +143,7 @@ export class JewelleryMasterComponent implements OnInit {
     certificateby1:[''],
     certdate1:[new Date(),''],
     Type:[''],
-    diamondsPcs:[''],
+    diamondsPcs: [''],
     diamondsCarat:[''],
     diamondsGrams:[''],
     diamondsFC:[''],
@@ -202,6 +210,7 @@ export class JewelleryMasterComponent implements OnInit {
   removeData(){
 
   }
+  
 
   formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -1157,3 +1166,9 @@ export class JewelleryMasterComponent implements OnInit {
     });
   }
 }
+
+
+function disable(): import("@angular/forms").AbstractControl {
+  throw new Error('Function not implemented.');
+}
+
