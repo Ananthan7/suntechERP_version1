@@ -18,7 +18,7 @@ export class CostCentreMetalComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
-  columnhead:any[] = ['Branch','Opening' ,'Purchase','Purchase','Sales (W)','Sales Return','Sales (Return)','Sales Return','Branch','Branch','Closing','Purchase','Imppr'];
+  columnhead:any[] = ['UNIQUED_ID','COST_CODE' ,'TYPE','BRANCH_CODE','ADJUSTMENT','SALES','SALES RETURN','PURCHASE','PURCHASE RETURN','STONE VALUE','STONE DIFF','PURITY DIFF','BRANCH TRANSFERIN','BRANCH TRANSFERIN OUT','MANUFACTURING','OPEN ST'];
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,

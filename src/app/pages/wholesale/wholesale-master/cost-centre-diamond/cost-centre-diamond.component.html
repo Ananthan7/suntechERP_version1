@@ -86,13 +86,28 @@
         </div>
         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
             <mat-tab label="General">
-                <div class="row mt-2">
-                    <div class="col-md-3 d-flex mb-2">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" 
-                        (addClick)="openCostCentreDiamond()">
-                        </menu-buttons>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row mt-2">
+                                <div class="col-md-3 d-flex mb-2">
+                                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" 
+                                    (addClick)="openCostCentreDiamond()">
+                                    </menu-buttons>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 mb-2 pt-2">
+                            <button type="button" class="btn btn-outline-primary del-btn">
+                                  All Branches
+                                </button>
+                        </div>
+
                     </div>
                 </div>
+                
+              
                 <div class="row">
                     <div class="col-md-12">
                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
@@ -101,6 +116,7 @@
                             </dxo-editing>
                             <dxo-selection mode="multiple"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
+                          
 
                             <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
                                 [allowEditing]="true" alignment="center" backgroundcolor="#000">
