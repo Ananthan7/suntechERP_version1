@@ -17,9 +17,11 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Item Code :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="itemcode" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)">
+                    </master-search>
                   </div>
                   <div class="col-md-4">
                     <div class="form-check">
@@ -33,9 +35,11 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Design :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="design" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="designCodeData" (newRowClick)="designSelected($event)">
+                    </master-search>
                   </div>
                   <div class="col-md-4">
                     <div class="form-check">
@@ -73,99 +77,127 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Cost Center :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="costcenter" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="costcenterCodeData" (newRowClick)="costcenterSelected($event)">
+                    </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Country :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="country" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="countryCodeData" (newRowClick)="countrySelected($event)">
+                    </master-search>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Type :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="type" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="typeCodeData" (newRowClick)="typeSelected($event)">
+                    </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Vendor :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="vendor" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="vendorCodeData" (newRowClick)="vendorSelected($event)">
+                    </master-search>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Category :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="category" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="categoryCodeData" (newRowClick)="categorySelected($event)">
+                    </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Sub Cat :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="subcategory" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="subcategoryCodeData" (newRowClick)="subcategorySelected($event)">
+                    </master-search>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Brand :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="brand" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="brandCodeData" (newRowClick)="brandSelected($event)">
+                    </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Color :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="color" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="colorCodeData" (newRowClick)="colorSelected($event)">
+                    </master-search>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Fluorescence :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="fluorescence" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="fluorescenceCodeData" (newRowClick)="fluorescenceSelected($event)">
+                    </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Clarity :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="clarity" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="clarityCodeData" (newRowClick)="claritySelected($event)">
+                    </master-search>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Range :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="range" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="rangeCodeData" (newRowClick)="rangeSelected($event)">
+                    </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Style :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="style" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="styleCodeData" (newRowClick)="styleSelected($event)">
+                    </master-search>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">HSN Code :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="HSNcode" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="HSNcodeCodeData" (newRowClick)="HSNcodeSelected($event)">
+                    </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Time :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="time" />
                     </mat-form-field>
+                    <master-search [MasterSearchData]="timeCodeData" (newRowClick)="timeSelected($event)">
+                    </master-search>
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -561,7 +593,13 @@
                 </div>
                 <div class="row mt-2">
                   <div class="col-md-8">
-                    <div class="d-flex justify-content-start text-start">
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                            (addClick)="addTableData()" (deleteClick)="deleteTableData()">
+                        </menu-buttons>
+                        <!-- <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        (addClick)="addTableDataStoneDetails()" (deleteClick)="deleteTableDataStoneDetails()">
+                    </menu-buttons> -->
+                    <!-- <div class="d-flex justify-content-start text-start">
                       <div class="p-1 bd-highlight">
                         <button type="button" class="btn btn-primary add-btn">
                           Apply
@@ -572,7 +610,7 @@
                           Discard
                         </button>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <div class="row mt-2">
@@ -655,6 +693,13 @@
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
                       </dxi-column>
                     </dx-data-grid>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-md-8">
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                            (addClick)="addTableDataStoneDetails()" (deleteClick)="deleteTableDataStoneDetails()">
+                        </menu-buttons>
                   </div>
                 </div>
               </mat-tab>
