@@ -14,12 +14,15 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./melting-process-details.component.scss']
 })
 export class MeltingProcessDetailsComponent implements OnInit {
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
+  designType: string = 'DIAMOND';
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  metalDetailData: any[] = [];
   vocMaxDate = new Date();
+  jobNumberDetailData: any[] = [];
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
   jobnoCodeData: MasterSearchModel = {
@@ -33,9 +36,43 @@ export class MeltingProcessDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  jobnoCodeSelected(e:any){
+  jobNoSearch: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  processMasterSearch: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  workerMasterSearch: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  jobnoCodeSelected(e: any) {
     console.log(e);
     this.meltingprocessdetailsForm.controls.jobno.setValue(e.job_number);
+    this.jobNumberValidate({ target: { value: e.job_number } })
   }
 
   locationCodeData: MasterSearchModel = {
@@ -49,7 +86,7 @@ export class MeltingProcessDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  locationCodeSelected(e:any){
+  locationCodeSelected(e: any) {
     console.log(e);
     this.meltingprocessdetailsForm.controls.location.setValue(e.LOCATION_CODE);
   }
@@ -76,40 +113,42 @@ export class MeltingProcessDetailsComponent implements OnInit {
 
 
   meltingprocessdetailsForm: FormGroup = this.formBuilder.group({
-    jobno : [''],
-    jobdes : [''],
-    jobpurity : [''],
-    process : [''],
-    processdes : [''],
-    worker : [''],
-    workerdes : [''],
-    treeno : [''],
-    waxweight : [''],
-    location : [''],
-    stockcode : [''],
-    stockcodedes : [''],
-    tostockcode : [''],
-    grossweight : [''],
-    stoneweight : [''],
-    pcs : [''],
-    netweight : [''],
-    purity : [''],
-    purityper : [''],
-    pureweight : [''],
-    purediff : [''],
-    remark : [''],
-    lossweight : [''],
-    lotno : [''],
-    barno : [''],
-    ticketno : [''],
+    jobno: [''],
+    subjobno: [''],
+    subJobDescription: [''],
+    jobdes: [''],
+    jobpurity: [''],
+    process: [''],
+    processdes: [''],
+    worker: [''],
+    workerdes: [''],
+    treeno: [''],
+    waxweight: [''],
+    location: [''],
+    stockcode: [''],
+    stockcodedes: [''],
+    tostockcode: [''],
+    grossweight: [''],
+    stoneweight: [''],
+    pcs: [''],
+    netweight: [''],
+    purity: [''],
+    purityper: [''],
+    pureweight: [''],
+    purediff: [''],
+    remark: [''],
+    lossweight: [''],
+    lotno: [''],
+    barno: [''],
+    ticketno: [''],
     tgold: [''],
     sliver: [''],
 
   });
 
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -117,7 +156,7 @@ export class MeltingProcessDetailsComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'JobMeltingProcessDJ/InsertJobMeltingProcessDJ'
     let postData = {
       "UNIQUEID": 0,
@@ -186,21 +225,21 @@ export class MeltingProcessDetailsComponent implements OnInit {
   setFormValues() {
   }
 
-  update(){
+  update() {
     if (this.meltingprocessdetailsForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-    let API = 'DiamondDismantle/UpdateDiamondDismantle'+ this.meltingprocessdetailsForm.value.branchCode + this.meltingprocessdetailsForm.value.voctype + this.meltingprocessdetailsForm.value.vocno + this.meltingprocessdetailsForm.value.yearMonth;
+    let API = 'DiamondDismantle/UpdateDiamondDismantle' + this.meltingprocessdetailsForm.value.branchCode + this.meltingprocessdetailsForm.value.voctype + this.meltingprocessdetailsForm.value.vocno + this.meltingprocessdetailsForm.value.yearMonth;
     let postData = {
 
-        
+
     }
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -221,7 +260,7 @@ export class MeltingProcessDetailsComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       Swal.fire({
@@ -246,7 +285,7 @@ export class MeltingProcessDetailsComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'DiamondDismantle/DeleteDiamondDismantle/'+ this.meltingprocessdetailsForm.value.branchCode + this.meltingprocessdetailsForm.value.voctype + this.meltingprocessdetailsForm.value.vocno + this.meltingprocessdetailsForm.value.yearMonth
+        let API = 'DiamondDismantle/DeleteDiamondDismantle/' + this.meltingprocessdetailsForm.value.branchCode + this.meltingprocessdetailsForm.value.voctype + this.meltingprocessdetailsForm.value.vocno + this.meltingprocessdetailsForm.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -287,4 +326,104 @@ export class MeltingProcessDetailsComponent implements OnInit {
       }
     });
   }
+
+
+  formatMetalDetailDataGrid() {
+    this.metalDetailData.forEach((element: any) => {
+      element.SETTED_FLAG = false
+      element.GROSS_WT = this.comService.decimalQuantityFormat(element.GROSS_WT, 'METAL')
+      element.STONE_WT = this.comService.decimalQuantityFormat(element.STONE_WT, 'STONE')
+      element.PURITY = this.comService.decimalQuantityFormat(element.PURITY, 'PURITY')
+    });
+  }
+  subJobNumberValidate(event?: any) {
+    let postData = {
+      "SPID": "040",
+      "parameter": {
+        'strUNQ_JOB_ID': this.meltingprocessdetailsForm.value.subjobno,
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
+      }
+    }
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          this.meltingprocessdetailsForm.controls.process.setValue(data[0].PROCESS)
+          this.meltingprocessdetailsForm.controls.worker.setValue(data[0].WORKER)
+          this.meltingprocessdetailsForm.controls.stockcode.setValue(data[0].STOCK_CODE)
+          this.meltingprocessdetailsForm.controls.pureweight.setValue(data[0].PUREWT)
+          this.meltingprocessdetailsForm.controls.pcs.setValue(data[0].PCS)
+          this.meltingprocessdetailsForm.controls.workerdes.setValue(data[0].WORKERDESC)
+          this.meltingprocessdetailsForm.controls.processdes.setValue(data[0].PROCESSDESC)
+          this.meltingprocessdetailsForm.controls.grossweight.setValue(data[0].NETWT)
+          this.meltingprocessdetailsForm.controls.purity.setValue(data[0].PURITY)
+          this.meltingprocessdetailsForm.controls.netweight.setValue(data[0].NETWT)
+          this.meltingprocessdetailsForm.controls.MetalWeightFrom.setValue(
+            this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
+
+          this.meltingprocessdetailsForm.controls.StoneWeight.setValue(data[0].STONE)
+
+          this.meltingprocessdetailsForm.controls.PURITY.setValue(data[0].PURITY)
+          this.meltingprocessdetailsForm.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
+          this.meltingprocessdetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
+          // this.stockCodeScrapValidate()
+          // this.meltingprocessdetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
+          // this.meltingprocessdetailsForm.controls.METALSTONE.setValue(data[0].METALSTONE)
+          // this.meltingprocessdetailsForm.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
+          // this.meltingprocessdetailsForm.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
+          // this.meltingprocessdetailsForm.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
+          // this.fillStoneDetails()
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+
+
+
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strJobNumber': this.comService.nullToString(event.target.value),
+        'strCurrenctUser': this.comService.nullToString(this.userName)
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.jobNumberDetailData = data
+            this.meltingprocessdetailsForm.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
+            this.meltingprocessdetailsForm.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
+
+            this.subJobNumberValidate()
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 }
+

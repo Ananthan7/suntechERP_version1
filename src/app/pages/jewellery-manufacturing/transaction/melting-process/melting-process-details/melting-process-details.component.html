@@ -20,7 +20,7 @@
                                     <input type="text" matInput formControlName="jobno" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="jobnoCodeData"
-                                    (newRowClick)="jobnoCodeSelected($event)"></master-search>&nbsp;
+                                    (newRowClick)="jobnoCodeSelected($event)"></master-search>&nbsp;    
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="jobdes" />
                                 </mat-form-field>
@@ -212,8 +212,8 @@
                                     <input type="text" matInput formControlName="location" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="locationCodeData"
-                                    (newRowClick)="locationCodeSelected($event)">
-                                </master-search>
+                                    (newRowClick)="locationCodeSelected($event)"></master-search>
+                               
                             </div>
                         </div>
                         <div class="row mb-1">
