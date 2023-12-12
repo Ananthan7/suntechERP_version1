@@ -36,6 +36,7 @@ export class CommonServiceService {
   FormatCount: any;
   enableJawahara: boolean = false;
   posIdNoCompulsory: boolean = false;
+  compAcCode: any;
 
   public allMessageBoxData: any;
   public allCompanyParams: any;
@@ -305,6 +306,9 @@ export class CommonServiceService {
       }
       if (data.PARAMETER == 'POSIDNOCOMPULSORY') {
         this.posIdNoCompulsory = data.PARAM_VALUE.toString() == '1' ? true : false;
+      }
+      if (data.PARAMETER == 'COMPACCODE') {
+        this.compAcCode = data.PARAM_VALUE.toString();
       }
       if (data.Parameter == 'POSKARATRATECHANGE') {
         this.posKARATRATECHANGE = data.Param_Value;

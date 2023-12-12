@@ -1199,7 +1199,7 @@
           </div>
 
           <!-- <div class="col-md-6" *ngIf="enableJawahara"> -->
-          <div class="col-md-6">
+          <div class="col-md-6" *ngIf="this.comFunc.compAcCode == 'JHO001' && strBranchcode == 'JHRSDF' ">
             <div class="row">
               <mat-checkbox color="primary" [(ngModel)]="showBoarding"
                 >Boarding Pass Details</mat-checkbox
@@ -1233,6 +1233,8 @@
                           [readonly]="viewOnly"
                         />
                       </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
                       <mat-form-field>
                         <mat-label>Boarding To</mat-label>
                         <input
@@ -1262,63 +1264,7 @@
                           #boardingDate
                         ></mat-datepicker>
                       </mat-form-field>
-                    </div>
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>INV NO.</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="invoiceNo"
-                          id="invoiceNo"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-                      <mat-form-field>
-                        <mat-label>INV DATE.</mat-label>
-                        <input
-                          matInput
-                          [matDatepicker]="invoiceDate"
-                          name="invoiceDate"
-                          formControlName="invoiceDate"
-                          placeholder="DD/MM/YYYY"
-                          [readonly]="viewOnly"
-                        />
-                        <mat-datepicker-toggle
-                          matSuffix
-                          [for]="invoiceDate"
-                        ></mat-datepicker-toggle>
-                        <mat-datepicker
-                          [startAt]="currentDate"
-                          #invoiceDate
-                        ></mat-datepicker>
-                      </mat-form-field>
 
-                      <mat-form-field>
-                        <mat-label>VOC TYPE</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="vocType"
-                          id="vocType"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-
-                      <div class="row">
-                        <mat-checkbox
-                          color="primary"
-                          formControlName="serviceInv"
-                          >Service Invoice</mat-checkbox
-                        >
-                      </div>
-                      <div class="row">
-                        <mat-checkbox
-                          color="primary"
-                          formControlName="lifeTimeWarr"
-                          >Life Time Warranty</mat-checkbox
-                        >
-                      </div>
                       <!-- <div class="row">
                         <div class="col-md-6">
                           <button
@@ -1340,17 +1286,35 @@
                           </button>
                         </div>
                       </div> -->
+                    </div>
 
-                      <div class="text-center">
-                        <button
-                          class="mt-2"
-                          mat-flat-button
+                    <div class="row" *ngIf="this.comFunc.compAcCode == 'JHO001' ">
+                      <div class="col-md-6">
+                        <mat-checkbox
                           color="primary"
-                          [disabled]="viewOnly"
+                          formControlName="serviceInv"
+                          >Service Invoice</mat-checkbox
                         >
-                          Get Customer Details
-                        </button>
                       </div>
+                      <div class="col-md-6">
+                        <mat-checkbox
+                          color="primary"
+                          formControlName="lifeTimeWarr"
+                          >Life Time Warranty</mat-checkbox
+                        >
+                      </div>
+                    </div>
+
+                    <div class="text-center">
+                      <button
+                        class="mt-2"
+                        mat-flat-button
+                        color="primary"
+                        [disabled]="viewOnly"
+                        (click)="getCustDetails()"
+                      >
+                        Get Customer Details
+                      </button>
                     </div>
                   </div>
                 </form>
@@ -1578,7 +1542,10 @@
             </div>
           </div>
 
-          <div class="col-md-6 col-xl-6" (click)=" this.viewOnly || this.editOnly ? printInvoice() : ''">
+          <div
+            class="col-md-6 col-xl-6"
+            (click)="this.viewOnly || this.editOnly ? printInvoice() : ''"
+          >
             <!-- *ngIf="!viewOnly" -->
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
@@ -1586,7 +1553,10 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-xl-6 mt-2" (click)="this.viewOnly || this.editOnly ? sendToEmail(): '' ">
+          <div
+            class="col-md-6 col-xl-6 mt-2"
+            (click)="this.viewOnly || this.editOnly ? sendToEmail() : ''"
+          >
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
                 <i class="fa fa-print"></i> <span> Send Email</span>
@@ -3746,7 +3716,7 @@
 
                 <mat-error
                   *ngIf="
-                  customerDetailForm.controls.fcn_customer_exp_date.hasError(
+                    customerDetailForm.controls.fcn_customer_exp_date.hasError(
                       'required'
                     )
                   "

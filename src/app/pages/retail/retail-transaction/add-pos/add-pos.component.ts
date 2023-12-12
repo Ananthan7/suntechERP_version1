@@ -690,12 +690,12 @@ export class AddPosComponent implements OnInit {
       passDetails: ['', Validators.required],
       flightNo: ['', Validators.required],
       boardingTo: ['', [Validators.required]],
-      boardingDate: ['', [Validators.required ]],
-      invoiceNo: ['', [Validators.required ]],
-      invoiceDate: ['', [Validators.required ]],
-      vocType: ['', [Validators.required ]],
-      serviceInv: ['', [Validators.required ]],
-      lifeTimeWarr: ['', [Validators.required ]],
+      boardingDate: ['', [Validators.required]],
+      invoiceNo: ['', [Validators.required]],
+      invoiceDate: ['', [Validators.required]],
+      vocType: ['', [Validators.required]],
+      serviceInv: ['', [Validators.required]],
+      lifeTimeWarr: ['', [Validators.required]],
     });
 
     /**End Receipt forms  */
@@ -717,14 +717,15 @@ export class AddPosComponent implements OnInit {
     // this.getArgs();
     this.indexedDb.getAllData('compparams').subscribe((data) => {
       if (data.length > 0) {
-        // console.log('==============compparams======================');
-        // console.log(data);
-        // console.log('====================================');
+        console.log('==============compparams======================');
+        console.log(data);
+        console.log('====================================');
         this.comFunc.allCompanyParams = data;
         this.comFunc.setCompParaValues();
         this.enableJawahara = this.comFunc.enableJawahara;
         this.posIdNoCompulsory = this.comFunc.posIdNoCompulsory;
-        if(this.posIdNoCompulsory){
+        
+        if (this.posIdNoCompulsory) {
           const validations = [Validators.required];
           this.addValidationsForForms(this.customerDataForm, 'fcn_customer_exp_date', validations);
           this.addValidationsForForms(this.customerDetailForm, 'fcn_customer_exp_date', validations);
@@ -1035,6 +1036,12 @@ export class AddPosComponent implements OnInit {
         this.customerDetailForm.controls.fcn_cust_detail_nationality.setValue(
           posCustomer.NATIONALITY
         );
+        this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+          posCustomer.POSCUSTIDEXP_DATE
+        );
+        this.customerDataForm.controls.fcn_customer_exp_date.setValue(
+          posCustomer.POSCUSTIDEXP_DATE
+        );
 
         this.customerDetails = posCustomer;
 
@@ -1047,13 +1054,13 @@ export class AddPosComponent implements OnInit {
           }
         /**end set customer data */
 
-        this.boardingPassForm.controls.passDetails.setValue( retailSaleData.BOARDINGPASS   );
-        this.boardingPassForm.controls.flightNo.setValue( retailSaleData.FLIGHTNO   );
-        this.boardingPassForm.controls.boardingDate.setValue( retailSaleData.BOARDINGDATE   );
-        this.boardingPassForm.controls.boardingTo.setValue( retailSaleData.BOARDINGFROM   );
-        this.boardingPassForm.controls.boardingTo.setValue( retailSaleData.BOARDINGFROM   );
-        this.boardingPassForm.controls.lifeTimeWarr.setValue( retailSaleData.LIFETIMEWARRANTY   );
-        this.boardingPassForm.controls.serviceInv.setValue( retailSaleData.SERVICE_INVOICE   );
+        this.boardingPassForm.controls.passDetails.setValue(retailSaleData.BOARDINGPASS);
+        this.boardingPassForm.controls.flightNo.setValue(retailSaleData.FLIGHTNO);
+        this.boardingPassForm.controls.boardingDate.setValue(retailSaleData.BOARDINGDATE);
+        this.boardingPassForm.controls.boardingTo.setValue(retailSaleData.BOARDINGFROM);
+        this.boardingPassForm.controls.boardingTo.setValue(retailSaleData.BOARDINGFROM);
+        this.boardingPassForm.controls.lifeTimeWarr.setValue(retailSaleData.LIFETIMEWARRANTY);
+        this.boardingPassForm.controls.serviceInv.setValue(retailSaleData.SERVICE_INVOICE);
 
         /**start set line item*/
         if (retailSaleData != null && retailSaleData.RetailDetails != null)
@@ -2485,12 +2492,12 @@ export class AddPosComponent implements OnInit {
         control.markAsTouched();
       });
 
-      
-      if(this.posIdNoCompulsory && (this.customerDetailForm.value.fcn_customer_exp_date < this.currentDate)){
+
+      if (this.posIdNoCompulsory && (this.customerDetailForm.value.fcn_customer_exp_date < this.currentDate)) {
         this.snackBar.open('Invalid Expiry Date', 'OK');
         return;
       }
-      
+
       if (!this.customerDetailForm.invalid) {
 
         const posCustomer = {
@@ -2769,6 +2776,8 @@ export class AddPosComponent implements OnInit {
           "PRODUCTRANGEAVAILABILITY": this.customerDetails?.PRODUCTRANGEAVAILABILITY || '',
 
           "LOOKING_FOR": this.customerDetails?.LOOKING_FOR || '',
+
+          "POSCUSTIDEXP_DATE": this.customerDetailForm.value.fcn_customer_exp_date || this.dummyDate,
 
         };
 
@@ -5943,7 +5952,8 @@ export class AddPosComponent implements OnInit {
     }
   }
 
-  getStockDesc(event: any) {
+
+  async getStockDesc(event: any) {
     // var strBranchcode = localStorage.getItem('userbranch');
     // var strUser = localStorage.getItem('username');
     // var strBranchcode = 'MOE';
@@ -5964,7 +5974,16 @@ export class AddPosComponent implements OnInit {
     console.log('called', event.target.value);
 
     this.snackBar.open('Loading...');
+
+
     if (event.target.value != '') {
+
+      if(this.comFunc.compAcCode == 'JHO001'){
+        const stockExist = await this.checkStockCodeForParticularDate(event.target.value);
+        if(stockExist)
+        return;
+      }
+
       let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
         '&strBranchCode=' + this.strBranchcode +
         '&strVocType=POS' + '&strUserName=' + this.strUser +
@@ -6579,7 +6598,7 @@ export class AddPosComponent implements OnInit {
     //   console.log(this.customerDataForm.value.fcn_customer_exp_date, this.currentDate);
     //   console.log('====================================');
 
-    if(this.posIdNoCompulsory && (this.customerDataForm.value.fcn_customer_exp_date < this.currentDate)){
+    if (this.posIdNoCompulsory && (this.customerDataForm.value.fcn_customer_exp_date < this.currentDate)) {
       this.snackBar.open('Invalid Expiry Date', 'OK');
       return;
     }
@@ -6879,6 +6898,8 @@ export class AddPosComponent implements OnInit {
           "PRODUCTRANGEAVAILABILITY": this.customerDetails?.PRODUCTRANGEAVAILABILITY || '',
 
           "LOOKING_FOR": this.customerDetails?.LOOKING_FOR || '',
+
+          "POSCUSTIDEXP_DATE": this.customerDataForm.value.fcn_customer_exp_date || this.dummyDate,
         },
         retailReceipt: this.receiptDetailsList,
         // "retailReceipt": this.receiptDetailsList.length > 0 ? this.receiptDetailsList : '',
@@ -7012,9 +7033,9 @@ export class AddPosComponent implements OnInit {
         const pdfContent = pdf.output('datauristring');
         const mailtoLink = document.createElement('a');
         mailtoLink.href = 'mailto:?subject=Invoice&body=Please find attached invoice.'
-        // +'&attachment='
+          // +'&attachment='
           + encodeURIComponent(this.printInvoiceDiv.nativeElement.innerHtml);
-          // + encodeURIComponent(pdfContent);
+        // + encodeURIComponent(pdfContent);
         window.location.href = mailtoLink.href;
 
       } else {
@@ -8952,7 +8973,7 @@ export class AddPosComponent implements OnInit {
       RSLOGINMID: '0',
       TRAYNREFUND: false,
       TRAYNREFUNDDATE: this.dummyDate, //need
-      SERVICE_INVOICE:  this.boardingPassForm.value.serviceInv || false,
+      SERVICE_INVOICE: this.boardingPassForm.value.serviceInv || false,
       GJVREFERENCE: '',
       GJVMID: 0, //need
       holdbarcode: false,
@@ -8973,8 +8994,8 @@ export class AddPosComponent implements OnInit {
       BOARDINGPASS: this.boardingPassForm.value.passDetails || '',
       WITHOUTVAT: false,
       FLIGHTNO: this.boardingPassForm.value.flightNo || '',
-      BOARDINGFROM:  this.boardingPassForm.value.boardingTo || '',
-      BOARDINGDATE:this.boardingPassForm.value.boardingDate || this.dummyDate, //need
+      BOARDINGFROM: this.boardingPassForm.value.boardingTo || '',
+      BOARDINGDATE: this.boardingPassForm.value.boardingDate || this.dummyDate, //need
       // new values
       CITY:
         this.customerDetailForm.value.fcn_cust_detail_city ||
@@ -9592,11 +9613,11 @@ export class AddPosComponent implements OnInit {
       QRCODEIMAGE: '',
       QRCODEVALUE: '',
       CERTIFICATEPRINTED: 0,
-      BOARDINGPASS:   '',
+      BOARDINGPASS: '',
       WITHOUTVAT: false,
-      FLIGHTNO:   '',
+      FLIGHTNO: '',
       BOARDINGFROM: '',
-      BOARDINGDATE:  this.dummyDate, 
+      BOARDINGDATE: this.dummyDate,
       BOOKVOCNO: '',
 
       CITY:
@@ -9656,7 +9677,7 @@ export class AddPosComponent implements OnInit {
   }
 
   /** start customer detail form */
-  nameChange(event: any) {
+  nameChange(event: any, source: any = null) {
     const value = event.target.value.toString().trim();
     // event.target.value = value;
     if (value != '') {
@@ -9689,8 +9710,8 @@ export class AddPosComponent implements OnInit {
           res.join(' ')
         );
       }
-
-      this.renderer.selectRootElement('#fcn_cust_detail_phone').focus();
+      if (source != 'byAPI')
+        this.renderer.selectRootElement('#fcn_cust_detail_phone')?.focus();
     } else {
       this.customerDetailForm.controls.fcn_customer_detail_fname.setValue('');
       this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
@@ -10132,4 +10153,62 @@ export class AddPosComponent implements OnInit {
     }
   }
 
+  async checkStockCodeForParticularDate(stockCode: any): Promise<boolean> {
+    const API = `RetailSalesDataInDotnet/CheckStockCodeForParticularDate/${this.strBranchcode}/${stockCode}/${this.vocDataForm.value.vocdate}`;
+  
+    return new Promise<boolean>((resolve) => {
+      this.suntechApi.getDynamicAPI(API)
+        .subscribe((resp) => {
+          if (resp.response == true) {
+            this.snackBar.open(resp.message, 'OK', { duration: 5000 });
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+    });
+  }
+
+  getCustDetails() {
+    const API = `UserEmiratesIdData/GetUserEmiratesIdDataWithBranch/HO`;
+    this.suntechApi.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          const res = resp.response;
+          this.customerDataForm.controls['fcn_customer_name'].setValue(
+            res.FULLNAMEENGLISH
+          );
+          this.nameChange({ target: { value: res.FULLNAMEENGLISH } }, 'byAPI');
+
+          this.customerDataForm.controls['fcn_customer_id_number'].setValue(
+            res.IDNUMBER
+          );
+
+          this.customerDataForm.controls['fcn_customer_exp_date'].setValue(
+            this.comFunc.cDateFormat(res.DATEOFEXPIRY)
+          );
+          this.customerDetailForm.controls['fcn_cust_detail_dob'].setValue(
+            this.comFunc.cDateFormat(res.DATEOFBIRTH)
+          );
+          this.customerDetailForm.controls['fcn_cust_detail_nationality'].setValue(
+            res.NATIONALITYENGLISH
+          );
+
+          const genderVal = res.GENDER.toString().charAt(0).toUpperCase();
+          if (genderVal == 'M') {
+            res.GENDER = 'Male';
+          } else if (genderVal == 'F') {
+            res.GENDER = 'Female';
+          } else {
+            res.GENDER = 'Unknown';
+          }
+
+          this.customerDetailForm.controls['fcn_cust_detail_gender'].setValue(
+            res.GENDER
+          );
+
+
+        }
+      });
+  }
 }
