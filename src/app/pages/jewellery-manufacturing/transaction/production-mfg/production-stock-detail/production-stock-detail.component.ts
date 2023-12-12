@@ -88,7 +88,7 @@ export class ProductionStockDetailComponent implements OnInit {
   }
   setStockCodeGrid(){
     this.stockCodeDataList.push({
-      STOCK_CODE:`${this.DETAILSCREEN_DATA.prefix}${this.DETAILSCREEN_DATA.prefixNo}`,
+      STOCK_CODE:`${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`,
       DESIGN: this.DETAILSCREEN_DATA.design,
       KARAT: this.DETAILSCREEN_DATA.KARAT,
       grossWt: this.DETAILSCREEN_DATA.grossWt,
