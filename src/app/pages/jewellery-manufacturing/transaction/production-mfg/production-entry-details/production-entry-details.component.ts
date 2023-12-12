@@ -22,7 +22,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   columnheadBottom: any[] = [""];
   HEADERDETAILS: any;
   StockDetailData: SavedataModel = {
-    DETAIL_FORM_DATA: [],
+    DETAIL_FORM_DATA: {},
     DETAIL_METAL_DATA: [],
     STOCK_FORM_DETAILS: [],
     STOCKCODE_MAIN_GRID: [],
@@ -60,9 +60,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   productiondetailsFrom: FormGroup = this.formBuilder.group({
+    VOCNO: [0],
     jobno: [''],
     jobnoDesc: [''],
-    jobDate: [''],
+    JOB_DATE: [''],
     subjobno: [''],
     subjobnoDesc: [''],
     customer: [''],
@@ -72,25 +73,25 @@ export class ProductionEntryDetailsComponent implements OnInit {
     worker: [''],
     workername: [''],
     partsName: [''],
-    parts: [''],
+    PART_CODE: [''],
     DESIGN_CODE: [''],
     DESIGN_DESCRIPTION: [''],
     totalpcs: [''],
-    noofpcs: [''],
+    JOB_PCS: [''],
     location: [''],
-    lossqty: [''],
-    grosswt: [''],
-    stonepcs: [''],
+    LOSS_WT: [''],
+    GROSS_WT: [''],
+    STONE_PCS: [''],
     timetaken: [''],
-    metalwt: [''],
-    stonewt: [''],
+    METAL_WT: [''],
+    STONE_WT: [''],
     price1: [''],
-    prefix: [''],
-    prefixNo: [''],
+    PREFIX: [''],
+    PREFIXNO: [''],
     otherstone: [''],
     price2: [''],
     costcode: [''],
-    setref: [''],
+    SETREF: [''],
     price3: [''],
     KARAT: [''],
     venderref: [''],
@@ -102,13 +103,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
     prodpcs: [''],
     pndpcs: [''],
     lossone: [''],
-    losswt: [''],
     fromStockCode: [''],
     fromStockCodeDesc: [''],
     toStockCode: [''],
     toStockCodeDesc: [''],
     metalpcs: [''],
-    grossWt: [''],
     stoneWt: [''],
     PURITY: [''],
     netWt: [''],
@@ -134,7 +133,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VOCDATE: [''],
     METALSTONE: [''],
     DIVCODE: [''],
-    stockCode: [''],
+    STOCK_CODE: [''],
+    STOCK_DESCRIPTION: [''],
     JOB_SO_NUMBER: [''],
   });
 
@@ -179,10 +179,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
             // this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.productiondetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(data[0].DESCRIPTION)
-            this.productiondetailsFrom.controls.noofpcs.setValue(data[0].JOB_PCS_TOTAL)
+            this.productiondetailsFrom.controls.JOB_PCS.setValue(data[0].JOB_PCS_TOTAL)
             this.productiondetailsFrom.controls.customer.setValue(data[0].CUSTOMER_CODE)
-            this.productiondetailsFrom.controls.prefix.setValue(data[0].PREFIX)
-            this.productiondetailsFrom.controls.prefixNo.setValue(data[0].PREFIX_NUMBER)
+            this.productiondetailsFrom.controls.PREFIX.setValue(data[0].PREFIX)
+            this.productiondetailsFrom.controls.PREFIXNO.setValue(data[0].PREFIX_NUMBER)
             this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
             // this.productiondetailsFrom.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
             // this.productiondetailsFrom.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
@@ -222,11 +222,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.productiondetailsFrom.controls.worker.setValue(data[0].WORKER)
           this.productiondetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
-          this.productiondetailsFrom.controls.metalwt.setValue(
+          this.productiondetailsFrom.controls.METAL_WT.setValue(
             this.commonService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.productiondetailsFrom.controls.stonewt.setValue(
             this.commonService.decimalQuantityFormat(data[0].STONE, 'STONE'))
-          this.productiondetailsFrom.controls.grossWt.setValue(
+          this.productiondetailsFrom.controls.GROSS_WT.setValue(
             this.commonService.decimalQuantityFormat(Number(data[0].NETWT), 'METAL'))
           this.productiondetailsFrom.controls.PUREWT.setValue(data[0].PUREWT)
           this.productiondetailsFrom.controls.PURITY.setValue(
@@ -234,7 +234,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.Job_Purity.setValue(
             this.commonService.decimalQuantityFormat(data[0].PURITY,'PURITY'))
           this.productiondetailsFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
-          this.productiondetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.productiondetailsFrom.controls.STOCK_CODE.setValue(data[0].STOCK_CODE)
           this.productiondetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.productiondetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
           this.productiondetailsFrom.controls.PURE_WT.setValue(data[0].PURE_WT)
@@ -301,12 +301,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
     }
   }
   formDetailCount: number = 0;
-  DETAIL_FORM_DATA:any[] = []
   formSubmit() {
     this.formDetailCount+=1
     
 
-    this.StockDetailData.DETAIL_FORM_DATA.push(this.productiondetailsFrom.value)
+    this.StockDetailData.DETAIL_FORM_DATA = this.productiondetailsFrom.value
     this.close(this.StockDetailData);
   }
 

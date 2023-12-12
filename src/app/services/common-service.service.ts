@@ -581,6 +581,7 @@ export class CommonServiceService {
   }
   /**purpose: Get a date time as a string, using the ISO standard*/
   formatDateTime(date: any) {
+    if(!date) return '';
     return date.toISOString()
   }
 
