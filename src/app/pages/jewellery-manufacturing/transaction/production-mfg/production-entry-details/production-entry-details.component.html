@@ -309,7 +309,8 @@
                 <label for="input" class="col-sm-2 col-form-label">Start Date :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%">
-                    <input matInput [matDatepicker]="startdate" name="startdate" formControlName="startdate"
+                    <input matInput [matDatepicker]="startdate" name="startdate" 
+                      formControlName="START_DATE"
                       placeholder="DD/MM/YYYY" DateValidation />
                     <mat-datepicker-toggle matSuffix [for]="startdate"></mat-datepicker-toggle>
                     <mat-datepicker [startAt]="currentDate" #startdate></mat-datepicker>
@@ -327,7 +328,8 @@
                 <label for="input" class="col-sm-2 col-form-label">End Date :</label>
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%">
-                    <input matInput [matDatepicker]="endDate" name="endDate" formControlName="startdate"
+                    <input matInput [matDatepicker]="endDate" name="endDate" 
+                      formControlName="END_DATE"
                       placeholder="DD/MM/YYYY" DateValidation />
                     <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                     <mat-datepicker [startAt]="currentDate" #endDate></mat-datepicker>

@@ -96,7 +96,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
     KARAT: [''],
     venderref: [''],
     price4: [''],
-    startdate: [''],
+    START_DATE: [''],
+    END_DATE: [''],
     endDate: [''],
     price5: [''],
     remarks: [''],
@@ -297,7 +298,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
     let dy = date.getMonth();
     if (yr.toString().length > 4) {
       let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
-      this.productiondetailsFrom.controls.startdate.setValue(new Date(date));
+      this.productiondetailsFrom.controls.START_DATE.setValue(new Date(date));
+      this.productiondetailsFrom.controls.END_DATE.setValue(new Date(date));
     }
   }
   formDetailCount: number = 0;
