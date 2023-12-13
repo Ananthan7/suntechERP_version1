@@ -235,6 +235,7 @@ export class AddPosComponent implements OnInit {
   customerReceiptForm: FormGroup;
 
   boardingPassForm: FormGroup;
+  invoiceWiseForm: FormGroup;
 
 
   advanceReceiptDetails: any;
@@ -461,6 +462,8 @@ export class AddPosComponent implements OnInit {
 
   _exchangeItemchange: any = {};
   srCustCode: any = ''; // sales return customer code
+
+  isInvalidRecNo: boolean = false;
   // quaggaConfig: any = Quagga.init({
   //   inputStream: {
   //     willReadFrequently: true,
@@ -694,6 +697,9 @@ export class AddPosComponent implements OnInit {
       invoiceNo: ['', [Validators.required]],
       invoiceDate: ['', [Validators.required]],
       vocType: ['', [Validators.required]],
+
+    });
+    this.invoiceWiseForm = this.formBuilder.group({
       serviceInv: ['', [Validators.required]],
       lifeTimeWarr: ['', [Validators.required]],
     });
@@ -724,7 +730,7 @@ export class AddPosComponent implements OnInit {
         this.comFunc.setCompParaValues();
         this.enableJawahara = this.comFunc.enableJawahara;
         this.posIdNoCompulsory = this.comFunc.posIdNoCompulsory;
-        
+
         if (this.posIdNoCompulsory) {
           const validations = [Validators.required];
           this.addValidationsForForms(this.customerDataForm, 'fcn_customer_exp_date', validations);
@@ -1059,8 +1065,9 @@ export class AddPosComponent implements OnInit {
         this.boardingPassForm.controls.boardingDate.setValue(retailSaleData.BOARDINGDATE);
         this.boardingPassForm.controls.boardingTo.setValue(retailSaleData.BOARDINGFROM);
         this.boardingPassForm.controls.boardingTo.setValue(retailSaleData.BOARDINGFROM);
-        this.boardingPassForm.controls.lifeTimeWarr.setValue(retailSaleData.LIFETIMEWARRANTY);
-        this.boardingPassForm.controls.serviceInv.setValue(retailSaleData.SERVICE_INVOICE);
+
+        this.invoiceWiseForm.controls.lifeTimeWarr.setValue(retailSaleData.LIFETIMEWARRANTY);
+        this.invoiceWiseForm.controls.serviceInv.setValue(retailSaleData.SERVICE_INVOICE);
 
         /**start set line item*/
         if (retailSaleData != null && retailSaleData.RetailDetails != null)
@@ -1371,6 +1378,8 @@ export class AddPosComponent implements OnInit {
 
     */
 
+
+
     let isLayoutRTL = false;
     this.page_language = 'ENGLISH';
 
@@ -1426,6 +1435,8 @@ export class AddPosComponent implements OnInit {
     this.getExchangeStockCodes();
     this.getMaritalStatus();
     this.getAccountLookup();
+
+    this.generateVocNo();
 
     // this.getComboFilters();
   }
@@ -1592,6 +1603,19 @@ export class AddPosComponent implements OnInit {
   }
   saveReceipt(type?: any) {
     const res = this.validateReceipt();
+
+    
+    if (this.selectedTabIndex == 2) {
+      if(this.isInvalidRecNo){
+        this.snackBar.open('Invalid Receipt No.', 'OK', {
+          duration: 2000
+        });
+        return;
+      }
+    }else{
+      this.isInvalidRecNo = false;
+    }
+    
     if (!res) {
       // if (parseFloat(this.cashreceiptForm.value.receiptAmtFC) > 0) {
 
@@ -1795,7 +1819,6 @@ export class AddPosComponent implements OnInit {
         "GIFT_CARD_BRANCH": "0",
         "WOOCOMCARDID": "0"
       };
-
 
 
       if (
@@ -5978,10 +6001,10 @@ export class AddPosComponent implements OnInit {
 
     if (event.target.value != '') {
 
-      if(this.comFunc.compAcCode == 'JHO001'){
+      if (this.comFunc.compAcCode == 'JHO001') {
         const stockExist = await this.checkStockCodeForParticularDate(event.target.value);
-        if(stockExist)
-        return;
+        if (stockExist)
+          return;
       }
 
       let API = 'RetailSalesStockValidation?strStockCode=' + event.target.value +
@@ -8973,14 +8996,14 @@ export class AddPosComponent implements OnInit {
       RSLOGINMID: '0',
       TRAYNREFUND: false,
       TRAYNREFUNDDATE: this.dummyDate, //need
-      SERVICE_INVOICE: this.boardingPassForm.value.serviceInv || false,
+      SERVICE_INVOICE: this.invoiceWiseForm.value.serviceInv || false,
       GJVREFERENCE: '',
       GJVMID: 0, //need
       holdbarcode: false,
       PROMO_CODE: '',
       VATAMOUNTFCROUND: 0,
       VATAMOUNTFCROUNDCC: 0,
-      LIFETIMEWARRANTY: this.boardingPassForm.value.lifeTimeWarr || false,
+      LIFETIMEWARRANTY: this.invoiceWiseForm.value.lifeTimeWarr || false,
       SALESORDER_VALIDITYDATE: this.dummyDate, //need
       EmiratesSkywardsMile: false,
       ONLINERATE: false,
@@ -10013,6 +10036,8 @@ export class AddPosComponent implements OnInit {
         .subscribe((res) => {
           this.snackBar.dismiss();
           if (res['status'] == 'Success') {
+            this.isInvalidRecNo = false;
+
             this.advanceReceiptForm.controls.advanceAmount.setValue(
               this.comFunc.emptyToZero(res['response']['BALANCE_FC']).toString());
             this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
@@ -10021,6 +10046,7 @@ export class AddPosComponent implements OnInit {
               this.comFunc.emptyToZero(res['response']['GST_TOTALCC']).toString());
             this.advanceReceiptDetails = res['response'];
           } else {
+            this.isInvalidRecNo = true;
             this.advanceReceiptForm.controls.advanceAmount.setValue(
               this.zeroAmtVal);
             this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
@@ -10153,9 +10179,21 @@ export class AddPosComponent implements OnInit {
     }
   }
 
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.vocType}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.vocDataForm.value.vocdate)}&blnTransferDummyDatabase=false`;
+    this.suntechApi.getDynamicAPI(API)
+      .subscribe((resp) => {
+        console.log('===============generateVocNo=====================');
+        console.log(resp);
+        console.log('====================================');
+        if (resp.status == "Success") {
+          this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+        }
+      });
+  }
   async checkStockCodeForParticularDate(stockCode: any): Promise<boolean> {
     const API = `RetailSalesDataInDotnet/CheckStockCodeForParticularDate/${this.strBranchcode}/${stockCode}/${this.vocDataForm.value.vocdate}`;
-  
+
     return new Promise<boolean>((resolve) => {
       this.suntechApi.getDynamicAPI(API)
         .subscribe((resp) => {
@@ -10170,10 +10208,11 @@ export class AddPosComponent implements OnInit {
   }
 
   getCustDetails() {
-    const API = `UserEmiratesIdData/GetUserEmiratesIdDataWithBranch/HO`;
+    const API = `UserEmiratesIdData/GetUserEmiratesIdDataWithBranch/${this.strBranchcode}`;
+    // const API = `UserEmiratesIdData/GetUserEmiratesIdDataWithBranch/HO`;
     this.suntechApi.getDynamicAPI(API)
-      .subscribe((resp) => {
-        if (resp.status == "Success") {
+      .subscribe((resp: any) => {
+        if (resp.status == 'Success' && resp.response != null) {
           const res = resp.response;
           this.customerDataForm.controls['fcn_customer_name'].setValue(
             res.FULLNAMEENGLISH
@@ -10208,6 +10247,8 @@ export class AddPosComponent implements OnInit {
           );
 
 
+        } else {
+          this.snackBar.open(resp.message, 'OK')
         }
       });
   }

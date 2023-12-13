@@ -1199,7 +1199,26 @@
           </div>
 
           <!-- <div class="col-md-6" *ngIf="enableJawahara"> -->
-          <div class="col-md-6" *ngIf="this.comFunc.compAcCode == 'JHO001' && strBranchcode == 'JHRSDF' ">
+          <div class="col-md-6">
+            <div *ngIf="this.comFunc.compAcCode == 'JHO001'">
+              <form [formGroup]="invoiceWiseForm" novalidate>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-checkbox color="primary" formControlName="serviceInv"
+                      >Service Invoice</mat-checkbox
+                    >
+                  </div>
+                  <div class="col-md-6">
+                    <mat-checkbox color="primary" formControlName="lifeTimeWarr"
+                      >Life Time Warranty</mat-checkbox
+                    >
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div *ngIf="this.comFunc.compAcCode == 'JHO001' && strBranchcode == 'JHRSDF' ">
+
             <div class="row">
               <mat-checkbox color="primary" [(ngModel)]="showBoarding"
                 >Boarding Pass Details</mat-checkbox
@@ -1288,23 +1307,6 @@
                       </div> -->
                     </div>
 
-                    <div class="row" *ngIf="this.comFunc.compAcCode == 'JHO001' ">
-                      <div class="col-md-6">
-                        <mat-checkbox
-                          color="primary"
-                          formControlName="serviceInv"
-                          >Service Invoice</mat-checkbox
-                        >
-                      </div>
-                      <div class="col-md-6">
-                        <mat-checkbox
-                          color="primary"
-                          formControlName="lifeTimeWarr"
-                          >Life Time Warranty</mat-checkbox
-                        >
-                      </div>
-                    </div>
-
                     <div class="text-center">
                       <button
                         class="mt-2"
@@ -1320,6 +1322,10 @@
                 </form>
               </div>
             </div>
+          </div>
+
+
+
           </div>
         </div>
       </div>
