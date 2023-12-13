@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Cad/Sketch Process</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Sketch Process</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -169,8 +169,8 @@
                     <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
                             [viewImportBtn]="false"
-                            (addClick)="openaddalloyallocation()"
-                            (deleteClick)="deleteTableData()"
+                            (addClick)="adddata()"
+                            (deleteClick)="removedata()"
                             >
                         </menu-buttons>
                     </div>
@@ -204,7 +204,7 @@
                                             <dxo-selection mode="multiple"></dxo-selection>
                                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                            <dxi-column *ngFor="let data of columnheadItemDetails"
+                                            <dxi-column *ngFor="let data of columnheadItemDetails1"
                                                 dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
                                                 alignment="center" backgroundcolor="#000">
                                             </dxi-column>
@@ -346,7 +346,7 @@
                                                 <dxo-selection mode="multiple"></dxo-selection>
                                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                                <dxi-column *ngFor="let data of columnheadItemDetails"
+                                                <dxi-column *ngFor="let data of columnheadItemDetails2"
                                                     dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
                                                     alignment="center" backgroundcolor="#000">
                                                 </dxi-column>
@@ -363,7 +363,39 @@
 
 
                     </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                        <div class="col-md-9">
+                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                            [showBorders]="true">
+                            <dxo-paging [enabled]="false"></dxo-paging>
+                            <dxo-editing mode="cell" [allowUpdating]="true">
+                            </dxo-editing>
+                            <dxo-selection mode="multiple"></dxo-selection>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
 
+                            <dxi-column *ngFor="let data of columnheadItemDetails3"
+                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+                                alignment="center" backgroundcolor="#000">
+                            </dxi-column>
+                        </dx-data-grid>
+                        </div>
+                        <div class="col-md-3">
+                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                            [showBorders]="true">
+                            <dxo-paging [enabled]="false"></dxo-paging>
+                            <dxo-editing mode="cell" [allowUpdating]="true">
+                            </dxo-editing>
+                            <dxo-selection mode="multiple"></dxo-selection>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                            <dxi-column *ngFor="let data of columnheadItemDetails2"
+                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+                                alignment="center" backgroundcolor="#000">
+                            </dxi-column>
+                        </dx-data-grid>
+                        </div></div>
+                    </div>
                 </div>
             </div>
         </form>

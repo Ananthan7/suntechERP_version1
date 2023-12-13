@@ -18,8 +18,11 @@ export class CADProcessingComponent implements OnInit {
   @Input() content!: any;
 
   tableData: any[] = [];  
-  columnheadItemDetails:any[] = ['  ',];
+  columnheadItemDetails:any[] = ['Srno','Division','Stone Type','Stock Code','Karat','Color','Shape','Sieve','Size','Pcs','Wt/Ct','Setting Type','Pointer Wt','Remarks'];
+  columnheadItemDetails1:any[] = ['Comp Code','description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
   divisionMS: any = 'ID';
+  columnheadItemDetails3:any[] = ['Comp Code','Srno','Division','Stone Type','Stock Code','Karat','Color','Shape','Sieve Std','Sieve Set'];
+  columnheadItemDetails2:any[] = ['']
   branchCode?: String;
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
@@ -73,6 +76,36 @@ export class CADProcessingComponent implements OnInit {
     deliveryOnDays:[''],
     deliveryOnDate:[''],
   });
+
+  adddata() {
+    let length = this.tableData.length;
+    let srno = length + 1;
+    let data =  {
+      "REFMID": 0,
+      "SRNO": srno,
+      "COMP_CODE": "string",
+      "COMP_DESCRIPTION": "string",
+      "COMP_SHAPE": "string",
+      "TYPE_CODE": "string",
+      "CATEGORY_CODE": "string",
+      "COMPSIZE_CODE": "string",
+      "COMPSET_CODE": "string",
+      "HEIGHT": 0,
+      "WIDTH": 0,
+      "LENGTH": 0,
+      "RADIUS": 0,
+      "PCS": 0,
+      "REMARKS": "string",
+      "DT_BRANCH_CODE": "string",
+      "DT_VOCTYPE": "str",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "stri"
+    };
+    this.tableData.push(data);
+}
+removedata(){
+  this.tableData.pop();
+}
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -363,7 +396,7 @@ export class CADProcessingComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 20,
     SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'process Code',
+    SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "process_code<> ''",
     VIEW_INPUT: true,

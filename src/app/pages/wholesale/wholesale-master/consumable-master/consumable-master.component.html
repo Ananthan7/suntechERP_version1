@@ -261,10 +261,13 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Price 1:</label>
                             <div class="col-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price1" />
+                                <mat-form-field style="width: 70%;">
+                                  <input type="text" matInput formControlName="price1" />
                                 </mat-form-field>
-                            </div>
+                                <master-search [MasterSearchData]="countryCodeData"
+                                (newRowClick)="countryCodeSelected($event)">
+                            </master-search>
+                              </div>
                             <div class="col-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput  />
@@ -285,10 +288,13 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Price 2:</label>
                             <div class="col-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price2" />
+                                <mat-form-field style="width: 70%;">
+                                  <input type="text" matInput formControlName="price2" />
                                 </mat-form-field>
-                            </div>
+                                <master-search [MasterSearchData]="countryCodeData"
+                                (newRowClick)="countryCodeSelected($event)">
+                            </master-search>
+                              </div>
                             <div class="col-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput  />
@@ -309,10 +315,13 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Price 3:</label>
                             <div class="col-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price3" />
+                                <mat-form-field style="width: 70%;">
+                                  <input type="text" matInput formControlName="price3" />
                                 </mat-form-field>
-                            </div>
+                                <master-search [MasterSearchData]="countryCodeData"
+                                (newRowClick)="countryCodeSelected($event)">
+                            </master-search>
+                              </div>
                             <div class="col-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput  />
@@ -333,10 +342,13 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Price 4:</label>
                             <div class="col-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price4" />
+                                <mat-form-field style="width: 70%;">
+                                  <input type="text" matInput formControlName="price4" />
                                 </mat-form-field>
-                            </div>
+                                <master-search [MasterSearchData]="countryCodeData"
+                                (newRowClick)="countryCodeSelected($event)">
+                            </master-search>
+                              </div>
                             <div class="col-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput  />
@@ -357,10 +369,13 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Price 5:</label>
                             <div class="col-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="price5" />
+                                <mat-form-field style="width: 70%;">
+                                  <input type="text" matInput formControlName="price5" />
                                 </mat-form-field>
-                            </div>
+                                <master-search [MasterSearchData]="countryCodeData"
+                                (newRowClick)="countryCodeSelected($event)">
+                            </master-search>
+                              </div>
                             <div class="col-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput  />
@@ -385,11 +400,9 @@
                               </button></div>
                            
                         </div>
-                        <div class="row ">
-                            <div class="row pt-2 offset-7">
-                                <mat-form-field style="width: 40%;">
-                                    <textarea matInput rows="3"></textarea>
-                                </mat-form-field>
+                        <div class="row pt-2">
+                            <div class="box-wrap2">
+                                <input type="text" matInput />
                             </div>
                         </div>
     
@@ -409,7 +422,7 @@
                         <div class="row pt-2">
                             <div class="col-11 t-a1"> 
                                 <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                                Tag
+                                Tag Details
                               </button></div>
                         </div>
                         <div class="row pt-2">
