@@ -274,8 +274,7 @@ export class DiamondSalesorderComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1549');
       return
     }
-    let COMPACCODE = this.commonService.getCompanyParamValue('COMPACCODE')
-    if (COMPACCODE == 'SUNTECH') {
+    if (this.commonService.getCompanyParamValue('COMPACCODE') == 'SUNTECH') {
       this.openDetailForm(CompanyDetailComponent, data)
     } else {
       this.openDetailForm(AddNewdetailComponent, data)
