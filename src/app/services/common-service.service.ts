@@ -112,15 +112,7 @@ export class CommonServiceService {
     })
     return paramValue
   }
-  // formatsDecimal: any = {
-  //   'AMTFORMAT': 'AMTFORMAT',
-  //   'MQTYFORMAT': 'MQTYFORMAT',
-  //   'AMTDECIMALS': 'AMTDECIMALS',
-  //   'MQTYDECIMALS': 'MQTYDECIMALS',
-  //   'POSSHOPCTRLAC': 'POSSHOPCTRLAC',
-  //   'COMPANYCURRENCY': 'COMPANYCURRENCY',
-  //   'POSKARATRATECHANGE': 'POSKARATRATECHANGE',
-  // }
+
   private initializeDecimalConstantsFlag() {
     this.DECIMAL_CONSTANTS_FLAG = {
       'AMOUNT': Number(this.allbranchMaster.BAMTDECIMALS),
