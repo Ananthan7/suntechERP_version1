@@ -155,6 +155,7 @@ export class ConsumableMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
 
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
