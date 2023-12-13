@@ -14,7 +14,7 @@
       <div class="container-fluid">
         <div class="row mb-3">
           <div class="col-6">
-            <h6>HO</h6>
+            <h6>HO-BRILLIANT DIAMOND L.L.C</h6>
           </div>
           <div class="col-6">
             <h6>Posted</h6>
@@ -36,7 +36,7 @@
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
                   <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
-                    placeholder="YYYY/MM/DD" DateValidation />
+                    placeholder="DD/MM/YYYY" DateValidation />
                   <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
@@ -64,7 +64,7 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="toprocess" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="ProcessCodeData" (newRowClick)="ProcessCodeSelected($event)">
+                <master-search [MasterSearchData]="ToProcessCodeData" (newRowClick)="ToProcessCodeSelected($event)">
                 </master-search>
               </div>
             </div>
@@ -82,7 +82,7 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="toworker" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                <master-search [MasterSearchData]="ToWorkerCodeData" (newRowClick)="ToWorkerCodeSelected($event)">
                 </master-search>
               </div>
             </div>
@@ -117,9 +117,6 @@
               </dxo-editing>
               <dxo-selection mode="multiple"></dxo-selection>
               <dxo-scrolling mode="virtual"></dxo-scrolling>
-              <dxi-column dataField="">
-
-              </dxi-column>
               <dx-check-box [value]="true" [elementAttr]="{ 'aria-label': 'Checked' }"></dx-check-box>
               <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                 [allowEditing]="true" alignment="center" backgroundcolor="#000">

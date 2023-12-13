@@ -20,6 +20,9 @@ export class MetalStockMasterComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   isDisplayed: boolean = false;
+  disabled: boolean = true;
+  isdisabled: boolean = false;
+  
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -31,11 +34,18 @@ export class MetalStockMasterComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+    this.metalstockForm.controls.PcGms = new FormControl({value: '', disabled: this.disabled})
   }
 
   showHideText() {
     this.isDisplayed = !this.isDisplayed;
   }
+
+  HideText() {
+    this.metalstockForm.controls.PcGms =  new FormControl({value: '', disabled: this.isdisabled})
+  }
+
+
   
   metalstockForm: FormGroup = this.formBuilder.group({
     metalType:[''],
