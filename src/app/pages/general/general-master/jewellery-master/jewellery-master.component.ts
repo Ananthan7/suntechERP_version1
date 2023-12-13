@@ -81,6 +81,22 @@ export class JewelleryMasterComponent implements OnInit {
     this.jewellerymasterForm.controls.costcenter.setValue(value.COST_CODE);
   }
 
+  modelcodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 157,
+    SEARCH_FIELD: 'processToDescription',
+    SEARCH_HEADING: 'Model Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "processToDescription<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  modelcodeSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.modelcode.setValue(value.processToDescription);
+  }
+
   countryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -289,6 +305,85 @@ export class JewelleryMasterComponent implements OnInit {
     this.jewellerymasterForm.controls.time.setValue(value.CODE);
   }
 
+  price1CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price1Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price1.setValue(value.PRICE_CODE);
+  }
+
+  price2CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price2Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price2.setValue(value.PRICE_CODE);
+  }
+
+  price3CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price3Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price3.setValue(value.PRICE_CODE);
+  }
+
+  price4CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price4Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price4.setValue(value.PRICE_CODE);
+  }
+
+  price5CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price5Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price5.setValue(value.PRICE_CODE);
+  }
 
 
   constructor(

@@ -13,7 +13,6 @@ import { GeneralComponent } from './general.component';
     CommonModule,
     GeneralRoutingModule,
     SharedModule,
-    
   ]
 })
 export class GeneralModule { }
