@@ -20,7 +20,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="itemcode" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)">
                     </master-search>
                   </div>
                   <div class="col-md-4">
@@ -38,7 +38,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="design" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="designCodeData" (newRowClick)="designSelected($event)">
                     </master-search>
                   </div>
                   <div class="col-md-4">
@@ -53,9 +53,11 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Model Code :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="modelcode" />
                     </mat-form-field>
+                  <master-search [MasterSearchData]="modelcodeData" (newRowClick)="modelcodeSelected($event)">
+                  </master-search>
                   </div>
                   <div class="col-md-4">
                     <div class="form-check">
@@ -80,7 +82,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="costcenter" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="costcenterCodeData" (newRowClick)="costcenterSelected($event)">
                     </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Country :</label>
@@ -88,7 +90,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="country" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="countryCodeData" (newRowClick)="countrySelected($event)">
                     </master-search>
                   </div>
                 </div>
@@ -98,7 +100,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="type" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="typeCodeData" (newRowClick)="typeSelected($event)">
                     </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Vendor :</label>
@@ -106,7 +108,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="vendor" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="vendorCodeData" (newRowClick)="vendorSelected($event)">
                     </master-search>
                   </div>
                 </div>
@@ -116,7 +118,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="category" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="categoryCodeData" (newRowClick)="categorySelected($event)">
                     </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Sub Cat :</label>
@@ -124,7 +126,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="subcategory" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="subcategoryCodeData" (newRowClick)="subcategorySelected($event)">
                     </master-search>
                   </div>
                 </div>
@@ -134,7 +136,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="brand" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="brandCodeData" (newRowClick)="brandSelected($event)">
                     </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Color :</label>
@@ -142,7 +144,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="color" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="colorCodeData" (newRowClick)="colorSelected($event)">
                     </master-search>
                   </div>
                 </div>
@@ -152,7 +154,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="fluorescence" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="fluorescenceCodeData" (newRowClick)="fluorescenceSelected($event)">
                     </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Clarity :</label>
@@ -160,7 +162,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="clarity" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="clarityCodeData" (newRowClick)="claritySelected($event)">
                     </master-search>
                   </div>
                 </div>
@@ -170,7 +172,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="range" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="rangeCodeData" (newRowClick)="rangeSelected($event)">
                     </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Style :</label>
@@ -178,7 +180,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="style" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="styleCodeData" (newRowClick)="styleSelected($event)">
                     </master-search>
                   </div>
                 </div>
@@ -188,7 +190,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="HSNcode" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="HSNcodeCodeData" (newRowClick)="HSNcodeSelected($event)">
                     </master-search>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Time :</label>
@@ -196,7 +198,7 @@
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="time" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="timeCodeData" (newRowClick)="timeSelected($event)">
                     </master-search>
                   </div>
                 </div>
@@ -286,10 +288,10 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Price 1 :</label>
                   <div class="col-md-2">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="price1" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="price1CodeData" (newRowClick)="price1Selected($event)">
                     </master-search>
                   </div>
                   <div class="col-md-2">
@@ -310,12 +312,11 @@
                 </div>
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Price 2 :</label>
-
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="price2" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="price2CodeData" (newRowClick)="price2Selected($event)">
                     </master-search>
                   </div>
                   <div class="col-md-2">
@@ -340,7 +341,7 @@
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="price3" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="price3CodeData" (newRowClick)="price3Selected($event)">
                     </master-search>
                   </div>
                   <div class="col-md-2">
@@ -365,8 +366,8 @@
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="price4" />
                     </mat-form-field>
-                    <master-search>
-                </master-search>
+                    <master-search [MasterSearchData]="price4CodeData" (newRowClick)="price4Selected($event)">
+                    </master-search>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
@@ -390,7 +391,7 @@
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="price5" />
                     </mat-form-field>
-                    <master-search>
+                    <master-search [MasterSearchData]="price5CodeData" (newRowClick)="price5Selected($event)">
                     </master-search>
                   </div>
                   <div class="col-md-2">
@@ -507,7 +508,7 @@
                       <input type="text" matInput formControlName="noofcert" />
                     </mat-form-field>
                   </div>
-                  <label for="inputPassword" class="col-sm-6 col-form-label"><a href="">Manufacture
+                  <label for="inputPassword" class="col-sm-6 col-form-label"><a href="#">Manufacture
                       Reference:</a></label>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -521,8 +522,8 @@
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
                       <mat-select>
-                        <mat-option value="1">New</mat-option>
-                        <mat-option value="2">Used</mat-option>
+                        <mat-option></mat-option>
+                        <mat-option></mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>
@@ -530,7 +531,7 @@
                 <div class="row align-items-center mb-1">
                   <div class="col-md-6">
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" >
+                      <input class="form-check-input" type="checkbox">
                       <label class="form-check-label">
                         Components Summary
                       </label>
@@ -538,7 +539,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" (change)="showHideText();">
+                      <input class="form-check-input" type="checkbox">
                       <label class="form-check-label">
                         Components Details
                       </label>
@@ -588,7 +589,7 @@
               <mat-tab label="Metal Details">
                 <div class="row mt-3">
                   <div class="col-md-12">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [(ngModel)]="checked" [disabled]="disabled">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
                       <dxo-paging [enabled]="true"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
                       </dxo-editing>
@@ -604,24 +605,96 @@
                 </div>
                 <div class="row mt-2">
                   <div class="col-md-8">
-                    <div class="d-flex justify-content-start text-start">
-                      <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                               *ngIf="isDisplayed"
-                                [viewImportBtn]="false"
-                                (addClick)="openenteraddmetaldetails()"
-                                (deleteClick)="removeData()"
-                                >
-                            </menu-buttons>
- 
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                            (addClick)="addTableData()" (deleteClick)="deleteTableData()">
+                        </menu-buttons>
+                        <!-- <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        (addClick)="addTableDataStoneDetails()" (deleteClick)="deleteTableDataStoneDetails()">
+                    </menu-buttons> -->
+                    <!-- <div class="d-flex justify-content-start text-start">
+                      <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-primary add-btn">
+                          Apply
+                        </button>
+                      </div>
+                      <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-outline-primary del-btn">
+                          Discard
+                        </button>
+                      </div>
+                    </div> -->
+                  </div>
                 </div>
-              </div>
-            </div>
-               
+                <div class="row mt-2">
+                  <div class="col-md-3">
+                    <div class="row align-items-center mb-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Created By :</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput formControlName="createby" />
+                        </mat-form-field>
+                      </div>
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Created On :</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput formControlName="createon" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="row align-items-center mb-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Last Edit By :</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput formControlName="lasteditby" />
+                        </mat-form-field>
+                      </div>
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Last Edit On :</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="date" matInput formControlName="lastediton" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="row align-items-center mb-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label">First Transaction :</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput formControlName="fristtransaction" />
+                        </mat-form-field>
+                      </div>
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Last Transaction :</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput formControlName="lasttransaction" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="row align-items-center mb-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label"> Salesman :</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput formControlName="salesman" />
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-12 text-end">
+                        <button type="button" class="btn btn-primary add-btn">
+                          Enquiry
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </mat-tab>
               <mat-tab label="Stone Details">
                 <div class="row mt-3">
                   <div class="col-md-12">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [(ngModel)]="checked" [disabled]="disabled">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
                       </dxo-editing>
@@ -636,15 +709,9 @@
                 </div>
                 <div class="row mt-2">
                   <div class="col-md-8">
-                    <div class="d-flex justify-content-start text-start">
-                      <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                               *ngIf="isDisplayed"
-                                [viewImportBtn]="false"
-                                (addClick)="openstonedetails()"
-                                (deleteClick)="removeData()"
-                                >
-                            </menu-buttons>
-                    </div>
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                            (addClick)="addTableDataStoneDetails()" (deleteClick)="deleteTableDataStoneDetails()">
+                        </menu-buttons>
                   </div>
                 </div>
               </mat-tab>
@@ -668,7 +735,7 @@
                       <label for="inputPassword" class="col-sm-2 col-form-label">Diamonds :</label>
                       <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="diamondsPcs"  />
+                          <input type="number" matInput formControlName="diamondsPcs" />
                         </mat-form-field>
                       </div>
                       <div class="col-md-2">
@@ -1041,71 +1108,6 @@
           </mat-tab>
         </mat-tab-group>
         <div class="container-fluid pt-3">
-          <div class="row mt-2">
-            <div class="col-md-3">
-              <div class="row align-items-center mb-1">
-                <label for="inputPassword" class="col-sm-6 col-form-label">Create By :</label>
-                <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="createby" />
-                  </mat-form-field>
-                </div>
-                <label for="inputPassword" class="col-sm-6 col-form-label">Create On :</label>
-                <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="createon" />
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="row align-items-center mb-1">
-                <label for="inputPassword" class="col-sm-6 col-form-label">Last Edit By :</label>
-                <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput  formControlName="lasteditby"/>
-                  </mat-form-field>
-                </div>
-                <label for="inputPassword" class="col-sm-6 col-form-label">Last Edit On :</label>
-                <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
-                    <input type="date" matInput formControlName="lastediton" />
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="row align-items-center mb-1">
-                <label for="inputPassword" class="col-sm-6 col-form-label">Frist Transaction :</label>
-                <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="fristtransaction" />
-                  </mat-form-field>
-                </div>
-                <label for="inputPassword" class="col-sm-6 col-form-label">Last Transaction :</label>
-                <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="lasttransaction" />
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="row align-items-center mb-1">
-                <label for="inputPassword" class="col-sm-6 col-form-label">Sales Man :</label>
-                <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="salesman" />
-                  </mat-form-field>
-                </div>
-                <div class="col-md-12 text-end">
-                  <button type="button" class="btn btn-primary add-btn">
-                    Enquiry
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
 
         </div>
       </div>

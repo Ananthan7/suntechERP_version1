@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -20,23 +20,372 @@ export class JewelleryMasterComponent implements OnInit {
 
   currentDate = new Date();
   divisionMS: any = 'ID';
-  columnheaderMetailDetails:any[]=['Div','Karat','Stock Code','Gross Wt','Purity','Pure Wt','Rate Type','Metal Rate','Rate Gms','Amount','Lab Rate','Lab Amount','Markup%','Sale Value'];
-  columnhead:any[] = ['Division','Gross Wt','Karat','Rate Type','Rate','Amount..','Amount','Metal Labour','Rate/Gram','MetalPer','Color'];
-  columnheader:any[] = ['Div', 'Stock Code', 'Shape','Color','Clarity','Sieve','Size','Pcs','Carat','Currency','Pc Code','Lab Rate','Lab Amt','LbCode'];
-  columnheaders:any[] = ['Sr','Description','FC','LC'];
-  columnheaderPartDetails:any[] = ['Sr#','Div','Part Code','Design Code','Pcs','Gross Wt','Rate','Amount']
+  columnheaderMetailDetails: any[] = ['Div', 'Karat', 'Stock Code', 'Gross Wt', 'Purity', 'Pure Wt', 'Rate Type', 'Metal Rate', 'Rate Gms', 'Amount', 'Lab Rate', 'Lab Amount', 'Markup%', 'Sale Value'];
+  columnhead: any[] = ['Division', 'Gross Wt', 'Karat', 'Rate Type', 'Rate', 'Amount..', 'Amount', 'Metal Labour', 'Rate/Gram', 'MetalPer', 'Color'];
+  columnheader: any[] = ['Div', 'Stock Code', 'Shape', 'Color', 'Clarity', 'Sieve', 'Size', 'Pcs', 'Carat', 'Currency', 'Pc Code', 'Lab Rate', 'Lab Amt', 'LbCode'];
+  columnheaders: any[] = ['Sr', 'Description', 'FC', 'LC'];
+  columnheaderPartDetails: any[] = ['Sr#', 'Div', 'Part Code', 'Design Code', 'Pcs', 'Gross Wt', 'Rate', 'Amount']
   subscriptions: any;
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   checkBoxesMode: string;
   allMode: string;
-  // currentDate = new FormControl(new Date());
-  isDisplayed: boolean = false;
-  disabled = true;
-  isdisabled : boolean = true;
-  checked = true;
-  
- 
+
+  itemcodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Item Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  EnterMetalDetailsComponentData: any;
+  StoneDetailsComponentData: any;
+  itemcodeSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.itemcode.setValue(value.PREFIX_CODE);
+  }
+
+  designCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Design Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DESIGN_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  designSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.design.setValue(value.DESIGN_CODE);
+  }
+
+  costcenterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  costcenterSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.costcenter.setValue(value.COST_CODE);
+  }
+
+  modelcodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 157,
+    SEARCH_FIELD: 'processToDescription',
+    SEARCH_HEADING: 'Model Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "processToDescription<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  modelcodeSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.modelcode.setValue(value.processToDescription);
+  }
+
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  countrySelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.country.setValue(value.CODE);
+  }
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.type.setValue(value.CODE);
+  }
+
+  vendorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Vendor Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  vendorSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.vendor.setValue(value.ACCODE);
+  }
+
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  categorySelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.category.setValue(value.CODE);
+  }
+
+  subcategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Subcategory Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  subcategorySelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.subcategory.setValue(value.CODE);
+  }
+
+  brandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  brandSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.brand.setValue(value.CODE);
+  }
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Design Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  colorSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.color.setValue(value.CODE);
+  }
+
+  fluorescenceCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'fluorescence Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  fluorescenceSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.fluorescence.setValue(value.CODE);
+  }
+
+  clarityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 37,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Clarity Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  claritySelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.clarity.setValue(value.CODE);
+  }
+
+  rangeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Range Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  rangeSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.range.setValue(value.CODE);
+  }
+
+  styleCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Style Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  styleSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.style.setValue(value.CODE);
+  }
+
+  HSNcodeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'HSN Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  HSNcodeSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.HSNcode.setValue(value.CODE);
+  }
+
+  timeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Time Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  timeSelected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.time.setValue(value.CODE);
+  }
+
+  price1CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price1Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price1.setValue(value.PRICE_CODE);
+  }
+
+  price2CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price2Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price2.setValue(value.PRICE_CODE);
+  }
+
+  price3CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price3Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price3.setValue(value.PRICE_CODE);
+  }
+
+  price4CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price4Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price4.setValue(value.PRICE_CODE);
+  }
+
+  price5CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price5Selected(value: any) {
+    console.log(value);
+    this.jewellerymasterForm.controls.price5.setValue(value.PRICE_CODE);
+  }
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -45,175 +394,179 @@ export class JewelleryMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
 
-  ) { 
+  ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
-    
   }
- 
+
   ngOnInit(): void {
-    
+  }
+  jewellerymasterForm: FormGroup = this.formBuilder.group({
+    itemcode: [''],
+    design: [''],
+    modelcode: [''],
+    description: [''],
+    costcenter: [''],
+    type: [''],
+    category: [''],
+    brand: [''],
+    fluorescence: [''],
+    range: [''],
+    HSNcode: [''],
+    vendorref: [''],
+    PCSunit: [''],
+    overall: [''],
+    vendorname: [''],
+    otherdesc: [''],
+    country: [''],
+    vendor: [''],
+    subcategory: [''],
+    color: [''],
+    clarity: [''],
+    style: [''],
+    time: [''],
+    setref: [''],
+    size: [''],
+    printscheme: [''],
+    price1: [''],
+    price2: [''],
+    price3: [''],
+    price4: [''],
+    price5: [''],
+    price1per: [''],
+    price2per: [''],
+    price3per: [''],
+    price4per: [''],
+    price5per: [''],
+    price1FC: [''],
+    price1LC: [''],
+    price2FC: [''],
+    price2LC: [''],
+    price3FC: [''],
+    price3LC: [''],
+    price4FC: [''],
+    price4LC: [''],
+    price5FC: [''],
+    price5LC: [''],
+    landercost: [''],
+    marketcost: [''],
+    POScus: [''],
+    certificateno: [''],
+    certificateno1: [''],
+    certdate: [''],
+    noofcert: [''],
+    hallmarking: [''],
+    foreigncost: [''],
+    grossWt: [''],
+    certificateby: [''],
+    certificateby1: [''],
+    certdate1: [''],
+    Type: [''],
+    diamondsPcs: [''],
+    diamondsCarat: [''],
+    diamondsGrams: [''],
+    diamondsFC: [''],
+    diamondsLC: [''],
+    colorstonePcs: [''],
+    colorstoneCarat: [''],
+    colorstoneGrams: [''],
+    colorstoneFC: [''],
+    colorstoneLC: [''],
+    pearlsPcs: [''],
+    pearlsCarat: [''],
+    pearlsGrams: [''],
+    pearlsFC: [''],
+    pearlsLC: [''],
+    otstonesPcs: [''],
+    otstonesCarat: [''],
+    otstonesGrams: [''],
+    otstonesFC: [''],
+    otstonesLC: [''],
+    metalPcs: [''],
+    metalCarat: [''],
+    metalGrams: [''],
+    metalFC: [''],
+    metalLC: [''],
+    totalPcs: [''],
+    totalCarat: [''],
+    totalGrams: [''],
+    totalFC: [''],
+    totalLC: [''],
+    costdiff: [''],
+    noofplat: [''],
+    createby: [''],
+    createon: [''],
+    lasteditby: [''],
+    lastediton: [''],
+    fristtransaction: [''],
+    lasttransaction: [''],
+    salesman: [''],
+    userdefined_1: [''],
+    userdefined_2: [''],
+    userdefined_3: [''],
+    userdefined_4: [''],
+    userdefined_5: [''],
+    userdefined_6: [''],
+    userdefined_7: [''],
+    userdefined_8: [''],
+    userdefined_9: [''],
+    userdefined_10: [''],
+    userdefined_11: [''],
+    userdefined_12: [''],
+    userdefined_13: [''],
+    userdefined_14: [''],
+    userdefined_15: [''],
+    tagDetails: [''],
+  });
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
   }
 
-
-
-  showHideText() {
-    this.isDisplayed = !this.isDisplayed;
-    this.disabled = !this.disabled;
-  }
-
-
-
-  openenteraddmetaldetails() {
+  addTableData() {
     const modalRef: NgbModalRef = this.modalService.open(EnterMetalDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.result.then((postData) => {
+      console.log(postData);      
+      if (postData) {
+        console.log('Data from modal:', postData);       
+        this.EnterMetalDetailsComponentData.push(postData);
+      }
+    });
+
   }
 
-  openstonedetails() {
+  deleteTableData() {
+    this.tableData.pop();
+  }
+
+  addTableDataStoneDetails() {
     const modalRef: NgbModalRef = this.modalService.open(StoneDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-  }
-
-  jewellerymasterForm: FormGroup = this.formBuilder.group({
-    itemcode:[''],
-    design : [''],
-    modelcode:[''],
-    description : [''],
-    costcenter : [''],
-    type : [''],
-    category:[''],
-    brand : [''],
-    fluorescence : [''],
-    range : [''],
-    HSNcode : [''],
-    vendorref : [''],
-    PCSunit : [''],
-    overall : [''],
-    vendorname : [''],
-    otherdesc : [''],
-    country:[''],
-    vendor:[''],
-    subcategory:[''],
-    color:[''],
-    clarity:[''],
-    style:[''],
-    time:[''],
-    setref:[''],
-    size:[''],
-    printscheme:[''],
-    price1:[''],
-    price2:[''],
-    price3:[''],
-    price4:[''],
-    price5:[''],
-    price1per:[''],
-    price2per:[''],
-    price3per:[''],
-    price4per:[''],
-    price5per:[''],
-    price1FC:[''],
-    price1LC:[''],
-    price2FC:[''],
-    price2LC:[''],
-    price3FC:[''],
-    price3LC:[''],
-    price4FC:[''],
-    price4LC:[''],
-    price5FC:[''],
-    price5LC:[''],
-    landercost:[''],
-    marketcost:[''],
-    POScus:[''],
-    certificateno:[''],
-    certificateno1:[''],
-    certdate:[new Date(),''],
-    noofcert:[''],
-    hallmarking:[''],
-    foreigncost:[''],
-    grossWt:[''],
-    certificateby:[''],
-    certificateby1:[''],
-    certdate1:[new Date(),''],
-    Type:[''],
-    diamondsPcs: [''],
-    diamondsCarat:[''],
-    diamondsGrams:[''],
-    diamondsFC:[''],
-    diamondsLC:[''],
-    colorstonePcs:[''],
-    colorstoneCarat:[''],
-    colorstoneGrams:[''],
-    colorstoneFC:[''],
-    colorstoneLC:[''],
-    pearlsPcs:[''],
-    pearlsCarat:[''],
-    pearlsGrams:[''],
-    pearlsFC:[''],
-    pearlsLC:[''],
-    otstonesPcs:[''],
-    otstonesCarat:[''],
-    otstonesGrams:[''],
-    otstonesFC:[''],
-    otstonesLC:[''],
-    metalPcs:[''],
-    metalCarat:[''],
-    metalGrams:[''],
-    metalFC:[''],
-    metalLC:[''],
-    totalPcs:[''],
-    totalCarat:[''],
-    totalGrams:[''],
-    totalFC:[''],
-    totalLC:[''],
-    costdiff:[''],
-    noofplat:[''],
-    createby:[''],
-    createon:[''],
-    lasteditby:[''],
-    lastediton:[''],
-    fristtransaction:[''],
-    lasttransaction:[''],
-    salesman:[''],
-    userdefined_1:[''],
-    userdefined_2:[''],
-    userdefined_3:[''],
-    userdefined_4:[''],
-    userdefined_5:[''],
-    userdefined_6:[''],
-    userdefined_7:[''],
-    userdefined_8:[''],
-    userdefined_9:[''],
-    userdefined_10:[''],
-    userdefined_11:[''],
-    userdefined_12:[''],
-    userdefined_13:[''],
-    userdefined_14:[''],
-    userdefined_15:[''],
-    tagDetails:[''],
-   });
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
-  addData(){
+    modalRef.result.then((postData) => {
+      console.log(postData);      
+      if (postData) {
+        console.log('Data from modal:', postData);       
+        this.StoneDetailsComponentData.push(postData);
+      }
+    });
 
   }
 
-  removeData(){
-
+  deleteTableDataStoneDetails() {
+    this.tableData.pop();
   }
-  
 
-  formSubmit(){
-    if(this.content && this.content.FLAG == 'EDIT'){
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -221,9 +574,9 @@ export class JewelleryMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'DiamondStockMaster/InsertDiamondStockMaster'
-    let postData ={
+    let postData = {
       "ITEM": this.jewellerymasterForm.value.itemcode || "",
       "STOCK_CODE": "md3",
       "STOCK_DESCRIPTION": this.jewellerymasterForm.value.description || "",
@@ -233,8 +586,8 @@ export class JewelleryMasterComponent implements OnInit {
       "TYPE_CODE": this.jewellerymasterForm.value.type || "",
       "CATEGORY_CODE": this.jewellerymasterForm.value.category || "",
       "SUBCATEGORY_CODE": this.jewellerymasterForm.value.subcategory || "",
-      "BRAND_CODE":this.jewellerymasterForm.value.brand || "",
-      "COUNTRY_CODE":this.jewellerymasterForm.value.country || "",
+      "BRAND_CODE": this.jewellerymasterForm.value.brand || "",
+      "COUNTRY_CODE": this.jewellerymasterForm.value.country || "",
       "SUPPLIER_CODE": "",
       "SUPPLIER_REF": "",
       "DESIGN_CODE": this.jewellerymasterForm.value.design || "",
@@ -243,12 +596,12 @@ export class JewelleryMasterComponent implements OnInit {
       "PICTURE_NAME1": this.jewellerymasterForm.value.picturename1 || "",
       "STOCK_FCCOST": 0,
       "STOCK_LCCOST": 0,
-      "PRICE1PER":this.jewellerymasterForm.value.price1 || "",
-      "PRICE2PER":this.jewellerymasterForm.value.price2 || "",
-      "PRICE3PER":this.jewellerymasterForm.value.price3 || "",
+      "PRICE1PER": this.jewellerymasterForm.value.price1 || "",
+      "PRICE2PER": this.jewellerymasterForm.value.price2 || "",
+      "PRICE3PER": this.jewellerymasterForm.value.price3 || "",
       "PRICE4PER": this.jewellerymasterForm.value.price4 || "",
-      "PRICE5PER":this.jewellerymasterForm.value.price5 || "",
-      "PRICE1FC":this.jewellerymasterForm.value.price1FC || "",
+      "PRICE5PER": this.jewellerymasterForm.value.price5 || "",
+      "PRICE1FC": this.jewellerymasterForm.value.price1FC || "",
       "PRICE1LC": this.jewellerymasterForm.value.price1LC || "",
       "PRICE2FC": this.jewellerymasterForm.value.price2FC || "",
       "PRICE2LC": this.jewellerymasterForm.value.price2LC || "",
@@ -334,7 +687,7 @@ export class JewelleryMasterComponent implements OnInit {
       "WATCH_STATUS": "",
       "WATCH_WEIGHT": "",
       "UNIT": "",
-      "PCS_PERUNIT":this.jewellerymasterForm.value.PCSunit || "",
+      "PCS_PERUNIT": this.jewellerymasterForm.value.PCSunit || "",
       "TAG_LINESWOENTER": "",
       "PICTURE_NAME_THUMBNAIL": "",
       "GOLDSMITH": "",
@@ -366,7 +719,7 @@ export class JewelleryMasterComponent implements OnInit {
       "INITIAL_BRPURVOCTYPE_NO": "string",
       "STOCK_DESCRIPTION_OTHERS": this.jewellerymasterForm.value.otherdesc || "",
       "TIME_CODE": this.jewellerymasterForm.value.time || "",
-      "RANGE_CODE":  this.jewellerymasterForm.value.range || "",
+      "RANGE_CODE": this.jewellerymasterForm.value.range || "",
       "COMMENTS_CODE": "",
       "NOTES": "",
       "ASK": "",
@@ -375,7 +728,7 @@ export class JewelleryMasterComponent implements OnInit {
       "POLISH": "",
       "SYMMETRY": "",
       "UDF1": this.jewellerymasterForm.value.userdefined_1 || "",
-      "UDF2":this.jewellerymasterForm.value.userdefined_2 || "",
+      "UDF2": this.jewellerymasterForm.value.userdefined_2 || "",
       "UDF3": this.jewellerymasterForm.value.userdefined_3 || "",
       "UDF4": this.jewellerymasterForm.value.userdefined_4 || "",
       "UDF5": this.jewellerymasterForm.value.userdefined_5 || "",
@@ -385,7 +738,7 @@ export class JewelleryMasterComponent implements OnInit {
       "UDF9": this.jewellerymasterForm.value.userdefined_9 || "",
       "UDF10": this.jewellerymasterForm.value.userdefined_10 || "",
       "UDF11": this.jewellerymasterForm.value.userdefined_11 || "",
-      "UDF12":this.jewellerymasterForm.value.userdefined_12 || "",
+      "UDF12": this.jewellerymasterForm.value.userdefined_12 || "",
       "UDF13": this.jewellerymasterForm.value.userdefined_13 || "",
       "UDF14": this.jewellerymasterForm.value.userdefined_14 || "",
       "UDF15": this.jewellerymasterForm.value.userdefined_15 || "",
@@ -409,14 +762,14 @@ export class JewelleryMasterComponent implements OnInit {
       "TONE_SATURATION": "",
       "SHAPEAPPAREL": "",
       "DIA_PCS": this.jewellerymasterForm.value.diamondsPcs || "",
-      "DIA_CARAT":this.jewellerymasterForm.value.diamondsCarat || "",
+      "DIA_CARAT": this.jewellerymasterForm.value.diamondsCarat || "",
       "DIA_VALUEFC": this.jewellerymasterForm.value.diamondsFC || "",
       "DIA_VALUECC": this.jewellerymasterForm.value.diamondsLC || "",
       "COLOR_PCS": this.jewellerymasterForm.value.colorstonePcs || "",
       "COLOR_CARAT": this.jewellerymasterForm.value.colorstoneCarat || "",
       "COLOR_VALUEFC": this.jewellerymasterForm.value.colorstoneFC || "",
       "COLOR_VALUECC": this.jewellerymasterForm.value.colorstoneLC || "",
-      "PEARL_PCS":this.jewellerymasterForm.value.pearlsPcs || "",
+      "PEARL_PCS": this.jewellerymasterForm.value.pearlsPcs || "",
       "PEARL_CARAT": this.jewellerymasterForm.value.pearlsCarat || "",
       "PEARL_VALUEFC": this.jewellerymasterForm.value.pearlsFC || "",
       "PEARL_VALUECC": this.jewellerymasterForm.value.pearlsLC || "",
@@ -455,7 +808,7 @@ export class JewelleryMasterComponent implements OnInit {
       "KPNUMBER": "",
       "HSN_CODE": this.jewellerymasterForm.value.HSNcode || "",
       "ITEM_ONHOLD": true,
-      "POS_CUST_CODE":  this.jewellerymasterForm.value.POScus || "",
+      "POS_CUST_CODE": this.jewellerymasterForm.value.POScus || "",
       "CONSIGNMENT": true,
       "POSGROSSWT": this.jewellerymasterForm.value.grossWt || "",
       "HANDLING_CHARGEFC": 0,
@@ -468,7 +821,7 @@ export class JewelleryMasterComponent implements OnInit {
       "BATCH_STOCK": true,
       "BATCH_PREFIX": "",
       "SIEVE_SET": "",
-      "MODEL_CODE":  this.jewellerymasterForm.value.modelcode || "",
+      "MODEL_CODE": this.jewellerymasterForm.value.modelcode || "",
       "NOOF_PLAT": this.jewellerymasterForm.value.noofplat || "",
       "PLAT_CHARGESFC": 0,
       "PLAT_CHARGESLC": 0,
@@ -477,7 +830,7 @@ export class JewelleryMasterComponent implements OnInit {
       "UNFIX_DIAMOND_ITEM": true,
       "ALLOW_WITHOUT_RATE": true,
       "RRR_STOCK_REF": "",
-      "MARKETCOSTFC":this.jewellerymasterForm.value.marketcost || "",
+      "MARKETCOSTFC": this.jewellerymasterForm.value.marketcost || "",
       "MARKETCOSTLC": 0,
       "RRR_PRICE_UPDATED": true,
       "RRR_PRICE_UPDDATE": "2023-11-27T07:30:26.960Z",
@@ -632,11 +985,11 @@ export class JewelleryMasterComponent implements OnInit {
         }
       ]
     }
-  
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -657,14 +1010,14 @@ export class JewelleryMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  update(){
+  update() {
     if (this.jewellerymasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'DiamondStockMaster/UpdateDiamondStockMaster/'+this.content.STOCK_CODE
-    let postData = 
+
+    let API = 'DiamondStockMaster/UpdateDiamondStockMaster/' + this.content.STOCK_CODE
+    let postData =
     {
       "ITEM": "s",
       "STOCK_CODE": "string",
@@ -1074,12 +1427,12 @@ export class JewelleryMasterComponent implements OnInit {
         }
       ]
     }
-    
-  
+
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -1166,9 +1519,3 @@ export class JewelleryMasterComponent implements OnInit {
     });
   }
 }
-
-
-function disable(): import("@angular/forms").AbstractControl {
-  throw new Error('Function not implemented.');
-}
-
