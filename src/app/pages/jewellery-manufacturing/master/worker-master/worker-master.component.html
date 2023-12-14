@@ -35,9 +35,9 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Worker A/c Code :</label>
+                                Worker A/c Code*:</label>
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput placeholder="AC Code" [readonly]="viewOnlyFlag"
+                                <input type="text" matInput  [readonly]="viewOnlyFlag"
                                     maxlength="6" (change)="workerCodeChange($event)" formControlName="WorkerAcCode" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="accountMasterData"
@@ -92,7 +92,7 @@
                         <span class="col-sm-4 col-form-label">Tray Weight*:</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput numericInput [readonly]="viewOnlyFlag" class="text-right"
+                                <input type="number" matInput numericInput [readonly]="viewOnlyFlag" class="text-right"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
@@ -117,7 +117,7 @@
                             :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="text" class="text-right" [readonly]="viewOnlyFlag" matInput
+                                <input type="number" class="text-right" [readonly]="viewOnlyFlag" matInput
                                     AmountDecimalInput formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
@@ -204,8 +204,8 @@
                             <dxi-column dataField="SrNo" width="auto" caption="Sr No" [allowEditing]="true"
                                 alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process Code " [allowEditing]="true"
-                                alignment="center">
+                            <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process Code "
+                                [allowEditing]="true" alignment="center">
                             </dxi-column>
                             <dxi-column dataField="PROCESS_DESC" width="auto" caption="Description"
                                 [allowEditing]="true" alignment="center">

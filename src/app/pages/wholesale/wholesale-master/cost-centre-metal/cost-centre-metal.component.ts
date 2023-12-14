@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CostCentreMetalDetailsComponent } from './cost-centre-metal-details/cost-centre-metal-details.component';
 
 @Component({
   selector: 'app-cost-centre-metal',
@@ -89,7 +90,12 @@ export class CostCentreMetalComponent implements OnInit {
 
 
   addTableData(){
-
+    const modalRef: NgbModalRef = this.modalService.open(CostCentreMetalDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    })
   }
   
   deleteTableData(){
