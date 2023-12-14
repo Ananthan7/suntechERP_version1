@@ -27,6 +27,8 @@ import { CostCentreDiamondComponent } from './cost-centre-diamond/cost-centre-di
 import { CostCentreDiamondDetailsComponent } from './cost-centre-diamond/cost-centre-diamond-details/cost-centre-diamond-details.component';
 import { EnterMetalDetailsComponent } from './watch-master/enter-metal-details/enter-metal-details.component';
 import { EnterStoneDetailsComponent } from './watch-master/enter-stone-details/enter-stone-details.component';
+import { CostCenterMakingChargesDetailsComponent } from './costcentre-magkingcharges/cost-center-making-charges-details/cost-center-making-charges-details.component';
+import { CostCentreMetalDetailsComponent } from './cost-centre-metal/cost-centre-metal-details/cost-centre-metal-details.component';
 
 
 @NgModule({
@@ -55,6 +57,8 @@ import { EnterStoneDetailsComponent } from './watch-master/enter-stone-details/e
     CostCentreDiamondDetailsComponent,
     EnterMetalDetailsComponent,
     EnterStoneDetailsComponent,
+    CostCenterMakingChargesDetailsComponent,
+    CostCentreMetalDetailsComponent,
   ],
   imports: [
     CommonModule,

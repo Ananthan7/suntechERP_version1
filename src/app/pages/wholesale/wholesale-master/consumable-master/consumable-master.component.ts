@@ -41,7 +41,7 @@ export class ConsumableMasterComponent implements OnInit {
     country:[''],
     size:[''],
     hsn:[''],
-
+    description:['']
   })
 
   codeCodeData:MasterSearchModel = {
@@ -112,7 +112,7 @@ export class ConsumableMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Vendor',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
@@ -189,6 +189,7 @@ export class ConsumableMasterComponent implements OnInit {
   codeCodeSelected(e:any){
     console.log(e);
     this.consumbleForm.controls.code.setValue(e.PREFIX_CODE);
+    this.consumbleForm.controls.description.setValue(e.DESCRIPTION);
   }
 
 
@@ -203,7 +204,7 @@ export class ConsumableMasterComponent implements OnInit {
 
   vendorCodeSelected(e:any){
     console.log(e);
-    this.consumbleForm.controls.vendor.setValue(e.CODE);
+    this.consumbleForm.controls.vendor.setValue(e.ACCODE);
   }
 
   typeCodeSelected(e:any){

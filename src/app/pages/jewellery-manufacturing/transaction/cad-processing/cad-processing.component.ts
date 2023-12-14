@@ -42,6 +42,9 @@ export class CADProcessingComponent implements OnInit {
     }
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    if (this.content) {
+      this.setFormValues()
+    }
   }
 
   
@@ -49,7 +52,22 @@ export class CADProcessingComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  setFormValues() {
+    if (!this.content) return
+    this.cadProcessingForm.controls.job_number.setValue(this.content.APPR_CODE)
+    this.cadProcessingForm.controls.design.setValue(this.content.job_description)
 
+
+    this.dataService.getDynamicAPI('/JobCadProcessDJ/GetJobCadProcessDJ/' + this.content.job_number).subscribe((data) => {
+      if (data.status == 'Success') {
+
+        this.tableData = data.response.WaxProcessDetails;
+
+
+      }
+    });
+
+  }
   cadProcessingForm: FormGroup = this.formBuilder.group({
     voctype: [''],
     vocNo: [''],
