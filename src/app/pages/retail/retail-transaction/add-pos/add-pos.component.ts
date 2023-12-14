@@ -547,7 +547,7 @@ export class AddPosComponent implements OnInit {
       fcn_li_location: [''],
       // fcn_li_location: ['', Validators.required],
       fcn_li_pcs: [{ value: 0 }, [Validators.required, Validators.min(1)]],
-      fcn_li_gross_wt: ['', [Validators.required, Validators.min(0.1)]],
+      fcn_li_gross_wt: ['', [Validators.required, Validators.min(0)]],
       // fcn_li_gross_wt: [{ value: 0, disabled: true }, Validators.required],
       fcn_li_stone_wt: [0, Validators.required],
       fcn_li_net_wt: [0, Validators.required],
@@ -624,7 +624,7 @@ export class AddPosComponent implements OnInit {
       fcn_customer_detail_name: ['', Validators.required],
       fcn_customer_detail_fname: ['', Validators.required],
       fcn_customer_detail_mname: [''],
-      fcn_customer_detail_lname: ['', Validators.required],
+      fcn_customer_detail_lname: ['', [Validators.required, Validators.maxLength(100)]],
       fcn_cust_detail_gender: ['', Validators.required],
       fcn_cust_detail_marital_status: [''],
       fcn_cust_detail_dob: ['',
@@ -786,6 +786,7 @@ export class AddPosComponent implements OnInit {
     });
     this.indexedDb.getAllData('idMaster').subscribe((data) => {
       if (data.length > 0) {
+        console.log('idMaster', data);
         this.comFunc.idMaster = data;
       }
     });
@@ -1604,18 +1605,18 @@ export class AddPosComponent implements OnInit {
   saveReceipt(type?: any) {
     const res = this.validateReceipt();
 
-    
+
     if (this.selectedTabIndex == 2) {
-      if(this.isInvalidRecNo){
+      if (this.isInvalidRecNo) {
         this.snackBar.open('Invalid Receipt No.', 'OK', {
           duration: 2000
         });
         return;
       }
-    }else{
+    } else {
       this.isInvalidRecNo = false;
     }
-    
+
     if (!res) {
       // if (parseFloat(this.cashreceiptForm.value.receiptAmtFC) > 0) {
 
@@ -6154,6 +6155,14 @@ export class AddPosComponent implements OnInit {
               this.li_net_amount_val =
                 this.lineItemForm.value.fcn_li_net_amount;
               // this.li_tag_val = this.newLineItem.TAG_LINES;
+
+
+              if (!this.newLineItem.IS_BARCODED_ITEM || this.newLineItem.TPROMOTIONALITEM)
+                this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+              else
+                this.setMakingValidation();
+
+
             } else {
               // this.snackBar.open('Invalid Stock Code', 'OK');
               this.openDialog(
@@ -6180,6 +6189,18 @@ export class AddPosComponent implements OnInit {
 
     // this.lineItemForm.controls['fcn_li_pcs'].setValue(1);
   }
+
+  setMakingValidation() {
+    this.addValidationsForForms(this.lineItemForm, 'fcn_li_rate', [
+      Validators.required,
+      Validators.min(0.1),
+    ]);
+    this.addValidationsForForms(this.lineItemForm, 'fcn_li_total_amount', [
+      Validators.required,
+      Validators.min(1),
+    ]);
+  }
+
   searchVocNoSalRet() {
 
     this.getRetailSReturn_EvnFn({
@@ -9804,7 +9825,8 @@ export class AddPosComponent implements OnInit {
   }
 
   getAccountLookup() {
-    this.suntechApi.getDynamicAPI('AccountLookup').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI('AccountLookup/GetAccountLookupWithAccMode/R').subscribe((resp) => {
+    // this.suntechApi.getDynamicAPI('AccountLookup').subscribe((resp) => {
       let resVal;
       if (resp['status'] == 'Success') {
         resVal = resp.response;
@@ -9817,7 +9839,8 @@ export class AddPosComponent implements OnInit {
         this.customerReceiptForm.controls.customAcCodeList.valueChanges.pipe(
           startWith(''),
           map((value) =>
-            this._filterMasters(this.accountLookupList, value, 'CODE', 'DESCRIPTION')
+            this._filterMasters(this.accountLookupList, value, 'ACCODE', 'ACCOUNT_HEAD')
+            // this._filterMasters(this.accountLookupList, value, 'CODE', 'DESCRIPTION')
           )
         );
 
@@ -9945,7 +9968,7 @@ export class AddPosComponent implements OnInit {
         this.advanceReceiptForm.controls.advanceYear.setValue(
           this.comFunc.emptyToZero(data['FYEARCODE'].toString()));
         this.advanceReceiptForm.controls.advanceBranch.setValue(
-          this.comFunc.emptyToZero(data['REC_BRANCHCODE'].toString()));
+          data['REC_BRANCHCODE'].toString());
 
         this.advanceReceiptForm.controls.advanceRecNo.setValue(
           this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));

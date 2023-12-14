@@ -2233,9 +2233,10 @@
                   >
                     <mat-option
                       *ngFor="let option of customAcCodeListOptions | async"
-                      [value]="option.CODE"
+                      [value]="option.ACCODE"
                     >
-                      {{ option.CODE + " - " + option.DESCRIPTION }}
+                      {{ option.ACCODE + " - " + option.ACCOUNT_HEAD }}
+                      <!-- {{ option.CODE + " - " + option.DESCRIPTION }} -->
                     </mat-option>
                   </mat-autocomplete>
                   <mat-error
@@ -3296,6 +3297,16 @@
                 >
                   Last Name is <strong>required</strong>
                 </mat-error>
+                <mat-error
+                *ngIf="
+                  customerDetailForm.controls.fcn_customer_detail_lname.hasError(
+                    'maxlength'
+                  )
+                "
+              >
+                Last Name must not exceed 100 characters.
+              </mat-error>
+              
               </mat-form-field>
             </div>
             <div class="col-md-3">

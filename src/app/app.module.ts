@@ -144,6 +144,11 @@ const dbConfig: DBConfig = {
       storeConfig: { keyPath: 'id', autoIncrement: true },
       storeSchema: []
     },
+    {
+      store: 'companyParameter',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: []
+    },
 
   ]
 };
