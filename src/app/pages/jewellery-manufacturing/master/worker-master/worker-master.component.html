@@ -35,10 +35,10 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Worker A/c Code*:</label>
+                                Worker A/c Code :</label>
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput  [readonly]="viewOnlyFlag"
-                                    maxlength="6" (change)="workerCodeChange($event)" formControlName="WorkerAcCode" />
+                                <input type="text" matInput [readonly]="viewOnlyFlag" maxlength="6"
+                                    (change)="workerCodeChange($event)" formControlName="WorkerAcCode" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="accountMasterData"
                                 (newRowClick)="WorkerAcCodeSelected($event)">
@@ -87,7 +87,6 @@
                             </mat-form-field>
                         </div>
                     </div>
-
                     <div class="row">
                         <span class="col-sm-4 col-form-label">Tray Weight*:</span>
                         <div class="col-sm-3">
@@ -122,7 +121,6 @@
                             </mat-form-field>
                         </div>
                     </div>
-
                     <div class="row align-items-center">
                         <span class="col-sm-4 col-form-label">Target
                             Weight(GMS)*:</span>
@@ -195,7 +193,6 @@
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
-
                             <dxi-column width="auto" cellTemplate="limitTemplate" alignment="right"></dxi-column>
                             <div *dxTemplate="let cellInfo of 'limitTemplate'">
                                 <input type="checkbox" (change)="changedCheckbox(cellInfo)" />
@@ -212,10 +209,15 @@
                             </dxi-column>
                         </dx-data-grid>
                     </div>
-
                 </div>
             </div>
-
+            <div class="row my-3">
+                <div class="col-md-12">
+                    <button type="button" mat-flat-button color="primary">Print
+                        Barcode
+                    </button>
+                </div>
+            </div>
         </form>
     </div>
 </div>

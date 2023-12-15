@@ -11,7 +11,6 @@
   <!-- content section -->
   <div class="row">
     <!-- <div class="container-fluid pt-3"> -->
-
     <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
       <mat-tab label="Diamond Labour Master">
         <div class="container-fluid">
@@ -71,8 +70,9 @@
                 <mat-form-field>
                   <mat-label>Select</mat-label>
                   <mat-select formControlName="method">
-                    <mat-option value="one"></mat-option>
-                    <mat-option value="two"></mat-option>
+                    <mat-option *ngFor="let option of methodList" [value]="option.METHOD">
+                      {{ option.name }}
+                    </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -170,7 +170,6 @@
                 <mat-form-field>
                   <input type="text" matInput maxlength="6" formControlName="selling" />
                 </mat-form-field>
-
               </div>
             </div>
             <div class="row mb-2">
@@ -190,7 +189,6 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-
               </div>
             </div>
             <div class="row mb-2">
@@ -243,11 +241,9 @@
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput formControlName="metallabour_description" />
                 </mat-form-field>
-
               </div>
             </div>
             <div class="row mb-2">
-
               <label for="input" class="col-sm-2 col-form-label">Labour Type :</label>
               <div class="col-sm-3">
                 <mat-form-field>
@@ -269,7 +265,6 @@
               </div>
             </div>
             <div class="row mb-2">
-
               <label for="input" class="col-sm-2 col-form-label">Karat :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
@@ -288,7 +283,6 @@
               </div>
             </div>
             <div class="row mb-2">
-
               <label for="input" class="col-sm-2 col-form-label">Color :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
@@ -336,7 +330,6 @@
               </div>
             </div>
             <div class="row mb-2">
-
               <label for="input" class="col-sm-2 col-form-label">Sub Category :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
@@ -410,7 +403,6 @@
                     </div> -->
                 <mat-checkbox class="example-margin mx-2" formControlName="onGrossWt"> On Gross Wt</mat-checkbox>
                 <mat-checkbox class="example-margin mx-2" formControlName="forDesignOnly">For Design Only</mat-checkbox>
-
                 <!-- <mat-radio-group aria-label="Select an option">
                       <mat-radio-button value="1"  formControlName="onGrossWt" class="mx-2"> On Gross Wt</mat-radio-button>
                       <mat-radio-button value="2"  formControlName="forDesignOnly" class="mx-2">For Design Only</mat-radio-button>

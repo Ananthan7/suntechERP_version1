@@ -94,4 +94,7 @@ export class EnterMetalDetailsComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  formSubmit(){}
+  continue(){}
+
 }
