@@ -72,7 +72,7 @@ export class WorkerMasterComponent implements OnInit {
     DailyTarget: [false],
     MonthlyTarget: [false],
     YearlyTarget: [false],
-    active : [false],
+    active : [true],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -190,7 +190,7 @@ export class WorkerMasterComponent implements OnInit {
       "TOTALSAL": 0,
       "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
       "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": "",
+      "SECRET_CODE": this.workerMasterForm.value.Password ||"",
       "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
       "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
       "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",

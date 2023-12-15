@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
   selector: 'app-cost-centre-diamond-details',
@@ -33,13 +34,29 @@ export class CostCentreDiamondDetailsComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  
+  continue(){}
 
   costcenterdiamonddetailsForm: FormGroup = this.formBuilder.group({
     branch:[''],
-    purchase:[''],
-    purchasereturn:[''],
-    sales:[''],
-    salesreturn:[''],
+    purchase1:[''],
+    purchase2:[''],
+    purchase3:[''],
+    purchasereturn1:[''],
+    purchasereturn2:[''],
+    purchasereturn3:[''],
+    sales1:[''],
+    sales2:[''],
+    sales3:[''],
+    sales4:[''],
+    sales5:[''],
+    salesreturn1:[''],
+    salesreturn2:[''],
+    salesreturn3:[''],
+    salesreturn4:[''],
+    salesreturn5:[''],
+    other1:[''],
+    other2:[''],
     opening:[''],
     ownstock:[''],
     closingstock:[''],
@@ -58,12 +75,43 @@ export class CostCentreDiamondDetailsComponent implements OnInit {
     customaccount:[''],
     in:[''],
     out:[''],
-    puregoldindiamondjewellery:[''],
-    puregoldindiamondjewelleryFixed:[''],
-    loosestonevalueindiamondjewellery:[''],
-    colorstonevalueindiamondjeweller:[''],
-    pearlvalueindiamondjewellery:[''],
+    puregoldindiamondjewellery1:[''],
+    puregoldindiamondjewellery2:[''],
+    puregoldindiamondjewellery3:[''],
+    puregoldindiamondjewellery4:[''],
+    puregoldindiamondjewelleryFixed1:[''],
+    puregoldindiamondjewelleryFixed2:[''],
+    puregoldindiamondjewelleryFixed3:[''],
+    puregoldindiamondjewelleryFixed4:[''],
+    loosestonevalueindiamondjewellery1:[''],
+    loosestonevalueindiamondjewellery2:[''],
+    loosestonevalueindiamondjewellery3:[''],
+    loosestonevalueindiamondjewellery4:[''],
+    colorstonevalueindiamondjeweller1:[''],
+    colorstonevalueindiamondjeweller2:[''],
+    colorstonevalueindiamondjeweller3:[''],
+    colorstonevalueindiamondjeweller4:[''],
+    pearlvalueindiamondjewellery1:[''],
+    pearlvalueindiamondjewellery2:[''],
+    pearlvalueindiamondjewellery3:[''],
+    pearlvalueindiamondjewellery4:[''],
   })
+
+  branchCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'GENERAL MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  branchCodeSelected(data: any) {
+    this.costcenterdiamonddetailsForm.controls.branch.setValue(data.BRANCH_CODE)
+  }
 
   formSubmit(){
 

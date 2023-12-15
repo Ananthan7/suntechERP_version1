@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class CostCentreDiamondComponent implements OnInit {
 
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
 
@@ -28,7 +28,7 @@ export class CostCentreDiamondComponent implements OnInit {
 
   constructor(
     private activeModal: NgbActiveModal,
-    private modalService : NgbModal,
+    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
@@ -40,15 +40,15 @@ export class CostCentreDiamondComponent implements OnInit {
 
   
   costcenterdiamondForm: FormGroup = this.formBuilder.group({
-    costcode:[''],
-    description:[''],
-    purchase:[''],
-    sales:[''],
-    branchtransfer:[''],
-  
+    costcode: [''],
+    description: [''],
+    purchase: [''],
+    sales: [''],
+    branchtransfer: [''],
+
   })
 
-  purchaseCodeData:MasterSearchModel = {
+  purchaseCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 49,
@@ -59,9 +59,9 @@ export class CostCentreDiamondComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
 
-  salesCodeData:MasterSearchModel = {
+
+  salesCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 49,
@@ -72,9 +72,9 @@ export class CostCentreDiamondComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
 
-  branchtransferCodeData:MasterSearchModel = {
+
+  branchtransferCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 49,
@@ -85,14 +85,14 @@ export class CostCentreDiamondComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
- 
-  purchaseCodeSelected(e:any){
+
+
+  purchaseCodeSelected(e: any) {
     console.log(e);
     this.costcenterdiamondForm.controls.purchase.setValue(e.GST_CODE);
   }
 
-  salesCodeSelected(e:any){
+  salesCodeSelected(e: any) {
     console.log(e);
     this.costcenterdiamondForm.controls.sales.setValue(e.GST_CODE);
   }
@@ -106,7 +106,9 @@ export class CostCentreDiamondComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  openCostCentreDiamond(){
+  continue(){}
+  
+  openCostCentreDiamond() {
     const modalRef: NgbModalRef = this.modalService.open(CostCentreDiamondDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
@@ -117,9 +119,9 @@ export class CostCentreDiamondComponent implements OnInit {
   }
 
 
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -127,7 +129,7 @@ export class CostCentreDiamondComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'CostCenterMaster/InsertCostCenterMaster'
     let postData = {
       "MID": 0,
@@ -319,12 +321,12 @@ export class CostCentreDiamondComponent implements OnInit {
           "CERTCHGAC": "string"
         }
       ]
-  }
-  
+    }
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -345,14 +347,14 @@ export class CostCentreDiamondComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
-  update(){
+
+  update() {
     if (this.costcenterdiamondForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'CostCenterMaster/UpdateCostCenterMaster/'+ this.costcenterdiamondForm.value.costcode + this.costcenterdiamondForm.value.type
+
+    let API = 'CostCenterMaster/UpdateCostCenterMaster/' + this.costcenterdiamondForm.value.costcode + this.costcenterdiamondForm.value.type
     let postData = {
       "MID": 0,
       "TYPE": "string",
@@ -544,11 +546,11 @@ export class CostCentreDiamondComponent implements OnInit {
         }
       ]
     }
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -569,7 +571,7 @@ export class CostCentreDiamondComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.MID) {
       Swal.fire({
@@ -635,7 +637,7 @@ export class CostCentreDiamondComponent implements OnInit {
       }
     });
   }
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

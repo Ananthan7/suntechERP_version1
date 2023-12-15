@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="row align-items-center mb-1">
-                                    <label for="inputPassword" class="col-sm-3 col-form-label">Design :</label>
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Code :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput />
@@ -202,8 +202,7 @@
                                         <mat-form-field style="width: 60%;">
                                             <input type="text" matInput formControlName="weight" />
                                         </mat-form-field>
-                                        <master-search [MasterSearchData]="weightCodeData"
-                                            (newRowClick)="weightCodeSelected($event)"></master-search>
+                                      
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -212,9 +211,7 @@
                                         <mat-form-field style="width: 60%;">
                                             <input type="text" matInput formControlName="status" />
                                         </mat-form-field>
-                                        <master-search [MasterSearchData]="statusCodeData"
-                                            (newRowClick)="statusCodeSelected($event)">
-                                        </master-search>
+                                        
                                     </div>
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Vendor Ref
                                         :</label>
@@ -222,8 +219,7 @@
                                         <mat-form-field style="width: 60%;">
                                             <input type="text" matInput formControlName="vendorRef" />
                                         </mat-form-field>
-                                        <master-search [MasterSearchData]="vendorRefCodeData"
-                                            (newRowClick)="vendorRefCodeSelected($event)"></master-search>
+                                  
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">

@@ -18,12 +18,10 @@ export class SequenceMasterComponent implements OnInit {
 
   dataSource: any[] = [];
   selectedSequence: any[] = [];
-
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
   selectAll = false
-
   private subscriptions: Subscription[] = [];
 
   sequenceMasterData: MasterSearchModel = {
@@ -51,19 +49,15 @@ export class SequenceMasterComponent implements OnInit {
   ) {
     this.getTableData()
   }
-
   ngOnInit(): void {
     if (this.content) {
       this.setFormValues()
     }
   }
-
   checkAll() {
     console.log(this.dataSource);
     this.dataSource.forEach((item:any)=>item.isChecked = this.selectAll )
 }
-
-
   /**USE: drag and drop event */
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
@@ -88,7 +82,6 @@ export class SequenceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
   setFormValues() {
     if (!this.content) return
     this.sequenceMasterForm.controls.sequenceCode.setValue(this.content.SEQ_CODE)

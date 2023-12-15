@@ -18,10 +18,10 @@
                                     <label for="inputPassword" class="col-sm-6 col-form-label">Code :</label>
                                     <div class="col-md-6">
                                       <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="code" />
+                                        <input type="text" matInput formControlName="code"  />
                                       </mat-form-field>
                                       <master-search [MasterSearchData]="codeCodeData"
-                                      (newRowClick)="codeCodeSelected($event)">
+                                      (newRowClick)="codeCodeSelected($event)" >
                                   </master-search>
                                     </div>
                                   </div>
@@ -32,7 +32,7 @@
                                 <div class="row align-items-center mb-1">
                                     <label for="inputPassword" class="col-sm-6 col-form-label">Description:</label>
                                     <div class="col-md-6">
-                                      <mat-form-field style="width: 70%;">
+                                      <mat-form-field style="width: 100%;">
                                         <input type="text" matInput  formControlName="description"/>
                                       </mat-form-field>
                                     </div>
@@ -238,13 +238,16 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Price Scheme:</label>
                             <div class="col-3">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="pricescheme" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="priceschemeCodeData"
+                                      (newRowClick)="priceschemeSelected($event)">
+                                  </master-search>
                             </div>
                             <div class="col-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  />
+                                    <input type="text" matInput formControlName="priceschemeCovRate" />
                                 </mat-form-field>
                             </div>
                             <div class="col-2">
@@ -395,14 +398,14 @@
                         </div>
                         <div class="row ">
                             <div class="col-9 offset-8">
-                                <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                                <button type="button" class="btn btn-outline-primary metal-issue-del-btn" [disabled]="consumbleForm.invalid" (click)="enableButtons()">
                                 Comments
                               </button></div>
                            
                         </div>
                         <div class="row pt-2">
                             <div class="box-wrap2">
-                                <input type="text" matInput />
+                                <input type="text" matInput matInput formControlName="comment" [disabled]="consumbleForm.invalid" (click)="enableButtons()"/>
                             </div>
                         </div>
     
@@ -416,18 +419,18 @@
                         </div>
                         <div class="row pt-4">
                             <div class="box-wrap">
-                                <input type="text" matInput />
+                                <input type="text" matInput  />
                             </div>
                         </div>
                         <div class="row pt-2">
                             <div class="col-11 t-a1"> 
-                                <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                                <button type="button" class="btn btn-outline-primary metal-issue-del-btn" [disabled]="consumbleForm.invalid" (click)="enableButtons()">
                                 Tag Details
                               </button></div>
                         </div>
                         <div class="row pt-2">
                             <div class="box-wrap1">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="tagDetails" [disabled]="consumbleForm.invalid" (click)="enableButtons()"/>
                             </div>
                         </div>
 

@@ -14,7 +14,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./consumable-master.component.scss']
 })
 export class ConsumableMasterComponent implements OnInit {
-
+  consumbleForm!: FormGroup;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -26,25 +26,49 @@ export class ConsumableMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.consumbleForm = this.formBuilder.group({
+      code: ['', Validators.required],
+      description: [''],
+      costcenter: [''],
+      type: [''],
+      category: [''],
+      subcategory: [''],
+      brand: [''],
+      color: [''],
+      size: [''],
+      vendor: [''],
+      country: [''],
+      hsn: [''],
+      pricescheme: [''],
+      priceschemeCovRate: [''],
+      price1: [''],
+      price2: [''],
+      price3: [''],
+      price4: [''],
+      price5: [''],
+
+    });
+    this.disableButtons();
+    this.consumbleForm.controls['comment'].disable();
+    this.consumbleForm.controls['tagDetails'].disable();
   }
 
-  
-  consumbleForm: FormGroup = this.formBuilder.group({
-    code:[''],
-    costcenter:[''],
-    category:[''],
-    subcategory:[''],
-    brand:[''],
-    color:[''],
-    vendor:[''],
-    type:[''],
-    country:[''],
-    size:[''],
-    hsn:[''],
-    description:['']
-  })
+  disableButtons() {
+    this.consumbleForm.controls['code'].enable();
+  }
 
-  codeCodeData:MasterSearchModel = {
+  enableButtons() {
+    this.consumbleForm.controls['code'].enable();
+  }
+
+
+  // consumbleForm: FormGroup = this.formBuilder.group({
+  //   code:[''],
+
+  // })
+
+
+  codeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 14,
@@ -56,7 +80,7 @@ export class ConsumableMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  brandCodeData:MasterSearchModel = {
+  brandCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 32,
@@ -67,7 +91,7 @@ export class ConsumableMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
+
 
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -92,7 +116,7 @@ export class ConsumableMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
 
 
 
@@ -155,7 +179,7 @@ export class ConsumableMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
+
 
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -181,19 +205,31 @@ export class ConsumableMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  subcategoryCodeSelected(e:any){
+  priceschemeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 176,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Price Scheme Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  subcategoryCodeSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.subcategory.setValue(e.CODE);
   }
 
-  codeCodeSelected(e:any){
+  codeCodeSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.code.setValue(e.PREFIX_CODE);
     this.consumbleForm.controls.description.setValue(e.DESCRIPTION);
   }
 
 
-  brandCodeSelected(e:any){
+  brandCodeSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.brand.setValue(e.CODE);
   }
@@ -202,39 +238,45 @@ export class ConsumableMasterComponent implements OnInit {
     this.consumbleForm.controls.color.setValue(data.CODE)
   }
 
-  vendorCodeSelected(e:any){
+  vendorCodeSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.vendor.setValue(e.ACCODE);
   }
 
-  typeCodeSelected(e:any){
+  typeCodeSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.type.setValue(e.CODE);
   }
 
-  categoryCodeSelected(e:any){
+  categoryCodeSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.category.setValue(e.CODE);
   }
 
-  countryCodeSelected(e:any){
+  countryCodeSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.country.setValue(e.CODE);
   }
 
-  costCenterSelected(e:any){
+  costCenterSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.costcenter.setValue(e.COST_CODE);
   }
 
-  sizeCenterSelected(e:any){
+  sizeCenterSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.size.setValue(e.CODE);
   }
 
-  HSNCenterSelected(e:any){
+  HSNCenterSelected(e: any) {
     console.log(e);
     this.consumbleForm.controls.hsn.setValue(e.CODE);
+  }
+
+  priceschemeSelected(e: any) {
+    console.log(e);
+    this.consumbleForm.controls.pricescheme.setValue(e.CURRENCY_CODE);
+    this.consumbleForm.controls.priceschemeCovRate.setValue(e.CONV_RATE);
   }
 
   close(data?: any) {

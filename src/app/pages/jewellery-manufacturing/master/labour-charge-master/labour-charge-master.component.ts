@@ -21,7 +21,7 @@ export class LabourChargeMasterComponent implements OnInit {
   branch = localStorage.getItem('userbranch');
   private subscriptions: Subscription[] = [];
 
-
+  methodList: any[] = [];
   labourTypeList: any[] = [];
   unitList: any[] = [];
   currencyList : any[] = [];
@@ -292,39 +292,61 @@ sizeFromCodeData: MasterSearchModel = {
     this.getcurrencyOptions()
     this.labourTypeList =[
       {
-        'name':'MAKING',
-        'value':'MAKING'
+        'name':'SETTING',
+        'value':'SETTING'
       },
       {
-        'name':'POLISH',
-        'value':'POLISH'
+        'name':'HANDLING',
+        'value':'HANDLING'
       },
       {
-        'name':'FINISHING',
-        'value':'FINISHING'
+        'name':'CERTIFICATE',
+        'value':'CERTIFICATE'
       },
-      {
-        'name':'CASTING',
-        'value':'CASTING'
-      },
+      // {
+      //   'name':'CASTING',
+      //   'value':'CASTING'
+      // },
       {
         'name':'GENERAL',
         'value':'GENERAL'
       },
-      {
-        'name':'RHODIUM',
-        'value':'RHODIUM'
-      },
-      {
-        'name':'STAMPING',
-        'value':'STAMPING'
-      },
-      {
-        'name':'WASTAGE',
-        'value':'WASTAGE'
-      },
+      // {
+      //   'name':'RHODIUM',
+      //   'value':'RHODIUM'
+      // },
+      // {
+      //   'name':'STAMPING',
+      //   'value':'STAMPING'
+      // },
+      // {
+      //   'name':'WASTAGE',
+      //   'value':'WASTAGE'
+      // },
     ]
     this.unitList= [
+      {
+      'name':'Lumpsum ',
+      'value':'Lumpsum '
+    },
+    {
+      'name':'PCS',
+      'value':'PCS'
+    },
+    {
+      'name':'Grams',
+      'value':'Grams'
+    },
+    {
+      'name':'Carat',
+      'value':'Carat'
+    },
+    {
+      'name':'Hours',
+      'value':'Hours'
+    }
+    ]
+    this.methodList= [
       {
       'name':'Lumpsum ',
       'value':'Lumpsum '
@@ -704,10 +726,6 @@ sizeFromCodeData: MasterSearchModel = {
         }
       });
     }
-
- 
-
-
 }
 
 

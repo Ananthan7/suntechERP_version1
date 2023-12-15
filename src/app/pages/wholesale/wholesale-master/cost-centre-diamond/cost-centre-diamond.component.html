@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+ <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> 
 <div class="container-fluid pt-3">
     <form [formGroup]="costcenterdiamondForm">
         <div class="row justify-content-between mb-2">
@@ -56,8 +56,8 @@
                             <input type="text" matInput formControlName="purchase" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="purchaseCodeData"
-                        (newRowClick)="purchaseCodeSelected($event)">
-                    </master-search>
+                            (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -66,9 +66,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="sales" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="salesCodeData"
-                        (newRowClick)="salesCodeSelected($event)">
-                    </master-search>
+                        <master-search [MasterSearchData]="salesCodeData" (newRowClick)="salesCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -78,8 +77,8 @@
                             <input type="text" matInput formControlName="branchtransfer" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="branchtransferCodeData"
-                                      (newRowClick)="branchtransferDataSelected($event)">
-                                  </master-search>
+                            (newRowClick)="branchtransferDataSelected($event)">
+                        </master-search>
                     </div>
                 </div>
             </div>
@@ -118,37 +117,14 @@
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
                           
 
-                            <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                            <dxi-column *ngFor="let data of columnheaderConsignment" dataField="{{ data }}"
+                                caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
                             </dxi-column>
                         </dx-data-grid>
                     </div>
                 </div>
-                <mat-tab label="Consignment">
-                    <div class="row mt-2">
-                        <div class="col-md-3 d-flex mb-2">
-                            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false">
-                            </menu-buttons>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                                <dxo-paging [enabled]="false"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true">
-                                </dxo-editing>
-                                <dxo-selection mode="multiple"></dxo-selection>
-                                <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                <dxi-column *ngFor="let data of columnheaderConsignment" dataField="{{ data }}"
-                                    caption="{{ data }}" [allowEditing]="true" alignment="center"
-                                    backgroundcolor="#000">
-                                </dxi-column>
-                            </dx-data-grid>
-                        </div>
-                    </div>
-                </mat-tab>
             </mat-tab>
         </mat-tab-group>
+        
     </form>
 </div>
