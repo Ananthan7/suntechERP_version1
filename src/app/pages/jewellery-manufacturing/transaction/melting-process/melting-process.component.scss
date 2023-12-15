@@ -1,19 +1,12 @@
-.add-btn {
+.metal-issue-add-btn {
   font-size: 12px;
   padding: 3px 20px !important;
   border-radius: 5px !important;
 }
 
-.del-btn {
+.metal-issue-del-btn {
   font-size: 12px;
   padding: 2px 10px 2px 10px;
-}
-
-table tbody tr th.fs-7 {
-  font-size: 12px;
-  text-align: center;
-  background: #51b2e2;
-  color: #fff;
 }
 
 ::ng-deep {
@@ -21,7 +14,45 @@ table tbody tr th.fs-7 {
     position: fixed;
     z-index: 1070 !important;
   }
-  table tbody tr td .mat-form-field-infix {
-    width: 65px !important;
-  }
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  text-align: center;
+}
+
+.upload-btn-wrapper 
+.btnnew {
+  color: white;
+  font-size: 14px;
+  background: #ffffff;
+  padding: 70px 80px;
+  margin-left: 14px;
+}
+
+.upload-btn-wrapper 
+.uploadproduct {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  font-size: 100px;
+  cursor: pointer;
+}
+
+.btn-primary {
+// background-color: #012C57 !important;
+background-color: #415a77 !important;
+border-color: #415a77 !important;
+font-size: 12px;
+border-radius: 5px !important;
+padding: 6px 15px 6px 15px !important;
+}
+.btn-danger {
+font-size: 12px;
+padding: 6px 15px 6px 15px !important;
+border-radius: 5px !important;
 }

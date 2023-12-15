@@ -317,6 +317,22 @@
           
         </div>
       </div>
+      <div class="col-md-6">
+        <div class="row mt-3 px-3">
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                    (continueClick)="resetAllocation()">Reset Allocation</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                    (saveClick)="formSubmit()">Save</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                    (cancelClick)="close()">Cancel</button>
+            </div>
+        </div>
+    </div>
     </form>
   </div>
 </div>

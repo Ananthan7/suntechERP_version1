@@ -155,11 +155,24 @@ export class MetalStockMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  unitCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Metal Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
   
   prefixCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 18,
+    LOOKUPID: 14,
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix',
     SEARCH_VALUE: '',
@@ -449,6 +462,11 @@ export class MetalStockMasterComponent implements OnInit {
   branchCodeSelected(e:any){
     console.log(e);
     this.metalstockForm.controls.branch.setValue(e.BRANCH_CODE);
+  }
+
+  unitCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.unit.setValue(e.CODE);
   }
 
   abcMasterCodeSelected(e:any){

@@ -60,9 +60,11 @@
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Division :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
+                          <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="division" />
                           </mat-form-field>
+                          <master-search [MasterSearchData]="divisionCodeData" (newRowClick)="divisionCodeSelected($event)">
+                          </master-search>
                         </div>
                       </div>
                       <div class="row align-items-center mb-1">
