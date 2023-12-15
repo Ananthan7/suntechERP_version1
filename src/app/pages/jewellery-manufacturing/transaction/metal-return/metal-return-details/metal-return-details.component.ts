@@ -171,7 +171,9 @@ export class MetalReturnDetailsComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
-  }                 
+  }   
+  
+  continue(){}
 
 
   formSubmit() {

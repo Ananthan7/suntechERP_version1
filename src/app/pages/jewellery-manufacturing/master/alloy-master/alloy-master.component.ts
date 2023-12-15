@@ -256,6 +256,8 @@ export class AlloyMasterComponent implements OnInit {
   costCenterSelected(e:any){
     console.log(e);
     this.alloyMastereForm.controls.costCenter.setValue(e.COST_CODE);
+    this.alloyMastereForm.controls.description.setValue(e.COST_DESCRIPTION);
+    
   }
 
   priceOneCodeSelected(e:any){

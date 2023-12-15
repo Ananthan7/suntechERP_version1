@@ -167,13 +167,10 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-3 d-flex mb-2">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                            [viewImportBtn]="false"
-                            (addClick)="adddata()"
-                            (deleteClick)="removedata()"
-                            >
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" (addClick)="  adddata()"
+                          (deleteClick)="removedata()">
                         </menu-buttons>
-                    </div>
+                      </div>
                     <div class="col-md-12">
                         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                             <mat-tab label="Components">
