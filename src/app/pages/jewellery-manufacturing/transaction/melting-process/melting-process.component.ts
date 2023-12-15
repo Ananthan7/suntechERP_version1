@@ -190,6 +190,7 @@ export class MeltingProcessComponent implements OnInit {
   deleteTableData(){
    
   }
+  resetAllocation(){}
 
   formSubmit(){
 
