@@ -545,6 +545,7 @@ export class AddPosComponent implements OnInit {
       fcn_li_item_desc: ['', Validators.required],
       fcn_li_division: ['', Validators.required],
       fcn_li_location: [''],
+      fcn_li_gift_type: [''],
       // fcn_li_location: ['', Validators.required],
       fcn_li_pcs: [{ value: 0 }, [Validators.required, Validators.min(1)]],
       fcn_li_gross_wt: ['', [Validators.required, Validators.min(0)]],
@@ -6157,7 +6158,7 @@ export class AddPosComponent implements OnInit {
               // this.li_tag_val = this.newLineItem.TAG_LINES;
 
 
-              if (!this.newLineItem.IS_BARCODED_ITEM || this.newLineItem.TPROMOTIONALITEM)
+              if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem.TPROMOTIONALITEM))
                 this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
               else
                 this.setMakingValidation();
@@ -9988,6 +9989,8 @@ export class AddPosComponent implements OnInit {
     }
 
     if (this.receiptModesList?.['BTN_GIFT'] == true && this.selectedTabIndex == 4) {
+
+
 
     }
     if (this.receiptModesList?.['BTN_CUSTOMER'] == true && this.selectedTabIndex == 5) {
