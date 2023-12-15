@@ -6,6 +6,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-customer-master-main.component';
+import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
 @Component({
   selector: 'app-retail-master',
   templateUrl: './retail-master.component.html',
@@ -72,7 +73,8 @@ export class RetailMasterComponent implements OnInit {
     }
     let contents: any;
     this.componentDbList = {
-      'PosCustomerMaster': PosCustomerMasterMainComponent, // not getting from api
+      'PosCustomerMaster': PosCustomerMasterMainComponent,
+      'SchemeMasterComponent': SchemeMasterComponent,
   
       // Add components and update in operationals > menu updation grid form component name
     }

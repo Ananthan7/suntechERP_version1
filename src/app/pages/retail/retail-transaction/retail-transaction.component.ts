@@ -15,6 +15,7 @@ import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellati
 import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
 import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
 import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-direct.component';
+import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -74,6 +75,7 @@ export class RetailTransactionComponent implements OnInit {
       'SalesEstimationComponent': SalesEstimationComponent,
       'PointOfSalesOrderComponent': PointOfSalesOrderComponent,
       'PosPurchaseDirectComponent':PosPurchaseDirectComponent,
+      'SchemeReceiptComponent': SchemeReceiptComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     }
