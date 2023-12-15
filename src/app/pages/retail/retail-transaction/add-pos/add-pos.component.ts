@@ -8331,12 +8331,6 @@ export class AddPosComponent implements OnInit {
 
     /** set nett weight */
     this.lineItemForm.controls['fcn_li_net_wt'].setValue(
-      // (
-      //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) -
-      //   this.comFunc.emptyToZero(
-      //     parseInt(this.lineItemForm.value.fcn_li_stone_wt)
-      //   )
-      // ).toFixed(2)
       this.comFunc.transformDecimalVB(
         this.comFunc.mQtyDecimals,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) -
@@ -8348,10 +8342,6 @@ export class AddPosComponent implements OnInit {
 
     /**  set pure weight */
     this.lineItemForm.controls.fcn_li_pure_wt.setValue(
-      // (
-      //   this.lineItemForm.value.fcn_li_net_wt *
-      //   this.lineItemForm.value.fcn_li_purity
-      // ).toFixed(2)
       this.comFunc.transformDecimalVB(
         this.comFunc.mQtyDecimals,
         this.lineItemForm.value.fcn_li_net_wt *
@@ -8360,16 +8350,7 @@ export class AddPosComponent implements OnInit {
     );
 
     /** set stone amount */
-    // alert(this.lineItemForm.value.fcn_li_stone_wt)
-    // alert( this.lineItemForm.value.fcn_ad_stone_rate)
-
     this.lineItemForm.controls['fcn_ad_stone_amount'].setValue(
-      // Math.round(
-      //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) *
-      //   this.comFunc.emptyToZero(
-      //     this.lineItemForm.value.fcn_ad_stone_rate
-      //   )
-      // ).toFixed(2)
       this.comFunc.transformDecimalVB(
         this.comFunc.amtDecimals,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_stone_wt) *
@@ -8379,11 +8360,6 @@ export class AddPosComponent implements OnInit {
 
     /** set metal amount */
     this.lineItemForm.controls['fcn_ad_metal_amount'].setValue(
-      // Math.round(
-      //   this.comFunc.emptyToZero(
-      //     this.lineItemForm.value.fcn_ad_metal_rate
-      //   ) * this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt)
-      // ).toFixed(2)
       this.comFunc.transformDecimalVB(
         this.comFunc.amtDecimals,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_rate) *

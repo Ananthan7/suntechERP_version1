@@ -494,12 +494,12 @@
                   type="text"
                   matInput
                   formControlName="fcn_customer_code"
-                  (change)="nameChange($event)"
-                  [readonly]="
-                    viewOnly ||
-                    this.customerDataForm.value.fcn_customer_code == ''
-                  "
+               readonly 
                 />
+                <!-- [readonly]="
+                viewOnly ||
+                this.customerDataForm.value.fcn_customer_code == ''
+              " -->
                 <mat-error
                   *ngIf="
                     customerDataForm.controls.fcn_customer_code.hasError(
