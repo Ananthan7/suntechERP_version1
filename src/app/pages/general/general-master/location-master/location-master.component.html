@@ -1,5 +1,5 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Loaction Master</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Location Master</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -113,7 +113,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">P/L AC Code :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="PLACCode"/>
+                            <input type="text" matInput formControlName="PLACCode1"/>
                           </mat-form-field>
                           <master-search [MasterSearchData]="PLACCodeCodeData"
                           (newRowClick)="PLACCodeCodeSelected($event)">
@@ -121,7 +121,7 @@
                         </div>
                         <div class="col-md-2">
                           <mat-form-field style="width: 70%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="PLACCode2" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="PLACCodeCodeData"
                           (newRowClick)="PLACCodeCodeSelected($event)">
@@ -129,7 +129,7 @@
                         </div>
                         <div class="col-md-2">
                           <mat-form-field style="width: 70%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="PLACCode3" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="PLACCodeCodeData"
                           (newRowClick)="PLACCodeCodeSelected($event)">
@@ -137,7 +137,7 @@
                         </div>
                         <div class="col-md-2">
                           <mat-form-field style="width: 70%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput  formControlName="PLACCode4" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="PLACCodeCodeData"
                           (newRowClick)="PLACCodeCodeSelected($event)">

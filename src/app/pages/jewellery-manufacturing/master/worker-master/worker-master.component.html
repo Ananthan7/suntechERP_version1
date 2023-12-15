@@ -35,9 +35,9 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Worker A/c Code :</label>
+                                Worker A/c Code*:</label>
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput placeholder="AC Code" [readonly]="viewOnlyFlag"
+                                <input type="text" matInput  [readonly]="viewOnlyFlag"
                                     maxlength="6" (change)="workerCodeChange($event)" formControlName="WorkerAcCode" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="accountMasterData"

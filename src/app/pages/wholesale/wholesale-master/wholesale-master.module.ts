@@ -5,6 +5,7 @@ import { WholesaleMasterRoutingModule } from './wholesale-master.routing';
 import { WholesaleMasterComponent } from './wholesale-master.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CostCentreMetalComponent } from './cost-centre-metal/cost-centre-metal.component';
+import { CostCentreMetalDetailsComponent  } from './cost-centre-metal/cost-centre-metal-details/cost-centre-metal-details.component';
 import { CostcentreMagkingchargesComponent } from './costcentre-magkingcharges/costcentre-magkingcharges.component';
 import { CostcentreConsumableComponent } from './costcentre-consumable/costcentre-consumable.component';
 import { MetalStockMasterComponent } from './metal-stock-master/metal-stock-master.component';
@@ -30,11 +31,11 @@ import { EnterStoneDetailsComponent } from './watch-master/enter-stone-details/e
 import { CostCenterMakingChargesDetailsComponent } from './costcentre-magkingcharges/cost-center-making-charges-details/cost-center-making-charges-details.component';
 import { CostCentreMetalDetailsComponent } from './cost-centre-metal/cost-centre-metal-details/cost-centre-metal-details.component';
 
-
 @NgModule({
   declarations: [
     WholesaleMasterComponent,
     CostCentreMetalComponent,
+    CostCentreMetalDetailsComponent ,
     CostcentreMagkingchargesComponent,
     CostcentreConsumableComponent,
     MetalStockMasterComponent,
