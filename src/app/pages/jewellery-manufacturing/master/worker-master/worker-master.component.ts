@@ -15,10 +15,12 @@ import Swal from 'sweetalert2';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkerMasterComponent implements OnInit {
+  workerMasterForm!:FormGroup;
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   showFilterRow!: boolean;
   viewOnlyFlag: boolean = false;
+  buttonField: boolean = true;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Process Code', 'Description'];
@@ -56,24 +58,7 @@ export class WorkerMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  workerMasterForm: FormGroup = this.formBuilder.group({
-    WorkerCode: ['', [Validators.required]],
-    WorkerDESCRIPTION: ['', [Validators.required]],
-    WorkerAcCode: ['', [Validators.required]],
-    NameOfSupervisor: ['', [Validators.required]],
-    DefaultProcess: ['', [Validators.required]],
-    LossAllowed: [''],
-    Password: [''],
-    TrayWeight: [''],
-    TargetPcs: [''],
-    TargetCaratWt: [''],
-    TargetMetalWt: [''],
-    TargetWeight: [''],
-    DailyTarget: [false],
-    MonthlyTarget: [false],
-    YearlyTarget: [false],
-    active : [true],
-  })
+ 
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -86,13 +71,32 @@ export class WorkerMasterComponent implements OnInit {
   ngOnInit(): void {
     if(this.content){
       this.setFormValues()
-    }
+    } 
+    this.workerMasterForm = this.formBuilder.group({
+      WorkerCode: ['', [Validators.required]],
+      WorkerDESCRIPTION: ['', [Validators.required]],
+      WorkerAcCode: ['', [Validators.required]],
+      NameOfSupervisor: ['', [Validators.required]],
+      DefaultProcess: ['', [Validators.required]],
+      LossAllowed: [''],
+      Password: [''],
+      TrayWeight: [''],
+      TargetPcs: [''],
+      TargetCaratWt: [''],
+      TargetMetalWt: [''],
+      TargetWeight: [''],
+      DailyTarget: [true],
+      MonthlyTarget: [false],
+      YearlyTarget: [false],
+      active : [true]
+    })
     
   }
   
   setFormValues() {
     if(!this.content) return
     if(this.content.flag == 'VIEW'){
+
       this.viewOnlyFlag = true
     }
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
@@ -109,6 +113,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**USE:  final save API call*/
   formSubmit() {
+
     if(this.content && this.content.FLAG == 'EDIT'){
       this.selectProcess()
       this.updateWorkerMaster()
@@ -377,6 +382,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   defaultProcessSelected(data: any) {
     this.workerMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
+    this.buttonField = false;
   }
   workerCodeChange(event: any) {
     this.accountMasterData.SEARCH_VALUE = event.target.value

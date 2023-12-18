@@ -96,7 +96,7 @@ export class LabourChargeMasterComponent implements OnInit {
  shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 33,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
@@ -122,7 +122,7 @@ processCodeData: MasterSearchModel = {
 sizeFromCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 36,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size From',
     SEARCH_VALUE: '',
@@ -136,7 +136,7 @@ sizeFromCodeData: MasterSearchModel = {
   sizeToCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 36,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size To',
     SEARCH_VALUE: '',
@@ -161,11 +161,11 @@ sizeFromCodeData: MasterSearchModel = {
   sieveCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 6,
-    SEARCH_FIELD: 'ACCODE',
+    LOOKUPID: 38,
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -431,6 +431,7 @@ sizeFromCodeData: MasterSearchModel = {
   karatCodeSelected(e:any){
     console.log(e); 
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
+    this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
   }
 
   shapeCodeSelected(e:any){
@@ -452,7 +453,11 @@ sizeFromCodeData: MasterSearchModel = {
       console.log(e); 
       this.diamondlabourMasterForm.controls.size_from.setValue(e.CODE);
   }
+
   
+  
+  
+
    // USE: get select options Process TypeMaster
    private getcurrencyOptions():void {
     let API = '/BranchCurrencyMaster/GetBranchCurrencyMasterDetail/'+this.branch;

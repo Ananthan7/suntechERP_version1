@@ -89,7 +89,17 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+  codeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   masterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -115,7 +125,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -127,8 +136,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
 
   subcategoryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -142,7 +149,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
  
-
   BrandCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -166,9 +172,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
- 
 
   vendorCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -252,12 +255,15 @@ export class AlloyMasterComponent implements OnInit {
     console.log(e);
     this.alloyMastereForm.controls.category.setValue(e.CODE);
   }
+codeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.code.setValue(e.CODE);
+  }
 
   costCenterSelected(e:any){
     console.log(e);
     this.alloyMastereForm.controls.costCenter.setValue(e.COST_CODE);
     this.alloyMastereForm.controls.description.setValue(e.COST_DESCRIPTION);
-    
   }
 
   priceOneCodeSelected(e:any){

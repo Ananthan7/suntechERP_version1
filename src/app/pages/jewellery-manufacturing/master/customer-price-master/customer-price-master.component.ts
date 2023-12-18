@@ -26,7 +26,17 @@ export class CustomerPriceMasterComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
- 
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'CUSTOMER_CODE',
+    SEARCH_HEADING: 'Customer Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CUSTOMER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -51,7 +61,11 @@ export class CustomerPriceMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  
+  customerCodeScpSelected(e:any){
+    console.log(e); 
+    this.customerpricemasterForm.controls.customercode.setValue(e.CUSTOMER_CODE);
+    this.customerpricemasterForm.controls.desc.setValue(e.DESCRIPTION);
+  }
   formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
@@ -286,7 +300,7 @@ export class CustomerPriceMasterComponent implements OnInit {
         }
       ]
     }
-  
+   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {

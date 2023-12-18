@@ -2165,8 +2165,8 @@
                     type="text"
                     matInput
                     formControlName="giftVocNo"
-                    value
                     id="giftVocNo"
+                    (change)="changeGiftVocNo($event)"
                     [readonly]="viewOnly"
                   />
                   <mat-error
