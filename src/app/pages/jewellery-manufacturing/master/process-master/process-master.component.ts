@@ -60,14 +60,50 @@ export class ProcessMasterComponent implements OnInit {
   StockProcessData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
     SEARCH_HEADING: 'Recov Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "process_code<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  accountStartData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  accountMiddleData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  accountEndData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
 
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
@@ -83,7 +119,9 @@ export class ProcessMasterComponent implements OnInit {
     approvalProcess: [''],
     recStockCode: [''],
     labour_charge: [''],
-
+    accountStart: [''],
+    accountMiddle: [''],
+    accountEnd: [''],
     loss: [false],
     recovery: [false],
     AllowGain: [false],
@@ -270,15 +308,27 @@ export class ProcessMasterComponent implements OnInit {
   StockProcesSelected(e: any){
     console.log(e);
     this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
-
+  }
+  accountStartSelected(e: any){
+    console.log(e);
+    this.processMasterForm.controls.accountStart.setValue(e.Process_Code);
+  }
+  accountMiddleSelected(e: any){
+    console.log(e);
+    this.processMasterForm.controls.accountMiddle.setValue(e.Process_Code);
+  }
+  accountEndSelected(e: any){
+    console.log(e);
+    this.processMasterForm.controls.accountEnd.setValue(e.Process_Code);
   }
 
   updateProcessMaster() {
+    console.log(this.processMasterForm.value);
     if ( this.processMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.mid
+    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.content.MID
     let postData = {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode || "0123",
