@@ -32,6 +32,8 @@ import { PointOfSalesOrderDetailsComponent } from './point-of-sales-order/point-
 import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-direct.component';
 import { PosPurchaseDirectDetailComponent } from './pos-purchase-direct/pos-purchase-direct-detail/pos-purchase-direct-detail.component';
 import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.component';
+import { AddReceiptComponent } from './scheme-receipt/add-receipt/add-receipt.component';
+import { AddSchemeComponent } from './scheme-register/add-scheme/add-scheme.component';
 
 
 
@@ -61,7 +63,9 @@ import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.componen
     PointOfSalesOrderDetailsComponent,
     PosPurchaseDirectComponent,
     PosPurchaseDirectDetailComponent,
-    SchemeReceiptComponent
+    SchemeReceiptComponent,
+    AddReceiptComponent,
+    AddSchemeComponent
     ],
   imports: [
     CommonModule,

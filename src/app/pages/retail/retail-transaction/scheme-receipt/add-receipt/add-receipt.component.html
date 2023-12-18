@@ -1,0 +1,338 @@
+<!-- header section ADD CUSTOMER -->
+<div class="headerEl d-flex justify-content-between p-3">
+    <h5 id="modal-dia-metal">Add POS Receipt</h5>
+    <button type="button" class="btn btn-close close-btn p-2" (click)="close()">
+        <i class="feather icon-x close-icon" style="color: white !important;"></i>
+    </button>
+</div>
+<!-- content section starts -->
+<div class="row p-3">
+    <form [formGroup]="receiptEntryForm">
+        <div class="row">
+
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <span class="matlabels">Branch
+                </span>
+                <span style="width: 45%">
+                    <mat-form-field class="example-full-width">
+                        <input type="text" placeholder="Branch Code" matInput readonly
+                        formControlName="Branch">
+                        <!-- [matAutocomplete]="Branch" <mat-autocomplete #Branch="matAutocomplete"
+                            (optionSelected)="branchCodeChange($event)">
+                            <mat-option
+                                *ngFor="let option of branchFilteredOptions | async"
+                                [value]="option.BRANCH_CODE">
+                                {{ option.BRANCH_CODE }}
+                            </mat-option>
+                        </mat-autocomplete> -->
+                    </mat-form-field>
+                    <!-- <master-find-icon [MasterFindData]="branchMasterData" 
+                        (newRowClick)="selectedBranch($event)">
+                    </master-find-icon> -->
+                </span>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <span class="matlabels">Type
+                </span>
+                <span style="width: 45%">
+                    <mat-form-field>
+                        <mat-select (selectionChange)="paymentTypeChange($event)" formControlName="Type">
+                            <mat-option *ngFor="let option of payTypeArray" [value]="option.ENGLISH">
+                                {{ option.ENGLISH }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </span>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12 border-left">
+                <span class="matlabels">Type Code
+                </span>
+                &nbsp;
+                <span>
+                    <mat-form-field style="width: 35%;" class="example-full-width" style="width: 30%">
+                        <input type="text" placeholder="select" matInput [readonly]="isViewTypeCode"
+                            formControlName="TypeCode" [matAutocomplete]="TypeCodes">
+                        <mat-autocomplete #TypeCodes="matAutocomplete" (optionSelected)="changeTypeCode($event)">
+                            <mat-option *ngFor="let option of typeCodeFilteredOptions | async"
+                                [value]="option.CREDIT_CODE">
+                                {{ option.CREDIT_CODE }} -
+                                {{ option.DESCRIPTION }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <!-- <mat-form-field style="width: 40%;margin-left: 5px;">
+                        <input type="text" matInput readonly formControlName="TypeCodeDESC" />
+                    </mat-form-field> -->
+                </span>
+            </div>
+        </div>
+        <div class="row border-bottom">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="matlabels">A/C Code
+                </span>
+                &nbsp;&nbsp;
+                <mat-form-field style="width: 30%">
+                    <input type="text" matInput (focusout)="accountMasterChanged($event)" 
+                    placeholder="ACCODE" formControlName="AC_Code" />
+                </mat-form-field>
+                <mat-form-field style="width: 50%;margin-left: 4px;">
+                    <input type="text" matInput readonly formControlName="AC_Description" />
+                </mat-form-field>
+                <!-- <master-find-icon [MasterFindData]="accountMasterData" 
+                    (newRowClick)="selectedAcCode($event)">
+                </master-find-icon> -->
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 border-left">
+                <div class="row">
+                    <span class="matlabels">Curr Code
+                    </span>
+                    <mat-form-field style="width: 55%">
+                        <input type="text" matInput readonly formControlName="CurrCode" />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Curr Rate*
+                    </span>
+                    <mat-form-field style="width: 45%">
+                        <input type="text" matInput readonly class="text-right" formControlName="CurrRate"
+                            (keypress)="isNumeric($event)" />
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Exp
+                    </span>
+                    <span style="width: 45%">
+                        <mat-form-field>
+                            <input type="text" matInput class="text-right" formControlName="Exp" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">TRN No
+                    </span>
+                    <span style="width: 45%">
+                        <mat-form-field>
+                            <input type="text" matInput class="text-right" formControlName="TRN_No"
+                                (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">TRN Inv
+                    </span>
+                    <span style="width: 45%">
+                        <mat-form-field>
+                            <input type="text" matInput class="text-right" formControlName="TRN_Inv"
+                                (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row border-bottom">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">TRN Inv Date
+                    </span>
+                    <span style="width: 60%">
+                        <mat-form-field style="width: 95%">
+                            <input matInput DateValidation name="StartDate" [matDatepicker]="StartDate"
+                                formControlName="TRN_Inv_Date" placeholder="DD/MM/YYYY" />
+                            <mat-datepicker-toggle matSuffix [for]="StartDate"></mat-datepicker-toggle>
+                            <mat-datepicker #StartDate></mat-datepicker>
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">HSN A/C
+                    </span>
+                    <span style="width: 35%">
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="HSN_AC" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">TRN Ref
+                    </span>
+                    <mat-form-field style="width: 45%">
+                        <input type="text" matInput formControlName="TRN_Ref" />
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="background-color: #f0f0f0;border-top: 1px solid #dbdbdb;">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Amount FC *
+                    </span>
+                    <span style="width: 45%">
+                        <mat-form-field>
+                            <input type="text" matInput readonly class="text-right" formControlName="Amount_FC"
+                                (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Amount LC *
+                    </span>
+                    <span style="width: 45%">
+                        <mat-form-field>
+                            <input type="text" matInput readonly class="text-right" formControlName="Amount_LC"
+                                (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Header Amount *
+                    </span>
+                    <span style="width: 45%">
+                        <mat-form-field>
+                            <input type="text" matInput readonly class="text-right" formControlName="Header_Amount"
+                                (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="background-color: #f0f0f0;">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">TRN Per % *
+                    </span>
+                    <span style="width: 65%">
+                        <mat-form-field>
+                            <input type="text" matInput readonly class="text-right" (keypress)="isNumeric($event)"
+                                formControlName="TRN_Per" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">TRN Amount FC *
+                    </span>
+                    <span style="width: 65%">
+                        <mat-form-field>
+                            <input type="text" matInput readonly class="text-right" formControlName="TRN_Amount_FC"
+                                (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">TRN Amount LC *
+                    </span>
+                    <span style="width: 65%">
+                        <mat-form-field>
+                            <input type="text" matInput readonly class="text-right" formControlName="TRN_Amount_LC"
+                                (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="background-color: #f0f0f0;border-bottom: 1px solid #dbdbdb;">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Amount With TRN*
+                    </span>
+                    <span style="width: 45%">
+                        <mat-form-field>
+                            <input type="text" matInput readonly class="text-right" formControlName="AmountWithTRN"
+                                (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Header Amount With TRN*
+                    </span>
+                    <span style="width: 45%">
+                        <mat-form-field>
+                            <input type="text" matInput readonly class="text-right"
+                                formControlName="HeaderAmountWithTRN" (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="border-left">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Valid Id
+                    </span>
+                    <span style="width: 65%">
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="ValidId" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Source of Funds
+                    </span>
+                    <span style="width: 65%">
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="SourceofFunds" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Transaction Type
+                    </span>
+                    <span style="width: 65%">
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="TransactionType" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row border-bottom">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="matlabels">Narration
+                </span>
+                <span style="width: 65%">
+                    <mat-form-field style="width: 80%">
+                        <input type="text" matInput formControlName="Narration" />
+                    </mat-form-field>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div style="text-align: right; padding-top: 10px">
+                    <button mat-flat-button color="primary" (click)="onSubmit()">ADD</button>
+                    &nbsp;
+                    <button mat-flat-button color="warn" (click)="close()">CANCEL</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
