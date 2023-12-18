@@ -10082,6 +10082,44 @@ export class AddPosComponent implements OnInit {
     }
 
   }
+  changeGiftVocNo(event: any) {
+    const value = event.target.value;
+    if (value != '') {
+      this.snackBar.open('Loading...');
+      let API = `ValidateGiftVocNo/ValidateGiftVocNo/${value}`
+      this.suntechApi.getDynamicAPI(API)
+        .subscribe((res) => {
+          this.snackBar.dismiss();
+          if (res['status'].toString().trim() == 'Success') {
+            this.isInvalidRecNo = false;
+
+
+            this.giftReceiptForm.controls.giftAmtFC.setValue(
+              this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals, this.comFunc.emptyToZero(res.VoucherAmountFc).toString()));
+
+          } else {
+            this.isInvalidRecNo = true;
+            this.giftReceiptForm.controls.giftAmtFC.setValue(
+              this.zeroAmtVal);
+
+
+            this.snackBar.open('Invalid Receipt No.', 'OK', {
+              duration: 2000
+            });
+          }
+        });
+    } else {
+      this.advanceReceiptForm.controls.advanceAmount.setValue(
+        this.zeroAmtVal);
+      this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+        this.zeroAmtVal);
+      this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+        this.zeroAmtVal);
+      this.advanceReceiptDetails = {};
+    }
+
+  }
 
   changeCustAcCode(value: any) {
     console.log('====================================');
