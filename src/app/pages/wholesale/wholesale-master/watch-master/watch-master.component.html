@@ -202,7 +202,7 @@
                                         <mat-form-field style="width: 60%;">
                                             <input type="text" matInput formControlName="weight" />
                                         </mat-form-field>
-                                      
+
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -211,7 +211,7 @@
                                         <mat-form-field style="width: 60%;">
                                             <input type="text" matInput formControlName="status" />
                                         </mat-form-field>
-                                        
+
                                     </div>
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Vendor Ref
                                         :</label>
@@ -219,7 +219,7 @@
                                         <mat-form-field style="width: 60%;">
                                             <input type="text" matInput formControlName="vendorRef" />
                                         </mat-form-field>
-                                  
+
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -508,8 +508,12 @@
                                                 Tag Line
                                             </button>
                                         </div>
-                                        <div class="box-wrap">
-                                            <input type="text" matInput />
+                                        <div class="tagLineText">
+                                            <!-- <textarea></textarea> -->
+                                            <mat-form-field class="example-full-width">
+                                                <mat-label></mat-label>
+                                                <textarea matInput></textarea>
+                                              </mat-form-field>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -563,11 +567,13 @@
                                                 :</label>
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 72%;">
-                                                    <input matInput [matDatepicker]="date"  formControlName="date"
-                                                    placeholder="YYYY/MM/DD" [value]="currentDate.value" DateValidation />
-                                                  <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
-                                                  <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
-                                                  </mat-form-field>
+                                                    <input matInput [matDatepicker]="date" formControlName="date"
+                                                        placeholder="YYYY/MM/DD" [value]="currentDate.value"
+                                                        DateValidation />
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="date"></mat-datepicker-toggle>
+                                                    <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
+                                                </mat-form-field>
                                             </div>
                                         </div>
                                         <div class="row align-items-center">
@@ -771,7 +777,7 @@
                         <div class="row mt-2">
                             <div class="col-md-8">
                                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                                (addClick)="openAddstonedetails()" (deleteClick)="deleteTableData()">
+                                    (addClick)="openAddstonedetails()" (deleteClick)="deleteTableData()">
                                 </menu-buttons>
                             </div>
                         </div>

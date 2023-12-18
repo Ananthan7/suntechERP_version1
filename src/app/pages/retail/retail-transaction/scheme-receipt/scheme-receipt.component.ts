@@ -149,7 +149,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.editMainRowDetails = this.editMainRowDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
   }
-
+  
   ngOnInit(): void {
     this.fetchPartyCode();
     this.getSalesmanList();

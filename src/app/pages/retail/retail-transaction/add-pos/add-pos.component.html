@@ -2082,7 +2082,7 @@
       </mat-tab>
       <mat-tab
         label="GIFT. VOC"
-        [disabled]="!this.receiptModesList?.BTN_GIFT || viewOnly"
+        [disabled]="this.receiptModesList?.BTN_GIFT || viewOnly"
       >
         <form [formGroup]="giftReceiptForm" novalidate>
           <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
@@ -2165,8 +2165,8 @@
                     type="text"
                     matInput
                     formControlName="giftVocNo"
-                    value
                     id="giftVocNo"
+                    (change)="changeGiftVocNo($event)"
                     [readonly]="viewOnly"
                   />
                   <mat-error
@@ -3800,7 +3800,7 @@
               <div class="col-md-12">
                 <div class="bg-gray-card">
                   <div class="form-group row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <mat-form-field>
                         <mat-label>Division </mat-label>
                         <input
@@ -3812,7 +3812,7 @@
                         />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <mat-form-field>
                         <mat-label>Item Code </mat-label>
                         <input
@@ -3853,6 +3853,16 @@
                           id="fcn_li_location"
                           readonly
                         />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-2" *ngIf="!newLineItem.GIFT_VOUCHER">
+                      <mat-form-field>
+                        <mat-label>Gift Type</mat-label>
+                        <mat-select formControlName="fcn_li_gift_type">
+                          <mat-option value="Cash">Cash</mat-option>
+                          <mat-option value="Gold">Gold</mat-option>
+                          <mat-option value="Diamond">Diamond</mat-option>
+                        </mat-select>
                       </mat-form-field>
                     </div>
                   </div>

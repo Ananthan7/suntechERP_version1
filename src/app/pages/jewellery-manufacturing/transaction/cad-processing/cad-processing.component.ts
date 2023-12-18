@@ -16,7 +16,6 @@ import { AlloyAllocationComponent } from './alloy-allocation/alloy-allocation.co
 })
 export class CADProcessingComponent implements OnInit {
   @Input() content!: any;
-
   tableData: any[] = [];  
   columnheadItemDetails:any[] = ['Srno','Division','Stone Type','Stock Code','Karat','Color','Shape','Sieve','Size','Pcs','Wt/Ct','Setting Type','Pointer Wt','Remarks'];
   columnheadItemDetails1:any[] = ['Comp Code','description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
@@ -26,7 +25,6 @@ export class CADProcessingComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
-
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -47,7 +45,6 @@ export class CADProcessingComponent implements OnInit {
     }
   }
 
-  
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -56,17 +53,11 @@ export class CADProcessingComponent implements OnInit {
     if (!this.content) return
     this.cadProcessingForm.controls.job_number.setValue(this.content.APPR_CODE)
     this.cadProcessingForm.controls.design.setValue(this.content.job_description)
-
-
     this.dataService.getDynamicAPI('/JobCadProcessDJ/GetJobCadProcessDJ/' + this.content.job_number).subscribe((data) => {
       if (data.status == 'Success') {
-
         this.tableData = data.response.WaxProcessDetails;
-
-
       }
     });
-
   }
   cadProcessingForm: FormGroup = this.formBuilder.group({
     voctype: [''],

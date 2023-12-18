@@ -60,14 +60,50 @@ export class ProcessMasterComponent implements OnInit {
   StockProcessData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
     SEARCH_HEADING: 'Recov Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "process_code<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  accountStartData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  accountMiddleData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  accountEndData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
 
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
@@ -83,7 +119,9 @@ export class ProcessMasterComponent implements OnInit {
     approvalProcess: [''],
     recStockCode: [''],
     labour_charge: [''],
-
+    accountStart: [''],
+    accountMiddle: [''],
+    accountEnd: [''],
     loss: [false],
     recovery: [false],
     AllowGain: [false],
@@ -270,47 +308,63 @@ export class ProcessMasterComponent implements OnInit {
   StockProcesSelected(e: any){
     console.log(e);
     this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
-
+  }
+  accountStartSelected(e: any){
+    console.log(e);
+    this.processMasterForm.controls.accountStart.setValue(e.Process_Code);
+  }
+  accountMiddleSelected(e: any){
+    console.log(e);
+    this.processMasterForm.controls.accountMiddle.setValue(e.Process_Code);
+  }
+  accountEndSelected(e: any){
+    console.log(e);
+    this.processMasterForm.controls.accountEnd.setValue(e.Process_Code);
   }
 
   updateProcessMaster() {
-    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.mid
+    console.log(this.processMasterForm.value);
+    if ( this.processMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.content.MID
     let postData = {
-      "MID": this.processMasterForm.value.mid,
-      "PROCESS_CODE": this.processMasterForm.value.processCode || "0125",
-      "DESCRIPTION": this.processMasterForm.value.processCode || "0125",
+      "MID": 0,
+      "PROCESS_CODE": this.processMasterForm.value.processCode || "0123",
+      "DESCRIPTION": this.processMasterForm.value.processCode || "0123",
       "STD_TIME": 0,
       "MAX_TIME": 0,
-      "LOSS_ACCODE": "string",
-      "WIP_ACCODE": "string",
-      "CURRENCY_CODE": "stri",
-      "PROCESS_TYPE": "string",
-      "UNIT": "string",
+      "LOSS_ACCODE": "",
+      "WIP_ACCODE": "",
+      "CURRENCY_CODE": "",
+      "PROCESS_TYPE": "",
+      "UNIT": "",
       "NO_OF_UNITS": 0,
       "UNIT_RATE": 0,
-      "LAB_ACCODE": "string",
-      "LAST_NO": "string",
-      "REPAIR_PROCESS": this.processMasterForm.value.LockWeight ? 1 : 0,
-      "FINAL_PROCESS": 0,
-      "GAIN_ACCODE": "string",
+      "LAB_ACCODE": "",
+      "LAST_NO": "",
+      "REPAIR_PROCESS": this.processMasterForm.value.RepairProcess ? 1 : 0,
+      "FINAL_PROCESS": this.processMasterForm.value.FinalProcess ? 1 : 0,
+      "GAIN_ACCODE": "",
       "TRAY_WT": 0,
-      "SETTING_PROCESS": 0,
+      "SETTING_PROCESS": this.processMasterForm.value.Setting ? 1 : 0,
       "POINTS": 0,
       "LOCK_WEIGHT": this.processMasterForm.value.LockWeight ? 1 : 0,
-      "AUTOTRANSFER": this.processMasterForm.value.AutoTransfer ? 1 : 0,
+      "AUTOTRANSFER": 0,
       "MASTER_WEIGHT": 0,
       "MERGE_BLOCK": 0,
-      "LAB_PROCESS": 0,
-      "WAX_PROCESS": 0,
+      "LAB_PROCESS": this.processMasterForm.value.LabProcess ? 1 : 0,
+      "WAX_PROCESS": this.processMasterForm.value.WaxProcess ? 1 : 0,
       "STD_LOSS_QTY": 0,
       "POSITION": 0,
       "RECOV_MIN": 0,
-      "RECOV_ACCODE": "string",
-      "RECOV_STOCK_CODE": "string",
+      "RECOV_ACCODE": "",
+      "RECOV_STOCK_CODE": "",
       "RECOV_VAR1": 0,
       "RECOV_VAR2": 0,
-      "DEDUCT_PURE_WT": 0,
-      "APPR_PROCESS": "string",
+      "DEDUCT_PURE_WT": this.processMasterForm.value.DeductPureWeight ? 1 : 0,
+      "APPR_PROCESS": "",
       "APPR_CODE": this.processMasterForm.value.approvalCode || "",
       "ALLOW_GAIN": true,
       "STD_GAIN": 0,
@@ -321,22 +375,21 @@ export class ProcessMasterComponent implements OnInit {
       "MIN_LOSS": 0,
       "MAX_LOSS": 0,
       "LOSS_ON_GROSS": true,
-      "JOB_NUMBER": "string",
+      "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": 0,
-
-      "APPLY_SETTING": true,
-      "TIMEON_PROCESS": true,
-      "STONE_INCLUDED": true,
-      "RECOVERY_PROCESS": true,
-      "ALLOW_METAL": true,
-      "ALLOW_STONE": true,
-      "ALLOW_CONSUMABLE": true,
-      "APPROVAL_REQUIRED": true,
-      "NON_QUANTITY": true,
-      "DF_REFINERY": true,
-      "AUTO_LOSS": true,
+      "APPLY_SETTING": this.processMasterForm.value.ApplySetting || true,
+      "TIMEON_PROCESS": this.processMasterForm.value.TimeCalculateonProcess || true,
+      "STONE_INCLUDED":  this.processMasterForm.value.Metal || true,
+      "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess  || true,
+      "ALLOW_METAL": this.processMasterForm.value.Metal || true,
+      "ALLOW_STONE": this.processMasterForm.value.Stone || true ,
+      "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable || true,
+      "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired || true,
+      "NON_QUANTITY": this.processMasterForm.value.NonQuantity  || true,
+      "DF_REFINERY": this.processMasterForm.value.RefineryAutoProcess || true,
+      "AUTO_LOSS": this.processMasterForm.value.ApplyAutoLossToRefinery || true,
       "ISACCUPDT": true,
-      "TREE_NO": true,
+      "TREE_NO": this.processMasterForm.value.HaveTreeNo || true,
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)

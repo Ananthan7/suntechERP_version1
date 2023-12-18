@@ -85,17 +85,14 @@
                                     <input type="text" matInput formControlName="design" />
                                 </mat-form-field>
                             </div>
-
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5 col-form-label ">Completed : </label>
-
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="completed" />
                                 </mat-form-field>
                             </div>
-
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5 col-form-label ">To Worker : </label>
@@ -126,7 +123,6 @@
                                     <input type="text" matInput formControlName="job" />
                                 </mat-form-field>
                             </div>
-
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-7 col-form-label">Sub Job Id : </label>
@@ -144,7 +140,6 @@
                                 </mat-form-field>
                             </div>
                         </div>
-
                     </div>
                     <div class="col-md-3">
                         <div class="icons">
@@ -167,10 +162,10 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-3 d-flex mb-2">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" (addClick)="  adddata()"
-                          (deleteClick)="removedata()">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                            (addClick)="  adddata()" (deleteClick)="removedata()">
                         </menu-buttons>
-                      </div>
+                    </div>
                     <div class="col-md-12">
                         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                             <mat-tab label="Components">
@@ -182,7 +177,6 @@
                                             </dxo-editing>
                                             <dxo-selection mode="multiple"></dxo-selection>
                                             <dxo-scrolling mode="virtual"></dxo-scrolling>
-
                                             <dxi-column *ngFor="let data of columnheadItemDetails"
                                                 dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
                                                 alignment="center" backgroundcolor="#000">
@@ -200,7 +194,6 @@
                                             </dxo-editing>
                                             <dxo-selection mode="multiple"></dxo-selection>
                                             <dxo-scrolling mode="virtual"></dxo-scrolling>
-
                                             <dxi-column *ngFor="let data of columnheadItemDetails1"
                                                 dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
                                                 alignment="center" backgroundcolor="#000">
@@ -229,7 +222,6 @@
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput formControlName="userId" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -239,7 +231,6 @@
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="date" matInput formControlName="date" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -249,7 +240,6 @@
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput formControlName="copy" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -259,12 +249,9 @@
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="number" matInput formControlName="type" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
-
                                                 </div>
-
                                                 <div class="col-md-7">
                                                     <div class="row">
                                                         <div class="p-1 bd-highlight">
@@ -290,7 +277,6 @@
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput formControlName="remarks" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -301,13 +287,11 @@
                                                                 <input type="text" matInput
                                                                     formControlName="attachments" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <label for="inputPassword"
                                                             class="col-sm-3 col-form-label ">Delivery On: </label>
-
                                                         <div class="col-sm-3">
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput
@@ -326,13 +310,9 @@
                                                                     formControlName="deliveryOnDate" />
                                                             </mat-form-field>
                                                         </div>
-
                                                     </div>
-
                                                 </div>
                                             </div>
-
-
                                         </div>
                                         <div class="col-md-4 pt-2">
                                             <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
@@ -342,56 +322,46 @@
                                                 </dxo-editing>
                                                 <dxo-selection mode="multiple"></dxo-selection>
                                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
-
                                                 <dxi-column *ngFor="let data of columnheadItemDetails2"
                                                     dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
                                                     alignment="center" backgroundcolor="#000">
                                                 </dxi-column>
                                             </dx-data-grid>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </mat-tab>
-
-
                         </mat-tab-group>
-
-
                     </div>
                     <div class="col-md-12">
                         <div class="row">
-                        <div class="col-md-9">
-                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
-                            [showBorders]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                            <dxi-column *ngFor="let data of columnheadItemDetails3"
-                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                alignment="center" backgroundcolor="#000">
-                            </dxi-column>
-                        </dx-data-grid>
+                            <div class="col-md-9">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    </dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxi-column *ngFor="let data of columnheadItemDetails3" dataField="{{ data }}"
+                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                        backgroundcolor="#000">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
+                            <div class="col-md-3">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    </dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxi-column *ngFor="let data of columnheadItemDetails2" dataField="{{ data }}"
+                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                        backgroundcolor="#000">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
-                            [showBorders]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                            <dxi-column *ngFor="let data of columnheadItemDetails2"
-                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                alignment="center" backgroundcolor="#000">
-                            </dxi-column>
-                        </dx-data-grid>
-                        </div></div>
                     </div>
                 </div>
             </div>

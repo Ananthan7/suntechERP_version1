@@ -545,6 +545,7 @@ export class AddPosComponent implements OnInit {
       fcn_li_item_desc: ['', Validators.required],
       fcn_li_division: ['', Validators.required],
       fcn_li_location: [''],
+      fcn_li_gift_type: [''],
       // fcn_li_location: ['', Validators.required],
       fcn_li_pcs: [{ value: 0 }, [Validators.required, Validators.min(1)]],
       fcn_li_gross_wt: ['', [Validators.required, Validators.min(0)]],
@@ -6157,7 +6158,7 @@ export class AddPosComponent implements OnInit {
               // this.li_tag_val = this.newLineItem.TAG_LINES;
 
 
-              if (!this.newLineItem.IS_BARCODED_ITEM || this.newLineItem.TPROMOTIONALITEM)
+              if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem.TPROMOTIONALITEM))
                 this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
               else
                 this.setMakingValidation();
@@ -9802,7 +9803,7 @@ export class AddPosComponent implements OnInit {
 
   getAccountLookup() {
     this.suntechApi.getDynamicAPI('AccountLookup/GetAccountLookupWithAccMode/R').subscribe((resp) => {
-    // this.suntechApi.getDynamicAPI('AccountLookup').subscribe((resp) => {
+      // this.suntechApi.getDynamicAPI('AccountLookup').subscribe((resp) => {
       let resVal;
       if (resp['status'] == 'Success') {
         resVal = resp.response;
@@ -9988,6 +9989,17 @@ export class AddPosComponent implements OnInit {
     }
 
     if (this.receiptModesList?.['BTN_GIFT'] == true && this.selectedTabIndex == 4) {
+      this.giftReceiptForm.controls.paymentsCreditGIftVoc.setValue(
+        this.comFunc.emptyToZero(data['RECEIPT_MODE']).toString());
+
+      this.advanceReceiptForm.controls.giftBranch.setValue(
+        data['REC_BRANCHCODE'].toString());
+
+      this.advanceReceiptForm.controls.advanceRecNo.setValue(
+        this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
+
+      this.giftReceiptForm.controls.giftAmtFC.setValue(
+        this.comFunc.emptyToZero(data['AMOUNT_FC']).toString());
 
     }
     if (this.receiptModesList?.['BTN_CUSTOMER'] == true && this.selectedTabIndex == 5) {
@@ -10053,6 +10065,44 @@ export class AddPosComponent implements OnInit {
             this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
               this.zeroAmtVal);
             this.advanceReceiptDetails = {};
+
+            this.snackBar.open('Invalid Receipt No.', 'OK', {
+              duration: 2000
+            });
+          }
+        });
+    } else {
+      this.advanceReceiptForm.controls.advanceAmount.setValue(
+        this.zeroAmtVal);
+      this.advanceReceiptForm.controls.advanceVatAmountFC.setValue(
+        this.zeroAmtVal);
+      this.advanceReceiptForm.controls.advanceVatAmountLC.setValue(
+        this.zeroAmtVal);
+      this.advanceReceiptDetails = {};
+    }
+
+  }
+  changeGiftVocNo(event: any) {
+    const value = event.target.value;
+    if (value != '') {
+      this.snackBar.open('Loading...');
+      let API = `ValidateGiftVocNo/ValidateGiftVocNo/${value}`
+      this.suntechApi.getDynamicAPI(API)
+        .subscribe((res) => {
+          this.snackBar.dismiss();
+          if (res['status'].toString().trim() == 'Success') {
+            this.isInvalidRecNo = false;
+
+
+            this.giftReceiptForm.controls.giftAmtFC.setValue(
+              this.comFunc.transformDecimalVB(
+                this.comFunc.amtDecimals, this.comFunc.emptyToZero(res.VoucherAmountFc).toString()));
+
+          } else {
+            this.isInvalidRecNo = true;
+            this.giftReceiptForm.controls.giftAmtFC.setValue(
+              this.zeroAmtVal);
+
 
             this.snackBar.open('Invalid Receipt No.', 'OK', {
               duration: 2000

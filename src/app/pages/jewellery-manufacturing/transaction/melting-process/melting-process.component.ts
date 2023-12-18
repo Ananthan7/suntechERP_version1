@@ -68,7 +68,17 @@ export class MeltingProcessComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
+  processCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'PROCESS_CODE',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   timeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -111,7 +121,11 @@ export class MeltingProcessComponent implements OnInit {
     console.log(e); 
     this.meltingProcessFrom.controls.stockCodeScp.setValue(e.DESCRIPTION);
   }
-  
+  processCodeScpSelected(e:any){
+    console.log(e); 
+    this.meltingProcessFrom.controls.process.setValue(e.PROCESS_CODE);
+    this.meltingProcessFrom.controls.processDesc.setValue(e.PROCESS_DESC);
+  }
 
   MeltingCodeSelected(e:any){
     console.log(e);
@@ -190,6 +204,7 @@ export class MeltingProcessComponent implements OnInit {
   deleteTableData(){
    
   }
+  resetAllocation(){}
 
   formSubmit(){
 

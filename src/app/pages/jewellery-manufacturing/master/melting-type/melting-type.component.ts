@@ -97,7 +97,8 @@ export class MeltingTypeComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
+  resetAllocation(){}
+  
   columnheads:any[] = ['Sr','Division','Default Alloy','Description','Alloy %'];
   
 
@@ -155,52 +156,58 @@ export class MeltingTypeComponent implements OnInit {
 
   meltingTypeForm: FormGroup = this.formBuilder.group({
     mid:[],
-    code: [''],
-    description: [''],
-    metal: [''],
-    color: [''],
-    karat: [''],
-    purity: [''],
-    alloy: [''],
-    stockCode: [''],
-    stockCodeDes : [''],
-    divCode : [''],
+    code: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    metal: ['', [Validators.required]],
+    color: ['', [Validators.required]],
+    karat: ['', [Validators.required]],
+    purity: ['', [Validators.required]],
+    alloy: ['', [Validators.required]],
+    stockCode: ['', [Validators.required]],
+    stockCodeDes : ['', [Validators.required]],
+    divCode : ['', [Validators.required]],
    
   });
 
   addTableData(){
-    console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
-    this.slNo = this.slNo + 1;
-    let data = {
-      "UNIQUEID": 0,
-      "SRNO": this.slNo,
-      "MELTYPE_CODE":  this.meltingTypeForm.value.code,
-      "MELTYPE_DESCRIPTION":  this.meltingTypeForm.value.description,
-      "KARAT_CODE":  this.meltingTypeForm.value.karat,
-      "PURITY":  this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
-      "DIVISION_CODE":  this.meltingTypeForm.value.divCode,
-      "DEF_ALLOY_STOCK":  this.meltingTypeForm.value.stockCode,
-      "DEF_ALLOY_DESCRIPTION":  this.meltingTypeForm.value.stockCodeDes,
-      "ALLOY_PER":  parseFloat(this.meltingTypeForm.value.alloy)
+
+    if(this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "")
+    {
+      console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
+      this.slNo = this.slNo + 1;
+      let data = {
+        "UNIQUEID": 0,
+        "SRNO": this.slNo,
+        "MELTYPE_CODE":  this.meltingTypeForm.value.code,
+        "MELTYPE_DESCRIPTION":  this.meltingTypeForm.value.description,
+        "KARAT_CODE":  this.meltingTypeForm.value.karat,
+        "PURITY":  this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
+        "DIVISION_CODE":  this.meltingTypeForm.value.divCode,
+        "DEF_ALLOY_STOCK":  this.meltingTypeForm.value.stockCode,
+        "DEF_ALLOY_DESCRIPTION":  this.meltingTypeForm.value.stockCodeDes,
+        "ALLOY_PER":  parseFloat(this.meltingTypeForm.value.alloy)
+      }
+  
+      this.tableData.push(data);
+      console.log(this.tableData);
+  
+      this.meltingTypeForm.controls.code.setValue("");
+      this.meltingTypeForm.controls.description.setValue("");
+      this.meltingTypeForm.controls.karat.setValue("");
+      this.meltingTypeForm.controls.purity.setValue("");
+      this.meltingTypeForm.controls.divCode.setValue("");
+      this.meltingTypeForm.controls.stockCode.setValue("");
+      this.meltingTypeForm.controls.stockCodeDes.setValue("");
+      this.meltingTypeForm.controls.alloy.setValue("");
+      this.meltingTypeForm.controls.color.setValue("");
+      this.meltingTypeForm.controls.metal.setValue("");
     }
-
-    this.tableData.push(data);
-    console.log(this.tableData);
-
-    this.meltingTypeForm.controls.code.setValue("");
-    this.meltingTypeForm.controls.description.setValue("");
-    this.meltingTypeForm.controls.karat.setValue("");
-    this.meltingTypeForm.controls.purity.setValue("");
-    this.meltingTypeForm.controls.divCode.setValue("");
-    this.meltingTypeForm.controls.stockCode.setValue("");
-    this.meltingTypeForm.controls.stockCodeDes.setValue("");
-    this.meltingTypeForm.controls.alloy.setValue("");
-    this.meltingTypeForm.controls.color.setValue("");
-    this.meltingTypeForm.controls.metal.setValue("");
-
+  else {
+    this.toastr.error('Please Fill all Mandatory Fields')
+  }
     
   }
-
+  
   setFormValues() {
     if(!this.content) return
     console.log(this.content);
