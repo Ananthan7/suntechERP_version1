@@ -28,8 +28,8 @@ export class DesignMasterComponent implements OnInit {
 
   columnhead:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
   columnheader:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
-  columnheader1:any[] = ['Srno','Division','Stone Type', 'Stock Code','Karat','Shape','Color','Ext.Color','Clarity','Ext.Clarity','Sieve Std.','Description','Sieve From'];
-  columnheader2:any[] = ['Comp.Code','Srno','Division','Stone Type', 'Stock Code','Karat','Int.Color','Ext.Color','Shape','Int.Clarity','Ext.Clarity'];
+  columnheader1:any[] = ['Sr no','Division','Stone Type', 'Stock Code','Karat','Shape','Color','Ext. Color','Clarity','Ext. Clarity','Sieve Std.','Description','Sieve From'];
+  columnheader2:any[] = ['Comp. Code','Sr no','Division','Stone Type', 'Stock Code','Karat','Int. Color','Ext. Color','Shape','Int. Clarity','Ext. Clarity'];
   columnheader3:any[] = ['',];
   columnheader4:any[] = ['SINO','Size Code','Description','Default'];
   column1:any[] = ['SINO','Model No','Description'];
@@ -47,7 +47,7 @@ export class DesignMasterComponent implements OnInit {
   column13:any[] = ['SINO','Billing Code','Description'];
   column14:any[] = ['SINO','Finishing Code','Description','Default'];
   column15:any[] = ['Size','Pcs'];
-  columnhead1:any[] = ['Srno','Comp.Code','Description','Pcs', 'Size Set Code','Size Code','Type','Category','Shape','Height','Width','Length','Radious'];
+  columnhead1:any[] = ['Sr no','Comp. Code','Description','Pcs', 'Size Set Code','Size Code','Type','Category','Shape','Height','Width','Length','Radious'];
   columnhead2:any[] = ['DESIGN_C','PART_CODE','PART_DESCRIPTION','METAL_WT', 'LS_PCS','LS_WT','CS_PCS','CS_WT','PL_PCS','PL_WT','OTH_PCS','OTH_WT','TOTAL_PCS'];
 
   seasons: string[] = ['Customer Exclusive', 'Keep on Hold', 'Add Steel'];

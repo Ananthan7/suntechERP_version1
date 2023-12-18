@@ -530,20 +530,10 @@
                 </div>
                 <div class="row align-items-center mb-1">
                   <div class="col-md-6">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox">
-                      <label class="form-check-label">
-                        Components Summary
-                      </label>
-                    </div>
+                    <mat-checkbox #tab3Checkbox (change)="onCheckboxChange(2)"> Components Summary</mat-checkbox>
                   </div>
                   <div class="col-md-6">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox">
-                      <label class="form-check-label">
-                        Components Details
-                      </label>
-                    </div>
+                    <mat-checkbox>Components Details</mat-checkbox>
                   </div>
                 </div>
               </div>
@@ -585,7 +575,7 @@
                 </div> -->
               </div>
             </div>
-            <mat-tab-group [selectedIndex]="">
+            <mat-tab-group #tabGroup [selectedIndex]="selectedTabIndex">
               <mat-tab label="Metal Details">
                 <div class="row mt-3">
                   <div class="col-md-12">
