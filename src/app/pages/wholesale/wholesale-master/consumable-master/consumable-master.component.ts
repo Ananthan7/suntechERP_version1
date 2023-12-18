@@ -61,12 +61,10 @@ export class ConsumableMasterComponent implements OnInit {
     this.consumbleForm.controls['code'].enable();
   }
 
-
   // consumbleForm: FormGroup = this.formBuilder.group({
   //   code:[''],
 
   // })
-
 
   codeCodeData: MasterSearchModel = {
     PAGENO: 1,
