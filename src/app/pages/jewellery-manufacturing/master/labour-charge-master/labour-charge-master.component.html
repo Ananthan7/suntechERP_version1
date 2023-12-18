@@ -70,7 +70,7 @@
                 <mat-form-field>
                   <mat-label>Select</mat-label>
                   <mat-select formControlName="method">
-                    <mat-option *ngFor="let option of methodList" [value]="option.METHOD">
+                    <mat-option *ngFor="let option of methodList" [value]="option.value">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -207,6 +207,7 @@
           </div> -->
         </div>
       </mat-tab>
+      
       <mat-tab label="Metal Labour Master">
         <div class="container-fluid">
           <!-- <div class="card metal-sales-card">

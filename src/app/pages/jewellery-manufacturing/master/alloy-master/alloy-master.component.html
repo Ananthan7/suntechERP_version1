@@ -19,9 +19,10 @@
                                 <label for="input" class="col-sm-5 col-form-label">Code :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="" />
+                                        <input type="text" matInput formControlName="code" />
                                     </mat-form-field>
-
+                                    <master-search [MasterSearchData]="codeData"
+                                        (newRowClick)="codeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
