@@ -9803,7 +9803,7 @@ export class AddPosComponent implements OnInit {
 
   getAccountLookup() {
     this.suntechApi.getDynamicAPI('AccountLookup/GetAccountLookupWithAccMode/R').subscribe((resp) => {
-    // this.suntechApi.getDynamicAPI('AccountLookup').subscribe((resp) => {
+      // this.suntechApi.getDynamicAPI('AccountLookup').subscribe((resp) => {
       let resVal;
       if (resp['status'] == 'Success') {
         resVal = resp.response;
@@ -9989,8 +9989,17 @@ export class AddPosComponent implements OnInit {
     }
 
     if (this.receiptModesList?.['BTN_GIFT'] == true && this.selectedTabIndex == 4) {
+      this.giftReceiptForm.controls.paymentsCreditGIftVoc.setValue(
+        this.comFunc.emptyToZero(data['RECEIPT_MODE']).toString());
 
+      this.advanceReceiptForm.controls.giftBranch.setValue(
+        data['REC_BRANCHCODE'].toString());
 
+      this.advanceReceiptForm.controls.advanceRecNo.setValue(
+        this.comFunc.emptyToZero(data['ARECVOCNO'].toString()));
+
+      this.giftReceiptForm.controls.giftAmtFC.setValue(
+        this.comFunc.emptyToZero(data['AMOUNT_FC']).toString());
 
     }
     if (this.receiptModesList?.['BTN_CUSTOMER'] == true && this.selectedTabIndex == 5) {
