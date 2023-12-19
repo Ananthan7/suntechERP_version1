@@ -85,10 +85,10 @@ export class WorkerMasterComponent implements OnInit {
       TargetCaratWt: [''],
       TargetMetalWt: [''],
       TargetWeight: [''],
-      DailyTarget: [true],
-      MonthlyTarget: [false],
-      YearlyTarget: [false],
-      active : [true]
+      DailyTarget: ['1'],
+      MonthlyTarget: [null],
+      YearlyTarget: [null],
+      Active : [true]
     })
     
   }

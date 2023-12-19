@@ -89,17 +89,21 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
   codeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost Code',
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'prefix_code',
+    SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COST_CODE<> ''",
+    WHERECONDITION: "prefix_code<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    
   }
+
+  
 
   masterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -255,9 +259,11 @@ export class AlloyMasterComponent implements OnInit {
     console.log(e);
     this.alloyMastereForm.controls.category.setValue(e.CODE);
   }
-codeSelected(e:any){
+
+  codeSelected(e:any){
     console.log(e);
-    this.alloyMastereForm.controls.code.setValue(e.CODE);
+    this.alloyMastereForm.controls.code.setValue(e.PREFIX_CODE);
+    this.alloyMastereForm.controls.type.setValue(e.CODE);
   }
 
   costCenterSelected(e:any){
