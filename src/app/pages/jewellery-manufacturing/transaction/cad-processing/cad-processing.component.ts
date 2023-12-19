@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -16,15 +16,23 @@ import { AlloyAllocationComponent } from './alloy-allocation/alloy-allocation.co
 })
 export class CADProcessingComponent implements OnInit {
   @Input() content!: any;
+  @Input()
+  selectedIndex!: number | null;
   tableData: any[] = [];  
+  tableDatas: any[] = [];  
   columnheadItemDetails:any[] = ['Srno','Division','Stone Type','Stock Code','Karat','Color','Shape','Sieve','Size','Pcs','Wt/Ct','Setting Type','Pointer Wt','Remarks'];
-  columnheadItemDetails1:any[] = ['Comp Code','description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
+  columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
   divisionMS: any = 'ID';
   columnheadItemDetails3:any[] = ['Comp Code','Srno','Division','Stone Type','Stock Code','Karat','Color','Shape','Sieve Std','Sieve Set'];
   columnheadItemDetails2:any[] = ['']
   branchCode?: String;
   yearMonth?: String;
+  currentDate = new FormControl(new Date());
+  isdisabled:boolean=true;
   private subscriptions: Subscription[] = [];
+  table: any;
+  status: boolean= true;
+  selectedTabIndex = 0;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -37,12 +45,14 @@ export class CADProcessingComponent implements OnInit {
   ngOnInit(): void {
     if (this.content) {
       // this.setFormValues()
+      
     }
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     if (this.content) {
       this.setFormValues()
     }
+    this.cadProcessingForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
   }
 
   close(data?: any) {
@@ -60,22 +70,22 @@ export class CADProcessingComponent implements OnInit {
     });
   }
   cadProcessingForm: FormGroup = this.formBuilder.group({
-    voctype: [''],
-    vocNo: [''],
-    vocDate: [''],
-    process: [''],
-    worker: [''],
+    voctype: ['CAD',''],
+    vocNo: ['1',''],
+    vocDate: [new Date(),''],
+    process: ['CAD',''],
+    worker: ['PARIMA',''],
     narration: [''],
     soNumber: [''],    //no
     design:[''],
-    completed:[''], //no
+    completed:[new Date(),''], //no
     toWorker:[''],
     toProcess:[''],
     job:[''],
     subJobId:[''],
-    timeTaken:[''],
+    timeTaken:['00:00:00',''],
     userId:[''], // No
-    date:[''],
+    date:[new Date(),''],
     copy:[''], // no
     type:[''],
     reason:[''], //no
@@ -83,38 +93,170 @@ export class CADProcessingComponent implements OnInit {
     attachments:[''], //no
     deliveryOn:[''],
     deliveryOnDays:[''],
-    deliveryOnDate:[''],
+    deliveryOnDate:[new Date(),{disabled: true,value:''}],
   });
+
+ 
 
   adddata() {
     let length = this.tableData.length;
     let srno = length + 1;
     let data =  {
-      "REFMID": 0,
-      "SRNO": srno,
-      "COMP_CODE": "string",
-      "COMP_DESCRIPTION": "string",
-      "COMP_SHAPE": "string",
-      "TYPE_CODE": "string",
-      "CATEGORY_CODE": "string",
-      "COMPSIZE_CODE": "string",
-      "COMPSET_CODE": "string",
-      "HEIGHT": 0,
-      "WIDTH": 0,
-      "LENGTH": 0,
-      "RADIUS": 0,
-      "PCS": 0,
-      "REMARKS": "string",
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "stri"
+      "Srno": srno,
+      "Division": "string",
+      "StoneType": "string",
+      "StockCode": "string",
+      "Karat": "string",
+      "Color": "string",
+      "Shape": "string",
+      "Sieve": "string",
+      "Size": 0,
+      "Pcs": 0,
+      "WtCt": 0,
+      "SettingType": 0,
+      "PointerWt": 0,
+      "Remarks": "string",
     };
+  
     this.tableData.push(data);
+   
 }
+
+divisiontemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Division = data.target.value;
+}
+
+stonetypetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].StoneType = data.target.value;
+}
+
+stockcodetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].StockCode = data.target.value;
+}
+
+karattemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Karat = data.target.value;
+}
+
+colortemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Color = data.target.value;
+}
+
+shapetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Shape = data.target.value;
+}
+
+sievetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Sieve = data.target.value;
+}
+
+sizetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Size = data.target.value;
+}
+
+Pcstemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Pcs = data.target.value;
+}
+
+wtcttemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].WtCt = data.target.value;
+}
+
+settingtypetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].SettingType = data.target.value;
+}
+
+pointerwttemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].PointerWt = data.target.value;
+}
+
+remarkstemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Remarks = data.target.value;
+}
+
+adddatas() {
+  let length = this.tableDatas.length;
+  let srno = length + 1;
+  let data2=  {
+    "Srno": srno,
+    "CompCode": "string",
+    "Description": "string",
+    "Pcs": "string",
+    "SizeSet": "string",
+    "SizeCode": "string",
+    "Type": "string",
+    "Category": "string",
+    "Shape": 0,
+    "Height": 0,
+    "Width": 0,
+    "Length": 0,
+    "Radius": 0,
+    "Remarks": "string",
+  };
+  this.tableDatas.push(data2);
+ 
+}
+
+compcodetemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].CompCode = data.target.value;
+}
+
+descriptiontemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Description = data.target.value;
+}
+
+Pcs2temp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Pcs = data.target.value;
+}
+
+sizesettemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].SizeSet = data.target.value;
+}
+
+sizecodetemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].SizeCode = data.target.value;
+}
+
+typetemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Type = data.target.value;
+}
+
+categorytemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Category = data.target.value;
+}
+
+shape2temp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Shape = data.target.value;
+}
+
+heighttemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Height = data.target.value;
+}
+
+widthtemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Width = data.target.value;
+}
+
+lengthtemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Length = data.target.value;
+}
+
+radiustemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Radius = data.target.value;
+}
+
+remarks2temp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Remarks = data.target.value;
+}
+
 removedata(){
   this.tableData.pop();
 }
+
+removedatas(){
+  this.tableDatas.pop();
+}
+
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
