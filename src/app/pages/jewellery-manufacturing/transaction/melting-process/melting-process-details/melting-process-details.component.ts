@@ -147,80 +147,76 @@ export class MeltingProcessDetailsComponent implements OnInit {
   });
 
   formSubmit() {
+let dataTOparent = {
+  formDetails :this.meltingprocessdetailsForm.value 
+  
+}
+this.close(dataTOparent)
 
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
-      return
-    }
-    if (this.meltingprocessdetailsForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    let API = 'JobMeltingProcessDJ/InsertJobMeltingProcessDJ'
-    let postData = {
-      "UNIQUEID": 0,
-      "SRNO": 0,
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "stri",
-      "DT_VOCNO": 0,
-      "DT_VOCDATE": "2023-11-25T05:04:56.703Z",
-      "DT_YEARMONTH": "string",
-      "JOB_NUMBER": this.meltingprocessdetailsForm.value.jobno,
-      "JOB_DESCRIPTION": this.meltingprocessdetailsForm.value.jobdes,
-      "PROCESS_CODE": this.meltingprocessdetailsForm.value.process,
-      "PROCESS_DESC": this.meltingprocessdetailsForm.value.processdes,
-      "WORKER_CODE": this.meltingprocessdetailsForm.value.worker,
-      "WORKER_DESC": this.meltingprocessdetailsForm.value.workerdes,
-      "STOCK_CODE": this.meltingprocessdetailsForm.value.stockcode,
-      "STOCK_DESCRIPTION": this.meltingprocessdetailsForm.value.stockcodedes,
-      "DIVCODE": "s",
-      "KARAT_CODE": "stri",
-      "PCS": this.meltingprocessdetailsForm.value.pcs,
-      "GROSS_WT": this.meltingprocessdetailsForm.value.grossweight,
-      "STONE_WT": this.meltingprocessdetailsForm.value.stoneweight,
-      "PURITY": this.meltingprocessdetailsForm.value.purity,
-      "PUREWT": this.meltingprocessdetailsForm.value.pureweight,
-      "PUDIFF": this.meltingprocessdetailsForm.value.purediff,
-      "IRON_WT": 0,
-      "NET_WT": this.meltingprocessdetailsForm.value.netweight,
-      "TOTAL_WEIGHT": 0,
-      "IRON_PER": 0,
-      "STONEDIFF": 0,
-      "WAX_WT": this.meltingprocessdetailsForm.value.waxweight,
-      "TREE_NO": this.meltingprocessdetailsForm.value.treeno,
-      "WIP_ACCODE": "string",
-      "CURRENCY_CODE": "stri",
-      "CURRENCY_RATE": 0,
-      "MKG_RATEFC": 0,
-      "MKG_RATECC": 0,
-      "MKGVALUEFC": 0,
-      "MKGVALUECC": 0,
-      "DLOC_CODE": "string",
-      "REMARKS": this.meltingprocessdetailsForm.value.remark,
-      "LOCTYPE_CODE": this.meltingprocessdetailsForm.value.location,
-      "TOSTOCKCODE": this.meltingprocessdetailsForm.value.tostockcode,
-      "LOSSWT": this.meltingprocessdetailsForm.value.lossweight,
-      "TODIVISION_CODE": "s",
-      "LOT_NO": this.meltingprocessdetailsForm.value.lotno,
-      "BAR_NO": this.meltingprocessdetailsForm.value.barno,
-      "TICKET_NO": this.meltingprocessdetailsForm.value.ticketno,
-      "SILVER_PURITY": this.meltingprocessdetailsForm.value.sliver,
-      "SILVER_PUREWT": 0,
-      "TOPURITY": 0,
-      "PUR_PER": this.meltingprocessdetailsForm.value.purityper,
-      "MELTING_TYPE": "string",
-      "ISALLOY": "s",
-      "BALANCE_WT": 0,
-      "BALANCE_PURE_WT": 0,
-      "LOSS_PURE_WT": 0,
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string"
-    }
-    this.close(postData);
-  }
+  //   let API = 'JobMeltingProcessDJ/InsertJobMeltingProcessDJ'
+  //   let postData = {
+  //     "UNIQUEID": 0,
+  //     "SRNO": 0,
+  //     "DT_BRANCH_CODE": "string",
+  //     "DT_VOCTYPE": "stri",
+  //     "DT_VOCNO": 0,
+  //     "DT_VOCDATE": "2023-11-25T05:04:56.703Z",
+  //     "DT_YEARMONTH": "string",
+  //     "JOB_NUMBER": this.meltingprocessdetailsForm.value.jobno,
+  //     "JOB_DESCRIPTION": this.meltingprocessdetailsForm.value.jobdes,
+  //     "PROCESS_CODE": this.meltingprocessdetailsForm.value.process,
+  //     "PROCESS_DESC": this.meltingprocessdetailsForm.value.processdes,
+  //     "WORKER_CODE": this.meltingprocessdetailsForm.value.worker,
+  //     "WORKER_DESC": this.meltingprocessdetailsForm.value.workerdes,
+  //     "STOCK_CODE": this.meltingprocessdetailsForm.value.stockcode,
+  //     "STOCK_DESCRIPTION": this.meltingprocessdetailsForm.value.stockcodedes,
+  //     "DIVCODE": "s",
+  //     "KARAT_CODE": "stri",
+  //     "PCS": this.meltingprocessdetailsForm.value.pcs,
+  //     "GROSS_WT": this.meltingprocessdetailsForm.value.grossweight,
+  //     "STONE_WT": this.meltingprocessdetailsForm.value.stoneweight,
+  //     "PURITY": this.meltingprocessdetailsForm.value.purity,
+  //     "PUREWT": this.meltingprocessdetailsForm.value.pureweight,
+  //     "PUDIFF": this.meltingprocessdetailsForm.value.purediff,
+  //     "IRON_WT": 0,
+  //     "NET_WT": this.meltingprocessdetailsForm.value.netweight,
+  //     "TOTAL_WEIGHT": 0,
+  //     "IRON_PER": 0,
+  //     "STONEDIFF": 0,
+  //     "WAX_WT": this.meltingprocessdetailsForm.value.waxweight,
+  //     "TREE_NO": this.meltingprocessdetailsForm.value.treeno,
+  //     "WIP_ACCODE": "string",
+  //     "CURRENCY_CODE": "stri",
+  //     "CURRENCY_RATE": 0,
+  //     "MKG_RATEFC": 0,
+  //     "MKG_RATECC": 0,
+  //     "MKGVALUEFC": 0,
+  //     "MKGVALUECC": 0,
+  //     "DLOC_CODE": "string",
+  //     "REMARKS": this.meltingprocessdetailsForm.value.remark,
+  //     "LOCTYPE_CODE": this.meltingprocessdetailsForm.value.location,
+  //     "TOSTOCKCODE": this.meltingprocessdetailsForm.value.tostockcode,
+  //     "LOSSWT": this.meltingprocessdetailsForm.value.lossweight,
+  //     "TODIVISION_CODE": "s",
+  //     "LOT_NO": this.meltingprocessdetailsForm.value.lotno,
+  //     "BAR_NO": this.meltingprocessdetailsForm.value.barno,
+  //     "TICKET_NO": this.meltingprocessdetailsForm.value.ticketno,
+  //     "SILVER_PURITY": this.meltingprocessdetailsForm.value.sliver,
+  //     "SILVER_PUREWT": 0,
+  //     "TOPURITY": 0,
+  //     "PUR_PER": this.meltingprocessdetailsForm.value.purityper,
+  //     "MELTING_TYPE": "string",
+  //     "ISALLOY": "s",
+  //     "BALANCE_WT": 0,
+  //     "BALANCE_PURE_WT": 0,
+  //     "LOSS_PURE_WT": 0,
+  //     "IS_REJECT": true,
+  //     "REASON": "string",
+  //     "REJ_REMARKS": "string",
+  //     "ATTACHMENT_FILE": "string"
+  //   }
+  //   this.close(postData);
+   }
 
   setFormValues() {
   }
