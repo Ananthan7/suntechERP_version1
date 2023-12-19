@@ -690,7 +690,7 @@
               <label for="input" class="col-sm-4 col-form-label">End Date</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="enddate" id="enddate"/>
+                  <input type="date" matInput formControlName="enddate" id="enddate" [min]="minEndDate"/>
                 </mat-form-field>
               </div>
               <div *ngIf="processTransferdetailsForm.hasError('dateError')">

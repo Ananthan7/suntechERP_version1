@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CostCenterMakingChargesDetailsComponent } from './cost-center-making-charges-details/cost-center-making-charges-details.component';
 
 @Component({
   selector: 'app-costcentre-magkingcharges',
@@ -110,6 +111,13 @@ export class CostcentreMagkingchargesComponent implements OnInit {
   }
 
   addTableData() {
+    
+    const modalRef: NgbModalRef = this.modalService.open(CostCenterMakingChargesDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
 
   }
 

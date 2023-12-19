@@ -397,9 +397,9 @@
                             </div>
                         </div>
                         <div class="row pt-2">
-                            <div class="box-wrap2">
-                                <input type="text" matInput matInput formControlName="comment"
-                                    [disabled]="consumbleForm.invalid" (click)="enableButtons()" />
+                            <div class="box-textarea1">
+                                <textarea type="text" formControlName="comment"
+                                    [disabled]="consumbleForm.invalid" (click)="enableButtons()"></textarea>
                             </div>
                         </div>
                     </div>
@@ -417,7 +417,7 @@
                                 <input type="file" name="uploadproduct" class="uploadproduct">
                             </div>
                         </div>
-                        <div class="row pt-2">
+                        <div class="row ">
                             <div class="col-11 t-a2">
                                 <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
                                     [disabled]="consumbleForm.invalid" (click)="enableButtons()">
@@ -426,9 +426,9 @@
                             </div>
                         </div>
                         <div class="row pt-2">
-                            <div class="box-wrap1">
-                                <input type="text" matInput formControlName="tagDetails"
-                                    [disabled]="consumbleForm.invalid" (click)="enableButtons()" />
+                            <div class="box-textarea2">
+                                <textarea type="text"  formControlName="tagDetails"
+                                    [disabled]="consumbleForm.invalid" (click)="enableButtons()"></textarea>
                             </div>
                         </div>
                     </div>
