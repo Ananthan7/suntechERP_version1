@@ -10,8 +10,6 @@ import * as FileSaver from "file-saver";
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from "xlsx";
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -41,6 +39,7 @@ export class CommonServiceService {
 
   public allMessageBoxData: any;
   public allCompanyParams: any;
+  public allCompanyParameters: any;
   public baseUsername: any;
   public baseUserbranch: any;
   public baseYear: any;
@@ -255,13 +254,8 @@ export class CommonServiceService {
   }
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
-    let paramValue: any;
-    this.allCompanyParams.map((data: any) => {
-      if (data.PARAMETER == parameter) {
-        paramValue = data.PARAM_VALUE;
-      }
-    })
-    return paramValue
+    return this.allCompanyParameters && this.allCompanyParameters.length>0 ? 
+    this.allCompanyParameters[0][parameter] : ''
   }
 
   private initializeDecimalConstantsFlag() {

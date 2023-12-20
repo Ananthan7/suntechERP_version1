@@ -36,7 +36,7 @@ export class IndexedApiService {
       if (data.length == 0) {
         this.getAllCompanyParametersAsObj();
       } else {
-        // this.comFunc.allCompanyParams = data;
+        this.comFunc.allCompanyParameters = data;
         // this.comFunc.setCompParaValues();
       }
     });
@@ -309,7 +309,9 @@ export class IndexedApiService {
      this.suntechApi.getDynamicAPI('CompanyParameters/GetCompanyParameterandParametervalue').subscribe((resp) => {
       if (resp.status == 'Success') {
          this.inDb.bulkInsert('companyParameter', [resp.response]);
+          this.comFunc.allCompanyParameters = resp.response;
       } else {
+        this.comFunc.allCompanyParameters = [];
       }
     });
   }

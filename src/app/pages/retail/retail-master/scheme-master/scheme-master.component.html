@@ -1,11 +1,148 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> Pos Customer Master
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> Scheme Master
     </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
 <!-- content section -->
+
+<div class="container-fluid pt-3">
+    <form [formGroup]="schemeMasterForm" class="p-1">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="code" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Prefix</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput formControlName="prefix" />
+                        </mat-form-field>
+                        <master-search [MasterSearchData]="prefixCodeData"
+                            (newRowClick)="prefixSelected($event)"></master-search>
+                    </div>
+                    <label for="inputPassword" class="col-sm-1 col-form-label">Status</label>
+                    <div class="col-md-3">
+                        <mat-checkbox>Components Details</mat-checkbox>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-md-10">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="description" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Frequency</label>
+                    <div class="col-md-2">
+                        <mat-form-field  style="width: 100%;">
+                            <mat-select formControlName="frequency">
+                              <mat-option value="weekly">Weekly</mat-option>
+                              <mat-option value="monthly">Monthly</mat-option>
+                              <mat-option value="yearly">Yearly</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Tenure/Period</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="tenurePeriod" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Installment Amount</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="installmentAmount" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Receipt Mode</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <mat-select formControlName="receiptModeone">
+                                <mat-option value="scheme">SCHEME</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Bonus Installment </label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="bonusInstallment" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Receipt Mode</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <mat-select formControlName="receiptModeTwo">
+                                <mat-option value="bonus">BONUS</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Cancel Charges </label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="cancelCharges" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Receipt Mode</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <mat-select formControlName="receiptModeThree">
+                                <mat-option  value="bonus">BONUS</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Deposit In</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <mat-select formControlName="depositIn">
+                                <mat-option>Amount</mat-option>
+                             </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Start Date</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;">
+                            <input matInput [matDatepicker]="startDate" [max]="startDate" formControlName="startDate"
+                                placeholder="DD/MM/YYYY" DateValidation />
+                            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #startDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-checkbox>Scheme Amt Not Fixed</mat-checkbox>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Remarks</label>
+                    <div class="col-md-10">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="remarks" />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
