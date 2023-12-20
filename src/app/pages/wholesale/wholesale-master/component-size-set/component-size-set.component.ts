@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import themes from 'devextreme/ui/themes';
 @Component({
   selector: 'app-component-size-set',
   templateUrl: './component-size-set.component.html',
@@ -15,7 +16,8 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class ComponentSizeSetComponent implements OnInit {
 
   columnheader:any[] = ['SN','Code','Description'];
-
+  allMode: string;
+  checkBoxesMode: string;
 
 subscriptions: any;
   @Input() content!: any; 
@@ -28,7 +30,10 @@ subscriptions: any;
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-  ) { }
+  ) { 
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+  }
  
   ngOnInit(): void {
   }

@@ -61,10 +61,16 @@
                   </div>
                   <div class="col-md-12">
                     <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
-                  [showRowLines]="true" class="mt-3">
+                  [showRowLines]="true" class="mt-3"
+                  [selectedRowKeys]="[]">
+
                   <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
 
-               
+                  <dxo-selection
+                  [selectAllMode]="allMode"
+                  [showCheckBoxesMode]="checkBoxesMode"
+                  mode="multiple"
+                ></dxo-selection>
                     <dxi-column dataField="SN" caption="SN"> </dxi-column>
                     <dxi-column dataField="Code" caption="Code" cellTemplate="codetemp">
                     </dxi-column>
@@ -83,7 +89,7 @@
                 </div>
 
                   <div *dxTemplate="let data of 'descriptiontemp'">
-                    <input type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" />
+                    <input [checked]="data.value" type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" />
                   </div>
                 </dx-data-grid>
                   </div>
