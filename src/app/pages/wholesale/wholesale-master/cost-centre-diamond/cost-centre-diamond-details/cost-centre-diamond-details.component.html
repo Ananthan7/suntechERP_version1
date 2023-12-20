@@ -6,8 +6,10 @@
 </div>
 <!-- modal header component -->
  <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> 
-<div class="container-fluid pt-3">
-    <form [formGroup]="costcenterdiamonddetailsForm">
+ <div class="row">
+    <div class="col-md-12">
+        <div class="container-fluid pt-3">
+          <form [formGroup]="costcenterdiamonddetailsForm">
         <div class="row justify-content-between">
             <div class="col-md-5">
                 <div class="row align-items-center mb-1">
@@ -36,19 +38,19 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Purchase</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 60%;">
-                            <input type="text" matInput formControlName="purchase1" />
+                            <input type="text" matInput formControlName="purchase" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-3">
                         <mat-form-field style="width: 60%;">
-                            <input type="text" matInput formControlName="purchase2"/>
+                            <input type="text" matInput formControlName="purchaseImp"/>
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-3">
                         <mat-form-field style="width: 60%;">
-                            <input type="text" matInput formControlName="purchase3"/>
+                            <input type="text" matInput formControlName="purchaseRep"/>
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
@@ -57,19 +59,19 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Purchase Return</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 60%;">
-                            <input type="text" matInput formControlName="purchasereturn1" />
+                            <input type="text" matInput formControlName="purchasereturn" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-3">
                         <mat-form-field style="width: 60%;">
-                            <input type="text" matInput formControlName="purchasereturn2" />
+                            <input type="text" matInput formControlName="purchasereturnImp" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-3">
                         <mat-form-field style="width: 60%;">
-                            <input type="text" matInput formControlName="purchasereturn3" />
+                            <input type="text" matInput formControlName="purchasereturnRep" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
@@ -89,31 +91,31 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Sales</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="sales1" />
+                            <input type="text" matInput  />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="sales2" />
+                            <input type="text" matInput formControlName="salesRet" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="sales3" />
+                            <input type="text" matInput formControlName="salesExp" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="sales4" />
+                            <input type="text" matInput formControlName="salesRep" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="sales5" />
+                            <input type="text" matInput formControlName="salesExb" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
@@ -122,31 +124,31 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Sales Return</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="salesreturn1" />
+                            <input type="text" matInput formControlName="salesreturn" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="salesreturn2" />
+                            <input type="text" matInput formControlName="salesreturnRet" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="salesreturn3" />
+                            <input type="text" matInput formControlName="salesreturnExp" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="salesreturn4" />
+                            <input type="text" matInput formControlName="salesreturnRep" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="salesreturn5" />
+                            <input type="text" matInput formControlName="salesreturnExb" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
@@ -159,7 +161,7 @@
                 <div class="row align-items-center mb-1">
                     <div class="col-md-12">
                         <mat-form-field style="width: 60%;">
-                            <input type="text" matInput formControlName="other1" />
+                            <input type="text" matInput formControlName="salesOth" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
@@ -167,7 +169,7 @@
                 <div class="row align-items-center mb-1">
                     <div class="col-md-12">
                         <mat-form-field style="width: 60%;">
-                            <input type="text" matInput formControlName="other2"/>
+                            <input type="text" matInput formControlName="salesreturnOth"/>
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
@@ -340,7 +342,7 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">IN</label>
                     <div class="col-md-7">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="in" />
+                            <input type="text" matInput formControlName="branchtransferin" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
@@ -349,171 +351,17 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Out</label>
                     <div class="col-md-7">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="out" />
+                            <input type="text" matInput formControlName="branchtransferout" />
                         </mat-form-field>
                         <master-search></master-search>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-            <mat-tab label="Diamond Component A/C">
-                <div class="row border">
-                    <div class="col-md-6">
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Pure Gold in Diamond
-                                Jewellery</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="puregoldindiamondjewellery1" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="puregoldindiamondjewellery2"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="puregoldindiamondjewellery3"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="puregoldindiamondjewellery4"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                        </div>
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Pure Gold in Diamond Jewellery (Fixed)</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="puregoldindiamondjewelleryFixed1" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="puregoldindiamondjewelleryFixed2"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="puregoldindiamondjewelleryFixed3"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="puregoldindiamondjewelleryFixed4"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                        </div>
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Loose Stone Value in Diamond Jewellery</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="loosestonevalueindiamondjewellery1" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="loosestonevalueindiamondjewellery2" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="loosestonevalueindiamondjewellery3"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="loosestonevalueindiamondjewellery4"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                        </div>
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Color Stone Value in Diamond Jeweller</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="colorstonevalueindiamondjeweller1" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="colorstonevalueindiamondjeweller2"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="colorstonevalueindiamondjeweller3"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="colorstonevalueindiamondjeweller4"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                        </div>
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Pearl Value in Diamond Jewellery</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="pearlvalueindiamondjewellery1" />
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="pearlvalueindiamondjewellery2"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="pearlvalueindiamondjewellery3"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 60%;">
-                                    <input type="text" matInput formControlName="pearlvalueindiamondjewellery4"/>
-                                </mat-form-field>
-                                <master-search></master-search>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-            <mat-tab label="Manufacture A/C">
-
-            </mat-tab>
-        </mat-tab-group> -->
+      
 
         <div class="col-md-6">
             <div class="row mt-3">
-                <!-- <div class="col-md-2">
-                    <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                        (saveClick)="formSubmit()">Save</button>
-                </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                        (cancelClick)="close()">Cancel</button>
-                </div> -->
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
                         (continueClick)="continue()">Continue</button>
@@ -522,4 +370,6 @@
         </div>
     
     </form>
+   </div>
+  </div>
 </div>

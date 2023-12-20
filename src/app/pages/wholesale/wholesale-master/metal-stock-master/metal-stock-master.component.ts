@@ -34,19 +34,19 @@ export class MetalStockMasterComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
-    this.metalstockForm.controls.PcGms = new FormControl({value: '', disabled: this.disabled})
+    // this.metalstockForm.controls.PcGms = new FormControl({value: '', disabled: this.disabled})
+    this.metalstockForm.controls['PcGms'].disable();
   }
 
   showHideText() {
     this.isDisplayed = !this.isDisplayed;
   }
 
-  HideText() {
-    this.metalstockForm.controls.PcGms =  new FormControl({value: '', disabled: this.isdisabled})
-  }
+  // HideText() {
+  //   this.metalstockForm.controls.PcGms =  new FormControl({value: '', disabled: this.isdisabled})
+  // }
 
-
-  
+ 
   metalstockForm: FormGroup = this.formBuilder.group({
     metalType:[''],
     code:[''],
@@ -208,7 +208,7 @@ export class MetalStockMasterComponent implements OnInit {
   typeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 62,
+    LOOKUPID: 68,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
@@ -220,7 +220,7 @@ export class MetalStockMasterComponent implements OnInit {
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 30,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Category Code',
     SEARCH_VALUE: '',
@@ -232,7 +232,7 @@ export class MetalStockMasterComponent implements OnInit {
   subcategoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 31,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Subcategory Code',
     SEARCH_VALUE: '',
@@ -1393,5 +1393,15 @@ export class MetalStockMasterComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+
+  onInPieceChange(event:any) {
+    console.log(event);
+    if(event.target.checked == true){
+      this.metalstockForm.controls['PcGms'].enable();
+    }
+    else{
+      this.metalstockForm.controls['PcGms'].disable();
+    }
   }
 }

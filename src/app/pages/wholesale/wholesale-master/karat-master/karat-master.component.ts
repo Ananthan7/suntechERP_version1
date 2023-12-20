@@ -29,6 +29,7 @@ export class KaratMasterComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+ 
   }
 
   karatmasterFrom: FormGroup = this.formBuilder.group({
@@ -45,6 +46,8 @@ export class KaratMasterComponent implements OnInit {
     scrap:[''],
     showinweb:[''],
   })
+
+
 
   divisionCodeData: MasterSearchModel = {
     PAGENO: 1,

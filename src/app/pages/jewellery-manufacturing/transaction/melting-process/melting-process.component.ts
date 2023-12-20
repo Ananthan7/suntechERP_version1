@@ -27,6 +27,8 @@ export class MeltingProcessComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
 
+
+
   columnhead:any[] = ['Sr #', 'Div','Job No','Stock Code','Stock Desc','Process','Worker','Pcs','Gross Wt','Stone Wt','Net Wt','Purity','Pure Wt','Balance Wt','Balance Pure'];
   columnhead1:any[] = ['R to Stock','Stock Code','Gross Wt','Purity', 'Pure Wt','Location'];
   columnhead2:any[] = ['R to Scrap','Stock Code','Gross Wt','Purity', 'Pure Wt','Location','Loss','Pure Wt','Bal Gross','Bal Pure'];
@@ -105,6 +107,10 @@ export class MeltingProcessComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+    this.userName = this.comService.userName;
   }
 
   close(data?: any) {

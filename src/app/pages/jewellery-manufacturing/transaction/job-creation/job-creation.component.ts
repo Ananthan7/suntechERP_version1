@@ -63,6 +63,7 @@ export class JobCreationComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;    
+    this.userName = this.commonService.userName; 
     this.yearMonth = this.commonService.yearSelected;
   }
 
