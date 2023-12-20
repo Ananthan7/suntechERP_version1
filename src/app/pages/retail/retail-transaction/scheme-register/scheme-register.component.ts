@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -35,39 +36,40 @@ export class SchemeRegisterComponent implements OnInit {
   indexNumberStart:number = 0
   newSchemeLength:number = 0
 
-  MobileMasterFindData: any = {
-    TABLE_NAME: 'POS_CUSTOMER_MASTER',
-    FILTER_FEILD_NAMES: {
-    },
-    API_FILTER_VALUE: 'MOBNO',
-    DB_FIELD_VALUE: 'MOBILE',
-    NAME_FIELD_VALUE: 'NAME',
-    USER_TYPED_VALUE: '',
+  customerMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Pos Customer Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  CodeMasterFindData: any = {
-    TABLE_NAME: 'POS_CUSTOMER_MASTER',
-    FILTER_FEILD_NAMES: {
-    },
-    API_FILTER_VALUE: 'CODE',
-    DB_FIELD_VALUE: 'CODE',
-    NAME_FIELD_VALUE: 'NAME',
-    USER_TYPED_VALUE: '',
+  customerMasterWithName: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'NAME',
+    SEARCH_HEADING: 'Pos Customer Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  NameMasterFindData: any = {
-    TABLE_NAME: 'POS_CUSTOMER_MASTER',
-    FILTER_FEILD_NAMES: {
-    },
-    API_FILTER_VALUE: 'NAME',
-    DB_FIELD_VALUE: 'NAME',
-    NAME_FIELD_VALUE: 'CODE',
-    USER_TYPED_VALUE: '',
+  customerMasterWithMobile: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'MOBILE',
+    SEARCH_HEADING: 'Pos Customer Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
   private subscriptions: Subscription[] = [];
   constructor(
     private formBuilder: FormBuilder,
@@ -98,6 +100,7 @@ export class SchemeRegisterComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    let no = this.commonService.getCompanyParamValue('CUSTNO')
   }
   ngAfterViewInit(): void {
     this.getIDtypes() //ID master list
@@ -358,6 +361,8 @@ export class SchemeRegisterComponent implements OnInit {
     this.dataToEditrow = [];
   }
   selectedCustomer(data: any,schemeFlag?:boolean) {
+    console.log(data,'fired');
+    
     this.schemeRegistrationForm.controls.Code.setValue(data.CODE)
     this.schemeRegistrationForm.controls.MobileNo.setValue(data.MOBILE)
     this.schemeRegistrationForm.controls.Name.setValue(data.NAME)

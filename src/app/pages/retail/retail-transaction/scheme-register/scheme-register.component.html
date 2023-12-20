@@ -43,9 +43,9 @@
                             <input type="text" matInput formControlName="Code"
                                 (focusout)="searchValueChange($event,'CODE')" />
                         </mat-form-field>
-                        <!-- <master-find-icon [MasterFindData]="CodeMasterFindData"
+                        <master-search [MasterSearchData]="customerMasterData" 
                             (newRowClick)="selectedCustomer($event)">
-                        </master-find-icon> -->
+                        </master-search>
                     </div>
                     <div class="col-lg-5 col-md-5 col-sm-12">
                         <span class="matlabels">Mobile No*:
@@ -54,9 +54,9 @@
                             <input type="text" matInput (keypress)="isNumeric($event)" formControlName="MobileNo"
                                 (focusout)="searchValueChange($event,'MOBILE')" />
                         </mat-form-field>
-                        <!-- <master-find-icon [MasterFindData]="MobileMasterFindData"
+                        <master-search [MasterSearchData]="customerMasterWithMobile" 
                             (newRowClick)="selectedCustomer($event)">
-                        </master-find-icon> -->
+                        </master-search>
                         <mat-error *ngIf="schemeRegistrationForm.controls.MobileNo.touched 
                                     && schemeRegistrationForm.controls.MobileNo.hasError('required')">
                             Mobile Number <strong>required</strong>
@@ -68,12 +68,11 @@
                         <span class="matlabels">Name:
                         </span>
                         <mat-form-field style="width: 65%">
-                            <input type="text" matInput formControlName="Name"
-                                 />
+                            <input type="text" matInput formControlName="Name" />
                         </mat-form-field>
-                        <!-- <master-find-icon [MasterFindData]="NameMasterFindData"
+                        <master-search [MasterSearchData]="customerMasterWithName" 
                             (newRowClick)="selectedCustomer($event)">
-                        </master-find-icon> -->
+                        </master-search>
                     </div>
 
                     <div class="col-lg-5 col-md-5 col-sm-12">
@@ -166,13 +165,12 @@
                     </dxi-column>
                     <dxi-column dataField="sbranch_code" caption="Branch" [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SalesManCode" caption="Salesman" [allowEditing]="true"
-                        alignment="center">
+                    <dxi-column dataField="SalesManCode" caption="Salesman" [allowEditing]="true" alignment="center">
                     </dxi-column>
                     <dxi-column dataField="SCHEME_STATUS" caption="Status" [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="IS_ATTACHMENT_PRESENT" cellTemplate="attachmentTemp" caption="Attachment" [allowEditing]="true"
-                        alignment="center">
+                    <dxi-column dataField="IS_ATTACHMENT_PRESENT" cellTemplate="attachmentTemp" caption="Attachment"
+                        [allowEditing]="true" alignment="center">
                     </dxi-column>
                     <!-- <dxi-column dataField="BlockScheme"
                         caption="Block Scheme"
