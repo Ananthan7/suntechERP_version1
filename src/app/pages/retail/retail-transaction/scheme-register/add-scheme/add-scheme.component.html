@@ -6,105 +6,111 @@
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
+    <!-- modal header component -->
+    <modal-header (saveClick)="onSubmit()" (cancelClick)="close()"
+        [isViewDelete]="false" [isViewMore]="false" ></modal-header>
     <!-- content section starts -->
-    <div class="row p-3">
-        <form [formGroup]="receiptEntryForm">
-            <div class="row">
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span class="matlabels">Scheme
-                        </span>
-                        <span style="width: 65%">
-                            <mat-form-field>
-                                <input type="text" matInput formControlName="SchemeName"
-                                    (keypress)="isNumeric($event)" />
-                            </mat-form-field>
-                        </span>
+    <div class="card">
+        <div class="row p-3">
+            <form [formGroup]="receiptEntryForm">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span class="matlabels">Scheme
+                            </span>
+                            <span style="width: 65%">
+                                <mat-form-field>
+                                    <input type="text" matInput formControlName="SchemeName"
+                                        (keypress)="isNumeric($event)" />
+                                </mat-form-field>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span class="matlabels">Scheme ID
+                            </span>
+                            <span style="width: 65%">
+                                <mat-form-field>
+                                    <input type="text" matInput formControlName="SchemeID"
+                                        (keypress)="SchemeIDChange()" />
+                                </mat-form-field>
+                                <master-search [MasterSearchData]="SchemeMasterFindData"
+                                    (newRowClick)="selectedScheme($event)">
+                                </master-search>
+                            </span>
+
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span class="matlabels">Scheme ID
-                        </span>
-                        <span style="width: 65%">
-                            <mat-form-field>
-                                <input type="text" matInput formControlName="SchemeID" (keypress)="SchemeIDChange()" />
-                            </mat-form-field>
-                            <!-- <master-find-icon [MasterFindData]="SchemeMasterFindData"
-                            (newRowClick)="selectedScheme($event)"></master-find-icon> -->
-                        </span>
-                     
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span class="matlabels">Total Value
+                            </span>
+                            <span style="width: 65%">
+                                <mat-form-field>
+                                    <input type="text" matInput class="text-right" formControlName="TotalValue"
+                                        (keypress)="isNumeric($event)" />
+                                </mat-form-field>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span class="matlabels">Units
+                            </span>
+                            <span style="width: 65%">
+                                <mat-form-field>
+                                    <input type="text" matInput class="text-right" formControlName="Units"
+                                        (change)="schemeUnitChanged($event)" (keypress)="isNumeric($event)" />
+                                </mat-form-field>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span class="matlabels">Total Value
-                        </span>
-                        <span style="width: 65%">
-                            <mat-form-field>
-                                <input type="text" matInput class="text-right" formControlName="TotalValue"
-                                    (keypress)="isNumeric($event)" />
-                            </mat-form-field>
-                        </span>
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span class="matlabels">Start Date
+                            </span>
+                            <span style="width: 65%">
+                                <mat-form-field>
+                                    <!--  -->
+                                    <input matInput DateValidation name="StartDate" (dateChange)="dateChange($event)"
+                                        [matDatepicker]="StartDate" formControlName="StartDate"
+                                        placeholder="DD/MM/YYYY" />
+                                    <mat-datepicker-toggle matSuffix [for]="StartDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #StartDate></mat-datepicker>
+                                </mat-form-field>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span class="matlabels">End Date
+                            </span>
+                            <span style="width: 65%">
+                                <mat-form-field>
+                                    <input matInput [disabled]="true" name="endDate" [matDatepicker]="endDate"
+                                        formControlName="endDate" placeholder="DD/MM/YYYY" />
+                                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #endDate></mat-datepicker>
+                                </mat-form-field>
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span class="matlabels">Units
-                        </span>
-                        <span style="width: 65%">
-                            <mat-form-field>
-                                <input type="text" matInput class="text-right" formControlName="Units"
-                                (change)="schemeUnitChanged($event)" (keypress)="isNumeric($event)"  />
-                            </mat-form-field>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span class="matlabels">Start Date
-                        </span>
-                        <span style="width: 65%">
-                            <mat-form-field>
-                                <!--  -->
-                                <input matInput DateValidation name="StartDate" (dateChange)="dateChange($event)"
-                                    [matDatepicker]="StartDate" formControlName="StartDate" placeholder="DD/MM/YYYY" />
-                                <mat-datepicker-toggle matSuffix [for]="StartDate"></mat-datepicker-toggle>
-                                <mat-datepicker #StartDate></mat-datepicker>
-                            </mat-form-field>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span class="matlabels">End Date
-                        </span>
-                        <span style="width: 65%">
-                            <mat-form-field>
-                                <input matInput [disabled]="true" name="endDate" [matDatepicker]="endDate"
-                                    formControlName="endDate" placeholder="DD/MM/YYYY" />
-                                <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-                                <mat-datepicker #endDate></mat-datepicker>
-                            </mat-form-field>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span class="matlabels">Branch
-                        </span>
-                        <span style="width: 65%">
-                            <mat-form-field class="example-full-width">
-                                <input type="text" placeholder="Branch Code" 
-                                readonly matInput
-                                    formControlName="Branch">
-                                <!-- [matAutocomplete]="Branch"
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span class="matlabels">Branch
+                            </span>
+                            <span style="width: 65%">
+                                <mat-form-field class="example-full-width">
+                                    <input type="text" placeholder="Branch Code" readonly matInput
+                                        formControlName="Branch">
+                                    <!-- [matAutocomplete]="Branch"
                                     <mat-autocomplete #Branch="matAutocomplete">
                                     <mat-option
                                         *ngFor="let option of branchFilteredOptions | async"
@@ -113,96 +119,73 @@
                                         option.DESCRIPTION}}
                                     </mat-option>
                                 </mat-autocomplete> -->
-                            </mat-form-field>
-                            <!-- <master-find-icon [MasterFindData]="BranchMasterFindData"
+                                </mat-form-field>
+                                <!-- <master-find-icon [MasterFindData]="BranchMasterFindData"
                                 (newRowClick)="selectedBranch($event)">
                             </master-find-icon> -->
-                            <!-- <mat-form-field>
+                                <!-- <mat-form-field>
                                 <input type="text" matInput
                                     formControlName="Branch" />
                             </mat-form-field> -->
-                        </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span class="matlabels">Salesman
+                            </span>
+                            <span style="width: 65%">
+                                <mat-form-field class="example-full-width">
+                                    <input type="text" (focusout)="salesmanChange($event)" placeholder="Salesman Code"
+                                        matInput formControlName="Salesman">
+                                </mat-form-field>
+                                <master-search [MasterSearchData]="salesPersonMasterData"
+                                    (newRowClick)="selectedSalesman($event)">
+                                </master-search>
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span class="matlabels">Salesman
-                        </span>
-                        <span style="width: 65%">
-                            <mat-form-field class="example-full-width">
-                                <input type="text" (focusout)="salesmanChange($event)" placeholder="Salesman Code"
-                                    matInput formControlName="Salesman">
-                                <!-- <mat-autocomplete #Salesman="matAutocomplete">
-                                    <mat-option
-                                        *ngFor="let option of filteredOptions | async"
-                                        [value]="option.SALESPERSON_CODE">
-                                        {{ option.SALESPERSON_CODE +' - '+
-                                        option.DESCRIPTION}}
-                                    </mat-option>
-                                </mat-autocomplete> -->
-                            </mat-form-field>
-                            <!-- <master-find-icon [MasterFindData]="salesPersonMasterData"
-                                (newRowClick)="selectedSalesman($event)">
-                            </master-find-icon> -->
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span class="matlabels">Status
-                        </span>
-                        <span style="width: 65%">
-                            <mat-form-field>
-                                <mat-select formControlName="Status">
-                                    <mat-option value="LIVE">LIVE</mat-option>
-                                    <!-- <mat-option value="MATURED">MATURED</mat-option>
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span class="matlabels">Status
+                            </span>
+                            <span style="width: 65%">
+                                <mat-form-field>
+                                    <mat-select formControlName="Status">
+                                        <mat-option value="LIVE">LIVE</mat-option>
+                                        <!-- <mat-option value="MATURED">MATURED</mat-option>
                                     <mat-option value="REDEEMED">REDEEMED</mat-option>
                                     <mat-option value="CANCELLED">CANCELLED</mat-option> -->
-                                </mat-select>
-                            </mat-form-field>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <!-- <div class="row">
-                        <span class="matlabels">Attachment
-                        </span>
-                        <span style="width: 65%" class="pt-3">
-                            <input type="file" (change)="onFileChange($event)"
-                                formControlName="Attachment" />
-                        </span>
-                    </div> -->
-                    <div class="d-flex">
-                        <label for="example-search-input" style="width: 30%" class="col-form-label">Attachment</label>
-                        <div class="col" style="width: 60%">
-                            <input class="form-control" type="file" formControlName="Attachment"
-                                (change)="onFileChange($event)" />
+                                    </mat-select>
+                                </mat-form-field>
+                            </span>
                         </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="d-flex">
+                            <label for="example-search-input" style="width: 30%"
+                                class="col-form-label">Attachment</label>
+                            <div class="col" style="width: 50%">
+                                <input class="form-control" type="file" formControlName="Attachment"
+                                    (change)="onFileChange($event)" />
+                            </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="row">
-                        <span>
-                            <mat-checkbox class="example-margin" formControlName="BlockScheme">Block
-                                Scheme</mat-checkbox>
-                        </span>
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row">
+                            <span>
+                                <mat-checkbox class="example-margin" formControlName="BlockScheme">Block
+                                    Scheme</mat-checkbox>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" style="padding-bottom: 20px">
-                    <div style="text-align: right; padding: 10px">
-                        <button mat-flat-button color="primary" *ngIf="isViewAddbtn" (click)="onSubmit()">ADD</button>
-                        &nbsp;
-                        <button mat-flat-button color="warn" (click)="close()">CANCEL</button>
-                    </div>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
