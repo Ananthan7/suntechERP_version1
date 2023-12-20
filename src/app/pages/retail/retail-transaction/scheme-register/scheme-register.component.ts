@@ -100,7 +100,6 @@ export class SchemeRegisterComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    let no = this.commonService.getCompanyParamValue('CUSTNO')
   }
   ngAfterViewInit(): void {
     this.getIDtypes() //ID master list

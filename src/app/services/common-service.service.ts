@@ -254,15 +254,8 @@ export class CommonServiceService {
   }
   //**USE: common fuction to get all company parameter values */
   getCompanyParamValue(parameter: string) {
-    console.log(this.allCompanyParameters,'allCompanyParameters');
-    
-    let paramValue: any = this.allCompanyParameters[parameter]
-    // this.allCompanyParams.map((data: any) => {
-    //   if (data.PARAMETER == parameter) {
-    //     paramValue = data.PARAM_VALUE;
-    //   }
-    // })
-    return paramValue
+    return this.allCompanyParameters && this.allCompanyParameters.length>0 ? 
+    this.allCompanyParameters[0][parameter] : ''
   }
 
   private initializeDecimalConstantsFlag() {
