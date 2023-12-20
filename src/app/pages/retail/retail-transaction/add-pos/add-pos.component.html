@@ -494,7 +494,7 @@
                   type="text"
                   matInput
                   formControlName="fcn_customer_code"
-               readonly 
+                  readonly
                 />
                 <!-- [readonly]="
                 viewOnly ||
@@ -656,6 +656,22 @@
                 </mat-error>
               </mat-form-field>
             </div>
+            <div class="col-md-3 " *ngIf="posPlanetIssuing">
+              <mat-checkbox color="primary" formControlName="tourVatRefuncYN"
+                >Tourist VAT Refund Y/N</mat-checkbox
+              >
+            </div>
+
+              <div class="col-md-2" *ngIf="posPlanetIssuing">
+                <mat-form-field>
+                  <mat-label>Tourism VAT Refund</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="tourVatRefund"
+                  />
+                </mat-form-field>
+              </div>
           </div>
         </form>
 
@@ -1217,74 +1233,77 @@
               </form>
             </div>
 
-            <div *ngIf="this.comFunc.compAcCode == 'JHO001' && strBranchcode == 'JHRSDF' ">
-
-            <div class="row">
-              <mat-checkbox color="primary" [(ngModel)]="showBoarding"
-                >Boarding Pass Details</mat-checkbox
-              >
-            </div>
-            <div class="card m-t-10" *ngIf="showBoarding">
-              <div class="card-header">
-                <b>Boarding Pass Details</b>
+            <div
+              *ngIf="
+                this.comFunc.compAcCode == 'JHO001' && strBranchcode == 'JHRSDF'
+              "
+            >
+              <div class="row">
+                <mat-checkbox color="primary" [(ngModel)]="showBoarding"
+                  >Boarding Pass Details</mat-checkbox
+                >
               </div>
-              <div class="card-body">
-                <form [formGroup]="boardingPassForm" novalidate>
-                  <div class="row" style="margin-top: 0px">
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>Pass Details</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="passDetails"
-                          id="passDetails"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-                      <mat-form-field>
-                        <mat-label>Flight No.</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="flightNo"
-                          id="flightNo"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>Boarding To</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="boardingTo"
-                          id="boardingTo"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-                      <mat-form-field>
-                        <mat-label>Boarding Date</mat-label>
-                        <input
-                          matInput
-                          [matDatepicker]="boardingDate"
-                          name="boardingDate"
-                          formControlName="boardingDate"
-                          placeholder="DD/MM/YYYY"
-                          [readonly]="viewOnly"
-                        />
-                        <mat-datepicker-toggle
-                          matSuffix
-                          [for]="boardingDate"
-                        ></mat-datepicker-toggle>
-                        <mat-datepicker
-                          [startAt]="currentDate"
-                          #boardingDate
-                        ></mat-datepicker>
-                      </mat-form-field>
+              <div class="card m-t-10" *ngIf="showBoarding">
+                <div class="card-header">
+                  <b>Boarding Pass Details</b>
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="boardingPassForm" novalidate>
+                    <div class="row" style="margin-top: 0px">
+                      <div class="col-md-6">
+                        <mat-form-field>
+                          <mat-label>Pass Details</mat-label>
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="passDetails"
+                            id="passDetails"
+                            [readonly]="viewOnly"
+                          />
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-label>Flight No.</mat-label>
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="flightNo"
+                            id="flightNo"
+                            [readonly]="viewOnly"
+                          />
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-6">
+                        <mat-form-field>
+                          <mat-label>Boarding To</mat-label>
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="boardingTo"
+                            id="boardingTo"
+                            [readonly]="viewOnly"
+                          />
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-label>Boarding Date</mat-label>
+                          <input
+                            matInput
+                            [matDatepicker]="boardingDate"
+                            name="boardingDate"
+                            formControlName="boardingDate"
+                            placeholder="DD/MM/YYYY"
+                            [readonly]="viewOnly"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="boardingDate"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker
+                            [startAt]="currentDate"
+                            #boardingDate
+                          ></mat-datepicker>
+                        </mat-form-field>
 
-                      <!-- <div class="row">
+                        <!-- <div class="row">
                         <div class="col-md-6">
                           <button
                           class="rounded"
@@ -1305,27 +1324,24 @@
                           </button>
                         </div>
                       </div> -->
-                    </div>
+                      </div>
 
-                    <div class="text-center">
-                      <button
-                        class="mt-2"
-                        mat-flat-button
-                        color="primary"
-                        [disabled]="viewOnly"
-                        (click)="getCustDetails()"
-                      >
-                        Get Customer Details
-                      </button>
+                      <div class="text-center">
+                        <button
+                          class="mt-2"
+                          mat-flat-button
+                          color="primary"
+                          [disabled]="viewOnly"
+                          (click)="getCustDetails()"
+                        >
+                          Get Customer Details
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-
-
-
           </div>
         </div>
       </div>
@@ -2082,7 +2098,7 @@
       </mat-tab>
       <mat-tab
         label="GIFT. VOC"
-        [disabled]="this.receiptModesList?.BTN_GIFT || viewOnly"
+        [disabled]="!this.receiptModesList?.BTN_GIFT || viewOnly"
       >
         <form [formGroup]="giftReceiptForm" novalidate>
           <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
@@ -3298,15 +3314,14 @@
                   Last Name is <strong>required</strong>
                 </mat-error>
                 <mat-error
-                *ngIf="
-                  customerDetailForm.controls.fcn_customer_detail_lname.hasError(
-                    'maxlength'
-                  )
-                "
-              >
-                Last Name must not exceed 100 characters.
-              </mat-error>
-              
+                  *ngIf="
+                    customerDetailForm.controls.fcn_customer_detail_lname.hasError(
+                      'maxlength'
+                    )
+                  "
+                >
+                  Last Name must not exceed 100 characters.
+                </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-3">

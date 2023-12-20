@@ -464,6 +464,9 @@ export class AddPosComponent implements OnInit {
   srCustCode: any = ''; // sales return customer code
 
   isInvalidRecNo: boolean = false;
+
+  posPlanetIssuing: boolean = false;
+  userwiseDiscount: boolean = false;
   // quaggaConfig: any = Quagga.init({
   //   inputStream: {
   //     willReadFrequently: true,
@@ -529,6 +532,8 @@ export class AddPosComponent implements OnInit {
       fcn_customer_id_type: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
       fcn_customer_code: ['',],
       fcn_customer_exp_date: ['',],
+      tourVatRefuncYN: ['',],
+      tourVatRefund: ['',],
     });
 
     this.vocDataForm = this.formBuilder.group({
@@ -1441,6 +1446,10 @@ export class AddPosComponent implements OnInit {
     this.generateVocNo();
 
     // this.getComboFilters();
+
+
+    this.posPlanetIssuing = this.comFunc.allbranchMaster.POSPLANETISSUING;
+    this.userwiseDiscount = this.comFunc.getCompanyParamValue('USERWISEDISCOUNT').toString() == '0' ? false: true;
   }
   getKaratDetails() {
     if (!this.editOnly && !this.viewOnly) {
@@ -6002,7 +6011,6 @@ export class AddPosComponent implements OnInit {
 
 
     if (event.target.value != '') {
-
       if (this.comFunc.compAcCode == 'JHO001') {
         const stockExist = await this.checkStockCodeForParticularDate(event.target.value);
         if (stockExist)
@@ -10086,17 +10094,19 @@ export class AddPosComponent implements OnInit {
     const value = event.target.value;
     if (value != '') {
       this.snackBar.open('Loading...');
-      let API = `ValidateGiftVocNo/ValidateGiftVocNo/${value}`
+      let API = `ValidateGiftVocNo/ValidateGiftVocNo/${value}/GFT`
       this.suntechApi.getDynamicAPI(API)
         .subscribe((res) => {
           this.snackBar.dismiss();
           if (res['status'].toString().trim() == 'Success') {
             this.isInvalidRecNo = false;
-
+            const result = res.response;
 
             this.giftReceiptForm.controls.giftAmtFC.setValue(
               this.comFunc.transformDecimalVB(
                 this.comFunc.amtDecimals, this.comFunc.emptyToZero(res.VoucherAmountFc).toString()));
+
+            this.giftReceiptForm.controls.giftBranch.setValue(result.BRANCH_CODE);
 
           } else {
             this.isInvalidRecNo = true;
@@ -10241,7 +10251,7 @@ export class AddPosComponent implements OnInit {
       });
   }
   async checkStockCodeForParticularDate(stockCode: any): Promise<boolean> {
-    const API = `RetailSalesDataInDotnet/CheckStockCodeForParticularDate/${this.strBranchcode}/${stockCode}/${this.vocDataForm.value.vocdate}`;
+    const API = `RetailSalesDataInDotnet/CheckStockCodeForParticularDate/${this.strBranchcode}/${stockCode}/${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
 
     return new Promise<boolean>((resolve) => {
       this.suntechApi.getDynamicAPI(API)
