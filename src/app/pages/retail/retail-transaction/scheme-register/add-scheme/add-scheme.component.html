@@ -33,10 +33,10 @@
                             <span style="width: 65%">
                                 <mat-form-field>
                                     <input type="text" matInput formControlName="SchemeID"
-                                        (keypress)="SchemeIDChange()" />
+                                        (keypress)="searchValueChange($event)" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="SchemeMasterFindData"
-                                    (newRowClick)="selectedScheme($event)">
+                                    (newRowClick)="searchValueChange($event)">
                                 </master-search>
                             </span>
 

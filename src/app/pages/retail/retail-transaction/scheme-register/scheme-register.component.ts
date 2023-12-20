@@ -438,6 +438,8 @@ export class SchemeRegisterComponent implements OnInit {
   }
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
+    console.log(data,'data');
+    
     if(data){
       this.dataToEditrow = []
       this.dataToEditrow.push(data)
@@ -465,10 +467,7 @@ export class SchemeRegisterComponent implements OnInit {
       // Handle modal dismissal (if needed)
     });
   }
-  // setValuesToHeaderGrid(dataFromDetail:any){
-  //   console.log(dataFromDetail,'dataFromDetail');
-    
-  // }
+  
   closeModal() {
     // this.activeModal.close();
     this.modalService.dismissAll()
@@ -476,7 +475,7 @@ export class SchemeRegisterComponent implements OnInit {
   // new rows added 
  
   addNewRow(data: any) {
-    console.log(data,'data1');
+    console.log(data,'fired22');
     let params = {
       "ID": this.indexNumberStart += 1,
       "SCHEME_UNIQUEID": '',
@@ -490,7 +489,7 @@ export class SchemeRegisterComponent implements OnInit {
       "SCHEME_CUSTCODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Code),
       "sbranch_code": data.Branch || new Date(1/1/1753).toISOString(),
       "PCS_SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-      "SalesManCode": data.Salesman || '',  
+      "SalesManCode": this.commonService.nullToString(data.Salesman),  
       "AttachmentPath": '',
       "BANK_ACCOUNTNO": "",
       "BANK_IBANNO": "",
@@ -588,12 +587,12 @@ export class SchemeRegisterComponent implements OnInit {
   editRowDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
-    this.openMadalView(str)
+    this.openNewSchemeDetails(str)
   }
   editMainGridDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
-    this.openMainGridMadalView(str)
+    this.openNewSchemeDetails(str)
   }
   //USE delete row
   deleteRow(e: any) {

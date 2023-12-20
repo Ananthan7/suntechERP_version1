@@ -23,11 +23,13 @@ import Swal from "sweetalert2";
   styleUrls: ["./add-scheme.component.scss"],
 })
 export class AddSchemeComponent implements OnInit {
+  @Input() content!: any;
   @ViewChild(MasterFindIconComponent, { static: false })
   MasterFindIcon!: MasterFindIconComponent;
-  @Output() newRowSaveClick = new EventEmitter();
-  @Output() closebtnClick = new EventEmitter();
-  @Input() dataToEdit!: any; //use: To get clicked row details from master grid
+
+  // @Output() newRowSaveClick = new EventEmitter();
+  // @Output() closebtnClick = new EventEmitter();
+  // @Input() content!: any; //use: To get clicked row details from master grid
   //mat autocomplete observables
   filteredOptions!: Observable<any[]>;
   salesmanArray: any[] = [];
@@ -124,7 +126,9 @@ export class AddSchemeComponent implements OnInit {
       this.commonService.branchCode
     );
     this.receiptEntryForm.controls.Status.setValue("LIVE");
-    this.setInitialValues(this.dataToEdit[0]);
+    console.log(this.content);
+    
+    this.setInitialValues(this.content);
   }
 
   onFileChange(input: any) {
@@ -138,6 +142,8 @@ export class AddSchemeComponent implements OnInit {
     }
   }
   setInitialValues(data: any) {
+    console.log(data,'fired');
+    
     if (data) {
       this.isViewAddbtn = false;
       if (data.SCHEME_UNIQUEID) {
@@ -268,32 +274,28 @@ export class AddSchemeComponent implements OnInit {
     this.MasterFindIcon.openMasterSearch();
   }
   //search Value Change
-  searchValueChange(event: any, searchFlag: string) {
-    this.searchFlag = searchFlag;
-    if (event.target.value == "") return;
-    let API = `Scheme/SchemeMasterLookUp?${searchFlag}=${event.target.value}`;
-    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
-      (result) => {
+  searchValueChange(event: any) {
+    let API = `SchemeMaster/GetSchemeMasterDetails/${this.commonService.branchCode}/${event.SCHEME_CODE.toString()}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
         if (result.response) {
-          this.selectedScheme(result.response);
+          this.selectedScheme(result.response)
         } else {
           Swal.fire({
-            title: "Scheme Not Found!",
+            title: 'Scheme Not Found!',
             text: "",
-            icon: "warning",
+            icon: 'warning',
             showCancelButton: false,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ok",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ok'
           }).then((result) => {
             // if (result.isConfirmed) {
             // }
-          });
+          })
         }
-      },
-      (err) => alert(err)
-    );
-    this.subscriptions.push(Sub);
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
   //use: form submit
   onSubmit() {
