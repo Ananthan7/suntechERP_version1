@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="container-fluid pt-3">
     <form [formGroup]="costcenterdiamonddetailsForm">
         <div class="row justify-content-between">
@@ -23,7 +23,99 @@
             </div>
         </div>
 
-        <div class="row justify-content-between mb-2 border">
+        <!-- <div class="row justify-content-between mb-2">
+            <div class="col-md-4">
+                <div class="row border">
+                    <div class="col-md-12">
+                        <div class="row mb-2">
+                            <h6 for="inputPassword" class="col-sm-3 col-form-label">Purchase A/C</h6>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Trading</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Import</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Repair</label>
+                        </div>
+                        <div class="row mb-2">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Purchase</label>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="purchaseTrading" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="purchaseImport" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="purchaseRepair" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Purchase Return</label>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="purchaseReturnTrading" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="purchaseReturnImport" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="purchaseReturnRepair" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 border">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row mb-2">
+                            <h6 for="inputPassword" class="col-sm-2 col-form-label">Sales A/C</h6>
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Trading</label>
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Retail</label>
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Export</label>
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Repair</label>
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Exhibition</label>
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Other</label>
+                        </div>
+                        <div class="row mb-2">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Purchase Return</label>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="purchaseReturnTrading" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="purchaseReturnImport" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="purchaseReturnRepair" />
+                                </mat-form-field>
+                                <master-search></master-search>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+         <div class="row justify-content-between mb-2 border">
             <div class="col-md-4">
                 <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-4 col-form-label text-center"><b>Purchase A/c</b></label>
@@ -395,14 +487,14 @@
  
         <div class="col-md-6">
             <div class="row mt-3">
-                <div class="col-md-2">
+                <!-- <div class="col-md-2">
                     <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
                         (saveClick)="formSubmit()">Save</button>
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
                         (cancelClick)="close()">Cancel</button>
-                </div>
+                </div> -->
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
                         (continueClick)="continue()">Continue</button>
