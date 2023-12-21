@@ -146,7 +146,6 @@ export class SchemeReceiptComponent implements OnInit {
     }
     this.getCommonLookUps(); //main data grid API
     this.deleteRow = this.deleteRow.bind(this);
-    this.editMainRowDetails = this.editMainRowDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
   }
   
@@ -162,39 +161,6 @@ export class SchemeReceiptComponent implements OnInit {
   editRowDetails(event: any) {
     let data = event.row.data;
     this.openMadalView(data)
-  }
-  editMainRowDetails(event: any) {
-    this.editFlag = true;
-    this.isSaved = true;
-    this.isViewSchemeMasterGrid = false;
-    let data = event.row.data;
-    if(data){
-      this.isViewAddbtn = false;
-      if(data.MID){
-        this.getDetailsForEdit(data.MID)
-        this.editDataMID = data.MID
-      }
-      this.receiptDetailsForm.controls.POSCustomerName.setValue(data.CUSTOMER_NAME)
-      this.receiptDetailsForm.controls.POSCustomerCode.setValue(data.POSCustomerCode)
-      this.receiptDetailsForm.controls.POSCustomerMobile.setValue(data.CUSTOMER_MOBILE)
-      this.receiptDetailsForm.controls.Salesman.setValue(data.SALESPERSON_CODE)
-      this.receiptDetailsForm.controls.SalesmanName.setValue(data.SALESPERSON_CODE)
-      this.receiptDetailsForm.controls.VocNo.setValue(data.VOCNO)
-      this.receiptDetailsForm.controls.VocType.setValue(data.VOCTYPE)
-      this.receiptDetailsForm.controls.PartyCode.setValue(data.PARTYCODE)
-      this.receiptDetailsForm.controls.CurrCode.setValue(data.PARTY_CURRENCY)
-      this.receiptDetailsForm.controls.CurrRate.setValue(data.PARTY_CURR_RATE)
-      this.receiptDetailsForm.controls.Narration.setValue(data.REMARKS)
-      this.schemeIdEdit = data.POSSCHEMEID
-  
-      this.receiptDetailsForm.controls.PostedDate.setValue(data.POSTDATE)
-      this.receiptDetailsForm.controls.VocDate.setValue(data.VOCDATE)
-      this.receiptDetailsForm.controls.MID.setValue(data.MID)
-      this.receiptDetailsForm.controls.Branch.setValue(data.BRANCH_CODE)
-    }else{
-      this.isViewAddbtn = true;
-    }
-    
   }
 
   getDetailsForEdit(MID: any) {
