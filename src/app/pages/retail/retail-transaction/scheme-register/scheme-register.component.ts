@@ -315,8 +315,6 @@ export class SchemeRegisterComponent implements OnInit {
   }
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
-    console.log(data,'data');
-    
     if(data){
       this.dataToEditrow = []
       this.dataToEditrow.push(data)
@@ -352,7 +350,6 @@ export class SchemeRegisterComponent implements OnInit {
   // new rows added 
  
   addNewRow(data: any) {
-    console.log(data,'fired22');
     let params =  {
       "ID": this.indexNumberStart += 1,
       "SCHEME_UNIQUEID": '',
@@ -421,7 +418,6 @@ export class SchemeRegisterComponent implements OnInit {
     }
     this.schemeArray = this.newSchemeItems.filter((item:any) => item.ID>0 )
     // let Model = []
-    console.log(this.detailArray,'this.detailArray2');
     this.detailArray.forEach((item:any,index:any)=>{
       delete item.schemeData['ID'];
       this.formdata.append(`Model[${index}].schemeData.MID`, '0');
@@ -492,8 +488,6 @@ export class SchemeRegisterComponent implements OnInit {
         this.formdata.append("Images["+i+"].Image.File", item.Images[i]);                
       }  
     })
-    console.log(this.formdata,'this.formdata');
-    
     //save API
     this.isLoading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI('SchemeRegistration/InsertWithAttachments', this.formdata)

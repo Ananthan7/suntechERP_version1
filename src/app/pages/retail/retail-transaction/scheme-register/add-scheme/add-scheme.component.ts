@@ -126,8 +126,6 @@ export class AddSchemeComponent implements OnInit {
       this.commonService.branchCode
     );
     this.receiptEntryForm.controls.Status.setValue("LIVE");
-    console.log(this.content);
-    
     this.setInitialValues(this.content);
   }
 
@@ -142,8 +140,6 @@ export class AddSchemeComponent implements OnInit {
     }
   }
   setInitialValues(data: any) {
-    console.log(data,'fired');
-    
     if (data) {
       this.isViewAddbtn = false;
       if (data.SCHEME_UNIQUEID) {

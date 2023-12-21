@@ -159,6 +159,8 @@ export class AddReceiptComponent implements OnInit {
       }
     }
   }
+
+ 
   //selected Branch from search
   selectedBranch(data: any) {
     this.receiptEntryForm.controls.Branch.setValue(data.BRANCH_CODE)
