@@ -5,6 +5,9 @@
         <i class="feather icon-x close-icon" style="color: white !important;"></i>
     </button>
 </div>
+<!-- modal header component -->
+<modal-header (saveClick)="onSubmit()" (cancelClick)="close()" [isViewDelete]="false"
+    [isViewMore]="false"></modal-header>
 <!-- content section starts -->
 <div class="row p-3">
     <form [formGroup]="receiptEntryForm">
@@ -15,8 +18,7 @@
                 </span>
                 <span style="width: 45%">
                     <mat-form-field class="example-full-width">
-                        <input type="text" placeholder="Branch Code" matInput readonly
-                        formControlName="Branch">
+                        <input type="text" placeholder="Branch Code" matInput readonly formControlName="Branch">
                         <!-- [matAutocomplete]="Branch" <mat-autocomplete #Branch="matAutocomplete"
                             (optionSelected)="branchCodeChange($event)">
                             <mat-option
@@ -72,8 +74,8 @@
                 </span>
                 &nbsp;&nbsp;
                 <mat-form-field style="width: 30%">
-                    <input type="text" matInput (focusout)="accountMasterChanged($event)" 
-                    placeholder="ACCODE" formControlName="AC_Code" />
+                    <input type="text" matInput (focusout)="accountMasterChanged($event)" placeholder="ACCODE"
+                        formControlName="AC_Code" />
                 </mat-form-field>
                 <mat-form-field style="width: 50%;margin-left: 4px;">
                     <input type="text" matInput readonly formControlName="AC_Description" />
@@ -325,7 +327,7 @@
                 </span>
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12">
                 <div style="text-align: right; padding-top: 10px">
                     <button mat-flat-button color="primary" (click)="onSubmit()">ADD</button>
@@ -333,6 +335,6 @@
                     <button mat-flat-button color="warn" (click)="close()">CANCEL</button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </form>
 </div>

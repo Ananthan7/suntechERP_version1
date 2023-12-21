@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -9,6 +9,8 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterFindIconComponent } from 'src/app/shared/common/master-find-icon/master-find-icon.component';
 import Swal from 'sweetalert2';
 import * as convert from 'xml-js';
+import { AddReceiptComponent } from './add-receipt/add-receipt.component';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
   selector: 'app-scheme-receipt',
@@ -55,48 +57,50 @@ export class SchemeReceiptComponent implements OnInit {
   schemeIdEdit: string = '';
   branchName: any = localStorage.getItem('BRANCH_PARAMETER');
 
-  partyCodeMasterData: any = {
-    TABLE_NAME: 'ACCOUNT_MASTER',
-    FILTER_FEILD_NAMES: {
-    },
-    API_FILTER_VALUE: 'ACCODE',
-    DB_FIELD_VALUE: 'ACCODE',
-    NAME_FIELD_VALUE: 'NAME_1',
-    USER_TYPED_VALUE: '',
+  customerMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'NAME',
+    SEARCH_HEADING: 'Pos Customer Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  customerMasterData: any = {
-    TABLE_NAME: 'POS_CUSTOMER_MASTER',
-    FILTER_FEILD_NAMES: {
-    },
-    API_FILTER_VALUE: 'NAME',
-    DB_FIELD_VALUE: 'NAME',
-    NAME_FIELD_VALUE: 'CODE',
-    USER_TYPED_VALUE: '',
+  SchemeMasterFindData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 59,
+    SEARCH_FIELD: "SCHEME_CODE",
+    SEARCH_HEADING: "Scheme Master",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "SCHEME_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
-  SchemeMasterFindData: any = {
-    API_VALUE: '',
-    API_FILTER_VALUE: 'SCHEME_CODE',
-    DB_FIELD_VALUE: 'SCHEME_CODE',
-    NAME_FIELD_VALUE: 'SCHEME_NAME',
-    USER_TYPED_VALUE: '',
-    VIEW_INPUT: false,
-    VIEW_TABLE: true,
-  }
-  salesPersonMasterData: any = {
-    TABLE_NAME: 'SALESPERSON_MASTER',
-    FILTER_FEILD_NAMES: {
-    },
-    API_FILTER_VALUE: 'SALESPERSON_CODE',
-    DB_FIELD_VALUE: 'SALESPERSON_CODE',
-    NAME_FIELD_VALUE: 'DESCRIPTION',
-    USER_TYPED_VALUE: '',
+  };
+  partyCodeMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 81,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "Account Master",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "ACCODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+  };
+  salesPersonMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "Account Master",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "ACCODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
   // dateRegPattern = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
   receiptDetailsForm: FormGroup = this.formBuilder.group({
     Branch: ['', [Validators.required]],
@@ -370,16 +374,16 @@ export class SchemeReceiptComponent implements OnInit {
   fetchSchemeWithCustCode(customerCode: string) {
     let custCode = ''
     custCode = customerCode
-    this.SchemeMasterFindData = {
-      TABLE_NAME: 'SCHEME_MASTER',
-      API_VALUE: `Scheme/SchemeMaster?SCHEME_CUSTCODE=${custCode}`,
-      API_FILTER_VALUE: 'SCHEME_UNIQUEID',
-      DB_FIELD_VALUE: 'SCHEME_UNIQUEID',
-      NAME_FIELD_VALUE: 'SCHEME_UNITVALUE',
-      USER_TYPED_VALUE: '',
-      VIEW_INPUT: true,
-      VIEW_TABLE: true,
-    }
+    // this.SchemeMasterFindData = {
+    //   TABLE_NAME: 'SCHEME_MASTER',
+    //   API_VALUE: `Scheme/SchemeMaster?SCHEME_CUSTCODE=${custCode}`,
+    //   API_FILTER_VALUE: 'SCHEME_UNIQUEID',
+    //   DB_FIELD_VALUE: 'SCHEME_UNIQUEID',
+    //   NAME_FIELD_VALUE: 'SCHEME_UNITVALUE',
+    //   USER_TYPED_VALUE: '',
+    //   VIEW_INPUT: true,
+    //   VIEW_TABLE: true,
+    // }
     let API = `Scheme/SchemeMaster?SCHEME_CUSTCODE=${custCode}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -763,7 +767,37 @@ export class SchemeReceiptComponent implements OnInit {
       windowClass: 'modal-full-width'
     });
   }
-
+  /**use: open new scheme details */
+  openNewSchemeDetails(data?: any) {
+    console.log(data,'data');
+    
+    if(data){
+      this.dataToEditrow = []
+      this.dataToEditrow.push(data)
+    }else{
+      this.dataToEditrow = []
+    }
+    // if (this.receiptDetailsForm.invalid) {
+    //   this.toastr.error('', 'select all details!', {
+    //     timeOut: 1000
+    //   });
+    //   return
+    // }
+    const modalRef: NgbModalRef = this.modalService.open(AddReceiptComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+    modalRef.componentInstance.content = data;
+    modalRef.result.then((result) => {
+      if (result) {
+        this.addNewRow(result) //USE: set Values To Detail table
+      }
+    }, (reason) => {
+      // Handle modal dismissal (if needed)
+    });
+  }
   formSubmit() {
     if (this.orderedItems.length == 0) {
       this.toastr.warning('Add new receipt to save', '', {
@@ -964,16 +998,16 @@ export class SchemeReceiptComponent implements OnInit {
     this.orderedItems = [];
     this.orderedItemsHead = [];
     this.receiptDetailsForm.controls.VocType.setValue('PCR')
-    this.SchemeMasterFindData = {
-      TABLE_NAME: 'SCHEME_MASTER',
-      API_VALUE: ``,
-      API_FILTER_VALUE: 'SCHEME_UNIQUEID',
-      DB_FIELD_VALUE: 'SCHEME_UNIQUEID',
-      NAME_FIELD_VALUE: 'SCHEME_UNITVALUE',
-      USER_TYPED_VALUE: '',
-      VIEW_INPUT: true,
-      VIEW_TABLE: true,
-    }
+    // this.SchemeMasterFindData = {
+    //   TABLE_NAME: 'SCHEME_MASTER',
+    //   API_VALUE: ``,
+    //   API_FILTER_VALUE: 'SCHEME_UNIQUEID',
+    //   DB_FIELD_VALUE: 'SCHEME_UNIQUEID',
+    //   NAME_FIELD_VALUE: 'SCHEME_UNITVALUE',
+    //   USER_TYPED_VALUE: '',
+    //   VIEW_INPUT: true,
+    //   VIEW_TABLE: true,
+    // }
     this.pageIndex = 1
     this.getCommonLookUps();
     this.isViewSchemeMasterGrid = true;

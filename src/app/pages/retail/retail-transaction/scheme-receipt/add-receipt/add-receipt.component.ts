@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -83,6 +84,7 @@ export class AddReceiptComponent implements OnInit {
     private commonService: CommonServiceService,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
+    private activeModal: NgbActiveModal,
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
     
@@ -424,9 +426,10 @@ export class AddReceiptComponent implements OnInit {
     return this.commonService.isNumeric(event);
   }
   /**USE: close modal window */
-  close() {
-    // this.closebtnClick.emit()
+  close(data?: any) {
+    this.activeModal.close(data);
   }
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());

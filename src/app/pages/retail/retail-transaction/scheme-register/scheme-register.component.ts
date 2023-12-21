@@ -298,28 +298,7 @@ export class SchemeRegisterComponent implements OnInit {
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
   }
-  //  open Jobcard in modal
-  openMadalView(data?: any) {
-    if(data){
-      this.dataToEditrow = []
-      this.dataToEditrow.push(data)
-    }else{
-      this.dataToEditrow = []
-    }
-    if (this.schemeRegistrationForm.invalid) {
-      this.toastr.error('', 'select all details!', {
-        timeOut: 1000
-      });
-      return
-    }
-    this.modalService.open(this.add_scheme, {
-      size: 'lg',
-      backdrop: true,
-      keyboard: false,
-      windowClass: 'modal-full-width'
-    });
-    
-  }
+
   openMainGridMadalView(data?: any) {
     if(data){
       this.dataToEditrow = []
@@ -458,26 +437,63 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model[${index}].schemeData.SCH_INST_AMOUNT_CC`, this.commonService.formatDate(new Date(item.schemeData.PCS_SYSTEM_DATE)));
       this.formdata.append(`Model[${index}].schemeData.SCH_ASSURED_AMT_FC`, item.schemeData.SalesManCode);
       this.formdata.append(`Model[${index}].schemeData.SCH_ASSURED_AMT_CC`, '');
+      this.formdata.append(`Model[${index}].schemeData.SCH_EXPIRE_DATE`, item.schemeData.BANK_ACCOUNTNO);
       this.formdata.append(`Model[${index}].schemeData.SCH_REMINDER_DAYS`, item.schemeData.BANK_ACCOUNTNO);
-      this.formdata.append(`Model[${index}].schemeData.BANK_IBANNO`, item.schemeData.BANK_IBANNO);
-      this.formdata.append(`Model[${index}].schemeData.BANK_SWIFTID`, item.schemeData.BANK_SWIFTID);
-      this.formdata.append(`Model[${index}].schemeData.BANK_EMISTARTDATE`, this.commonService.formatDate(new Date(item.schemeData.BANK_EMISTARTDATE)));
-      this.formdata.append(`Model[${index}].schemeData.BANK_EMIENDDATE`, this.commonService.formatDate(new Date(item.schemeData.BANK_EMIENDDATE)));
-      this.formdata.append(`Model[${index}].schemeData.ACTIVE`, item.schemeData.ACTIVE);
-      this.formdata.append(`Model[${index}].schemeData.SCHEME_REMARKS`, item.schemeData.SCHEME_REMARKS);
-      this.formdata.append(`Model[${index}].schemeData.CUSTOMER_ACCOUNTNO`, item.schemeData.CUSTOMER_ACCOUNTNO);
-      this.formdata.append(`Model[${index}].schemeData.BANK_DATE`, this.commonService.formatDate(new Date(item.schemeData.BANK_DATE)));
-      this.formdata.append(`Model[${index}].schemeData.SCHEME_BLOCK`, item.schemeData.SCHEME_BLOCK);
-      this.formdata.append(`Model[${index}].schemeData.SCHEME_ControlRedeemDate`, this.commonService.formatDate(new Date(item.schemeData.SCHEME_ControlRedeemDate)));
-      this.formdata.append(`Model[${index}].ImageData.BRANCH_CODE`, item.ImageData.BRANCH_CODE);
-      this.formdata.append(`Model[${index}].ImageData.VOCTYPE`, item.ImageData.VOCTYPE);
-      this.formdata.append(`Model[${index}].ImageData.YEARMONTH`, item.ImageData.YEARMONTH);
-      this.formdata.append(`Model[${index}].ImageData.VOCNO`, item.ImageData.VOCNO);
+      this.formdata.append(`Model[${index}].schemeData.SCH_REMINDER_MODE`, item.schemeData.BANK_IBANNO);
+      this.formdata.append(`Model[${index}].schemeData.SCHEME_BONUS`, item.schemeData.BANK_SWIFTID);
+      this.formdata.append(`Model[${index}].schemeData.REMARKS`, this.commonService.formatDate(new Date(item.schemeData.BANK_EMISTARTDATE)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_UNITS`, this.commonService.formatDate(new Date(item.schemeData.BANK_EMIENDDATE)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_CANCEL_AMT`, item.schemeData.ACTIVE);
+      this.formdata.append(`Model[${index}].schemeData.SCH_STATUS`, item.schemeData.SCHEME_REMARKS);
+      this.formdata.append(`Model[${index}].schemeData.PAY_DATE`, item.schemeData.CUSTOMER_ACCOUNTNO);
+      this.formdata.append(`Model[${index}].schemeData.PAY_BRANCH_CODE`, this.commonService.formatDate(new Date(item.schemeData.BANK_DATE)));
+      this.formdata.append(`Model[${index}].schemeData.PAY_VOCTYPE`, item.schemeData.SCHEME_BLOCK);
+      this.formdata.append(`Model[${index}].schemeData.PAY_VOCNO`, this.commonService.formatDate(new Date(item.schemeData.SCHEME_ControlRedeemDate)));
+      this.formdata.append(`Model[${index}].schemeData.PAY_YEARMONTH`, this.commonService.nullToString(item.schemeData.YEARMONTH));
+      this.formdata.append(`Model[${index}].schemeData.PAY_AMOUNTFC`, (item.schemeData.SCHEME_UNITS));
+      this.formdata.append(`Model[${index}].schemeData.PAY_AMOUNTCC`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_ALERT_EMAIL`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_ALERT_MOBILE`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_SEND_ALERT`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.PAN_NUMBER`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_PAN_NUMBER`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.VOCDATE`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_CANCEL`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_REDEEM`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.REDEEM_REFERENCE`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCHEME_BRANCH`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].UNIQUEID`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCH_CUSTOMER_CODE`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCH_CUSTOMER_ID`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SRNO`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].PAY_DATE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].PAY_AMOUNT_FC`, item.schemeData.SCHEME_TOTAL_VALUE);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].PAY_AMOUNT_CC`, item.schemeData.SCHEME_TOTAL_VALUE);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].PAY_STATUS`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].REMAINDER_DATE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].REMAINDER_SEND`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].DT_BRANCH_CODE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_DATE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_BRANCH_CODE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_VOCTYPE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_VOCNO`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_YEARMONTH`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_AMOUNTFC`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_AMOUNTCC`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCHBAL_AMOUNTFC`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCHBAL_AMOUNTCC`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCH_PARTIALLY_PAID`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RECEIPT_REF`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RECEIPT_MID`, '');
+      // this.formdata.append(`Model[${index}].ImageData.BRANCH_CODE`, item.ImageData.BRANCH_CODE);
+      // this.formdata.append(`Model[${index}].ImageData.VOCTYPE`, item.ImageData.VOCTYPE);
+      // this.formdata.append(`Model[${index}].ImageData.VOCNO`, item.ImageData.VOCNO);
       for (let i:number = 0; i < item.Images.length; i++) {    
         this.formdata.append("Images["+i+"].Image.File", item.Images[i]);                
       }  
     })
-   
+    console.log(this.formdata,'this.formdata');
+    
     //save API
     this.isLoading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI('SchemeRegistration/InsertWithAttachments', this.formdata)
