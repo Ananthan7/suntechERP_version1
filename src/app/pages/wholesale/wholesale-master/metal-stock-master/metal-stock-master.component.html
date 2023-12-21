@@ -10,6 +10,8 @@
     <div class="col-md-12">
         <form [formGroup]="metalstockForm">
             <div class="container-fluid pt-3">
+              <mat-tab-group [selectedIndex]="">
+                <mat-tab label="General">
                 <div class="row justify-content-between">
                     <div class="col-md-6">
                       <div class="row align-items-center mb-1">
@@ -334,10 +336,10 @@
                         </div>
                         <div class="col-md-4">
                          
-                        <div class="image_box">
-                            <!-- <input type="file">Item Image -->
-                            <div class="img_box">
-
+                          <div class="row pt-4">
+                            <div class="upload-btn-wrapper">
+                                <button class="btn btnnew border-dark"></button>
+                                <input type="file" name="uploadproduct" class="uploadproduct">
                             </div>
                         </div>
                         </div>
@@ -489,7 +491,7 @@
                             </label>
                           </div>
                           <div class="form-check pt-5">
-                            <input class="form-check-input" type="checkbox" formControlName="createbarcodes">
+                            <input class="form-check-input" type="checkbox" formControlName="createbarcodes"  (change)="onBarcodeCheckboxChange()">
                             <label class="form-check-label">
                               Create Barcodes
                             </label>
@@ -789,6 +791,166 @@
                       </div>
                     </div>
                   </div>
+                </mat-tab>
+                <mat-tab label="UDF Grouping">
+                  <div class="row justify-content-between">
+                    <div class="col-md-5">
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_1" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_2" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_3" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_4" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_5" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_6" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_7" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_8" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_9" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_10" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_11" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_12" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_13" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_14" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">User defined :</label>
+                        <div class="col-md-8">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="userdefined_15" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                      <div class="p-1  pl-1 bd-highlight">
+                        <button type="button" class="btn btn-primary w-100 add-btn">
+                          Comments
+                        </button>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <mat-form-field style="width: 100%;">
+                            <textarea matInput rows="4" formControlName="tagDetails"></textarea>
+                        </mat-form-field>
+                        </div>
+                      </div>
+                      <!-- <div class="box-wrap">
+                      </div> -->
+                    </div>
+                    <div class="col-md-3 text-center">
+                      <div class="p-1  pl-1 bd-highlight">
+                        <button type="button" class="btn btn-primary w-100 add-btn">
+                          Sales Tag Details
+                        </button>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <mat-form-field style="width: 100%;">
+                            <textarea matInput rows="4" formControlName="tagDetails"></textarea>
+                        </mat-form-field>
+                        </div>
+                      </div>
+                      <!-- <div class="box-wrap">
+                      </div> -->
+                    </div>
+                  </div>
+                </mat-tab>
+                </mat-tab-group>
             </div>
         </form>
     </div>

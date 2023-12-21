@@ -135,7 +135,7 @@ export class KaratMasterComponent implements OnInit {
     let API = '/karatMaster/UpdateKaratMaster/'+this.content.KARAT_CODE
     let postData = 
     {
-      "KARAT_CODE": "stri",
+      "KARAT_CODE": "string",
       "STD_PURITY": 0,
       "PURITY_FROM": 0,
       "PURITY_TO": 0,

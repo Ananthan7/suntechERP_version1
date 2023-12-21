@@ -36,6 +36,7 @@ export class MetalStockMasterComponent implements OnInit {
   ngOnInit(): void {
     // this.metalstockForm.controls.PcGms = new FormControl({value: '', disabled: this.disabled})
     this.metalstockForm.controls['PcGms'].disable();
+    this.metalstockForm.controls['prefix'].disable();
   }
 
   showHideText() {
@@ -104,8 +105,8 @@ export class MetalStockMasterComponent implements OnInit {
     linksub:[''],
     stamprate:[''],
     MTinclusive:[''],
-    Inpieces:[''],
-    createbarcodes:[''],
+    Inpieces:[false],
+    createbarcodes:[false],
     passpuritydifference:[''],
     includestoneweight:[''],
     askpercentage:[''],
@@ -1402,6 +1403,19 @@ export class MetalStockMasterComponent implements OnInit {
     }
     else{
       this.metalstockForm.controls['PcGms'].disable();
+    }
+  }
+
+  onBarcodeCheckboxChange() {
+    const barcodeCheckbox = this.metalstockForm.get('createbarcodes');
+    const inPiecesCheckbox = this.metalstockForm.get('Inpieces');
+
+    if (barcodeCheckbox && inPiecesCheckbox) {
+      if (barcodeCheckbox.value) {
+        inPiecesCheckbox.setValue(true);
+        this.metalstockForm.controls['PcGms'].enable();
+        this.metalstockForm.controls['prefix'].enable();
+      }
     }
   }
 }

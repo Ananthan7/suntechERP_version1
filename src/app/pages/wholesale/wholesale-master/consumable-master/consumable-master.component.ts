@@ -134,7 +134,7 @@ export class ConsumableMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Vendor',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
@@ -238,7 +238,7 @@ export class ConsumableMasterComponent implements OnInit {
 
   vendorCodeSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.vendor.setValue(e.ACCODE);
+    this.consumbleForm.controls.vendor.setValue(e.CODE);
   }
 
   typeCodeSelected(e: any) {
