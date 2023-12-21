@@ -656,22 +656,18 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-3 " *ngIf="posPlanetIssuing">
+            <div class="col-md-3" *ngIf="posPlanetIssuing">
               <mat-checkbox color="primary" formControlName="tourVatRefuncYN"
                 >Tourist VAT Refund Y/N</mat-checkbox
               >
             </div>
 
-              <div class="col-md-2" *ngIf="posPlanetIssuing">
-                <mat-form-field>
-                  <mat-label>Tourism VAT Refund</mat-label>
-                  <input
-                    type="text"
-                    matInput
-                    formControlName="tourVatRefund"
-                  />
-                </mat-form-field>
-              </div>
+            <div class="col-md-2" *ngIf="posPlanetIssuing">
+              <mat-form-field>
+                <mat-label>Tourism VAT Refund</mat-label>
+                <input type="text" matInput formControlName="tourVatRefundNo" />
+              </mat-form-field>
+            </div>
           </div>
         </form>
 
@@ -3870,7 +3866,7 @@
                         />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-2" *ngIf="!newLineItem.GIFT_VOUCHER">
+                    <div class="col-md-2" *ngIf="newLineItem.GIFT_VOUCHER">
                       <mat-form-field>
                         <mat-label>Gift Type</mat-label>
                         <mat-select formControlName="fcn_li_gift_type">
@@ -4667,5 +4663,67 @@
             Cancel</button>&nbsp;
         </div> -->
     </div>
+  </div>
+</ng-template>
+
+<ng-template #userAuthModal let-modal modal-lg>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Authentication</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="authForm">
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="username"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error *ngIf="authForm.controls.username.hasError('required')">
+              Username is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input
+              type="password"
+              matInput
+              formControlName="password"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error *ngIf="authForm.controls.password.hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="text-right">
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          class="btn-m-r-10"
+          [disabled]="viewOnly"
+          (click)="submitAuth()"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
   </div>
 </ng-template>

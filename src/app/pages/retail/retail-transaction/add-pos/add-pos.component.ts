@@ -54,6 +54,8 @@ export class AddPosComponent implements OnInit {
   @ViewChild('sales_payment_modal') public sales_payment_modal!: NgbModal;
   @ViewChild('more_customer_detail_modal')
   public more_customer_detail_modal!: NgbModal;
+  @ViewChild('userAuthModal')
+  public userAuthModal!: NgbModal;
   selectedModal: NgbModalRef | undefined;
 
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
@@ -160,6 +162,8 @@ export class AddPosComponent implements OnInit {
 
   modalReference: any;
   modalReferenceSalesReturn: any;
+  modalReferenceUserAuth!: NgbModalRef;
+  
   closeResult: any;
   karatRateDetails: any = [];
   orders: any[] = [];
@@ -237,6 +241,10 @@ export class AddPosComponent implements OnInit {
   boardingPassForm: FormGroup;
   invoiceWiseForm: FormGroup;
 
+  authForm: FormGroup = this.formBuilder.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required],
+  });
 
   advanceReceiptDetails: any;
   exchangeFormMetalRateType = '';
@@ -533,7 +541,7 @@ export class AddPosComponent implements OnInit {
       fcn_customer_code: ['',],
       fcn_customer_exp_date: ['',],
       tourVatRefuncYN: ['',],
-      tourVatRefund: ['',],
+      tourVatRefundNo: ['',],
     });
 
     this.vocDataForm = this.formBuilder.group({
@@ -975,6 +983,16 @@ export class AddPosComponent implements OnInit {
         this.customerDataForm.controls['fcn_customer_mobile'].setValue(
           posCustomer.MOBILE
         );
+
+        
+        this.customerDataForm.controls.tourVatRefuncYN.setValue(
+          retailSaleData.TRAYN || false
+        );
+        this.customerDataForm.controls.tourVatRefundNo.setValue(
+          retailSaleData.TRANO
+        );
+
+
         this.inv_customer_name = posCustomer.NAME;
         this.inv_cust_mobile_no = posCustomer.MOBILE;
 
@@ -1449,7 +1467,7 @@ export class AddPosComponent implements OnInit {
 
 
     this.posPlanetIssuing = this.comFunc.allbranchMaster.POSPLANETISSUING;
-    this.userwiseDiscount = this.comFunc.getCompanyParamValue('USERWISEDISCOUNT').toString() == '0' ? false: true;
+    this.userwiseDiscount = this.comFunc.getCompanyParamValue('USERWISEDISCOUNT').toString() == '0' ? false : true;
   }
   getKaratDetails() {
     if (!this.editOnly && !this.viewOnly) {
@@ -7427,6 +7445,7 @@ export class AddPosComponent implements OnInit {
     console.log(value);
     console.log('====================================');
 
+
     // if (value != '') {
 
     let checkStockCostVal =
@@ -7596,8 +7615,12 @@ export class AddPosComponent implements OnInit {
       this.manageCalculations();
     }
   }
-  rateFunc(value: any) {
+  async rateFunc(value: any)  {
 
+    const isauth: any = await this.openAuthModal();
+    if (isauth) {
+      alert(`validated ${isauth}`);
+    }
     if (this.blockMinimumPrice == 'B') {
       if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
         this.openDialog(
@@ -8227,7 +8250,8 @@ export class AddPosComponent implements OnInit {
     }
 
   }
-  changeNettAmt(event: any) {
+  async changeNettAmt(event: any) {
+    
     // console.log('==============changeNettAmt======================');
     // console.log(localStorage.getItem('fcn_li_net_amount'));
     // console.log('====================================');
@@ -8996,8 +9020,8 @@ export class AddPosComponent implements OnInit {
       Agent_Commission: false,
       AgentCommission_Per: 0,
       CALCULATE_LOYALTY: true,
-      TRAYN: false,
-      TRANO: '',
+      TRAYN: this.customerDataForm.value.tourVatRefuncYN || false,
+      TRANO: this.customerDataForm.value.tourVatRefundNo || '',
       POSReferenceRepairInvoice: '',
       RSLOGINMID: '0',
       TRAYNREFUND: false,
@@ -10092,9 +10116,10 @@ export class AddPosComponent implements OnInit {
   }
   changeGiftVocNo(event: any) {
     const value = event.target.value;
+    const vocType = this.giftReceiptForm.value.paymentsCreditGIftVoc;
     if (value != '') {
       this.snackBar.open('Loading...');
-      let API = `ValidateGiftVocNo/ValidateGiftVocNo/${value}/GFT`
+      let API = `ValidateGiftVocNo/ValidateGiftVocNo/${value}/${vocType}`
       this.suntechApi.getDynamicAPI(API)
         .subscribe((res) => {
           this.snackBar.dismiss();
@@ -10114,9 +10139,12 @@ export class AddPosComponent implements OnInit {
               this.zeroAmtVal);
 
 
-            this.snackBar.open('Invalid Receipt No.', 'OK', {
+            this.snackBar.open(res.message, 'OK', {
               duration: 2000
             });
+            // this.snackBar.open('Invalid Receipt No.', 'OK', {
+            //   duration: 2000
+            // });
           }
         });
     } else {
@@ -10310,5 +10338,47 @@ export class AddPosComponent implements OnInit {
           this.snackBar.open(resp.message, 'OK')
         }
       });
+  }
+
+  submitAuth() {
+    if(!this.authForm.invalid){
+      this.modalReferenceUserAuth.close(true);
+    }else{
+      this.snackBar.open('Please fill all fields', 'OK', {duration: 1000})
+    }
+    
+  }
+
+  openAuthModal() {
+
+    return new Promise((resolve) => {
+
+     this.modalReferenceUserAuth = this.modalService.open(
+        this.userAuthModal,
+        {
+          size: "lg",
+          backdrop: true,
+          keyboard: false,
+          windowClass: "modal-full-width",
+        }
+      );
+
+      this.modalReferenceUserAuth.result.then((result) => {
+        if (result) {
+          console.log("Result :", result);
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      },
+        (reason) => {
+          console.log(`Dismissed ${reason}`);
+          resolve(false);
+
+        }
+      );
+    });
+
+
   }
 }
