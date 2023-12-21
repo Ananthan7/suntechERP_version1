@@ -36,7 +36,13 @@ subscriptions: any;
   }
  
   ngOnInit(): void {
+    console.log(this.content);
+    if(this.content){
+      this.setFormValues()
+    }
   }
+
+
   componentsizesetmasterForm: FormGroup = this.formBuilder.group({
     code:[''],
     description  : [''],
@@ -47,26 +53,47 @@ subscriptions: any;
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  setFormValues() {
+    if(!this.content) return
+    this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE)
+    this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION)
+
+
+    this.dataService.getDynamicAPI('ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/'+this.content.COMPSET_CODE).subscribe((data) => {
+      if (data.status == 'Success') {
+
+        this.tableData = data.response.approvalDetails;
+       
+
+      }
+    });
+   
+  }
+
+  
+  
   
   addTableData(){
     let length = this.tableData.length;
     let sn = length + 1;
     let data =  {
       "SN": sn,
-      "CODE": "",
+      "CODE_1": "",
       "DESCRIPTION": "",
     };
     this.tableData.push(data);
   }
 
-  codedataselected(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].Code = data.target.value;
+  codetemp(data:any,value: any){
+    console.log(data);
+    this.tableData[value.data.SRNO - 1].CODE_1 = data.target.value;
   }
 
   descriptiontemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].Description = data.target.value;
+    this.tableData[value.data.SRNO - 1].DESCRIPTION = data.target.value;
   }
-  
+
   deleteTableData(){
     this.tableData.pop();
   }
@@ -87,6 +114,7 @@ subscriptions: any;
       "MID": 0,
       "COMPSET_CODE":  this.componentsizesetmasterForm.value.code || "",
       "DESCRIPTION":  this.componentsizesetmasterForm.value.description || "",
+      "approvalDetails": this.tableData,
       "detail": [
         {
           "UNIQUEID": 0,

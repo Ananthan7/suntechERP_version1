@@ -348,25 +348,22 @@ sizeFromCodeData: MasterSearchModel = {
     ]
     this.methodList= [
       {
-      'name':'Lumpsum ',
-      'value':'Lumpsum '
+      'name':'Hand Setting ',
+      'value':'Hand Setting '
     },
     {
-      'name':'PCS',
-      'value':'PCS'
+      'name':'Wax Setting',
+      'value':'Wax Setting'
     },
     {
-      'name':'Grams',
-      'value':'Grams'
+      'name':'Other Setting',
+      'value':'Other Setting'
     },
     {
-      'name':'Carat',
-      'value':'Carat'
+      'name':'GENERAL',
+      'value':'GENERAL'
     },
-    {
-      'name':'Hours',
-      'value':'Hours'
-    }
+    
     ]
   }
 
@@ -421,6 +418,8 @@ sizeFromCodeData: MasterSearchModel = {
   stockCodeSelected(e:any){
     console.log(e); 
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
+    this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
+    this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
   }
 
   currencyCodeSelected(e:any){

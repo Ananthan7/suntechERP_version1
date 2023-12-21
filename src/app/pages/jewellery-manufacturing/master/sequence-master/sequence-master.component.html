@@ -62,7 +62,7 @@
                         <thead>
                             <tr>
                                 <th scope="col"><input type="checkbox" class="inputSec" [(ngModel)]="selectAll"
-                                        (change)="checkAll()" /></th>
+                                        (change)="checkAll()"(change)="oncalculateChange($event)"/></th>
                                 <th scope="col">No</th>
                                 <th scope="col">Process</th>
                                 <th scope="col">Description</th>
@@ -90,10 +90,10 @@
                                 <td class="text-right" cdkDragHandle>{{data['LOSS_ACCODE']}}</td>
                                 <td class="text-right" cdkDragHandle>{{data['STD_LOSS']}}</td>
                                 <td class="text-right" cdkDragHandle>{{data['MAX_LOSS']}}</td>
-                                <td cdkDragHandle>{{data['STDTIME']}}</td>
-                                <td cdkDragHandle>{{data['MAXTIME']}}</td>
+                                <td contenteditable cdkDragHandle>{{data['STDTIME']}}</td>
+                                <td contenteditable cdkDragHandle>{{data['MAXTIME']}}</td>
                                 <td>
-                                    <input type="checkbox" [value]="data['TIMEON_PROCESS']" />
+                                    <input type="checkbox" [value]="data['TIMEON_PROCESS']"formControlName="calculatetime" />
                                 </td>
                                 <!-- Preview -->
                                 <div *cdkDragPreview matchSize="true" class="container dragdrop-placeholder">

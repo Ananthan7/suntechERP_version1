@@ -38,6 +38,7 @@ export class SequenceMasterComponent implements OnInit {
   sequenceMasterForm: FormGroup = this.formBuilder.group({
     sequenceCode: ['', [Validators.required]],
     sequenceDESCRIPTION: ['', [Validators.required]],
+    
     sequencePrefixCode: ['', [Validators.required]],
   })
   constructor(
@@ -50,6 +51,7 @@ export class SequenceMasterComponent implements OnInit {
     this.getTableData()
   }
   ngOnInit(): void {
+    this.sequenceMasterForm.controls['calculatetime'].disable();
     if (this.content) {
       this.setFormValues()
     }
@@ -365,5 +367,17 @@ export class SequenceMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-
+  oncalculateChange(event:any) {
+    console.log(event);
+    if(event.checked==true){
+      this.sequenceMasterForm.controls['calculatetime'].enable();
+   
+     
+    }
+    else{
+      this.sequenceMasterForm.controls['calculatetime'].disable();
+    
+     
+    }
+}
 }

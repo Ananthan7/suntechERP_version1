@@ -35,7 +35,7 @@ export class MetalPrefixMasterComponent implements OnInit {
   metalprefixForm: FormGroup = this.formBuilder.group({
     prefixcode:[''],
     prefixcodedes:[''],
-    lastno :[''],
+    lastno :['00000',''],
     tagWt :[''],
     branch:[''],
     suffixcode:[''],

@@ -71,11 +71,11 @@ export class ProcessMasterComponent implements OnInit {
   accountStartData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
+    LOOKUPID: 95,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'ACCOUNT CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
+    WHERECONDITION: "ACCODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -83,11 +83,11 @@ export class ProcessMasterComponent implements OnInit {
   accountMiddleData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
+    LOOKUPID: 95,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'ACCOUNT CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
+    WHERECONDITION: "ACCODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -95,11 +95,11 @@ export class ProcessMasterComponent implements OnInit {
   accountEndData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Process Code',
+    LOOKUPID: 95,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'ACCOUNT CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
+    WHERECONDITION: "ACCODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -311,15 +311,15 @@ export class ProcessMasterComponent implements OnInit {
   }
   accountStartSelected(e: any){
     console.log(e);
-    this.processMasterForm.controls.accountStart.setValue(e.Process_Code);
+    this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
   }
   accountMiddleSelected(e: any){
     console.log(e);
-    this.processMasterForm.controls.accountMiddle.setValue(e.Process_Code);
+    this.processMasterForm.controls.accountMiddle.setValue(e.ACCODE);
   }
   accountEndSelected(e: any){
     console.log(e);
-    this.processMasterForm.controls.accountEnd.setValue(e.Process_Code);
+    this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
   }
 
   updateProcessMaster() {

@@ -12,9 +12,10 @@
 }
 
 .icons {
-  width: 100%;
+  width: 85%;
   border: 1px solid #ddd;
   margin-bottom: 2px;
+  margin-left: 22px;
 }
 
 .icons .image_box {
@@ -57,4 +58,31 @@
 
 .example-full-width {
   width: 100%;
+}
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  text-align: center;
+}
+
+.upload-btn-wrapper 
+.btnnew {
+  border-color: #fff;
+  color: white;
+  font-size: 40px;
+  background: white;
+  padding: 120px 75px 47px 84px;
+  margin-left: 14px;
+}
+
+.upload-btn-wrapper 
+.uploadproduct {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  font-size: 100px;
+  cursor: pointer;
 }

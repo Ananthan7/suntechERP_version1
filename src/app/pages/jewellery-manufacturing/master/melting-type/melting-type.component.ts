@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 
 
 
+
 @Component({
   selector: 'app-melting-type',
   templateUrl: './melting-type.component.html',
@@ -22,7 +23,10 @@ export class MeltingTypeComponent implements OnInit {
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
-
+  metal:any;
+  description:any;
+  code:any;
+  alloy:any;
   slNo = 0;
 
 
@@ -46,10 +50,11 @@ export class MeltingTypeComponent implements OnInit {
       return
     }
 
-    if (this.meltingTypeForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.meltingTypeForm.invalid) {
+    
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
 
     let API = 'MeltingType/InsertMeltingType'
     let postData=
@@ -59,8 +64,8 @@ export class MeltingTypeComponent implements OnInit {
         "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
         "KARAT_CODE": this.meltingTypeForm.value.karat,
         "PURITY": this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
-        "METAL_PER": this.meltingTypeForm.value.metal,
-        "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
+        "METAL_PER": this.metal,
+        "ALLOY_PER": parseFloat(this.alloy),
         "CREATED_BY": this.userName,
         "COLOR": this.meltingTypeForm.value.color,
         "STOCK_CODE": this.meltingTypeForm.value.stockCode,
@@ -69,6 +74,7 @@ export class MeltingTypeComponent implements OnInit {
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
     .subscribe((result) => {
+   
       if (result.response) {
         if (result.status == "Success") {
           Swal.fire({
@@ -191,6 +197,10 @@ export class MeltingTypeComponent implements OnInit {
       this.tableData.push(data);
       console.log(this.tableData);
   
+      this.metal=this.meltingTypeForm.value.metal
+      // this.description=this.meltingTypeForm.value.description
+      // this.code=this.meltingTypeForm.value.code
+      this.alloy=this.meltingTypeForm.value.alloy
       this.meltingTypeForm.controls.code.setValue("");
       this.meltingTypeForm.controls.description.setValue("");
       this.meltingTypeForm.controls.karat.setValue("");
