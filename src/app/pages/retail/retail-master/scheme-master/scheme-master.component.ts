@@ -137,8 +137,77 @@ export class SchemeMasterComponent implements OnInit {
         this.toastr.error('Not saved')
       }
     }, err => alert(err))
+  this.subscriptions.push(Sub);
+};
+
+setFormValues() {
+  if(!this.content) return
+  console.log(this.content);
+  this.schemeMasterForm.controls.mid.setValue(this.content.MID);
+  this.schemeMasterForm.controls.code.setValue(this.content.SCHEME_CODE);
+  this.schemeMasterForm.controls.description.setValue(this.content.SCHEME_NAME);
+  this.schemeMasterForm.controls.remarks.setValue(this.content.SCHEME_REMARKS);
+  this.schemeMasterForm.controls.frequency.setValue(this.content.SCHEME_FREQUENCY);
+  this.schemeMasterForm.controls.startDate.setValue(this.content.START_DATE);
+  this.schemeMasterForm.controls.prefix.setValue(this.content.PREFIX_CODE);
+}
+
+update(){
+  if (this.schemeMasterForm.invalid) {
+    this.toastr.error('select all required fields')
+    return
+  }
+
+  let API = 'SchemeMaster/UpdateSchemeMaster/' + this.schemeMasterForm.value.branchCode + this.schemeMasterForm.value.code
+  let postData = {
+    "MID": 0,
+    "BRANCH_CODE": this.branchCode,
+    "SCHEME_CODE": this.schemeMasterForm.value.code,
+    "SCHEME_NAME": this.schemeMasterForm.value.description,
+    "SCHEME_UNIT": 0,
+    "SCHEME_BONUS": 0,
+    "SCHEME_PERIOD": 0,
+    "SCHEME_REMARKS": this.schemeMasterForm.value.remarks,
+    "SCHEME_AMOUNT": 0,
+    "SCHEME_METALCURRENCY": 0,
+    "CANCEL_CHARGE": 0,
+    "SCHEME_FREQUENCY": this.schemeMasterForm.value.frequency,
+    "STATUS": true,
+    "START_DATE": this.schemeMasterForm.value.startDate,
+    "SCHEME_CURRENCY_CODE": "",
+    "PREFIX_CODE": this.schemeMasterForm.value.prefix,
+    "BONUS_RECTYPE": "string",
+    "CANCEL_RECTYPE": "string",
+    "INST_RECTYPE": "string",
+    "SCHEME_FIXEDAMT": true
+}
+
+  let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+    .subscribe((result) => {
+      if (result.response) {
+        if(result.status == "Success"){
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.schemeMasterForm.reset()
+              this.tableData = []
+              this.close();
+            }
+          });
+        }
+      } else {
+        this.toastr.error('Not saved')
+      }
+    }, err => alert(err))
   this.subscriptions.push(Sub)
 }
+
+// SchemeMaster/UpdateSchemeMaster
 
 deleteSchemeMaster() {
   if (!this.content.WORKER_CODE) {
@@ -164,7 +233,7 @@ deleteSchemeMaster() {
     confirmButtonText: 'Yes, delete!'
   }).then((result) => {
     if (result.isConfirmed) {
-      let API = '/JobCadProcessDJ/DeleteJobCadProcessDJ/' + this.schemeMasterForm.value.brnachCode + this.schemeMasterForm.value.voctype + this.schemeMasterForm.value.vocNo + this.schemeMasterForm.value.yearMoth;
+      let API = '/SchemeMaster/DeleteSchemeMaster/' + this.schemeMasterForm.value.branchCode + this.schemeMasterForm.value.code;
       let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
         .subscribe((result) => {
           if (result) {
