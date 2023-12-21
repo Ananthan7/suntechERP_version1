@@ -41,7 +41,7 @@
                         </span>
                         <mat-form-field style="width: 65%">
                             <input type="text" matInput formControlName="Code"
-                                (focusout)="searchValueChange($event,'CODE')" />
+                                (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="customerMasterData" 
                             (newRowClick)="selectedCustomer($event)">
@@ -52,7 +52,7 @@
                         </span>
                         <mat-form-field style="width: 65%">
                             <input type="text" matInput (keypress)="isNumeric($event)" formControlName="MobileNo"
-                                (focusout)="searchValueChange($event,'MOBILE')" />
+                                (focusout)="searchValueChange($event,'Mobile')" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="customerMasterWithMobile" 
                             (newRowClick)="selectedCustomer($event)">
@@ -131,9 +131,12 @@
     <div class="row">
         <div class="card p-3 col-md-12">
             <div class="row">
-                <div class="m-2">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        (addClick)="openNewSchemeDetails()" (deleteClick)="deleteTableData()">
+                </menu-buttons>
+                <!-- <div class="m-2">
                     <button mat-flat-button color="primary" (click)="openMadalView()">Add New</button>
-                </div>
+                </div> -->
             </div>
             <div class="row">
                 <dx-data-grid width="100%" #gridContainer [loadPanel]="{ enabled: true, text: 'Loading...' }"
@@ -193,7 +196,7 @@
 </div>
 
 <!-- modal template -->
-<ng-template #add_scheme let-modal>
+<!-- <ng-template #add_scheme let-modal>
     <app-add-scheme [dataToEdit]="dataToEditrow" (closebtnClick)="closeModal()"
         (newRowSaveClick)="addNewRow($event)"></app-add-scheme>
-</ng-template>
+</ng-template> -->
