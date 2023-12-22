@@ -126,8 +126,6 @@ export class AddSchemeComponent implements OnInit {
       this.commonService.branchCode
     );
     this.receiptEntryForm.controls.Status.setValue("LIVE");
-    console.log(this.content);
-    
     this.setInitialValues(this.content);
   }
 
@@ -142,8 +140,6 @@ export class AddSchemeComponent implements OnInit {
     }
   }
   setInitialValues(data: any) {
-    console.log(data,'fired');
-    
     if (data) {
       this.isViewAddbtn = false;
       if (data.SCHEME_UNIQUEID) {
@@ -276,25 +272,19 @@ export class AddSchemeComponent implements OnInit {
   //search Value Change
   searchValueChange(event: any) {
     let API = `SchemeMaster/GetSchemeMasterDetails/${this.commonService.branchCode}/${event.SCHEME_CODE.toString()}`
+    this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
+          this.commonService.closeSnackBarMsg();
           this.selectedScheme(result.response)
         } else {
-          Swal.fire({
-            title: 'Scheme Not Found!',
-            text: "",
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ok'
-          }).then((result) => {
-            // if (result.isConfirmed) {
-            // }
-          })
+          this.commonService.toastErrorByMsgId('MSG1531')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg();
+      })
     this.subscriptions.push(Sub)
   }
   //use: form submit

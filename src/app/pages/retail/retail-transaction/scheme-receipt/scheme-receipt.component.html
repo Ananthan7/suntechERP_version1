@@ -48,10 +48,10 @@
                                                         maxlength="6"
                                                         (focusout)="partyCodeChange($event,'ACCODE')" />
                                                 </mat-form-field>
-                                                <!-- <master-find-icon
-                                                    [MasterFindData]="partyCodeMasterData"
+                                                <master-search
+                                                    [MasterSearchData]="partyCodeMasterData"
                                                     (newRowClick)="selectedParty($event)">
-                                                </master-find-icon> -->
+                                                </master-search>
                                             </span>
                                         </div>
                                     </div>
@@ -61,26 +61,15 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field
-                                                    class="example-full-width">
+                                                    style="width: 65% !important">
                                                     <input type="text" matInput
                                                         (focusout)="salesmanChange($event)"
                                                         formControlName="Salesman">
-                                                    <!-- <mat-autocomplete
-                                                            #Salesman="matAutocomplete">
-                                                            <mat-option
-                                                                *ngFor="let option of filteredOptions | async"
-                                                                [value]="option.SALESPERSON_CODE">
-                                                                {{
-                                                                option.SALESPERSON_CODE
-                                                                +' - '+
-                                                                option.DESCRIPTION}}
-                                                            </mat-option>
-                                                        </mat-autocomplete> -->
                                                 </mat-form-field>
-                                                <!-- <master-find-icon
-                                                    [MasterFindData]="salesPersonMasterData"
+                                                <master-search
+                                                    [MasterSearchData]="salesPersonMasterData"
                                                     (newRowClick)="selectedSalesman($event)">
-                                                </master-find-icon> -->
+                                                </master-search>
                                             </span>
                                         </div>
                                     </div>
@@ -93,7 +82,8 @@
                                             <span style="width: 65%">
                                                 <mat-form-field>
                                                     <input type="text" matInput
-                                                        readonly formControlName="VocType" />
+                                                        readonly
+                                                        formControlName="VocType" />
                                                 </mat-form-field>
                                             </span>
                                         </div>
@@ -115,7 +105,8 @@
                                                     <mat-datepicker-toggle
                                                         matSuffix
                                                         [for]="VocDate"></mat-datepicker-toggle>
-                                                    <mat-datepicker #VocDate></mat-datepicker>
+                                                    <mat-datepicker
+                                                        #VocDate></mat-datepicker>
                                                     <!-- <mat-error
                                                             *ngIf="receiptDetailsForm.get('VocDate')?.hasError('invalidDate')">
                                                             Invalid date format
@@ -149,8 +140,7 @@
                                 <div class="row">
                                     <div class="col-lg-4 col-md-12 col-sm-12">
                                         <div class="row">
-                                            <span class="matlabels">Curr
-                                                Code
+                                            <span class="matlabels">Currency
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
@@ -163,7 +153,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-12 col-sm-12">
                                         <div class="row">
-                                            <span class="matlabels">Curr
+                                            <span class="matlabels">Currency
                                                 Rate
                                             </span>
                                             <span style="width: 65%">
@@ -206,7 +196,8 @@
                                                     <mat-datepicker-toggle
                                                         matSuffix
                                                         [for]="RefDate"></mat-datepicker-toggle>
-                                                    <mat-datepicker #RefDate></mat-datepicker>
+                                                    <mat-datepicker
+                                                        #RefDate></mat-datepicker>
                                                 </mat-form-field>
                                             </span>
                                         </div>
@@ -233,10 +224,10 @@
                                                     (focusout)="customerChange($event,'NAME')"
                                                     formControlName="POSCustomerName" />
                                             </mat-form-field>
-                                            <!-- <master-find-icon
-                                                [MasterFindData]="customerMasterData"
+                                            <master-search
+                                                [MasterSearchData]="customerMasterData"
                                                 (newRowClick)="selectedCustomer($event)">
-                                            </master-find-icon> -->
+                                            </master-search>
                                         </span>
                                     </div>
                                     <div class="col-lg-4 col-md-12 col-sm-12">
@@ -251,10 +242,10 @@
                                                         formControlName="SchemeID"
                                                         maxlength="20" />
                                                 </mat-form-field>
-                                                <!-- <master-find-icon
-                                                    [MasterFindData]="SchemeMasterFindData"
+                                                <master-search
+                                                    [MasterSearchData]="SchemeMasterFindData"
                                                     (newRowClick)="selectedScheme($event)">
-                                                </master-find-icon> -->
+                                                </master-search>
                                             </span>
                                         </div>
                                     </div>
@@ -287,7 +278,8 @@
                                                     <mat-datepicker-toggle
                                                         matSuffix
                                                         [for]="PostedDate"></mat-datepicker-toggle>
-                                                    <mat-datepicker #PostedDate></mat-datepicker>
+                                                    <mat-datepicker
+                                                        #PostedDate></mat-datepicker>
                                                 </mat-form-field>
                                             </span>
                                         </div>
@@ -295,7 +287,8 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12 advanceCustomer">
+                        <div
+                            class="col-lg-3 col-md-3 col-sm-12 advanceCustomer">
                             <div class="row p-3 border-bottom">
                                 <b>{{rightSideHeader}}</b>
                             </div>
@@ -308,8 +301,10 @@
                         </div>
                     </div>
                     <div class="row border-top">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                            (addClick)="openMadalView()" (deleteClick)="deleteTableData()">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                            [viewImportBtn]="false"
+                            (addClick)="openNewSchemeDetails()"
+                            (deleteClick)="deleteTableData()">
                         </menu-buttons>
                         <!-- <div class="m-2">
                             <button mat-flat-button color="primary"
@@ -322,8 +317,7 @@
                                 [loadPanel]="{ enabled: true, text: 'Loading...' }"
                                 [dataSource]="orderedItems"
                                 [showColumnLines]="true" [showRowLines]="true"
-                                [showBorders]="true"
-                                [columnAutoWidth]="true">
+                                [showBorders]="true" [columnAutoWidth]="true">
                                 <!-- <dxo-filter-row visible="true"></dxo-filter-row> keyExpr="Id"-->
                                 <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
                                 <dxo-paging [enabled]="true" [pageSize]="10"
