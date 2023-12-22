@@ -19,8 +19,8 @@ import {
 })
 export class JobCreationComponent implements OnInit {
   divisionMS: any;
-  columnhead: any[] = ["So No", "Date", "Stock Code", "Party", "Delivery Date", "Partyname", "Remarks", "Pending Days", "Design Code", "Description", "Pcs Order", "Extra Pcs", "Balance Pcs", "Pcs/Bag", "No Bags", "Metal Wt", "Stone Wt", "Gross Wt", "Unq Design", "SRNO"];
-  columnheader: any[] = ["So No", "Orders", "Design Code", "Stock Code", "Job Number", "Job Description", "Karat", "Total Pcs", "Stone Wt", "Metal Wt", "Gross Wt", "Category", "Sub Category", "Brand Code", "Metal Color", "Type", "Seq.Code", "Actualpcs", "YEARMONTH", "PartyCode", "DSO_SRNO"];
+  columnhead: any[] = ["SL No", "Date", "Stock Code", "Party", "Delivery Date", "Partyname", "Remarks", "Pending Days", "Design Code", "Description", "Pcs Order", "Extra Pcs", "Balance Pcs", "Pcs/Bag", "No Bags", "Metal Wt", "Stone Wt", "Gross Wt", "Unq Design", "SRNO"];
+  columnheader: any[] = ["SL No", "Orders", "Design Code", "Stock Code", "Job Number", "Job Description", "Karat", "Total Pcs", "Stone Wt", "Metal Wt", "Gross Wt", "Category", "Sub Category", "Brand Code", "Metal Color", "Type", "Seq.Code", "Actualpcs", "YEARMONTH", "PartyCode", "DSO_SRNO"];
   @Input() content!: any;
   tableData: any[] = [];
   branchCode?: String;

@@ -70,7 +70,9 @@
                         <div class="col-md-3">
                           <mat-form-field style="width: 80%;">
                             <mat-select formControlName="makingcharge">
-          
+                                <mat-option *ngFor="let option of makingchargeTypeList" [value]="option.value">
+                                  {{ option.name }}
+                                </mat-option>
                             </mat-select>
                           </mat-form-field>
                         </div>
@@ -941,7 +943,7 @@
                       <div class="row">
                         <div class="col-md-12">
                           <mat-form-field style="width: 100%;">
-                            <textarea matInput rows="4" formControlName="tagDetails"></textarea>
+                            <textarea matInput rows="4" formControlName="salesTagDetails"></textarea>
                         </mat-form-field>
                         </div>
                       </div>

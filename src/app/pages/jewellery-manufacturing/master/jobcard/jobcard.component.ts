@@ -58,7 +58,7 @@ export class JobcardComponent implements OnInit {
 
   jobCardFrom: FormGroup = this.formBuilder.group({
     orderType : [''],
-    jobno : [''],
+    jobno : ['53528'],
     designcode : [''],
     designtype : [''],
     customer : [''],
@@ -72,7 +72,7 @@ export class JobcardComponent implements OnInit {
     comments : [''],
     size : [''],
     jobtype : [''],
-    jobdate : [''],
+    jobdate :  [this.getCurrentDate(), Validators.required],
     date : [''],
     prefix : [''],
     type : [''],
@@ -81,7 +81,7 @@ export class JobcardComponent implements OnInit {
     setref : [''],
     length : [''],
     purity : [''],
-    deldate : [''],
+    deldate :  [this.getCurrentDate(), Validators.required],
     salesman : [''],
     stockcode : [''],
     currency : [''],
@@ -93,7 +93,7 @@ export class JobcardComponent implements OnInit {
     totalpcs : [''],
     pending : [''],
     parts : [''],
-   
+    srewFiled : [''],
   });
 
   constructor(
@@ -109,7 +109,13 @@ export class JobcardComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
   }
-
+  getCurrentDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
 
   /**USE: close modal window */
   close(data?: any) {
