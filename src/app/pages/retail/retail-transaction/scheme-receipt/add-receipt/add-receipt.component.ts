@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,9 +15,9 @@ import Swal from 'sweetalert2';
   styleUrls: ['./add-receipt.component.scss']
 })
 export class AddReceiptComponent implements OnInit {
+  @Input() content: any;
   @Output() newRowSaveClick = new EventEmitter();
   @Output() closebtnClick = new EventEmitter();
-  @Input() newReceiptDatas: any;
   branchArray: any[] = [];
   typeCodeFilteredOptions!: Observable<any[]>;
   typeCodeArray: any[] = [];
@@ -35,18 +36,18 @@ export class AddReceiptComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  accountMasterData: any = {
-    TABLE_NAME: 'ACCOUNT_MASTER',
-    FILTER_FEILD_NAMES: {
-    },
-    API_FILTER_VALUE: 'ACCOUNT_HEAD',
-    DB_FIELD_VALUE: 'ACCOUNT_HEAD',
-    NAME_FIELD_VALUE: 'ACCODE',
-    USER_TYPED_VALUE: '',
+  
+  accountMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 81,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "Account Master",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "ACCODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
-
+  };
   payTypeArray: any[] = [];
   /**form group data */
   receiptEntryForm: FormGroup = this.formBuilder.group({
@@ -91,10 +92,12 @@ export class AddReceiptComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.newReceiptDatas.details && this.newReceiptDatas.details.length>0){
-      let data = this.newReceiptDatas.details[0]
+    console.log(this.content,'content');
+    
+    if(this.content.details && this.content.details.length>0){
+      let data = this.content.details[0]
       this.getPaymentType(data.RECPAY_TYPE || data.Type)
-      this.receiptEntryForm.controls.Branch.setValue(data.BRANCH_CODE || data.Branch)
+      this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
       // this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE || data.AC_Code)
       this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
       this.receiptEntryForm.controls.CurrRate.setValue(data.CURRENCY_RATE || data.CurrRate)
@@ -202,7 +205,7 @@ export class AddReceiptComponent implements OnInit {
   
   //Account master
   getAccountMaster(accountCode: string) {
-    let Sub: Subscription = this.dataService.getDynamicAPI('Scheme/AccountMaster?ACCODE=' + accountCode)
+    let Sub: Subscription = this.dataService.getDynamicAPI(`AccountMaster/${accountCode}`)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
@@ -247,8 +250,8 @@ export class AddReceiptComponent implements OnInit {
   //USE to get HSN and VAT and calculations
   getTaxDetails() {
     let date = this.commonService.formatDate(new Date())
-    let accountCode = this.newReceiptDatas.PARTY_CODE
-    let Sub: Subscription = this.dataService.getDynamicAPI(`Scheme/TaxDetails?Accode=${accountCode}&strdate=${date}`)
+    let accountCode = this.content.PARTY_CODE
+    let Sub: Subscription = this.dataService.getDynamicAPI(`TaxDetails?Accode=${accountCode}&strdate=${date}`)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
@@ -256,10 +259,10 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_SAC_CODE);
           this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER);
 
-          this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.newReceiptDatas.SCHEME_AMOUNT)
-          this.receiptEntryForm.controls.AmountWithTRN.setValue(this.newReceiptDatas.SCHEME_AMOUNT)
+          this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
+          this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
 
-          let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.newReceiptDatas.SCHEME_AMOUNT))
+          let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCHEME_AMOUNT))
 
           amount_LC = Number(amount_LC.toFixed(2))
           this.receiptEntryForm.controls.Amount_LC.setValue(amount_LC)
@@ -270,11 +273,11 @@ export class AddReceiptComponent implements OnInit {
           amount_FC = Number(amount_FC.toFixed(2))
           this.receiptEntryForm.controls.Amount_FC.setValue(amount_FC)
 
-          let trn_Fc_amount: number = Number(this.newReceiptDatas.SCHEME_AMOUNT) - amount_FC
+          let trn_Fc_amount: number = Number(this.content.SCHEME_AMOUNT) - amount_FC
           trn_Fc_amount =  Number(trn_Fc_amount.toFixed(2)) 
           this.receiptEntryForm.controls.TRN_Amount_FC.setValue(trn_Fc_amount)
 
-          let trn_amount_lc: number = Number(this.newReceiptDatas.SCHEME_AMOUNT) - amount_LC
+          let trn_amount_lc: number = Number(this.content.SCHEME_AMOUNT) - amount_LC
           trn_amount_lc = Number(trn_amount_lc.toFixed(2))
           this.receiptEntryForm.controls.TRN_Amount_LC.setValue(trn_amount_lc)
 
@@ -297,7 +300,7 @@ export class AddReceiptComponent implements OnInit {
   //currency Code Change
   currencyCodeChange(value: string) {
     if (value == '') return
-    let API = `Scheme/CurrencyMaster/${value}`
+    let API = `CurrencyMaster/GetCurrencyMasterDetail/${value}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
@@ -315,7 +318,7 @@ export class AddReceiptComponent implements OnInit {
   }
   /**USE: get CreditCardMaster */
   getCreditCardMaster() {
-    let Sub: Subscription = this.dataService.getDynamicAPI('Scheme/CreditCardMaster')
+    let Sub: Subscription = this.dataService.getDynamicAPI('CreditCardMaster/GetCreditCardMaster')
       .subscribe((result) => {
         if (result.response) {
           let data = result.response

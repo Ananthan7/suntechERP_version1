@@ -27,7 +27,9 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
-                                                    <input type="text" matInput readonly formControlName="Branch"
+                                                    <input type="text" matInput
+                                                        readonly
+                                                        formControlName="Branch"
                                                         maxlength="6" />
                                                 </mat-form-field>
                                             </span>
@@ -41,10 +43,13 @@
                                             </span>
                                             <span style="width: 70%">
                                                 <mat-form-field>
-                                                    <input type="text" matInput formControlName="PartyCode"
-                                                        maxlength="6" (focusout)="partyCodeChange($event,'ACCODE')" />
+                                                    <input type="text" matInput
+                                                        formControlName="PartyCode"
+                                                        maxlength="6"
+                                                        (focusout)="partyCodeChange($event,'ACCODE')" />
                                                 </mat-form-field>
-                                                <master-search [MasterSearchData]="partyCodeMasterData"
+                                                <master-search
+                                                    [MasterSearchData]="partyCodeMasterData"
                                                     (newRowClick)="selectedParty($event)">
                                                 </master-search>
                                             </span>
@@ -55,11 +60,14 @@
                                             <span class="matlabels">Salesman*
                                             </span>
                                             <span style="width: 65%">
-                                                <mat-form-field style="width: 65% !important">
-                                                    <input type="text" matInput (focusout)="salesmanChange($event)"
+                                                <mat-form-field
+                                                    style="width: 65% !important">
+                                                    <input type="text" matInput
+                                                        (focusout)="salesmanChange($event)"
                                                         formControlName="Salesman">
                                                 </mat-form-field>
-                                                <master-search [MasterSearchData]="salesPersonMasterData"
+                                                <master-search
+                                                    [MasterSearchData]="salesPersonMasterData"
                                                     (newRowClick)="selectedSalesman($event)">
                                                 </master-search>
                                             </span>
@@ -73,7 +81,9 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
-                                                    <input type="text" matInput readonly formControlName="VocType" />
+                                                    <input type="text" matInput
+                                                        readonly
+                                                        formControlName="VocType" />
                                                 </mat-form-field>
                                             </span>
                                         </div>
@@ -85,13 +95,18 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
-                                                    <input matInput DateValidation name="VocDate"
+                                                    <input matInput
+                                                        DateValidation
+                                                        name="VocDate"
                                                         (dateChange)="dateChange($event,'VocDate')"
-                                                        [matDatepicker]="VocDate" formControlName="VocDate"
+                                                        [matDatepicker]="VocDate"
+                                                        formControlName="VocDate"
                                                         placeholder="DD/MM/YYYY" />
-                                                    <mat-datepicker-toggle matSuffix
+                                                    <mat-datepicker-toggle
+                                                        matSuffix
                                                         [for]="VocDate"></mat-datepicker-toggle>
-                                                    <mat-datepicker #VocDate></mat-datepicker>
+                                                    <mat-datepicker
+                                                        #VocDate></mat-datepicker>
                                                     <!-- <mat-error
                                                             *ngIf="receiptDetailsForm.get('VocDate')?.hasError('invalidDate')">
                                                             Invalid date format
@@ -113,7 +128,9 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
-                                                    <input type="text" matInput readonly class="text-right"
+                                                    <input type="text" matInput
+                                                        readonly
+                                                        class="text-right"
                                                         formControlName="VocNo" />
                                                 </mat-form-field>
                                             </span>
@@ -127,7 +144,9 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
-                                                    <input type="text" matInput readonly formControlName="CurrCode" />
+                                                    <input type="text" matInput
+                                                        readonly
+                                                        formControlName="CurrCode" />
                                                 </mat-form-field>
                                             </span>
                                         </div>
@@ -139,7 +158,9 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
-                                                    <input type="text" matInput class="text-right" readonly
+                                                    <input type="text" matInput
+                                                        class="text-right"
+                                                        readonly
                                                         formControlName="CurrRate" />
                                                 </mat-form-field>
                                             </span>
@@ -153,7 +174,8 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
-                                                    <input type="text" matInput class="text-right"
+                                                    <input type="text" matInput
+                                                        class="text-right"
                                                         formControlName="RefNo" />
                                                 </mat-form-field>
                                             </span>
@@ -165,12 +187,17 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
-                                                    <input matInput DateValidation (dateChange)="dateRefChange($event)"
-                                                        [matDatepicker]="RefDate" formControlName="RefDate"
+                                                    <input matInput
+                                                        DateValidation
+                                                        (dateChange)="dateRefChange($event)"
+                                                        [matDatepicker]="RefDate"
+                                                        formControlName="RefDate"
                                                         placeholder="DD/MM/YYYY" />
-                                                    <mat-datepicker-toggle matSuffix
+                                                    <mat-datepicker-toggle
+                                                        matSuffix
                                                         [for]="RefDate"></mat-datepicker-toggle>
-                                                    <mat-datepicker #RefDate></mat-datepicker>
+                                                    <mat-datepicker
+                                                        #RefDate></mat-datepicker>
                                                 </mat-form-field>
                                             </span>
                                         </div>
@@ -178,21 +205,27 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-6 col-md-12 col-sm-12 d-flex">
+                                    <div
+                                        class="col-lg-6 col-md-12 col-sm-12 d-flex">
                                         <span class="matlabels">POS Customer
                                             Code
                                         </span>
                                         <span>
                                             <mat-form-field style="width: 25%">
-                                                <input type="text" matInput (focusout)="customerChange($event,'CODE')"
-                                                    placeholder="Code" formControlName="POSCustomerCode" />
+                                                <input type="text" matInput
+                                                    (focusout)="customerChange($event,'CODE')"
+                                                    placeholder="Code"
+                                                    formControlName="POSCustomerCode" />
                                             </mat-form-field>
-                                            <mat-form-field style="width: 40%; margin-left: 7px;">
-                                                <input type="text" matInput placeholder="Name"
+                                            <mat-form-field
+                                                style="width: 40%; margin-left: 7px;">
+                                                <input type="text" matInput
+                                                    placeholder="Name"
                                                     (focusout)="customerChange($event,'NAME')"
                                                     formControlName="POSCustomerName" />
                                             </mat-form-field>
-                                            <master-search [MasterSearchData]="customerMasterData"
+                                            <master-search
+                                                [MasterSearchData]="customerMasterData"
                                                 (newRowClick)="selectedCustomer($event)">
                                             </master-search>
                                         </span>
@@ -204,10 +237,13 @@
                                             </span>
                                             <span style="width: 70%">
                                                 <mat-form-field>
-                                                    <input type="text" readonly matInput formControlName="SchemeID"
+                                                    <input type="text" readonly
+                                                        matInput
+                                                        formControlName="SchemeID"
                                                         maxlength="20" />
                                                 </mat-form-field>
-                                                <master-search [MasterSearchData]="SchemeMasterFindData"
+                                                <master-search
+                                                    [MasterSearchData]="SchemeMasterFindData"
                                                     (newRowClick)="selectedScheme($event)">
                                                 </master-search>
                                             </span>
@@ -216,11 +252,13 @@
                                 </div>
                                 <div class="row">
 
-                                    <div class="col-lg-6 col-md-12 col-sm-12 d-flex">
+                                    <div
+                                        class="col-lg-6 col-md-12 col-sm-12 d-flex">
                                         <span class="matlabels">Narration
                                         </span>
                                         <mat-form-field style="width: 100%">
-                                            <input type="text" matInput formControlName="Narration" />
+                                            <input type="text" matInput
+                                                formControlName="Narration" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-lg-4 col-md-12 col-sm-12">
@@ -230,13 +268,18 @@
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
-                                                    <input matInput DateValidation
-                                                        (dateChange)="datePostedChange($event)" maxlength="10"
-                                                        [matDatepicker]="PostedDate" formControlName="PostedDate"
+                                                    <input matInput
+                                                        DateValidation
+                                                        (dateChange)="datePostedChange($event)"
+                                                        maxlength="10"
+                                                        [matDatepicker]="PostedDate"
+                                                        formControlName="PostedDate"
                                                         placeholder="DD/MM/YYYY" />
-                                                    <mat-datepicker-toggle matSuffix
+                                                    <mat-datepicker-toggle
+                                                        matSuffix
                                                         [for]="PostedDate"></mat-datepicker-toggle>
-                                                    <mat-datepicker #PostedDate></mat-datepicker>
+                                                    <mat-datepicker
+                                                        #PostedDate></mat-datepicker>
                                                 </mat-form-field>
                                             </span>
                                         </div>
@@ -244,7 +287,8 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12 advanceCustomer">
+                        <div
+                            class="col-lg-3 col-md-3 col-sm-12 advanceCustomer">
                             <div class="row p-3 border-bottom">
                                 <b>{{rightSideHeader}}</b>
                             </div>
@@ -257,8 +301,10 @@
                         </div>
                     </div>
                     <div class="row border-top">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                            (addClick)="openNewSchemeDetails()" (deleteClick)="deleteTableData()">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                            [viewImportBtn]="false"
+                            (addClick)="openNewSchemeDetails()"
+                            (deleteClick)="deleteTableData()">
                         </menu-buttons>
                         <!-- <div class="m-2">
                             <button mat-flat-button color="primary"
@@ -267,12 +313,15 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <dx-data-grid width="100%" [loadPanel]="{ enabled: true, text: 'Loading...' }"
-                                [dataSource]="orderedItems" [showColumnLines]="true" [showRowLines]="true"
+                            <dx-data-grid width="100%"
+                                [loadPanel]="{ enabled: true, text: 'Loading...' }"
+                                [dataSource]="orderedItems"
+                                [showColumnLines]="true" [showRowLines]="true"
                                 [showBorders]="true" [columnAutoWidth]="true">
                                 <!-- <dxo-filter-row visible="true"></dxo-filter-row> keyExpr="Id"-->
                                 <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
-                                <dxo-paging [enabled]="true" [pageSize]="10" [pageIndex]="1"></dxo-paging>
+                                <dxo-paging [enabled]="true" [pageSize]="10"
+                                    [pageIndex]="1"></dxo-paging>
                                 <dxo-selection mode="single"></dxo-selection>
                                 <!-- <dxi-column type="buttons" caption [visible]="disableDelete" [fixed]="true"
                                         fixedPosition="right">
@@ -280,8 +329,11 @@
                                         icon="fa fa-edit"></dxi-button>
                                     </dxi-column> -->
                                 <!-- <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button> -->
-                                <dxi-column *ngFor="let data of orderedItemsHead" dataField="{{data}}"
-                                    caption="{{data}}" [allowEditing]="true" alignment="center"
+                                <dxi-column
+                                    *ngFor="let data of orderedItemsHead"
+                                    dataField="{{data}}"
+                                    caption="{{data}}" [allowEditing]="true"
+                                    alignment="center"
                                     [format]="data == 'Voc Date'? 'dd-MM-yyyy': ''">
                                 </dxi-column>
                                 <dxo-summary>

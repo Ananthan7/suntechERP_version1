@@ -106,7 +106,7 @@ export class SchemeReceiptComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 1,
     SEARCH_FIELD: "ACCODE",
-    SEARCH_HEADING: "Account Master",
+    SEARCH_HEADING: "Sales person",
     SEARCH_VALUE: "",
     WHERECONDITION: "ACCODE<>''",
     VIEW_INPUT: true,
@@ -862,7 +862,7 @@ export class SchemeReceiptComponent implements OnInit {
       keyboard: false,
       windowClass: "modal-full-width",
     });
-    modalRef.componentInstance.content = data;
+    modalRef.componentInstance.content = this.receiptDetailsForm.value;
     modalRef.result.then(
       (result) => {
         if (result) {
