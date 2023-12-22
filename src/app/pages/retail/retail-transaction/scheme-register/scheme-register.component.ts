@@ -210,7 +210,7 @@ export class SchemeRegisterComponent implements OnInit {
   }
   /**USE get Nationalitycode from API */
   getIDtypes() {
-    let API = 'Scheme/GeneralMaster/GetWithTypes?TYPES=ID MASTER'
+    let API = 'GeneralMaster/GetGeneralMasterList/ID MASTER'
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result: any) => {
         this.IdTypesList = result.response;
@@ -245,109 +245,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  /**USE: save button click */
-  formSubmit() {
-    if (this.schemeRegistrationForm.invalid) {
-      this.toastr.error('select all details!', 'Error', {
-        timeOut: 1000
-      });
-      return
-    }
-    
-    if (this.indexNumberStart == 0) {
-      Swal.fire({
-        title: 'Add New Schemes!',
-        text: "",
-        icon: 'error',
-        showCancelButton: false,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ok'
-      }).then((result) => {
-        // if (result.isConfirmed) {
-        // }
-      })
-      return
-    }
-    this.schemeArray = this.newSchemeItems.filter((item:any) => item.ID>0 )
-    // let Model = []
-    console.log(this.detailArray,'this.detailArray2');
-    this.detailArray.forEach((item:any,index:any)=>{
-      delete item.CustomerData['ID'];
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_UNIQUEID`, '');
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_ID`, item.CustomerData.SCHEME_ID);
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_UNITS`, item.CustomerData.SCHEME_UNITS);
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_TOTAL_VALUE`, item.CustomerData.SCHEME_TOTAL_VALUE);
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_STARTED`, this.commonService.formatDate(new Date(item.CustomerData.SCHEME_STARTED)));
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_ENDEDON`, this.commonService.formatDate(new Date(item.CustomerData.SCHEME_ENDEDON)));
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_STATUS`, item.CustomerData.SCHEME_STATUS);
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_UNITVALUE`, item.CustomerData.SCHEME_UNITVALUE);
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_CUSTCODE`, item.CustomerData.SCHEME_CUSTCODE);
-      this.formdata.append(`Model[${index}].CustomerData.sbranch_code`, item.CustomerData.sbranch_code);
-      this.formdata.append(`Model[${index}].CustomerData.PCS_SYSTEM_DATE`, this.commonService.formatDate(new Date(item.CustomerData.PCS_SYSTEM_DATE)));
-      this.formdata.append(`Model[${index}].CustomerData.SalesManCode`, item.CustomerData.SalesManCode);
-      this.formdata.append(`Model[${index}].CustomerData.AttachmentPath`, '');
-      this.formdata.append(`Model[${index}].CustomerData.BANK_ACCOUNTNO`, item.CustomerData.BANK_ACCOUNTNO);
-      this.formdata.append(`Model[${index}].CustomerData.BANK_IBANNO`, item.CustomerData.BANK_IBANNO);
-      this.formdata.append(`Model[${index}].CustomerData.BANK_SWIFTID`, item.CustomerData.BANK_SWIFTID);
-      this.formdata.append(`Model[${index}].CustomerData.BANK_EMISTARTDATE`, this.commonService.formatDate(new Date(item.CustomerData.BANK_EMISTARTDATE)));
-      this.formdata.append(`Model[${index}].CustomerData.BANK_EMIENDDATE`, this.commonService.formatDate(new Date(item.CustomerData.BANK_EMIENDDATE)));
-      this.formdata.append(`Model[${index}].CustomerData.ACTIVE`, item.CustomerData.ACTIVE);
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_REMARKS`, item.CustomerData.SCHEME_REMARKS);
-      this.formdata.append(`Model[${index}].CustomerData.CUSTOMER_ACCOUNTNO`, item.CustomerData.CUSTOMER_ACCOUNTNO);
-      this.formdata.append(`Model[${index}].CustomerData.BANK_DATE`, this.commonService.formatDate(new Date(item.CustomerData.BANK_DATE)));
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_BLOCK`, item.CustomerData.SCHEME_BLOCK);
-      this.formdata.append(`Model[${index}].CustomerData.SCHEME_ControlRedeemDate`, this.commonService.formatDate(new Date(item.CustomerData.SCHEME_ControlRedeemDate)));
-      this.formdata.append(`Model[${index}].ImageData.BRANCH_CODE`, item.ImageData.BRANCH_CODE);
-      this.formdata.append(`Model[${index}].ImageData.VOCTYPE`, item.ImageData.VOCTYPE);
-      this.formdata.append(`Model[${index}].ImageData.YEARMONTH`, item.ImageData.YEARMONTH);
-      this.formdata.append(`Model[${index}].ImageData.VOCNO`, item.ImageData.VOCNO);
-      for (let i:number = 0; i < item.Images.length; i++) {    
-        this.formdata.append("Images["+i+"].Image.File", item.Images[i]);                
-      }  
-    })
-   
-    //save API
-    this.isLoading = true;
-    let Sub: Subscription = this.dataService.postDynamicAPI('SchemeRegistration/InsertWithAttachments', this.formdata)
-      .subscribe((result: any) => {
-        this.isLoading = false;
-        if (result.status == "Success") {
-          this.detailArray = []
-          this.indexNumberStart = 0
-          this.formdata = new FormData();
-          this.fetchSchemeWithCustCode(this.schemeRegistrationForm.value.Code)
-          Swal.fire({
-            title: result.status,
-            text: result.message || "",
-            icon: 'success',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ok'
-          }).then((result) => {
-            
-          })
-        } else {
-          Swal.fire({
-            title: result.message ? result.message : 'Scheme Not Saved, try again',
-            text: "",
-            icon: 'error',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ok'
-          }).then((result) => {
-            // if (result.isConfirmed) {
-            // }
-          })
-        }
-      }, err => {
-        alert(err)
-        this.isLoading = false;
-      })
-    this.subscriptions.push(Sub)
-  }
+ 
 
   deleteTableData(){
 
@@ -400,28 +298,7 @@ export class SchemeRegisterComponent implements OnInit {
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
   }
-  //  open Jobcard in modal
-  openMadalView(data?: any) {
-    if(data){
-      this.dataToEditrow = []
-      this.dataToEditrow.push(data)
-    }else{
-      this.dataToEditrow = []
-    }
-    if (this.schemeRegistrationForm.invalid) {
-      this.toastr.error('', 'select all details!', {
-        timeOut: 1000
-      });
-      return
-    }
-    this.modalService.open(this.add_scheme, {
-      size: 'lg',
-      backdrop: true,
-      keyboard: false,
-      windowClass: 'modal-full-width'
-    });
-    
-  }
+
   openMainGridMadalView(data?: any) {
     if(data){
       this.dataToEditrow = []
@@ -438,8 +315,6 @@ export class SchemeRegisterComponent implements OnInit {
   }
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
-    console.log(data,'data');
-    
     if(data){
       this.dataToEditrow = []
       this.dataToEditrow.push(data)
@@ -475,8 +350,7 @@ export class SchemeRegisterComponent implements OnInit {
   // new rows added 
  
   addNewRow(data: any) {
-    console.log(data,'fired22');
-    let params = {
+    let params =  {
       "ID": this.indexNumberStart += 1,
       "SCHEME_UNIQUEID": '',
       "SCHEME_ID": this.commonService.nullToString(data.SchemeID),
@@ -506,17 +380,154 @@ export class SchemeRegisterComponent implements OnInit {
     this.newSchemeItems.push(params)
     
     let datas = {
-      "CustomerData": params,
-      "ImageData": {
-        "BRANCH_CODE": this.commonService.branchCode || "",
-        "VOCTYPE": "PCR",
-        "YEARMONTH": this.commonService.yearSelected,
-        "VOCNO": 0
-      },
+      "schemeData": params,
+      // "ImageData": {
+      //   "BRANCH_CODE": this.commonService.branchCode || "",
+      //   "VOCTYPE": "PCR",
+      //   "YEARMONTH": this.commonService.yearSelected,
+      //   "VOCNO": 0
+      // },
       "Images": data.Attachedfile || []
     }
     this.detailArray.push(datas)
     // this.closeModal()
+  }
+   /**USE: save button click */
+   formSubmit() {
+    if (this.schemeRegistrationForm.invalid) {
+      this.toastr.error('select all details!', 'Error', {
+        timeOut: 1000
+      });
+      return
+    }
+    
+    if (this.indexNumberStart == 0) {
+      Swal.fire({
+        title: 'Add New Schemes!',
+        text: "",
+        icon: 'error',
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ok'
+      }).then((result) => {
+        // if (result.isConfirmed) {
+        // }
+      })
+      return
+    }
+    this.schemeArray = this.newSchemeItems.filter((item:any) => item.ID>0 )
+    // let Model = []
+    this.detailArray.forEach((item:any,index:any)=>{
+      delete item.schemeData['ID'];
+      this.formdata.append(`Model[${index}].schemeData.MID`, '0');
+      this.formdata.append(`Model[${index}].schemeData.SCH_CUSTOMER_ID`, item.schemeData.SCHEME_ID);
+      this.formdata.append(`Model[${index}].schemeData.SCH_CUSTOMER_CODE`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_CUSTOMER_NAME`, item.schemeData.SCHEME_TOTAL_VALUE);
+      this.formdata.append(`Model[${index}].schemeData.SCH_SCHEME_CODE`, this.commonService.formatDate(new Date(item.schemeData.SCHEME_STARTED)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_METALCURRENCY`, this.commonService.formatDate(new Date(item.schemeData.SCHEME_ENDEDON)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_JOIN_DATE`, item.schemeData.SCHEME_STATUS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_SCHEME_PERIOD`, item.schemeData.SCHEME_UNITVALUE);
+      this.formdata.append(`Model[${index}].schemeData.SCH_FREQUENCY`, item.schemeData.SCHEME_CUSTCODE);
+      this.formdata.append(`Model[${index}].schemeData.SCH_INST_AMOUNT_FC`, item.schemeData.sbranch_code);
+      this.formdata.append(`Model[${index}].schemeData.SCH_INST_AMOUNT_CC`, this.commonService.formatDate(new Date(item.schemeData.PCS_SYSTEM_DATE)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_ASSURED_AMT_FC`, item.schemeData.SalesManCode);
+      this.formdata.append(`Model[${index}].schemeData.SCH_ASSURED_AMT_CC`, '');
+      this.formdata.append(`Model[${index}].schemeData.SCH_EXPIRE_DATE`, item.schemeData.BANK_ACCOUNTNO);
+      this.formdata.append(`Model[${index}].schemeData.SCH_REMINDER_DAYS`, item.schemeData.BANK_ACCOUNTNO);
+      this.formdata.append(`Model[${index}].schemeData.SCH_REMINDER_MODE`, item.schemeData.BANK_IBANNO);
+      this.formdata.append(`Model[${index}].schemeData.SCHEME_BONUS`, item.schemeData.BANK_SWIFTID);
+      this.formdata.append(`Model[${index}].schemeData.REMARKS`, this.commonService.formatDate(new Date(item.schemeData.BANK_EMISTARTDATE)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_UNITS`, this.commonService.formatDate(new Date(item.schemeData.BANK_EMIENDDATE)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_CANCEL_AMT`, item.schemeData.ACTIVE);
+      this.formdata.append(`Model[${index}].schemeData.SCH_STATUS`, item.schemeData.SCHEME_REMARKS);
+      this.formdata.append(`Model[${index}].schemeData.PAY_DATE`, item.schemeData.CUSTOMER_ACCOUNTNO);
+      this.formdata.append(`Model[${index}].schemeData.PAY_BRANCH_CODE`, this.commonService.formatDate(new Date(item.schemeData.BANK_DATE)));
+      this.formdata.append(`Model[${index}].schemeData.PAY_VOCTYPE`, item.schemeData.SCHEME_BLOCK);
+      this.formdata.append(`Model[${index}].schemeData.PAY_VOCNO`, this.commonService.formatDate(new Date(item.schemeData.SCHEME_ControlRedeemDate)));
+      this.formdata.append(`Model[${index}].schemeData.PAY_YEARMONTH`, this.commonService.nullToString(item.schemeData.YEARMONTH));
+      this.formdata.append(`Model[${index}].schemeData.PAY_AMOUNTFC`, (item.schemeData.SCHEME_UNITS));
+      this.formdata.append(`Model[${index}].schemeData.PAY_AMOUNTCC`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_ALERT_EMAIL`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_ALERT_MOBILE`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_SEND_ALERT`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.PAN_NUMBER`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_PAN_NUMBER`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.VOCDATE`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_CANCEL`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCH_REDEEM`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.REDEEM_REFERENCE`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.SCHEME_BRANCH`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].UNIQUEID`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCH_CUSTOMER_CODE`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCH_CUSTOMER_ID`, item.schemeData.SCHEME_UNITS);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SRNO`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].PAY_DATE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].PAY_AMOUNT_FC`, item.schemeData.SCHEME_TOTAL_VALUE);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].PAY_AMOUNT_CC`, item.schemeData.SCHEME_TOTAL_VALUE);
+      this.formdata.append(`Model[${index}].schemeData.Details[0].PAY_STATUS`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].REMAINDER_DATE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].REMAINDER_SEND`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].DT_BRANCH_CODE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_DATE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_BRANCH_CODE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_VOCTYPE`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_VOCNO`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_YEARMONTH`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_AMOUNTFC`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RCVD_AMOUNTCC`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCHBAL_AMOUNTFC`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCHBAL_AMOUNTCC`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].SCH_PARTIALLY_PAID`, '0');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RECEIPT_REF`, '');
+      this.formdata.append(`Model[${index}].schemeData.Details[0].RECEIPT_MID`, '');
+      // this.formdata.append(`Model[${index}].ImageData.BRANCH_CODE`, item.ImageData.BRANCH_CODE);
+      // this.formdata.append(`Model[${index}].ImageData.VOCTYPE`, item.ImageData.VOCTYPE);
+      // this.formdata.append(`Model[${index}].ImageData.VOCNO`, item.ImageData.VOCNO);
+      for (let i:number = 0; i < item.Images.length; i++) {    
+        this.formdata.append("Images["+i+"].Image.File", item.Images[i]);                
+      }  
+    })
+    //save API
+    this.isLoading = true;
+    let Sub: Subscription = this.dataService.postDynamicAPI('SchemeRegistration/InsertWithAttachments', this.formdata)
+      .subscribe((result: any) => {
+        this.isLoading = false;
+        if (result.status == "Success") {
+          this.detailArray = []
+          this.indexNumberStart = 0
+          this.formdata = new FormData();
+          this.fetchSchemeWithCustCode(this.schemeRegistrationForm.value.Code)
+          Swal.fire({
+            title: result.status,
+            text: result.message || "",
+            icon: 'success',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ok'
+          }).then((result) => {
+            
+          })
+        } else {
+          Swal.fire({
+            title: result.message ? result.message : 'Scheme Not Saved, try again',
+            text: "",
+            icon: 'error',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ok'
+          }).then((result) => {
+            // if (result.isConfirmed) {
+            // }
+          })
+        }
+      }, err => {
+        alert(err)
+        this.isLoading = false;
+      })
+    this.subscriptions.push(Sub)
   }
   editSchemeDetail(data: any) {
     

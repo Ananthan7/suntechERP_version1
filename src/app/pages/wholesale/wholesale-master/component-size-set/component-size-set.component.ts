@@ -34,24 +34,21 @@ subscriptions: any;
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
+
+  codetemp(data:any,value: any){
+    console.log(data);
+    this.tableData[value.data.SN - 1].Code = data.target.value;
+  }
+
+  descriptiontemp(data:any,value: any){
+    this.tableData[value.data.SN - 1].DESCRIPTION = data.target.value;
+  }
  
   ngOnInit(): void {
     console.log(this.content);
     if(this.content){
       this.setFormValues()
     }
-  }
-
-
-  componentsizesetmasterForm: FormGroup = this.formBuilder.group({
-    code:[''],
-    description  : [''],
-  
-   });
-
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
   }
 
   setFormValues() {
@@ -71,27 +68,25 @@ subscriptions: any;
    
   }
 
+  componentsizesetmasterForm: FormGroup = this.formBuilder.group({
+    code:[''],
+    description  : [''],
   
-  
-  
-  addTableData(){
+   });
+   addTableData(){
     let length = this.tableData.length;
     let sn = length + 1;
     let data =  {
       "SN": sn,
-      "CODE_1": "",
+      "Code": "",
       "DESCRIPTION": "",
     };
     this.tableData.push(data);
   }
 
-  codetemp(data:any,value: any){
-    console.log(data);
-    this.tableData[value.data.SRNO - 1].CODE_1 = data.target.value;
-  }
-
-  descriptiontemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].DESCRIPTION = data.target.value;
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
   }
 
   deleteTableData(){

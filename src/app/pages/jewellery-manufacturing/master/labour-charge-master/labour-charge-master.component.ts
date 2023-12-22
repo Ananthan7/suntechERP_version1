@@ -412,7 +412,7 @@ sizeFromCodeData: MasterSearchModel = {
 
   sieveSelected(e:any){
     console.log(e); 
-    this.diamondlabourMasterForm.controls.sieve.setValue(e.ACCOUNT_MODE);
+    this.diamondlabourMasterForm.controls.sieve.setValue(e.CODE);
   }
 
   stockCodeSelected(e:any){

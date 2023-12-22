@@ -116,6 +116,7 @@ export class JewelleryMasterComponent implements OnInit {
   itemcodeSelected(value: any) {
     console.log(value);
     this.jewellerymasterForm.controls.itemcode.setValue(value.PREFIX_CODE);
+   
   }
 
   designCodeData: MasterSearchModel = {
