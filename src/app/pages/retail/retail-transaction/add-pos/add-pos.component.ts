@@ -163,7 +163,7 @@ export class AddPosComponent implements OnInit {
   modalReference: any;
   modalReferenceSalesReturn: any;
   modalReferenceUserAuth!: NgbModalRef;
-  
+
   closeResult: any;
   karatRateDetails: any = [];
   orders: any[] = [];
@@ -495,7 +495,7 @@ export class AddPosComponent implements OnInit {
   //   Quagga.start();
   // });
 
-   giftTypeOptions = [
+  giftTypeOptions = [
     { value: 'Cash', label: 'Cash' },
     { value: 'Gold', label: 'Gold' },
     { value: 'Diamond', label: 'Diamond' },
@@ -503,7 +503,7 @@ export class AddPosComponent implements OnInit {
 
   transAttachmentList: any[] = [];
   transColumnList: any[] = [
-    
+
     { title: 'Sr #', field: 'SRNO' },
     { title: 'Code', field: 'CODE' },
     { title: 'Voucher Number', field: 'VOCNO' },
@@ -1016,7 +1016,7 @@ export class AddPosComponent implements OnInit {
           posCustomer.MOBILE
         );
 
-        
+
         this.customerDataForm.controls.tourVatRefuncYN.setValue(
           retailSaleData.TRAYN || false
         );
@@ -6669,9 +6669,9 @@ export class AddPosComponent implements OnInit {
   }
 
   postRetailSalesMaster() {
-console.log('====================this.karatRateDetails================');
-console.log(this.karatRateDetails);
-console.log('====================================');
+    console.log('====================this.karatRateDetails================');
+    console.log(this.karatRateDetails);
+    console.log('====================================');
     if (this.amlNameValidation)
       if (!this.customerDetails.AMLNAMEVALIDATION && this.customerDetails.DIGISCREENED) {
         this.amlNameValidationData = false;
@@ -7050,6 +7050,8 @@ console.log('====================================');
       this.isSaved = true;
       this.snackBar.open('Processing...');
 
+
+
       if (this.editOnly) {
         let API = `RetailSalesDataInDotnet/UpdateRetailSalesData?strBranchCode=${this.content.BRANCH_CODE}&strVocType=${this.content.VOCTYPE}&strYearMonth=${this.content.YEARMONTH}&intVocNo=${this.content.VOCNO}`
         this.suntechApi.putDynamicAPI(API, postData)
@@ -7413,12 +7415,16 @@ console.log('====================================');
       this.manageCalculations();
     }
   }
-  validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt: any = null) {
+  async validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt: any = null) {
     // alert(this.lineItemForm.value.fcn_li_net_amount)
     if (value != '') {
 
+      let isAuth: any = false;
+      if (this.userwiseDiscount)
+      isAuth = await this.openAuthModal();
+
       // alert('validateMinSalePriceByTotalAmt parseFloat(value)'+parseFloat(value)+'STOCK_COST' +this.newLineItem.STOCK_COST );
-      if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
+      if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST) ) {
 
         if (this.blockMinimumPrice == 'B') {
           if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
@@ -7446,7 +7452,7 @@ console.log('====================================');
           }
         }
         else if (this.blockMinimumPrice == 'W') {
-          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value) ) {
             this.openDialog(
               'Warning',
               // 'The rate is below to the minimum price, Do you want to Continue?',
@@ -7684,14 +7690,14 @@ console.log('====================================');
       this.manageCalculations();
     }
   }
-  async rateFunc(value: any)  {
+  async rateFunc(value: any) {
+    let isAuth: any = false;
+    // if(this.userwiseDiscount)
+    isAuth = await this.openAuthModal();
+    alert(`validated ${isAuth}`);
 
-    const isauth: any = await this.openAuthModal();
-    if (isauth) {
-      alert(`validated ${isauth}`);
-    }
     if (this.blockMinimumPrice == 'B') {
-      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value) ) {
         this.openDialog(
           'Warning',
           `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
@@ -7715,7 +7721,7 @@ console.log('====================================');
       }
     }
     else if (this.blockMinimumPrice == 'W') {
-      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value) ) {
         this.openDialog(
           'Warning',
           // 'The rate is below to the minimum price, Do you want to Continue?',
@@ -8320,7 +8326,7 @@ console.log('====================================');
 
   }
   async changeNettAmt(event: any) {
-    
+
     // console.log('==============changeNettAmt======================');
     // console.log(localStorage.getItem('fcn_li_net_amount'));
     // console.log('====================================');
@@ -10421,19 +10427,19 @@ console.log('====================================');
   }
 
   submitAuth() {
-    if(!this.authForm.invalid){
+    if (!this.authForm.invalid) {
       this.modalReferenceUserAuth.close(true);
-    }else{
-      this.snackBar.open('Please fill all fields', 'OK', {duration: 1000})
+    } else {
+      this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
     }
-    
+
   }
 
   openAuthModal() {
 
     return new Promise((resolve) => {
 
-     this.modalReferenceUserAuth = this.modalService.open(
+      this.modalReferenceUserAuth = this.modalService.open(
         this.userAuthModal,
         {
           size: "lg",
