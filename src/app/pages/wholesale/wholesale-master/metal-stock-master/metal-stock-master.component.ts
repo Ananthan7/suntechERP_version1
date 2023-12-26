@@ -19,6 +19,7 @@ export class MetalStockMasterComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
+  makingchargeTypeList: any[] = [];
   isDisplayed: boolean = false;
   disabled: boolean = true;
   isdisabled: boolean = false;
@@ -37,6 +38,31 @@ export class MetalStockMasterComponent implements OnInit {
     // this.metalstockForm.controls.PcGms = new FormControl({value: '', disabled: this.disabled})
     this.metalstockForm.controls['PcGms'].disable();
     this.metalstockForm.controls['prefix'].disable();
+
+    
+    this.makingchargeTypeList =[
+      {
+        'name':'GMS',
+        'value':'GMS'
+      },
+      {
+        'name':'PCS',
+        'value':'PCS'
+      },
+      {
+        'name':'LENGTH',
+        'value':'LENGTH'
+      },
+      {
+        'name':'GOZ',
+        'value':'GOZ'
+      },
+      {
+        'name':'%',
+        'value':'%'
+      }
+  
+    ]
   }
 
   showHideText() {
@@ -107,29 +133,37 @@ export class MetalStockMasterComponent implements OnInit {
     MTinclusive:[''],
     Inpieces:[false],
     createbarcodes:[false],
-    passpuritydifference:[''],
-    includestoneweight:[''],
-    askpercentage:[''],
-    excludetaxonmetal:[''],
-    avoidalloy:[''],
-    asksupplier:[''],
-    alloyitem:[''],
-    dustitem:[''],
-    excludetax:[''],
-    blockinallreports:[''],
-    askwastage:[''],
-    makingnetWt:[''],
-    dyestrip:[''],
-    kundan:[''],
-    blockinalltransaction:[''],
-    allownegativestock:[''],
-    blockWtinsales:[''],
-    allowlessthancost:[''],
-    finisheditem:[''],
-    excludefromtransfer:[''],
-    POPstockfilter:[''],
+    passpuritydifference:[false],
+    includestoneweight:[false],
+    askpercentage:[false],
+    excludetaxonmetal:[false],
+    avoidalloy:[false],
+    asksupplier:[false],
+    alloyitem:[false],
+    dustitem:[false],
+    excludetax:[false],
+    blockinallreports:[false],
+    askwastage:[false],
+    makingnetWt:[false],
+    dyestrip:[false],
+    kundan:[false],
+    blockinalltransaction:[false],
+    allownegativestock:[false],
+    blockWtinsales:[false],
+    allowlessthancost:[false],
+    finisheditem:[false],
+    excludefromtransfer:[false],
+    POPstockfilter:[false],
     Qtyroundoff:[''],
- 
+    collection:[''],
+    subCollection:[''],
+    stoneTypeLo:[''],
+    setting:[''],
+    shape:[''],
+    incCat:[''],
+    orderRef:[''],
+    tagDetails:[''],
+    salesTagDetails:[''],
   });
 
   costCenterData: MasterSearchModel = {
@@ -460,6 +494,126 @@ export class MetalStockMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  collectionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 198,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  subCollectionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 198,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  stoneTypeLoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Stone type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  settingCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Setting type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 33,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  incCatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 198,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  orderRefCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 198,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  collectionCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.collection.setValue(e.STOCK_CODE);
+  }
+
+  subCollectionCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.subCollection.setValue(e.STOCK_CODE);
+  }
+
+  stoneTypeLoCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.stoneTypeLo.setValue(e.CODE);
+  }
+
+  settingCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.setting.setValue(e.CODE);
+  }
+
+  shapeCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.shape.setValue(e.CODE);
+  }
+
+  incCatCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.incCat.setValue(e.STOCK_CODE);
+  }
+
+  orderRefCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.orderRef.setValue(e.STOCK_CODE);
+  }
+
+
   branchCodeSelected(e:any){
     console.log(e);
     this.metalstockForm.controls.branch.setValue(e.BRANCH_CODE);
@@ -620,7 +774,7 @@ export class MetalStockMasterComponent implements OnInit {
     let postData = {
       "MID": 0,
       "DIVISION_CODE": "s",
-      "STOCK_CODE": "md7",
+      "STOCK_CODE": "md8",
       "DESCRIPTION": this.metalstockForm.value.description || "",
       "UNIT_CODE": this.metalstockForm.value.unit || "",
       "CC_MAKING":  "md1",
@@ -673,7 +827,7 @@ export class MetalStockMasterComponent implements OnInit {
       "SUBCATEGORY_CODE": this.metalstockForm.value.subCategory || "",
       "MKGPURCOST":this.metalstockForm.value.purcostGms || "",
       "MKGSALEPRICE": this.metalstockForm.value.salespriceGms || "",
-      "EXCLUDEGSTVAT": true,
+      "EXCLUDEGSTVAT": this.metalstockForm.value.excludetaxonmetal,
       "DESCRIPTION_OTHERS": "",
       "LOYALTY_ITEM": true,
       "EXCLUDE_PROMOTION": 0,
@@ -704,21 +858,21 @@ export class MetalStockMasterComponent implements OnInit {
       "MT5_INCLUSIVE": this.metalstockForm.value.MTinclusive || "",
       "KUNDAN_UNIT_CODE":  "str",
       "KUNDAN": this.metalstockForm.value.kundan || "",
-      "UDF1": "",
-      "UDF2": "",
-      "UDF3": "",
-      "UDF4": "",
-      "UDF5": "",
-      "UDF6": "",
-      "UDF7": "",
-      "UDF8": "",
-      "UDF9": "",
-      "UDF10": "",
-      "UDF11": "",
-      "UDF12": "",
-      "UDF13": "",
-      "UDF14": "",
-      "UDF15": "",
+      "UDF1": this.metalstockForm.value.userdefined_1,
+      "UDF2": this.metalstockForm.value.userdefined_2,
+      "UDF3": this.metalstockForm.value.userdefined_3,
+      "UDF4": this.metalstockForm.value.userdefined_4,
+      "UDF5": this.metalstockForm.value.userdefined_5,
+      "UDF6": this.metalstockForm.value.userdefined_6,
+      "UDF7": this.metalstockForm.value.userdefined_7,
+      "UDF8": this.metalstockForm.value.userdefined_8,
+      "UDF9": this.metalstockForm.value.userdefined_9,
+      "UDF10": this.metalstockForm.value.userdefined_10,
+      "UDF11": this.metalstockForm.value.userdefined_11,
+      "UDF12": this.metalstockForm.value.userdefined_12,
+      "UDF13": this.metalstockForm.value.userdefined_13,
+      "UDF14": this.metalstockForm.value.userdefined_14,
+      "UDF15": this.metalstockForm.value.userdefined_15,
       "FINISHED_ITEM": this.metalstockForm.value.finisheditem || "",
       "MODEL_CODE": this.metalstockForm.value.modelcode || "",
       "AVOID_ALLOY": this.metalstockForm.value.avoidalloy || "",

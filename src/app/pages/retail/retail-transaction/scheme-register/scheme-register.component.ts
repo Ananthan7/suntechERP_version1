@@ -424,27 +424,27 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model[${index}].schemeData.SCH_CUSTOMER_ID`, item.schemeData.SCHEME_ID);
       this.formdata.append(`Model[${index}].schemeData.SCH_CUSTOMER_CODE`, item.schemeData.SCHEME_UNITS);
       this.formdata.append(`Model[${index}].schemeData.SCH_CUSTOMER_NAME`, item.schemeData.SCHEME_TOTAL_VALUE);
-      this.formdata.append(`Model[${index}].schemeData.SCH_SCHEME_CODE`, this.commonService.formatDate(new Date(item.schemeData.SCHEME_STARTED)));
-      this.formdata.append(`Model[${index}].schemeData.SCH_METALCURRENCY`, this.commonService.formatDate(new Date(item.schemeData.SCHEME_ENDEDON)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_SCHEME_CODE`, this.commonService.formatDateTime(new Date(item.schemeData.SCHEME_STARTED)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_METALCURRENCY`, this.commonService.formatDateTime(new Date(item.schemeData.SCHEME_ENDEDON)));
       this.formdata.append(`Model[${index}].schemeData.SCH_JOIN_DATE`, item.schemeData.SCHEME_STATUS);
       this.formdata.append(`Model[${index}].schemeData.SCH_SCHEME_PERIOD`, item.schemeData.SCHEME_UNITVALUE);
       this.formdata.append(`Model[${index}].schemeData.SCH_FREQUENCY`, item.schemeData.SCHEME_CUSTCODE);
-      this.formdata.append(`Model[${index}].schemeData.SCH_INST_AMOUNT_FC`, item.schemeData.sbranch_code);
-      this.formdata.append(`Model[${index}].schemeData.SCH_INST_AMOUNT_CC`, this.commonService.formatDate(new Date(item.schemeData.PCS_SYSTEM_DATE)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_INST_AMOUNT_FC`, item.schemeData.SCHEME_TOTAL_VALUE);
+      this.formdata.append(`Model[${index}].schemeData.SCH_INST_AMOUNT_CC`, item.schemeData.SCHEME_TOTAL_VALUE);
       this.formdata.append(`Model[${index}].schemeData.SCH_ASSURED_AMT_FC`, item.schemeData.SalesManCode);
       this.formdata.append(`Model[${index}].schemeData.SCH_ASSURED_AMT_CC`, '');
-      this.formdata.append(`Model[${index}].schemeData.SCH_EXPIRE_DATE`, item.schemeData.BANK_ACCOUNTNO);
-      this.formdata.append(`Model[${index}].schemeData.SCH_REMINDER_DAYS`, item.schemeData.BANK_ACCOUNTNO);
+      this.formdata.append(`Model[${index}].schemeData.SCH_EXPIRE_DATE`, this.commonService.formatDateTime(new Date(item.schemeData.SCHEME_ENDEDON)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_REMINDER_DAYS`, '');
       this.formdata.append(`Model[${index}].schemeData.SCH_REMINDER_MODE`, item.schemeData.BANK_IBANNO);
       this.formdata.append(`Model[${index}].schemeData.SCHEME_BONUS`, item.schemeData.BANK_SWIFTID);
-      this.formdata.append(`Model[${index}].schemeData.REMARKS`, this.commonService.formatDate(new Date(item.schemeData.BANK_EMISTARTDATE)));
-      this.formdata.append(`Model[${index}].schemeData.SCH_UNITS`, this.commonService.formatDate(new Date(item.schemeData.BANK_EMIENDDATE)));
+      this.formdata.append(`Model[${index}].schemeData.REMARKS`, this.commonService.formatDateTime(new Date(item.schemeData.BANK_EMISTARTDATE)));
+      this.formdata.append(`Model[${index}].schemeData.SCH_UNITS`, this.commonService.formatDateTime(new Date(item.schemeData.BANK_EMIENDDATE)));
       this.formdata.append(`Model[${index}].schemeData.SCH_CANCEL_AMT`, item.schemeData.ACTIVE);
       this.formdata.append(`Model[${index}].schemeData.SCH_STATUS`, item.schemeData.SCHEME_REMARKS);
       this.formdata.append(`Model[${index}].schemeData.PAY_DATE`, item.schemeData.CUSTOMER_ACCOUNTNO);
-      this.formdata.append(`Model[${index}].schemeData.PAY_BRANCH_CODE`, this.commonService.formatDate(new Date(item.schemeData.BANK_DATE)));
+      this.formdata.append(`Model[${index}].schemeData.PAY_BRANCH_CODE`, this.commonService.formatDateTime(new Date(item.schemeData.BANK_DATE)));
       this.formdata.append(`Model[${index}].schemeData.PAY_VOCTYPE`, item.schemeData.SCHEME_BLOCK);
-      this.formdata.append(`Model[${index}].schemeData.PAY_VOCNO`, this.commonService.formatDate(new Date(item.schemeData.SCHEME_ControlRedeemDate)));
+      this.formdata.append(`Model[${index}].schemeData.PAY_VOCNO`, '0');
       this.formdata.append(`Model[${index}].schemeData.PAY_YEARMONTH`, this.commonService.nullToString(item.schemeData.YEARMONTH));
       this.formdata.append(`Model[${index}].schemeData.PAY_AMOUNTFC`, (item.schemeData.SCHEME_UNITS));
       this.formdata.append(`Model[${index}].schemeData.PAY_AMOUNTCC`, item.schemeData.SCHEME_UNITS);
@@ -531,7 +531,7 @@ export class SchemeRegisterComponent implements OnInit {
   }
   editSchemeDetail(data: any) {
     
-    let API = 'Scheme/SchemeMaster?SCHEME_UNIQUEID=' + data.SchemeUniqueNo
+    let API = 'SchemeMaster/GetSchemeMasterDetails/'+ this.commonService.branchCode + '' + data.SchemeUniqueNo
     let params = {
       "SCHEME_UNIQUEID": data.SchemeUniqueNo,
       "SCHEME_ID": data.SchemeID || '',

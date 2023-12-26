@@ -163,7 +163,7 @@ export class AddPosComponent implements OnInit {
   modalReference: any;
   modalReferenceSalesReturn: any;
   modalReferenceUserAuth!: NgbModalRef;
-  
+
   closeResult: any;
   karatRateDetails: any = [];
   orders: any[] = [];
@@ -495,6 +495,38 @@ export class AddPosComponent implements OnInit {
   //   Quagga.start();
   // });
 
+  giftTypeOptions = [
+    { value: 'Cash', label: 'Cash' },
+    { value: 'Gold', label: 'Gold' },
+    { value: 'Diamond', label: 'Diamond' },
+  ];
+
+  transAttachmentList: any[] = [];
+  transColumnList: any[] = [
+
+    { title: 'Sr #', field: 'SRNO' },
+    { title: 'Code', field: 'CODE' },
+    { title: 'Voucher Number', field: 'VOCNO' },
+    { title: 'Voucher Type', field: 'VOCTYPE' },
+    { title: 'Voucher Date', field: 'VOCDATE' },
+    { title: 'Reference MID', field: 'REFMID' },
+    { title: 'Remarks', field: 'REMARKS' },
+    { title: 'Attachment Path', field: 'ATTACHMENT_PATH' },
+    { title: 'Unique ID', field: 'UNIQUEID' },
+    { title: 'Attachment Type', field: 'ATTACH_TYPE' },
+    { title: 'Expire Date', field: 'EXPIRE_DATE' },
+    { title: 'Branch Code', field: 'BRANCH_CODE' },
+    { title: 'Year Month', field: 'YEARMONTH' },
+    // { title: 'Doc Type', field: 'DOC_TYPE' },
+    // { title: 'Subled Code', field: 'SUBLED_CODE' },
+    // { title: 'Doc Active Status', field: 'DOC_ACTIVESTATUS' },
+    // { title: 'Doc Last Renew By', field: 'DOC_LASTRENEWBY' },
+    // { title: 'Doc Next Renew Date', field: 'DOC_NEXTRENEWDATE' },
+    // { title: 'Doc Last Renew Date', field: 'DOC_LASTRENEWDATE' },
+    // { title: 'Document Date', field: 'DOCUMENT_DATE' },
+    // { title: 'Document Number', field: 'DOCUMENT_NO' },
+    // { title: 'From KYC', field: 'FROM_KYC' },
+  ];
 
   get vocDateVal(): Date {
     return this.vocDataForm.controls.vocdate.value;
@@ -984,7 +1016,7 @@ export class AddPosComponent implements OnInit {
           posCustomer.MOBILE
         );
 
-        
+
         this.customerDataForm.controls.tourVatRefuncYN.setValue(
           retailSaleData.TRAYN || false
         );
@@ -6637,7 +6669,9 @@ export class AddPosComponent implements OnInit {
   }
 
   postRetailSalesMaster() {
-
+    console.log('====================this.karatRateDetails================');
+    console.log(this.karatRateDetails);
+    console.log('====================================');
     if (this.amlNameValidation)
       if (!this.customerDetails.AMLNAMEVALIDATION && this.customerDetails.DIGISCREENED) {
         this.amlNameValidationData = false;
@@ -6977,9 +7011,46 @@ export class AddPosComponent implements OnInit {
         metalPurchase: this.metalPurchaseDataPost,
         retailsReturn: this.retailSReturnDataPost,
         retailSales: this.retailSalesDataPost,
+
+        "additionalInfo": {
+          "giftInfo": [
+            {
+              "GIFT_TYPE": this.lineItemForm.value.fcn_li_gift_type,
+              "GIFT_CODE": this.giftTypeOptions.find(e => e.value == this.lineItemForm.value.fcn_li_gift_type)
+            }
+          ]
+        },
+        "transattachment": [
+          {
+            "VOCNO": 0,
+            "VOCTYPE": "string",
+            "VOCDATE": "2023-12-22T05:22:31.297Z",
+            "REFMID": 0,
+            "SRNO": 0,
+            "REMARKS": "string",
+            "ATTACHMENT_PATH": "string",
+            "UNIQUEID": "string",
+            "CODE": "string",
+            "ATTACH_TYPE": "string",
+            "EXPIRE_DATE": "2023-12-22T05:22:31.297Z",
+            "BRANCH_CODE": "string",
+            "YEARMONTH": "string",
+            "DOC_TYPE": "string",
+            "SUBLED_CODE": "string",
+            "DOC_ACTIVESTATUS": true,
+            "DOC_LASTRENEWBY": "string",
+            "DOC_NEXTRENEWDATE": "2023-12-22T05:22:31.297Z",
+            "DOC_LASTRENEWDATE": "2023-12-22T05:22:31.297Z",
+            "DOCUMENT_DATE": "2023-12-22T05:22:31.297Z",
+            "DOCUMENT_NO": "string",
+            "FROM_KYC": true
+          }
+        ]
       };
       this.isSaved = true;
       this.snackBar.open('Processing...');
+
+
 
       if (this.editOnly) {
         let API = `RetailSalesDataInDotnet/UpdateRetailSalesData?strBranchCode=${this.content.BRANCH_CODE}&strVocType=${this.content.VOCTYPE}&strYearMonth=${this.content.YEARMONTH}&intVocNo=${this.content.VOCNO}`
@@ -7344,12 +7415,16 @@ export class AddPosComponent implements OnInit {
       this.manageCalculations();
     }
   }
-  validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt: any = null) {
+  async validateMinSalePriceByTotalAmt(value: any, totalAmt: any, lsTotalAmt: any, nettAmt: any = null) {
     // alert(this.lineItemForm.value.fcn_li_net_amount)
     if (value != '') {
 
+      let isAuth: any = false;
+      if (this.userwiseDiscount)
+      isAuth = await this.openAuthModal();
+
       // alert('validateMinSalePriceByTotalAmt parseFloat(value)'+parseFloat(value)+'STOCK_COST' +this.newLineItem.STOCK_COST );
-      if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
+      if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST) ) {
 
         if (this.blockMinimumPrice == 'B') {
           if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
@@ -7377,7 +7452,7 @@ export class AddPosComponent implements OnInit {
           }
         }
         else if (this.blockMinimumPrice == 'W') {
-          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value) ) {
             this.openDialog(
               'Warning',
               // 'The rate is below to the minimum price, Do you want to Continue?',
@@ -7615,14 +7690,14 @@ export class AddPosComponent implements OnInit {
       this.manageCalculations();
     }
   }
-  async rateFunc(value: any)  {
+  async rateFunc(value: any) {
+    let isAuth: any = false;
+    // if(this.userwiseDiscount)
+    isAuth = await this.openAuthModal();
+    alert(`validated ${isAuth}`);
 
-    const isauth: any = await this.openAuthModal();
-    if (isauth) {
-      alert(`validated ${isauth}`);
-    }
     if (this.blockMinimumPrice == 'B') {
-      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value) ) {
         this.openDialog(
           'Warning',
           `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
@@ -7646,7 +7721,7 @@ export class AddPosComponent implements OnInit {
       }
     }
     else if (this.blockMinimumPrice == 'W') {
-      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value) ) {
         this.openDialog(
           'Warning',
           // 'The rate is below to the minimum price, Do you want to Continue?',
@@ -8251,7 +8326,7 @@ export class AddPosComponent implements OnInit {
 
   }
   async changeNettAmt(event: any) {
-    
+
     // console.log('==============changeNettAmt======================');
     // console.log(localStorage.getItem('fcn_li_net_amount'));
     // console.log('====================================');
@@ -9082,6 +9157,17 @@ export class AddPosComponent implements OnInit {
       PRINT_COUNT_ACCOPY: 0,
       PRINT_COUNT_CNTLCOPY: 0,
       SOURCEOFWEALTHANDFUNDS: '',
+      "AGENT_COMMISSION": false,
+      "EMIRATESSKYWARDSMILE": false,
+      "HOLDBARCODE": false,
+      "AGENTCOMMISSION_PER": 0,
+      "CCSALESCOMMISIONAMOUNTCC": 0,
+      "CCSALESCOMMISIONAMOUNTFC": 0,
+      "POSREFERENCEREPAIRINVOICE": "",
+      "BOOKVOCNO": "",
+      "DTREMARKS": "",
+      "GROUPREF": "",
+      "NEWMID": 0,
       RetailDetails: this.currentLineItems,
     };
     console.log('====================================');
@@ -10341,19 +10427,19 @@ export class AddPosComponent implements OnInit {
   }
 
   submitAuth() {
-    if(!this.authForm.invalid){
+    if (!this.authForm.invalid) {
       this.modalReferenceUserAuth.close(true);
-    }else{
-      this.snackBar.open('Please fill all fields', 'OK', {duration: 1000})
+    } else {
+      this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
     }
-    
+
   }
 
   openAuthModal() {
 
     return new Promise((resolve) => {
 
-     this.modalReferenceUserAuth = this.modalService.open(
+      this.modalReferenceUserAuth = this.modalService.open(
         this.userAuthModal,
         {
           size: "lg",

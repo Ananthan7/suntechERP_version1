@@ -39,7 +39,7 @@
                             <div class="col-sm-3">
                                 <div class="datepick">
                                     <input class="form-control flatpickr-input" type="text" placeholder="Select Date*"
-                                        mwlFlatpickr dateFormat="Y-m-d" formControlName="jobdate">
+                                        mwlFlatpickr dateFormat="d/m/y" formControlName="jobdate">
                                 </div>
                             </div>
                         </div>
@@ -238,7 +238,7 @@
                             <div class="col-sm-7">
                                 <div class="datepick">
                                     <input class="form-control flatpickr-input" type="text" placeholder="Select Date*"
-                                        mwlFlatpickr dateFormat="Y-m-d" formControlName="deldate">
+                                        mwlFlatpickr dateFormat="d/m/y" formControlName="deldate">
                                 </div>
                             </div>
                         </div>
@@ -275,6 +275,10 @@
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 150px;">
                                     <mat-select formControlName="lossbooking">
+                                            <mat-option value="singleMetal">Single Metal</mat-option>
+                                            <mat-option value="multipleMetal">Multiple Metal</mat-option>
+                                            <mat-option value="highestWeight">Highest Weight</mat-option>  
+                                            <mat-option value="weightedAvg">Weighted Average</mat-option>   
                                     </mat-select>
                                 </mat-form-field>
                                 <!-- <select class="form-select form-control bg-white"></select> -->
@@ -349,11 +353,11 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Parts
+                            <label for="input" class="col-sm-3 col-form-label">Screw Field
                                 : </label>
-                            <div class="col-sm-7">
+                            <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="parts" />
+                                    <input type="text" matInput formControlName="srewFiled" />
                                 </mat-form-field>
                             </div>
                         </div>

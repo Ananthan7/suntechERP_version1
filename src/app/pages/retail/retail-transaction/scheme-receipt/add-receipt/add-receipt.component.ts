@@ -153,7 +153,7 @@ export class AddReceiptComponent implements OnInit {
       }
      
     }else{
-      this.getBranchMasterList()
+      // this.getBranchMasterList()
       this.getPaymentType('Credit Card')
       this.getCreditCardMaster()
       let branch = localStorage.getItem('userbranch')
@@ -251,6 +251,10 @@ export class AddReceiptComponent implements OnInit {
   getTaxDetails() {
     let date = this.commonService.formatDate(new Date())
     let accountCode = this.content.PARTY_CODE
+    if(!accountCode){
+      this.toastr.error('Accode not found')
+      return
+    }
     let Sub: Subscription = this.dataService.getDynamicAPI(`TaxDetails?Accode=${accountCode}&strdate=${date}`)
       .subscribe((result) => {
         if (result.response) {
@@ -344,13 +348,14 @@ export class AddReceiptComponent implements OnInit {
     this.selectedTypeArray = this.typeCodeArray.filter((item: any) => item.CREDIT_CODE == event.option.value)
     this.receiptEntryForm.controls.TypeCodeDESC.setValue(this.selectedTypeArray[0].DESCRIPTION)
     this.receiptEntryForm.controls.AC_Code.setValue(this.selectedTypeArray[0].ACCODE)
+    
     if (this.selectedTypeArray[0].ACCODE != "") {
       this.getAccountMaster(this.selectedTypeArray[0].ACCODE)
     }
   }
   /**USE:  get PaymentType*/
   getPaymentType(value: string) {
-    let Sub: Subscription = this.dataService.getDynamicAPI('Scheme/ComboFilter')
+    let Sub: Subscription = this.dataService.getDynamicAPI('ComboFilter')
       .subscribe((result:any) => {
         if (result.response) {
           let data = result.response
@@ -379,7 +384,7 @@ export class AddReceiptComponent implements OnInit {
   }
   /**USE: branch autocomplete starts*/
   getBranchMasterList() {
-    let Sub: Subscription = this.dataService.getDynamicAPI('Scheme/BranchMaster')
+    let Sub: Subscription = this.dataService.getDynamicAPI('BranchMaster')
       .subscribe((result) => {
         if (result.response) {
           this.branchArray = result.response

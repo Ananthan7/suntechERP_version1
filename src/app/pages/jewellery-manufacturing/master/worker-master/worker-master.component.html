@@ -21,7 +21,7 @@
                             <mat-form-field style="width: 20%">
                                 <input type="text" FocusOnLoad matInput placeholder="Code" maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" [readonly]="viewOnlyFlag"
-                                    (focusout)="checkWorkerExists($event)"/>
+                                    (focusout)="checkWorkerExists($event)" />
                                 <mat-error *ngIf="workerMasterForm.controls.WorkerCode.touched 
                                         && workerMasterForm.controls.WorkerCode.hasError('required')">
                                     Worker Code <strong>required</strong>
@@ -147,7 +147,7 @@
                                     <mat-radio-button value="1" class="mx-2">Daily</mat-radio-button>
                                     <mat-radio-button value="2" class="mx-2">Monthly</mat-radio-button>
                                     <mat-radio-button value="3" class="mx-2">Yearly</mat-radio-button>
-                                  </mat-radio-group>
+                                </mat-radio-group>
                             </div>
                             <!-- <div class="d-flex justify-content-between">
                                 <div class="form-check">
@@ -212,7 +212,7 @@
             </div>
             <div class="row my-3">
                 <div class="col-md-12">
-                    <button type="button" mat-flat-button color="primary"  [disabled]="buttonField">Print
+                    <button type="button" mat-flat-button color="primary" [disabled]="buttonField">Print
                         Barcode
                     </button>
                 </div>

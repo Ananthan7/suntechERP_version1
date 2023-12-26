@@ -664,12 +664,30 @@
 
             <div class="col-md-2" *ngIf="posPlanetIssuing">
               <mat-form-field>
-                <mat-label>Tourism VAT Refund</mat-label>
+                <mat-label>Tourist VAT Refund</mat-label>
                 <input type="text" matInput formControlName="tourVatRefundNo" />
               </mat-form-field>
             </div>
           </div>
         </form>
+
+        <div class="row mb-2">
+          <div class="col-md-12">
+            <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" 
+            [dataSource]="transAttachmentList"
+            [showBorders]="true"
+            >
+              <dxo-paging [enabled]="false"></dxo-paging>
+              <dxo-editing mode="cell" [allowUpdating]="true">
+              </dxo-editing>
+              <dxo-selection mode="multiple"></dxo-selection>
+
+              <dxi-column *ngFor="let data of transColumnList" dataField="{{ data.field }}" caption="{{ data.title }}"
+                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
           <mat-tab-group>
@@ -3866,13 +3884,11 @@
                         />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-2" *ngIf="newLineItem.GIFT_VOUCHER">
+                    <div class="col-md-2" *ngIf="!newLineItem.GIFT_VOUCHER">
                       <mat-form-field>
                         <mat-label>Gift Type</mat-label>
                         <mat-select formControlName="fcn_li_gift_type">
-                          <mat-option value="Cash">Cash</mat-option>
-                          <mat-option value="Gold">Gold</mat-option>
-                          <mat-option value="Diamond">Diamond</mat-option>
+                          <mat-option *ngFor="let option of giftTypeOptions" [value]="option.value">{{ option.label }}</mat-option>
                         </mat-select>
                       </mat-form-field>
                     </div>

@@ -352,7 +352,7 @@ export class SchemeReceiptComponent implements OnInit {
     //   VIEW_INPUT: true,
     //   VIEW_TABLE: true,
     // }
-    let API = `Scheme/SchemeMaster?SCHEME_CUSTCODE=${custCode}`;
+    let API = `SchemeRegistration/GetSchemeRegistrationDetail/${custCode}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
         if (result.response) {
@@ -421,7 +421,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   //fetch from CreditCardMaster
   fetchCreditCardMaster() {
-    let API = `Scheme/CreditCardMaster`;
+    let API = `CreditCardMaster/GetCreditCardMaster`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
         if (result.response) {
@@ -742,7 +742,7 @@ export class SchemeReceiptComponent implements OnInit {
   //currency Code Change
   currencyCodeChange(value: string) {
     if (value == "") return;
-    let API = `Scheme/CurrencyMaster/${value}`;
+    let API = `CurrencyMaster/GetCurrencyMasterDetail/${value}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
         if (result.response) {
