@@ -72,11 +72,11 @@ export class SchemeReceiptComponent implements OnInit {
   SchemeMasterFindData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 59,
-    SEARCH_FIELD: "SCHEME_CODE",
-    SEARCH_HEADING: "Scheme Master",
+    LOOKUPID: 72,
+    SEARCH_FIELD: "SCH_SCHEME_CODE",
+    SEARCH_HEADING: "Scheme Registration",
     SEARCH_VALUE: "",
-    WHERECONDITION: "SCHEME_CODE<>''",
+    WHERECONDITION: "SCH_SCHEME_CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -351,13 +351,14 @@ export class SchemeReceiptComponent implements OnInit {
     this.SchemeMasterFindData = {
       PAGENO: 1,
       RECORDS: 10,
-      LOOKUPID: 59,
-      SEARCH_FIELD: "SCHEME_CODE",
-      SEARCH_HEADING: "Scheme Master",
+      LOOKUPID: 72,
+      SEARCH_FIELD: "SCH_SCHEME_CODE",
+      SEARCH_HEADING: "Scheme Registration",
       SEARCH_VALUE: "",
-      WHERECONDITION: `SCHEME_CUSTCODE = ${custCode}`,
+      WHERECONDITION: `SCH_SCHEME_CODE = '${custCode}'`,
       VIEW_INPUT: true,
       VIEW_TABLE: true,
+      LOAD_ONCLICK: true
     };
     let API = `SchemeRegistration/GetSchemeRegistrationDetail/${custCode}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
@@ -483,6 +484,8 @@ export class SchemeReceiptComponent implements OnInit {
     }
   }
   selectedScheme(data: any) {
+    console.log(data);
+    
     this.receiptDetailsForm.controls.SchemeID.setValue(data.SCHEME_CODE);
     this.receiptDetailsForm.controls.SchemeUniqueID.setValue(
       data.SCHEME_UNIQUEID
