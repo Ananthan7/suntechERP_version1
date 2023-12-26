@@ -48,7 +48,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 10,
     SEARCH_FIELD: 'DESCRIPTION',
-    SEARCH_HEADING: 'Ordertype Code',
+    SEARCH_HEADING: 'Order type',
     SEARCH_VALUE: '',
     WHERECONDITION: "DESCRIPTION<> ''",
     VIEW_INPUT: true,
