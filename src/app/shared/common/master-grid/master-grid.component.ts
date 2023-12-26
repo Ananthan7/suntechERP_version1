@@ -105,7 +105,7 @@ export class MasterGridComponent implements OnInit {
           "FILTER": {
             "YEARMONTH": localStorage.getItem('YEAR') || '',
             "BRANCH_CODE": this.CommonService.branchCode,
-            "VOCTYPE": this.vocType || ""
+            "VOCTYPE": this.vocType != 'SCR' ? this.vocType : ""
           },
           "TRANSACTION": {
             "VOCTYPE": this.vocType || "",

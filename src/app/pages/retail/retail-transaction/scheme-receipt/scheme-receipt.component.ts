@@ -1,17 +1,7 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from "@angular/core";
+import { Component, ElementRef, OnInit, Renderer2, ViewChild, } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import {
-  NgbActiveModal,
-  NgbModal,
-  NgbModalRef,
-} from "@ng-bootstrap/ng-bootstrap";
+import {  NgbActiveModal,  NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
@@ -82,11 +72,11 @@ export class SchemeReceiptComponent implements OnInit {
   SchemeMasterFindData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 59,
-    SEARCH_FIELD: "SCHEME_CODE",
-    SEARCH_HEADING: "Scheme Master",
+    LOOKUPID: 72,
+    SEARCH_FIELD: "SCH_SCHEME_CODE",
+    SEARCH_HEADING: "Scheme Registration",
     SEARCH_VALUE: "",
-    WHERECONDITION: "SCHEME_CODE<>''",
+    WHERECONDITION: "SCH_SCHEME_CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -105,13 +95,13 @@ export class SchemeReceiptComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 1,
-    SEARCH_FIELD: "ACCODE",
-    SEARCH_HEADING: "Sales person",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<>''",
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Salesman',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  };
+  }
   // dateRegPattern = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
   receiptDetailsForm: FormGroup = this.formBuilder.group({
     Branch: ["", [Validators.required]],
@@ -135,6 +125,7 @@ export class SchemeReceiptComponent implements OnInit {
     POSCustomerMobile: [""],
     Narration: [""],
     MID: [""],
+    SCHEME_AMOUNT: [""],
   });
   private subscriptions: Subscription[] = [];
   constructor(
@@ -176,18 +167,23 @@ export class SchemeReceiptComponent implements OnInit {
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue("COMPANYCURRENCY");
+    let CURRENCY_CODE =
+      this.commonService.getCompanyParamValue("COMPANYCURRENCY");
     this.receiptDetailsForm.controls.CurrCode.setValue(CURRENCY_CODE);
     this.setCurrencyRate();
   }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter(
-      (item: any) => item.CURRENCY_CODE == this.receiptDetailsForm.value.CurrCode
+      (item: any) =>
+        item.CURRENCY_CODE == this.receiptDetailsForm.value.CurrCode
     );
     if (CURRENCY_RATE.length > 0) {
       this.receiptDetailsForm.controls.CurrRate.setValue(
-        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE,"RATE")
+        this.commonService.decimalQuantityFormat(
+          CURRENCY_RATE[0].CONV_RATE,
+          "RATE"
+        )
       );
     } else {
       this.receiptDetailsForm.controls.currency.setValue("");
@@ -352,6 +348,18 @@ export class SchemeReceiptComponent implements OnInit {
     //   VIEW_INPUT: true,
     //   VIEW_TABLE: true,
     // }
+    this.SchemeMasterFindData = {
+      PAGENO: 1,
+      RECORDS: 10,
+      LOOKUPID: 72,
+      SEARCH_FIELD: "SCH_SCHEME_CODE",
+      SEARCH_HEADING: "Scheme Registration",
+      SEARCH_VALUE: "",
+      WHERECONDITION: `SCH_SCHEME_CODE = '${custCode}'`,
+      VIEW_INPUT: true,
+      VIEW_TABLE: true,
+      LOAD_ONCLICK: true
+    };
     let API = `SchemeRegistration/GetSchemeRegistrationDetail/${custCode}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
@@ -363,6 +371,9 @@ export class SchemeReceiptComponent implements OnInit {
               // this.receiptDetailsForm.controls.SchemeID.setValue(data[0].SCHEME_ID)
               // this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data[0].SCHEME_UNIQUEID)
               // this.newReceiptData.SCHEME_AMOUNT = data[0]?.SCHEME_TOTAL_VALUE
+              this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(
+                this.commonService.emptyToZero(data[0].SCHEME_AMOUNT)
+              )
               // this.MasterFindIcon.openMasterSearch(API)
             } else {
               this.receiptDetailsForm.controls.SchemeID.setValue("");
@@ -473,13 +484,15 @@ export class SchemeReceiptComponent implements OnInit {
     }
   }
   selectedScheme(data: any) {
-    this.receiptDetailsForm.controls.SchemeID.setValue(data.SCHEME_ID);
+    console.log(data);
+    
+    this.receiptDetailsForm.controls.SchemeID.setValue(data.SCHEME_CODE);
     this.receiptDetailsForm.controls.SchemeUniqueID.setValue(
       data.SCHEME_UNIQUEID
     );
     this.receiptDetailsForm.controls.SchemeUnits.setValue(data.SCHEME_UNITS);
+    this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(data.SCHEME_TOTAL_VALUE);
     this.newReceiptData.SCHEME_AMOUNT = data.SCHEME_TOTAL_VALUE;
-    // this.newReceiptData.SCHEME_AMOUNT = data.SCHEME_AMOUNT
   }
   //customer selection from search
   selectedCustomer(data: any) {
@@ -843,6 +856,7 @@ export class SchemeReceiptComponent implements OnInit {
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
     console.log(data, "data");
+    console.log(this.newReceiptData);
 
     if (data) {
       this.dataToEditrow = [];
@@ -967,47 +981,86 @@ export class SchemeReceiptComponent implements OnInit {
       TOTAL_AMOUNTCC: this.TOTAL_AMOUNTLC || 0,
       REMARKS: this.receiptDetailsForm.value.Narration || "",
       SYSTEM_DATE: this.commonService.formatDate(new Date(this.currentDate)),
-      NavSeqNo: 0,
-      HawalaCommCode: "",
-      HawalaCommPer: 0,
+      NAVSEQNO: 0,
+      HAWALACOMMCODE: "",
+      HAWALACOMMPER: 0,
       FLAG_UPDATED: "N",
       FLAG_INPROCESS: "N",
       SUPINVNO: "",
       SUPINVDATE: this.commonService.formatDate(new Date(this.currentDate)),
+      HHACCOUNT_HEAD: this.rightSideHeader || "Advance From Retail Customers",
       SALESPERSON_CODE: this.receiptDetailsForm.value.Salesman || "",
       BALANCE_FC: this.totalValue_FC || 0,
       BALANCE_CC: this.totalValue || 0,
-      AuthorizedPosting: true,
+      AUTHORIZEDPOSTING: true,
       AUTOGENREF: "",
       AUTOGENMID: 0,
       AUTOGENVOCTYPE: "",
       OUSTATUSNEW: 1,
-      hhaccount_head: this.rightSideHeader || "Advance From Retail Customers",
+      POSCUSTOMERCODE: this.receiptDetailsForm.value.POSCustomerCode || "",
       D2DTRANSFER: "F",
-      POSCustomerCode: this.receiptDetailsForm.value.POSCustomerCode || "",
       DRAFT_FLAG: "",
       POSSCHEMEID: this.receiptDetailsForm.value.SchemeUniqueID || 0,
-      FLAG_EDIT_ALLOW: "Y",
-      AdvReturn: false,
+      PARTY_ADDRESS: "",
+      AUTOPOSTING: true,
       POSTDATE:
         this.commonService.formatDate(
           new Date(this.receiptDetailsForm.value.PostedDate)
         ) || this.commonService.formatDate(new Date(this.currentDate)),
-      HTUSERNAME: this.commonService.userName || "",
-      GENSEQNO: 0,
-      HVAT_AMOUNT_CC: this.VATAmount || 0,
-      HVAT_AMOUNT_FC: this.VATAmount_FC || 0,
-      HTOTALAMOUNTWITHVAT_CC: this.totalValue || 0,
-      HTOTALAMOUNTWITHVAT_FC: this.totalValue_FC || 0,
-      POSORDER_REF: "",
-      FROM_TOUCH: false,
+      FLAG_EDIT_ALLOW: "Y",
+
+      // AdvReturn: false,
+      // HTUSERNAME: this.commonService.userName || "",
+      // GENSEQNO: 0,
+      // HVAT_AMOUNT_CC: this.VATAmount || 0,
+      // HVAT_AMOUNT_FC: this.VATAmount_FC || 0,
+      // HTOTALAMOUNTWITHVAT_CC: this.totalValue || 0,
+      // HTOTALAMOUNTWITHVAT_FC: this.totalValue_FC || 0,
+      // POSORDER_REF: "",
+      // FROM_TOUCH: false,
+      // ADRRETURNREF: "",
+      // CancelledPosting: false,
+      // REPAIR_REF: "",
+      // CUSTOMER_NAME: this.receiptDetailsForm.value.POSCustomerName || "",
+      // CUSTOMER_ADDRESS: "",
+      // GIFT_CARDNO: "",
+      // CUSTOMER_MOBILE: this.receiptDetailsForm.value.POSCustomerMobile || "",
+
+      BASE_CURRENCY: this.commonService.nullToString(this.receiptDetailsForm.value.CurrCode),
+      BASE_CURR_RATE: this.commonService.emptyToZero(this.receiptDetailsForm.value.CurrRate),
+      BASE_CONV_RATE: 0, //Todo
+      PRINT_COUNT: 0,
+      DOC_REF: "",
+      GST_REGISTERED: true,
+      GST_STATE_CODE: "",
+      GST_NUMBER: "",
+      GST_TYPE: "",
+      GST_TOTALFC: 0,
+      GST_TOTALCC: 0,
+      REC_STATUS: "",
+      CUSTOMER_NAME: this.commonService.nullToString(this.receiptDetailsForm.value.POSCustomerName),
+      CUSTOMER_MOBILE: this.commonService.nullToString(this.receiptDetailsForm.value.POSCustomerMobile),
+      CUSTOMER_EMAIL: this.commonService.nullToString(this.receiptDetailsForm.value.POSCustomerMobile),
+      TDS_CODE: "",
+      TDS_APPLICABLE: true,
+      TDS_TOTALFC: 0,
+      TDS_TOTALCC: 0,
       ADRRETURNREF: "",
-      CancelledPosting: false,
-      REPAIR_REF: "",
-      CUSTOMER_NAME: this.receiptDetailsForm.value.POSCustomerName || "",
-      CUSTOMER_ADDRESS: "",
+      ADVRETURN: false,
+      SCH_SCHEME_CODE: "",
+      SCH_CUSTOMER_ID: "",
+      REFDOCNO: "",
+      FROM_TOUCH: false,
+      SL_CODE: "",
+      SL_DESCRIPTION: "",
       GIFT_CARDNO: "",
-      CUSTOMER_MOBILE: this.receiptDetailsForm.value.POSCustomerMobile || "",
+      OT_TRANSFER_TIME: "",
+      HTUSERNAME: "",
+      DUEDAYS: 0,
+      PRINT_COUNT_ACCOPY: 0,
+      PRINT_COUNT_CNTLCOPY: 0,
+      WOOCOMCARDID: "",
+      POSORDER_REF: "",
       Details: detailsArray,
     };
     if (this.editFlag) {
@@ -1090,7 +1143,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.orderedItems = [];
     this.orderedItemsHead = [];
     this.receiptDetailsForm.controls.VocType.setValue("PCR");
- 
+
     this.isViewSchemeMasterGrid = true;
     this.isSaved = false;
   }
@@ -1116,7 +1169,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.orderedItemsHead = Object.keys(this.orderedItems[0]);
     // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
     this.calculateTotalValues();
-    this.closeModal();
+    // this.closeModal();
   }
   /**use: caluculate the total values for printing */
   private calculateTotalValues(): void {
@@ -1204,8 +1257,8 @@ export class SchemeReceiptComponent implements OnInit {
       // SunTech - POS
       WindowPrt.document.write(
         "<html><head><title> &nbsp;" +
-          // new Date().toISOString() +
-          "</title></head><style> table, th, td { border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style><body><div>"
+        // new Date().toISOString() +
+        "</title></head><style> table, th, td { border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style><body><div>"
       );
       WindowPrt.document.write(printContent.innerHTML);
       WindowPrt.document.write("</div></body></html>");
@@ -1231,7 +1284,7 @@ export class SchemeReceiptComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  deleteTableData() {}
+  deleteTableData() { }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
