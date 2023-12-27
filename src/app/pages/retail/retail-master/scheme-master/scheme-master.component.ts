@@ -22,7 +22,10 @@ export class SchemeMasterComponent implements OnInit {
   @Input() content!: any;
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
-  tableData: any[] = [];  
+  frequencyList: any[] = [];  
+  depositinList: any[] = [];  
+  receipt1List: any[] = [];  
+  receipt2List: any[] = [];  
   branchCode?: String;
   yearMonth?: String;
 
@@ -69,6 +72,34 @@ export class SchemeMasterComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
+    let frequencyAPI = 'ComboFilter/scheme%20frequency';
+    let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+        this.frequencyList = resp.response
+      }
+    });
+    let depositinAPI = 'ComboFilter/scheme%20type';
+    let subs: Subscription = this.dataService.getDynamicAPI(depositinAPI).subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+        this.depositinList = resp.response
+      }
+    });
+
+    let receiptAPI = 'CreditCardMaster/GetReceiptModes/3/'+this.branchCode;
+    let receipts1: Subscription = this.dataService.getDynamicAPI(receiptAPI).subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+        this.receipt1List = resp.response
+      }
+    });
+
+    let receiptAPI2 = 'CreditCardMaster/GetReceiptModes/2/'+this.branchCode;
+    let receipts2: Subscription = this.dataService.getDynamicAPI(receiptAPI2).subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+        this.receipt2List = resp.response
+      }
+    });
+
   }
 
   prefixSelected(e:any){
@@ -99,20 +130,20 @@ export class SchemeMasterComponent implements OnInit {
           "SCHEME_CODE": this.schemeMasterForm.value.code,
           "SCHEME_NAME": this.schemeMasterForm.value.description,
           "SCHEME_UNIT": 0,
-          "SCHEME_BONUS": 0,
+          "SCHEME_BONUS": this.schemeMasterForm.value.bonusInstallment,
           "SCHEME_PERIOD": 0,
           "SCHEME_REMARKS": this.schemeMasterForm.value.remarks,
-          "SCHEME_AMOUNT": 0,
+          "SCHEME_AMOUNT": this.schemeMasterForm.value.installmentAmount,
           "SCHEME_METALCURRENCY": 0,
-          "CANCEL_CHARGE": 0,
+          "CANCEL_CHARGE": this.schemeMasterForm.value.cancelCharges,
           "SCHEME_FREQUENCY": this.schemeMasterForm.value.frequency,
           "STATUS": true,
           "START_DATE": this.schemeMasterForm.value.startDate,
           "SCHEME_CURRENCY_CODE": "",
           "PREFIX_CODE": this.schemeMasterForm.value.prefix,
-          "BONUS_RECTYPE": "string",
-          "CANCEL_RECTYPE": "string",
-          "INST_RECTYPE": "string",
+          "BONUS_RECTYPE": this.schemeMasterForm.value.receiptModeTwo,
+          "CANCEL_RECTYPE": this.schemeMasterForm.value.receiptModeThree,
+          "INST_RECTYPE": this.schemeMasterForm.value.receiptModeone,
           "SCHEME_FIXEDAMT": true
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -128,7 +159,7 @@ export class SchemeMasterComponent implements OnInit {
           }).then((result: any) => {
             if (result.value) {
               this.schemeMasterForm.reset()
-              this.tableData = []
+              
               this.close()
             }
           });
@@ -195,7 +226,7 @@ update(){
           }).then((result: any) => {
             if (result.value) {
               this.schemeMasterForm.reset()
-              this.tableData = []
+             
               this.close();
             }
           });
@@ -247,7 +278,7 @@ deleteSchemeMaster() {
               }).then((result: any) => {
                 if (result.value) {
                   this.schemeMasterForm.reset()
-                  this.tableData = []
+                 
                   this.close();
                 }
               });
@@ -261,7 +292,7 @@ deleteSchemeMaster() {
               }).then((result: any) => {
                 if (result.value) {
                   this.schemeMasterForm.reset()
-                  this.tableData = []
+                
                   this.close()
                 }
               });

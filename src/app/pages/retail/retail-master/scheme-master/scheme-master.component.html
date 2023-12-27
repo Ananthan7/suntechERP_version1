@@ -47,9 +47,11 @@
                     <div class="col-md-2">
                         <mat-form-field  style="width: 100%;">
                             <mat-select formControlName="frequency">
-                              <mat-option value="weekly">Weekly</mat-option>
-                              <mat-option value="monthly">Monthly</mat-option>
-                              <mat-option value="yearly">Yearly</mat-option>
+                                <mat-option
+                                *ngFor="let data of frequencyList"
+                                [value]="data.ENGLISH"
+                                >{{ data.ENGLISH }}</mat-option
+                              >
                             </mat-select>
                           </mat-form-field>
                     </div>
@@ -73,7 +75,11 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeone">
-                                <mat-option value="scheme">SCHEME</mat-option>
+                                <mat-option
+                                *ngFor="let data of receipt1List" 
+                                [value]="data.CREDIT_CODE"
+                                >{{ data.CREDIT_CODE }}</mat-option
+                              >
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -89,7 +95,11 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeTwo">
-                                <mat-option value="bonus">BONUS</mat-option>
+                                <mat-option
+                                *ngFor="let data of receipt2List" 
+                                [value]="data.CREDIT_CODE"
+                                >{{ data.CREDIT_CODE }}</mat-option
+                              >
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -105,7 +115,11 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeThree">
-                                <mat-option  value="bonus">BONUS</mat-option>
+                                <mat-option
+                                *ngFor="let data of receipt2List" 
+                                [value]="data.CREDIT_CODE"
+                                >{{ data.CREDIT_CODE }}</mat-option
+                              >
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -115,7 +129,11 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <mat-select formControlName="depositIn">
-                                <mat-option>Amount</mat-option>
+                                <mat-option
+                                *ngFor="let data of depositinList"
+                                [value]="data.ENGLISH"
+                                >{{ data.ENGLISH }}</mat-option
+                              >
                              </mat-select>
                         </mat-form-field>
                     </div>
