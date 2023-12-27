@@ -60,10 +60,10 @@ export class ProcessMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
+    SEARCH_FIELD: 'Process_Code',
     SEARCH_HEADING: 'Recov Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<> ''",
+    WHERECONDITION: "Process_Code<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -176,6 +176,10 @@ export class ProcessMasterComponent implements OnInit {
       this.setFormValues()
     }
     this.getProcessTypeOptions()
+
+    this.processMasterForm.controls['loss_max'].disable();
+    this.processMasterForm.controls['loss_min'].disable();
+    this.processMasterForm.controls['min_end'].disable();
   }
   // USE: get select options Process TypeMaster
   private getProcessTypeOptions():void {
@@ -341,12 +345,12 @@ export class ProcessMasterComponent implements OnInit {
   }
   ACCODESelected(e: any) {
     console.log(e);
-    this.processMasterForm.controls.WIP_ACCOUNT.setValue(e.ACCODE);
+    this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
   }
 
   StockProcesSelected(e: any){
     console.log(e);
-    this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
+    this.processMasterForm.controls.recStockCode.setValue(e.Process_Code);
   }
   accountStartSelected(e: any){
     console.log(e);
@@ -520,6 +524,18 @@ export class ProcessMasterComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+
+  onlossChange(event:any){  
+    console.log(event);
+    if(event.target.checked == true){
+      this.processMasterForm.controls['loss_max'].enable();
+      this.processMasterForm.controls['loss_min'].enable();
+    }
+    else{
+      this.processMasterForm.controls['loss_min'].disable();
+      this.processMasterForm.controls['loss_max'].disable();
+    }
   }
 
 }

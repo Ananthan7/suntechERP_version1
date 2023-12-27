@@ -8,3 +8,15 @@
     font-size: 12px;
     padding: 2px 10px 2px 10px;
   }
+  
+  ::ng-deep .checkboxes-mode {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+  }
+  ​
+  ::ng-deep .option > .dx-selectbox {
+    width: 150px;
+    display: inline-block;
+    vertical-align: middle;
+  }
