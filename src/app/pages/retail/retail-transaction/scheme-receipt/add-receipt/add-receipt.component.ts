@@ -199,7 +199,8 @@ export class AddReceiptComponent implements OnInit {
       this.toastr.error('select all required details!');
       return;
     } else {
-      this.newRowSaveClick.emit(this.receiptEntryForm.value)
+      this.close(this.receiptEntryForm.value)
+      // this.newRowSaveClick.emit(this.receiptEntryForm.value)
     }
   }
   
@@ -249,8 +250,10 @@ export class AddReceiptComponent implements OnInit {
   }
   //USE to get HSN and VAT and calculations
   getTaxDetails() {
+    console.log(this.content,'fired');
+    
     let date = this.commonService.formatDate(new Date())
-    let accountCode = this.content.PARTY_CODE
+    let accountCode = this.content.PartyCode
     if(!accountCode){
       this.toastr.error('Accode not found')
       return
@@ -262,7 +265,7 @@ export class AddReceiptComponent implements OnInit {
 
           this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_SAC_CODE);
           this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER);
-
+          this.content.SCHEME_AMOUNT = 100 //TODO
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
 
