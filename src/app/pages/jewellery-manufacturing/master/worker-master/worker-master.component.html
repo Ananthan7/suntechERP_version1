@@ -75,7 +75,7 @@
                         <span class="col-sm-4 col-form-label">Loss Allowed :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput numericInput class="text-right" autocomplete="LossAllowed"
+                                <input type="number" matInput numericInput class="text-right" autocomplete="LossAllowed"
                                     formControlName="LossAllowed" [readonly]="viewOnlyFlag" />
                             </mat-form-field>
                         </div>
@@ -98,7 +98,7 @@
                         <span class="col-sm-3 col-form-label">Target Pcs*:</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="text" matInput numericInput [readonly]="viewOnlyFlag" class="text-right"
+                                <input type="number" matInput numericInput [readonly]="viewOnlyFlag" class="text-right"
                                     formControlName="TargetPcs" />
                             </mat-form-field>
                         </div>
@@ -126,7 +126,7 @@
                             Weight(GMS)*:</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput [readonly]="viewOnlyFlag" class="text-right"
+                                <input type="number" matInput [readonly]="viewOnlyFlag" class="text-right"
                                     AmountDecimalInput formControlName="TargetWeight" />
                             </mat-form-field>
                         </div>
@@ -200,10 +200,10 @@
                             <dxi-column dataField="SrNo" width="auto" caption="Sr No" [allowEditing]="true"
                                 alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process Code "
+                            <dxi-column dataField="Process Code" width="auto" caption="Process Code "
                                 [allowEditing]="true" alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="PROCESS_DESC" width="auto" caption="Description"
+                            <dxi-column dataField="Description" width="auto" caption="Description"
                                 [allowEditing]="true" alignment="center">
                             </dxi-column>
                         </dx-data-grid>

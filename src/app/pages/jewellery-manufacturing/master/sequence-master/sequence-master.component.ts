@@ -22,6 +22,7 @@ export class SequenceMasterComponent implements OnInit {
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
   selectAll = false
+
   private subscriptions: Subscription[] = [];
 
   sequenceMasterData: MasterSearchModel = {
@@ -38,7 +39,6 @@ export class SequenceMasterComponent implements OnInit {
   sequenceMasterForm: FormGroup = this.formBuilder.group({
     sequenceCode: ['', [Validators.required]],
     sequenceDESCRIPTION: ['', [Validators.required]],
-    
     sequencePrefixCode: ['', [Validators.required]],
   })
   constructor(
@@ -55,6 +55,7 @@ export class SequenceMasterComponent implements OnInit {
     if (this.content) {
       this.setFormValues()
     }
+    
   }
   checkAll() {
     console.log(this.dataSource);

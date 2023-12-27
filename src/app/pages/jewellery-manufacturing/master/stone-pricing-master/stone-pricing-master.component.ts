@@ -181,10 +181,12 @@ export class StonePricingMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.content);
-    if (this.content) {
-      this.setFormValues()
-    }
+    console.log(this.content.FLAG);
+    if (this.content.FLAG == 'VIEW') {
+      this.viewFormValues();
+    }else if(this.content.FLAG == 'EDIT'){
+      this.setFormValues();
+    }else
     this.stonePrizeMasterForm.controls['sieve_from_desc'].disable();
     this.stonePrizeMasterForm.controls['sieve_to_desc'].disable();
 
@@ -224,6 +226,29 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
     this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
+  }
+
+  viewFormValues() {
+    if (!this.content) return
+    this.stonePrizeMasterForm.controls.price_code.setValue(this.content.CODE)
+    this.stonePrizeMasterForm.controls.sleve_set.setValue(this.content.SIEVE_SET)
+    this.stonePrizeMasterForm.controls.shape.setValue(this.content.SHAPE)
+    this.stonePrizeMasterForm.controls.sleve_form.setValue(this.content.SIEVE)
+    this.stonePrizeMasterForm.controls.sleve_to.setValue(this.content.SIEVE_TO)
+    this.stonePrizeMasterForm.controls.color.setValue(this.content.COLOR)
+    this.stonePrizeMasterForm.controls.clarity.setValue(this.content.CLARITY)
+    this.stonePrizeMasterForm.controls.sieve_from.setValue(this.content.sieve_FROM)
+    this.stonePrizeMasterForm.controls.sieve_to.setValue(this.content.sieve_TO)
+    this.stonePrizeMasterForm.controls.currency.setValue(this.content.CURRENCYCODE)
+    this.stonePrizeMasterForm.controls.carat_wt.setValue(this.content.CARAT_WT)
+    this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(this.content.sieve_FROM)
+    this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(this.content.sieve_TO)
+    this.stonePrizeMasterForm.controls.wt_from.setValue(this.content.WEIGHT_FROM)
+    this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.WEIGHT_TO)
+    this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
+    this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
+    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
+    this.stonePrizeMasterForm.disable();
   }
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {

@@ -155,21 +155,13 @@ export class MetalStockMasterComponent implements OnInit {
     excludefromtransfer:[false],
     POPstockfilter:[false],
     Qtyroundoff:[''],
-    userdefined_1:[''],
-    userdefined_2:[''],
-    userdefined_3:[''],
-    userdefined_4:[''],
-    userdefined_5:[''],
-    userdefined_6:[''],
-    userdefined_7:[''],
-    userdefined_8:[''],
-    userdefined_9:[''],
-    userdefined_10:[''],
-    userdefined_11:[''],
-    userdefined_12:[''],
-    userdefined_13:[''],
-    userdefined_14:[''],
-    userdefined_15:[''],
+    collection:[''],
+    subCollection:[''],
+    stoneTypeLo:[''],
+    setting:[''],
+    shape:[''],
+    incCat:[''],
+    orderRef:[''],
     tagDetails:[''],
     salesTagDetails:[''],
   });
@@ -501,6 +493,126 @@ export class MetalStockMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+  collectionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 198,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  subCollectionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 198,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  stoneTypeLoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Stone type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  settingCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Setting type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 33,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  incCatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 198,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  orderRefCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 198,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Link Sub',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  collectionCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.collection.setValue(e.STOCK_CODE);
+  }
+
+  subCollectionCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.subCollection.setValue(e.STOCK_CODE);
+  }
+
+  stoneTypeLoCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.stoneTypeLo.setValue(e.CODE);
+  }
+
+  settingCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.setting.setValue(e.CODE);
+  }
+
+  shapeCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.shape.setValue(e.CODE);
+  }
+
+  incCatCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.incCat.setValue(e.STOCK_CODE);
+  }
+
+  orderRefCodeSelected(e:any){
+    console.log(e);
+    this.metalstockForm.controls.orderRef.setValue(e.STOCK_CODE);
+  }
+
 
   branchCodeSelected(e:any){
     console.log(e);

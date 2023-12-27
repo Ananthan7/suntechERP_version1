@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkerMasterComponent implements OnInit {
-  workerMasterForm!:FormGroup;
+ 
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   showFilterRow!: boolean;
@@ -69,42 +69,40 @@ export class WorkerMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.content){
+    if (this.content) {
       this.setFormValues()
-    } 
-    this.workerMasterForm = this.formBuilder.group({
-      WorkerCode: ['', [Validators.required]],
-      WorkerDESCRIPTION: ['', [Validators.required]],
-      WorkerAcCode: ['', [Validators.required]],
-      NameOfSupervisor: ['', [Validators.required]],
-      DefaultProcess: ['', [Validators.required]],
-      LossAllowed: [''],
-      Password: [''],
-      TrayWeight: [''],
-      TargetPcs: [''],
-      TargetCaratWt: [''],
-      TargetMetalWt: [''],
-      TargetWeight: [''],
-      DailyTarget: ['1'],
-      MonthlyTarget: [null],
-      YearlyTarget: [null],
-      Active : [true]
-    })
+    }  
     
   }
+
+  workerMasterForm = this.formBuilder.group({
+    WorkerCode: ['', [Validators.required]],
+    WorkerDESCRIPTION: ['', [Validators.required]],
+    WorkerAcCode: ['', [Validators.required]],
+    NameOfSupervisor: ['', [Validators.required]],
+    DefaultProcess: ['', [Validators.required]],
+    LossAllowed: [''],
+    Password: [''],
+    TrayWeight: [''],
+    TargetPcs: [''],
+    TargetCaratWt: [''],
+    TargetMetalWt: [''],
+    TargetWeight: [''],
+    DailyTarget: ['1'],
+    MonthlyTarget: [null],
+    YearlyTarget: [null],
+    Active : [true]
+  })
   
   setFormValues() {
-    if(!this.content) return
-    if(this.content.flag == 'VIEW'){
-
-      this.viewOnlyFlag = true
-    }
+    if (!this.content) return
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
     this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
     this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
     this.workerMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR)
     this.workerMasterForm.controls.DefaultProcess.setValue(this.content.PROCESS_CODE)
     this.workerMasterForm.controls.LossAllowed.setValue(this.content.LOSS_ALLOWED)
+    this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE)
     this.workerMasterForm.controls.TrayWeight.setValue(this.content.TRAY_WEIGHT)
     this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS)
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.content.TARGET_CARAT_WT)
@@ -137,7 +135,7 @@ export class WorkerMasterComponent implements OnInit {
       "TOTALSAL": 0,
       "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
       "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": "",
+      "SECRET_CODE": this.workerMasterForm.value.Password || "",
       "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
       "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
       "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
