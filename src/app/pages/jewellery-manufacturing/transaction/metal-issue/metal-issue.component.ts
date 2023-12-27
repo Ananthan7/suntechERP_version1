@@ -19,7 +19,7 @@ export class MetalIssueComponent implements OnInit {
   currentFilter: any;
   divisionMS: any = 'ID';
   tableData: any[] = [];
-  columnhead: any[] = [''];
+  columnhead: any[] = ['Job Id','Uniq job Id','Design','Stock Code','Division','Description','Carat','Process','Worker','Amount'];
   metalIssueDetailsData : any[] = [];
   @Input() content!: any; 
   userName = localStorage.getItem('username');
@@ -73,7 +73,7 @@ export class MetalIssueComponent implements OnInit {
 
   metalIssueForm: FormGroup = this.formBuilder.group({
     voctype: ['DMI',''],
-    time: [new Date().getHours() + ':' + new Date().getMinutes()+ ':' +new Date().getSeconds(),''],
+    time: [new Date().getFullYear().toString() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + (new Date().getDate())).slice(-2) + 'T' + new Date().toTimeString().slice(0,5)],
     vocdate: [new Date(),''],
     enteredBy: [''],
     vocno: ['1',''],

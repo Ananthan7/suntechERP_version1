@@ -37,7 +37,8 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Time:</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%">
-                                            <input  type="time" matInput name="time" formControlName="time">
+                                            <!-- <input  type="datetime" matInput  formControlName="time"> -->
+                                            <input  type="datetime-local" matInput formControlName = "time" />
                                           </mat-form-field>
                                     </div>
                                 </div>
@@ -54,7 +55,7 @@
                                         </mat-form-field> -->
                                           <mat-form-field style="width: 72%;">
                                             <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
-                                            placeholder="YYYY/MM/DD"  DateValidation />
+                                            placeholder="DD/MM/YYYY"  DateValidation />
                                           <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                                           <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                                           </mat-form-field>
