@@ -114,6 +114,10 @@ export class SchemeRegisterComponent implements OnInit {
   ngAfterViewInit(): void {
     this.getIDtypes() //ID master list
   }
+  onRowClickHandler(data:any){
+    console.log(data,'fireddd');
+    
+  }
   customizeDate(data: any) {
     if (!data.value) return
     return data.value.slice(0, 10)
@@ -499,7 +503,7 @@ export class SchemeRegisterComponent implements OnInit {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ok'
           }).then((result) => {
-            
+            this.close('reloadMainGrid')
           })
         } else {
           Swal.fire({
