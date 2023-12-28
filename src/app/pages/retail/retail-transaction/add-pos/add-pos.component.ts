@@ -3203,6 +3203,7 @@ export class AddPosComponent implements OnInit {
             this.customerDataForm.controls.fcn_customer_code.setValue(
               result.CODE
             );
+            this.getUserAttachments();
 
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               result.MOBILE
@@ -3316,6 +3317,29 @@ export class AddPosComponent implements OnInit {
     this.inv_sales_man = this.vocDataForm.value.sales_person;
     this.inv_bill_date = this.convertDate(this.vocDataForm.value.vocdate);
     this.inv_number = this.vocDataForm.value.fcn_voc_no;
+  }
+
+
+  getUserAttachments() {
+    const custCode = this.customerDataForm.value.fcn_customer_code;
+
+    this.snackBar.open('Loading...');
+    let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}`
+    this.suntechApi.getDynamicAPI(API)
+      .subscribe((resp) => {
+    this.snackBar.dismiss();
+
+        console.log('=================resp===================');
+        console.log(resp);
+        console.log('====================================');
+        if (resp.status != 'Success') {
+
+        } else {
+
+        }
+
+      });
+
   }
 
   // private _filterSalesPerson(value: string): string[] {
@@ -3852,7 +3876,65 @@ export class AddPosComponent implements OnInit {
       "LOYALTY_POINTS": this.comFunc.emptyToZero(items['LOYALTY_POINTS']),
       "SALES_TAGLINES": items['SALES_TAGLINES'] || '',
       "COUNTRY_CODE": items['COUNTRY_CODE'] || '',
-      "DTSALESPERSON_CODE": items['DTSALESPERSON_CODE'] || ''
+      "DTSALESPERSON_CODE": items['DTSALESPERSON_CODE'] || '',
+
+
+      // new fields added - 28-12-2023
+      "COMPONENT_PRICE_TYPE": "string",
+      "DUFIX_METALGROSSWT": 0,
+      "DUFIX_DIAPCS": 0,
+      "DUFIX_DIACARAT": 0,
+      "DUFIX_STONEPCS": 0,
+      "DUFIX_STONECARAT": 0,
+      "DUFIX_METAL_WT": 0,
+      "DUFIX_FINEGOLD": 0,
+      "DUFIX_MASTERFINEGOLD": 0,
+      "DUFIX_DIACTRATEFC": 0,
+      "DUFIX_DIACTRATECC": 0,
+      "DUFIX_DIAVALUEFC": 0,
+      "DUFIX_DIAVALUECC": 0,
+      "DUFIX_CLRSTNRATEFC": 0,
+      "DUFIX_CLRSTNRATECC": 0,
+      "DUFIX_CLRSTNVALUEFC": 0,
+      "DUFIX_CLRSTNVALUECC": 0,
+      "DUFIX_METALVALUEFC": 0,
+      "DUFIX_METALVALUECC": 0,
+      "DUFIX_LABOURFC": 0,
+      "DUFIX_LABOURCC": 0,
+      "DUFIX_HMCHARGEFC": 0,
+      "DUFIX_HMCHARGECC": 0,
+      "DUFIX_CERTCHARGEFC": 0,
+      "DUFIX_CERTCHARGECC": 0,
+      "DUFIX_DWASTAGE": 0,
+      "DUFIX_PURITY": 0,
+      "DUFIX_PUDIFF": 0,
+      "DUFIX_DKARAT_CODE": "string",
+      "DUFIX_METLA_WT": 0,
+      "DUFIX_DWASTAGEPER": 0,
+      "DUFIX_DWASTAGEAMOUNTFC": 0,
+      "DUFIX_DWASTAGEAMOUNTCC": 0,
+      "DUFIX_PEARL_PCS": 0,
+      "DUFIX_PEARL_WT": 0,
+      "DUFIX_PEARL_AMTFC": 0,
+      "DUFIX_PEARL_AMTCC": 0,
+      "DUFIX_DLABUNIT": 0,
+      "DUFIX_DLABRATEFC": 0,
+      "DUFIX_DLABRATECC": 0,
+      "DUFIX_DCHARGABLEWEIGHT": 0,
+      "GIFT_ITEM": true,
+      "GSTMETALPER": 0,
+      "GSTMAKINGPER": 0,
+      "GSTOTHERPER": 0,
+      "GSTMETALAMT_CC": 0,
+      "GSTMAKINGAMT_CC": 0,
+      "GSTOTHERAMT_CC": 0,
+      "GSTMETALAMT_FC": 0,
+      "HSNCODE": "string",
+      "LESSTHANCOST_USER": "string",
+      "NEWUNIQUEID": 0,
+      "STOCKCHECKOTHERBRANCH": true,
+      "VATCODE": "string"
+
     };
 
     // temp_sales_return_items.SRNO = slno;
@@ -4765,6 +4847,13 @@ export class AddPosComponent implements OnInit {
       "SHAPE": '',
       "SIEVE": '',
       "KPNUMBER": '',
+
+      // new fields added - 27-12-2023
+      "NEWUNIQUEID": 0,
+      "DETAILPCS": 0,
+      "D_REMARKS": "string",
+      "DONE_REEXPORTYN": true,
+
     };
 
     temp_exchange_items_metal.SRNO = slno;
@@ -5472,7 +5561,56 @@ export class AddPosComponent implements OnInit {
       "UNIT_CODE": '0',
       "FLAGESTK": '0',
       "GPC_MAKINGAMT_AC": '0',
-      "DTSALESPERSON_CODE": "0"
+      "DTSALESPERSON_CODE": "0",
+
+      // new fields added - 28-12-2023
+      "COMPONENT_PRICE_TYPE": "string",
+      "DTREMARKS": "string",
+      "DUFIX_METALGROSSWT": 0,
+      "DUFIX_DIAPCS": 0,
+      "DUFIX_DIACARAT": 0,
+      "DUFIX_STONEPCS": 0,
+      "DUFIX_STONECARAT": 0,
+      "DUFIX_METAL_WT": 0,
+      "DUFIX_FINEGOLD": 0,
+      "DUFIX_MASTERFINEGOLD": 0,
+      "DUFIX_DIACTRATEFC": 0,
+      "DUFIX_DIACTRATECC": 0,
+      "DUFIX_DIAVALUEFC": 0,
+      "DUFIX_DIAVALUECC": 0,
+      "DUFIX_CLRSTNRATEFC": 0,
+      "DUFIX_CLRSTNRATECC": 0,
+      "DUFIX_CLRSTNVALUEFC": 0,
+      "DUFIX_CLRSTNVALUECC": 0,
+      "DUFIX_METALVALUEFC": 0,
+      "DUFIX_METALVALUECC": 0,
+      "DUFIX_LABOURFC": 0,
+      "DUFIX_LABOURCC": 0,
+      "DUFIX_HMCHARGEFC": 0,
+      "DUFIX_HMCHARGECC": 0,
+      "DUFIX_CERTCHARGEFC": 0,
+      "DUFIX_CERTCHARGECC": 0,
+      "DUFIX_DWASTAGE": 0,
+      "DUFIX_PURITY": 0,
+      "DUFIX_PUDIFF": 0,
+      "DUFIX_DKARAT_CODE": "string",
+      "DUFIX_METLA_WT": 0,
+      "DUFIX_DWASTAGEPER": 0,
+      "DUFIX_DWASTAGEAMOUNTFC": 0,
+      "DUFIX_DWASTAGEAMOUNTCC": 0,
+      "DUFIX_PEARL_PCS": 0,
+      "DUFIX_PEARL_WT": 0,
+      "DUFIX_PEARL_AMTFC": 0,
+      "DUFIX_PEARL_AMTCC": 0,
+      "DUFIX_DLABUNIT": 0,
+      "DUFIX_DLABRATEFC": 0,
+      "DUFIX_DLABRATECC": 0,
+      "DUFIX_DCHARGABLEWEIGHT": 0,
+      "GIFT_ITEM": false,
+      "HSNCODE": "string",
+      "LESSTHANCOST_USER": "string",
+      "NEWUNIQUEID": 0,
+      "STOCKCHECKOTHERBRANCH": false,
     };
     console.log(data);
 
@@ -7062,7 +7200,9 @@ export class AddPosComponent implements OnInit {
             "DOC_LASTRENEWDATE": "2023-12-22T05:22:31.297Z",
             "DOCUMENT_DATE": "2023-12-22T05:22:31.297Z",
             "DOCUMENT_NO": "string",
-            "FROM_KYC": true
+            "FROM_KYC": true,
+
+
           }
         ]
       };
@@ -9628,6 +9768,30 @@ export class AddPosComponent implements OnInit {
       "PURITYQUALITYREMARKS": '',
       "PARTYTRANSWISE_DESIGNATEDZONE": false,
 
+
+      // new fields added 27-12-2023
+      "DISCOUNT_PERGRM": 0,
+      "EXCLUDE_VAT": true,
+      "H_AIRWAYBILL": "string",
+      "H_BASIS": "string",
+      "H_DESTINATION": "string",
+      "H_MINER": "string",
+      "H_SHIPMENTMODE": "string",
+      "H_SHIPPER": "string",
+      "INTERNALFIXEDQTY": 0,
+      "ITEMROUNDVALUEFC": 0,
+      "NEWMID": 0,
+      "PARTYROUNDVALUEFC": 0,
+      "PARTYTRANSWISE_METALVATONMAKING": true,
+      "PLACEOFSUPPLY": "string",
+      "POSPRICESFIXED": true,
+      "SHIPMENTCOMPANY": "string",
+      "SHIPMENTPORT": "string",
+      "TAX_APPLICABLE": true,
+      "TRANSFER_BRANCH": "string",
+      "VATAMOUNTFCROUND": 0,
+      "VATAMOUNTFCROUNDCC": 0,
+
       metalPurchaseDetails: this.currentExchangeMetalPurchase,
 
     };
@@ -9869,6 +10033,13 @@ export class AddPosComponent implements OnInit {
       'PRINT_COUNT_ACCOPY': 0,
       'PRINT_COUNT_CNTLCOPY': 0,
 
+      // new fields added 28-12-2023
+      "AGENT_COMMISSION": true,
+      "AGENTCOMMISSION_PER": 0,
+      "EMIRATESSKYWARDSMILE": true,
+      "NEWMID": 0,
+      "PLANETRESPONSEFLG": true,
+      "POSREFERENCEREPAIRINVOICE": "string",
 
       retailSReturnDetails: this.currentsalesReturnItems,
     };
