@@ -75,6 +75,25 @@ export class MasterGridComponent implements OnInit {
       this.getMasterGridData();
     }
   }
+  checkVocTypeCondition(value:any){
+    if(!value) return ''
+    if(this.vocType == 'SCR') return '';
+    if(this.vocType == 'SRC') return '';
+    if(this.vocType == 'MASSCH') return '';
+    return value
+  }
+  checkVocTypeReturnNumber(value:any){
+    if(!value) return 0
+    if(this.vocType == 'SCR') return 0;
+    if(this.vocType == 'SRC') return 0;
+    if(this.vocType == 'MASSCH') return 0;
+    return value
+  }
+  checkVocTypeTable(value:any){
+    if(!value) return 0
+    if(this.vocType == 'SRC') return 'CURRENCY_RECEIPT ';
+    return value
+  }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     if (data) {
@@ -98,25 +117,25 @@ export class MasterGridComponent implements OnInit {
     let params
     if(data?.MENU_SUB_MODULE == 'Transaction' || this.vocType){
       params = {
-        "PAGENO": this.pageIndex || 1,
-        "RECORDS": this.pageSize || 10,
-        "TABLE_NAME": this.tableName,
+        "PAGENO": this.pageIndex,
+        "RECORDS": this.pageSize,
+        "TABLE_NAME": this.checkVocTypeTable(this.tableName),
         "CUSTOM_PARAM": {
           "FILTER": {
-            "YEARMONTH": localStorage.getItem('YEAR') || '',
-            "BRANCH_CODE": this.CommonService.branchCode,
-            "VOCTYPE": this.vocType != 'SCR' ? this.vocType : ""
+            "YEARMONTH": this.checkVocTypeReturnNumber(this.CommonService.yearSelected),
+            "BRANCH_CODE": this.checkVocTypeCondition(this.CommonService.branchCode),
+            "VOCTYPE": this.checkVocTypeCondition(this.vocType)
           },
           "TRANSACTION": {
-            "VOCTYPE": this.vocType || "",
-            "MAIN_VOCTYPE": this.mainVocType || "",
+            "VOCTYPE": this.CommonService.nullToString(this.vocType),
+            "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
           }
         }
       }
     }else{
       params = {
-        "PAGENO": this.pageIndex || 1,
-        "RECORDS": this.pageSize || 10,
+        "PAGENO": this.pageIndex,
+        "RECORDS": this.pageSize,
         "TABLE_NAME": this.tableName,
         "CUSTOM_PARAM": {
           // "FILTER": {
@@ -126,7 +145,7 @@ export class MasterGridComponent implements OnInit {
           // },
           "TRANSACTION": {
             // "VOCTYPE": this.vocType || "",
-            "MAIN_VOCTYPE": this.mainVocType || "",
+            "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
           }
         }
       }
