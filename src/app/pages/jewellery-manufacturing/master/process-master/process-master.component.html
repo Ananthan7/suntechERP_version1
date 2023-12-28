@@ -141,16 +141,23 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-check mt-4">
-                                <mat-checkbox formControlName="loss" class="example-margin">
-                                    Loss*</mat-checkbox>
+                                <input class="form-check-input" type="checkbox" formControlName="loss"
+                                    (change)="onlossChange($event)">
+                                <label class="form-check-label">
+                                    Loss
+                                </label>
                             </div>
                             <div class="form-check mt-4">
-                                <mat-checkbox formControlName="recovery" class="example-margin">
-                                    Recovery*</mat-checkbox>
+                                <input class="form-check-input" type="checkbox" formControlName="recovery">
+                                <label class="form-check-label">
+                                    Recovery
+                                </label>
                             </div>
                             <div class="form-check mt-4">
-                                <mat-checkbox formControlName="AllowGain" class="example-margin">
-                                    Allow Gain</mat-checkbox>
+                                <input class="form-check-input" type="checkbox" formControlName="AllowGain">
+                                <label class="form-check-label">
+                                    Allow Gain
+                                </label>
                             </div>
                         </div>
                         <div class="col-md-2">

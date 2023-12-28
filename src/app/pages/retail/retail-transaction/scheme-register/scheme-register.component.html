@@ -23,8 +23,10 @@
                             <span class="matlabels pt-3">Scheme Unique Id:
                             </span>
                             <mat-form-field style="width: 65%">
-                                <input type="text" matInput (keyup.enter)="schemeIDChange($event)"
-                                    (focusout)="schemeIDChange($event)" formControlName="SchemeId"
+                                <input type="text" matInput
+                                    (keyup.enter)="schemeIDChange($event)"
+                                    (focusout)="schemeIDChange($event)"
+                                    formControlName="SchemeId"
                                     [readonly]="viewOnly" />
                             </mat-form-field>
                         </div>
@@ -43,7 +45,7 @@
                             <input type="text" matInput formControlName="Code"
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="customerMasterData" 
+                        <master-search [MasterSearchData]="customerMasterData"
                             (newRowClick)="selectedCustomer($event)">
                         </master-search>
                     </div>
@@ -51,13 +53,17 @@
                         <span class="matlabels">Mobile No*:
                         </span>
                         <mat-form-field style="width: 65%">
-                            <input type="text" matInput (keypress)="isNumeric($event)" formControlName="MobileNo"
+                            <input type="text" matInput
+                                (keypress)="isNumeric($event)"
+                                formControlName="MobileNo"
                                 (focusout)="searchValueChange($event,'Mobile')" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="customerMasterWithMobile" 
+                        <master-search
+                            [MasterSearchData]="customerMasterWithMobile"
                             (newRowClick)="selectedCustomer($event)">
                         </master-search>
-                        <mat-error *ngIf="schemeRegistrationForm.controls.MobileNo.touched 
+                        <mat-error
+                            *ngIf="schemeRegistrationForm.controls.MobileNo.touched 
                                     && schemeRegistrationForm.controls.MobileNo.hasError('required')">
                             Mobile Number <strong>required</strong>
                         </mat-error>
@@ -68,9 +74,11 @@
                         <span class="matlabels">Name:
                         </span>
                         <mat-form-field style="width: 65%">
-                            <input type="text" matInput formControlName="Name" />
+                            <input type="text" matInput
+                                formControlName="Name" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="customerMasterWithName" 
+                        <master-search
+                            [MasterSearchData]="customerMasterWithName"
                             (newRowClick)="selectedCustomer($event)">
                         </master-search>
                     </div>
@@ -79,12 +87,15 @@
                         <span class="matlabels">Email:
                         </span>
                         <mat-form-field style="width: 65%">
-                            <input type="text" matInput formControlName="Email" />
-                            <mat-error *ngIf="schemeRegistrationForm.controls.Email.touched 
+                            <input type="text" matInput
+                                formControlName="Email" />
+                            <mat-error
+                                *ngIf="schemeRegistrationForm.controls.Email.touched 
                                     && schemeRegistrationForm.controls.Email.hasError('required')">
                                 Email <strong>required</strong>
                             </mat-error>
-                            <mat-error *ngIf="schemeRegistrationForm.controls.Email.touched 
+                            <mat-error
+                                *ngIf="schemeRegistrationForm.controls.Email.touched 
                                     && schemeRegistrationForm.controls.Email.hasError('pattern')">
                                 Email Format Not Correct
                             </mat-error>
@@ -93,20 +104,23 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-7 col-md-12 col-sm-12 d-flex">
-                        <span class="matlabels pt-3" style="width: 30%;">Government.ID
+                        <span class="matlabels pt-3"
+                            style="width: 30%;">Government.ID
                             Type/#ID:
                         </span>
                         <mat-form-field style="width: 20%;">
                             <mat-label>Id Type</mat-label>
                             <mat-select formControlName="GovIdType">
-                                <mat-option *ngFor="let item of IdTypesList" [value]="item.CODE">
+                                <mat-option *ngFor="let item of IdTypesList"
+                                    [value]="item.CODE">
                                     {{ item.CODE }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                         &nbsp;
                         <mat-form-field style="width: 45%;">
-                            <input type="text" placeholder="Id" matInput formControlName="GovIdNumber">
+                            <input type="text" placeholder="Id" matInput
+                                formControlName="GovIdNumber">
                         </mat-form-field>
                     </div>
                 </div>
@@ -131,17 +145,23 @@
     <div class="row">
         <div class="card p-3 col-md-12">
             <div class="row">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                        (addClick)="openNewSchemeDetails()" (deleteClick)="deleteTableData()">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                    [viewImportBtn]="false"
+                    (addClick)="openNewSchemeDetails()"
+                    (deleteClick)="deleteTableData()">
                 </menu-buttons>
                 <!-- <div class="m-2">
                     <button mat-flat-button color="primary" (click)="openMadalView()">Add New</button>
                 </div> -->
             </div>
             <div class="row">
-                <dx-data-grid width="100%" #gridContainer [loadPanel]="{ enabled: true, text: 'Loading...' }"
-                    id="gridContainer" [dataSource]="newSchemeItems" [showColumnLines]="true" [showRowLines]="true"
-                    [showBorders]="true" [remoteOperations]="true" [columnAutoWidth]="true"
+                <dx-data-grid width="100%" #gridContainer
+                    (onRowClick)="onRowClickHandler($event)"
+                    [loadPanel]="{ enabled: true, text: 'Loading...' }"
+                    id="gridContainer" [dataSource]="newSchemeItems"
+                    [showColumnLines]="true" [showRowLines]="true"
+                    [showBorders]="true" [remoteOperations]="true"
+                    [columnAutoWidth]="true"
                     (onCellClick)="openAttchments($event)">
                     <dxo-paging></dxo-paging>
                     <dxo-selection mode="single"></dxo-selection>
@@ -149,43 +169,57 @@
                         fixedPosition="right">
                         <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button>
                     </dxi-column> -->
-                    <dxi-column dataField="SCHEME_UNIQUEID" caption="Unique ID" [allowEditing]="true"
+                    <dxi-column dataField="SCHEME_UNIQUEID" caption="Unique ID"
+                        [allowEditing]="true"
                         alignment="center">
                     </dxi-column>
 
-                    <dxi-column dataField="SCHEME_ID" caption="Scheme ID" [allowEditing]="true" alignment="center">
+                    <dxi-column dataField="SCHEME_ID" caption="Scheme ID"
+                        [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SCHEME_TOTAL_VALUE" caption="Total Value" [allowEditing]="true"
+                    <dxi-column dataField="SCHEME_TOTAL_VALUE"
+                        caption="Total Value" [allowEditing]="true"
                         alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SCHEME_UNITS" caption="Units" [allowEditing]="true" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="SCHEME_STARTED" caption="Start Date" [customizeText]="customizeDate"
+                    <dxi-column dataField="SCHEME_UNITS" caption="Units"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SCHEME_ENDEDON" caption="End Date" [customizeText]="customizeDate"
+                    <dxi-column dataField="SCHEME_STARTED" caption="Start Date"
+                        [customizeText]="customizeDate"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="sbranch_code" caption="Branch" [allowEditing]="true" alignment="center">
+                    <dxi-column dataField="SCHEME_ENDEDON" caption="End Date"
+                        [customizeText]="customizeDate"
+                        [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SalesManCode" caption="Salesman" [allowEditing]="true" alignment="center">
+                    <dxi-column dataField="sbranch_code" caption="Branch"
+                        [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SCHEME_STATUS" caption="Status" [allowEditing]="true" alignment="center">
+                    <dxi-column dataField="SalesManCode" caption="Salesman"
+                        [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="IS_ATTACHMENT_PRESENT" cellTemplate="attachmentTemp" caption="Attachment"
+                    <dxi-column dataField="SCHEME_STATUS" caption="Status"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="IS_ATTACHMENT_PRESENT"
+                        cellTemplate="attachmentTemp" caption="Attachment"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
                     <!-- <dxi-column dataField="BlockScheme"
                         caption="Block Scheme"
                         [allowEditing]="true" alignment="center">
                     </dxi-column> -->
-                    <dxi-column type="buttons" [fixed]="true" fixedPosition="right">
-                        <dxi-button [onClick]="editRowDetails" icon="fa fa-eye"></dxi-button>
+                    <dxi-column type="buttons" [fixed]="true"
+                        fixedPosition="right">
+                        <dxi-button [onClick]="editRowDetails"
+                            icon="fa fa-eye"></dxi-button>
                         <!-- <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button> -->
                     </dxi-column>
                     <div *dxTemplate="let data of 'attachmentTemp'">
-                        <a href="javascript:void(0)" [hidden]="data.value === false">
-                            <i class="fa fa-paperclip" style="color: #337ab7"></i></a>
+                        <a href="javascript:void(0)"
+                            [hidden]="data.value === false">
+                            <i class="fa fa-paperclip"
+                                style="color: #337ab7"></i></a>
                         <dxi-button icon="fa fa-paperclip"></dxi-button>
                     </div>
                 </dx-data-grid>

@@ -714,6 +714,7 @@ export class AddPosComponent implements OnInit {
       advanceAmount: ['', [Validators.required, Validators.min(0.1)]],
       advanceVatAmountLC: [''],
       advanceVatAmountFC: [''],
+      advanceCustCode: ['', Validators.required],
     });
 
     this.othersReceiptForm = this.formBuilder.group({
@@ -1878,7 +1879,11 @@ export class AddPosComponent implements OnInit {
         // "DT_YEARMONTH": "2022",
         "RECEIPT_TYPE": "0",
         "GIFT_CARD_BRANCH": "0",
-        "WOOCOMCARDID": "0"
+        "WOOCOMCARDID": "0",
+
+        // new fields added 27-12-2023
+        "NEWUNIQUEID": 0,
+
       };
 
 
@@ -2863,6 +2868,11 @@ export class AddPosComponent implements OnInit {
 
           "POSCUSTIDEXP_DATE": this.customerDetailForm.value.fcn_customer_exp_date || this.dummyDate,
 
+          // new fields added 27-12-2023
+          "ATTACHMENT_FROM_SCANNER": true,
+          "GOOD_QUALITY_A_K_A": "string",
+          "LOW_QUALITY_A_K_A": "string",
+          "POSKNOWNABOUT": 0
         };
 
         // const apiCtrl =
@@ -6662,6 +6672,9 @@ export class AddPosComponent implements OnInit {
       data.DT_VOCNO = 0;
       data.DT_YEARMONTH = this.baseYear || localStorage.getItem('YEAR');
       data.OT_TRANSFER_TIME = new Date();
+      // new fields added - 27-12-2023
+      data.ORIGINALKARAT_RATE = data.ORIGINALKARAT_RATE || 0;
+
     });
     console.log('================this.karatRateDetails====================');
     console.log(this.karatRateDetails);
@@ -7005,6 +7018,12 @@ export class AddPosComponent implements OnInit {
           "LOOKING_FOR": this.customerDetails?.LOOKING_FOR || '',
 
           "POSCUSTIDEXP_DATE": this.customerDataForm.value.fcn_customer_exp_date || this.dummyDate,
+
+          // new fields added 27-12-2023
+          "ATTACHMENT_FROM_SCANNER": true,
+          "GOOD_QUALITY_A_K_A": "string",
+          "LOW_QUALITY_A_K_A": "string",
+          "POSKNOWNABOUT": 0
         },
         retailReceipt: this.receiptDetailsList,
         // "retailReceipt": this.receiptDetailsList.length > 0 ? this.receiptDetailsList : '',
@@ -7420,62 +7439,41 @@ export class AddPosComponent implements OnInit {
     if (value != '') {
 
       let isAuth: any = false;
-      if (this.userwiseDiscount)
-      isAuth = await this.openAuthModal();
 
       // alert('validateMinSalePriceByTotalAmt parseFloat(value)'+parseFloat(value)+'STOCK_COST' +this.newLineItem.STOCK_COST );
-      if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST) ) {
+      if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
 
         if (this.blockMinimumPrice == 'B') {
           if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
-            this.openDialog(
-              'Warning',
-              // 'The rate is below to the minimum price, Do you want to Continue?',
-              // this.comFunc.getMsgByID('MSG1731'),
-              `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-              } `,
-
-              true
-            );
-            this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == 'OK') {
-                // this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-                //   0
-                // );
-                this.lineItemForm.controls.fcn_li_total_amount.setValue(lsTotalAmt);
-                this.manageCalculations();
+            if (this.userwiseDiscount) {
+              isAuth = await this.openAuthModal();
+              if (isAuth) {
+                this.validateMinSalePriceByTotalAmtFunc('B', value, totalAmt, lsTotalAmt, nettAmt);
+              } else {
+                this.lineItemForm.controls.fcn_li_rate.setValue('');
+                this.renderer.selectRootElement('#fcn_li_rate').focus();
               }
-            });
+            } else {
+              this.validateMinSalePriceByTotalAmtFunc('B', value, totalAmt, lsTotalAmt, nettAmt);
+            }
           } else {
             this.lineItemForm.controls.fcn_li_rate.setValue(value);
             this.manageCalculations({ totalAmt: totalAmt, nettAmt });
           }
         }
         else if (this.blockMinimumPrice == 'W') {
-          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value) ) {
-            this.openDialog(
-              'Warning',
-              // 'The rate is below to the minimum price, Do you want to Continue?',
-              `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-              }`,
-              false
-            );
-            this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == 'No') {
-                // document.execCommand('undo', true, null);
-                this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                  lsTotalAmt
-                );
-                const lsNettAmt = localStorage.getItem('fcn_li_net_amount')
-                // alert('lsNettAmt'+lsNettAmt);
-                this.manageCalculations();
-                // this.manageCalculations({ nettAmt: lsNettAmt });
+          if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+            if (this.userwiseDiscount) {
+              isAuth = await this.openAuthModal();
+              if (isAuth) {
+                this.validateMinSalePriceByTotalAmtFunc('W', value, totalAmt, lsTotalAmt, nettAmt);
               } else {
-                this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
-                this.lineItemForm.controls.fcn_li_rate.setValue(value);
-                this.manageCalculations({ totalAmt: totalAmt, nettAmt });
+                this.lineItemForm.controls.fcn_li_rate.setValue('');
+                this.renderer.selectRootElement('#fcn_li_rate').focus();
               }
-            });
+            } else {
+              this.validateMinSalePriceByTotalAmtFunc('W', value, totalAmt, lsTotalAmt, nettAmt);
+            }
           } else {
             this.lineItemForm.controls.fcn_li_rate.setValue(value);
             // this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
@@ -7504,11 +7502,48 @@ export class AddPosComponent implements OnInit {
           }
         });
       }
+
     } else {
       this.lineItemForm.controls.fcn_li_rate.setValue(0);
       this.lineItemForm.controls.fcn_li_total_amount.setValue(0);
       this.manageCalculations();
     }
+
+  }
+
+  validateMinSalePriceByTotalAmtFunc(bOrW: String, value: any, totalAmt: any, lsTotalAmt: any, nettAmt: any = null) {
+
+    this.openDialog(
+      'Warning',
+      // 'The rate is below to the minimum price, Do you want to Continue?',
+      `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+      }`,
+      bOrW == 'B' ? true : false
+    );
+
+    this.dialogBox.afterClosed().subscribe((data: any) => {
+
+      if (data == 'OK') {
+        this.lineItemForm.controls.fcn_li_total_amount.setValue(lsTotalAmt);
+        this.manageCalculations();
+      }
+      if (data == 'No') {
+        // document.execCommand('undo', true, null);
+        this.lineItemForm.controls.fcn_li_total_amount.setValue(
+          lsTotalAmt
+        );
+        const lsNettAmt = localStorage.getItem('fcn_li_net_amount')
+        // alert('lsNettAmt'+lsNettAmt);
+        this.manageCalculations();
+        // this.manageCalculations({ nettAmt: lsNettAmt });
+      } else {
+        this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
+        this.lineItemForm.controls.fcn_li_rate.setValue(value);
+        this.manageCalculations({ totalAmt: totalAmt, nettAmt });
+      }
+    });
+
+
   }
   validateMinSalePrice() {
     const grossAmt = this.lineItemForm.value.fcn_li_gross_amount;
@@ -7696,50 +7731,43 @@ export class AddPosComponent implements OnInit {
     isAuth = await this.openAuthModal();
     alert(`validated ${isAuth}`);
 
+
+
+
     if (this.blockMinimumPrice == 'B') {
-      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value) ) {
-        this.openDialog(
-          'Warning',
-          `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-          }`,
-          // 'The rate is below to the minimum price, Do you want to Continue?','
-          true
-        );
-        this.dialogBox.afterClosed().subscribe((data: any) => {
-          if (data == 'OK') {
-            // this.lineItemForm.controls.fcn_li_rate.setValue(
-            //   this.blockMinimumPriceValue
-            // );
+      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+        if (this.userwiseDiscount) {
+          isAuth = await this.openAuthModal();
+          if (isAuth) {
+            this.rateFuncDetail('B', value);
+          } else {
             this.lineItemForm.controls.fcn_li_rate.setValue(
               this.zeroAmtVal
             );
             this.manageCalculations();
           }
-        });
+        } else {
+          this.rateFuncDetail('B', value);
+        }
       } else {
         this.manageCalculations();
       }
     }
     else if (this.blockMinimumPrice == 'W') {
-      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value) ) {
-        this.openDialog(
-          'Warning',
-          // 'The rate is below to the minimum price, Do you want to Continue?',
-          `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
-          }`,
-          false
-        );
-        this.dialogBox.afterClosed().subscribe((data: any) => {
-          if (data == 'No') {
+      if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
+        if (this.userwiseDiscount) {
+          isAuth = await this.openAuthModal();
+          if (isAuth) {
+            this.rateFuncDetail('W', value);
+          } else {
             this.lineItemForm.controls.fcn_li_rate.setValue(
               this.zeroAmtVal
             );
             this.manageCalculations();
-
-          } else {
-            this.manageCalculations();
           }
-        });
+        } else {
+          this.rateFuncDetail('W', value);
+        }
       }
       else {
         this.manageCalculations();
@@ -7749,6 +7777,37 @@ export class AddPosComponent implements OnInit {
       this.manageCalculations();
     }
   }
+
+  rateFuncDetail(bOrW: String, value: any) {
+    this.openDialog(
+      'Warning',
+      `${this.comFunc.getMsgByID('MSG1731')} ${this.comFunc.compCurrency} ${this.blockMinimumPriceValue
+      }`,
+      // 'The rate is below to the minimum price, Do you want to Continue?','
+      bOrW == 'B' ? true : false
+    );
+    this.dialogBox.afterClosed().subscribe((data: any) => {
+      if (data == 'OK') {
+        // this.lineItemForm.controls.fcn_li_rate.setValue(
+        //   this.blockMinimumPriceValue
+        // );
+        this.lineItemForm.controls.fcn_li_rate.setValue(
+          this.zeroAmtVal
+        );
+        this.manageCalculations();
+      }
+      if (data == 'No') {
+        this.lineItemForm.controls.fcn_li_rate.setValue(
+          this.zeroAmtVal
+        );
+        this.manageCalculations();
+
+      } else {
+        this.manageCalculations();
+      }
+    });
+  }
+
   changeRate(event: any) {
     const preVal = localStorage.getItem('fcn_li_rate');
     const value = event.target.value;
@@ -10160,7 +10219,7 @@ export class AddPosComponent implements OnInit {
     const value = this.advanceReceiptForm.value.advanceRecNo;
     if (value != '') {
       this.snackBar.open('Loading...');
-      let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/PCR/${this.advanceReceiptForm.value.advanceYear}/${this.advanceReceiptForm.value.advanceRecNo}`
+      let API = `AdvanceReceipt/GetAdvanceReceipt/${this.advanceReceiptForm.value.advanceBranch}/PCR/${this.advanceReceiptForm.value.advanceYear}/${this.advanceReceiptForm.value.advanceRecNo}/${this.advanceReceiptForm.value.advanceCustCode}`
       this.suntechApi.getDynamicAPI(API)
         .subscribe((res) => {
           this.snackBar.dismiss();

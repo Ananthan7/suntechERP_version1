@@ -144,6 +144,12 @@ export class MetalIssueDetailsComponent implements OnInit {
     
   }
 
+  jobchange(e:any){  
+      console.log(e);
+      this.metalIssueDetailsForm.controls.jobNumber.setValue(e.job_number);
+      this.metalIssueDetailsForm.controls.jobNumDes.setValue(e.job_description);     
+  }
+
 
 
   close(data?: any) {
