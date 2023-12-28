@@ -506,6 +506,7 @@ export class SchemeRegisterComponent implements OnInit {
             this.close('reloadMainGrid')
           })
         } else {
+          this.detailArray = []
           Swal.fire({
             title: result.message ? result.message : 'Scheme Not Saved, try again',
             text: "",
@@ -520,6 +521,7 @@ export class SchemeRegisterComponent implements OnInit {
           })
         }
       }, err => {
+        this.detailArray = []
         this.commonService.closeSnackBarMsg();
         this.commonService.toastErrorByMsgId('MSG1531')
         this.isLoading = false;
