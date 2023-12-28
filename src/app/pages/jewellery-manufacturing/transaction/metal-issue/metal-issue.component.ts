@@ -73,7 +73,7 @@ export class MetalIssueComponent implements OnInit {
 
   metalIssueForm: FormGroup = this.formBuilder.group({
     voctype: ['DMI',''],
-    time: [new Date().getFullYear().toString() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + (new Date().getDate())).slice(-2) + 'T' + new Date().toTimeString().slice(0,5)],
+    time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
     vocdate: [new Date(),''],
     enteredBy: [''],
     vocno: ['1',''],
