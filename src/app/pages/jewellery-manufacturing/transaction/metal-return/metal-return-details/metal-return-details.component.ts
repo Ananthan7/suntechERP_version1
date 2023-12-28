@@ -155,6 +155,8 @@ export class MetalReturnDetailsComponent implements OnInit {
     console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
     this.metalReturnDetailsForm.controls.jobDes.setValue(e.job_description);
+    this.metalReturnDetailsForm.controls.subJobNo.setValue(e.job_number);
+    this.metalReturnDetailsForm.controls.subJobNoDes.setValue(e.job_description);
   }
   ProcessCodeSelected(e:any){
     console.log(e);
