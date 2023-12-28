@@ -1945,7 +1945,7 @@
           </div>
           <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
             <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Rec No.</mat-label>
                   <input
@@ -1969,7 +1969,31 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Customer Code</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="advanceCustCode"
+                    value
+                    id="advanceCustCode"
+                    (change)="changeAdvanceVocNo($event)"
+                    [readonly]="viewOnly"
+                  />
+
+                  <mat-error
+                    *ngIf="
+                      advanceReceiptForm.controls.advanceCustCode.hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Customer Code is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
                   <input

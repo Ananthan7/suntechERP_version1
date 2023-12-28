@@ -41,8 +41,8 @@ export class KaratMasterComponent implements OnInit {
       sp_variance: [''],
       pos: [''],
       pop_minmaxamt: [''],
-      scrap: [''],
-      showinweb: [''],
+      scrap: [false],
+      showinweb: [false],
     })
 
     const standardpurityControl = this.karatmasterFrom.get('standardpurity');
@@ -148,21 +148,21 @@ export class KaratMasterComponent implements OnInit {
     let API = '/karatMaster/UpdateKaratMaster/' + this.content.KARAT_CODE
     let postData =
     {
-      "KARAT_CODE": "string",
-      "STD_PURITY": 0,
+      "KARAT_CODE": this.karatmasterFrom.value.karatcode || "",
+      "STD_PURITY": this.karatmasterFrom.value.standardpurity || 0,
       "PURITY_FROM": 0,
       "PURITY_TO": 0,
       "MID": 0,
-      "SYSTEM_DATE": "2023-11-24T10:52:32.949Z",
-      "KARAT_DESC": "string",
-      "SPGRVT": 0,
-      "POSMINMAXAMT": 0,
-      "DIVISION_CODE": "s",
-      "POPMINMAXAMT": 0,
-      "SPGRVT_VAR": 0,
+      "SYSTEM_DATE": "2023-11-24T10:50:27.839Z",
+      "KARAT_DESC": this.karatmasterFrom.value.karatcodedes || "",
+      "SPGRVT": this.karatmasterFrom.value.sp_gravity || "",
+      "POSMINMAXAMT": this.karatmasterFrom.value.pos || "",
+      "DIVISION_CODE": this.karatmasterFrom.value.division || "",
+      "POPMINMAXAMT": this.karatmasterFrom.value.pop_minmaxamt || "",
+      "SPGRVT_VAR": this.karatmasterFrom.value.sp_variance || "",
       "KARAT_DESC_AR": "string",
-      "IS_SCRAP": true,
-      "SHOWINWEB": true
+      "IS_SCRAP": this.karatmasterFrom.value.scrap,
+      "SHOWINWEB": this.karatmasterFrom.value.showinweb,
     }
 
 

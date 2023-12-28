@@ -29,18 +29,6 @@ export class StonePricingMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  sleve_setData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 86,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'sieve Set',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SIEVE SET MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
   shapeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -65,14 +53,26 @@ export class StonePricingMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  sleve_setData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 86,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'sieve Set',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'SIEVE SET MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
   sievefromData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
+    LOOKUPID: 86,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve From',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "TYPES ='SIEVE SET MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -80,11 +80,11 @@ export class StonePricingMasterComponent implements OnInit {
   sievetoData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
+    LOOKUPID: 86,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve To',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "TYPES ='SIEVE SET MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

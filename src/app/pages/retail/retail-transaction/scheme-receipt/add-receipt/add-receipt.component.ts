@@ -266,6 +266,8 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_SAC_CODE);
           this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER);
           this.content.SCHEME_AMOUNT = 100 //TODO
+          console.log(this.content.SCHEME_AMOUNT ,'this.content.SCHEME_AMOUNT ');
+          
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
 
