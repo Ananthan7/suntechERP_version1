@@ -187,7 +187,6 @@ export class SchemeReceiptComponent implements OnInit {
   }
   editRowDetails(event: any) {
     let data = event.row.data;
-    this.openMadalView(data);
   }
 
   getDetailsForEdit(MID: any) {
@@ -357,7 +356,6 @@ export class SchemeReceiptComponent implements OnInit {
               this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(
                 this.commonService.emptyToZero(data[0].PAY_AMOUNTFC)
               )
-              // this.MasterFindIcon.openMasterSearch(API)
             } else {
               this.receiptDetailsForm.controls.SchemeID.setValue("");
               this.receiptDetailsForm.controls.SchemeUniqueID.setValue("");
@@ -495,7 +493,6 @@ export class SchemeReceiptComponent implements OnInit {
   customerChange(event: any, searchFlag: string) {
     if (event.target.value == "") return;
     this.VocNumberMain = "";
-    // this.MasterFindIcon.openMasterSearch()
     this.snackBar.open("Loading ...");
     let API = `Scheme/CustomerMaster?${searchFlag}=${event.target.value}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
@@ -532,7 +529,6 @@ export class SchemeReceiptComponent implements OnInit {
   //party Code Change
   mainGridCustomerChange(event: any, searchFlag: string) {
     if (event.target.value == "") return;
-    // this.MasterFindIcon.openMasterSearch()
     this.snackBar.open("Loading ...");
     let API = `Scheme/CustomerMaster?${searchFlag}=${event.target.value}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
@@ -800,41 +796,6 @@ export class SchemeReceiptComponent implements OnInit {
   //     option.DESCRIPTION.toLowerCase().includes(filterValue));
   // }
 
-  /**USE: salesman autocomplete ends*/
-  openMadalView(data?: any) {
-    if (data) {
-      this.dataToEditrow = [];
-      this.dataToEditrow.push(data);
-    } else {
-      this.dataToEditrow = [];
-    }
-    this.newReceiptData.details = this.dataToEditrow;
-
-    if (
-      !this.receiptDetailsForm.value.POSCustomerCode ||
-      this.receiptDetailsForm.value.POSCustomerCode == ""
-    ) {
-      this.toastr.error("Customer Code Required", "", {
-        timeOut: 3000,
-      });
-      return;
-    }
-    if (
-      !this.receiptDetailsForm.value.SchemeID ||
-      this.receiptDetailsForm.value.SchemeID == ""
-    ) {
-      this.toastr.error("Scheme not available", "", {
-        timeOut: 3000,
-      });
-      return;
-    }
-    this.modalService.open(this.contentTemplate, {
-      size: "xl",
-      backdrop: "static",
-      keyboard: false,
-      windowClass: "modal-full-width",
-    });
-  }
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
     if (data) {
@@ -1061,8 +1022,7 @@ export class SchemeReceiptComponent implements OnInit {
     }
 
     this.snackBar.open("Loading ...");
-    this.dataService
-      .postDynamicAPI("SchemeCurrencyReceipt", postData)
+    this.dataService.postDynamicAPI("SchemeCurrencyReceipt", postData)
       .subscribe((result: any) => {
         this.snackBar.dismiss();
         if (result["status"] == "Success" || result.response) {
