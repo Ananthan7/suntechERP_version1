@@ -94,6 +94,10 @@ export class WorkerMasterComponent implements OnInit {
     Active : [true]
   })
   
+  printBarcode(){
+     window.print();
+  }
+
   setFormValues() {
     if (!this.content) return
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
@@ -111,6 +115,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**USE:  final save API call*/
   formSubmit() {
+    this.buttonField = false;
 
     if(this.content && this.content.FLAG == 'EDIT'){
       this.selectProcess()
@@ -162,9 +167,7 @@ export class WorkerMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.workerMasterForm.reset()
                 this.tableData = []
-                this.close('reloadMainGrid')
               }
             });
           }
@@ -351,26 +354,26 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
-    if (event.target.value == '' || this.viewOnlyFlag == true) return
-    let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          Swal.fire({
-            title: '',
-            text: 'Worker Already Exists!',
-            icon: 'warning',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.workerMasterForm.reset()
-            }
-          });
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
+  //   if (event.target.value == '' || this.viewOnlyFlag == true) return
+  //   let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         Swal.fire({
+  //           title: '',
+  //           text: 'Worker Already Exists!',
+  //           icon: 'warning',
+  //           confirmButtonColor: '#336699',
+  //           confirmButtonText: 'Ok'
+  //         }).then((result: any) => {
+  //           if (result.value) {
+  //             this.workerMasterForm.reset()
+  //           }
+  //         });
+  //       }
+  //     }, err => alert(err))
+  //   this.subscriptions.push(Sub)
+   }
   //selected field value setting
   WorkerAcCodeSelected(data: any) {
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)
@@ -380,7 +383,6 @@ export class WorkerMasterComponent implements OnInit {
   }
   defaultProcessSelected(data: any) {
     this.workerMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
-    this.buttonField = false;
   }
   workerCodeChange(event: any) {
     this.accountMasterData.SEARCH_VALUE = event.target.value

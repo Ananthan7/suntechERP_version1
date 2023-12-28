@@ -82,18 +82,38 @@
                                 <td><input type="checkbox" class="inputSec" [(ngModel)]="data['isChecked']"
                                         (change)="changedCheckbox(data)" /></td>
                                 <td>{{i+1}}</td>
-                                <td cdkDragHandle>{{data['PROCESS_CODE']}}</td>
-                                <td style="text-align: left;" cdkDragHandle>{{data['DESCRIPTION']}}</td>
-                                <td cdkDragHandle>{{data['WIP_ACCODE']}}</td>
-                                <td cdkDragHandle>{{data['GAIN_ACCODE']}}</td>
-                                <td class="text-right" cdkDragHandle>{{data['LAB_ACCODE']}}</td>
-                                <td class="text-right" cdkDragHandle>{{data['LOSS_ACCODE']}}</td>
-                                <td class="text-right" cdkDragHandle>{{data['STD_LOSS']}}</td>
-                                <td class="text-right" cdkDragHandle>{{data['MAX_LOSS']}}</td>
-                                <td contenteditable cdkDragHandle>{{data['STDTIME']}}</td>
-                                <td contenteditable cdkDragHandle>{{data['MAXTIME']}}</td>
                                 <td>
-                                    <input  type="checkbox"  [value]="data['TIMEON_PROCESS']" formControlName="calculatetime"  />
+                                    <input  type="text"  style="width: 100%;" [value]="data['PROCESS_CODE']" formControlName="PROCESS_CODE" />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['DESCRIPTION']" formControlName="DESCRIPTION" />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['WIP_ACCODE']" formControlName="WIP_ACCODE" />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['GAIN_ACCODE']" formControlName="GAIN_ACCODE" />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['LAB_ACCODE']" formControlName="LAB_ACCODE" />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['LOSS_ACCODE']" formControlName="LOSS_ACCODE" />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['STD_LOSS']" formControlName="STD_LOSS" />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['MAX_LOSS']" formControlName="MAX_LOSS" />
+                                </td>
+                                <td>
+                                    <input  type="time"  style="width: 100%;" [value]="data['STDTIME']" formControlName="STDTIME" step="2" />
+                                </td>
+                                <td>
+                                    <input  type="time"  style="width: 100%;" [value]="data['MAXTIME']" formControlName="MAXTIME" step="2" />
+                                </td>
+                                <td>
+                                    <input  type="checkbox"  [value]="data['TIMEON_PROCESS']" formControlName="calculatetime" />
                                 </td>
                                 <!-- Preview -->
                                 <div *cdkDragPreview matchSize="true" class="container dragdrop-placeholder">

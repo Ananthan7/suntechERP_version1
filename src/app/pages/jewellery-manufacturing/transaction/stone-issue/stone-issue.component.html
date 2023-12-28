@@ -40,7 +40,7 @@
                   </div>
                   <div class="col-md-4">
                     <mat-form-field style="width: 80%;">
-                      <input type="text" matInput formControlName="basecurrencyrate" />
+                      <input type="number" matInput formControlName="basecurrencyrate" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -53,14 +53,17 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Voucher Date:</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%;">
-                      <input type="date" matInput formControlName="vocdate" />
+                      <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
+                      placeholder="DD/MM/YYYY"  DateValidation />
+                    <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                     </mat-form-field>
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Currency :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Currency* :</label>
                   <div class="col-md-4">
                     <mat-form-field style="width: 80%;">
                       <input type="text" matInput formControlName="currency" />
