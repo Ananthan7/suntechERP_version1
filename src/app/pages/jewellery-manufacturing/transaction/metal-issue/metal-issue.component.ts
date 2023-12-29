@@ -27,6 +27,7 @@ export class MetalIssueComponent implements OnInit {
   yearMonth?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
 
   private subscriptions: Subscription[] = [];
   constructor(
@@ -36,6 +37,7 @@ export class MetalIssueComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    
   ) { }
 
 
@@ -72,9 +74,9 @@ export class MetalIssueComponent implements OnInit {
   }
 
   metalIssueForm: FormGroup = this.formBuilder.group({
-    voctype: ['DMI',''],
+    voctype: ['DMI','',[Validators.required]],
     time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
-    vocdate: [new Date(),''],
+    vocdate: [new Date(),'',[Validators.required]],
     enteredBy: [''],
     vocno: ['1',''],
     worker: [''],
