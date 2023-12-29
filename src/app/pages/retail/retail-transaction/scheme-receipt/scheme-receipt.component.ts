@@ -810,6 +810,8 @@ export class SchemeReceiptComponent implements OnInit {
     //   });
     //   return
     // }
+    console.log(this.receiptDetailsForm.value,'this.receiptDetailsForm.value;');
+    
     const modalRef: NgbModalRef = this.modalService.open(AddReceiptComponent, {
       size: "xl",
       backdrop: true, //'static'
