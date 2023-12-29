@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -121,7 +121,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     metalAmountFc : [''],
     metalAmountLc : [''],
     totalRateFc : [''],
-    purityDiff : [''],
+    purityDiff : ['',[Validators.required]],
     totalRateLc : [''],
     jobPcs: [''],
     jobPcsDate: [''],
@@ -155,6 +155,8 @@ export class MetalReturnDetailsComponent implements OnInit {
     console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
     this.metalReturnDetailsForm.controls.jobDes.setValue(e.job_description);
+    this.metalReturnDetailsForm.controls.subJobNo.setValue(e.job_number);
+    this.metalReturnDetailsForm.controls.subJobNoDes.setValue(e.job_description);
   }
   ProcessCodeSelected(e:any){
     console.log(e);

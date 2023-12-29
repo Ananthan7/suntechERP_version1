@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -25,7 +25,10 @@ export class MetalReturnComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   vocMaxDate = new Date();
-  currentDate = new Date();
+  currentDate: any = this.commonService.currentDate;
+  userName = this.commonService.userName;
+  companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
+
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -77,10 +80,10 @@ export class MetalReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
   metalReturnForm: FormGroup = this.formBuilder.group({
-    vocType: [''],
-    vocNo : [''],
-    vocDate : [''],
-    vocTime : [''],
+    vocType: ['DMR',[Validators.required]],
+    vocNo : ['1',[Validators.required]],
+    vocDate : ['',[Validators.required]],
+    vocTime : [new Date().toTimeString().slice(0, 5),[Validators.required]],
     vocDesc : [''],
     enteredBy : [''],
     process : [''],
@@ -102,8 +105,28 @@ export class MetalReturnComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    this.setInitialValues()
   }
 
+  setInitialValues() {
+    this.branchCode = this.commonService.branchCode;
+    // this.companyName = this.commonService.companyName;
+    this.yearMonth = this.commonService.yearSelected;
+    this.metalReturnForm.controls.vocDate.setValue(this.currentDate)
+    this.metalReturnForm.controls.vocType.setValue('DMR')
+    //this.commonService.getqueryParamVocType()
+  }
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.metalReturnForm.controls.vocdate.setValue(new Date(date))
+    }
+  }
   
   close(data?: any) {
     //TODO reset forms and data before closing
