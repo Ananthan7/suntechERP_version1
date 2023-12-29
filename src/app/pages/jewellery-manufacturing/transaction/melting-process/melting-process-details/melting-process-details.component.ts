@@ -76,20 +76,20 @@ export class MeltingProcessDetailsComponent implements OnInit {
 
 
   meltingprocessdetailsForm: FormGroup = this.formBuilder.group({
-    jobno : [''],
+    jobno : ['',[Validators.required]],
     jobdes : [''],
     jobpurity : [''],
-    process : [''],
-    processdes : [''],
-    worker : [''],
-    workerdes : [''],
+    process : ['',[Validators.required]],
+    processdes : ['',[Validators.required]],
+    worker : ['',[Validators.required]],
+    workerdes : ['',[Validators.required]],
     treeno : [''],
     waxweight : [''],
     location : [''],
     stockcode : [''],
     stockcodedes : [''],
     tostockcode : [''],
-    grossweight : [''],
+    grossweight : ['',[Validators.required]],
     stoneweight : [''],
     pcs : [''],
     netweight : [''],
@@ -99,11 +99,11 @@ export class MeltingProcessDetailsComponent implements OnInit {
     purediff : [''],
     remark : [''],
     lossweight : [''],
-    lotno : [''],
-    barno : [''],
-    ticketno : [''],
+    lotno : ['',[Validators.required]],
+    barno : ['',[Validators.required]],
+    ticketno : ['',[Validators.required]],
     tgold: [''],
-    sliver: [''],
+    sliver: ['',[Validators.required]],
 
   });
 
