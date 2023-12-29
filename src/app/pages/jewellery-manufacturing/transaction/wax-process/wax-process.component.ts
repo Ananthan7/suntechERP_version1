@@ -23,6 +23,7 @@ export class WaxProcessComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   vocMaxDate = new Date();
   currentDate = new Date();
+  companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   //waxprocessFrom!: FormGroup
 
   userName = localStorage.getItem('username');
@@ -85,13 +86,13 @@ export class WaxProcessComponent implements OnInit {
   description: any;
 
   waxprocessFrom: FormGroup = this.formBuilder.group({
-    voctype: ['WXI'],
-    vocdate: [new Date()],
-    vocno: ['1'],
-    processcode: [''],
-    workercode: [''],
+    voctype: ['WXI',[Validators.required]],
+    vocdate: [new Date(),[Validators.required]],
+    vocno: ['1',[Validators.required]],
+    processcode: ['',[Validators.required]],
+    workercode: ['',[Validators.required]],
     enteredBy: [''],
-    remarks: [''],
+    remarks: ['',[Validators.required]],
   });
 
   constructor(
@@ -205,10 +206,7 @@ export class WaxProcessComponent implements OnInit {
 
     this.dataService.getDynamicAPI('JobWaxIssue/GetJobWaxIssue/' + this.content.job_number).subscribe((data) => {
       if (data.status == 'Success') {
-
         this.tableData = data.response.WaxProcessDetails;
-
-
       }
     });
 
