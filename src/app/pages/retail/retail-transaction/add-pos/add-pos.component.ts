@@ -8680,9 +8680,38 @@ export class AddPosComponent implements OnInit {
       // alert(argsData.totalAmt + '_' + argsData.nettAmt)
       mkgvalue = argsData.totalAmt;
     } else {
-      mkgvalue =
-        this.lineItemForm.value.fcn_li_rate *
-        this.lineItemForm.value.fcn_li_gross_wt;
+      // mkgvalue =
+      //   this.lineItemForm.value.fcn_li_rate *
+      //   this.lineItemForm.value.fcn_li_gross_wt;
+      
+        // new calculation added 30/12/2023
+        if (this.divisionMS == 'M') {
+          switch (this.newLineItem?.MAKING_ON) {
+  
+            case 'PCS':
+              mkgvalue =
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) *
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+              break;
+  
+            case 'GROSS':
+              mkgvalue =
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) *
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+              break;
+  
+            case 'NET':
+              mkgvalue =
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+              break;
+  
+          }
+        } else {
+          mkgvalue =
+            this.lineItemForm.value.fcn_li_rate *
+            this.lineItemForm.value.fcn_li_gross_wt;
+        }
     }
 
     // const mkgvalue = (
