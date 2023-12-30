@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -8,7 +8,6 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-details.component';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-metal-issue',
@@ -16,13 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./metal-issue.component.scss']
 })
 export class MetalIssueComponent implements OnInit {
-  @ViewChild('more_customer_detail_modal') more_customer_detail_modal: any;
-  @ViewChild('mymodal') mymodal: any;
-  @ViewChild('adjust_sale_return_modal') adjust_sale_return_modal: any;
-  @ViewChild('exchange_modal') exchange_modal: any;
-  @ViewChild('sales_payment_modal') sales_payment_modal: any;
-  selectedModal: NgbModalRef | undefined;
-  
+
   currentFilter: any;
   divisionMS: any = 'ID';
   tableData: any[] = [];
@@ -81,7 +74,7 @@ export class MetalIssueComponent implements OnInit {
   deleteTableData(){
    
   }
-
+  
   removeLineItemsGrid(event: any) {
   }
   editTable(event: any) {
@@ -98,9 +91,9 @@ export class MetalIssueComponent implements OnInit {
   }
 
   metalIssueForm: FormGroup = this.formBuilder.group({
-    voctype: ['DMI','',[Validators.required]],
+    voctype: ['DMI',[Validators.required]],
     time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
-    vocdate: [new Date(),'',[Validators.required]],
+    vocdate: [new Date(),[Validators.required]],
     enteredBy: [''],
     vocno: ['1',''],
     worker: [''],
