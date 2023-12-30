@@ -25,6 +25,7 @@ export class WaxProcessReturnComponent implements OnInit {
   yearMonth?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   
   private subscriptions: Subscription[] = [];
     user: MasterSearchModel = {
@@ -104,14 +105,14 @@ export class WaxProcessReturnComponent implements OnInit {
   }
 
   waxprocessFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocDate : [''],
+    voctype:['',[Validators.required]],
+    vocDate : ['',[Validators.required]],
     vocno:[''],
     enteredBy : [''],
-    process:[''],
-    worker:[''],
-    toworker:[''],
-    toprocess:[''],
+    process:['',[Validators.required]],
+    worker:['',[Validators.required]],
+    toworker:['',[Validators.required]],
+    toprocess:['',[Validators.required]],
     waxcode:[''],
     remark:[''],
    });

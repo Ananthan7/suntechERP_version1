@@ -67,7 +67,7 @@ export class ProcessTransferComponent implements OnInit {
   processTransferFrom: FormGroup = this.formBuilder.group({
     voctype: ['', [Validators.required]],
     vocdate: ['', [Validators.required]],
-    vocno: [''],
+    vocno: ['', [Validators.required]],
     salesman: [''],
     SalesmanName: [''],
     currency: [''],

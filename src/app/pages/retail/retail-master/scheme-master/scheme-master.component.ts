@@ -44,6 +44,7 @@ export class SchemeMasterComponent implements OnInit {
  
 
   schemeMasterForm: FormGroup = this.formBuilder.group({
+    mid: [""],
     code: [""],
     prefix: [""],
     description: [""],
@@ -99,7 +100,12 @@ export class SchemeMasterComponent implements OnInit {
         this.receipt2List = resp.response
       }
     });
-
+    console.log("test");
+    
+    if(this.content){
+      // console.log(this.content);
+      this.setFormValues()
+    }
   }
 
   prefixSelected(e:any){
@@ -114,7 +120,7 @@ export class SchemeMasterComponent implements OnInit {
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      // this.updateMeltingType()
+       this.update()
       return
     }
 
@@ -181,6 +187,11 @@ setFormValues() {
   this.schemeMasterForm.controls.frequency.setValue(this.content.SCHEME_FREQUENCY);
   this.schemeMasterForm.controls.startDate.setValue(this.content.START_DATE);
   this.schemeMasterForm.controls.prefix.setValue(this.content.PREFIX_CODE);
+  this.schemeMasterForm.controls.installmentAmount.setValue(this.content.SCHEME_AMOUNT);
+  this.schemeMasterForm.controls.cancelCharges.setValue(this.content.CANCEL_CHARGE);
+  this.schemeMasterForm.controls.receiptModeTwo.setValue(this.content.BONUS_RECTYPE);
+  this.schemeMasterForm.controls.receiptModeThree.setValue(this.content.CANCEL_RECTYPE);
+  this.schemeMasterForm.controls.receiptModeone.setValue(this.content.INST_RECTYPE);
 }
 
 update(){
@@ -189,7 +200,7 @@ update(){
     return
   }
 
-  let API = 'SchemeMaster/UpdateSchemeMaster/' + this.schemeMasterForm.value.branchCode + this.schemeMasterForm.value.code
+  let API = 'SchemeMaster/UpdateSchemeMaster/' + this.branchCode +"/"+ this.schemeMasterForm.value.code
   let postData ={
     "MID": 0,
     "BRANCH_CODE": this.branchCode,
