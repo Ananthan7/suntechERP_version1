@@ -475,9 +475,20 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${index}].schemeData.Details[0].SCH_PARTIALLY_PAID`, this.schemeRegistrationForm.value.SCH_PARTIALLY_PAID);
       this.formdata.append(`Model.model[${index}].schemeData.Details[0].RECEIPT_REF`, '0');
       this.formdata.append(`Model.model[${index}].schemeData.Details[0].RECEIPT_MID`, '0');
-      // this.formdata.append(`Model[${index}].ImageData.BRANCH_CODE`, item.ImageData.BRANCH_CODE);
-      // this.formdata.append(`Model[${index}].ImageData.VOCTYPE`, item.ImageData.VOCTYPE);
-      // this.formdata.append(`Model[${index}].ImageData.VOCNO`, item.ImageData.VOCNO);
+      this.formdata.append(`Model.model[${index}].imageData.VOCNO`, this.schemeRegistrationForm.value.UNIQUEID );
+      this.formdata.append(`Model.model[${index}].imageData.UNIQUEID`, '');
+      this.formdata.append(`Model.model[${index}].imageData.SRNO`, this.schemeRegistrationForm.value.UNIQUEID);
+      this.formdata.append(`Model.model[${index}].imageData.VOCDATE`, this.schemeRegistrationForm.value.VOCDATE);
+      this.formdata.append(`Model.model[${index}].imageData.REMARKS`, '');
+      this.formdata.append(`Model.model[${index}].imageData.CODE`, '');
+      this.formdata.append(`Model.model[${index}].imageData.EXPIRE_DATE`, '');
+      this.formdata.append(`Model.model[${index}].imageData.DOC_ACTIVESTATUS`, '');
+      this.formdata.append(`Model.model[${index}].imageData.DOC_LASTRENEWBY`, '');
+      this.formdata.append(`Model.model[${index}].imageData.DOC_LASTRENEWDATE`, '');
+      this.formdata.append(`Model.model[${index}].imageData.DOC_NEXTRENEWDATE`, '');
+      this.formdata.append(`Model.model[${index}].imageData.DOCUMENT_DATE`, '');
+      this.formdata.append(`Model.model[${index}].imageData.DOCUMENT_NO`, '');
+      this.formdata.append(`Model.model[${index}].imageData.FROM_KYC`, '');
       for (let i:number = 0; i < item.Images.length; i++) {    
         this.formdata.append("Images["+i+"].Image.File", item.Images[i]);                
       }  

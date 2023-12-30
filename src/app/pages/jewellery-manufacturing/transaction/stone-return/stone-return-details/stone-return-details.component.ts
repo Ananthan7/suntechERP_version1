@@ -82,7 +82,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     clarity: [''],
     unitrate: [''],
     shape: [''],
-    sieveset: [''],
+    sieveset: ['',[Validators.required]],
     amount: [''],
     pointerwt: [''],
   });

@@ -43,7 +43,7 @@ export class KaratMasterComponent implements OnInit {
       pop_minmaxamt: [''],
       scrap: [false],
       showinweb: [false],
-    })
+    });
 
     const standardpurityControl = this.karatmasterFrom.get('standardpurity');
 

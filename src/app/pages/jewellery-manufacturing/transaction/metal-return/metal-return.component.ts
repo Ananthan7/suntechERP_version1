@@ -27,7 +27,7 @@ export class MetalReturnComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate: any = this.commonService.currentDate;
   userName = this.commonService.userName;
-  companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
+  companyName = this.commonService.allbranchMaster['BRANCH_NAME']
 
   user: MasterSearchModel = {
     PAGENO: 1,
