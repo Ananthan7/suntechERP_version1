@@ -27,12 +27,8 @@ export class MetalReturnComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate: any = this.commonService.currentDate;
   userName = this.commonService.userName;
-<<<<<<< HEAD
-  companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
 
-=======
-  companyName = this.commonService.allbranchMaster['BRANCH_NAME']
->>>>>>> ERP_Staging
+  companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -84,18 +80,11 @@ export class MetalReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
   metalReturnForm: FormGroup = this.formBuilder.group({
-<<<<<<< HEAD
+
     vocType: ['DMR',[Validators.required]],
     vocNo : ['1',[Validators.required]],
     vocDate : ['',[Validators.required]],
     vocTime : [new Date().toTimeString().slice(0, 5),[Validators.required]],
-=======
-    vocType: ['DMR'],
-    vocNo : ['1'],
-    vocDate : [''],
-    vocTime : [new Date().toTimeString().slice(0, 5)],
->>>>>>> ERP_Staging
-    vocDesc : [''],
     enteredBy : [''],
     process : [''],
     worker : [''],
