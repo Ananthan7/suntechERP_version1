@@ -103,6 +103,44 @@ export class MeltingProcessDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    
+
+  }
+  setAllInitialValues() {
+    let dataFromParent = this.content[0].PROCESS_FORMDETAILS
+    if (!dataFromParent) return
+    this.meltingprocessdetailsForm.controls.jobno.setValue(dataFromParent.jobno)
+    this.meltingprocessdetailsForm.controls.jobdes.setValue(dataFromParent.jobdes)
+    this.meltingprocessdetailsForm.controls.subjobno.setValue(dataFromParent.subjobno)
+    this.meltingprocessdetailsForm.controls.subJobDescription.setValue(dataFromParent.subJobDescription)
+    this.meltingprocessdetailsForm.controls.workerFrom.setValue(dataFromParent.workerFrom)
+    this.meltingprocessdetailsForm.controls.workerTo.setValue(dataFromParent.workerTo)
+    this.meltingprocessdetailsForm.controls.toggleSwitchtIssue.setValue(dataFromParent.toggleSwitchtIssue)
+    this.meltingprocessdetailsForm.controls.processFrom.setValue(dataFromParent.processFrom)
+    this.meltingprocessdetailsForm.controls.processTo.setValue(dataFromParent.processTo)
+    this.meltingprocessdetailsForm.controls.MetalPcsFrom.setValue(dataFromParent.MetalPcsFrom)
+    this.meltingprocessdetailsForm.controls.MetalPcsTo.setValue(dataFromParent.MetalPcsTo)
+    this.meltingprocessdetailsForm.controls.GrossWeightTo.setValue(dataFromParent.GrossWeightTo)
+    this.meltingprocessdetailsForm.controls.approvedby.setValue(dataFromParent.approvedby)
+    this.meltingprocessdetailsForm.controls.startdate.setValue(dataFromParent.startdate)
+    this.meltingprocessdetailsForm.controls.enddate.setValue(dataFromParent.enddate)
+    this.meltingprocessdetailsForm.controls.JOB_DATE.setValue(dataFromParent.JOB_DATE)
+    this.meltingprocessdetailsForm.controls.DESIGN_CODE.setValue(dataFromParent.DESIGN_CODE)
+    this.meltingprocessdetailsForm.controls.SEQ_CODE.setValue(dataFromParent.SEQ_CODE)
+    this.meltingprocessdetailsForm.controls.PROCESSDESC.setValue(dataFromParent.PROCESSDESC)
+    this.meltingprocessdetailsForm.controls.WORKERDESC.setValue(dataFromParent.WORKERDESC)
+    this.meltingprocessdetailsForm.controls.PUREWT.setValue(dataFromParent.PUREWT)
+    this.meltingprocessdetailsForm.controls.MetalWeightFrom.setValue(dataFromParent.MetalWeightFrom)
+    this.meltingprocessdetailsForm.controls.processToDescription.setValue(dataFromParent.processToDescription)
+    this.meltingprocessdetailsForm.controls.workerToDescription.setValue(dataFromParent.workerToDescription)
+    this.meltingprocessdetailsForm.controls.PURITY.setValue(dataFromParent.PURITY)
+    this.meltingprocessdetailsForm.controls.METALLAB_TYPE.setValue(dataFromParent.METALLAB_TYPE)
+    this.meltingprocessdetailsForm.controls.remarks.setValue(dataFromParent.remarks)
+    this.meltingprocessdetailsForm.controls.treeno.setValue(dataFromParent.treeno)
+    this.meltingprocessdetailsForm.controls.JOB_SO_NUMBER.setValue(dataFromParent.JOB_SO_NUMBER)
+    this.meltingprocessdetailsForm.controls.stockCode.setValue(dataFromParent.stockCode)
+    this.meltingprocessdetailsForm.controls.DIVCODE.setValue(dataFromParent.DIVCODE)
+    this.meltingprocessdetailsForm.controls.METALSTONE.setValue(dataFromParent.METALSTONE)
   }
 
 
@@ -153,69 +191,69 @@ let dataTOparent = {
 }
 this.close(dataTOparent)
 
-  //   let API = 'JobMeltingProcessDJ/InsertJobMeltingProcessDJ'
-  //   let postData = {
-  //     "UNIQUEID": 0,
-  //     "SRNO": 0,
-  //     "DT_BRANCH_CODE": "string",
-  //     "DT_VOCTYPE": "stri",
-  //     "DT_VOCNO": 0,
-  //     "DT_VOCDATE": "2023-11-25T05:04:56.703Z",
-  //     "DT_YEARMONTH": "string",
-  //     "JOB_NUMBER": this.meltingprocessdetailsForm.value.jobno,
-  //     "JOB_DESCRIPTION": this.meltingprocessdetailsForm.value.jobdes,
-  //     "PROCESS_CODE": this.meltingprocessdetailsForm.value.process,
-  //     "PROCESS_DESC": this.meltingprocessdetailsForm.value.processdes,
-  //     "WORKER_CODE": this.meltingprocessdetailsForm.value.worker,
-  //     "WORKER_DESC": this.meltingprocessdetailsForm.value.workerdes,
-  //     "STOCK_CODE": this.meltingprocessdetailsForm.value.stockcode,
-  //     "STOCK_DESCRIPTION": this.meltingprocessdetailsForm.value.stockcodedes,
-  //     "DIVCODE": "s",
-  //     "KARAT_CODE": "stri",
-  //     "PCS": this.meltingprocessdetailsForm.value.pcs,
-  //     "GROSS_WT": this.meltingprocessdetailsForm.value.grossweight,
-  //     "STONE_WT": this.meltingprocessdetailsForm.value.stoneweight,
-  //     "PURITY": this.meltingprocessdetailsForm.value.purity,
-  //     "PUREWT": this.meltingprocessdetailsForm.value.pureweight,
-  //     "PUDIFF": this.meltingprocessdetailsForm.value.purediff,
-  //     "IRON_WT": 0,
-  //     "NET_WT": this.meltingprocessdetailsForm.value.netweight,
-  //     "TOTAL_WEIGHT": 0,
-  //     "IRON_PER": 0,
-  //     "STONEDIFF": 0,
-  //     "WAX_WT": this.meltingprocessdetailsForm.value.waxweight,
-  //     "TREE_NO": this.meltingprocessdetailsForm.value.treeno,
-  //     "WIP_ACCODE": "string",
-  //     "CURRENCY_CODE": "stri",
-  //     "CURRENCY_RATE": 0,
-  //     "MKG_RATEFC": 0,
-  //     "MKG_RATECC": 0,
-  //     "MKGVALUEFC": 0,
-  //     "MKGVALUECC": 0,
-  //     "DLOC_CODE": "string",
-  //     "REMARKS": this.meltingprocessdetailsForm.value.remark,
-  //     "LOCTYPE_CODE": this.meltingprocessdetailsForm.value.location,
-  //     "TOSTOCKCODE": this.meltingprocessdetailsForm.value.tostockcode,
-  //     "LOSSWT": this.meltingprocessdetailsForm.value.lossweight,
-  //     "TODIVISION_CODE": "s",
-  //     "LOT_NO": this.meltingprocessdetailsForm.value.lotno,
-  //     "BAR_NO": this.meltingprocessdetailsForm.value.barno,
-  //     "TICKET_NO": this.meltingprocessdetailsForm.value.ticketno,
-  //     "SILVER_PURITY": this.meltingprocessdetailsForm.value.sliver,
-  //     "SILVER_PUREWT": 0,
-  //     "TOPURITY": 0,
-  //     "PUR_PER": this.meltingprocessdetailsForm.value.purityper,
-  //     "MELTING_TYPE": "string",
-  //     "ISALLOY": "s",
-  //     "BALANCE_WT": 0,
-  //     "BALANCE_PURE_WT": 0,
-  //     "LOSS_PURE_WT": 0,
-  //     "IS_REJECT": true,
-  //     "REASON": "string",
-  //     "REJ_REMARKS": "string",
-  //     "ATTACHMENT_FILE": "string"
-  //   }
-  //   this.close(postData);
+    let API = 'JobMeltingProcessDJ/InsertJobMeltingProcessDJ'
+    let postData = {
+      "UNIQUEID": 0,
+      "SRNO": 0,
+      "DT_BRANCH_CODE": "string",
+      "DT_VOCTYPE": "stri",
+      "DT_VOCNO": 0,
+      "DT_VOCDATE": "2023-11-25T05:04:56.703Z",
+      "DT_YEARMONTH": "string",
+      "JOB_NUMBER": this.meltingprocessdetailsForm.value.jobno,
+      "JOB_DESCRIPTION": this.meltingprocessdetailsForm.value.jobdes,
+      "PROCESS_CODE": this.meltingprocessdetailsForm.value.process,
+      "PROCESS_DESC": this.meltingprocessdetailsForm.value.processdes,
+      "WORKER_CODE": this.meltingprocessdetailsForm.value.worker,
+      "WORKER_DESC": this.meltingprocessdetailsForm.value.workerdes,
+      "STOCK_CODE": this.meltingprocessdetailsForm.value.stockcode,
+      "STOCK_DESCRIPTION": this.meltingprocessdetailsForm.value.stockcodedes,
+      "DIVCODE": "s",
+      "KARAT_CODE": "stri",
+      "PCS": this.meltingprocessdetailsForm.value.pcs,
+      "GROSS_WT": this.meltingprocessdetailsForm.value.grossweight,
+      "STONE_WT": this.meltingprocessdetailsForm.value.STONE_WT,
+      "PURITY": this.meltingprocessdetailsForm.value.purity,
+      "PUREWT": this.meltingprocessdetailsForm.value.pureweight,
+      "PUDIFF": this.meltingprocessdetailsForm.value.PUDIFF,
+      "IRON_WT": 0,
+      "NET_WT": this.meltingprocessdetailsForm.value.netweight,
+      "TOTAL_WEIGHT": 0,
+      "IRON_PER": 0,
+      "STONEDIFF": 0,
+      "WAX_WT": this.meltingprocessdetailsForm.value.WAX_WT,
+      "TREE_NO": this.meltingprocessdetailsForm.value.treeno,
+      "WIP_ACCODE": "string",
+      "CURRENCY_CODE": "stri",
+      "CURRENCY_RATE": 0,
+      "MKG_RATEFC": 0,
+      "MKG_RATECC": 0,
+      "MKGVALUEFC": 0,
+      "MKGVALUECC": 0,
+      "DLOC_CODE": "string",
+      "REMARKS": this.meltingprocessdetailsForm.value.remark,
+      "LOCTYPE_CODE": this.meltingprocessdetailsForm.value.location,
+      "TOSTOCKCODE": this.meltingprocessdetailsForm.value.tostockcode,
+      "LOSSWT": this.meltingprocessdetailsForm.value.LOSSWT,
+      "TODIVISION_CODE": "s",
+      "LOT_NO": this.meltingprocessdetailsForm.value.lotno,
+      "BAR_NO": this.meltingprocessdetailsForm.value.barno,
+      "TICKET_NO": this.meltingprocessdetailsForm.value.ticketno,
+      "SILVER_PURITY": this.meltingprocessdetailsForm.value.SILVER_PURITY,
+      "SILVER_PUREWT": 0,
+      "TOPURITY": 0,
+      "PUR_PER": this.meltingprocessdetailsForm.value.PUR_PER,
+      "MELTING_TYPE": "string",
+      "ISALLOY": "s",
+      "BALANCE_WT": 0,
+      "BALANCE_PURE_WT": 0,
+      "LOSS_PURE_WT": 0,
+      "IS_REJECT": true,
+      "REASON": "string",
+      "REJ_REMARKS": "string",
+      "ATTACHMENT_FILE": "string"
+    }
+    this.close(postData);
    }
 
   setFormValues() {
@@ -341,6 +379,7 @@ this.close(dataTOparent)
         'strCurrenctUser': ''
       }
     }
+   
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
@@ -359,7 +398,7 @@ this.close(dataTOparent)
           this.meltingprocessdetailsForm.controls.netweight.setValue(data[0].NETWT)
           this.meltingprocessdetailsForm.controls.MetalWeightFrom.setValue(
             this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
-
+            
           this.meltingprocessdetailsForm.controls.StoneWeight.setValue(data[0].STONE)
 
           this.meltingprocessdetailsForm.controls.PURITY.setValue(data[0].PURITY)
@@ -382,7 +421,7 @@ this.close(dataTOparent)
     this.subscriptions.push(Sub)
   }
 
-
+  
 
 
   jobNumberValidate(event: any) {
