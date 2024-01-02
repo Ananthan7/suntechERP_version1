@@ -129,9 +129,9 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.prefix.setValue(e.PREFIX_CODE);
   }
 
-  close() {
+  close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close();
+    this.activeModal.close(data);
   }
 
   formSubmit() {
@@ -182,7 +182,7 @@ export class SchemeMasterComponent implements OnInit {
             if (result.value) {
               this.schemeMasterForm.reset()
               
-              this.close()
+              this.close('reloadMainGrid')
             }
           });
         }
@@ -254,7 +254,7 @@ update(){
             if (result.value) {
               this.schemeMasterForm.reset()
              
-              this.close();
+              this.close('reloadMainGrid')
             }
           });
         }
@@ -306,7 +306,7 @@ deleteSchemeMaster() {
                 if (result.value) {
                   this.schemeMasterForm.reset()
                  
-                  this.close();
+                  this.close('reloadMainGrid')
                 }
               });
             } else {
@@ -320,7 +320,7 @@ deleteSchemeMaster() {
                 if (result.value) {
                   this.schemeMasterForm.reset()
                 
-                  this.close()
+                  this.close('reloadMainGrid')
                 }
               });
             }
