@@ -122,6 +122,8 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneissuedetailsFrom.controls.jobDes.setValue(e.job_description);
     this.stoneissuedetailsFrom.controls.subjobnumber.setValue(e.job_number);
     this.stoneissuedetailsFrom.controls.subjobDes.setValue(e.job_description);
+    this.stoneissuedetailsFrom.controls.designcode.setValue(e.job_number);
+    this.stoneissuedetailsFrom.controls.partcode.setValue(e.job_description);
   }
 
   processCodeSelected(e: any) {

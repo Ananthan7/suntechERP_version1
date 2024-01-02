@@ -400,7 +400,7 @@
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
-                            (newRowClick)="processCodeFromSelected($event)">
+                            (newRowClick)="metalprocessCodeFromSelected($event)">
                           </master-search>
                         </span>
                       </td>
@@ -413,7 +413,7 @@
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
-                            (newRowClick)="processCodeToSelected($event)">
+                            (newRowClick)="metalprocessCodeToSelected($event)">
                           </master-search>
                         </span>
                       </td>
@@ -433,7 +433,7 @@
                               formControlName="METAL_workerFrom" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
-                            (newRowClick)="workerCodeFromSelected($event)">
+                            (newRowClick)="metalworkerCodeFromSelected($event)">
                           </master-search>
                         </span>
                       </td>
@@ -444,7 +444,7 @@
                               formControlName="METAL_workerTo" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
-                            (newRowClick)="workerCodeToSelected($event)">
+                            (newRowClick)="metalworkerCodeToSelected($event)">
                           </master-search>
                         </span>
                       </td>

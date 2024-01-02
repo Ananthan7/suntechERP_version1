@@ -377,8 +377,7 @@ export class SequenceMasterComponent implements OnInit {
     }
     else{
       this.sequenceMasterForm.controls['calculatetime'].disable();
-    
-     
+       
     }
 }
 }
