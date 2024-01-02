@@ -39,19 +39,19 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purchaseTrading" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                               <master-search></master-search>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purchaseImport" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                               <master-search></master-search>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purchaseRepair" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                               <master-search></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -60,19 +60,19 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purchaseReturnTrading" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                               <master-search></master-search>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purchaseReturnImport" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                               <master-search></master-search>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purchaseReturnRepair" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                               <master-search></master-search>
                             </div>
                         </div>
                     </div>
@@ -96,19 +96,19 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purchaseReturnTrading" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                               <master-search></master-search>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purchaseReturnImport" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                               <master-search></master-search>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purchaseReturnRepair" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                               <master-search></master-search>
                             </div>
                         </div>
                     </div>
@@ -124,9 +124,10 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Purchase</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="purchase" />
+                            <input type="text" matInput formControlName="purchase"  maxlength="6"/>
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -135,7 +136,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="purchaseReturn" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -144,7 +146,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="purchaseImport" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -153,7 +156,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="purchaseImportReturn" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -162,7 +166,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="stoneValueInPurchase" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -171,7 +176,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="repairPurchase" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -180,7 +186,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="kundanValueInPurchase" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
             </div>
@@ -195,7 +202,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="Wholesales" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -204,7 +212,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="wholesalesReturn" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -213,7 +222,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="exportSales" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -222,7 +232,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="exportSalesReturn" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -231,7 +242,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="stoneValueInSales" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -240,7 +252,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="repairPurchaseReturn" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -249,7 +262,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="kundanValueInSales" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
             </div>
@@ -263,7 +277,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="retailSales" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -272,7 +287,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="retailSalesReturn" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -281,7 +297,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="exhibitionSales" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -290,7 +307,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="exhibitionSalesReturn" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -299,7 +317,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="repairSales" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -308,7 +327,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="repairSalesReturn" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -317,7 +337,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="wastageInSales" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
             </div>
@@ -337,7 +358,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="openingStock" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -346,7 +368,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="physicalStock" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -355,7 +378,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="closingStock" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -364,7 +388,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="stoneValueInOpening" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -373,7 +398,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="stoneChargePurchase" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -382,7 +408,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="kundanValueInOpening" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                     </div>
@@ -393,7 +420,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="branchTransferIn" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -402,7 +430,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="branchTransferOUT" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -411,7 +440,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="adjustments" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -420,7 +450,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="manufacture" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -429,7 +460,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="stampChargeSales" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                     </div>
@@ -440,7 +472,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="stoneDifference" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -449,7 +482,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="purityDifference" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -458,7 +492,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="wastageInPurchase" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -467,7 +502,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="wastageDiscount" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
@@ -476,7 +512,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="repairUnfixPurchase" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="purchaseCodeData" (newRowClick)="purchaseCodeSelected($event)">
+                        </master-search>
                             </div>
                         </div>
                     </div>
