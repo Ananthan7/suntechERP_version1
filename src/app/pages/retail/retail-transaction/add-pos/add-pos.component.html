@@ -673,7 +673,7 @@
 
         <div class="row mb-2">
           <div class="col-md-12">
-            <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" 
+            <dx-data-grid #dataGrid id="gridContainer" keyExpr="KYCrefmid" 
             [dataSource]="transAttachmentList"
             [showBorders]="true"
             >
@@ -685,6 +685,18 @@
               <dxi-column *ngFor="let data of transColumnList" dataField="{{ data.field }}" caption="{{ data.title }}"
                 [allowEditing]="true" alignment="center" backgroundcolor="#000">
               </dxi-column>
+              <dxi-column dataField="ATTACHMENT_PATH"
+                        cellTemplate="attachmentTemp" caption="Attachment"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+
+                    <div *dxTemplate="let data of 'attachmentTemp'">
+                      <a target="_blank" href="{{data}}"
+                         >
+                          <i class="fa fa-paperclip"
+                              style="color: #337ab7"></i></a>
+                      <dxi-button icon="fa fa-paperclip"></dxi-button>
+                  </div>
             </dx-data-grid>
           </div>
         </div>
@@ -2181,12 +2193,12 @@
                     type="text"
                     matInput
                     formControlName="giftBranch"
-                    [matAutocomplete]="giftBranch"
                     id="giftBranch"
                     (focusout)="changeBranch($event)"
                     [readonly]="viewOnly"
                   />
-                  <mat-autocomplete
+                  <!-- [matAutocomplete]="giftBranch" -->
+                  <!-- <mat-autocomplete
                     #giftBranch="matAutocomplete"
                     autoActiveFirstOption
                   >
@@ -2198,7 +2210,8 @@
                     >
                       {{ option }}
                     </mat-option>
-                  </mat-autocomplete>
+                  </mat-autocomplete> -->
+               
                   <mat-error
                     *ngIf="
                       giftReceiptForm.controls.giftBranch.hasError('required')

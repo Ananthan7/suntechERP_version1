@@ -38,63 +38,44 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
   continue(){}
 
   costcenterdiamonddetailsForm: FormGroup = this.formBuilder.group({
-    branch:[''],
-    purchase1:[''],
-    purchase2:[''],
-    purchase3:[''],
-    purchasereturn1:[''],
-    purchasereturn2:[''],
-    purchasereturn3:[''],
-    sales1:[''],
-    sales2:[''],
-    sales3:[''],
-    sales4:[''],
-    sales5:[''],
-    salesreturn1:[''],
-    salesreturn2:[''],
-    salesreturn3:[''],
-    salesreturn4:[''],
-    salesreturn5:[''],
-    other1:[''],
-    other2:[''],
-    opening:[''],
-    ownstock:[''],
-    closingstock:[''],
-    stonediff:[''],
-    costadjustment:[''],
+    branch:['',[Validators.required]],
+    purchase:[''],
+    purchaseReturn:[''],
+    purchaseImport:[''],
+    purchaseImportReturn:[''],
+    stoneValueInPurchase:[''],
+    repairPurchase:[''],
+    kundanValueInPurchase:['',[Validators.required]],
+    Wholesales:[''],
+    wholesalesReturn:[''],
+    exportSales:[''],
+    exportSalesReturn:[''],
+    stoneValueInSales:[''],
+    repairPurchaseReturn:['',[Validators.required]],
+    kundanValueInSales:['',[Validators.required]],
+    retailSales:[''],
+    retailSalesReturn:[''],
+    exhibitionSales:[''],
+    exhibitionSalesReturn:[''],
+    repairSales:['',[Validators.required]],
+    repairSalesReturn:['',[Validators.required]],
+    wastageInSales:[''],
+    openingStock:[''],
+    physicalStock:[''],
+    closingStock:[''],
+    stoneValueInOpening:[''],
+    stoneChargePurchase:[''],
+    kundanValueInOpening:[''],
+    branchTransferIn:[''],
+    branchTransferOUT:[''],
+    adjustments:[''],
     manufacture:[''],
-    SOHmetalmanufacturing:[''],
-    wastage:[''],
-    dismantling:[''],
-    dismantlingloss:[''],
-    repairunfixpurchase:[''],
-    lotmixaccount:[''],
-    certificationcharges:[''],
-    platecharges:[''],
-    Stkrevalue:[''],
-    customaccount:[''],
-    in:[''],
-    out:[''],
-    puregoldindiamondjewellery1:[''],
-    puregoldindiamondjewellery2:[''],
-    puregoldindiamondjewellery3:[''],
-    puregoldindiamondjewellery4:[''],
-    puregoldindiamondjewelleryFixed1:[''],
-    puregoldindiamondjewelleryFixed2:[''],
-    puregoldindiamondjewelleryFixed3:[''],
-    puregoldindiamondjewelleryFixed4:[''],
-    loosestonevalueindiamondjewellery1:[''],
-    loosestonevalueindiamondjewellery2:[''],
-    loosestonevalueindiamondjewellery3:[''],
-    loosestonevalueindiamondjewellery4:[''],
-    colorstonevalueindiamondjeweller1:[''],
-    colorstonevalueindiamondjeweller2:[''],
-    colorstonevalueindiamondjeweller3:[''],
-    colorstonevalueindiamondjeweller4:[''],
-    pearlvalueindiamondjewellery1:[''],
-    pearlvalueindiamondjewellery2:[''],
-    pearlvalueindiamondjewellery3:[''],
-    pearlvalueindiamondjewellery4:[''],
+    stampChargeSales:[''],
+    stoneDifference:[''],
+    purityDifference:[''],
+    wastageInPurchase:[''],
+    wastageDiscount:[''],
+    repairUnfixPurchase:['',[Validators.required]]
   })
 
   branchCodeData: MasterSearchModel = {
@@ -113,6 +94,22 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
     this.costcenterdiamonddetailsForm.controls.branch.setValue(data.BRANCH_CODE)
   }
 
+  purchaseCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Purchase Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  purchaseCodeSelected(e: any) {   
+    console.log(e);    
+  }
+
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -125,44 +122,44 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
     }
   
     let API = 'CostCenterMaster/InsertCostCenterMaster'
-    let postData = {
+    let postData =  {
       "UNIQUE_ID": 0,
       "COST_CODE": "string",
       "TYPE": "string",
-      "BRANCH_CODE": this.costcenterdiamonddetailsForm.value.branch || "",
+      "BRANCH_CODE": this.costcenterdiamonddetailsForm.value.branch,
       "ADJUSTMENT": "string",
-      "SALES": this.costcenterdiamonddetailsForm.value.sales || "",
-      "SALESRETURN": this.costcenterdiamonddetailsForm.value.salesreturn || "",
-      "PURCHASE": this.costcenterdiamonddetailsForm.value.purchase || "",
-      "PURCHASERETURN": this.costcenterdiamonddetailsForm.value.purchasereturn || "",
-      "STONEVALUE": "string",
-      "STONEDIFF": this.costcenterdiamonddetailsForm.value.stonediff || "",
-      "PURITYDIFF": "string",
-      "BRANCHTRANSFERIN": "string",
-      "BRANCHTRANSFEROUT": "string",
-      "MANUFACTURING": this.costcenterdiamonddetailsForm.value.manufacture || "",
+      "SALES": "string",
+      "SALESRETURN": "string",
+      "PURCHASE": this.costcenterdiamonddetailsForm.value.purchase,
+      "PURCHASERETURN": this.costcenterdiamonddetailsForm.value.purchaseReturn,
+      "STONEVALUE": this.costcenterdiamonddetailsForm.value.stoneValueInPurchase,
+      "STONEDIFF": this.costcenterdiamonddetailsForm.value.stoneDifference,
+      "PURITYDIFF": this.costcenterdiamonddetailsForm.value.purityDifference,
+      "BRANCHTRANSFERIN": this.costcenterdiamonddetailsForm.value.branchTransferIn,
+      "BRANCHTRANSFEROUT": this.costcenterdiamonddetailsForm.value.branchTransferOUT,
+      "MANUFACTURING": this.costcenterdiamonddetailsForm.value.manufacture,
       "OPENINGBALANCE": "string",
-      "CLOSINGSTOCK": "string",
-      "PHYSICALSTOCK": "string",
-      "OPENINGOWNSTOCK": this.costcenterdiamonddetailsForm.value.opening || "",
-      "CLOSINGOWNSTOCK": this.costcenterdiamonddetailsForm.value.closingstock || "",
-      "OWNSTOCK": this.costcenterdiamonddetailsForm.value.ownstock || "",
-      "OPENINGSTONE": "string",
+      "CLOSINGSTOCK": this.costcenterdiamonddetailsForm.value.closingStock,
+      "PHYSICALSTOCK":this.costcenterdiamonddetailsForm.value.physicalStock,
+      "OPENINGOWNSTOCK": "string",
+      "CLOSINGOWNSTOCK": "string",
+      "OWNSTOCK": "string",
+      "OPENINGSTONE": this.costcenterdiamonddetailsForm.value.stoneValueInOpening,
       "POSSALES": "string",
       "POSSRETURN": "string",
-      "EXBSALES": "string",
-      "EXBSRETURN": "string",
-      "EXPSALES": "string",
-      "EXPSRETURN": "string",
-      "SOH_GOLD_DMFG": this.costcenterdiamonddetailsForm.value.SOHmetalmanufacturing || "",
-      "WASTAGE": this.costcenterdiamonddetailsForm.value.wastage || "",
-      "IMPPURCHASE": "string",
-      "IMPPURCHASERETURN": "string",
+      "EXBSALES": this.costcenterdiamonddetailsForm.value.exhibitionSales,
+      "EXBSRETURN": this.costcenterdiamonddetailsForm.value.exhibitionSalesReturn,
+      "EXPSALES": this.costcenterdiamonddetailsForm.value.exportSales,
+      "EXPSRETURN": this.costcenterdiamonddetailsForm.value.exportSalesReturn,
+      "SOH_GOLD_DMFG": "string",
+      "WASTAGE": "string",
+      "IMPPURCHASE": this.costcenterdiamonddetailsForm.value.exportSalesReturn,
+      "IMPPURCHASERETURN": this.costcenterdiamonddetailsForm.value.purchaseImportReturn,
       "OTHERSALES": "string",
       "OTHERSRETURN": "string",
       "REFINING_CHARGEAC": "string",
       "DISCOUNTMETAL": "string",
-      "STONEVALUESALES": "string",
+      "STONEVALUESALES": this.costcenterdiamonddetailsForm.value.stoneValueInSales,
       "SCP_ACCODE": "string",
       "SCPSR_ACCODE": "string",
       "SCS_ACCODE": "string",
@@ -185,11 +182,11 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "PTREPR_ACCODE": "string",
       "PTRES_ACCODE": "string",
       "PTRESR_ACCODE": "string",
-      "COSTADJUSTMENT": this.costcenterdiamonddetailsForm.value.costadjustment || "",
-      "DISMANTLINGLOSS": this.costcenterdiamonddetailsForm.value.dismantlingloss || "",
-      "DISMANTLING_ACCODE":this.costcenterdiamonddetailsForm.value.dismantling || "",
+      "COSTADJUSTMENT": "string",
+      "DISMANTLINGLOSS": "string",
+      "DISMANTLING_ACCODE": "string",
       "STOCK_REVALUATION": "string",
-      "LOTMIX_ACCODE": this.costcenterdiamonddetailsForm.value.lotmixaccount || "",
+      "LOTMIX_ACCODE": "string",
       "SRNO": 0,
       "DIAPUR_UNFIX": "string",
       "DIASAL_UNFIX": "string",
@@ -204,21 +201,21 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "UNFIXSALES": "string",
       "UNFIXSUPPLIERCTRLAC": "string",
       "UNFIXCUSTOMERCTRLAC": "string",
-      "REPAIRPURCHASE": this.costcenterdiamonddetailsForm.value.repairunfixpurchase || "",
-      "REPPURCHASERETURN": "string",
-      "REPAIRSALESRETURN": "string",
-      "REPAIRSALES": "string",
+      "REPAIRPURCHASE": "string",
+      "REPPURCHASERETURN": this.costcenterdiamonddetailsForm.value.repairPurchaseReturn,
+      "REPAIRSALESRETURN": this.costcenterdiamonddetailsForm.value.repairSalesReturn,
+      "REPAIRSALES": this.costcenterdiamonddetailsForm.value.repairSales,
       "REPUNFIXPURCHASE": "string",
-      "KUNDANVALUESALES": "string",
-      "KUNDANVALUEPURCHASE": "string",
+      "KUNDANVALUESALES": this.costcenterdiamonddetailsForm.value.kundanValueInSales,
+      "KUNDANVALUEPURCHASE": this.costcenterdiamonddetailsForm.value.kundanValueInPurchase,
       "PREMIUM_CHARGES": "string",
       "DIAPUR_UNFIX_VALUE": "string",
       "DIASAL_UNFIX_VALUE": "string",
       "OPENING_GOLD_DIAJEW": "string",
       "REFINE_CHARGES": "string",
       "WASTAGEONSALES": "string",
-      "CERT_CHARGES": this.costcenterdiamonddetailsForm.value.certificationcharges || "",
-      "PLATE_CHARGES": this.costcenterdiamonddetailsForm.value.platecharges || "",
+      "CERT_CHARGES": "string",
+      "PLATE_CHARGES": "string",
       "STAMPCHARGE_PURCHASEAC": "string",
       "STAMPCHARGE_SALESAC": "string",
       "KUNDANVALUEOPENING": "string",
@@ -230,7 +227,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "DIASAL_UNFIX_COLOR": "string",
       "DIASAL_UNFIX_PEARL": "string",
       "DIASAL_UNFIX_LABOUR": "string",
-      "CUSTOM_ACCODE": this.costcenterdiamonddetailsForm.value.customaccount || "",
+      "CUSTOM_ACCODE": "string",
       "BRIN_UNFIX_GOLD": "string",
       "BROUT_UNFIX_GOLD": "string",
       "BRIN_FIX_GOLD": "string",
@@ -302,31 +299,8 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "MISCCHGAC": "string",
       "PLATCHGAC": "string",
       "CERTCHGAC": "string"
-  }
-  
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if(result.status == "Success"){
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.costcenterdiamonddetailsForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+    }
+  this.close(postData);
   }
   
   update(){
@@ -417,7 +391,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "UNFIXCUSTOMERCTRLAC": "string",
       "REPAIRPURCHASE": this.costcenterdiamonddetailsForm.value.repairunfixpurchase || "",
       "REPPURCHASERETURN": "string",
-      "REPAIRSALESRETURN": "string",
+      "REPAIRSALESRETURN": this.costcenterdiamonddetailsForm.value.repairSalesReturn,
       "REPAIRSALES": "string",
       "REPUNFIXPURCHASE": "string",
       "KUNDANVALUESALES": "string",
@@ -515,29 +489,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "CERTCHGAC": "string"
     }
   
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if(result.status == "Success"){
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.costcenterdiamonddetailsForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+    this.close({postData});
   }
   
   deleteRecord() {

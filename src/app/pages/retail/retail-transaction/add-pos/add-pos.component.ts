@@ -503,20 +503,30 @@ export class AddPosComponent implements OnInit {
 
   transAttachmentList: any[] = [];
   transColumnList: any[] = [
-
-    { title: 'Sr #', field: 'SRNO' },
-    { title: 'Code', field: 'CODE' },
-    { title: 'Voucher Number', field: 'VOCNO' },
+    { title: 'MID', field: 'KYCrefmid' },
     { title: 'Voucher Type', field: 'VOCTYPE' },
-    { title: 'Voucher Date', field: 'VOCDATE' },
-    { title: 'Reference MID', field: 'REFMID' },
     { title: 'Remarks', field: 'REMARKS' },
-    { title: 'Attachment Path', field: 'ATTACHMENT_PATH' },
-    { title: 'Unique ID', field: 'UNIQUEID' },
-    { title: 'Attachment Type', field: 'ATTACH_TYPE' },
+    // { title: 'Attachment', field: 'ATTACHMENT_PATH' },
+    { title: 'Doc Type', field: 'DOC_TYPE' },
     { title: 'Expire Date', field: 'EXPIRE_DATE' },
-    { title: 'Branch Code', field: 'BRANCH_CODE' },
-    { title: 'Year Month', field: 'YEARMONTH' },
+
+    // { title: 'Sr #', field: 'SRNO' },
+    // { title: 'Code', field: 'CODE' },
+    // { title: 'Voucher Number', field: 'VOCNO' },
+    // { title: 'Voucher Type', field: 'VOCTYPE' },
+    // { title: 'Voucher Date', field: 'VOCDATE' },
+    // { title: 'Reference MID', field: 'REFMID' },
+    // { title: 'Remarks', field: 'REMARKS' },
+    // { title: 'Attachment Path', field: 'ATTACHMENT_PATH' },
+    // { title: 'Unique ID', field: 'UNIQUEID' },
+    // { title: 'Attachment Type', field: 'ATTACH_TYPE' },
+    // { title: 'Expire Date', field: 'EXPIRE_DATE' },
+    // { title: 'Branch Code', field: 'BRANCH_CODE' },
+    // { title: 'Year Month', field: 'YEARMONTH' },
+   
+ 
+
+
     // { title: 'Doc Type', field: 'DOC_TYPE' },
     // { title: 'Subled Code', field: 'SUBLED_CODE' },
     // { title: 'Doc Active Status', field: 'DOC_ACTIVESTATUS' },
@@ -926,6 +936,9 @@ export class AddPosComponent implements OnInit {
     console.log('======content==============================');
     console.log(this.content);
     console.log('====================================');
+
+    // need to enable
+    // this.vocType = this.comFunc.getqueryParamVocType()
 
     if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
 
@@ -2583,6 +2596,7 @@ export class AddPosComponent implements OnInit {
 
 
       if (this.posIdNoCompulsory && (this.customerDetailForm.value.fcn_customer_exp_date < this.currentDate)) {
+        this.isCustProcessing = false;
         this.snackBar.open('Invalid Expiry Date', 'OK');
         return;
       }
@@ -2967,6 +2981,13 @@ export class AddPosComponent implements OnInit {
               this.customerDetails.CODE
             );
 
+            // this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+            //   this.customerDetails.POSCUSTIDEXP_DATE
+            // );
+            // this.customerDataForm.controls.fcn_customer_exp_date.setValue(
+            //   this.customerDetails.POSCUSTIDEXP_DATE
+            // );
+
             // this.snackBar.open('Customer details saved successfully');
             // this.snackBar.dismiss();
             this.snackBar.open('Customer details saved successfully', '', {
@@ -3146,6 +3167,7 @@ export class AddPosComponent implements OnInit {
 
       } else {
         this.isCustProcessing = false;
+        alert(this.isCustProcessing);
 
         this.snackBar.open('Please Fill Required Fields', '', {
           duration: 2000 // time in milliseconds
@@ -3268,6 +3290,14 @@ export class AddPosComponent implements OnInit {
               result.MOBILE1
             );
 
+            this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+              result.POSCUSTIDEXP_DATE
+            );
+            this.customerDataForm.controls.fcn_customer_exp_date.setValue(
+              result.POSCUSTIDEXP_DATE
+            );
+
+
             this.customerDetails = result;
 
             if (this.amlNameValidation)
@@ -3324,7 +3354,7 @@ export class AddPosComponent implements OnInit {
     const custCode = this.customerDataForm.value.fcn_customer_code;
 
     this.snackBar.open('Loading...');
-    let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}`
+    let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
     this.snackBar.dismiss();
@@ -3332,10 +3362,11 @@ export class AddPosComponent implements OnInit {
         console.log('=================resp===================');
         console.log(resp);
         console.log('====================================');
-        if (resp.status != 'Success') {
+        if (resp.status == 'Success') {
+          this.transAttachmentList = resp.response;
 
         } else {
-
+          this.transAttachmentList = [];
         }
 
       });
@@ -6855,6 +6886,7 @@ export class AddPosComponent implements OnInit {
     //   console.log('====================================');
 
     if (this.posIdNoCompulsory && (this.customerDataForm.value.fcn_customer_exp_date < this.currentDate)) {
+      this.isSaved = false;
       this.snackBar.open('Invalid Expiry Date', 'OK');
       return;
     }
@@ -7211,6 +7243,7 @@ export class AddPosComponent implements OnInit {
 
 
 
+      
       if (this.editOnly) {
         let API = `RetailSalesDataInDotnet/UpdateRetailSalesData?strBranchCode=${this.content.BRANCH_CODE}&strVocType=${this.content.VOCTYPE}&strYearMonth=${this.content.YEARMONTH}&intVocNo=${this.content.VOCNO}`
         this.suntechApi.putDynamicAPI(API, postData)

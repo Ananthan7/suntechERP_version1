@@ -74,6 +74,13 @@ export class ApprovalMasterComponent implements OnInit {
     this.tableData[value.data.SRNO - 1].SYS_MESSAGE = data.target.checked;
   }
 
+  emailid(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].Length = data.target.value;
+  }
+  mobilenumber(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].Length = data.target.value;
+  }
+
   ngOnInit(): void {
     console.log(this.content);
     if(this.content){
@@ -103,7 +110,11 @@ export class ApprovalMasterComponent implements OnInit {
     description: [''],
    
   });
+  
   adddata() {
+    if(this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "")
+    {
+      console.log(this.commonService.transformDecimalVB(6,this.approvalMasterForm.value.code));
       let length = this.tableData.length;
       let srno = length + 1;
       let data =  {
@@ -117,11 +128,18 @@ export class ApprovalMasterComponent implements OnInit {
         "ORG_MESSAGE": false,
         "EMAIL": false,
         "SYS_MESSAGE": false,
-        "EMAIL_ID": "test",
-        "MOBILE_NO": "1234567890"
+        "EMAIL_ID": "",
+        "MOBILE_NO": ""
       };
       this.tableData.push(data);
+      this.approvalMasterForm.controls.code.setValue("");
+      this.approvalMasterForm.controls.description.setValue("");
   }
+  else {
+    this.toastr.error('Please Fill all Mandatory Fields')
+  }
+}
+
   removedata(){
     this.tableData.pop();
   }
