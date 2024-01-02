@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -16,10 +16,11 @@ import { AddSchemeComponent } from './add-scheme/add-scheme.component';
   styleUrls: ['./scheme-register.component.scss']
 })
 export class SchemeRegisterComponent implements OnInit {
+  @Input() content!: any;
   @ViewChild('add_scheme') add_scheme: any;
   @ViewChild('pos_customer_search') pos_customer_search: any;
 
-  formdata = new FormData();   
+  formdata = new FormData();
   isLoading: boolean = false
   viewOnly: boolean = false;
   isViewSchemeMasterGrid: boolean = true;
@@ -33,8 +34,8 @@ export class SchemeRegisterComponent implements OnInit {
   schemeArray: any[] = []
   dataToEditrow: any[] = [];
   detailArray: any[] = []
-  indexNumberStart:number = 0
-  newSchemeLength:number = 0
+  indexNumberStart: number = 0
+  newSchemeLength: number = 0
   currentDate: any = new Date()
   customerMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -69,7 +70,7 @@ export class SchemeRegisterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
+
   schemeRegistrationForm: FormGroup = this.formBuilder.group({
     SchemeId: [''],
     Code: ['', Validators.required],
@@ -81,15 +82,15 @@ export class SchemeRegisterComponent implements OnInit {
     VOCTYPE: [''],
     VOCDATE: [''],
     SCH_REMINDER_MODE: [0],
-    SCH_PARTIALLY_PAID:[false],
-    PAY_STATUS:[true],
-    REMAINDER_SEND:[true],
-    SCH_SEND_ALERT:[true],
-    SCH_CANCEL:[false],
-    SCH_REDEEM:[false],
-    SCH_STATUS:[0],
-    SCH_REMINDER_DAYS:[0],
-    UNIQUEID:[0],
+    SCH_PARTIALLY_PAID: [false],
+    PAY_STATUS: [true],
+    REMAINDER_SEND: [true],
+    SCH_SEND_ALERT: [true],
+    SCH_CANCEL: [false],
+    SCH_REDEEM: [false],
+    SCH_STATUS: [0],
+    SCH_REMINDER_DAYS: [0],
+    UNIQUEID: [0],
   });
   private subscriptions: Subscription[] = [];
   constructor(
@@ -110,42 +111,73 @@ export class SchemeRegisterComponent implements OnInit {
   ngOnInit(): void {
     this.schemeRegistrationForm.controls.VOCDATE.setValue(this.currentDate)
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
+    console.log(this.content, 'this.content');
+    this.setInitialValues()
   }
   ngAfterViewInit(): void {
     this.getIDtypes() //ID master list
   }
-  onRowClickHandler(data:any){
-    console.log(data,'fireddd');
-    
+
+  setInitialValues() {
+    if (!this.content) this.commonService.toastErrorByMsgId('MSG1531');
+    this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.content.PAY_VOCTYPE)
+    this.schemeRegistrationForm.controls.Code.setValue(this.content.SCH_SCHEME_CODE)
+    this.schemeRegistrationForm.controls.Name.setValue(this.content.SCH_CUSTOMER_NAME)
+    this.schemeRegistrationForm.controls.MobileNo.setValue(this.content.SCH_ALERT_MOBILE)
+    this.schemeRegistrationForm.controls.Email.setValue(this.content.SCH_ALERT_EMAIL)
+    this.schemeIdChange(this.content)
+  }
+  //search Value Change
+  schemeIdChange(event: any) {
+    let API = `SchemeMaster/GetSchemeMasterDetails/${this.commonService.branchCode}/${event.SCH_SCHEME_CODE.toString()}`
+    this.commonService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          console.log(result,'result');
+          
+          this.commonService.closeSnackBarMsg();
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg();
+      })
+    this.subscriptions.push(Sub)
+  }
+  onRowClickHandler(data: any) {
+    console.log(data, 'fireddd');
+
   }
   customizeDate(data: any) {
     if (!data.value) return
     return data.value.slice(0, 10)
   }
-  openAttchments(e: any){
+  openAttchments(e: any) {
     const columnName = e.column?.dataField;
     const cellValue = e.data[columnName];
-    
+
     // Handle the cell click event based on the column and value
-    if (columnName === 'IS_ATTACHMENT_PRESENT' ) {
+    if (columnName === 'IS_ATTACHMENT_PRESENT') {
       let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
       let API = `Scheme/GetSchemeAttachments?SCHEME_UNIQUEID=${SCHEME_UNIQUEID}`
       this.dataService.getDynamicAPI(API)
-      .subscribe((result: any) => {
-        if (result.fileCount > 0) {
+        .subscribe((result: any) => {
+          if (result.fileCount > 0) {
 
-          for (let j = 0; j < result.file.length; j++) {
-            window.open(
-              result.file[j],
-              '_blank' // <- This is what makes it open in a new window.
-            );
+            for (let j = 0; j < result.file.length; j++) {
+              window.open(
+                result.file[j],
+                '_blank' // <- This is what makes it open in a new window.
+              );
+            }
+          } else {
+            this.toastr.error(result.message, '', {
+              timeOut: 1000
+            });
           }
-        }else{
-          this.toastr.error(result.message, '', {
-            timeOut: 1000
-          });
-        }
-      })
+        })
     }
   }
   addScheme() {
@@ -156,20 +188,20 @@ export class SchemeRegisterComponent implements OnInit {
     let API = `SchemeMaster/GetSchemeMasterDetails/${this.commonService.branchCode}/${SCHEME_CUSTCODE}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result: any) => {
-        
+
         if (result.response && result.response.length > 0) {
           this.newSchemeItems = result.response
           this.newSchemeItems.length
-        }else{
+        } else {
           this.newSchemeItems = []
         }
       })
     this.subscriptions.push(Sub)
   }
-  exportToExcel(){
-    this.commonService.exportExcel(this.schemeReceiptList,'Scheme Details')
+  exportToExcel() {
+    this.commonService.exportExcel(this.schemeReceiptList, 'Scheme Details')
   }
-  
+
   /**schemeID change function */
   schemeIDChange(event: any) {
     if (event.target.value == '') return
@@ -181,11 +213,11 @@ export class SchemeRegisterComponent implements OnInit {
         if (sataus == 'success') {
           if (result.response['SCHEME_CUSTCODE']) {
             let event = { target: { value: result.response['SCHEME_CUSTCODE'] } }
-            this.searchValueChange(event, 'CODE',true)
+            this.searchValueChange(event, 'CODE', true)
           }
           this.newSchemeItems = []
           this.newSchemeItems.push(result.response)
-        
+
         } else {
           Swal.fire({
             title: 'Scheme Id Not Found',
@@ -213,13 +245,13 @@ export class SchemeRegisterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   //search Value Change SCHEME_CUSTCODE
-  searchValueChange(event: any, searchFlag: string,schemeFlag?: boolean) {
+  searchValueChange(event: any, searchFlag: string, schemeFlag?: boolean) {
     if (event.target.value == '') return
     // let API = `Scheme/CustomerMaster?${searchFlag}=${event.target.value}`
     let API = `PosCustomerMaster/GetCustomerByCode/${searchFlag}=${event.target.value}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
-        this.selectedCustomer(result.response,schemeFlag)
+        this.selectedCustomer(result.response, schemeFlag)
       } else {
         this.reset()
         // this.changeCode(event,searchFlag)
@@ -240,12 +272,12 @@ export class SchemeRegisterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
- 
 
-  deleteTableData(){
+
+  deleteTableData() {
 
   }
-  saveClick(){
+  saveClick() {
     this.schemeRegistrationForm.reset()
     this.isViewSchemeMasterGrid = true;
 
@@ -257,14 +289,14 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeArray = []
     this.dataToEditrow = [];
   }
-  selectedCustomer(data: any,schemeFlag?:boolean) {
+  selectedCustomer(data: any, schemeFlag?: boolean) {
     this.schemeRegistrationForm.controls.Code.setValue(data.CODE)
     this.schemeRegistrationForm.controls.MobileNo.setValue(data.MOBILE)
     this.schemeRegistrationForm.controls.Name.setValue(data.NAME)
     this.schemeRegistrationForm.controls.Email.setValue(data.EMAIL)
     this.schemeRegistrationForm.controls.GovIdType.setValue(data.Idcategory)
     this.schemeRegistrationForm.controls.GovIdNumber.setValue(data.POSCustIDNo)
-    if(data.CODE && !schemeFlag) this.fetchSchemeWithCustCode(data.CODE)
+    if (data.CODE && !schemeFlag) this.fetchSchemeWithCustCode(data.CODE)
   }
   reset() {
     this.schemeRegistrationForm.controls.Code.setValue('')
@@ -293,10 +325,10 @@ export class SchemeRegisterComponent implements OnInit {
   }
 
   openMainGridMadalView(data?: any) {
-    if(data){
+    if (data) {
       this.dataToEditrow = []
       this.dataToEditrow.push(data)
-    }else{
+    } else {
       this.dataToEditrow = []
     }
     this.modalService.open(this.add_scheme, {
@@ -308,10 +340,10 @@ export class SchemeRegisterComponent implements OnInit {
   }
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
-    if(data){
+    if (data) {
       this.dataToEditrow = []
       this.dataToEditrow.push(data)
-    }else{
+    } else {
       this.dataToEditrow = []
     }
     if (this.schemeRegistrationForm.invalid) {
@@ -335,15 +367,15 @@ export class SchemeRegisterComponent implements OnInit {
       // Handle modal dismissal (if needed)
     });
   }
-  
+
   closeModal() {
     // this.activeModal.close();
     this.modalService.dismissAll()
   }
   // new rows added 
- 
+
   addNewRow(data: any) {
-    let params =  {
+    let params = {
       "ID": this.indexNumberStart += 1,
       "SCHEME_UNIQUEID": '',
       "SCHEME_ID": this.commonService.nullToString(data.SchemeID),
@@ -354,9 +386,9 @@ export class SchemeRegisterComponent implements OnInit {
       "SCHEME_STATUS": this.commonService.nullToString(data.Status),
       "SCHEME_UNITVALUE": this.commonService.emptyToZero(data.SchemeAmount),
       "SCHEME_CUSTCODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Code),
-      "sbranch_code": data.Branch || new Date(1/1/1753).toISOString(),
+      "sbranch_code": data.Branch || new Date(1 / 1 / 1753).toISOString(),
       "PCS_SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-      "SalesManCode": this.commonService.nullToString(data.Salesman),  
+      "SalesManCode": this.commonService.nullToString(data.Salesman),
       "AttachmentPath": '',
       "BANK_ACCOUNTNO": "",
       "BANK_IBANNO": "",
@@ -371,7 +403,7 @@ export class SchemeRegisterComponent implements OnInit {
       "SCHEME_ControlRedeemDate": this.commonService.formatDateTime(this.currentDate),
     }
     this.newSchemeItems.push(params)
-    
+
     let datas = {
       "schemeData": params,
       // "ImageData": {
@@ -385,15 +417,15 @@ export class SchemeRegisterComponent implements OnInit {
     this.detailArray.push(datas)
     // this.closeModal()
   }
-   /**USE: save button click */
-   formSubmit() {
+  /**USE: save button click */
+  formSubmit() {
     if (this.schemeRegistrationForm.invalid) {
       this.toastr.error('select all details!', 'Error', {
         timeOut: 1000
       });
       return
     }
-    
+
     if (this.indexNumberStart == 0) {
       Swal.fire({
         title: 'Add New Schemes!',
@@ -409,10 +441,10 @@ export class SchemeRegisterComponent implements OnInit {
       })
       return
     }
-    this.schemeArray = this.newSchemeItems.filter((item:any) => item.ID>0 )
-    console.log(this.detailArray,'this.detailArray');
-    
-    this.detailArray.forEach((item:any,index:any)=>{
+    this.schemeArray = this.newSchemeItems.filter((item: any) => item.ID > 0)
+    console.log(this.detailArray, 'this.detailArray');
+
+    this.detailArray.forEach((item: any, index: any) => {
       delete item.schemeData['ID'];
       this.formdata.append(`Model.model[${index}].schemeData.MID`, '0');
       this.formdata.append(`Model.model[${index}].schemeData.SCH_CUSTOMER_ID`, item.schemeData.SCHEME_ID);
@@ -421,7 +453,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${index}].schemeData.SCH_SCHEME_CODE`, item.schemeData.SCHEME_ID);
       this.formdata.append(`Model.model[${index}].schemeData.SCH_METALCURRENCY`, 'AMOUNT');
       this.formdata.append(`Model.model[${index}].schemeData.SCH_JOIN_DATE`, this.commonService.formatDate(new Date(item.schemeData.SCHEME_STARTED)));
-      this.formdata.append(`Model.model[${index}].schemeData.SCH_SCHEME_PERIOD`, (item.schemeData.SchemePeriod)|| 0);
+      this.formdata.append(`Model.model[${index}].schemeData.SCH_SCHEME_PERIOD`, (item.schemeData.SchemePeriod) || 0);
       this.formdata.append(`Model.model[${index}].schemeData.SCH_FREQUENCY`, item.schemeData.SCHEME_CUSTCODE);
       this.formdata.append(`Model.model[${index}].schemeData.SCH_INST_AMOUNT_FC`, item.schemeData.SCHEME_TOTAL_VALUE);
       this.formdata.append(`Model.model[${index}].schemeData.SCH_INST_AMOUNT_CC`, item.schemeData.SCHEME_TOTAL_VALUE);
@@ -475,7 +507,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${index}].schemeData.Details[0].SCH_PARTIALLY_PAID`, this.schemeRegistrationForm.value.SCH_PARTIALLY_PAID);
       this.formdata.append(`Model.model[${index}].schemeData.Details[0].RECEIPT_REF`, '0');
       this.formdata.append(`Model.model[${index}].schemeData.Details[0].RECEIPT_MID`, '0');
-      this.formdata.append(`Model.model[${index}].imageData.VOCNO`, this.schemeRegistrationForm.value.UNIQUEID );
+      this.formdata.append(`Model.model[${index}].imageData.VOCNO`, this.schemeRegistrationForm.value.UNIQUEID);
       this.formdata.append(`Model.model[${index}].imageData.UNIQUEID`, '');
       this.formdata.append(`Model.model[${index}].imageData.SRNO`, this.schemeRegistrationForm.value.UNIQUEID);
       this.formdata.append(`Model.model[${index}].imageData.VOCDATE`, this.schemeRegistrationForm.value.VOCDATE);
@@ -489,9 +521,9 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${index}].imageData.DOCUMENT_DATE`, '');
       this.formdata.append(`Model.model[${index}].imageData.DOCUMENT_NO`, '');
       this.formdata.append(`Model.model[${index}].imageData.FROM_KYC`, '');
-      for (let i:number = 0; i < item.Images.length; i++) {    
-        this.formdata.append("Images["+i+"].Image.File", item.Images[i]);                
-      }  
+      for (let i: number = 0; i < item.Images.length; i++) {
+        this.formdata.append("Images[" + i + "].Image.File", item.Images[i]);
+      }
     })
     //save API
     this.isLoading = true;
@@ -540,8 +572,8 @@ export class SchemeRegisterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   editSchemeDetail(data: any) {
-    
-    let API = 'SchemeMaster/GetSchemeMasterDetails/'+ this.commonService.branchCode + '' + data.SchemeUniqueNo
+
+    let API = 'SchemeMaster/GetSchemeMasterDetails/' + this.commonService.branchCode + '' + data.SchemeUniqueNo
     let params = {
       "SCHEME_UNIQUEID": data.SchemeUniqueNo,
       "SCHEME_ID": data.SchemeID || '',
@@ -627,21 +659,21 @@ export class SchemeRegisterComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         let str = e.row.data;
-        if(str.SCHEME_UNIQUEID == ''){
+        if (str.SCHEME_UNIQUEID == '') {
           let data = this.newSchemeItems.filter((item: any) => item.ID != str.ID)
           this.newSchemeItems = data
-        }else{
+        } else {
           this.deleteSchemeWithUniqueId(str.SCHEME_UNIQUEID)
         }
       }
     })
   }
-  deleteSchemeWithUniqueId(SCHEME_UNIQUEID: string){
+  deleteSchemeWithUniqueId(SCHEME_UNIQUEID: string) {
     let API = `Scheme/SchemeMaster?SCHEME_UNIQUEID=${SCHEME_UNIQUEID}`
     let Sub: Subscription = this.dataService.deleteDynamicAPI(API).subscribe((result) => {
       if (result.status == "Success") {
         this.fetchSchemeWithCustCode(this.schemeRegistrationForm.value.Code)
-         Swal.fire({
+        Swal.fire({
           title: result.message || 'Scheme Deleted!',
           text: "",
           icon: 'success',
