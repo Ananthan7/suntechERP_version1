@@ -113,9 +113,9 @@ export class StoneReturnComponent implements OnInit {
   }
 
   stonereturnFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocno:[''],
-    vocdate:[''],
+    voctype:['',[Validators.required]],
+    vocno:['',[Validators.required]],
+    vocdate:['',[Validators.required]],
    basecurrency:[''],
    basecurrencyrate:[''],
    currency:[''],

@@ -36,14 +36,13 @@ export class SchemeMasterComponent implements OnInit {
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PREFIX_CODE<> ''",
+    WHERECONDITION: "DIVISION='M' AND SCHEME_PREFIX = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
- 
-
   schemeMasterForm: FormGroup = this.formBuilder.group({
+    mid: [""],
     code: [""],
     prefix: [""],
     description: [""],
@@ -72,7 +71,7 @@ export class SchemeMasterComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
+    this.setInitialValues()
     let frequencyAPI = 'ComboFilter/scheme%20frequency';
     let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {
@@ -99,22 +98,45 @@ export class SchemeMasterComponent implements OnInit {
         this.receipt2List = resp.response
       }
     });
-
+    console.log("test");
+    
+    if(this.content){
+      // console.log(this.content);
+      this.setFormValues()
+    }
+   
   }
+
+  setInitialValues() {
+    this.schemeMasterForm.controls.startDate.setValue(this.currentDate)
+  }
+
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.schemeMasterForm.controls.startDate.setValue(new Date(date))
+    }
+}
+
 
   prefixSelected(e:any){
     console.log(e);
     this.schemeMasterForm.controls.prefix.setValue(e.PREFIX_CODE);
   }
 
-  close() {
+  close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close();
+    this.activeModal.close(data);
   }
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      // this.updateMeltingType()
+       this.update()
       return
     }
 
@@ -130,16 +152,16 @@ export class SchemeMasterComponent implements OnInit {
           "SCHEME_CODE": this.schemeMasterForm.value.code,
           "SCHEME_NAME": this.schemeMasterForm.value.description,
           "SCHEME_UNIT": 0,
-          "SCHEME_BONUS": this.schemeMasterForm.value.bonusInstallment,
+          "SCHEME_BONUS": 1,
           "SCHEME_PERIOD": 0,
           "SCHEME_REMARKS": this.schemeMasterForm.value.remarks,
-          "SCHEME_AMOUNT": this.schemeMasterForm.value.installmentAmount,
+          "SCHEME_AMOUNT": parseFloat(this.schemeMasterForm.value.installmentAmount),
           "SCHEME_METALCURRENCY": 0,
-          "CANCEL_CHARGE": this.schemeMasterForm.value.cancelCharges,
+          "CANCEL_CHARGE": parseFloat(this.schemeMasterForm.value.cancelCharges),
           "SCHEME_FREQUENCY": this.schemeMasterForm.value.frequency,
           "STATUS": true,
           "START_DATE": this.schemeMasterForm.value.startDate,
-          "SCHEME_CURRENCY_CODE": "",
+          "SCHEME_CURRENCY_CODE": "stri",
           "PREFIX_CODE": this.schemeMasterForm.value.prefix,
           "BONUS_RECTYPE": this.schemeMasterForm.value.receiptModeTwo,
           "CANCEL_RECTYPE": this.schemeMasterForm.value.receiptModeThree,
@@ -160,7 +182,7 @@ export class SchemeMasterComponent implements OnInit {
             if (result.value) {
               this.schemeMasterForm.reset()
               
-              this.close()
+              this.close('reloadMainGrid')
             }
           });
         }
@@ -181,6 +203,11 @@ setFormValues() {
   this.schemeMasterForm.controls.frequency.setValue(this.content.SCHEME_FREQUENCY);
   this.schemeMasterForm.controls.startDate.setValue(this.content.START_DATE);
   this.schemeMasterForm.controls.prefix.setValue(this.content.PREFIX_CODE);
+  this.schemeMasterForm.controls.installmentAmount.setValue(this.content.SCHEME_AMOUNT);
+  this.schemeMasterForm.controls.cancelCharges.setValue(this.content.CANCEL_CHARGE);
+  this.schemeMasterForm.controls.receiptModeTwo.setValue(this.content.BONUS_RECTYPE);
+  this.schemeMasterForm.controls.receiptModeThree.setValue(this.content.CANCEL_RECTYPE);
+  this.schemeMasterForm.controls.receiptModeone.setValue(this.content.INST_RECTYPE);
 }
 
 update(){
@@ -189,27 +216,27 @@ update(){
     return
   }
 
-  let API = 'SchemeMaster/UpdateSchemeMaster/' + this.schemeMasterForm.value.branchCode + this.schemeMasterForm.value.code
-  let postData = {
+  let API = 'SchemeMaster/UpdateSchemeMaster/' + this.branchCode +"/"+ this.schemeMasterForm.value.code
+  let postData ={
     "MID": 0,
     "BRANCH_CODE": this.branchCode,
     "SCHEME_CODE": this.schemeMasterForm.value.code,
     "SCHEME_NAME": this.schemeMasterForm.value.description,
     "SCHEME_UNIT": 0,
-    "SCHEME_BONUS": 0,
+    "SCHEME_BONUS": 1,
     "SCHEME_PERIOD": 0,
     "SCHEME_REMARKS": this.schemeMasterForm.value.remarks,
-    "SCHEME_AMOUNT": 0,
+    "SCHEME_AMOUNT": parseFloat(this.schemeMasterForm.value.installmentAmount),
     "SCHEME_METALCURRENCY": 0,
-    "CANCEL_CHARGE": 0,
+    "CANCEL_CHARGE": parseFloat(this.schemeMasterForm.value.cancelCharges),
     "SCHEME_FREQUENCY": this.schemeMasterForm.value.frequency,
     "STATUS": true,
     "START_DATE": this.schemeMasterForm.value.startDate,
-    "SCHEME_CURRENCY_CODE": "",
+    "SCHEME_CURRENCY_CODE": "stri",
     "PREFIX_CODE": this.schemeMasterForm.value.prefix,
-    "BONUS_RECTYPE": "string",
-    "CANCEL_RECTYPE": "string",
-    "INST_RECTYPE": "string",
+    "BONUS_RECTYPE": this.schemeMasterForm.value.receiptModeTwo,
+    "CANCEL_RECTYPE": this.schemeMasterForm.value.receiptModeThree,
+    "INST_RECTYPE": this.schemeMasterForm.value.receiptModeone,
     "SCHEME_FIXEDAMT": true
 }
 
@@ -227,7 +254,7 @@ update(){
             if (result.value) {
               this.schemeMasterForm.reset()
              
-              this.close();
+              this.close('reloadMainGrid')
             }
           });
         }
@@ -279,7 +306,7 @@ deleteSchemeMaster() {
                 if (result.value) {
                   this.schemeMasterForm.reset()
                  
-                  this.close();
+                  this.close('reloadMainGrid')
                 }
               });
             } else {
@@ -293,7 +320,7 @@ deleteSchemeMaster() {
                 if (result.value) {
                   this.schemeMasterForm.reset()
                 
-                  this.close()
+                  this.close('reloadMainGrid')
                 }
               });
             }

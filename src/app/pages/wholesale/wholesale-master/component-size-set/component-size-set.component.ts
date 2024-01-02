@@ -69,8 +69,8 @@ subscriptions: any;
   }
 
   componentsizesetmasterForm: FormGroup = this.formBuilder.group({
-    code:[''],
-    description  : [''],
+    code:['',[Validators.required]],
+    description  : ['',[Validators.required]],
   
    });
    addTableData(){

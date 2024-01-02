@@ -27,6 +27,9 @@ export class MetalIssueComponent implements OnInit {
   yearMonth?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
+  ordered_items: any = [];
+  viewOnly: boolean = false;
 
   private subscriptions: Subscription[] = [];
   constructor(
@@ -36,6 +39,7 @@ export class MetalIssueComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    
   ) { }
 
 
@@ -70,11 +74,26 @@ export class MetalIssueComponent implements OnInit {
   deleteTableData(){
    
   }
+  
+  removeLineItemsGrid(event: any) {
+  }
+  editTable(event: any) {
+  }
+
+  customizeWeight(data: any) {
+    return 'Wt: ' + data['value'];
+  }
+
+  customizeQty(data: any) {
+  }
+  customizeDate(data: any) {
+    // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
+  }
 
   metalIssueForm: FormGroup = this.formBuilder.group({
-    voctype: ['DMI',''],
-    time: [new Date().getFullYear().toString() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + (new Date().getDate())).slice(-2) + 'T' + new Date().toTimeString().slice(0,5)],
-    vocdate: [new Date(),''],
+    voctype: ['DMI',[Validators.required]],
+    time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
+    vocdate: [new Date(),[Validators.required]],
     enteredBy: [''],
     vocno: ['1',''],
     worker: [''],

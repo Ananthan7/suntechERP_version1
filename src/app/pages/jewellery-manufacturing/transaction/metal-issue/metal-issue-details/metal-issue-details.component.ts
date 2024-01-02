@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
@@ -19,7 +20,8 @@ export class MetalIssueDetailsComponent implements OnInit {
   columnhead: any[] = ['Div', 'Stock Code', 'Karat', 'Color', 'Req.Pcs', 'Req.Wt ', 'Issued Pcs', 'Issued Wt', 'Bal.pcs', 'Bal.Wt'];
   vocMaxDate = new Date();
   currentDate = new Date();
-  
+  branchCode?: String;
+  yearMonth?: String;
  
 
   constructor(
@@ -27,9 +29,12 @@ export class MetalIssueDetailsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
     if (this.content) {
       this.setFormValues()
     }
@@ -172,7 +177,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     unqDesignId: [''],
     uniqueId:[''],
     treeNumber: [''],
-    jobPurity: [''],
+    jobPurity: ['',[Validators.required]],
     stockCode: [''],
     stockCodeDes: [''],
     pcs: [''],
@@ -188,7 +193,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     totalAmountFc: [''],
     subStockCode: [''],
     totalAmountLc: [''],
-    purityDiff: [''],
+    purityDiff: ['',[Validators.required]],
     amountFc: [''],
     jobPcs: [''],
     amountLc: [''],
@@ -268,7 +273,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           "MASTER_METAL": this.metalIssueDetailsForm.value.masterMetal,
           "STONE_WT": this.metalIssueDetailsForm.value.stoneWeight,
           "NET_WT": this.metalIssueDetailsForm.value.netWeight,
-          "DT_BRANCH_CODE": "dm3",
+          "DT_BRANCH_CODE": this.branchCode,
           "DT_VOCTYPE": "MIS",
           "DT_VOCNO": 0,
           "DT_YEARMONTH": "string",

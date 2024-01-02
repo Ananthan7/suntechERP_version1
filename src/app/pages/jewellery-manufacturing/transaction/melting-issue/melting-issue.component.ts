@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { ToastrService } from 'ngx-toastr';
@@ -168,9 +168,9 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   meltingIssueFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocno:[''],
-    vocdate:[''],
+    voctype:['',[Validators.required]],
+    vocno:['',[Validators.required]],
+    vocdate:['',[Validators.required]],
     voctime:[''],
     meltingtype:[''],
     jobno:[''],
@@ -180,7 +180,7 @@ export class MeltingIssueComponent implements OnInit {
     worker:[''],
     workerdes:[''],
     subjobno:[''], // Not in table
-    color:[''],
+    color:['',[Validators.required]],
     time:[''],  // Not in table
     remarks:[''],
     issued:[''],

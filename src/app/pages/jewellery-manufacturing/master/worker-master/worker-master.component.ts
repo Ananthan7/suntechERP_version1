@@ -354,26 +354,26 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
-    if (event.target.value == '' || this.viewOnlyFlag == true) return
-    let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          Swal.fire({
-            title: '',
-            text: 'Worker Already Exists!',
-            icon: 'warning',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.workerMasterForm.reset()
-            }
-          });
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
+  //   if (event.target.value == '' || this.viewOnlyFlag == true) return
+  //   let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         Swal.fire({
+  //           title: '',
+  //           text: 'Worker Already Exists!',
+  //           icon: 'warning',
+  //           confirmButtonColor: '#336699',
+  //           confirmButtonText: 'Ok'
+  //         }).then((result: any) => {
+  //           if (result.value) {
+  //             this.workerMasterForm.reset()
+  //           }
+  //         });
+  //       }
+  //     }, err => alert(err))
+  //   this.subscriptions.push(Sub)
+   }
   //selected field value setting
   WorkerAcCodeSelected(data: any) {
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)

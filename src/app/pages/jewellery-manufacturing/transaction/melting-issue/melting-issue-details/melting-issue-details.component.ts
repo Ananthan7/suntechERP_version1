@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -139,35 +139,35 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
 
   meltingIssuedetailsFrom: FormGroup = this.formBuilder.group({
-    jobno:[''],
+    jobno:['',[Validators.required]],
     jobdes:[''],
     jobpurity:[''],
-    process:[''],
-    processdes:[''],
-    worker:[''],
-    workerdes:[''],
+    process:['',[Validators.required]],
+    processdes:['',[Validators.required]],
+    worker:['',[Validators.required]],
+    workerdes:['',[Validators.required]],
     treeno:[''],
     stockcode:[''],
     stockdes:[''],
     tostock:[''],
     mainstock:[''],
-    grossweight:[''],
-    purity:[''],
-    lossweight:[''],
+    grossweight:['',[Validators.required]],
+    purity:['',[Validators.required]],
+    lossweight:['',[Validators.required]],
     diffgrwt:[''],
-    waxweight:[''],
+    waxweight:['',[Validators.required]],
     stoneweight:[''],
     remarks:[''],
-    lotno:[''],
+    lotno:['',[Validators.required]],
     tgold:[''],
     silver:[''],
-    ticketno:[''],
-    barno:[''],
+    ticketno:['',[Validators.required]],
+    barno:['',[Validators.required]],
     location:[''],
     pcs:[''],
     netweight:[''],
-    pureweight:[''],
-    topurity:['']
+    pureweight:['',[Validators.required]],
+    topurity:['',[Validators.required]]
   });
 
 
