@@ -143,9 +143,9 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input matInput [matDatepicker]="startDate" [max]="startDate" formControlName="startDate"
-                                placeholder="DD/MM/YYYY" DateValidation />
+                                placeholder="DD/MM/YYYY" DateValidation  (dateChange)="formatDate($event)"/>
                             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-                            <mat-datepicker [startAt]="currentDate" #startDate></mat-datepicker>
+                            <mat-datepicker #startDate></mat-datepicker>
                         </mat-form-field>
                     </div>
                     <div class="col-md-2">
