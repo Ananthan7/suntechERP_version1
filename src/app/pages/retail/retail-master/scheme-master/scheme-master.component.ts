@@ -36,12 +36,10 @@ export class SchemeMasterComponent implements OnInit {
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PREFIX_CODE<> ''",
+    WHERECONDITION: "DIVISION='M' AND SCHEME_PREFIX = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
- 
 
   schemeMasterForm: FormGroup = this.formBuilder.group({
     mid: [""],
@@ -73,7 +71,7 @@ export class SchemeMasterComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
+    this.setInitialValues()
     let frequencyAPI = 'ComboFilter/scheme%20frequency';
     let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {
@@ -106,16 +104,34 @@ export class SchemeMasterComponent implements OnInit {
       // console.log(this.content);
       this.setFormValues()
     }
+   
   }
+
+  setInitialValues() {
+    this.schemeMasterForm.controls.startDate.setValue(this.currentDate)
+  }
+
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.schemeMasterForm.controls.startDate.setValue(new Date(date))
+    }
+}
+
 
   prefixSelected(e:any){
     console.log(e);
     this.schemeMasterForm.controls.prefix.setValue(e.PREFIX_CODE);
   }
 
-  close() {
+  close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close();
+    this.activeModal.close(data);
   }
 
   formSubmit() {
@@ -166,7 +182,7 @@ export class SchemeMasterComponent implements OnInit {
             if (result.value) {
               this.schemeMasterForm.reset()
               
-              this.close()
+              this.close('reloadMainGrid')
             }
           });
         }
@@ -238,7 +254,7 @@ update(){
             if (result.value) {
               this.schemeMasterForm.reset()
              
-              this.close();
+              this.close('reloadMainGrid')
             }
           });
         }
@@ -290,7 +306,7 @@ deleteSchemeMaster() {
                 if (result.value) {
                   this.schemeMasterForm.reset()
                  
-                  this.close();
+                  this.close('reloadMainGrid')
                 }
               });
             } else {
@@ -304,7 +320,7 @@ deleteSchemeMaster() {
                 if (result.value) {
                   this.schemeMasterForm.reset()
                 
-                  this.close()
+                  this.close('reloadMainGrid')
                 }
               });
             }

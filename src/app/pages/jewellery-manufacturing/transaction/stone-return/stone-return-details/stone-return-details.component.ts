@@ -49,6 +49,23 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
   }
+  subJobNoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  subJobNoCodeSelected(e:any){
+    console.log(e);
+    this.stonereturndetailsFrom.controls.subJobNo.setValue(e.job_number);
+    this.stonereturndetailsFrom.controls.subJobNoDes.setValue(e.job_description);
+    
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
