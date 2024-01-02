@@ -36,7 +36,9 @@ export class SchemeRegisterComponent implements OnInit {
   detailArray: any[] = []
   indexNumberStart: number = 0
   newSchemeLength: number = 0
-  currentDate: any = new Date()
+  dataIndex: any;
+  currentDate: any = new Date();
+  
   customerMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -119,7 +121,7 @@ export class SchemeRegisterComponent implements OnInit {
   }
 
   setInitialValues() {
-    if (!this.content) this.commonService.toastErrorByMsgId('MSG1531');
+    if (!this.content) return;
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.content.PAY_VOCTYPE)
     this.schemeRegistrationForm.controls.Code.setValue(this.content.SCH_SCHEME_CODE)
     this.schemeRegistrationForm.controls.Name.setValue(this.content.SCH_CUSTOMER_NAME)
@@ -135,7 +137,35 @@ export class SchemeRegisterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           console.log(result,'result');
-          
+          let data = result.response
+          let params = {
+            "ID": this.indexNumberStart += 1,
+            "SCHEME_UNIQUEID": '',
+            "SCHEME_ID": this.commonService.nullToString(data.SCHEME_CODE),
+            "SCHEME_UNITS": this.commonService.emptyToZero(data.SCHEME_UNIT),
+            "SCHEME_TOTAL_VALUE": this.commonService.emptyToZero(data.TotalValue),
+            "SCHEME_STARTED": this.commonService.nullToString(this.commonService.formatDateTime(data.StartDate)),
+            "SCHEME_ENDEDON": this.commonService.nullToString(this.commonService.formatDateTime(data.endDate)),
+            "SCHEME_STATUS": this.commonService.nullToString(data.Status),
+            "SCHEME_UNITVALUE": this.commonService.emptyToZero(data.SchemeAmount),
+            "SCHEME_CUSTCODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Code),
+            "sbranch_code": data.Branch || new Date(1 / 1 / 1753).toISOString(),
+            "PCS_SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
+            "SalesManCode": this.commonService.nullToString(data.Salesman),
+            "AttachmentPath": '',
+            "BANK_ACCOUNTNO": "",
+            "BANK_IBANNO": "",
+            "BANK_SWIFTID": "",
+            "BANK_EMISTARTDATE": this.commonService.formatDateTime(this.currentDate),
+            "BANK_EMIENDDATE": this.commonService.formatDateTime(this.currentDate),
+            "ACTIVE": true,
+            "SCHEME_REMARKS": '',
+            "CUSTOMER_ACCOUNTNO": '',
+            "BANK_DATE": this.commonService.formatDateTime(this.currentDate),
+            "SCHEME_BLOCK": data.BlockScheme ? 1 : 0,
+            "SCHEME_ControlRedeemDate": this.commonService.formatDateTime(this.currentDate),
+          }
+          this.newSchemeItems.push(params)
           this.commonService.closeSnackBarMsg();
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -146,9 +176,11 @@ export class SchemeRegisterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  onRowClickHandler(data: any) {
-    console.log(data, 'fireddd');
+  onRowClickHandler(event: any) {
+    console.log(event, 'fireddd');
 
+    this.dataIndex = event.dataIndex
+    this.openNewSchemeDetails(event.data)
   }
   customizeDate(data: any) {
     if (!data.value) return
@@ -402,8 +434,15 @@ export class SchemeRegisterComponent implements OnInit {
       "SCHEME_BLOCK": data.BlockScheme ? 1 : 0,
       "SCHEME_ControlRedeemDate": this.commonService.formatDateTime(this.currentDate),
     }
-    this.newSchemeItems.push(params)
-
+    console.log(this.dataIndex);
+    
+    if(this.dataIndex){
+      this.newSchemeItems[0] = params;
+    }else{
+      this.newSchemeItems.push(params)
+    }
+    console.log(this.newSchemeItems);
+    
     let datas = {
       "schemeData": params,
       // "ImageData": {
@@ -417,8 +456,21 @@ export class SchemeRegisterComponent implements OnInit {
     this.detailArray.push(datas)
     // this.closeModal()
   }
+
+  replaceObject(updatedObject: any): void {
+    const index = this.newSchemeItems.findIndex((item:any) => item.id === updatedObject.id);
+
+    if (index !== -1) {
+      // Replace the object at the found index
+      this.newSchemeItems[index] = updatedObject;
+    }
+  }
   /**USE: save button click */
   formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
+       this.editSchemeDetail(this.content)
+      return
+    }
     if (this.schemeRegistrationForm.invalid) {
       this.toastr.error('select all details!', 'Error', {
         timeOut: 1000
@@ -573,32 +625,73 @@ export class SchemeRegisterComponent implements OnInit {
   }
   editSchemeDetail(data: any) {
 
-    let API = 'SchemeMaster/GetSchemeMasterDetails/' + this.commonService.branchCode + '' + data.SchemeUniqueNo
+    let API = 'SchemeRegistration/UpdateSchemeRegistration/'+ data.SCH_CUSTOMER_ID
     let params = {
-      "SCHEME_UNIQUEID": data.SchemeUniqueNo,
-      "SCHEME_ID": data.SchemeID || '',
-      "SCHEME_UNITS": data.Units || 0,
-      "SCHEME_TOTAL_VALUE": data.TotalValue || 0,
-      "SCHEME_STARTED": this.commonService.formatDate(data.StartDate) || '',
-      "SCHEME_ENDEDON": this.commonService.formatDate(data.endDate) || '',
-      "SCHEME_STATUS": data.Status || "",
-      "SCHEME_UNITVALUE": 0,
-      "SCHEME_CUSTCODE": data.SCHEME_CUSTCODE || "",
-      "sbranch_code": data.Branch || '',
-      "PCS_SYSTEM_DATE": new Date().toISOString(),
-      "SalesManCode": data.Salesman || '',
-      "AttachmentPath": '',
-      "BANK_ACCOUNTNO": "",
-      "BANK_IBANNO": "",
-      "BANK_SWIFTID": "",
-      "BANK_EMISTARTDATE": new Date().toISOString(),
-      "BANK_EMIENDDATE": new Date().toISOString(),
-      "ACTIVE": true,
-      "SCHEME_REMARKS": '',
-      "CUSTOMER_ACCOUNTNO": '',
-      "BANK_DATE": new Date().toISOString(),
-      "SCHEME_BLOCK": data.BlockScheme ? 1 : 0,
-      "SCHEME_ControlRedeemDate": new Date().toISOString()
+      "MID": 0,
+      "SCH_CUSTOMER_ID": this.commonService.nullToString(data.SCH_CUSTOMER_ID),
+      "SCH_CUSTOMER_CODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Code),
+      "SCH_CUSTOMER_NAME": this.commonService.nullToString(this.schemeRegistrationForm.value.Name),
+      "SCH_SCHEME_CODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Name),
+      "SCH_METALCURRENCY": "string",
+      "SCH_JOIN_DATE": "2024-01-02T09:32:15.920Z",
+      "SCH_SCHEME_PERIOD": 0,
+      "SCH_FREQUENCY": "string",
+      "SCH_INST_AMOUNT_FC": 0,
+      "SCH_INST_AMOUNT_CC": 0,
+      "SCH_ASSURED_AMT_FC": 0,
+      "SCH_ASSURED_AMT_CC": 0,
+      "SCH_EXPIRE_DATE": "2024-01-02T09:32:15.920Z",
+      "SCH_REMINDER_DAYS": 0,
+      "SCH_REMINDER_MODE": "string",
+      "SCHEME_BONUS": 0,
+      "REMARKS": "string",
+      "SCH_UNITS": 0,
+      "SCH_CANCEL_AMT": 0,
+      "SCH_STATUS": "string",
+      "PAY_DATE": "2024-01-02T09:32:15.920Z",
+      "PAY_BRANCH_CODE": "string",
+      "PAY_VOCTYPE": "string",
+      "PAY_VOCNO": 0,
+      "PAY_YEARMONTH": "string",
+      "PAY_AMOUNTFC": 0,
+      "PAY_AMOUNTCC": 0,
+      "SCH_ALERT_EMAIL": "string",
+      "SCH_ALERT_MOBILE": "string",
+      "SCH_SEND_ALERT": true,
+      "PAN_NUMBER": "string",
+      "SCH_PAN_NUMBER": "string",
+      "VOCDATE": "2024-01-02T09:32:15.920Z",
+      "SCH_CANCEL": true,
+      "SCH_REDEEM": true,
+      "REDEEM_REFERENCE": "string",
+      "SCHEME_BRANCH": "string",
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "SCH_CUSTOMER_CODE": "string",
+          "SCH_CUSTOMER_ID": "string",
+          "SRNO": 0,
+          "PAY_DATE": "2024-01-02T09:32:15.920Z",
+          "PAY_AMOUNT_FC": 0,
+          "PAY_AMOUNT_CC": 0,
+          "PAY_STATUS": true,
+          "REMAINDER_DATE": "2024-01-02T09:32:15.920Z",
+          "REMAINDER_SEND": true,
+          "DT_BRANCH_CODE": "string",
+          "RCVD_DATE": "2024-01-02T09:32:15.920Z",
+          "RCVD_BRANCH_CODE": "string",
+          "RCVD_VOCTYPE": "string",
+          "RCVD_VOCNO": 0,
+          "RCVD_YEARMONTH": "string",
+          "RCVD_AMOUNTFC": 0,
+          "RCVD_AMOUNTCC": 0,
+          "SCHBAL_AMOUNTFC": 0,
+          "SCHBAL_AMOUNTCC": 0,
+          "SCH_PARTIALLY_PAID": true,
+          "RECEIPT_REF": "string",
+          "RECEIPT_MID": 0
+        }
+      ]
     }
     let Sub: Subscription = this.dataService.putDynamicAPI(API, params)
       .subscribe((result) => {
