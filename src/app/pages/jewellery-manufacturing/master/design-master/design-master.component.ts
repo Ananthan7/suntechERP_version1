@@ -20,16 +20,18 @@ export class DesignMasterComponent implements OnInit {
 
 
   tableData: any[] = [];
+  tableDatas: any[] = [];
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
 
   currentFilter: any; 
-  divisionMS: any = 'ID';
+
+  selectedTabIndex = 0;
 
   columnhead:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
   columnheader:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
   columnheader1:any[] = ['Srno','Division','Stone Type', 'Stock Code','Karat','Shape','Color','Ext.Color','Clarity','Ext.Clarity','Sieve Std.','Description','Sieve From'];
-  columnheader2:any[] = ['Comp.Code','Srno','Division','Stone Type', 'Stock Code','Karat','Int.Color','Ext.Color','Shape','Int.Clarity','Ext.Clarity'];
+  columnheader2:any[] = ['Comp. Code','Sr no','Division','Stone Type', 'Stock Code','Karat','Int. Color','Ext. Color','Shape','Int. Clarity','Ext. Clarity'];
   columnheader3:any[] = ['',];
   columnheader4:any[] = ['SINO','Size Code','Description','Default'];
   column1:any[] = ['SINO','Model No','Description'];
@@ -108,6 +110,156 @@ export class DesignMasterComponent implements OnInit {
     price5 : [''],
     metalwt: [''],
   });
+
+  adddata() {
+    let length = this.tableData.length;
+    let srno = length + 1;
+    let data =  {
+      "Srno": srno,
+      "Division": "string",
+      "StoneType": "string",
+      "StockCode": "string",
+      "Karat": "string",
+      "Shape": "string",
+      "Color": "string",
+      "ExtColor": "string",
+      "Clarity": 0,
+      "ExtClarity": 0,
+      "SieveStd": 0,
+      "Description": 'string',
+      "SieveFrom": 0,
+
+    };
+  
+    this.tableData.push(data);
+   
+}
+
+divisiontemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Division = data.target.value;
+}
+
+stoneTypetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].StoneType = data.target.value;
+}
+
+stockCodetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].StockCode = data.target.value;
+}
+
+karattemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Karat = data.target.value;
+}
+
+shapetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Shape = data.target.value;
+}
+
+colortemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Color = data.target.value;
+}
+
+extColortemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].ExtColor = data.target.value;
+}
+
+claritytemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Clarity = data.target.value;
+}
+
+extClaritytemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].ExtClarity = data.target.value;
+}
+
+sieveStdtemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].SieveStd = data.target.value;
+}
+
+descriptiontemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Description = data.target.value;
+}
+
+sieveFromtemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].SieveFrom = data.target.value;
+}
+
+adddatas(){
+  let length = this.tableDatas.length;
+  let srno = length + 1;
+  let datas =  {
+    "Srno": srno,
+    "Division": "string",
+    "StoneType": "string",
+    "StockCode": "string",
+    "Karat": "string",
+    "Shape": "string",
+    "Color": "string",
+    "ExtColor": "string",
+    "Clarity": 0,
+    "ExtClarity": 0,
+    "SieveStd": 0,
+    "Description": 'string',
+    "SieveFrom": 0,
+}
+this.tableDatas.push(datas);
+}
+
+compCodetemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].CompCode = data.target.value;
+}
+
+Descriptiontemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Description = data.target.value;
+}
+
+Pcstemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Pcs = data.target.value;
+}
+
+sizeSetCodetemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].SizeSetCode = data.target.value;
+}
+
+sizeCodetemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].SizeCode = data.target.value;
+}
+
+typetemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Type = data.target.value;
+}
+
+categorytemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Category = data.target.value;
+}
+
+Shapetemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Shape = data.target.value;
+}
+
+heighttemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Height = data.target.value;
+}
+
+widthtemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Width = data.target.value;
+}
+
+lengthtemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Length = data.target.value;
+}
+
+radioustemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Radious = data.target.value;
+}
+
+
+removedata(){
+  this.tableData.pop();
+}
+
+removedatas(){
+  this.tableDatas.pop();
+}
 
   costCenterData: MasterSearchModel = {
     PAGENO: 1,

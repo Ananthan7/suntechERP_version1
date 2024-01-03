@@ -19,9 +19,10 @@
                                 <label for="input" class="col-sm-5 col-form-label">Code :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="" />
+                                        <input type="text" matInput formControlName="code" />
                                     </mat-form-field>
-
+                                    <master-search [MasterSearchData]="codeData"
+                                        (newRowClick)="codeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
@@ -130,16 +131,19 @@
                             <div class="row mb-1">
                                 <label for="input" class="col-sm-5 col-form-label">Created on :</label>
                                 <div class="col-sm-7">
-                                    <mat-form-field>
-                                        <input type="text" matInput formControlName="createdOn" />
-                                    </mat-form-field>
+                                    <mat-form-field style="width: 100%;">
+                                        <input [disabled]="true"  matInput [matDatepicker]="createdOn"  formControlName="createdOn"
+                                        placeholder="YYYY/MM/DD"  DateValidation />
+                                      <mat-datepicker-toggle matSuffix [for]="createdOn"></mat-datepicker-toggle>
+                                      <mat-datepicker [disabled]="true" [startAt]="currentDate" #createdOn></mat-datepicker>
+                                      </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
                                 <label for="input" class="col-sm-5 col-form-label">Created by :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field>
-                                        <input type="text" matInput formControlName="createdBy" />
+                                        <input [disabled]="true" type="text" matInput formControlName="createdBy" />
                                     </mat-form-field>
                                 </div>
                             </div>

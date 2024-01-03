@@ -19,7 +19,7 @@ export class MetalIssueComponent implements OnInit {
   currentFilter: any;
   divisionMS: any = 'ID';
   tableData: any[] = [];
-  columnhead: any[] = [''];
+  columnhead: any[] = ['Job Id','Uniq job Id','Design','Stock Code','Division','Description','Carat','Process','Worker','Amount'];
   metalIssueDetailsData : any[] = [];
   @Input() content!: any; 
   userName = localStorage.getItem('username');
@@ -27,6 +27,9 @@ export class MetalIssueComponent implements OnInit {
   yearMonth?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
+  ordered_items: any = [];
+  viewOnly: boolean = false;
 
   private subscriptions: Subscription[] = [];
   constructor(
@@ -36,6 +39,7 @@ export class MetalIssueComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    
   ) { }
 
 
@@ -70,13 +74,28 @@ export class MetalIssueComponent implements OnInit {
   deleteTableData(){
    
   }
+  
+  removeLineItemsGrid(event: any) {
+  }
+  editTable(event: any) {
+  }
+
+  customizeWeight(data: any) {
+    return 'Wt: ' + data['value'];
+  }
+
+  customizeQty(data: any) {
+  }
+  customizeDate(data: any) {
+    // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
+  }
 
   metalIssueForm: FormGroup = this.formBuilder.group({
-    voctype: [''],
-    time: [''],
-    vocdate: [''],
+    voctype: ['DMI',[Validators.required]],
+    time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
+    vocdate: [new Date(),[Validators.required]],
     enteredBy: [''],
-    vocno: [''],
+    vocno: ['1',''],
     worker: [''],
     workerDes: [''],
     remarks: [''],   

@@ -1,0 +1,52 @@
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .matlabels {
+      width: 30%;
+      font-weight: 700;
+      font-size: 12px;
+    }
+  }
+  /* Medium devices (landscape tablets, 768px and up) */
+  @media only screen and (min-width: 768px) {
+    .matlabels {
+      width: 30%;
+      font-weight: 700;
+      font-size: 10px;
+      padding-top: 22px;
+    }
+  }
+  /* Extra large devices (large laptops and desktops, 1200px and up) */
+  @media only screen and (min-width: 1200px) {
+    .matlabels {
+      width: 30%;
+      font-weight: 700;
+      font-size: 12px;
+      padding-top: 22px;
+    }
+  }
+  
+  ::ng-deep{
+      .mat-tab-body-content{
+          overflow: hidden !important;
+      }
+      .mat-form-field{
+        padding: 0px !important;
+        font-weight: 600 !important;
+      }
+      // .dx-row:hover {
+      //   cursor: pointer;
+      // }
+  }
+  ::ng-deep {
+    .cdk-overlay-container {
+        position: fixed;
+        z-index: 1070 !important;
+    }
+  
+  }
+  .advanceCustomer{
+    border-left: 1px solid #c8c8c8;
+  }
+  .excelbtn:hover{
+    cursor: pointer;
+  }

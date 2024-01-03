@@ -32,6 +32,22 @@ export class IndexedApiService {
         this.comFunc.setCompParaValues();
       }
     });
+    this.inDb.getAllData('companyParameter').subscribe((data) => {
+      if (data.length == 0) {
+        this.getAllCompanyParametersAsObj();
+      } else {
+        this.comFunc.allCompanyParameters = data;
+        // this.comFunc.setCompParaValues();
+      }
+    });
+    this.inDb.getAllData('compparams').subscribe((data) => {
+      if (data.length == 0) {
+        this.getAllCompanyParameters();
+      } else {
+        this.comFunc.allCompanyParams = data;
+        this.comFunc.setCompParaValues();
+      }
+    });
 
     this.inDb.getAllData('branchCurrencyMaster').subscribe((data) => {
       if (data.length == 0) {
@@ -286,6 +302,16 @@ export class IndexedApiService {
         this.setCompParaValues();
       } else {
         this.comFunc.allCompanyParams = [];
+      }
+    });
+  }
+  getAllCompanyParametersAsObj() {
+     this.suntechApi.getDynamicAPI('CompanyParameters/GetCompanyParameterandParametervalue').subscribe((resp) => {
+      if (resp.status == 'Success') {
+         this.inDb.bulkInsert('companyParameter', [resp.response]);
+          this.comFunc.allCompanyParameters = resp.response;
+      } else {
+        this.comFunc.allCompanyParameters = [];
       }
     });
   }

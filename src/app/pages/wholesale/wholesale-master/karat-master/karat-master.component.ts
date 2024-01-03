@@ -14,9 +14,9 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./karat-master.component.scss']
 })
 export class KaratMasterComponent implements OnInit {
-
+  karatmasterFrom!: FormGroup;
   subscriptions: any;
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
 
   constructor(
@@ -27,24 +27,40 @@ export class KaratMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) { }
- 
-  ngOnInit(): void {
-  }
 
-  karatmasterFrom: FormGroup = this.formBuilder.group({
-    division :[''],
-    karatcode:[''],
-    karatcodedes:[''],
-    standardpurity:[''],
-    minimum :[''],
-    maximum:[''],
-    sp_gravity:[''],
-    sp_variance:[''],
-    pos :[''],
-    pop_minmaxamt:[''],
-    scrap:[''],
-    showinweb:[''],
-  })
+  ngOnInit(): void {
+
+    this.karatmasterFrom = this.formBuilder.group({
+      division: ['',[Validators.required]],
+      karatcode: [''],
+      karatcodedes: [''],
+      standardpurity: ['0.000000',[Validators.required]],
+      minimum: ['0.000000'],
+      maximum: ['0.000000'],
+      sp_gravity: [''],
+      sp_variance: ['',[Validators.required]],
+      pos: ['',[Validators.required]],
+      pop_minmaxamt: ['',[Validators.required]],
+      scrap: [false,[Validators.required]],
+      showinweb: [false,[Validators.required]],
+    })
+
+    const standardpurityControl = this.karatmasterFrom.get('standardpurity');
+
+    if (standardpurityControl) {
+      standardpurityControl.valueChanges.subscribe((value) => {
+        this.karatmasterFrom.patchValue(
+          {
+            minimum: value,
+            maximum: value,
+          },
+          { emitEvent: false }
+        );
+      });
+    } else {
+      console.error("Control 'standardpurity' not found in the form group.");
+    }
+  }
 
   divisionCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -57,7 +73,7 @@ export class KaratMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  divisionCodeSelected(e:any){
+  divisionCodeSelected(e: any) {
     console.log(e);
     this.karatmasterFrom.controls.division.setValue(e.DIVISION_CODE);
   }
@@ -69,9 +85,9 @@ export class KaratMasterComponent implements OnInit {
 
 
 
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -79,11 +95,11 @@ export class KaratMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'karatMaster/InsertKaratMaster'
     let postData = {
       "KARAT_CODE": this.karatmasterFrom.value.karatcode || "",
-      "STD_PURITY": this.karatmasterFrom.value.standardpurity || "",
+      "STD_PURITY": this.karatmasterFrom.value.standardpurity || 0,
       "PURITY_FROM": 0,
       "PURITY_TO": 0,
       "MID": 0,
@@ -92,17 +108,17 @@ export class KaratMasterComponent implements OnInit {
       "SPGRVT": this.karatmasterFrom.value.sp_gravity || "",
       "POSMINMAXAMT": this.karatmasterFrom.value.pos || "",
       "DIVISION_CODE": this.karatmasterFrom.value.division || "",
-      "POPMINMAXAMT":this.karatmasterFrom.value.pop_minmaxamt || "",
+      "POPMINMAXAMT": this.karatmasterFrom.value.pop_minmaxamt || "",
       "SPGRVT_VAR": this.karatmasterFrom.value.sp_variance || "",
       "KARAT_DESC_AR": "string",
-      "IS_SCRAP": this.karatmasterFrom.value.scrap || "",
-      "SHOWINWEB": this.karatmasterFrom.value.showinweb || "",
+      "IS_SCRAP": this.karatmasterFrom.value.scrap,
+      "SHOWINWEB": this.karatmasterFrom.value.showinweb,
     }
-  
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -123,37 +139,37 @@ export class KaratMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  update(){
+  update() {
     if (this.karatmasterFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = '/karatMaster/UpdateKaratMaster/'+this.content.KARAT_CODE
-    let postData = 
+
+    let API = '/karatMaster/UpdateKaratMaster/' + this.content.KARAT_CODE
+    let postData =
     {
-      "KARAT_CODE": "stri",
-      "STD_PURITY": 0,
+      "KARAT_CODE": this.karatmasterFrom.value.karatcode || "",
+      "STD_PURITY": this.karatmasterFrom.value.standardpurity || 0,
       "PURITY_FROM": 0,
       "PURITY_TO": 0,
       "MID": 0,
-      "SYSTEM_DATE": "2023-11-24T10:52:32.949Z",
-      "KARAT_DESC": "string",
-      "SPGRVT": 0,
-      "POSMINMAXAMT": 0,
-      "DIVISION_CODE": "s",
-      "POPMINMAXAMT": 0,
-      "SPGRVT_VAR": 0,
+      "SYSTEM_DATE": "2023-11-24T10:50:27.839Z",
+      "KARAT_DESC": this.karatmasterFrom.value.karatcodedes || "",
+      "SPGRVT": this.karatmasterFrom.value.sp_gravity || "",
+      "POSMINMAXAMT": this.karatmasterFrom.value.pos || "",
+      "DIVISION_CODE": this.karatmasterFrom.value.division || "",
+      "POPMINMAXAMT": this.karatmasterFrom.value.pop_minmaxamt || "",
+      "SPGRVT_VAR": this.karatmasterFrom.value.sp_variance || "",
       "KARAT_DESC_AR": "string",
-      "IS_SCRAP": true,
-      "SHOWINWEB": true
+      "IS_SCRAP": this.karatmasterFrom.value.scrap,
+      "SHOWINWEB": this.karatmasterFrom.value.showinweb,
     }
-    
-  
+
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',

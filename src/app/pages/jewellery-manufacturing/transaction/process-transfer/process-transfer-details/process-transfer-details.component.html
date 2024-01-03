@@ -75,7 +75,7 @@
             </div>
           </div>
           <div class="col-md-4 pt-1" style="border: 1px solid #b0b0b0;">
-            <h6>Approved Details</h6>
+            <h6>Approval Details</h6>
             <div class="row mb-2">
               <label for="inputPassword" class="col-sm-4 col-form-label">Approved
                 By</label>
@@ -229,11 +229,6 @@
                       <th>Location</th>
                       <th>Std.Loss</th>
                       <th>
-                        <mat-form-field style="width: 50px;">
-                          <input type="text" matInput class="text-right"
-                            MetalDecimalInput
-                            formControlName="stdLoss" />
-                        </mat-form-field>
                       </th>
                     </tr>
                     <tr>
@@ -389,9 +384,9 @@
                       <th rowspan="2">Transfer to Stock</th>
                       <th>Std Loss</th>
                       <td>
-                        <mat-form-field style="width: 100px;">
+                         <mat-form-field style="width: 100px;">
                           <input type="text" matInput formControlName="METAL_quantity" />
-                        </mat-form-field>
+                        </mat-form-field> 
                       </td>
                     </tr>
                     <tr>
@@ -405,7 +400,7 @@
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
-                            (newRowClick)="processCodeFromSelected($event)">
+                            (newRowClick)="metalprocessCodeFromSelected($event)">
                           </master-search>
                         </span>
                       </td>
@@ -418,7 +413,7 @@
                           </mat-form-field>
                           <master-search
                             [MasterSearchData]="processMasterSearch"
-                            (newRowClick)="processCodeToSelected($event)">
+                            (newRowClick)="metalprocessCodeToSelected($event)">
                           </master-search>
                         </span>
                       </td>
@@ -438,7 +433,7 @@
                               formControlName="METAL_workerFrom" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
-                            (newRowClick)="workerCodeFromSelected($event)">
+                            (newRowClick)="metalworkerCodeFromSelected($event)">
                           </master-search>
                         </span>
                       </td>
@@ -449,7 +444,7 @@
                               formControlName="METAL_workerTo" />
                           </mat-form-field>
                           <master-search [MasterSearchData]="workerMasterSearch"
-                            (newRowClick)="workerCodeToSelected($event)">
+                            (newRowClick)="metalworkerCodeToSelected($event)">
                           </master-search>
                         </span>
                       </td>
@@ -695,7 +690,7 @@
               <label for="input" class="col-sm-4 col-form-label">End Date</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="enddate" id="enddate"/>
+                  <input type="date" matInput formControlName="enddate" id="enddate" [min]="minEndDate"/>
                 </mat-form-field>
               </div>
               <div *ngIf="processTransferdetailsForm.hasError('dateError')">

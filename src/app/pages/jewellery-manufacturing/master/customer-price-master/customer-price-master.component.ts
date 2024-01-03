@@ -7,6 +7,10 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-customer-price-master',
@@ -16,13 +20,23 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class CustomerPriceMasterComponent implements OnInit {
 
   divisionMS: any = 'ID';
-  columnheader:any[] = ['SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER','WEIGHT_FROM','WEIGHT_TO','CUSTOMER','PRICE_TYPE','CUSTOMER_CODE','DT_VALID_FROM'];
+  columnheader:any[] = ['PRICE_CODE','SIEVE','SIEVE_TO','SIEVE_SET','SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER','WEIGHT_FROM','WEIGHT_TO','CUSTOMER','PRICE_TYPE','CUSTOMER_CODE','DT_VALID_FROM'];
   columnheader1:any[] = ['LABOUR_CODE','DIVISION_CODE','SHAPE','DIVISION','METHOD','UNITCODE','CURRENCY_CODE','CRACCODE','COST_RATE','SELLING_RATE','CARATWT_FROM','CARATWT_TO','CUSTOMER_CODE','REFMID','DT_VALID_FROM'];
-  columnheader2:any[] = ['DESIGN_CODE','LABOUR_CODE','LABTYPE','METHOD','DIVISION','CURRENCY_CODE','UNITCODE','COST_RATE','SELLING_RATE','CRACCODE','DIVISION_CODE','SELLING_RATE','CUSTOMER','REFMID','DT_VALID_FROM'];
+  columnheader2:any[] = ['DESIGN_CODE','LABOUR_CODE','LABTYPE','METHOD','DIVISION','CURRENCY_CODE','UNITCODE','COST_RATE','SELLING_PER','CRACCODE','DIVISION_CODE','SELLING_RATE','CUSTOMER_CODE','REFMID','DT_VALID_FROM'];
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
- 
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'CUSTOMER_CODE',
+    SEARCH_HEADING: 'Customer Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CUSTOMER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -46,6 +60,11 @@ export class CustomerPriceMasterComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+  customerCodeScpSelected(e:any){
+    console.log(e); 
+    this.customerpricemasterForm.controls.customercode.setValue(e.CUSTOMER_CODE);
+    this.customerpricemasterForm.controls.desc.setValue(e.DESCRIPTION);
   }
   formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -281,7 +300,7 @@ export class CustomerPriceMasterComponent implements OnInit {
         }
       ]
     }
-  
+   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {

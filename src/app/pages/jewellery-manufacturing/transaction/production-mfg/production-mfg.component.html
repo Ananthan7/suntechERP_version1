@@ -280,7 +280,7 @@
                           alignment="center">
                         </dxi-column>
                         <dxi-column dataField="data" width="auto"
-                          caption="Loction"
+                          caption="Location"
                           alignment="center">
                         </dxi-column>
                         <dxi-column dataField="data" width="auto"
@@ -336,12 +336,11 @@
                     <div class="col-md-12">
                       <dx-data-grid #dataGrid id="gridContainer"
                         [columnAutoWidth]="true"
+                        [dataSource]="STOCK_FORM_DETAILS"
                         [allowColumnResizing]="true"
                         [showRowLines]="true"
                         [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
                         <dxo-selection mode="single"></dxo-selection>
                         <dxi-column *ngFor="let data of columnheads"
                           dataField="{{ data }}" width="130"

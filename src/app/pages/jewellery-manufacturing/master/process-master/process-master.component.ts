@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -60,14 +59,50 @@ export class ProcessMasterComponent implements OnInit {
   StockProcessData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'Process_Code',
     SEARCH_HEADING: 'Recov Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "Process_Code<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  accountStartData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 95,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'ACCOUNT CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  accountMiddleData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 95,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'ACCOUNT CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  accountEndData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 95,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'ACCOUNT CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  
 
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
@@ -75,15 +110,17 @@ export class ProcessMasterComponent implements OnInit {
     processDesc: [''],
     processType: [null],
     stand_time: [''],
-    WIP_ACCOUNT: [''],
+    WIPaccount: [''],
     max_time: [''],
-    processPosition: [''],
+    Position: [''],
     trayWeight: [''],
     approvalCode: [''],
     approvalProcess: [''],
     recStockCode: [''],
     labour_charge: [''],
-
+    accountStart: [''],
+    accountMiddle: [''],
+    accountEnd: [''],
     loss: [false],
     recovery: [false],
     AllowGain: [false],
@@ -95,7 +132,7 @@ export class ProcessMasterComponent implements OnInit {
     accode_start: [''],
     accode_end: [''],
     accode_middle : [''],
-    loss_on_gross: [''],
+    loss_on_gross: [false],
     FinalProcess: [false],
     Setting: [false],
     LabProcess: [false],
@@ -117,6 +154,13 @@ export class ProcessMasterComponent implements OnInit {
     RecoveryProcess: [false],
     AutoTransfer: [false],
     ApplySetting: [false],
+    loss_standard: [''],
+    loss_min: [''],
+    loss_max: [''],
+ 
+    
+    
+
   })
   
   constructor(
@@ -132,6 +176,10 @@ export class ProcessMasterComponent implements OnInit {
       this.setFormValues()
     }
     this.getProcessTypeOptions()
+
+    this.processMasterForm.controls['loss_max'].disable();
+    this.processMasterForm.controls['loss_min'].disable();
+    this.processMasterForm.controls['min_end'].disable();
   }
   // USE: get select options Process TypeMaster
   private getProcessTypeOptions():void {
@@ -147,7 +195,40 @@ export class ProcessMasterComponent implements OnInit {
 
   private setFormValues() {
     if (!this.content) return
-    this.processMasterForm.controls.mid.setValue(this.content.PROCESS_CODE);
+    this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
+    this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
+    this.processMasterForm.controls.RepairProcess.setValue(this.content.REPAIR_PROCESS);
+    this.processMasterForm.controls.FinalProcess.setValue(this.content.FINAL_PROCESS);
+    this.processMasterForm.controls.Setting.setValue(this.content.SETTING_PROCESS);
+    this.processMasterForm.controls.LockWeight.setValue(this.content.LOCK_WEIGHT);
+    this.processMasterForm.controls.LabProcess.setValue(this.content.LAB_PROCESS);
+    this.processMasterForm.controls.WaxProcess.setValue(this.content.WAX_PROCESS);
+    this.processMasterForm.controls.DeductPureWeight.setValue(this.content.DEDUCT_PURE_WT);
+    this.processMasterForm.controls.approvalCode.setValue(this.content.APPR_CODE);
+    this.processMasterForm.controls.ApplySetting.setValue(this.content.APPLY_SETTING);
+    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.content.TIMEON_PROCESS);
+    this.processMasterForm.controls.StoneIncluded.setValue(this.content.STONE_INCLUDED);
+    this.processMasterForm.controls.RecoveryProcess.setValue(this.content.RECOVERY_PROCESS);
+    this.processMasterForm.controls.Metal.setValue(this.content.ALLOW_METAL);
+    this.processMasterForm.controls.Stone.setValue(this.content.ALLOW_STONE);
+    this.processMasterForm.controls.Consumable.setValue(this.content.ALLOW_CONSUMABLE);
+    this.processMasterForm.controls.ApprovalRequired.setValue(this.content.APPROVAL_REQUIRED);
+    this.processMasterForm.controls.NonQuantity.setValue(this.content.NON_QUANTITY);
+    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.content.DF_REFINERY);
+    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.content.AUTO_LOSS);
+    this.processMasterForm.controls.HaveTreeNo.setValue(this.content.TREE_NO);
+    this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
+    this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
+    this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
+    this.processMasterForm.controls.processType.setValue(this.content.PROCESS_TYPE);
+    this.processMasterForm.controls.Position.setValue(this.content.POSITION);
+    this.processMasterForm.controls.recStockCode.setValue(this.content.RECOV_STOCK_CODE);
+    this.processMasterForm.controls.approvalProcess.setValue(this.content.APPR_PROCESS);
+    this.processMasterForm.controls.loss_standard.setValue(this.content.STD_LOSS);
+    this.processMasterForm.controls.loss_min.setValue(this.content.MIN_LOSS);
+    this.processMasterForm.controls.loss_max.setValue(this.content.MAX_LOSS);
+    this.processMasterForm.controls.loss_on_gross.setValue(this.content.LOSS_ON_GROSS);
+ 
   }
   // final save
   formSubmit() {
@@ -165,13 +246,13 @@ export class ProcessMasterComponent implements OnInit {
     let postData = {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode || "0123",
-      "DESCRIPTION": this.processMasterForm.value.processCode || "0123",
-      "STD_TIME": 0,
-      "MAX_TIME": 0,
+      "DESCRIPTION": this.processMasterForm.value.processDesc || "",
+      "STD_TIME": this.processMasterForm.value.stand_time || "",
+      "MAX_TIME":this.processMasterForm.value.max_time || "",
       "LOSS_ACCODE": "",
-      "WIP_ACCODE": "",
+      "WIP_ACCODE": this.processMasterForm.value.WIPaccount || "",
       "CURRENCY_CODE": "",
-      "PROCESS_TYPE": "",
+      "PROCESS_TYPE": this.processMasterForm.value.processType || "",
       "UNIT": "",
       "NO_OF_UNITS": 0,
       "UNIT_RATE": 0,
@@ -180,7 +261,7 @@ export class ProcessMasterComponent implements OnInit {
       "REPAIR_PROCESS": this.processMasterForm.value.RepairProcess ? 1 : 0,
       "FINAL_PROCESS": this.processMasterForm.value.FinalProcess ? 1 : 0,
       "GAIN_ACCODE": "",
-      "TRAY_WT": 0,
+      "TRAY_WT": this.processMasterForm.value.trayWeight || "",
       "SETTING_PROCESS": this.processMasterForm.value.Setting ? 1 : 0,
       "POINTS": 0,
       "LOCK_WEIGHT": this.processMasterForm.value.LockWeight ? 1 : 0,
@@ -190,29 +271,29 @@ export class ProcessMasterComponent implements OnInit {
       "LAB_PROCESS": this.processMasterForm.value.LabProcess ? 1 : 0,
       "WAX_PROCESS": this.processMasterForm.value.WaxProcess ? 1 : 0,
       "STD_LOSS_QTY": 0,
-      "POSITION": 0,
+      "POSITION": this.processMasterForm.value.Position || "",
       "RECOV_MIN": 0,
       "RECOV_ACCODE": "",
-      "RECOV_STOCK_CODE": "",
+      "RECOV_STOCK_CODE": this.processMasterForm.value.recStockCode || "",
       "RECOV_VAR1": 0,
       "RECOV_VAR2": 0,
       "DEDUCT_PURE_WT": this.processMasterForm.value.DeductPureWeight ? 1 : 0,
-      "APPR_PROCESS": "",
+      "APPR_PROCESS": this.processMasterForm.value.approvalProcess || "",
       "APPR_CODE": this.processMasterForm.value.approvalCode || "",
       "ALLOW_GAIN": true,
       "STD_GAIN": 0,
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,
       "ALLOW_LOSS": true,
-      "STD_LOSS": 0,
-      "MIN_LOSS": 0,
-      "MAX_LOSS": 0,
-      "LOSS_ON_GROSS": true,
+      "STD_LOSS": this.processMasterForm.value. loss_standard || "",
+      "MIN_LOSS": this.processMasterForm.value.loss_min || "",
+      "MAX_LOSS": this.processMasterForm.value.loss_max || "",
+      "LOSS_ON_GROSS": this.processMasterForm.value.loss_on_gross || "",
       "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": 0,
       "APPLY_SETTING": this.processMasterForm.value.ApplySetting || true,
       "TIMEON_PROCESS": this.processMasterForm.value.TimeCalculateonProcess || true,
-      "STONE_INCLUDED":  this.processMasterForm.value.Metal || true,
+      "STONE_INCLUDED":  this.processMasterForm.value.StoneIncluded || true,
       "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess  || true,
       "ALLOW_METAL": this.processMasterForm.value.Metal || true,
       "ALLOW_STONE": this.processMasterForm.value.Stone || true ,
@@ -264,53 +345,69 @@ export class ProcessMasterComponent implements OnInit {
   }
   ACCODESelected(e: any) {
     console.log(e);
-    this.processMasterForm.controls.WIP_ACCOUNT.setValue(e.ACCODE);
+    this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
   }
 
   StockProcesSelected(e: any){
     console.log(e);
-    this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
-
+    this.processMasterForm.controls.recStockCode.setValue(e.Process_Code);
+  }
+  accountStartSelected(e: any){
+    console.log(e);
+    this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
+  }
+  accountMiddleSelected(e: any){
+    console.log(e);
+    this.processMasterForm.controls.accountMiddle.setValue(e.ACCODE);
+  }
+  accountEndSelected(e: any){
+    console.log(e);
+    this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
   }
 
   updateProcessMaster() {
-    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.mid
+    console.log(this.processMasterForm.value);
+    if ( this.processMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.content.MID
     let postData = {
-      "MID": this.processMasterForm.value.mid,
-      "PROCESS_CODE": this.processMasterForm.value.processCode || "0125",
-      "DESCRIPTION": this.processMasterForm.value.processCode || "0125",
+      "MID": 0,
+      "PROCESS_CODE": this.processMasterForm.value.processCode || "0123",
+      "DESCRIPTION": this.processMasterForm.value.processCode || "0123",
       "STD_TIME": 0,
       "MAX_TIME": 0,
-      "LOSS_ACCODE": "string",
-      "WIP_ACCODE": "string",
-      "CURRENCY_CODE": "stri",
-      "PROCESS_TYPE": "string",
-      "UNIT": "string",
+      "LOSS_ACCODE": "",
+      "WIP_ACCODE": "",
+      "CURRENCY_CODE": "",
+      "PROCESS_TYPE": "",
+      "UNIT": "",
       "NO_OF_UNITS": 0,
       "UNIT_RATE": 0,
-      "LAB_ACCODE": "string",
-      "LAST_NO": "string",
-      "REPAIR_PROCESS": this.processMasterForm.value.LockWeight ? 1 : 0,
-      "FINAL_PROCESS": 0,
-      "GAIN_ACCODE": "string",
+      "LAB_ACCODE": "",
+      "LAST_NO": "",
+      "REPAIR_PROCESS": this.processMasterForm.value.RepairProcess ? 1 : 0,
+      "FINAL_PROCESS": this.processMasterForm.value.FinalProcess ? 1 : 0,
+      "GAIN_ACCODE": "",
       "TRAY_WT": 0,
-      "SETTING_PROCESS": 0,
+      "SETTING_PROCESS": this.processMasterForm.value.Setting ? 1 : 0,
       "POINTS": 0,
       "LOCK_WEIGHT": this.processMasterForm.value.LockWeight ? 1 : 0,
-      "AUTOTRANSFER": this.processMasterForm.value.AutoTransfer ? 1 : 0,
+      "AUTOTRANSFER": 0,
       "MASTER_WEIGHT": 0,
       "MERGE_BLOCK": 0,
-      "LAB_PROCESS": 0,
-      "WAX_PROCESS": 0,
+      "LAB_PROCESS": this.processMasterForm.value.LabProcess ? 1 : 0,
+      "WAX_PROCESS": this.processMasterForm.value.WaxProcess ? 1 : 0,
       "STD_LOSS_QTY": 0,
       "POSITION": 0,
       "RECOV_MIN": 0,
-      "RECOV_ACCODE": "string",
-      "RECOV_STOCK_CODE": "string",
+      "RECOV_ACCODE": "",
+      "RECOV_STOCK_CODE": "",
       "RECOV_VAR1": 0,
       "RECOV_VAR2": 0,
-      "DEDUCT_PURE_WT": 0,
-      "APPR_PROCESS": "string",
+      "DEDUCT_PURE_WT": this.processMasterForm.value.DeductPureWeight ? 1 : 0,
+      "APPR_PROCESS": "",
       "APPR_CODE": this.processMasterForm.value.approvalCode || "",
       "ALLOW_GAIN": true,
       "STD_GAIN": 0,
@@ -321,22 +418,21 @@ export class ProcessMasterComponent implements OnInit {
       "MIN_LOSS": 0,
       "MAX_LOSS": 0,
       "LOSS_ON_GROSS": true,
-      "JOB_NUMBER": "string",
+      "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": 0,
-
-      "APPLY_SETTING": true,
-      "TIMEON_PROCESS": true,
-      "STONE_INCLUDED": true,
-      "RECOVERY_PROCESS": true,
-      "ALLOW_METAL": true,
-      "ALLOW_STONE": true,
-      "ALLOW_CONSUMABLE": true,
-      "APPROVAL_REQUIRED": true,
-      "NON_QUANTITY": true,
-      "DF_REFINERY": true,
-      "AUTO_LOSS": true,
+      "APPLY_SETTING": this.processMasterForm.value.ApplySetting || true,
+      "TIMEON_PROCESS": this.processMasterForm.value.TimeCalculateonProcess || true,
+      "STONE_INCLUDED":  this.processMasterForm.value.StoneIncluded || true,
+      "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess  || true,
+      "ALLOW_METAL": this.processMasterForm.value.Metal || true,
+      "ALLOW_STONE": this.processMasterForm.value.Stone || true ,
+      "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable || true,
+      "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired || true,
+      "NON_QUANTITY": this.processMasterForm.value.NonQuantity  || true,
+      "DF_REFINERY": this.processMasterForm.value.RefineryAutoProcess || true,
+      "AUTO_LOSS": this.processMasterForm.value.ApplyAutoLossToRefinery || true,
       "ISACCUPDT": true,
-      "TREE_NO": true,
+      "TREE_NO": this.processMasterForm.value.HaveTreeNo || true,
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -428,6 +524,18 @@ export class ProcessMasterComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+
+  onlossChange(event:any){  
+    console.log(event);
+    if(event.target.checked == true){
+      this.processMasterForm.controls['loss_max'].enable();
+      this.processMasterForm.controls['loss_min'].enable();
+    }
+    else{
+      this.processMasterForm.controls['loss_min'].disable();
+      this.processMasterForm.controls['loss_max'].disable();
+    }
   }
 
 }

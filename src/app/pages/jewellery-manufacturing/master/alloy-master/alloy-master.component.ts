@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -19,6 +19,7 @@ export class AlloyMasterComponent implements OnInit {
 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
+  currentDate = new FormControl(new Date());
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -35,6 +36,7 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.alloyMastereForm.controls['createdBy'].disable();
   }
   
   alloyMastereForm: FormGroup = this.formBuilder.group({
@@ -46,6 +48,8 @@ export class AlloyMasterComponent implements OnInit {
     subCategory: [''],
     brand: [''],
     vendor: [''],
+    createdOn:[new Date(),''],
+    createdBy:['SUNTECH',''],
     price1code: [''],
     price1per : [''],
     price1Fc : [''],
@@ -89,7 +93,21 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
+  codeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'prefix_code',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "prefix_code<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    
+  }
+
+  
 
   masterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -115,7 +133,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -127,8 +144,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
 
   subcategoryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -142,7 +157,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
  
-
   BrandCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -166,9 +180,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
- 
 
   vendorCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -253,9 +264,16 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.category.setValue(e.CODE);
   }
 
+  codeSelected(e:any){
+    console.log(e);
+    this.alloyMastereForm.controls.code.setValue(e.PREFIX_CODE)
+    this.alloyMastereForm.controls.description.setValue(e.DESCRIPTION) 
+  }
+
   costCenterSelected(e:any){
     console.log(e);
     this.alloyMastereForm.controls.costCenter.setValue(e.COST_CODE);
+    
   }
 
   priceOneCodeSelected(e:any){
@@ -291,6 +309,8 @@ export class AlloyMasterComponent implements OnInit {
 
   }
 
+ 
+  
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       // this.updateMeltingType()

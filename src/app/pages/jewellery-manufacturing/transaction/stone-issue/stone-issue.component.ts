@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { StoneIssueDetailComponent } from './stone-issue-detail/stone-issue-detail.component';
+import { event } from 'devextreme/events';
+
 
 @Component({
   selector: 'app-stone-issue',
@@ -28,6 +30,8 @@ export class StoneIssueComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
+  currentDate = new FormControl(new Date());
+
     user: MasterSearchModel = {
       PAGENO: 1,
       RECORDS: 10,
@@ -89,6 +93,8 @@ export class StoneIssueComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+ 
+
   userDataSelected(value: any) {
     console.log(value);
     this.stoneissueFrom.controls.enteredBy.setValue(value.UsersName);
@@ -137,19 +143,23 @@ export class StoneIssueComponent implements OnInit {
    
   }
 
+ 
+
   stoneissueFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocno:[''],
-    vocdate:[''],
+    voctype:['STI',[Validators.required]],
+    vocno:['1',[Validators.required]],
+    vocdate:[new Date(),[Validators.required]],
     enteredBy:[''],
    basecurrency:[''],
    basecurrencyrate:[''],
-   currency:[''],
-   currencyrate:[''],
-   worker:[''],
+   currency:["AED",''],
+   currencyrate:['1',''],
+   worker:['',],
    workername:[''],
     narration:[''],
   });
+
+ 
 
 removedata(){
   this.tableData.pop();

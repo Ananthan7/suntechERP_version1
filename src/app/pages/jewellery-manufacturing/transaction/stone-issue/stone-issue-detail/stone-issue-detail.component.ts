@@ -122,6 +122,8 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneissuedetailsFrom.controls.jobDes.setValue(e.job_description);
     this.stoneissuedetailsFrom.controls.subjobnumber.setValue(e.job_number);
     this.stoneissuedetailsFrom.controls.subjobDes.setValue(e.job_description);
+    this.stoneissuedetailsFrom.controls.designcode.setValue(e.job_number);
+    this.stoneissuedetailsFrom.controls.partcode.setValue(e.job_description);
   }
 
   processCodeSelected(e: any) {
@@ -164,7 +166,7 @@ export class StoneIssueDetailComponent implements OnInit {
     worker: [''],
     workername: [''],
     stock: [''],
-    stockCode: [''],
+    stockCode: ['',[Validators.required]],
     stockDes: [''],
     batchid: [''],
     location: [''],
@@ -173,15 +175,15 @@ export class StoneIssueDetailComponent implements OnInit {
     clarity: [''],
     karat: [''],
     size: [''],
-    sieveset: [''],
+    sieveset: ['',[Validators.required]],
     unitrate: [''],
     sieve: [''],
     amount: [''],
     color: [''],
     stockbal: [''],
     pointerwt: [''],
-    otheratt: [''],
-    remarks: [''],
+    otheratt: ['',[Validators.required]],
+    remarks: ['',[Validators.required]],
   });
 
 
@@ -248,7 +250,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "CONSIGNMENT": 0,
       "SIEVE_SET": "0",
       "SUB_STOCK_CODE": "0",
-      "D_REMARKS": "Str",
+      "D_REMARKS": this.stoneissuedetailsFrom.value.remarks || "",
       "SIEVE_DESC": "0",
       "EXCLUDE_TRANSFER_WT": true,
       "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "",

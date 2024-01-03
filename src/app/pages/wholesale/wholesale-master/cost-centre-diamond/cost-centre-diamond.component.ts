@@ -17,18 +17,18 @@ import Swal from 'sweetalert2';
 })
 export class CostCentreDiamondComponent implements OnInit {
 
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
 
   columnhead:any[] = ['Division','Description'];
-  columnheader:any[] = ['Branch','Opening' ,'Purchase','Purchase','Sales (W)','Sales Return','Sales (Return)','Sales Return','Branch','Branch','Closing','Purchase','Imppr'];
+  columnheader:any[] = ['UNIQUE_ID','COST_CODE' ,'TYPE','BRANCH_CODE','ADJUSTMENT','SALES','SALESRETURN','PURCHASE','PURCHASERETURN','STONEVALUE','STONEDIFF','PURITYDIFF','BRANCHTRANSFERIN','BRANCHTRANSFERINOUT','MANUFACTURING','OPENINGBALANCE','CLOSINGSTOCK','PHYSICALSTOCK','OPENINGOWNSTOCK','CLOSINGOWNSTOCK','OWNSTOCK','OPENINGSTOCK','POSSALES','POSSRETURN','EXBSALES','EXBSRETURN','EXPSALES','EXPSRETURN','SOH_GOLD_DMFG','WASTAGE','IMPPURCHASE','IMPPURCHASERETURN','OTHERSALES','OTHERSRETURN','REFINING_CHARGEAC','DISCOUNTMETAL','STONEVALUESALES','SCP_ACCODE','SCPSR_ACCODE','SCS_ACCODE','SCSSR_ACCODE','STA_ACCODE','STASR_ACCODE','PTA_ACCODE','PTAPR_ACCODE','ICT_ACCODE','ICTRT_ACCODE','COSTADJUSTMENT','DISMANTLINGLOSS','DISMANTLING_ACCODE','PTHP_ACCODE','PTHPR_ACCODE','PTHS_ACCODE','PTHSR_ACCODE','PTDP_ACCODE','PTDPR_ACCODE','PTDS_ACCODE','PTDSR_ACCODE','PTREP_ACCODE','PTREPR_ACCODE','PTRES_ACCODE','PTRESR_ACCODE','STOCK_REVALUATION','LOTMIX_ACCODE','SRNO','CVAT_ACCODE','CVAT_PER','PREMIUM_CHARGES','DIAPUR_UNFIX','PURCHASE_GST','SALES_GST','BRANCH_TRANSFER_GST','DIAPUR_FIXED_GOLD','DIASAL_FIXED_GOLD','DIAPUR_UNFIX_WASTAGE','DIASAL_UNFIX_WASTAGE','UNFIXPURCHASE','UNFIXSALES','UNFIXSUPPLIERCTRLAC','UNFIXCUSTOMERCTRLAC','REPAIRPURCHASE','REPAIRPURCHASERETURN','REPAIRSALESRETURN','REPAIRSALES','REPUNFIXPURCHASE','KUNDANVALUESALES','KUNDANVALUEPURCHASE','DIAPUR_UNFIX_VALUE','DIASAL_UNFIX_VALUE','OPENING_GOLD_DIAJEW','REFINE_CHARGES','WASTAGEONSALES','CERT_CHARGES','PLATE_CHARGES','STAMPCHARGE_PURCHASEAC','STAMPCHARGE_SALESAC','DIAPUR_UNFIX_LOOSE','DIAPUR_UNFIX_COLOR','DIAREPAIRSAL_UNFIX_LABOUR','DIAREPAIRSAL_UNFIX_WASTAGE','DIAEXHIBITIONSAL_UNFIX','DIAEXHIBITIONSAL_FIXED_GOLD','DIAEXHIBITIONSAL_UNFIX_LOOSE','DIAEXHIBITIONSAL_UNFIX_COLOR','DIAREPAIRSAL_UNFIX_LABOUR','DIAREPAIRSAL_UNFIX_WASTAGE','DIAEXHIBITIONSAL_UNFIX','DIAEXHIBITIONSAL_FIXED_GOLD','DIAEXHIBITIONSAL_UNFIX_PEARL','DIAEXHIBITIONSAL_UNFIX_LABOUR','DIAEXHIBITIONSAL_UNFIX_WASTAGE','DIAOTHERSAL_UNFIX_LABOUR','DIAOTHERSAL_UNFIX_WASTAGE','DIA_ALTER_AC','SETTINGCHGAC','POLISHINGCHGAC','RHODIUM_UNFIX_LABOUR','HEDGESALESFIXING','HEDGEPURCHASEFIXING','HEDGEMETALPAYMENT','HEDGEMETALRECEIPT'];
   columnheaderConsignment:any[]=['Branch','Opening' ,'Purchase','Purchase','Sales (W)','Sales Return','Sales (Return)','Sales Return','Branch','Branch']
   divisionMS: any = 'ID';
 
   constructor(
     private activeModal: NgbActiveModal,
-    private modalService : NgbModal,
+    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
@@ -37,16 +37,18 @@ export class CostCentreDiamondComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  costcenterdiamondForm: FormGroup = this.formBuilder.group({
-    costcode:[''],
-    description:[''],
-    purchase:[''],
-    sales:[''],
-    branchtransfer:[''],
+
   
+  costcenterdiamondForm: FormGroup = this.formBuilder.group({
+    costcode: [''],
+    description: [''],
+    purchase: [''],
+    sales: [''],
+    branchtransfer: [''],
+
   })
 
-  purchaseCodeData:MasterSearchModel = {
+  purchaseCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 49,
@@ -57,9 +59,9 @@ export class CostCentreDiamondComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
 
-  salesCodeData:MasterSearchModel = {
+
+  salesCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 49,
@@ -70,9 +72,9 @@ export class CostCentreDiamondComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
 
-  branchtransferCodeData:MasterSearchModel = {
+
+  branchtransferCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 49,
@@ -83,14 +85,14 @@ export class CostCentreDiamondComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
- 
-  purchaseCodeSelected(e:any){
+
+
+  purchaseCodeSelected(e: any) {
     console.log(e);
     this.costcenterdiamondForm.controls.purchase.setValue(e.GST_CODE);
   }
 
-  salesCodeSelected(e:any){
+  salesCodeSelected(e: any) {
     console.log(e);
     this.costcenterdiamondForm.controls.sales.setValue(e.GST_CODE);
   }
@@ -104,7 +106,9 @@ export class CostCentreDiamondComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  openCostCentreDiamond(){
+  continue(){}
+  
+  openCostCentreDiamond() {
     const modalRef: NgbModalRef = this.modalService.open(CostCentreDiamondDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
@@ -115,9 +119,9 @@ export class CostCentreDiamondComponent implements OnInit {
   }
 
 
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -125,7 +129,7 @@ export class CostCentreDiamondComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'CostCenterMaster/InsertCostCenterMaster'
     let postData = {
       "MID": 0,
@@ -317,12 +321,12 @@ export class CostCentreDiamondComponent implements OnInit {
           "CERTCHGAC": "string"
         }
       ]
-  }
-  
+    }
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -343,14 +347,14 @@ export class CostCentreDiamondComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
-  update(){
+
+  update() {
     if (this.costcenterdiamondForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'CostCenterMaster/UpdateCostCenterMaster/'+ this.costcenterdiamondForm.value.costcode + this.costcenterdiamondForm.value.type
+
+    let API = 'CostCenterMaster/UpdateCostCenterMaster/' + this.costcenterdiamondForm.value.costcode + this.costcenterdiamondForm.value.type
     let postData = {
       "MID": 0,
       "TYPE": "string",
@@ -542,11 +546,11 @@ export class CostCentreDiamondComponent implements OnInit {
         }
       ]
     }
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -567,7 +571,7 @@ export class CostCentreDiamondComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.MID) {
       Swal.fire({
@@ -633,7 +637,7 @@ export class CostCentreDiamondComponent implements OnInit {
       }
     });
   }
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

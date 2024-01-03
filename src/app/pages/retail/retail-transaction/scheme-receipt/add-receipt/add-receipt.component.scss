@@ -1,0 +1,45 @@
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .matlabels {
+      width: 30%;
+      font-weight: 700;
+      font-size: 9px;
+    }
+  }
+  /* Medium devices (landscape tablets, 768px and up) */
+  @media only screen and (min-width: 768px) {
+    .matlabels {
+      width: 23%;
+      font-size: 9px;
+      padding-top: 22px;
+      font-weight: 700;
+    }
+  }
+  /* Extra large devices (large laptops and desktops, 1200px and up) */
+  @media only screen and (min-width: 1200px) {
+    .matlabels {
+      width: 32%;
+      font-size: 11px;
+      padding-top: 22px;
+      font-weight: 700;
+    }
+  }
+  ::ng-deep {
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
+    .modal-content {
+      border: 0px !important;
+    }
+  }
+  .border-left {
+    border-left: 1px solid #e3e3e3;
+  }
+  .headerEl {
+    border-radius: 7px 7px 0px 0px;
+    border-bottom: 1px solid #c9c9c9;
+  }
+  .border-bottom{
+    border-bottom: 1px solid #e7e7e7;
+  }

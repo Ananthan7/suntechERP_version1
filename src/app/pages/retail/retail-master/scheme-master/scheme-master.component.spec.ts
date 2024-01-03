@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SchemeRegisterComponent } from './scheme-register.component';
+import { SchemeMasterComponent } from './scheme-master.component';
 
-describe('SchemeRegisterComponent', () => {
-  let component: SchemeRegisterComponent;
-  let fixture: ComponentFixture<SchemeRegisterComponent>;
+describe('SchemeMasterComponent', () => {
+  let component: SchemeMasterComponent;
+  let fixture: ComponentFixture<SchemeMasterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SchemeRegisterComponent ]
+      declarations: [ SchemeMasterComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SchemeRegisterComponent);
+    fixture = TestBed.createComponent(SchemeMasterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

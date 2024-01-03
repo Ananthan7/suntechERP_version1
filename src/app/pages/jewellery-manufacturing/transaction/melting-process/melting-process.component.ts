@@ -69,7 +69,17 @@ export class MeltingProcessComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
+  processCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'PROCESS_CODE',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   timeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -195,6 +205,7 @@ export class MeltingProcessComponent implements OnInit {
   deleteTableData() {
 
   }
+  resetAllocation(){}
 
   formSubmit() {
 

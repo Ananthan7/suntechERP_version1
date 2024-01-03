@@ -7,7 +7,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="savePdf()" (cancelClick)="close()"></modal-header>
+<modal-header [isViewDelete]="false" [isViewMore]="false" [editSaveBtnText]="'Go'"  (saveClick)="savePdf()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="retailAdvanceReceiptRegisterForm">
@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">SalesMan :</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Salesman :</label>
                     <div class="col-md-2">
                         <mat-form-field>
                             <input matInput ="text"  formControlName="salesman"                               />
@@ -73,7 +73,7 @@
                     <div class="col-md-2">
                         <mat-form-field>
                             <mat-select formControlName="reportTo">
-                                <mat-option value="PERVIEW">PERVIEW</mat-option>
+                                <mat-option value="PREVIEW">PREVIEW</mat-option>
                                 <mat-option></mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -96,7 +96,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="right_content text-end">
-                        <h4>DAVINCI JEWLERRY -HAWALLY</h4>
+                        <h4>DAVINCI JEWELLERY -HAWALLY</h4>
                         <p>Hawallly, Lbn Khaldoun St, Block 1,'Al Nafisy Building 10</p>
                     </div>
                     <div class="email_address text-end">
@@ -114,10 +114,10 @@
                                 <tr>
                                     <th scope="col">Voc.No</th>
                                     <th scope="col">Voc.Date</th>
-                                    <th scope="col">Sales Man Name</th>
+                                    <th scope="col">Salesman Name</th>
                                     <th scope="col">Customer Details</th>
                                     <th scope="col">Remarks</th>
-                                    <th scope="col">Recieved Amount</th>
+                                    <th scope="col">Received Amount</th>
                                     <th scope="col">Balance Amount</th>
                                     <th scope="col">Status</th>
                                 </tr>

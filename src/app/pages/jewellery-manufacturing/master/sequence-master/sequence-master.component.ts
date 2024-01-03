@@ -18,7 +18,6 @@ export class SequenceMasterComponent implements OnInit {
 
   dataSource: any[] = [];
   selectedSequence: any[] = [];
-
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
@@ -51,19 +50,17 @@ export class SequenceMasterComponent implements OnInit {
   ) {
     this.getTableData()
   }
-
   ngOnInit(): void {
+    this.sequenceMasterForm.controls['calculatetime'].disable();
     if (this.content) {
       this.setFormValues()
     }
+    
   }
-
   checkAll() {
     console.log(this.dataSource);
     this.dataSource.forEach((item:any)=>item.isChecked = this.selectAll )
 }
-
-
   /**USE: drag and drop event */
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
@@ -88,7 +85,6 @@ export class SequenceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
   setFormValues() {
     if (!this.content) return
     this.sequenceMasterForm.controls.sequenceCode.setValue(this.content.SEQ_CODE)
@@ -372,5 +368,16 @@ export class SequenceMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-
+  oncalculateChange(event:any) {
+    console.log(event);
+    if(event.checked==true){
+      this.sequenceMasterForm.controls['calculatetime'].enable();
+   
+     
+    }
+    else{
+      this.sequenceMasterForm.controls['calculatetime'].disable();
+       
+    }
+}
 }

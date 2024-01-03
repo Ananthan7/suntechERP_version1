@@ -20,8 +20,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
   columnheadBottom: any[] = [""];
+  HEADERDETAILS: any;
   StockDetailData: SavedataModel = {
-    DETAIL_FORM_DATA: [],
+    DETAIL_FORM_DATA: {},
     DETAIL_METAL_DATA: [],
     STOCK_FORM_DETAILS: [],
     STOCKCODE_MAIN_GRID: [],
@@ -59,9 +60,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
   productiondetailsFrom: FormGroup = this.formBuilder.group({
+    VOCNO: [0],
     jobno: [''],
     jobnoDesc: [''],
-    jobDate: [''],
+    JOB_DATE: [''],
     subjobno: [''],
     subjobnoDesc: [''],
     customer: [''],
@@ -71,43 +73,42 @@ export class ProductionEntryDetailsComponent implements OnInit {
     worker: [''],
     workername: [''],
     partsName: [''],
-    parts: [''],
-    design: [''],
-    designCode: [''],
+    PART_CODE: [''],
+    DESIGN_CODE: [''],
+    DESIGN_DESCRIPTION: [''],
     totalpcs: [''],
-    noofpcs: [''],
+    JOB_PCS: [''],
     location: [''],
-    lossqty: [''],
-    grosswt: [''],
-    stonepcs: [''],
+    LOSS_WT: [''],
+    GROSS_WT: [''],
+    STONE_PCS: [''],
     timetaken: [''],
-    metalwt: [''],
-    stonewt: [''],
+    METAL_WT: [''],
+    STONE_WT: [''],
     price1: [''],
-    prefix: [''],
-    prefixNo: [''],
+    PREFIX: [''],
+    PREFIXNO: [''],
     otherstone: [''],
     price2: [''],
     costcode: [''],
-    setref: [''],
+    SETREF: [''],
     price3: [''],
     KARAT: [''],
     venderref: [''],
     price4: [''],
-    startdate: [''],
+    START_DATE: [''],
+    END_DATE: [''],
     endDate: [''],
     price5: [''],
     remarks: [''],
     prodpcs: [''],
     pndpcs: [''],
     lossone: [''],
-    losswt: [''],
     fromStockCode: [''],
     fromStockCodeDesc: [''],
     toStockCode: [''],
     toStockCodeDesc: [''],
     metalpcs: [''],
-    grossWt: [''],
     stoneWt: [''],
     PURITY: [''],
     netWt: [''],
@@ -133,7 +134,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VOCDATE: [''],
     METALSTONE: [''],
     DIVCODE: [''],
-    stockCode: [''],
+    STOCK_CODE: [''],
+    STOCK_DESCRIPTION: [''],
     JOB_SO_NUMBER: [''],
   });
 
@@ -143,16 +145,16 @@ export class ProductionEntryDetailsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private comService: CommonServiceService
+    private commonService: CommonServiceService
   ) { }
 
   ngOnInit(): void {
     this.setInitialLoadValue()
   }
   setInitialLoadValue(){
-    this.branchCode = this.comService.branchCode;
-    let headers = this.content[0].HEADERDETAILS
-    this.productiondetailsFrom.controls.VOCDATE.setValue(headers.vocDate)
+    this.branchCode = this.commonService.branchCode;
+    this.HEADERDETAILS = this.content[0].HEADERDETAILS
+    this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
   }
 
   /**USE: jobnumber validate API call */
@@ -161,41 +163,41 @@ export class ProductionEntryDetailsComponent implements OnInit {
     let postData = {
       "SPID": "028",
       "parameter": {
-        'strBranchCode': this.comService.nullToString(this.branchCode),
-        'strJobNumber': this.comService.nullToString(event.target.value),
-        'strCurrenctUser': this.comService.nullToString(this.userName)
+        'strBranchCode': this.commonService.nullToString(this.branchCode),
+        'strJobNumber': this.commonService.nullToString(event.target.value),
+        'strCurrenctUser': this.commonService.nullToString(this.userName)
       }
     }
-    this.comService.showSnackBarMsg('MSG81447')
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.productiondetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.productiondetailsFrom.controls.subjobnoDesc.setValue(data[0].JOB_DESCRIPTION)
             // this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
-            this.productiondetailsFrom.controls.design.setValue(data[0].DESIGN_CODE)
-            this.productiondetailsFrom.controls.designCode.setValue(data[0].DESCRIPTION)
-            this.productiondetailsFrom.controls.noofpcs.setValue(data[0].JOB_PCS_TOTAL)
+            this.productiondetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
+            this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(data[0].DESCRIPTION)
+            this.productiondetailsFrom.controls.JOB_PCS.setValue(data[0].JOB_PCS_TOTAL)
             this.productiondetailsFrom.controls.customer.setValue(data[0].CUSTOMER_CODE)
-            this.productiondetailsFrom.controls.prefix.setValue(data[0].PREFIX)
-            this.productiondetailsFrom.controls.prefixNo.setValue(data[0].PREFIX_NUMBER)
+            this.productiondetailsFrom.controls.PREFIX.setValue(data[0].PREFIX)
+            this.productiondetailsFrom.controls.PREFIXNO.setValue(data[0].PREFIX_NUMBER)
             this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
             // this.productiondetailsFrom.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
             // this.productiondetailsFrom.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
             this.subJobNumberValidate()
           } else {
-            this.comService.toastErrorByMsgId('MSG1531')
+            this.commonService.toastErrorByMsgId('MSG1531')
             return
           }
         } else {
-          this.comService.toastErrorByMsgId('MSG1747')
+          this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -205,14 +207,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "SPID": "040",
       "parameter": {
         'strUNQ_JOB_ID': this.productiondetailsFrom.value.subjobno,
-        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strBranchCode': this.commonService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
     }
-    this.comService.showSnackBarMsg('MSG81447')//loading msg
+    this.commonService.showSnackBarMsg('MSG81447')//loading msg
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           console.log(data[0],'data[0]');
@@ -221,30 +223,30 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.productiondetailsFrom.controls.worker.setValue(data[0].WORKER)
           this.productiondetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
-          this.productiondetailsFrom.controls.metalwt.setValue(
-            this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
+          this.productiondetailsFrom.controls.METAL_WT.setValue(
+            this.commonService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.productiondetailsFrom.controls.stonewt.setValue(
-            this.comService.decimalQuantityFormat(data[0].STONE, 'STONE'))
-          this.productiondetailsFrom.controls.grossWt.setValue(
-            this.comService.decimalQuantityFormat(Number(data[0].NETWT), 'METAL'))
+            this.commonService.decimalQuantityFormat(data[0].STONE, 'STONE'))
+          this.productiondetailsFrom.controls.GROSS_WT.setValue(
+            this.commonService.decimalQuantityFormat(Number(data[0].NETWT), 'METAL'))
           this.productiondetailsFrom.controls.PUREWT.setValue(data[0].PUREWT)
           this.productiondetailsFrom.controls.PURITY.setValue(
-            this.comService.decimalQuantityFormat(data[0].PURITY,'PURITY'))
+            this.commonService.decimalQuantityFormat(data[0].PURITY,'PURITY'))
           this.productiondetailsFrom.controls.Job_Purity.setValue(
-            this.comService.decimalQuantityFormat(data[0].PURITY,'PURITY'))
+            this.commonService.decimalQuantityFormat(data[0].PURITY,'PURITY'))
           this.productiondetailsFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
-          this.productiondetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.productiondetailsFrom.controls.STOCK_CODE.setValue(data[0].STOCK_CODE)
           this.productiondetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.productiondetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
           this.productiondetailsFrom.controls.PURE_WT.setValue(data[0].PURE_WT)
           this.productiondetailsFrom.controls.KARAT.setValue(data[0].KARAT)
           this.productiondetailsFrom.controls.totalpcs.setValue(data[0].PCS)
         } else {
-          this.comService.toastErrorByMsgId('MSG1747');
+          this.commonService.toastErrorByMsgId('MSG1747');
         }
       }, err => {
-        this.comService.closeSnackBarMsg();
-        this.comService.toastErrorByMsgId('MSG1531');
+        this.commonService.closeSnackBarMsg();
+        this.commonService.toastErrorByMsgId('MSG1531');
       })
     this.subscriptions.push(Sub)
   }
@@ -296,12 +298,16 @@ export class ProductionEntryDetailsComponent implements OnInit {
     let dy = date.getMonth();
     if (yr.toString().length > 4) {
       let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
-      this.productiondetailsFrom.controls.startdate.setValue(new Date(date));
+      this.productiondetailsFrom.controls.START_DATE.setValue(new Date(date));
+      this.productiondetailsFrom.controls.END_DATE.setValue(new Date(date));
     }
   }
-
+  formDetailCount: number = 0;
   formSubmit() {
-    this.StockDetailData.DETAIL_FORM_DATA.push(this.productiondetailsFrom.value)
+    this.formDetailCount+=1
+    
+
+    this.StockDetailData.DETAIL_FORM_DATA = this.productiondetailsFrom.value
     this.close(this.StockDetailData);
   }
 

@@ -3,20 +3,33 @@
         <div class="d-flex justify-content-start text-start">
             <div class="p-1">
                 <button type="button" class="btn btn-primary text-center"
-                (click)="saveClicked()">
-                    Save
+                    *ngIf="editSaveBtnText && editSaveBtnText != ''; else elseBlock"
+                    (click)="saveClicked()">
+                    {{editSaveBtnText}}
                 </button>
+                <ng-template #elseBlock>
+                    <button type="button" class="btn btn-primary text-center"
+                        (click)="saveClicked()">
+                        Save
+                    </button>
+                </ng-template>
             </div>
             <div class="p-1">
-                <button type="button" class="btn btn-primary text-center"
-                (click)="cancelClicked()">
+                <button type="button" class="btn btn-primary text-center" *ngIf="isViewCancel"
+                    (click)="cancelClicked()">
                     Cancel
                 </button>
             </div>
             <div class="p-1" *ngIf="isViewDelete">
-                <button type="button" class="btn btn-danger text-center" 
+                <button type="button" class="btn btn-danger text-center"
                     (click)="deleteClicked()">
                     Delete
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isViewContinue">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="continueClicked()">
+                    Continue
                 </button>
             </div>
             <div class="p-1 dropdown text-right" *ngIf="isViewMore">

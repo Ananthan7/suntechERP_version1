@@ -37,19 +37,21 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
 
   customerpricesettingForm: FormGroup = this.formBuilder.group({
-    pricecode:[''],
+    pricecode:['',[Validators.required]],
     date:[new Date(),''],
     description:[''],
-    division:[''],
-    currency:[''],
+    division:['',[Validators.required]],
+    currency:['',[Validators.required]],
     approvedby:[''],
     enteredBy:[''],
-    group1:[''],
-    group2:[''],
-    group3:[''],
-    group4:[''],
-    group5:[''],
-    group6:[''],
+    stockCode:['',[Validators.required]],
+    designCode:['',[Validators.required]],
+    group1:['',[Validators.required]],
+    group2:['',[Validators.required]],
+    group3:['',[Validators.required]],
+    group4:['',[Validators.required]],
+    group5:['',[Validators.required]],
+    group6:['',[Validators.required]],
   })
 
 
@@ -146,7 +148,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       "DIVISION": this.customerpricesettingForm.value.division || "",
       "CREATED_DATE": this.customerpricesettingForm.value.date || "",
       "ENTERED_BY":this.customerpricesettingForm.value.enteredby || "",
-      "IS_STOCK_CODE": true,
+      "IS_STOCK_CODE": this.customerpricesettingForm.value.stockCode,
       "APPROVED_BY": this.customerpricesettingForm.value.approvedby || "",
       "GROUP1": this.customerpricesettingForm.value.group1 || "",
       "GROUP2": this.customerpricesettingForm.value.group2 || "",
@@ -163,7 +165,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       "PLATE_CHARGES": 0,
       "CURRENCY_CODE": this.customerpricesettingForm.value.currency || "",
       "CURRENCY_RATE": 0,
-      "IS_DESIGN_CODE": true,
+      "IS_DESIGN_CODE": this.customerpricesettingForm.value.designCode,
       "customer_vendor_pricing_detail": [
         {
           "SRNO": 0,
@@ -288,7 +290,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       "GROUP1": this.customerpricesettingForm.value.group1 || "",
       "GROUP2": this.customerpricesettingForm.value.group2 || "",
       "GROUP3": this.customerpricesettingForm.value.group3 || "",
-      "IS_ACTIVE": true,
+      "IS_ACTIVE": this.customerpricesettingForm.value.stockCode,
       "BRANCH_CODE": "string",
       "DEFAULT_CUST": true,
       "DEFAULT_SUPP": true,
@@ -300,7 +302,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       "PLATE_CHARGES": 0,
       "CURRENCY_CODE": this.customerpricesettingForm.value.currency || "",
       "CURRENCY_RATE": 0,
-      "IS_DESIGN_CODE": true,
+      "IS_DESIGN_CODE": this.customerpricesettingForm.value.designCode,
       "customer_vendor_pricing_detail": [
         {
           "SRNO": 0,

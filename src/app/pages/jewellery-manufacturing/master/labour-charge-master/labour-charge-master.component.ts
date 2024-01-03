@@ -21,7 +21,7 @@ export class LabourChargeMasterComponent implements OnInit {
   branch = localStorage.getItem('userbranch');
   private subscriptions: Subscription[] = [];
 
-
+  methodList: any[] = [];
   labourTypeList: any[] = [];
   unitList: any[] = [];
   currencyList : any[] = [];
@@ -34,15 +34,15 @@ export class LabourChargeMasterComponent implements OnInit {
     labour_code: [''],
     labour_description: [''],
     shape: [''],
-    process: [''],
+    process: ['',[Validators.required]],
     size_from: [''],
     labour_ac: [''],
     size_to: [''],
-    cost_rate : [''],
+    cost_rate : ['',[Validators.required]],
     sieve : [''],
     selling_rate : [''],
     sieve_desc : [''],
-    selling : [''],
+    selling : ['',[Validators.required]],
     ctWtFrom : [''],
     ctWtTo : [''],
     settingType : [''],
@@ -62,23 +62,23 @@ export class LabourChargeMasterComponent implements OnInit {
     metallabour_description: [''],
     metallabourType: [''],
     metalcurrency: [''],
-    karat: [''],
+    karat: ['',[Validators.required]],
     labourAc: [''],
     color : [''],
     costRate : [''],
-    typecode : [''],
+    typecode : ['',[Validators.required]],
     metalselling_rate : [''],
-    category : [''],
+    category : ['',[Validators.required]],
     metalSelling : [''],
     subCategory : [''],
-    wastage : [''],
-    brand : [''],
+    wastage : ['',[Validators.required]],
+    brand : ['',[Validators.required]],
     metalunitList : [''],
     purity : [''],
     wtFrom : [''],
     wtTo : [''],
-    onGrossWt : [false],
-    forDesignOnly : [false]
+    onGrossWt : [false,[Validators.required]],
+    forDesignOnly : [false,[Validators.required]]
   });
 
   divisionCodeData: MasterSearchModel = {
@@ -96,7 +96,7 @@ export class LabourChargeMasterComponent implements OnInit {
  shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 33,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
@@ -122,7 +122,7 @@ processCodeData: MasterSearchModel = {
 sizeFromCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 36,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size From',
     SEARCH_VALUE: '',
@@ -136,7 +136,7 @@ sizeFromCodeData: MasterSearchModel = {
   sizeToCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 36,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size To',
     SEARCH_VALUE: '',
@@ -161,11 +161,11 @@ sizeFromCodeData: MasterSearchModel = {
   sieveCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 6,
-    SEARCH_FIELD: 'ACCODE',
+    LOOKUPID: 38,
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -292,37 +292,37 @@ sizeFromCodeData: MasterSearchModel = {
     this.getcurrencyOptions()
     this.labourTypeList =[
       {
-        'name':'MAKING',
-        'value':'MAKING'
+        'name':'SETTING',
+        'value':'SETTING'
       },
       {
-        'name':'POLISH',
-        'value':'POLISH'
+        'name':'HANDLING',
+        'value':'HANDLING'
       },
       {
-        'name':'FINISHING',
-        'value':'FINISHING'
+        'name':'CERTIFICATE',
+        'value':'CERTIFICATE'
       },
-      {
-        'name':'CASTING',
-        'value':'CASTING'
-      },
+      // {
+      //   'name':'CASTING',
+      //   'value':'CASTING'
+      // },
       {
         'name':'GENERAL',
         'value':'GENERAL'
       },
-      {
-        'name':'RHODIUM',
-        'value':'RHODIUM'
-      },
-      {
-        'name':'STAMPING',
-        'value':'STAMPING'
-      },
-      {
-        'name':'WASTAGE',
-        'value':'WASTAGE'
-      },
+      // {
+      //   'name':'RHODIUM',
+      //   'value':'RHODIUM'
+      // },
+      // {
+      //   'name':'STAMPING',
+      //   'value':'STAMPING'
+      // },
+      // {
+      //   'name':'WASTAGE',
+      //   'value':'WASTAGE'
+      // },
     ]
     this.unitList= [
       {
@@ -345,6 +345,25 @@ sizeFromCodeData: MasterSearchModel = {
       'name':'Hours',
       'value':'Hours'
     }
+    ]
+    this.methodList= [
+      {
+      'name':'Hand Setting ',
+      'value':'Hand Setting '
+    },
+    {
+      'name':'Wax Setting',
+      'value':'Wax Setting'
+    },
+    {
+      'name':'Other Setting',
+      'value':'Other Setting'
+    },
+    {
+      'name':'GENERAL',
+      'value':'GENERAL'
+    },
+    
     ]
   }
 
@@ -393,12 +412,14 @@ sizeFromCodeData: MasterSearchModel = {
 
   sieveSelected(e:any){
     console.log(e); 
-    this.diamondlabourMasterForm.controls.sieve.setValue(e.ACCOUNT_MODE);
+    this.diamondlabourMasterForm.controls.sieve.setValue(e.CODE);
   }
 
   stockCodeSelected(e:any){
     console.log(e); 
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
+    this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
+    this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
   }
 
   currencyCodeSelected(e:any){
@@ -409,6 +430,7 @@ sizeFromCodeData: MasterSearchModel = {
   karatCodeSelected(e:any){
     console.log(e); 
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
+    this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
   }
 
   shapeCodeSelected(e:any){
@@ -430,7 +452,11 @@ sizeFromCodeData: MasterSearchModel = {
       console.log(e); 
       this.diamondlabourMasterForm.controls.size_from.setValue(e.CODE);
   }
+
   
+  
+  
+
    // USE: get select options Process TypeMaster
    private getcurrencyOptions():void {
     let API = '/BranchCurrencyMaster/GetBranchCurrencyMasterDetail/'+this.branch;
@@ -704,10 +730,6 @@ sizeFromCodeData: MasterSearchModel = {
         }
       });
     }
-
- 
-
-
 }
 
 

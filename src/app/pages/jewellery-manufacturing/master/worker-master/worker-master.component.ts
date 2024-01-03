@@ -15,10 +15,12 @@ import Swal from 'sweetalert2';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkerMasterComponent implements OnInit {
+ 
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   showFilterRow!: boolean;
   viewOnlyFlag: boolean = false;
+  buttonField: boolean = true;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Process Code', 'Description'];
@@ -56,7 +58,24 @@ export class WorkerMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  workerMasterForm: FormGroup = this.formBuilder.group({
+ 
+  constructor(
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+    private commonService: CommonServiceService,
+    // private ChangeDetector: ChangeDetectorRef,
+  ) { }
+
+  ngOnInit(): void {
+    if (this.content) {
+      this.setFormValues()
+    }  
+    
+  }
+
+  workerMasterForm = this.formBuilder.group({
     WorkerCode: ['', [Validators.required]],
     WorkerDESCRIPTION: ['', [Validators.required]],
     WorkerAcCode: ['', [Validators.required]],
@@ -69,38 +88,25 @@ export class WorkerMasterComponent implements OnInit {
     TargetCaratWt: [''],
     TargetMetalWt: [''],
     TargetWeight: [''],
-    DailyTarget: [false],
-    MonthlyTarget: [false],
-    YearlyTarget: [false],
-    active : [false],
+    DailyTarget: ['1'],
+    MonthlyTarget: [null],
+    YearlyTarget: [null],
+    Active : [true]
   })
-  constructor(
-    private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
-    private toastr: ToastrService,
-    private commonService: CommonServiceService,
-    // private ChangeDetector: ChangeDetectorRef,
-  ) { }
-
-  ngOnInit(): void {
-    if(this.content){
-      this.setFormValues()
-    }
-    
-  }
   
+  printBarcode(){
+     window.print();
+  }
+
   setFormValues() {
-    if(!this.content) return
-    if(this.content.flag == 'VIEW'){
-      this.viewOnlyFlag = true
-    }
+    if (!this.content) return
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
     this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION)
     this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
     this.workerMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR)
     this.workerMasterForm.controls.DefaultProcess.setValue(this.content.PROCESS_CODE)
     this.workerMasterForm.controls.LossAllowed.setValue(this.content.LOSS_ALLOWED)
+    this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE)
     this.workerMasterForm.controls.TrayWeight.setValue(this.content.TRAY_WEIGHT)
     this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS)
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.content.TARGET_CARAT_WT)
@@ -109,6 +115,8 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**USE:  final save API call*/
   formSubmit() {
+    this.buttonField = false;
+
     if(this.content && this.content.FLAG == 'EDIT'){
       this.selectProcess()
       this.updateWorkerMaster()
@@ -132,7 +140,7 @@ export class WorkerMasterComponent implements OnInit {
       "TOTALSAL": 0,
       "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
       "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": "",
+      "SECRET_CODE": this.workerMasterForm.value.Password || "",
       "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
       "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
       "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
@@ -159,9 +167,7 @@ export class WorkerMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.workerMasterForm.reset()
                 this.tableData = []
-                this.close('reloadMainGrid')
               }
             });
           }
@@ -190,7 +196,7 @@ export class WorkerMasterComponent implements OnInit {
       "TOTALSAL": 0,
       "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
       "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": "",
+      "SECRET_CODE": this.workerMasterForm.value.Password ||"",
       "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
       "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
       "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
@@ -348,26 +354,26 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
-    if (event.target.value == '' || this.viewOnlyFlag == true) return
-    let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          Swal.fire({
-            title: '',
-            text: 'Worker Already Exists!',
-            icon: 'warning',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.workerMasterForm.reset()
-            }
-          });
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
+  //   if (event.target.value == '' || this.viewOnlyFlag == true) return
+  //   let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         Swal.fire({
+  //           title: '',
+  //           text: 'Worker Already Exists!',
+  //           icon: 'warning',
+  //           confirmButtonColor: '#336699',
+  //           confirmButtonText: 'Ok'
+  //         }).then((result: any) => {
+  //           if (result.value) {
+  //             this.workerMasterForm.reset()
+  //           }
+  //         });
+  //       }
+  //     }, err => alert(err))
+  //   this.subscriptions.push(Sub)
+   }
   //selected field value setting
   WorkerAcCodeSelected(data: any) {
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)

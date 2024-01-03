@@ -17,7 +17,7 @@ export class WaxProcessReturnComponent implements OnInit {
   currentFilter: any;
 
 
-  columnhead:any[] = ['Sr No','Job No','Design','Party','S.O','S.O.Date', 'Del.Date','Gross Weight','Metal Weight','Stone Weight','Wax Weight','Issue Pcs','Return Pcs','Karat'];
+  columnhead:any[] = ['Sr No','Job No','Design','Party','S.O','S.O Date', 'Del Date','Gross Weight','Metal Weight','Stone Weight','Wax Weight','Issue Pcs','Return Pcs','Karat'];
   @Input() content!: any; 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
@@ -25,6 +25,7 @@ export class WaxProcessReturnComponent implements OnInit {
   yearMonth?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   
   private subscriptions: Subscription[] = [];
     user: MasterSearchModel = {
@@ -52,9 +53,32 @@ export class WaxProcessReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  ToProcessCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
  
 
   WorkerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  ToWorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 19,
@@ -81,14 +105,14 @@ export class WaxProcessReturnComponent implements OnInit {
   }
 
   waxprocessFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocDate : [''],
+    voctype:['',[Validators.required]],
+    vocDate : ['',[Validators.required]],
     vocno:[''],
     enteredBy : [''],
-    process:[''],
-    worker:[''],
-    toworker:[''],
-    toprocess:[''],
+    process:['',[Validators.required]],
+    worker:['',[Validators.required]],
+    toworker:['',[Validators.required]],
+    toprocess:['',[Validators.required]],
     waxcode:[''],
     remark:[''],
    });
@@ -116,6 +140,10 @@ export class WaxProcessReturnComponent implements OnInit {
   WorkerCodeSelected(e:any){
     console.log(e);
     this.waxprocessFrom.controls.worker.setValue(e.WORKER_CODE);
+  }
+
+  ToWorkerCodeSelected(e:any){
+    console.log(e);
     this.waxprocessFrom.controls.toworker.setValue(e.WORKER_CODE);
   }
 
@@ -127,6 +155,10 @@ export class WaxProcessReturnComponent implements OnInit {
   ProcessCodeSelected(e:any){
     console.log(e);
     this.waxprocessFrom.controls.process.setValue(e.Process_Code);
+  }
+
+  ToProcessCodeSelected(e:any){
+    console.log(e);
     this.waxprocessFrom.controls.toprocess.setValue(e.Process_Code);
   }
 

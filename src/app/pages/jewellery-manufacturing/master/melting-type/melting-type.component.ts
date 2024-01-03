@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 
 
 
+
 @Component({
   selector: 'app-melting-type',
   templateUrl: './melting-type.component.html',
@@ -22,7 +23,10 @@ export class MeltingTypeComponent implements OnInit {
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
-
+  metal:any;
+  description:any;
+  code:any;
+  alloy:any;
   slNo = 0;
 
 
@@ -46,10 +50,11 @@ export class MeltingTypeComponent implements OnInit {
       return
     }
 
-    if (this.meltingTypeForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.meltingTypeForm.invalid) {
+    
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
 
     let API = 'MeltingType/InsertMeltingType'
     let postData=
@@ -59,7 +64,7 @@ export class MeltingTypeComponent implements OnInit {
         "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
         "KARAT_CODE": this.meltingTypeForm.value.karat,
         "PURITY": this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
-        "METAL_PER": this.meltingTypeForm.value.metal,
+        "METAL_PER": this.metal,
         "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
         "CREATED_BY": this.userName,
         "COLOR": this.meltingTypeForm.value.color,
@@ -69,6 +74,7 @@ export class MeltingTypeComponent implements OnInit {
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
     .subscribe((result) => {
+   
       if (result.response) {
         if (result.status == "Success") {
           Swal.fire({
@@ -97,7 +103,8 @@ export class MeltingTypeComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
+  resetAllocation(){}
+  
   columnheads:any[] = ['Sr','Division','Default Alloy','Description','Alloy %'];
   
 
@@ -155,52 +162,62 @@ export class MeltingTypeComponent implements OnInit {
 
   meltingTypeForm: FormGroup = this.formBuilder.group({
     mid:[],
-    code: [''],
-    description: [''],
-    metal: [''],
-    color: [''],
-    karat: [''],
-    purity: [''],
-    alloy: [''],
-    stockCode: [''],
-    stockCodeDes : [''],
-    divCode : [''],
+    code: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    metal: ['', [Validators.required]],
+    color: ['', [Validators.required]],
+    karat: ['', [Validators.required]],
+    purity: ['', [Validators.required]],
+    alloy: ['', [Validators.required]],
+    stockCode: ['', [Validators.required]],
+    stockCodeDes : ['', [Validators.required]],
+    divCode : ['', [Validators.required]],
    
   });
 
   addTableData(){
-    console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
-    this.slNo = this.slNo + 1;
-    let data = {
-      "UNIQUEID": 0,
-      "SRNO": this.slNo,
-      "MELTYPE_CODE":  this.meltingTypeForm.value.code,
-      "MELTYPE_DESCRIPTION":  this.meltingTypeForm.value.description,
-      "KARAT_CODE":  this.meltingTypeForm.value.karat,
-      "PURITY":  this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
-      "DIVISION_CODE":  this.meltingTypeForm.value.divCode,
-      "DEF_ALLOY_STOCK":  this.meltingTypeForm.value.stockCode,
-      "DEF_ALLOY_DESCRIPTION":  this.meltingTypeForm.value.stockCodeDes,
-      "ALLOY_PER":  parseFloat(this.meltingTypeForm.value.alloy)
+
+    if(this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "")
+    {
+      console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
+      this.slNo = this.slNo + 1;
+      let data = {
+        "UNIQUEID": 0,
+        "SRNO": this.slNo,
+        "MELTYPE_CODE":  this.meltingTypeForm.value.code,
+        "MELTYPE_DESCRIPTION":  this.meltingTypeForm.value.description,
+        "KARAT_CODE":  this.meltingTypeForm.value.karat,
+        "PURITY":  this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
+        "DIVISION_CODE":  this.meltingTypeForm.value.divCode,
+        "DEF_ALLOY_STOCK":  this.meltingTypeForm.value.stockCode,
+        "DEF_ALLOY_DESCRIPTION":  this.meltingTypeForm.value.stockCodeDes,
+        "ALLOY_PER":  parseFloat(this.meltingTypeForm.value.alloy)
+      }
+  
+      this.tableData.push(data);
+      console.log(this.tableData);
+  
+      this.metal=this.meltingTypeForm.value.metal
+      // this.description=this.meltingTypeForm.value.description
+      // this.code=this.meltingTypeForm.value.code
+      this.alloy=this.meltingTypeForm.value.alloy
+      this.meltingTypeForm.controls.code.setValue("");
+      this.meltingTypeForm.controls.description.setValue("");
+      this.meltingTypeForm.controls.karat.setValue("");
+      this.meltingTypeForm.controls.purity.setValue("");
+      this.meltingTypeForm.controls.divCode.setValue("");
+      this.meltingTypeForm.controls.stockCode.setValue("");
+      this.meltingTypeForm.controls.stockCodeDes.setValue("");
+      this.meltingTypeForm.controls.alloy.setValue("");
+      this.meltingTypeForm.controls.color.setValue("");
+      this.meltingTypeForm.controls.metal.setValue("");
     }
-
-    this.tableData.push(data);
-    console.log(this.tableData);
-
-    this.meltingTypeForm.controls.code.setValue("");
-    this.meltingTypeForm.controls.description.setValue("");
-    this.meltingTypeForm.controls.karat.setValue("");
-    this.meltingTypeForm.controls.purity.setValue("");
-    this.meltingTypeForm.controls.divCode.setValue("");
-    this.meltingTypeForm.controls.stockCode.setValue("");
-    this.meltingTypeForm.controls.stockCodeDes.setValue("");
-    this.meltingTypeForm.controls.alloy.setValue("");
-    this.meltingTypeForm.controls.color.setValue("");
-    this.meltingTypeForm.controls.metal.setValue("");
-
+  else {
+    this.toastr.error('Please Fill all Mandatory Fields')
+  }
     
   }
-
+  
   setFormValues() {
     if(!this.content) return
     console.log(this.content);

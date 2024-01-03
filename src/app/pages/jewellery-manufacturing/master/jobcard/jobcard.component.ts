@@ -28,7 +28,8 @@ export class JobcardComponent implements OnInit {
   userName = localStorage.getItem('username');
   columnhead:any[] = ['Sl No','Job Reference','Part Code','Description','Pcs','Metal Color','Metal Wt','Stone Wt','Gross Wt' ];
   branchCode?: String;
-  yearMonth?: String;
+  yearMonth?: String; 
+  currentDate: any = this.commonService.currentDate;
   private subscriptions: Subscription[] = [];
 
   lengthCodeData: MasterSearchModel = {
@@ -48,17 +49,236 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 10,
     SEARCH_FIELD: 'DESCRIPTION',
-    SEARCH_HEADING: 'Ordertype Code',
+    SEARCH_HEADING: 'Order type',
     SEARCH_VALUE: '',
     WHERECONDITION: "DESCRIPTION<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
+  designCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Design type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DESIGN_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Customer Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  costCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  prefixCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Prefix type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 17,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 30,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  salesmanCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Salesman type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  subcatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Sub Category type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  brandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  currencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  mainmetalCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Main Metal type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  timeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Time type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  rangeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Range type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  seqCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 93,
+    SEARCH_FIELD: 'SEQ_CODE',
+    SEARCH_HEADING: 'Sequence type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SEQ_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+
 
   jobCardFrom: FormGroup = this.formBuilder.group({
     orderType : [''],
-    jobno : [''],
+    jobno : ['53528'],
     designcode : [''],
     designtype : [''],
     customer : [''],
@@ -72,7 +292,7 @@ export class JobcardComponent implements OnInit {
     comments : [''],
     size : [''],
     jobtype : [''],
-    jobdate : [''],
+    jobdate :  [''],
     date : [''],
     prefix : [''],
     type : [''],
@@ -81,7 +301,7 @@ export class JobcardComponent implements OnInit {
     setref : [''],
     length : [''],
     purity : [''],
-    deldate : [''],
+    deldate :  [''],
     salesman : [''],
     stockcode : [''],
     currency : [''],
@@ -93,7 +313,8 @@ export class JobcardComponent implements OnInit {
     totalpcs : [''],
     pending : [''],
     parts : [''],
-   
+    srewFiled : [''],
+    instruction : [''],
   });
 
   constructor(
@@ -102,14 +323,35 @@ export class JobcardComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private comService: CommonServiceService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
+    this.setInitialValues()
   }
 
+  setInitialValues() {
+    // this.branchCode = this.jobCardFrom.branchCode;
+    // this.companyName = this.commonService.companyName;
+    this.yearMonth = this.commonService.yearSelected;
+    this.jobCardFrom.controls.jobdate.setValue(this.currentDate)
+    this.jobCardFrom.controls.deldate.setValue(this.currentDate)
+    //this.commonService.getqueryParamVocType()
+  }
+
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.jobCardFrom.controls.vocdate.setValue(new Date(date))
+    }
+  }
 
   /**USE: close modal window */
   close(data?: any) {
@@ -123,10 +365,103 @@ export class JobcardComponent implements OnInit {
   }
 
     
+  designCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.designcode.setValue(e.DESIGN_CODE);
+    this.jobCardFrom.controls.designtype.setValue(e.DESIGN_DESCRIPTION);
+  }
+
+  customerCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.customer.setValue(e.ACCODE);
+    this.jobCardFrom.controls.customername.setValue(e.DESCRIPTION);
+  }
+
+  costCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.costcode.setValue(e.COST_CODE);
+  }
+
+  prefixCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.prefix.setValue(e.PREFIX_CODE);
+  }
+
+  karatCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.karat.setValue(e.KARAT_CODE);
+  }
+
+  typeCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.type.setValue(e.CODE);
+  }
+
+  categoryCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.category.setValue(e.CODE);
+  }
+
+  colorCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.color.setValue(e.CODE);
+  }
+
+  countryCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.country.setValue(e.CODE);
+  }
+
+  salesmanCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.salesman.setValue(e.SALESPERSON_CODE);
+  }
+
   ordertypeCodeSelected(e:any){
     console.log(e);
     this.jobCardFrom.controls.orderType.setValue(e.DESCRIPTION);
   }
+
+  subcatCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.subcat.setValue(e.CODE);
+  }
+
+  brandCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.brand.setValue(e.CODE);
+  }
+
+  stockCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.stockcode.setValue(e.STOCK_CODE);
+  }
+
+  currencyCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.currency.setValue(e.CURRENCY_CODE);
+  }
+
+  mainmetalCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.mainmetal.setValue(e.COST_CODE);
+  }
+
+  timeCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.time.setValue(e.CODE);
+  }
+
+  rangeCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.range.setValue(e.CODE);
+  }
+
+  seqCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.seqcode.setValue(e.SEQ_CODE);
+  }
+
 
   formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){

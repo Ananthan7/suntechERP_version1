@@ -16,8 +16,7 @@
                         <div class="row m-2">
                             <div class="col-md-5">
                                 <div class=" row">
-                                    <label for="inputPassword" class="col-sm-6 col-form-label">HO - AI
-                                        Fayha</label>
+                                    <h6>{{branchCode}} - {{companyName}}</h6>
                                 </div>
                                 <div class=" row">
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
@@ -37,7 +36,8 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Time:</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%">
-                                            <input  type="time" matInput name="time" formControlName="time">
+                                            <!-- <input  type="datetime" matInput  formControlName="time"> -->
+                                            <input  type="datetime" matInput formControlName = "time" />
                                           </mat-form-field>
                                     </div>
                                 </div>
@@ -52,11 +52,11 @@
                                         <!-- <mat-form-field style="width: 100%;">
                                             <input type="date" matInput  formControlName="vocdate"/>
                                         </mat-form-field> -->
-                                        <mat-form-field style="width: 100%">
-                                            <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate"
-                                              placeholder="YYYY/MM/DD" DateValidation />
-                                            <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                                            <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                                          <mat-form-field style="width: 72%;">
+                                            <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
+                                            placeholder="DD/MM/YYYY"  DateValidation />
+                                          <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                                          <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                                           </mat-form-field>
                                     </div>
                                 </div>
@@ -134,6 +134,22 @@
                                         caption="{{ data }}" [allowEditing]="true" alignment="center"
                                         backgroundcolor="#000">
                                     </dxi-column>
+
+                                    <dxo-summary>
+                                        <dxi-total-item column="pcs" summaryType="sum"
+                                        >
+                                        </dxi-total-item>
+                                        <dxi-total-item column="total_amount"
+                                           displayFormat="AED {0}"
+                    
+                                          >
+                                        </dxi-total-item>
+                                        <dxi-total-item column="net_amount"
+                                          summaryType="sum"
+                                          displayFormat="AED {0}" 
+                                        >
+                                        </dxi-total-item>
+                                      </dxo-summary>
                                 </dx-data-grid>
                             </div>
                             <div class="col-md-4">

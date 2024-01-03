@@ -1,118 +1,126 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Customer Stone Pricing Master</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Customer Stone Pricing Master</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
 </div>
 <!-- modal header component -->
 <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
-    <div class="col-md-12">
-      <form [formGroup]="customerpricemasterForm">
-            <div class="container-fluid pt-3">
-                <div class="row justify-content-between">
-                    <div class="col-md-12">
-                     <div class="row">
-                         <div class="col-md-3">
-                             <div class="row align-items-center mb-1">
-                                 <label for="inputPassword" class="col-sm-5 col-form-label">Customer Code :</label>
-                                 <div class="col-md-7">
-                                   <mat-form-field style="width: 100%;">
-                                     <input type="text" matInput formControlName="customercode" />
-                                   </mat-form-field>
-                                 </div>
-                             </div>
-                             <div class="row align-items-center mb-1">
-                                 <label for="inputPassword" class="col-sm-5 col-form-label">Price Code*:</label>
-                                 <div class="col-md-7">
-                                   <mat-form-field style="width: 100%;">
-                                     <input type="text" matInput formControlName="pricecode"/>
-                                   </mat-form-field>
-                                 </div>
-                             </div>
-                             <div class="row align-items-center mb-1">
-                                 <label for="inputPassword" class="col-sm-5 col-form-label">Labour Type:</label>
-                                 <div class="col-md-7">
-                                     <mat-form-field>
-                                         <mat-label></mat-label>
-                                         <mat-select>
-                                         </mat-select>
-                                       </mat-form-field>
-                                 </div>
-                             </div>
-         
-                         </div>
-         
-                         <div class="col-md-6 ">
-                             <div class="row">
-                                 <div class="col-md-8">
-                                     <div class="row align-items-center mb-1">
-                                         <div class="col-md-12">
-                                           <mat-form-field style="width: 100%;">
-                                             <input type="text" matInput />
-                                           </mat-form-field>
-                                         </div>
-                                       </div>
-                                 </div>
-                                 <div class="col-md-4 pt-3">
-                                     <label for="inputPassword" class="col-sm-9 col-form-label">Valid From:</label>
-                                 </div>
-                             </div>
-                             <div class="row">
-                                 <div class="col-md-4">
-                                     <div class="row align-items-center mb-1">
-                                         <label for="inputPassword" class="col-sm-6 col-form-label">Metal Loss%:</label>
-                                         <div class="col-md-6">
-                                           <mat-form-field style="width: 100%;">
-                                             <input type="text" matInput />
-                                           </mat-form-field>
-                                         </div>
-                                       </div>
-                                 </div>
-                                 <div class="col-md-4">
-                                     <div class="row align-items-center mb-1">
-                                         <label for="inputPassword" class="col-sm-6 col-form-label">MarkUp %:</label>
-                                         <div class="col-md-6">
-                                           <mat-form-field style="width: 100%;">
-                                             <input type="text" matInput />
-                                           </mat-form-field>
-                                         </div>
-                                       </div>
-                                 </div>
-                                 <div class="col-md-3">
-                                     <div class="row align-items-center mb-1">
-                                         <div class="col-md-12">
-                                           <mat-form-field style="width: 100%;">
-                                             <input type="date" matInput />
-                                           </mat-form-field>
-                                         </div>
-                                       </div>
-                                 </div>
-                             </div>
-                             <div class="row">
-                                 <div class="col-md-4">
-                                     <div class="row align-items-center mb-1">
-                                         <label for="inputPassword" class="col-sm-6 col-form-label">Add On Rate:</label>
-                                         <div class="col-md-6">
-                                           <mat-form-field style="width: 100%;">
-                                             <input type="text" matInput />
-                                           </mat-form-field>
-                                         </div>
-                                       </div>
-                                 </div>
-                                 <div class="col-md-4">
-                                     <div class="row align-items-center mb-1">
-                                         <label for="inputPassword" class="col-sm-6 col-form-label">Margin %:</label>
-                                         <div class="col-md-6">
-                                           <mat-form-field style="width: 100%;">
-                                             <input type="text" matInput />
-                                           </mat-form-field>
-                                         </div>
-                                       </div>
-                                 </div>
-                             </div>                          
-                         </div>
-                         <div class="col-md-3">
+  <div class="col-md-12">
+    <form [formGroup]="customerpricemasterForm">
+      <div class="container-fluid pt-3">
+        <div class="row justify-content-between">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="row align-items-center mb-1">
+                  <label for="inputPassword" class="col-sm-5 col-form-label">Customer Code:</label>
+                  <div class="col-md-6">
+                      <mat-form-field style="width: 80%;">
+                          <input type="text" matInput formControlName="customercode" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="customerCodeData"
+                      (newRowClick)="customerCodeScpSelected($event)"></master-search>
+                  </div>
+              </div>
+             
+                <div class="row align-items-center mb-1">
+                  <label for="inputPassword" class="col-sm-5 col-form-label">Price Code*:</label>
+                  <div class="col-md-7">
+                    <mat-form-field style="width: 100%;">
+                      <input type="text" matInput formControlName="pricecode" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row align-items-center mb-1">
+                  <label for="inputPassword" class="col-sm-5 col-form-label">Labour Type:</label>
+                  <div class="col-md-7">
+                    <mat-form-field style="width: 100%;">
+                      <select matNativeControl required>
+                        <option value="setting">Setting</option>
+                        <option value="polish">Polish</option>
+                        <option value="finishing">Finishing</option>
+                        <option value="casting">Casting</option>
+                        <option value="general">General</option>
+                        <option value="rhoodium">Rhoodium</option>
+                      </select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 ">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-md-12">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 pt-3">
+                    <label for="inputPassword" class="col-sm-9 col-form-label">Valid From:</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="row align-items-center mb-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Metal Loss%:</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="row align-items-center mb-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label">MarkUp %:</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="row align-items-center mb-1">
+                      <div class="col-md-12">
+                        <mat-form-field style="width: 100%;">
+                          <input type="date" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="row align-items-center mb-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Add On Rate:</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="row align-items-center mb-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Margin %:</label>
+                      <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-md-3">
+                          <label for="inputPassword" class="col-sm-5 col-form-label text-center">Customer Code</label>
                              <div class="row pt-4">
                                 <div class="col-md-4">
                                     <mat-radio-button value="1">By Value</mat-radio-button>
@@ -139,51 +147,83 @@
                                              Change Value
                                            </button>
                                      </div>
-                             </div>         
-                         </div>
-                     </div>
+                             </div>          -->
+              <div class="col-md-3">
+                <div class="container mt-5">
+                    <h5 class="text-center mb-4">Change Price</h5>
+                    <div class="row pt-4">
+                      <div class="col-md-4">
+                        <mat-radio-button value="1">By Value</mat-radio-button>
+                      </div>
+                      <div class="col-md-3">
+                        <mat-radio-button value="2" class="pl-3">By %</mat-radio-button>
+                      </div>
+                      <div class="col-md-2">
+                        <mat-radio-button value="1">Fixed</mat-radio-button>
+                      </div>
                     </div>
-                    <div class="col-md-12 pt-3">
-                     <mat-tab-group  [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-                         <mat-tab label="Stone Pricing">
-                     <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                         <dxo-paging [enabled]="false"></dxo-paging>
-                         <dxo-editing mode="cell" [allowUpdating]="true">
-                         </dxo-editing>
-                         <dxo-selection mode="multiple"></dxo-selection>
-                         <dxo-scrolling mode="virtual"></dxo-scrolling>         
-                         <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}"   caption="{{ data }}"
-                           [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                         </dxi-column>
-                       </dx-data-grid>
-                     </mat-tab>
-                     <mat-tab label="Labour Charges">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>       
-                        <dxi-column *ngFor="let data of columnheader1" dataField="{{ data }}"   caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                     </mat-tab>
-                    <mat-tab label="Design Wise Labour">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                       <dxi-column *ngFor="let data of columnheader2" dataField="{{ data }}"   caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                     </mat-tab>
-                   </mat-tab-group>
+                    <div class="row align-items-center mb-1 form-switch">
+                      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                      <label class="col-md-3 form-check-label" for="flexSwitchCheckChecked">Add</label>
+                      <div class="col-md-7">
+                        <mat-form-field style="width: 100%;">
+                          <input type="text" matInput />
+                        </mat-form-field>
+                      </div>
                     </div>
+                    <div class="row align-items-center mb-1"></div>
+                    <div class="col-md-8 offset-5">
+                      <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                        Change Value
+                      </button>
+                    </div>
+                  
+                </div>
+              </div>
             </div>
-        </form>
-    </div>
+          </div>
+        </div>
+        <div class="col-md-12 pt-3">
+          <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+            <mat-tab label="Stone Pricing">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="cell" [allowUpdating]="true">
+                </dxo-editing>
+                <dxo-selection mode="multiple"></dxo-selection>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
+                  [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                </dxi-column>
+              </dx-data-grid>
+            </mat-tab>
+            <mat-tab label="Labour Charges">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="cell" [allowUpdating]="true">
+                </dxo-editing>
+                <dxo-selection mode="multiple"></dxo-selection>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxi-column *ngFor="let data of columnheader1" dataField="{{ data }}" caption="{{ data }}"
+                  [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                </dxi-column>
+              </dx-data-grid>
+            </mat-tab>
+            <mat-tab label="Design Wise Labour">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="cell" [allowUpdating]="true">
+                </dxo-editing>
+                <dxo-selection mode="multiple"></dxo-selection>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxi-column *ngFor="let data of columnheader2" dataField="{{ data }}" caption="{{ data }}"
+                  [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                </dxi-column>
+              </dx-data-grid>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

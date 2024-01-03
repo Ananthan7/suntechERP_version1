@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label">Process Code :</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Process Code* :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput formControlName="processCode" />
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label">Worker Code : </label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Worker Code* : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput formControlName="workerCode" />
@@ -84,7 +84,7 @@
                                             <button class="btn btnnew border-dark"></button>
                                             <input type="file" name="uploadproduct" class="uploadproduct">
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="row">
                                             <div class="col-md-12">
@@ -208,15 +208,15 @@
                                     </div>
                                     <div class="col-md-4 ">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="toStockCodeDes" />
+                                            <input type="text" matInput formControlName="toStockCode" />
                                         </mat-form-field>
                                     </div>
                                 </div>
-                               
+
                             </div>
                             <div class="col-md-6">
                                 <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-3 col-form-label">Location : </label>
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Location* : </label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput formControlName="location" />
@@ -282,7 +282,7 @@
                                     <div class="row mb-1">
                                         <div class="col-md-6">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput />
+                                                <input type="text" matInput formControlName="toStockCodeDes" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-3">
@@ -297,26 +297,31 @@
                     </div>
                 </div>
 
-            <div class="col-md-12">
-                <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-primary metal-issue-add-btn">Change Job</button>
-                          </div>
-                          <div class="col-md-2">
-                            <button type="button" class="btn btn-primary metal-issue-add-btn">Continue</button>
-                          </div>
-                          <div class="col-md-2">
-                            <button type="button" class="btn btn-primary metal-issue-add-btn">Save</button>
-                          </div>
-                          <div class="col-md-2">
-                            <button type="button" class="btn btn-primary metal-issue-add-btn">Cancel</button>
-                          </div>
+                        <div class="col-md-6">
+                            <div class="d-flex flex-row">
+                                <div class="p-2">
+                                    <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                                        (click)="jobchange($event)">Change Job</button>
+                                </div>
+                                <div class="p-2">
+                                    <button type="button"
+                                        class="btn btn-primary metal-issue-add-btn text-center">Continue</button>
+                                </div>
+                                <div class="p-2">
+                                    <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                                        (click)="formSubmit()">Save</button>
+                                </div>
+                                <div class="p-2">
+                                    <button type="button"
+                                        class="btn btn-primary metal-issue-add-btn text-center">Cancel</button>
+                                </div>
+                            </div>
+                                      
+                        </div>
                     </div>
-                 </div>
                 </div>
-            </div>
 
                 <div class="row my-2">
                     <div class="col-md-12">

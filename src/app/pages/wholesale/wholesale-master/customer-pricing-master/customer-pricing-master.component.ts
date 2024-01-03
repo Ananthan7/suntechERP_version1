@@ -16,7 +16,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class CustomerPricingMasterComponent implements OnInit {
 
   divisionMS: any = 'ID';
-  columnheader:any[] = ['SrNo','Group 1','Group 2', 'Group 3','Group 4','Group 5','Group 6','Apply On U','Mkg On %','Std Mkg','Mkg Rate','Mkg Rate','Variance'];
+  columnheader:any[] = ['SrNo','Group 1','Group 2', 'Group 3','Group 4','Group 5','Group 6','Apply On U','Mkg On %','Std Mkg','Mkg Rate','Variance'];
   columnheader1:any[] = ['Branch','Making','Wastage', 'Apply',];
   columnheaderweightRange:any[] = ['SrNo','Division','Apply on Unit', 'From Weight','To Weight','Making Rate'];
   columnheaderTransaction : any[] = ['SrNo','Karat','Std Purity','Sales Purity','Purchase Purity'];
@@ -37,15 +37,17 @@ export class CustomerPricingMasterComponent implements OnInit {
   }
 
   customerpricemasterForm: FormGroup = this.formBuilder.group({
-    division:[],
-    approvalby:[],
-    enteredBy:[],
-    price:[],
-    currency:[],
-    customername:[],  
-    customercode:[],
-    labourtype:[],
-    pricedesc:[],
+    division:['',[Validators.required]],
+    approvalby:[''],
+    enteredBy:[''],
+    price:['',[Validators.required]],
+    currency:['',[Validators.required]],
+    customername:[''],  
+    customercode:['',[Validators.required]],
+    labourtype:[''],
+    pricedesc:[''],
+    defaultCustomer:['',[Validators.required]],
+    defaultVendor:['',[Validators.required]],
   })
 
   user: MasterSearchModel = {
@@ -94,7 +96,7 @@ export class CustomerPricingMasterComponent implements OnInit {
   }
   custsuppCodeSelected(e:any){
     console.log(e); 
-    this.customerpricemasterForm.controls.custsupp.setValue(e.ACCODE);
+    this.customerpricemasterForm.controls.customercode.setValue(e.ACCODE);
   }
 
   approvalCodeData: MasterSearchModel = {
@@ -179,8 +181,8 @@ export class CustomerPricingMasterComponent implements OnInit {
       "GROUP3": "string",
       "IS_ACTIVE": true,
       "BRANCH_CODE": "string",
-      "DEFAULT_CUST": true,
-      "DEFAULT_SUPP": true,
+      "DEFAULT_CUST": this.customerpricemasterForm.value.defaultCustomer,
+      "DEFAULT_SUPP": this.customerpricemasterForm.value.defaultVendor,
       "GROUP4": "string",
       "GROUP5": "string",
       "GROUP6": "string",

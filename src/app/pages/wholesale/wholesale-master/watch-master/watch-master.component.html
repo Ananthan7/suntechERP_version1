@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="row align-items-center mb-1">
-                                    <label for="inputPassword" class="col-sm-3 col-form-label">Design :</label>
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Code :</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput />
@@ -202,8 +202,7 @@
                                         <mat-form-field style="width: 60%;">
                                             <input type="text" matInput formControlName="weight" />
                                         </mat-form-field>
-                                        <master-search [MasterSearchData]="weightCodeData"
-                                            (newRowClick)="weightCodeSelected($event)"></master-search>
+
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -212,9 +211,7 @@
                                         <mat-form-field style="width: 60%;">
                                             <input type="text" matInput formControlName="status" />
                                         </mat-form-field>
-                                        <master-search [MasterSearchData]="statusCodeData"
-                                            (newRowClick)="statusCodeSelected($event)">
-                                        </master-search>
+
                                     </div>
                                     <label for="inputPassword" class="col-sm-3 col-form-label">Vendor Ref
                                         :</label>
@@ -222,8 +219,7 @@
                                         <mat-form-field style="width: 60%;">
                                             <input type="text" matInput formControlName="vendorRef" />
                                         </mat-form-field>
-                                        <master-search [MasterSearchData]="vendorRefCodeData"
-                                            (newRowClick)="vendorRefCodeSelected($event)"></master-search>
+
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -493,10 +489,17 @@
                                                 Item Image
                                             </button>
                                         </div>
-                                        <div class="icons">
-                                            <div class="image_box">
-                                                <input type="text" matInput />
+                                        <div class="row pt-4">
+                                            <div class="upload-btn-wrapper">
+                                                <button class="btn btnnew border-dark"></button>
+                                                <input type="file" name="uploadproduct" class="uploadproduct">
                                             </div>
+                                        </div>
+                                        <div class="icons">
+                                            <!-- <div class="image_box">
+                                                <input type="text" matInput />
+                                            </div> -->
+                                         
                                             <div class="icons_footer">
                                                 <i class="fas fa-step-backward icon-common"></i>
                                                 <i class="fas fa-caret-right icon-common"></i>
@@ -512,8 +515,12 @@
                                                 Tag Line
                                             </button>
                                         </div>
-                                        <div class="box-wrap">
-                                            <input type="text" matInput />
+                                        <div class="tagLineText">
+                                            <!-- <textarea></textarea> -->
+                                            <mat-form-field class="example-full-width">
+                                                <mat-label></mat-label>
+                                                <textarea matInput></textarea>
+                                              </mat-form-field>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -522,10 +529,14 @@
                                                 Certificate Image
                                             </button>
                                         </div>
-                                        <div class="icons">
-                                            <div class="image_box">
-                                                <input type="text" matInput />
+                                        <div class="row pt-4">
+                                            <div class="upload-btn-wrapper">
+                                                <button class="btn btnnew border-dark"></button>
+                                                <input type="file" name="uploadproduct" class="uploadproduct">
                                             </div>
+                                        </div>
+                                        <div class="icons">
+                                            
                                             <div class="icons_footer">
                                                 <i class="fas fa-step-backward icon-common"></i>
                                                 <i class="fas fa-caret-right icon-common"></i>
@@ -567,11 +578,13 @@
                                                 :</label>
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 72%;">
-                                                    <input matInput [matDatepicker]="date"  formControlName="date"
-                                                    placeholder="YYYY/MM/DD" [value]="currentDate.value" DateValidation />
-                                                  <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
-                                                  <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
-                                                  </mat-form-field>
+                                                    <input matInput [matDatepicker]="date" formControlName="date"
+                                                        placeholder="YYYY/MM/DD" [value]="currentDate.value"
+                                                        DateValidation />
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="date"></mat-datepicker-toggle>
+                                                    <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
+                                                </mat-form-field>
                                             </div>
                                         </div>
                                         <div class="row align-items-center">
@@ -775,7 +788,7 @@
                         <div class="row mt-2">
                             <div class="col-md-8">
                                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                                (addClick)="openAddstonedetails()" (deleteClick)="deleteTableData()">
+                                    (addClick)="openAddstonedetails()" (deleteClick)="deleteTableData()">
                                 </menu-buttons>
                             </div>
                         </div>

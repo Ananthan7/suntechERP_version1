@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -24,6 +24,9 @@ export class StoneReturnComponent implements OnInit {
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  currentDate = new FormControl(new Date());
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
+
   private subscriptions: Subscription[] = [];
     user: MasterSearchModel = {
     PAGENO: 1,
@@ -75,6 +78,7 @@ export class StoneReturnComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.userName = this.comService.userName;
   }
 
   close(data?: any) {
@@ -113,9 +117,9 @@ export class StoneReturnComponent implements OnInit {
   }
 
   stonereturnFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocno:[''],
-    vocdate:[''],
+    voctype:['',[Validators.required]],
+    vocno:['',[Validators.required]],
+    vocdate:['',[Validators.required]],
    basecurrency:[''],
    basecurrencyrate:[''],
    currency:[''],
