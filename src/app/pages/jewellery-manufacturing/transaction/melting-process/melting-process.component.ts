@@ -129,8 +129,8 @@ export class MeltingProcessComponent implements OnInit {
   }
   processCodeScpSelected(e:any){
     console.log(e); 
-    this.meltingProcessFrom.controls.process.setValue(e.PROCESS_CODE);
-    this.meltingProcessFrom.controls.processDesc.setValue(e.PROCESS_DESC);
+    this.meltingProcessFrom.controls.process.setValue(e.Process_Code);
+    this.meltingProcessFrom.controls.processDesc.setValue(e.Description);
   }
 
   MeltingCodeSelected(e:any){
@@ -155,9 +155,9 @@ export class MeltingProcessComponent implements OnInit {
   }
 
   meltingProcessFrom: FormGroup = this.formBuilder.group({
-    vocType : ['',[Validators.required]],
-    vocNo : ['',[Validators.required]],
-    vocDate : ['',[Validators.required]],
+    vocType : ['MLP',[Validators.required]],
+    vocNo : ['1',[Validators.required]],
+    vocDate : [new Date(),[Validators.required]],
     meltingType : ['',[Validators.required]],
     process : [''],
     processDesc : [''],
