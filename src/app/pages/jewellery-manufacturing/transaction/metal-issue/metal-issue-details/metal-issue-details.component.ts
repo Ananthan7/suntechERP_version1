@@ -144,6 +144,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.subStockCode.setValue(e.DESCRIPTION);
+     this.metalIssueDetailsForm.controls.pcs.setValue(e.PCS);
     this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
     

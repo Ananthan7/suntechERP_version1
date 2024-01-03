@@ -497,11 +497,24 @@ export class ProcessTransferDetailsComponent implements OnInit {
   processCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.processFrom.setValue(event.Process_Code)
     this.processTransferdetailsForm.controls.PROCESSDESC.setValue(event.Description)
+   
   }
   processCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.processTo.setValue(event.Process_Code)
     this.processTransferdetailsForm.controls.processToDescription.setValue(event.Description)
+   
+
   }
+
+  metalprocessCodeFromSelected(event: any) {
+    this.processTransferdetailsForm.controls.METAL_processFrom.setValue(event.Process_Code)
+  }
+  metalprocessCodeToSelected(event: any) {
+    this.processTransferdetailsForm.controls.METAL_processTo.setValue(event.Process_Code)
+    this.processTransferdetailsForm.controls.METAL_processToDescription.setValue(event.Description)
+
+  }
+
   workerCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.workerFrom.setValue(event.WORKER_CODE)
   }
@@ -509,6 +522,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.workerTo.setValue(event.WORKER_CODE)
     this.processTransferdetailsForm.controls.workerToDescription.setValue(event.DESCRIPTION)
   }
+
+  metalworkerCodeFromSelected(event: any) {
+    this.processTransferdetailsForm.controls.METAL_workerFrom.setValue(event.WORKER_CODE)
+  }
+  
+  metalworkerCodeToSelected(event: any) {
+    this.processTransferdetailsForm.controls.METAL_workerTo.setValue(event.WORKER_CODE)
+    this.processTransferdetailsForm.controls.METAL_workerToDescription.setValue(event.DESCRIPTION)
+  }
+
   jobNumberSelected(event: any) {
     this.processTransferdetailsForm.controls.jobno.setValue(event.job_number)
     this.processTransferdetailsForm.controls.jobdes.setValue(event.job_description)
