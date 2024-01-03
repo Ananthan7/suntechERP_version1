@@ -218,7 +218,7 @@
                     <div *dxTemplate="let data of 'attachmentTemp'">
                         <a href="javascript:void(0)"
                             [hidden]="data.value === false">
-                            <i class="fa fa-paperclip"
+                            <i class="fa fa-paperclip" (click)="getSchemeAttachment()"
                                 style="color: #337ab7"></i></a>
                         <dxi-button icon="fa fa-paperclip"></dxi-button>
                     </div>
