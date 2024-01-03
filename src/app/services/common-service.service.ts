@@ -728,7 +728,7 @@ export class CommonServiceService {
   /**purpose: Get a date time as a string, using the ISO standard*/
   formatDateTime(date: any) {
     if(!date) return '';
-    return date.toISOString()
+    return new Date(date).toISOString()
   }
 
   /**purpose: to format number with M,K values(eg: 1k,2M) */
