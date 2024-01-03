@@ -9,9 +9,12 @@ export class ModalHeaderComponent implements OnInit {
   @Output() saveClick = new EventEmitter();
   @Output() cancelClick = new EventEmitter();
   @Output() deleteClick = new EventEmitter();
+  @Output() continueClick = new EventEmitter();
   @Input() isViewDelete: boolean = true;
   @Input() isViewMore: boolean = true;
   @Input() isViewArrow: boolean = true;
+  @Input() isViewContinue: boolean = false;
+  @Input() isViewCancel: boolean = true;
   @Input() editSaveBtnText?: string = '';
 
   branchCode: any = localStorage.getItem('userbranch')
@@ -29,6 +32,9 @@ export class ModalHeaderComponent implements OnInit {
   }
   deleteClicked() {
     this.deleteClick.emit();
+  }
+  continueClicked() {
+    this.continueClick.emit();
   }
 
 }

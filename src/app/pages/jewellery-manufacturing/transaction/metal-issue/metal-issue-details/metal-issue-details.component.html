@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metalIssueDetailsForm">
@@ -305,27 +305,17 @@
                                     <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
                                         (click)="jobchange($event)">Change Job</button>
                                 </div>
-                                <div class="p-2">
-                                    <button type="button"
-                                        class="btn btn-primary metal-issue-add-btn text-center">Continue</button>
-                                </div>
-                                <div class="p-2">
-                                    <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                                        (click)="formSubmit()">Save</button>
-                                </div>
-                                <div class="p-2">
-                                    <button type="button"
-                                        class="btn btn-primary metal-issue-add-btn text-center">Cancel</button>
-                                </div>
                             </div>
-                                      
                         </div>
                     </div>
                 </div>
 
                 <div class="row my-2">
                     <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                        [allowColumnReordering]="true"
+                        [allowColumnResizing]="true"
+                        [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>

@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true"></modal-header> 
 <!-- content section -->
 <!-- content section -->
 <div class="row">
@@ -276,22 +276,6 @@
                                     <mat-datepicker-toggle matSuffix [for]="jobPcsDate"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #jobPcsDate></mat-datepicker>
                                   </mat-form-field> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row mt-3">
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                                    (saveClick)="formSubmit()">Save</button>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                                    (cancelClick)="close()">Cancel</button>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                                    (continueClick)="continue()">Continue</button>
                             </div>
                         </div>
                     </div>

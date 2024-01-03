@@ -13,10 +13,12 @@ import Swal from 'sweetalert2';
   styleUrls: ['./stone-pricing-master.component.scss']
 })
 export class StonePricingMasterComponent implements OnInit {
+  [x: string]: any;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   tableData: any[] = [];
-
+  isReadOnly:any
+  isDisabled:boolean=true
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -248,7 +250,8 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
     this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
-    this.stonePrizeMasterForm.disable();
+    this.stonePrizeMasterForm.disable()
+
   }
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -492,4 +495,8 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
+}
+
+function disable(): HTMLElement | null {
+  throw new Error('Function not implemented.');
 }

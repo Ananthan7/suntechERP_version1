@@ -229,8 +229,4 @@ export class StoneDetailsComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
-  formSubmit(){}
-  continue(){}
-
 }

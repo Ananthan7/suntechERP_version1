@@ -117,13 +117,14 @@ export class StoneReturnComponent implements OnInit {
   }
 
   stonereturnFrom: FormGroup = this.formBuilder.group({
-    voctype:['',[Validators.required]],
-    vocno:['',[Validators.required]],
-    vocdate:['',[Validators.required]],
-   basecurrency:[''],
-   basecurrencyrate:[''],
-   currency:[''],
-   currencyrate:[''],
+
+    voctype:['STR'],
+    vocno:['1'],
+    vocdate:[new Date(),''],
+   basecurrency:['AED'],
+   basecurrencyrate:['1.000000'],
+   currency:['AED'],
+   currencyrate:['1.000000'],
    worker:[''],
    workername:[''],
     remark:[''],

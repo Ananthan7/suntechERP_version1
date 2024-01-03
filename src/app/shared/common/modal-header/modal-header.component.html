@@ -15,7 +15,7 @@
                 </ng-template>
             </div>
             <div class="p-1">
-                <button type="button" class="btn btn-primary text-center"
+                <button type="button" class="btn btn-primary text-center" *ngIf="isViewCancel"
                     (click)="cancelClicked()">
                     Cancel
                 </button>
@@ -24,6 +24,12 @@
                 <button type="button" class="btn btn-danger text-center"
                     (click)="deleteClicked()">
                     Delete
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isViewContinue">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="continueClicked()">
+                    Continue
                 </button>
             </div>
             <div class="p-1 dropdown text-right" *ngIf="isViewMore">
