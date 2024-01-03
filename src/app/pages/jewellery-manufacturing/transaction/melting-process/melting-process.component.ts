@@ -206,6 +206,7 @@ export class MeltingProcessComponent implements OnInit {
 
   }
   resetAllocation(){}
+  processCodeScpSelected(data:any){}
 
   formSubmit() {
 
