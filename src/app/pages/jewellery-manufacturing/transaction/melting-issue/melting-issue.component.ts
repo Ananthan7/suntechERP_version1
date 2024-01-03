@@ -21,6 +21,8 @@ export class MeltingIssueComponent implements OnInit {
   columnhead1 : any[] = ['Sr#','Ingredients','Qty']
   @Input() content!: any;
   tableData: any[] = [];
+  voctype?: String;
+  currentDate = new Date();
   meltingISsueDetailsData : any[] = [];
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
@@ -131,11 +133,17 @@ export class MeltingIssueComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private comService: CommonServiceService,
     private commonService: CommonServiceService,) { }
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    this.voctype = this.comService.getqueryParamMainVocType()
+    this.meltingIssueFrom.controls.vocdate.setValue(this.currentDate)
+    this.meltingIssueFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    
+    
   }
 
   close(data?: any) {
@@ -201,17 +209,19 @@ export class MeltingIssueComponent implements OnInit {
       return
     }
   
+    console.log(this.meltingIssueFrom,'not error')
+
     let API = 'JobMeltingIssueDJ/InsertJobMeltingIssueDJ'
     let postData = {
       "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.meltingIssueFrom.value.voctype,
-      "VOCNO": this.meltingIssueFrom.value.vocno,
-      "VOCDATE": this.meltingIssueFrom.value.vocdate,
+      "BRANCH_CODE": this.comService.nullToString(this.branchCode),
+      "VOCTYPE": this.comService.nullToString(this.meltingISsueDetailsData[0].voctype),
+      "VOCNO": this.comService.emptyToZero(this.meltingISsueDetailsData[0].vocno),
+      "VOCDATE": this.comService.formatDateTime(this.meltingISsueDetailsData[0].vocdate),
       "YEARMONTH": this.yearMonth,
       "NAVSEQNO": 0,
-      "WORKER_CODE": this.meltingIssueFrom.value.worker,
-      "WORKER_DESC": this.meltingIssueFrom.value.workerdes,
+      "WORKER_CODE": this.comService.nullToString(this.meltingISsueDetailsData[0].worker),
+      "WORKER_DESC": this.comService.nullToString(this.meltingISsueDetailsData[0].workerDesc),
       "SALESPERSON_CODE": "",
       "SALESPERSON_NAME": "",
       "DOCTIME": "2023-10-21T10:15:43.789Z",
@@ -236,11 +246,11 @@ export class MeltingIssueComponent implements OnInit {
       "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
-      "PROCESS_CODE": this.meltingIssueFrom.value.processcode,
-      "PROCESS_DESC": this.meltingIssueFrom.value.processdes,
+      "PROCESS_CODE": this.comService.nullToString(this.meltingISsueDetailsData[0].process),
+      "PROCESS_DESC": this.comService.nullToString(this.meltingISsueDetailsData[0].processDesc),
       "PRINT_COUNT": 0,
       "MELTING_TYPE": "",
-      "COLOR": this.meltingIssueFrom.value.color,
+      "COLOR": this.comService.nullToString(this.meltingISsueDetailsData[0].color),
       "RET_STOCK_CODE": "",
       "RET_GROSS_WT": 0,
       "RET_PURITY": 0,
@@ -323,6 +333,7 @@ export class MeltingIssueComponent implements OnInit {
       //   }
       // ]
     }
+    
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {

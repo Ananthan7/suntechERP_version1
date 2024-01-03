@@ -103,7 +103,7 @@ export class MeltingProcessDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    
+
 
   }
   setAllInitialValues() {
@@ -185,11 +185,17 @@ export class MeltingProcessDetailsComponent implements OnInit {
   });
 
   formSubmit() {
-let dataTOparent = {
-  formDetails :this.meltingprocessdetailsForm.value 
-  
-}
-this.close(dataTOparent)
+    let dataTOparent: any = {
+
+      METAL_DETAIL_GRID: [],
+      PROCESS_FORMDETAILS: [],
+
+
+    }
+    // this.close(dataTOparent)
+    dataTOparent.PROCESS_FORMDETAILS = this.meltingprocessdetailsForm.value;
+    dataTOparent.METAL_DETAIL_GRID = this.metalDetailData; //grid data
+    dataTOparent.POSTDATA = []
 
     let API = 'JobMeltingProcessDJ/InsertJobMeltingProcessDJ'
     let postData = {
@@ -253,8 +259,9 @@ this.close(dataTOparent)
       "REJ_REMARKS": "string",
       "ATTACHMENT_FILE": "string"
     }
-    this.close(postData);
-   }
+    dataTOparent.POSTDATA.push(postData)
+    this.close(dataTOparent);
+  }
 
   setFormValues() {
   }
@@ -379,7 +386,7 @@ this.close(dataTOparent)
         'strCurrenctUser': ''
       }
     }
-   
+
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
@@ -398,7 +405,7 @@ this.close(dataTOparent)
           this.meltingprocessdetailsForm.controls.netweight.setValue(data[0].NETWT)
           this.meltingprocessdetailsForm.controls.MetalWeightFrom.setValue(
             this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
-            
+
           this.meltingprocessdetailsForm.controls.StoneWeight.setValue(data[0].STONE)
 
           this.meltingprocessdetailsForm.controls.PURITY.setValue(data[0].PURITY)
@@ -421,7 +428,7 @@ this.close(dataTOparent)
     this.subscriptions.push(Sub)
   }
 
-  
+
 
 
   jobNumberValidate(event: any) {

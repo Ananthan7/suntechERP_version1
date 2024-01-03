@@ -33,8 +33,8 @@ export class MeltingProcessComponent implements OnInit {
   meltingprocessDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
 
-
-  columnhead: any[] = ['Sr #', 'Div', 'Job No', 'Stock Code', 'Stock Desc', 'Process', 'Worker', 'Pcs', 'Gross Wt', 'Stone Wt', 'Net Wt', 'Purity', 'Pure Wt', 'Balance Wt', 'Balance Pure'];
+  columnhead: any[] = ['SRNO', 'Div', 'jobno', 'stockcode', 'stockcodedes', 'process','worker', 'pcs', 'grossweight', 'stoneweight', 'netweight', 'purity', 'pureweight', 'lossweight', 'purediff'];
+  // columnhead: any[] = ['Sr #', 'Div', 'Job No', 'Stock Code', 'Stock Desc', 'Process', 'Worker', 'Pcs', 'Gross Wt', 'Stone Wt', 'Net Wt', 'Purity', 'Pure Wt', 'Balance Wt', 'Balance Pure'];
   columnhead1: any[] = ['R to Stock', 'Stock Code', 'Gross Wt', 'Purity', 'Pure Wt', 'Location'];
   columnhead2: any[] = ['R to Scrap', 'Stock Code', 'Gross Wt', 'Purity', 'Pure Wt', 'Location', 'Loss', 'Pure Wt', 'Bal Gross', 'Bal Pure'];
   column: any[] = ['Sr', 'So No', 'Party Code', 'Party Name', 'Job No', 'job Desc', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', ' Req Metal', 'Stone Wt', 'Recd Gross Wt', 'Metal Allocated', 'Allocated Pure Wt', 'Job Pcs'];
@@ -204,8 +204,9 @@ export class MeltingProcessComponent implements OnInit {
       console.log(postData);
       if (postData) {
         console.log('Data from modal:', postData);
-        this.meltingprocessDetailsData.push(postData);
+        this.meltingprocessDetailsData.push(postData.POSTDATA[0]);
         console.log(this.meltingprocessDetailsData);
+        this.setValuesToHeaderGrid(postData); 
 
       }
     });
@@ -232,7 +233,7 @@ export class MeltingProcessComponent implements OnInit {
     if (detailDataToParent) {
       this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
     }
-    this.getSequenceDetailData(PROCESS_FORMDETAILS);
+    // this.getSequenceDetailData(PROCESS_FORMDETAILS);
     
   }
   swapObjects(array1: any, array2: any, index: number) {
@@ -329,7 +330,7 @@ export class MeltingProcessComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status == "Success") {
+          if (result.status.trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -476,6 +477,7 @@ export class MeltingProcessComponent implements OnInit {
   }
   
 }
+
 
 
   

@@ -131,6 +131,42 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
   }
+  setAllInitialValues() {
+    let dataFromParent = this.content[0].PROCESS_FORMDETAILS
+    if (!dataFromParent) return
+    this.meltingIssuedetailsFrom.controls.jobno.setValue(dataFromParent.jobno)
+    this.meltingIssuedetailsFrom.controls.jobdes.setValue(dataFromParent.jobdes)
+    this.meltingIssuedetailsFrom.controls.subjobno.setValue(dataFromParent.subjobno)
+    this.meltingIssuedetailsFrom.controls.subJobDescription.setValue(dataFromParent.subJobDescription)
+    this.meltingIssuedetailsFrom.controls.workerFrom.setValue(dataFromParent.workerFrom)
+    this.meltingIssuedetailsFrom.controls.workerTo.setValue(dataFromParent.workerTo)
+    this.meltingIssuedetailsFrom.controls.toggleSwitchtIssue.setValue(dataFromParent.toggleSwitchtIssue)
+    this.meltingIssuedetailsFrom.controls.processFrom.setValue(dataFromParent.processFrom)
+    this.meltingIssuedetailsFrom.controls.processTo.setValue(dataFromParent.processTo)
+    this.meltingIssuedetailsFrom.controls.MetalPcsFrom.setValue(dataFromParent.MetalPcsFrom)
+    this.meltingIssuedetailsFrom.controls.MetalPcsTo.setValue(dataFromParent.MetalPcsTo)
+    this.meltingIssuedetailsFrom.controls.GrossWeightTo.setValue(dataFromParent.GrossWeightTo)
+    this.meltingIssuedetailsFrom.controls.approvedby.setValue(dataFromParent.approvedby)
+    this.meltingIssuedetailsFrom.controls.startdate.setValue(dataFromParent.startdate)
+    this.meltingIssuedetailsFrom.controls.enddate.setValue(dataFromParent.enddate)
+    this.meltingIssuedetailsFrom.controls.JOB_DATE.setValue(dataFromParent.JOB_DATE)
+    this.meltingIssuedetailsFrom.controls.DESIGN_CODE.setValue(dataFromParent.DESIGN_CODE)
+    this.meltingIssuedetailsFrom.controls.SEQ_CODE.setValue(dataFromParent.SEQ_CODE)
+    this.meltingIssuedetailsFrom.controls.PROCESSDESC.setValue(dataFromParent.PROCESSDESC)
+    this.meltingIssuedetailsFrom.controls.WORKERDESC.setValue(dataFromParent.WORKERDESC)
+    this.meltingIssuedetailsFrom.controls.PUREWT.setValue(dataFromParent.PUREWT)
+    this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(dataFromParent.MetalWeightFrom)
+    this.meltingIssuedetailsFrom.controls.processToDescription.setValue(dataFromParent.processToDescription)
+    this.meltingIssuedetailsFrom.controls.workerToDescription.setValue(dataFromParent.workerToDescription)
+    this.meltingIssuedetailsFrom.controls.PURITY.setValue(dataFromParent.PURITY)
+    this.meltingIssuedetailsFrom.controls.METALLAB_TYPE.setValue(dataFromParent.METALLAB_TYPE)
+    this.meltingIssuedetailsFrom.controls.remarks.setValue(dataFromParent.remarks)
+    this.meltingIssuedetailsFrom.controls.treeno.setValue(dataFromParent.treeno)
+    this.meltingIssuedetailsFrom.controls.JOB_SO_NUMBER.setValue(dataFromParent.JOB_SO_NUMBER)
+    this.meltingIssuedetailsFrom.controls.stockCode.setValue(dataFromParent.stockCode)
+    this.meltingIssuedetailsFrom.controls.DIVCODE.setValue(dataFromParent.DIVCODE)
+    this.meltingIssuedetailsFrom.controls.METALSTONE.setValue(dataFromParent.METALSTONE)
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -169,6 +205,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     pureweight:[''],
     topurity:['']
   });
+
 
 
   formSubmit(){
@@ -245,6 +282,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
     }
     this.close(postData);
   }
+  
+  
 
  
 
