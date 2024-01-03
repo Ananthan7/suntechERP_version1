@@ -81,6 +81,8 @@ export class ApprovalMasterComponent implements OnInit {
     this.tableData[value.data.SRNO - 1].Length = data.target.value;
   }
 
+  
+
   ngOnInit(): void {
     console.log(this.content);
     if(this.content){

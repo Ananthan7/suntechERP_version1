@@ -64,7 +64,8 @@ export class StoneReturnDetailsComponent implements OnInit {
     console.log(e);
     this.stonereturndetailsFrom.controls.subJobNo.setValue(e.job_number);
     this.stonereturndetailsFrom.controls.subJobNoDes.setValue(e.job_description);
-    
+    this.stonereturndetailsFrom.controls.jobno.setValue(e.job_number);
+    this.stonereturndetailsFrom.controls.jobDesc.setValue(e.job_description);
   }
 
   close(data?: any) {
@@ -77,7 +78,7 @@ export class StoneReturnDetailsComponent implements OnInit {
 
   stonereturndetailsFrom: FormGroup = this.formBuilder.group({
     jobno: [''],
-    jobDate: [''],
+    jobDesc: [''],
     subjobno: [''],
     subjobDesc : [''],
     designcode: [''],

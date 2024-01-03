@@ -17,7 +17,7 @@
               <div class="row">
                 <div class="col-md-8">
                   <div class="row">
-                    <label for="inputPassword" class="col-sm-2 col-form-label"> Job Number :</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label"> Job Number*:</label>
                     <div class="col-sm-8">
                       <div class="position-relative d-flex">
                         <mat-form-field style="width: 100%;">
@@ -26,16 +26,13 @@
                         <master-search [MasterSearchData]="subJobNoCodeData"
                           (newRowClick)="subJobNoCodeSelected($event)"></master-search>&nbsp;
                         <mat-form-field style="width: 100%">
-                          <input matInput [matDatepicker]="jobDate" formControlName="jobDate" placeholder="YYYY/MM/DD"
-                            DateValidation />
-                          <mat-datepicker-toggle matSuffix [for]="jobDate"></mat-datepicker-toggle>
-                          <mat-datepicker [startAt]="currentDate" #jobDate></mat-datepicker>
+                          <input type="text" matInput formControlName="subjobno" />
                         </mat-form-field>
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Sub Job No :</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Sub Job No*:</label>
                     <div class="col-sm-8">
                       <div class="position-relative d-flex">
                         <mat-form-field style="width: 100%;">
@@ -54,7 +51,7 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Design Code : </label>
                     <div class="col-md-3">
                       <div class="position-relative d-flex">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 70%;">
                           <input type="text" matInput formControlName="designcode" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="subJobNoCodeData"
@@ -64,29 +61,27 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Salesorder No*: </label>
                     <div class="col-md-3">
                       <div class="position-relative d-flex">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 70%;">
                           <input type="text" matInput formControlName="salesorderno" />
                         </mat-form-field>
                       </div>
                     </div>
                   </div>
-
-
                 </div>
-
               </div>
             </div>
-
-
-
-
-
           </div>
 
+          <div class="col-md-12">
+            <div class="upload-btn-wrapper">
+              <button class="btn btnnew border-dark"></button>
+              <input type="file" name="uploadproduct" class="uploadproduct">
+            </div>
+          </div>
           <div class="row m-1">
             <div class="col-md-8">
               <div class="row">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Process :</label>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Process*:</label>
                 <div class="col-sm-7">
                   <div class="position-relative d-flex">
 
@@ -102,7 +97,7 @@
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-3 col-form-label"> Worker :</label>
+                <label for="inputPassword" class="col-sm-3 col-form-label"> Worker*:</label>
                 <div class="col-sm-7">
                   <div class="position-relative d-flex">
 
@@ -134,7 +129,7 @@
                 </div>
               </div>
               <div class="row">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Batch ID*:</label>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Batch ID:</label>
                 <div class="col-sm-5">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
@@ -175,7 +170,7 @@
 
             <div class="col-md-4">
               <div class="row">
-                <label for="inputPassword" class="col-sm-4 col-form-label">Location :</label>
+                <label for="inputPassword" class="col-sm-4 col-form-label">Location*:</label>
                 <div class="col-md-7">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">

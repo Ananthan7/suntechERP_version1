@@ -79,7 +79,7 @@ export class MeltingProcessComponent implements OnInit {
     SEARCH_VALUE: '',
     WHERECONDITION: "PROCESS_CODE<> ''",
     VIEW_INPUT: true,
-    VIEW_TABLE: true,
+    VIEW_TABLE: true, 
   }
   timeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -155,9 +155,9 @@ export class MeltingProcessComponent implements OnInit {
   }
 
   meltingProcessFrom: FormGroup = this.formBuilder.group({
-    vocType : ['',[Validators.required]],
-    vocNo : ['',[Validators.required]],
-    vocDate : ['',[Validators.required]],
+    vocType : ['MLP',[Validators.required]],
+    vocNo : ['1',[Validators.required]],
+    vocDate : [new Date(),''],
     meltingType : ['',[Validators.required]],
     process : [''],
     processDesc : [''],

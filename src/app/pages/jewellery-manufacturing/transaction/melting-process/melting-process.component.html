@@ -25,7 +25,7 @@
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="vocType" />
                 </mat-form-field>
-              </div>
+              </div> 
             </div>
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-4">Voucher No : </label>
@@ -44,10 +44,10 @@
                   <input type="date" matInput />
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
-                  <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
-                    placeholder="DD/MM/YYYY" DateValidation />
-                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                  <input matInput [matDatepicker]="vocDate"  formControlName="vocDate"
+                  placeholder="YYYY/MM/DD"  DateValidation />
+                <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -315,7 +315,10 @@
               </div>
             </div>
             <div class="col-md-12 mt-2">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+              [allowColumnReordering]="true"
+              [allowColumnResizing]="true"
+              [columnAutoWidth]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
