@@ -330,7 +330,10 @@
             <div class="col-12">
               <div class="row pt-1">
                 <div class="col">
-                  <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                  <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                  [allowColumnReordering]="true"
+                  [allowColumnResizing]="true"
+                  [columnAutoWidth]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true">
                     </dxo-editing>

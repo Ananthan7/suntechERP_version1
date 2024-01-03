@@ -131,6 +131,7 @@ export class WaxProcessComponent implements OnInit {
   jobNumberDataSelected(data: any, value: any) {
     console.log(value);
     console.log(data);
+    this.tableData[value.data.SRNO - 1].job_number = data.job_number;
   //   this.tableData[value.data.SRNO - 1].job_number = data.jobNumber;
    }
 

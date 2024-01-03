@@ -108,7 +108,10 @@
                             <mat-tab label="Vocher Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                        [allowColumnReordering]="true"
+                                        [allowColumnResizing]="true"
+                                        [columnAutoWidth]="true">
                                             <dxo-paging [enabled]="false"></dxo-paging>
                                             <dxo-editing mode="cell" [allowUpdating]="true">
                                             </dxo-editing>
@@ -146,7 +149,10 @@
                             <mat-tab label="Item Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                        [allowColumnReordering]="true"
+                                        [allowColumnResizing]="true"
+                                        [columnAutoWidth]="true">
                                             <dxo-paging [enabled]="false"></dxo-paging>
                                             <dxo-editing mode="cell" [allowUpdating]="true">
                                             </dxo-editing>

@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-component-size-set',
   templateUrl: './component-size-set.component.html',
@@ -22,6 +24,7 @@ export class ComponentSizeSetComponent implements OnInit {
 subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
+  selectedIndexes: any = [];
   
   constructor(
     private activeModal: NgbActiveModal,
@@ -29,6 +32,7 @@ subscriptions: any;
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
   ) { 
     this.allMode = 'allPages';
@@ -89,8 +93,29 @@ subscriptions: any;
     this.activeModal.close(data);
   }
 
+  onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SN))) {
+        acc.push(index);
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
+    
+  }
+
   deleteTableData(){
-    this.tableData.pop();
+    console.log(this.selectedIndexes);
+  
+    if (this.selectedIndexes.length > 0) {
+      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+    }   
   }
   
   formSubmit(){

@@ -108,11 +108,13 @@
             <div class="row">
               <div class="col">
                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
-                  [showRowLines]="true" class="mt-5">
+                  [showRowLines]="true" class="mt-5"   [allowColumnReordering]="true"
+                  [allowColumnResizing]="true"
+                  [columnAutoWidth]="true">
                   <dxo-editing  mode="cell" ></dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
-                  <dxi-column>
+                 
                     <dxi-column dataField="SRNO" caption="SI No"> </dxi-column>
                     <dxi-column dataField="job_number" caption="Job Number" cellTemplate="jobNumbertemp">
                     </dxi-column>
@@ -133,7 +135,7 @@
                     </dxi-column>
                     <dxi-column dataField="IssuePcs" caption="Issue Pcs" cellTemplate="IssuePcstemp">
                     </dxi-column>
-                  </dxi-column>
+              
 
                   <div *dxTemplate="let data of 'jobNumbertemp'">
                     <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>

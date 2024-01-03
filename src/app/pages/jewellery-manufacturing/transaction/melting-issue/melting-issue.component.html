@@ -145,7 +145,10 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                [allowColumnReordering]="true"
+                                [allowColumnResizing]="true"
+                                [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-selection mode="multiple"></dxo-selection>
@@ -162,7 +165,10 @@
                                 <label for="inputPassword"
                                     class="col-sm-12  col-form-label text-center border border-light bg-light text-dark">Pure
                                     / Alloy Ratio</label>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                [allowColumnReordering]="true"
+                                [allowColumnResizing]="true"
+                                [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-selection mode="multiple"></dxo-selection>
@@ -179,7 +185,10 @@
                 </div>
                 <div class="row py-2 border-top">
                     <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                        [allowColumnReordering]="true"
+                        [allowColumnResizing]="true"
+                        [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>

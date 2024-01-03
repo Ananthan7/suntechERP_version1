@@ -157,9 +157,35 @@ export class StoneIssueComponent implements OnInit {
    worker:['',],
    workername:[''],
     narration:[''],
+    caratTotal:[''],
+    amountTotal:[''],
   });
 
- 
+  // addRow(): void {
+  //   const newRow = this.formBuilder.group({
+  //     serialNo: this.tableData.length + 1,
+  //     carat: 0,
+  //     amount: 0
+  //   });
+
+  //   this.tableData.push(newRow);
+  //   this.updateTotal();
+  // }
+
+  // updateTotal(): void {
+  //   let caratTotal = 0;
+  //   let amountTotal = 0;
+
+  //   this.tableData.controls.forEach((control: FormGroup) => {
+  //     caratTotal += control.get('carat').value;
+  //     amountTotal += control.get('amount').value;
+  //   });
+
+  //   this.form.patchValue({
+  //     caratTotal,
+  //     amountTotal
+  //   });
+  // }
 
 removedata(){
   this.tableData.pop();
