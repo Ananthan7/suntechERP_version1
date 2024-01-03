@@ -5,7 +5,7 @@
     </button>
   </div>
   <!-- modal header component -->
-  <!-- <modal-header  (cancelClick)="close()"></modal-header> -->
+ <modal-header  (cancelClick)="close()" [isViewContinue]="true"> </modal-header> 
 
       <form [formGroup]="enterStoneDetailsForm">
         <div class="container-fluid pt-3">
@@ -297,22 +297,4 @@
   
           </div>
         </div>
-
-        <div class="col-md-6" >
-          <div class="row mt-4 px-4">
-            <div class="col-md-2">
-              <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                  (continueClick)="continue()">Continue</button>
-          </div>
-              <div class="col-md-2">
-                  <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                      (saveClick)="formSubmit()">Save</button>
-              </div>
-              <div class="col-md-2">
-                  <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                      (cancelClick)="close()">Cancel</button>
-              </div>
-            
-          </div>
-      </div>
       </form>

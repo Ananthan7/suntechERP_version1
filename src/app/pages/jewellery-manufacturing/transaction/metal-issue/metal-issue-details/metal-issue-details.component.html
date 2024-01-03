@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metalIssueDetailsForm">
@@ -305,20 +305,7 @@
                                     <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
                                         (click)="jobchange($event)">Change Job</button>
                                 </div>
-                                <div class="p-2">
-                                    <button type="button"
-                                        class="btn btn-primary metal-issue-add-btn text-center">Continue</button>
-                                </div>
-                                <div class="p-2">
-                                    <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                                        (click)="formSubmit()">Save</button>
-                                </div>
-                                <div class="p-2">
-                                    <button type="button"
-                                        class="btn btn-primary metal-issue-add-btn text-center">Cancel</button>
-                                </div>
                             </div>
-                                      
                         </div>
                     </div>
                 </div>

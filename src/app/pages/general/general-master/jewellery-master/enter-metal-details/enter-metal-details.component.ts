@@ -95,6 +95,4 @@ export class EnterMetalDetailsComponent implements OnInit {
   }
 
   formSubmit(){}
-  continue(){}
-
 }

@@ -34,8 +34,6 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  
-  continue(){}
 
   costcenterdiamonddetailsForm: FormGroup = this.formBuilder.group({
     branch:['',[Validators.required]],

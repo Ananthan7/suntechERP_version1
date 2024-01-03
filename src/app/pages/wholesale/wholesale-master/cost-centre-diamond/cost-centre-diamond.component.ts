@@ -105,8 +105,6 @@ export class CostCentreDiamondComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
-  continue(){}
   
   openCostCentreDiamond() {
     const modalRef: NgbModalRef = this.modalService.open(CostCentreDiamondDetailsComponent, {

@@ -35,10 +35,6 @@ export class CostCentreDiamondDetailsComponent implements OnInit {
     this.activeModal.close(data);
   }
   
-  continue(){
-
-  }
-
   costcenterdiamonddetailsForm: FormGroup = this.formBuilder.group({
     branch:[''],
     purchase:[''],

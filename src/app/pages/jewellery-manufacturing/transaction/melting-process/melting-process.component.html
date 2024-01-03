@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="meltingProcessFrom">
@@ -375,13 +375,6 @@
               <div class="p-2">
                 <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
                   (continueClick)="resetAllocation()">Reset Allocation</button>
-              </div>
-              <div class="p-2">
-                <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                  (saveClick)="formSubmit()">Save</button>
-              </div>
-              <div class="p-2"><button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                  (cancelClick)="close()">Cancel</button>
               </div>
             </div>
           </div>

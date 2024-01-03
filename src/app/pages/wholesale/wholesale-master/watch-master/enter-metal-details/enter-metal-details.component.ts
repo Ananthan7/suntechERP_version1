@@ -97,18 +97,8 @@ this.myForm.get('amountFC')?.valueChanges.subscribe(value => {
     this.enterMetalDetailsForm.controls.rateType.setValue(e.RATE_TYPE);
   }
 
-
-  formSubmit() {
-
-  }
-
-
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
-  }
-
-  continue(){
-    
   }
 }
