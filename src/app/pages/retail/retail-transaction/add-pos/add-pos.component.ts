@@ -27,6 +27,7 @@ import { IndexedDbService } from 'src/app/services/indexed-db.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { environment } from 'src/environments/environment';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -56,6 +57,9 @@ export class AddPosComponent implements OnInit {
   public more_customer_detail_modal!: NgbModal;
   @ViewChild('userAuthModal')
   public userAuthModal!: NgbModal;
+
+  @ViewChild('userAttachmentModal')
+  public userAttachmentModal!: NgbModal;
   selectedModal: NgbModalRef | undefined;
 
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
@@ -163,6 +167,7 @@ export class AddPosComponent implements OnInit {
   modalReference: any;
   modalReferenceSalesReturn: any;
   modalReferenceUserAuth!: NgbModalRef;
+  modalReferenceUserAttachment!: NgbModalRef;
 
   closeResult: any;
   karatRateDetails: any = [];
@@ -245,6 +250,35 @@ export class AddPosComponent implements OnInit {
     username: ['', Validators.required],
     password: ['', Validators.required],
   });
+
+  attachmentForm: FormGroup = this.formBuilder.group({
+    remarks: ['', Validators.required],
+    docType: ['', Validators.required],
+    expDate: ['', Validators.required],
+    attachmentFile: [''],
+  });
+
+  docTypeData: MasterSearchModel =
+    {
+      "PAGENO": 1,
+      "RECORDS": 10,
+      "LOOKUPID": 3,
+      "ORDER_TYPE": 0,
+      "WHERECONDITION": "TYPES='DOCUMENT TYPE'",
+      "SEARCH_FIELD": "CODE",
+      "SEARCH_VALUE": ""
+    }
+  // {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 3,
+  //   SEARCH_FIELD: 'CODE',
+  //   SEARCH_HEADING: 'Document Type',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "CODE<> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
 
   advanceReceiptDetails: any;
   exchangeFormMetalRateType = '';
@@ -523,8 +557,8 @@ export class AddPosComponent implements OnInit {
     // { title: 'Expire Date', field: 'EXPIRE_DATE' },
     // { title: 'Branch Code', field: 'BRANCH_CODE' },
     // { title: 'Year Month', field: 'YEARMONTH' },
-   
- 
+
+
 
 
     // { title: 'Doc Type', field: 'DOC_TYPE' },
@@ -3357,7 +3391,7 @@ export class AddPosComponent implements OnInit {
     let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
-    this.snackBar.dismiss();
+        this.snackBar.dismiss();
 
         console.log('=================resp===================');
         console.log(resp);
@@ -6850,6 +6884,14 @@ export class AddPosComponent implements OnInit {
     console.log('====================================');
   }
 
+  //need to work
+  setTransAttachmentData() {
+    this.transAttachmentList.forEach((data: any) => {
+
+    });
+
+  }
+
   postRetailSalesMaster() {
     console.log('====================this.karatRateDetails================');
     console.log(this.karatRateDetails);
@@ -7243,7 +7285,7 @@ export class AddPosComponent implements OnInit {
 
 
 
-      
+
       if (this.editOnly) {
         let API = `RetailSalesDataInDotnet/UpdateRetailSalesData?strBranchCode=${this.content.BRANCH_CODE}&strVocType=${this.content.VOCTYPE}&strYearMonth=${this.content.YEARMONTH}&intVocNo=${this.content.VOCNO}`
         this.suntechApi.putDynamicAPI(API, postData)
@@ -8716,35 +8758,35 @@ export class AddPosComponent implements OnInit {
       // mkgvalue =
       //   this.lineItemForm.value.fcn_li_rate *
       //   this.lineItemForm.value.fcn_li_gross_wt;
-      
-        // new calculation added 30/12/2023
-        if (this.divisionMS == 'M') {
-          switch (this.newLineItem?.MAKING_ON) {
-  
-            case 'PCS':
-              mkgvalue =
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) *
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
-              break;
-  
-            case 'GROSS':
-              mkgvalue =
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) *
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
-              break;
-  
-            case 'NET':
-              mkgvalue =
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
-                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
-              break;
-  
-          }
-        } else {
-          mkgvalue =
-            this.lineItemForm.value.fcn_li_rate *
-            this.lineItemForm.value.fcn_li_gross_wt;
+
+      // new calculation added 30/12/2023
+      if (this.divisionMS == 'M') {
+        switch (this.newLineItem?.MAKING_ON) {
+
+          case 'PCS':
+            mkgvalue =
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) *
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+            break;
+
+          case 'GROSS':
+            mkgvalue =
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) *
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+            break;
+
+          case 'NET':
+            mkgvalue =
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)
+            break;
+
         }
+      } else {
+        mkgvalue =
+          this.lineItemForm.value.fcn_li_rate *
+          this.lineItemForm.value.fcn_li_gross_wt;
+      }
     }
 
     // const mkgvalue = (
@@ -10757,6 +10799,80 @@ export class AddPosComponent implements OnInit {
       );
     });
 
+
+  }
+
+  openAttachment(url: string) {
+    window.open(url, '_blank');
+  }
+
+
+  openUserAttachmentModal() {
+
+    this.modalReferenceUserAttachment = this.modalService.open(
+      this.userAttachmentModal,
+      {
+        size: "lg",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
+
+    this.modalReferenceUserAttachment.result.then((result) => {
+      if (result) {
+        console.log("Result :", result);
+      } else {
+      }
+    },
+      (reason) => {
+        console.log(`Dismissed ${reason}`);
+      }
+    );
+
+  }
+
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    console.log(file);
+  }
+
+
+  submitAttachment() {
+    if (!this.attachmentForm.invalid) {
+      // this.modalReferenceUserAttachment.close(true);
+
+      const formData = new FormData();
+
+      formData.append('Data.VOCNO', '');
+      formData.append('Data.VOCTYPE', '');
+      formData.append('Data.VOCDATE', this.convertDateWithTimeZero(
+        new Date(this.vocDataForm.value.vocdate).toISOString()
+      ),);
+      formData.append('Data.REFMID', '');
+      formData.append('Data.SRNO', '');
+      formData.append('Data.REMARKS', '');
+      formData.append('Data.ATTACHMENT_PATH', '');
+      formData.append('Data.UNIQUEID', '');
+      formData.append('Data.CODE', '');
+      formData.append('Data.ATTACH_TYPE', '');
+      formData.append('Data.EXPIRE_DATE', this.attachmentForm.value.expDate || this.dummyDate);
+      formData.append('Data.BRANCH_CODE', '');
+      formData.append('Data.YEARMONTH', '');
+      formData.append('Data.DOC_TYPE', '');
+      formData.append('Data.SUBLED_CODE', '');
+      formData.append('Data.DOC_ACTIVESTATUS', 'false');
+      formData.append('Data.DOC_LASTRENEWBY', '');
+      formData.append('Data.DOC_NEXTRENEWDATE', '');
+      formData.append('Data.DOC_LASTRENEWDATE', '');
+      formData.append('Data.DOCUMENT_DATE', '');
+      formData.append('Data.DOCUMENT_NO', '');
+      formData.append('Data.FROM_KYC', 'false');
+
+    } else {
+      this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
+    }
 
   }
 }
