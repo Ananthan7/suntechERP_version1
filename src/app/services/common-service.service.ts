@@ -227,7 +227,7 @@ export class CommonServiceService {
   }
   showSnackBarMsg(MessageOrID: string) {
     this.snackBar.open(this.getMsgByID(MessageOrID) || MessageOrID, 'Close', {
-      duration: 3000, // Duration in milliseconds (e.g., 3000 for 3 seconds)
+      duration: 5000, // Duration in milliseconds (e.g., 3000 for 3 seconds)
       panelClass: ['custom-snackbar'],
     });
   }
