@@ -55,12 +55,12 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Currency</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="partyCurrency"/>
+                            <input type="text" matInput formControlName="partyCurrency" readonly/>
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="partyCurrencyRate"/>
+                            <input type="text" matInput formControlName="partyCurrencyRate" readonly/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="partyCurrencyCodeData"
                         (newRowClick)="partyCurrencyCodeSelected($event)"></master-search>
@@ -102,12 +102,12 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Base Currency</label>
                     <div class="col-md-1">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="baseCurrency"/>
+                            <input type="text" matInput formControlName="baseCurrency" readonly />
                         </mat-form-field>
                     </div>
                     <div class="col-md-1">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="baseCurrencyRate"/>
+                            <input type="text" matInput formControlName="baseCurrencyRate" readonly/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -154,12 +154,12 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Amount</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="partyAmount"/>
+                            <input type="number" matInput formControlName="partyAmount"/>
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="partyAmountRate"/>
+                            <input type="number" matInput formControlName="partyAmountRate"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -192,13 +192,13 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Total VAT</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="totalVat"/>
+                            <input type="number" matInput formControlName="totalVat"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-3 col-form-label">Total</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="total"/>
+                            <input type="number" matInput formControlName="total"/>
                         </mat-form-field>
                     </div>
                 </div>

@@ -116,7 +116,6 @@ export class ApprovalMasterComponent implements OnInit {
   adddata() {
     if(this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "")
     {
-      console.log(this.commonService.transformDecimalVB(6,this.approvalMasterForm.value.code));
       let length = this.tableData.length;
       let srno = length + 1;
       let data =  {
@@ -134,8 +133,8 @@ export class ApprovalMasterComponent implements OnInit {
         "MOBILE_NO": ""
       };
       this.tableData.push(data);
-      this.approvalMasterForm.controls.code.setValue("");
-      this.approvalMasterForm.controls.description.setValue("");
+      // this.approvalMasterForm.controls.code.setValue("");
+      // this.approvalMasterForm.controls.description.setValue("");
   }
   else {
     this.toastr.error('Please Fill all Mandatory Fields')

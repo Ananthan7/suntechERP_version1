@@ -77,7 +77,7 @@ export class JobCreationComponent implements OnInit {
     vocDate : [""],
     vocNo: [""],
     userName : [""],
-    processCode: [""],
+    processCode: ["",[Validators.required]],
     docRef: [""],
     narration: [""],
   });

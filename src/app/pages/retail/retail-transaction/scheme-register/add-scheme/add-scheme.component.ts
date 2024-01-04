@@ -309,11 +309,7 @@ export class AddSchemeComponent implements OnInit {
     this.receiptEntryForm.controls.SchemeAmount.setValue(data.SCHEME_UNIT);
     this.receiptEntryForm.controls.TotalValue.setValue(data.SCHEME_UNIT);
     this.receiptEntryForm.controls.Units.setValue(1);
-    if (data.SCHEME_PERIOD) {
-      this.receiptEntryForm.controls.SchemePeriod.setValue(data.SCHEME_PERIOD);
-    } else {
-      this.toastr.error("SCHEME_PERIOD Not found!");
-    }
+    this.receiptEntryForm.controls.SchemePeriod.setValue(data.SCHEME_PERIOD);
     // Add 12 months to the current date
     const currentDate = new Date();
     const nextYearDate = new Date(currentDate);
