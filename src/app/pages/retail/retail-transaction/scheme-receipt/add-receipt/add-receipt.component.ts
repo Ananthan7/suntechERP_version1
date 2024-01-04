@@ -36,7 +36,7 @@ export class AddReceiptComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  
+
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -88,71 +88,15 @@ export class AddReceiptComponent implements OnInit {
     private activeModal: NgbActiveModal,
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
-    
+
   }
 
   ngOnInit(): void {
-    console.log(this.content,'content');
-    
-    if(this.content.details && this.content.details.length>0){
-      let data = this.content.details[0]
-      this.getPaymentType(data.RECPAY_TYPE || data.Type)
-      this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
-      // this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE || data.AC_Code)
-      this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
-      this.receiptEntryForm.controls.CurrRate.setValue(data.CURRENCY_RATE || data.CurrRate)
-      this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE || data.CurrCode)
-      this.receiptEntryForm.controls.Amount_FC.setValue(data.AMOUNTFC || data.Amount_FC)
-      this.receiptEntryForm.controls.Amount_LC.setValue(data.AMOUNTCC || data.Amount_LC)
-      this.receiptEntryForm.controls.Header_Amount.setValue(data.HEADER_AMOUNT || data.Header_Amount)
-      this.receiptEntryForm.controls.AmountWithTRN.setValue(data.HEADER_AMOUNTWITHVAT || data.AmountWithTRN)
-      this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(data.HEADER_AMOUNTWITHVAT || data.HeaderAmountWithTRN)
-      this.receiptEntryForm.controls.TRN_Amount_FC.setValue(data.VAT_AMOUNTFC || data.TRN_Amount_FC)
-      this.receiptEntryForm.controls.TRN_Amount_LC.setValue(data.VAT_AMOUNTCC || data.TRN_Amount_LC)
-      this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER || data.TRN_Per)
-      this.receiptEntryForm.controls.SRNO.setValue(data.SRNO)
-      
-      if(data.TypeCode){
-        this.receiptEntryForm.controls.TypeCode.setValue(data.TypeCode)
-      }
-      if(data.TypeCode){
-        this.receiptEntryForm.controls.TypeCodeDESC.setValue(data.TypeCodeDESC)
-      }
-      if(data.HSN_AC){
-        this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_AC)
-      }
-      if(data.TRN_No){
-        this.receiptEntryForm.controls.TRN_No.setValue(data.TRN_No)
-      }
-      if(data.TRN_Inv){
-        this.receiptEntryForm.controls.TRN_Inv.setValue(data.TRN_Inv)
-      }
-      if(data.TRN_Inv_Date){
-        this.receiptEntryForm.controls.TRN_Inv_Date.setValue(data.TRN_Inv_Date)
-      }
-      if(data.TRN_Inv_Date){
-        this.receiptEntryForm.controls.TRN_Inv_Date.setValue(data.TRN_Inv_Date)
-      }
-      if(data.TRN_Ref){
-        this.receiptEntryForm.controls.TRN_Ref.setValue(data.TRN_Ref)
-      }
-      if(data.Exp){
-        this.receiptEntryForm.controls.Exp.setValue(data.Exp)
-      }
-      if(data.ValidId){
-        this.receiptEntryForm.controls.ValidId.setValue(data.ValidId)
-      }
-      if(data.SourceofFunds){
-        this.receiptEntryForm.controls.SourceofFunds.setValue(data.SourceofFunds)
-      }
-      if(data.TransactionType){
-        this.receiptEntryForm.controls.TransactionType.setValue(data.TransactionType)
-      }
-      if(data.Narration){
-        this.receiptEntryForm.controls.Narration.setValue(data.Narration)
-      }
-     
-    }else{
+    console.log(this.content, 'content');
+
+    if (this.content.details && this.content.details.length > 0) {
+      this.setInitialValues()
+    } else {
       // this.getBranchMasterList()
       this.getPaymentType('Credit Card')
       this.getCreditCardMaster()
@@ -162,8 +106,41 @@ export class AddReceiptComponent implements OnInit {
       }
     }
   }
+  setInitialValues() {
+    console.log(this.content,'this.content');
+    
+    let data = this.content.details[0]
+    this.getPaymentType(data.RECPAY_TYPE || data.Type)
+    this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
+    // this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE || data.AC_Code)
+    this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
+    this.receiptEntryForm.controls.CurrRate.setValue(data.CURRENCY_RATE || data.CurrRate)
+    this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE || data.CurrCode)
+    this.receiptEntryForm.controls.Amount_FC.setValue(data.AMOUNTFC || data.Amount_FC)
+    this.receiptEntryForm.controls.Amount_LC.setValue(data.AMOUNTCC || data.Amount_LC)
+    this.receiptEntryForm.controls.Header_Amount.setValue(data.HEADER_AMOUNT || data.Header_Amount)
+    this.receiptEntryForm.controls.AmountWithTRN.setValue(data.HEADER_AMOUNTWITHVAT || data.AmountWithTRN)
+    this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(data.HEADER_AMOUNTWITHVAT || data.HeaderAmountWithTRN)
+    this.receiptEntryForm.controls.TRN_Amount_FC.setValue(data.VAT_AMOUNTFC || data.TRN_Amount_FC)
+    this.receiptEntryForm.controls.TRN_Amount_LC.setValue(data.VAT_AMOUNTCC || data.TRN_Amount_LC)
+    this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER || data.TRN_Per)
+    this.receiptEntryForm.controls.SRNO.setValue(data.SRNO)
 
- 
+    this.receiptEntryForm.controls.TypeCode.setValue(data.TypeCode)
+    this.receiptEntryForm.controls.TypeCodeDESC.setValue(data.TypeCodeDESC)
+    this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_AC)
+    this.receiptEntryForm.controls.TRN_No.setValue(data.TRN_No)
+    this.receiptEntryForm.controls.TRN_Inv.setValue(data.TRN_Inv)
+    this.receiptEntryForm.controls.TRN_Inv_Date.setValue(data.TRN_Inv_Date)
+    this.receiptEntryForm.controls.TRN_Inv_Date.setValue(data.TRN_Inv_Date)
+    this.receiptEntryForm.controls.TRN_Ref.setValue(data.TRN_Ref)
+    this.receiptEntryForm.controls.Exp.setValue(data.Exp)
+    this.receiptEntryForm.controls.ValidId.setValue(data.ValidId)
+    this.receiptEntryForm.controls.SourceofFunds.setValue(data.SourceofFunds)
+    this.receiptEntryForm.controls.TransactionType.setValue(data.TransactionType)
+    this.receiptEntryForm.controls.Narration.setValue(data.Narration)
+  }
+
   //selected Branch from search
   selectedBranch(data: any) {
     this.receiptEntryForm.controls.Branch.setValue(data.BRANCH_CODE)
@@ -184,11 +161,11 @@ export class AddReceiptComponent implements OnInit {
     let branch = event.target.value
     event.target.value = branch.toUpperCase()
     let data = this.branchArray.filter((item: any) => item.BRANCH_CODE == event.target.value)
-    
-    if (data.length>0) {
+
+    if (data.length > 0) {
       this.receiptEntryForm.controls.Branch.setValue(data[0].BRANCH_CODE)
-      
-    }else{
+
+    } else {
       this.toastr.error('Branch not found!');
       this.receiptEntryForm.value.Branch.setValue('')
     }
@@ -203,7 +180,7 @@ export class AddReceiptComponent implements OnInit {
       // this.newRowSaveClick.emit(this.receiptEntryForm.value)
     }
   }
-  
+
   //Account master
   getAccountMaster(accountCode: string) {
     let Sub: Subscription = this.dataService.getDynamicAPI(`AccountMaster/${accountCode}`)
@@ -250,11 +227,11 @@ export class AddReceiptComponent implements OnInit {
   }
   //USE to get HSN and VAT and calculations
   getTaxDetails() {
-    console.log(this.content,'fired');
-    
+    console.log(this.content, 'fired');
+
     let date = this.commonService.formatDate(new Date())
     let accountCode = this.content.PartyCode
-    if(!accountCode){
+    if (!accountCode) {
       this.toastr.error('Accode not found')
       return
     }
@@ -266,8 +243,8 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_SAC_CODE);
           this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER);
           this.content.SCHEME_AMOUNT = 100 //TODO
-          console.log(this.content.SCHEME_AMOUNT ,'this.content.SCHEME_AMOUNT ');
-          
+          console.log(this.content.SCHEME_AMOUNT, 'this.content.SCHEME_AMOUNT ');
+
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
 
@@ -283,7 +260,7 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.Amount_FC.setValue(amount_FC)
 
           let trn_Fc_amount: number = Number(this.content.SCHEME_AMOUNT) - amount_FC
-          trn_Fc_amount =  Number(trn_Fc_amount.toFixed(2)) 
+          trn_Fc_amount = Number(trn_Fc_amount.toFixed(2))
           this.receiptEntryForm.controls.TRN_Amount_FC.setValue(trn_Fc_amount)
 
           let trn_amount_lc: number = Number(this.content.SCHEME_AMOUNT) - amount_LC
@@ -303,7 +280,7 @@ export class AddReceiptComponent implements OnInit {
       }, err => this.toastr.error(err))
     this.subscriptions.push(Sub)
   }
-  private calculateVAT(VAT: number, AMOUNT: number):number {
+  private calculateVAT(VAT: number, AMOUNT: number): number {
     return (AMOUNT / (100 + VAT)) * 100
   }
   //currency Code Change
@@ -332,7 +309,7 @@ export class AddReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.typeCodeArray = data.filter((value: any) => value.MODE == 1)
-          
+
           this.typeCodeFilteredOptions = this.receiptEntryForm.controls.TypeCode.valueChanges.pipe(
             startWith(''),
             map(value => this._filterTypeCode(value || '')),
@@ -353,7 +330,7 @@ export class AddReceiptComponent implements OnInit {
     this.selectedTypeArray = this.typeCodeArray.filter((item: any) => item.CREDIT_CODE == event.option.value)
     this.receiptEntryForm.controls.TypeCodeDESC.setValue(this.selectedTypeArray[0].DESCRIPTION)
     this.receiptEntryForm.controls.AC_Code.setValue(this.selectedTypeArray[0].ACCODE)
-    
+
     if (this.selectedTypeArray[0].ACCODE != "") {
       this.getAccountMaster(this.selectedTypeArray[0].ACCODE)
     }
@@ -361,7 +338,7 @@ export class AddReceiptComponent implements OnInit {
   /**USE:  get PaymentType*/
   getPaymentType(value: string) {
     let Sub: Subscription = this.dataService.getDynamicAPI('ComboFilter')
-      .subscribe((result:any) => {
+      .subscribe((result: any) => {
         if (result.response) {
           let data = result.response
           this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode' && value.ENGLISH == 'Credit Card')
@@ -369,7 +346,7 @@ export class AddReceiptComponent implements OnInit {
         } else {
           this.toastr.error('Receipt Mode not found')
         }
-      }, (err:any) => alert(err))
+      }, (err: any) => alert(err))
     this.subscriptions.push(Sub)
   }
   //type change
@@ -400,7 +377,7 @@ export class AddReceiptComponent implements OnInit {
 
           let AcCode = this.branchArray.filter((item: any) => item.BRANCH_CODE = this.receiptEntryForm.value.Branch)
           if (AcCode[0].CASH_ACCODE) {
-            
+
             // this.receiptEntryForm.controls.AC_Code.setValue(AcCode[0].CASH_ACCODE)
             // this.receiptEntryForm.controls.AC_Description.setValue(AcCode[0].DESCRIPTION)
             // this.getAccountMaster(AcCode[0].CASH_ACCODE)

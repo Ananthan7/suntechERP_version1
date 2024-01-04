@@ -27,7 +27,7 @@ export class SchemeReceiptComponent implements OnInit {
   branchArray: any[] = [];
   newReceiptData: any = {};
   currentDate: any = new Date();
-  dataToEditrow: any[] = [];
+  dataToEditrow: any;
 
   // filteredOptions!: Observable<any[]>;
   salesmanArray: any[] = [];
@@ -172,6 +172,13 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.Narration.setValue(this.content.REMARKS);
     this.receiptDetailsForm.controls.PartyCode.setValue(this.content.PARTYCODE);
     this.getDetailsForEdit(this.content.MID)
+  }
+  VIEWEDITFLAG: string = '';
+  dataIndex: any;
+  onRowClickHandler(event: any) {
+    this.VIEWEDITFLAG = 'EDIT'
+    this.dataIndex = event.dataIndex
+    this.openNewSchemeDetails(event.data)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -806,18 +813,18 @@ export class SchemeReceiptComponent implements OnInit {
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
     if (data) {
-      this.dataToEditrow = [];
-      this.dataToEditrow.push(data);
+      this.dataToEditrow = data;
     } else {
-      this.dataToEditrow = [];
+      this.dataToEditrow = this.receiptDetailsForm.value;
     }
+    console.log(this.dataToEditrow,'dataToEditrow');
+    
     // if (this.receiptDetailsForm.invalid) {
     //   this.toastr.error('', 'select all details!', {
     //     timeOut: 1000
     //   });
     //   return
     // }
-    console.log(this.receiptDetailsForm.value, 'this.receiptDetailsForm.value;');
 
     const modalRef: NgbModalRef = this.modalService.open(AddReceiptComponent, {
       size: "xl",
@@ -825,7 +832,7 @@ export class SchemeReceiptComponent implements OnInit {
       keyboard: false,
       windowClass: "modal-full-width",
     });
-    modalRef.componentInstance.content = this.receiptDetailsForm.value;
+    modalRef.componentInstance.content = this.dataToEditrow;
     modalRef.result.then(
       (result) => {
         if (result) {
