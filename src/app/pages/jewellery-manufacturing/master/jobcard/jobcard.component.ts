@@ -7,6 +7,9 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ComponentsComponent } from './components/components.component';
+import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
+import { JobStickerPrintComponent } from './job-sticker-print/job-sticker-print.component';
 
 @Component({
   selector: 'app-jobcard',
@@ -330,6 +333,7 @@ export class JobcardComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.setInitialValues()
+    this.jobCardFrom.controls['date'].disable()
   }
 
   setInitialValues() {
@@ -338,7 +342,36 @@ export class JobcardComponent implements OnInit {
     this.yearMonth = this.commonService.yearSelected;
     this.jobCardFrom.controls.jobdate.setValue(this.currentDate)
     this.jobCardFrom.controls.deldate.setValue(this.currentDate)
+    this.jobCardFrom.controls.date.setValue(this.currentDate)
     //this.commonService.getqueryParamVocType()
+  }
+
+  
+  openaddcomponent() {
+    const modalRef: NgbModalRef = this.modalService.open(ComponentsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openaddtransactiondetails() {
+    const modalRef: NgbModalRef = this.modalService.open(TransactionDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openaddstickerprint() {
+    const modalRef: NgbModalRef = this.modalService.open(JobStickerPrintComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
   }
 
   formatDate(event: any) {

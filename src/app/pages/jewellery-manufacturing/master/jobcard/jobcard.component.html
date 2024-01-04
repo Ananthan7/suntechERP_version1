@@ -94,8 +94,13 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <div class="datepick">
-                                    <input class="form-control flatpickr-input" type="date" 
-                                        formControlName="date">
+                                        <mat-form-field style="width: 100%">
+                                            <input matInput DateValidation (dateChange)="formatDate($event)"
+                                                [matDatepicker]="date" formControlName="date"
+                                                placeholder="DD/MM/YYYY" />
+                                            <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                                            <mat-datepicker #date></mat-datepicker>
+                                        </mat-form-field>
                                 </div>
                             </div>
                         </div>
@@ -412,9 +417,9 @@
                             </div>
                         </div>
                         <div class="m-3 row">
-                            <button class="btn btn-primary rounded-pill my-2">Components</button>
-                            <button class="btn btn-primary rounded-pill my-2">Transactions</button>
-                            <button class="btn btn-primary rounded-pill my-2">Sticker
+                            <button class="btn btn-primary rounded-pill my-2" (click)="openaddcomponent()">Components</button>
+                            <button class="btn btn-primary rounded-pill my-2" (click)="openaddtransactiondetails()">Transactions</button>
+                            <button class="btn btn-primary rounded-pill my-2" (click)="openaddstickerprint()">Sticker
                                 Point</button>
                         </div>
                     </div>
