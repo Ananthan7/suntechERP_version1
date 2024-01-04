@@ -60,10 +60,10 @@ export class ProcessMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 20,
-    SEARCH_FIELD: 'Process_Code',
+    SEARCH_FIELD: 'RECOV_STOCK_CODE',
     SEARCH_HEADING: 'Recov Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Process_Code<> ''",
+    WHERECONDITION: "RECOV_STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -117,7 +117,7 @@ export class ProcessMasterComponent implements OnInit {
     approvalCode: [''],
     approvalProcess: [''],
     recStockCode: [''],
-    labour_charge: [''],
+    labour_charge: [],
     accountStart: [''],
     accountMiddle: [''],
     accountEnd: [''],
@@ -528,14 +528,31 @@ export class ProcessMasterComponent implements OnInit {
 
   onlossChange(event:any){  
     console.log(event);
-    if(event.target.checked == true){
+    if(event.checked === true){
       this.processMasterForm.controls['loss_max'].enable();
       this.processMasterForm.controls['loss_min'].enable();
+      this.processMasterForm.controls['accountStart'].enable();
+      this.processMasterForm.controls['loss_standard'].enable();
     }
     else{
       this.processMasterForm.controls['loss_min'].disable();
       this.processMasterForm.controls['loss_max'].disable();
+      this.processMasterForm.controls['accountStart'].disable();
+      this.processMasterForm.controls['loss_standard'].disable();
     }
   }
 
+  onRecovery(event:any){  
+    console.log(event);
+    if(event.checked === true){
+      this.processMasterForm.controls['standard_end'].enable();
+      this.processMasterForm.controls['min_end'].enable();
+      this.processMasterForm.controls['accountMiddle'].enable()
+    }
+    else{
+      this.processMasterForm.controls['standard_end'].disable();
+      this.processMasterForm.controls['min_end'].disable();
+      this.processMasterForm.controls['accountMiddle'].disable();
+    }
+  }
 }
