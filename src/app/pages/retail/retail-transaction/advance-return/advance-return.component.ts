@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import {
   NgbActiveModal,
   NgbModal,
@@ -7,6 +7,7 @@ import {
 import { PcrSelectionComponent } from "./pcr-selection/pcr-selection.component";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import { CommonServiceService } from "src/app/services/common-service.service";
 
 @Component({
   selector: "app-advance-return",
@@ -14,6 +15,8 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
   styleUrls: ["./advance-return.component.scss"],
 })
 export class AdvanceReturnComponent implements OnInit {
+  @Input() content!: any;
+  
   vocMaxDate = new Date();
   currentDate = new Date();
   columnhead: any[] = [
@@ -113,10 +116,14 @@ export class AdvanceReturnComponent implements OnInit {
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private comService: CommonServiceService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+    
+  }
 
   openaddposdetails() {
     const modalRef: NgbModalRef = this.modalService.open(
