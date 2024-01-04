@@ -207,9 +207,10 @@ export class SchemeRegisterComponent implements OnInit {
 
     // Handle the cell click event based on the column and value
     if (columnName === 'IS_ATTACHMENT_PRESENT') {
-      let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
-      let API = `Scheme/GetSchemeAttachments?SCHEME_UNIQUEID=${SCHEME_UNIQUEID}`
-      this.dataService.getDynamicAPI(API)
+      // let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
+      let API = `SchemeRegistration/GetSchemeAttachments`
+      let param = {SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID}
+      let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
         .subscribe((result: any) => {
           if (result.fileCount > 0) {
 
@@ -511,7 +512,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.detailArray.forEach((item: any, index: any) => {
       delete item.schemeData['ID'];
       this.formdata.append(`Model.model[${index}].schemeData.MID`, '0');
-      this.formdata.append(`Model.model[${index}].schemeData.SCH_CUSTOMER_ID`, this.content.SCH_CUSTOMER_ID || '0');
+      this.formdata.append(`Model.model[${index}].schemeData.SCH_CUSTOMER_ID`, this.content ? this.content.SCH_CUSTOMER_ID : '0');
       this.formdata.append(`Model.model[${index}].schemeData.SCH_CUSTOMER_CODE`, item.schemeData.SCHEME_CUSTCODE);
       this.formdata.append(`Model.model[${index}].schemeData.SCH_CUSTOMER_NAME`, this.schemeRegistrationForm.value.Name);
       this.formdata.append(`Model.model[${index}].schemeData.SCH_SCHEME_CODE`, item.schemeData.SCHEME_ID);
@@ -805,20 +806,6 @@ export class SchemeRegisterComponent implements OnInit {
           // if (result.isConfirmed) {
           // }
         })
-      }
-    }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
-  getSchemeAttachment(){
-    let API = 'SchemeRegistration/GetSchemeAttachments'
-    console.log(this.content,this.content.SCH_CUSTOMER_ID);
-    
-    let param = {SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID}
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param).subscribe((result) => {
-      if (result.fileCount == 0) {
-        this.commonService.toastErrorByMsgId('MSG1531')
-      } else {
-        javascript:void(0)
       }
     }, err => alert(err))
     this.subscriptions.push(Sub)

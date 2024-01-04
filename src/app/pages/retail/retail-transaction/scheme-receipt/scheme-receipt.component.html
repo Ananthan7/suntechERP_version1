@@ -316,6 +316,7 @@
                             <dx-data-grid width="100%"
                                 [loadPanel]="{ enabled: true, text: 'Loading...' }"
                                 [dataSource]="orderedItems"
+                                (onRowClick)="onRowClickHandler($event)"
                                 [showColumnLines]="true" [showRowLines]="true"
                                 [showBorders]="true" [columnAutoWidth]="true">
                                 <!-- <dxo-filter-row visible="true"></dxo-filter-row> keyExpr="Id"-->
