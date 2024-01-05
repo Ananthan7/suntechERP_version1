@@ -26,6 +26,10 @@ export class CustomerPriceMasterComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
+  currentDate: any = this.commonService.currentDate;
+  branchCode?: String;
+  yearMonth?: String; 
+
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -47,7 +51,12 @@ export class CustomerPriceMasterComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
   }
+
+
+
   customerpricemasterForm: FormGroup = this.formBuilder.group({
     customercode :[''],
     desc :[''],
@@ -55,8 +64,12 @@ export class CustomerPriceMasterComponent implements OnInit {
     labourtype:[''],
     addonrate : [''],
     margin:[''],
+    date:[new Date(),''],
     
    });
+
+
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -89,7 +102,7 @@ export class CustomerPriceMasterComponent implements OnInit {
       "MARKUP_PER": 0,
       "CUSTOMER_NAME": "",
       "PRINT_COUNT": 0,
-      "VALID_FROM": "2023-11-28T05:47:14.177Z",
+      "VALID_FROM": this.customerpricemasterForm.value.date,
       "ADD_ON_RATE":0,
       "CURRENCY_CODE": "stri",
       "CURRENCY_RATE": 0,

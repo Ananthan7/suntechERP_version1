@@ -33,6 +33,7 @@ export class JobcardComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String; 
   currentDate: any = this.commonService.currentDate;
+  urls: string | ArrayBuffer | null | undefined;
   private subscriptions: Subscription[] = [];
 
   lengthCodeData: MasterSearchModel = {
@@ -318,7 +319,9 @@ export class JobcardComponent implements OnInit {
     parts : [''],
     srewFiled : [''],
     instruction : [''],
+    picture_name : [''],
   });
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -344,6 +347,19 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.deldate.setValue(this.currentDate)
     this.jobCardFrom.controls.date.setValue(this.currentDate)
     //this.commonService.getqueryParamVocType()
+  }
+
+  onFileChanged(event:any) {
+    this.urls = event.target.files[0]
+    console.log(this.urls)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
   }
 
   
@@ -523,7 +539,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": "",
+      "PICTURE_NAME":this.urls || "",
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",
