@@ -215,7 +215,7 @@ export class SchemeReceiptComponent implements OnInit {
         if (resp.response) {
           if (resp.response) {
             let result = resp.response;
-            this.receiptDetailsForm.controls.SchemeID.setValue( result.POSSCHEMEID );
+            // this.receiptDetailsForm.controls.SchemeID.setValue( result.POSSCHEMEID );
             this.orderedItems = result.Details;
             this.orderedItems.forEach((item: any, i: any) => {
               item.SRNO = i + 1;
@@ -361,7 +361,8 @@ export class SchemeReceiptComponent implements OnInit {
       (result) => {
         if (result.response) {
           let data = result.response;
-
+          console.log(data,' schemeid api response');
+          
           if (result.response.length > 0) {
             if (data[0].SCHEME_ID != "") {
               this.receiptDetailsForm.controls.SchemeID.setValue(data[0].SCH_SCHEME_CODE)
@@ -479,10 +480,7 @@ export class SchemeReceiptComponent implements OnInit {
     }
   }
   selectedScheme(data: any) {
-    this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID);
-    this.receiptDetailsForm.controls.SchemeUniqueID.setValue(
-      data.SCHEME_UNIQUEID
-    );
+    this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_SCHEME_CODE);
     this.fetchSchemeId(data.SCH_CUSTOMER_ID)
     // this.receiptDetailsForm.controls.SchemeUnits.setValue(data.SCHEME_UNITS);
     // this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(data.SCHEME_TOTAL_VALUE);
@@ -955,7 +953,8 @@ export class SchemeReceiptComponent implements OnInit {
       });
       return;
     }
-
+    console.log(this.receiptDetailsForm.value);
+    
     let postData = {
       "MID": 1,
       "BRANCH_CODE": this.receiptDetailsForm.value.Branch || "",
@@ -963,7 +962,7 @@ export class SchemeReceiptComponent implements OnInit {
       "VOCNO": this.receiptDetailsForm.value.VocNo || 0,
       "VOCDATE": this.commonService.formatDateTime(this.receiptDetailsForm.value.VocDate),
       "VALUE_DATE": this.commonService.formatDateTime(this.currentDate),
-      "YEARMONTH": this.commonService.yearSelected || "",
+      "YEARMONTH": this.commonService.yearSelected,
       "PARTYCODE": this.receiptDetailsForm.value.PartyCode || "",
       "PARTY_CURRENCY": this.receiptDetailsForm.value.CurrCode || "",
       "PARTY_CURR_RATE": this.receiptDetailsForm.value.CurrRate || 0,
@@ -1017,7 +1016,7 @@ export class SchemeReceiptComponent implements OnInit {
       "ADRRETURNREF": "",
       "ADVRETURN": false,
       "SCH_SCHEME_CODE": this.receiptDetailsForm.value.SchemeID,
-      "SCH_CUSTOMER_ID": "",
+      "SCH_CUSTOMER_ID": this.receiptDetailsForm.value.SchemeUniqueID,
       "REFDOCNO": "",
       "FROM_TOUCH": false,
       "SL_CODE": "",
