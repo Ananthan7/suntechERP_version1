@@ -31,7 +31,7 @@ export class WorkerMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 152,
-    SEARCH_FIELD: 'ACCOUNT_HEAD',
+    SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Worker A/c Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE <> ''",

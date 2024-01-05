@@ -107,23 +107,23 @@ export class ProcessMasterComponent implements OnInit {
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
     processCode: ['',[Validators.required]],
-    processDesc: [''],
+    processDesc: ['',[Validators.required]],
     processType: [null],
-    stand_time: [''],
-    WIPaccount: [''],
-    max_time: [''],
-    Position: ['',[Validators.required]],
-    trayWeight: ['',[Validators.required]],
-    approvalCode: ['',[Validators.required]],
-    approvalProcess: ['',[Validators.required]],
+    stand_time: ['',[Validators.required]],
+    WIPaccount: ['',[Validators.required]],
+    max_time: ['',[Validators.required]],
+    Position: [''],
+    trayWeight: [''],
+    approvalCode: [''],
+    approvalProcess: [''],
     recStockCode: [''],
     labour_charge: [],
-    accountStart: [''],
-    accountMiddle: [''],
-    accountEnd: [''],
+    accountStart: ['',[Validators.required]],
+    accountMiddle: ['',[Validators.required]],
+    accountEnd: ['',[Validators.required]],
     loss: [false],
     recovery: [false],
-    allowGain: [false,[Validators.required]],
+    allowGain: [false],
     standard_start: [''],
     standard_end: [''],
     min_start: [''],
@@ -132,28 +132,28 @@ export class ProcessMasterComponent implements OnInit {
     accode_start: [''],
     accode_end: [''],
     accode_middle : [''],
-    loss_on_gross: [false,[Validators.required]],
+    loss_on_gross: [false],
     FinalProcess: [false],
     Setting: [false],
-    LabProcess: [false ,[Validators.required]],
-    WaxProcess: [false,[Validators.required]],
-    Stone: [false,[Validators.required]],
+    LabProcess: [false ],
+    WaxProcess: [false],
+    Stone: [false],
     MergePices: [false],
     LockWeight: [false],
     HaveTreeNo: [false],
-    NonQuantity: [false,[Validators.required]],
-    Consumable: [false,[Validators.required]],
-    RefineryAutoProcess: [false,[Validators.required]],
-    ApplyAutoLossToRefinery: [false,[Validators.required]],
+    NonQuantity: [false],
+    Consumable: [false],
+    RefineryAutoProcess: [false],
+    ApplyAutoLossToRefinery: [false],
     RepairProcess: [false],
-    Metal: [false,[Validators.required]],
-    ApprovalRequired: [false,[Validators.required]],
-    DeductPureWeight: [false,[Validators.required]],
-    StoneIncluded: [false,[Validators.required]],
-    TimeCalculateonProcess: [false,[Validators.required]],
-    RecoveryProcess: [false,[Validators.required]],
+    Metal: [false],
+    ApprovalRequired: [false],
+    DeductPureWeight: [false],
+    StoneIncluded: [false],
+    TimeCalculateonProcess: [false],
+    RecoveryProcess: [false],
     AutoTransfer: [false],
-    ApplySetting: [false,[Validators.required]],
+    ApplySetting: [false],
     loss_standard: [''],
     loss_min: [''],
     loss_max: [''],
@@ -375,14 +375,17 @@ export class ProcessMasterComponent implements OnInit {
     console.log(e);
     this.processMasterForm.controls.recStockCode.setValue(e.Process_Code);
   }
+
   accountStartSelected(e: any){
     console.log(e);
     this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
   }
+
   accountMiddleSelected(e: any){
     console.log(e);
     this.processMasterForm.controls.accountMiddle.setValue(e.ACCODE);
   }
+
   accountEndSelected(e: any){
     console.log(e);
     this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
