@@ -145,7 +145,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.subStockCode.setValue(e.DESCRIPTION);
      this.metalIssueDetailsForm.controls.pcs.setValue(e.PCS);
-    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.DIVISION_CODE);
+    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
     
   }
@@ -181,7 +181,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     jobPurity: ['',[Validators.required]],
     stockCode: [''],
     stockCodeDes: [''],
-    pcs: ['1'],
+    pcs: [''],
     purity: [''],
     grossWeight: [''],
     netWeight: [''],
@@ -196,7 +196,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     totalAmountLc: [''],
     purityDiff: ['',[Validators.required]],
     amountFc: [''],
-    jobPcs: ['1'],
+    jobPcs: [''],
     amountLc: [''],
     masterMetal:[false]
   });

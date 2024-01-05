@@ -57,6 +57,7 @@ export class SchemeMasterComponent implements OnInit {
     depositIn: [""],
     startDate: [""],
     remarks: [""],
+    Active: [""],
   });
 
   constructor(
