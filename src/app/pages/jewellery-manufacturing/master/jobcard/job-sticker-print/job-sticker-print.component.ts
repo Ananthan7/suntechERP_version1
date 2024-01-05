@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import themes from 'devextreme/ui/themes';
 
 @Component({
   selector: 'app-job-sticker-print',
@@ -20,6 +21,8 @@ export class JobStickerPrintComponent implements OnInit {
   showHeaderFilter: boolean;
   currentFilter: any;
   showFilterRow: boolean;
+  allMode: string;
+  checkBoxesMode: string;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -30,6 +33,8 @@ export class JobStickerPrintComponent implements OnInit {
   ) { 
     this.showHeaderFilter = true;
     this.showFilterRow = true;
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
   ngOnInit(): void {

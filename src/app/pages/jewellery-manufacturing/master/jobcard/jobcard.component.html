@@ -180,6 +180,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="brand" />
                                 </mat-form-field>
+                                <master-search></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -247,7 +248,7 @@
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="purity" />
+                                    <input type="number" matInput formControlName="purity" />
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>
@@ -362,9 +363,10 @@
                             <label for="input" class="col-sm-5 col-form-label">Seq.Code
                                 : </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 80%;">
                                     <input type="text" matInput formControlName="seqcode" />
                                 </mat-form-field>
+                                <master-search></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -372,14 +374,14 @@
                                 Pcs </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="totalpcs" />
+                                    <input type="number" matInput formControlName="totalpcs" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Pending
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="pending" />
+                                    <input type="number" matInput formControlName="pending" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -413,7 +415,13 @@
                         <div class="row mt-5 mb-2">
                             <div class="col-sm-12">
                                 <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea> -->
-                                <textarea matInput rows="5"></textarea>
+                                <div class="upload-btn-wrapper">
+                                    <button class="btn btnnew border-dark">
+                                        <img src={{urls}} style="width:200px;height:185px">
+                                        
+                                    </button>
+                                    <input type="file" formControlName="picture_name" class="uploadproduct" (change)="onFileChanged($event)">
+                                </div>
                             </div>
                         </div>
                         <div class="m-3 row">
