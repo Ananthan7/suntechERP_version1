@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-2 col-form-label">Process Code*
+                                <label for="input" class="col-sm-2 col-form-label">Process Code *
                                     :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%; margin-left: 7px;">
@@ -44,7 +44,7 @@
                                 <label for="input" class="col-sm-2  col-form-label">Standard Time :</label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="time" formControlName="stand_time" matInput>
+                                        <input type="number" formControlName="stand_time" matInput>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -69,28 +69,28 @@
                                     :</label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="time" step="1" formControlName="max_time" matInput>
+                                        <input type="number" step="1" formControlName="max_time" matInput>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-2 col-form-label">Position :</label>
+                                <label for="input" class="col-sm-2 col-form-label">Position * :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%; margin-left: 7px;">
                                         <input type="number" matInput formControlName="Position" />
                                     </mat-form-field>
                                 </div>
-                                <label for="input" class="col-sm-2 col-form-label">Tray Weight
+                                <label for="input" class="col-sm-2 col-form-label">Tray Weight * 
                                     :</label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="number" matInput formControlName="trayWeight" />
+                                        <input type="number" matInput formControlName="trayWeight" maxlength="9" />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-2">
                                 <label for="input" class="col-sm-2 col-form-label">Approval
-                                    Code* :</label>
+                                    Code * :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 90%">
                                         <input type="text" matInput maxlength="6" formControlName="approvalCode" />
@@ -100,7 +100,7 @@
                                     </master-search>
                                 </div>
                                 <label for="input" class="col-sm-2 col-form-label">Approval
-                                    Process :</label>
+                                    Process * :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 90%">
                                         <input type="text" matInput maxlength="6" formControlName="approvalProcess" />
@@ -151,15 +151,15 @@
                             </div>
                             <div class="form-check">
                                 <mat-checkbox formControlName="recovery" class="example-margin"  (change)="onRecovery($event)">
-                                    Recovery </mat-checkbox>
+                                    Recovery * </mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="recovery">
                                 <label class="form-check-label">
                                     Recovery
                                 </label> -->
                             </div>
                             <div class="form-check">
-                                <mat-checkbox formControlName="recovery" class="example-margin" >
-                                    Allow Gain </mat-checkbox>
+                                <mat-checkbox formControlName="allowGain" class="example-margin" (change)="onAllowGain($event)">
+                                    Allow Gain * </mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="AllowGain">
                                 <label class="form-check-label">
                                     Allow Gain
@@ -171,12 +171,12 @@
                                 <label for="input" class="col-sm-12 col-form-label">Standard % :</label>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="loss_standard" />
+                                        <input type="number" matInput formControlName="loss_standard" /> 
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="standard_end" />
+                                        <input type="number" matInput formControlName="standard_end" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -240,7 +240,7 @@
                         <div class="col-md-2">
                             <div class="form-check mt-md-5">
                                 <mat-checkbox formControlName="loss_on_gross" class="example-margin">
-                                    Loss on Gross only*</mat-checkbox>
+                                    Loss on Gross only *</mat-checkbox>
                             </div>
                         </div>
                     </div>
@@ -258,15 +258,15 @@
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="LabProcess" class="example-margin">
-                                            Lab Process*</mat-checkbox>
+                                            Lab Process *</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="WaxProcess" class="example-margin">
-                                            Wax Process*</mat-checkbox>
+                                            Wax Process *</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="Stone" class="example-margin">
-                                            Stone</mat-checkbox>
+                                            Stone  * </mat-checkbox>
                                     </div>
 
 
@@ -323,11 +323,11 @@
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="NonQuantity" class="example-margin">
-                                            Non Quantity</mat-checkbox>
+                                            Non Quantity * </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="Consumable" class="example-margin">
-                                            Consumable</mat-checkbox>
+                                            Consumable * </mat-checkbox>
                                     </div>
 
                                     <!-- <div class="form-check mb-2">
@@ -371,19 +371,19 @@
                                 <div class="radio-btn">
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="RefineryAutoProcess" class="example-margin">
-                                            Refinery Auto Process*</mat-checkbox>
+                                            Refinery Auto Process * </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="RepairProcess" class="example-margin">
-                                            Apply Auto Loss to Refinery*</mat-checkbox>
+                                            Apply Auto Loss to Refinery * </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="Metal" class="example-margin">
-                                            Metal*</mat-checkbox>
+                                            Metal * </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="ApprovalRequired" class="example-margin">
-                                            Approval Required*</mat-checkbox>
+                                            Approval Required * </mat-checkbox>
                                     </div>
 
 
@@ -429,19 +429,19 @@
 
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="DeductPureWeight" class="example-margin">
-                                            Deduct Pure Weight</mat-checkbox>
+                                            Deduct Pure Weight * </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="StoneIncluded" class="example-margin">
-                                            Stone Included*</mat-checkbox>
+                                            Stone Included * </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="TimeCalculateonProcess" class="example-margin">
-                                            Time Calculate on Process*</mat-checkbox>
+                                            Time Calculate on Process *</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="RecoveryProcess" class="example-margin">
-                                            Recovery Process*</mat-checkbox>
+                                            Recovery Process *</mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="AutoTransfer" class="example-margin">
@@ -449,7 +449,7 @@
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="ApplySetting" class="example-margin">
-                                            Apply Setting*</mat-checkbox>
+                                            Apply Setting *</mat-checkbox>
                                     </div>
 
                                     <!-- <div class="form-check mb-2">
