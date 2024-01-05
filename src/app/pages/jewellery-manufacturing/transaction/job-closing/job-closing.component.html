@@ -18,21 +18,21 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput />
+                                        <input type="text" matInput formControlName="vocType"/>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput />
+                                        <input type="text" matInput formControlName="vocNum" />
                                     </mat-form-field>
                                 </div>
                             </div>
 
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Voucher Date*:</label>
+                            <label for="inputPassword" class="col-sm-6">Voucher Date:</label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
                                     <input type="date" matInput />
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5">Party Code*:</label>
+                            <label for="inputPassword" class="col-sm-5">Party Code:</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput />
@@ -108,19 +108,19 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-6">Metal Location :</label>
+                            <label for="inputPassword" class="col-sm-6">Metal Location* :</label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="mLoctype"/>
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Stone Location: </label>
+                            <label for="inputPassword" class="col-sm-6">Stone Location* : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="sLoctype"/>
                                 </mat-form-field>
                                 <master-search></master-search>
                             </div>

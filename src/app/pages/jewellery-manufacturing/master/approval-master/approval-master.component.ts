@@ -108,8 +108,8 @@ export class ApprovalMasterComponent implements OnInit {
   }
   
   approvalMasterForm: FormGroup = this.formBuilder.group({
-    code: [''],
-    description: [''],
+    code: ['',[Validators.required]],
+    description: ['',[Validators.required]],
    
   });
   

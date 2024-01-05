@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -35,6 +35,11 @@ export class JobClosingComponent implements OnInit {
 
   jobCloseingFrom: FormGroup = this.formBuilder.group({
 
+
+      vocType: ['', [Validators.required]],
+      vocNum: ['', [Validators.required]],
+      sLoctype: ['', [Validators.required]],
+      mLoctype: ['', [Validators.required]], 
   });
 
   formSubmit(){

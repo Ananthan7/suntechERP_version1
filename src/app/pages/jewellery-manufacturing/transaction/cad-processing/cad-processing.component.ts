@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -77,10 +77,10 @@ export class CADProcessingComponent implements OnInit {
     worker: ['PARIMA',''],
     narration: [''],
     soNumber: [''],    //no
-    design:[''],
+    design:['', [Validators.required]],
     completed:[new Date(),''], //no
-    toWorker:[''],
-    toProcess:[''],
+    toWorker:['', [Validators.required]],
+    toProcess:['', [Validators.required]],
     job:[''],
     subJobId:[''],
     timeTaken:['00:00:00',''],
