@@ -26,6 +26,7 @@ export class MeltingProcessComponent implements OnInit {
   currentDate = new Date();
   meltingprocessDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
 
 
   columnhead: any[] = ['Sr #', 'Div', 'Job No', 'Stock Code', 'Stock Desc', 'Process', 'Worker', 'Pcs', 'Gross Wt', 'Stone Wt', 'Net Wt', 'Purity', 'Pure Wt', 'Balance Wt', 'Balance Pure'];
