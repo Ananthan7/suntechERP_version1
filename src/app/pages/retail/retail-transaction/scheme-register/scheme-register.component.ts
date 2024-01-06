@@ -129,29 +129,28 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.Name.setValue(this.content.SCH_CUSTOMER_NAME)
     this.schemeRegistrationForm.controls.MobileNo.setValue(this.content.SCH_ALERT_MOBILE)
     this.schemeRegistrationForm.controls.Email.setValue(this.content.SCH_ALERT_EMAIL)
-    this.schemeIdChange(this.content)
+    this.getSchemeRegistrationDetail(this.content.SCH_CUSTOMER_ID)
   }
-  //search Value Change
-  schemeIdChange(event: any) {
-    let API = `SchemeMaster/GetSchemeMasterDetails/${this.commonService.branchCode}/${event.SCH_SCHEME_CODE.toString()}`
+  //schemeid EDIT and VIEW Value Change
+  getSchemeRegistrationDetail(SCH_CUSTOMER_ID: any) {
+    let API = `SchemeRegistration/GetSchemeRegistrationDetail/${SCH_CUSTOMER_ID}`
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
-          console.log(result,'result');
           let data = result.response
           let params = {
             "ID": this.indexNumberStart += 1,
-            "SCHEME_UNIQUEID": '',
-            "SCHEME_ID": this.commonService.nullToString(data.SCHEME_CODE),
-            "SCHEME_UNITS": this.commonService.emptyToZero(data.SCHEME_UNIT),
-            "SCHEME_TOTAL_VALUE": this.commonService.emptyToZero(data.TotalValue),
-            "SCHEME_STARTED": this.commonService.nullToString(this.commonService.formatDateTime(data.StartDate)),
-            "SCHEME_ENDEDON": this.commonService.nullToString(this.commonService.formatDateTime(data.endDate)),
-            "SCHEME_STATUS": this.commonService.nullToString(data.Status),
-            "SCHEME_UNITVALUE": this.commonService.emptyToZero(data.SchemeAmount),
+            "SCHEME_UNIQUEID": this.commonService.nullToString(data.Details[0].UNIQUEID),
+            "SCHEME_ID": this.commonService.nullToString(data.SCH_CUSTOMER_CODE),
+            "SCHEME_UNITS": this.commonService.emptyToZero(data.SCH_UNITS),
+            "SCHEME_TOTAL_VALUE": this.commonService.emptyToZero(data.PAY_AMOUNTFC),
+            "SCHEME_STARTED": this.commonService.nullToString(this.commonService.formatDateTime(data.SCH_JOIN_DATE)),
+            "SCHEME_ENDEDON": this.commonService.nullToString(this.commonService.formatDateTime(data.SCH_EXPIRE_DATE)),
+            "SCHEME_STATUS": this.commonService.nullToString(data.SCH_STATUS?.toString() == '1'? 'Active' : 'InActive'),
+            "SCHEME_UNITVALUE": this.commonService.emptyToZero(Number(data.SCH_UNITS) * Number(data.PAY_AMOUNTFC)),
             "SCHEME_CUSTCODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Code),
-            "sbranch_code": data.Branch || new Date(1 / 1 / 1753).toISOString(),
+            "BRANCH_CODE": data.Branch || new Date(1 / 1 / 1753).toISOString(),
             "PCS_SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
             "SalesManCode": this.commonService.nullToString(data.Salesman),
             "AttachmentPath": '',
@@ -164,7 +163,7 @@ export class SchemeRegisterComponent implements OnInit {
             "SCHEME_REMARKS": '',
             "CUSTOMER_ACCOUNTNO": '',
             "BANK_DATE": this.commonService.formatDateTime(this.currentDate),
-            "SCHEME_BLOCK": data.BlockScheme ? 1 : 0,
+            "SCHEME_BLOCK": data.SCH_REDEEM ? 1 : 0,
             "SCHEME_ControlRedeemDate": this.commonService.formatDateTime(this.currentDate),
           }
           this.newSchemeItems.push(params)
@@ -180,6 +179,7 @@ export class SchemeRegisterComponent implements OnInit {
             // "Images": data.Attachedfile || []
           }
           this.detailArray.push(datas)
+
           this.commonService.closeSnackBarMsg();
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -190,10 +190,44 @@ export class SchemeRegisterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
+  /**schemeID change function */
+  schemeIDChange(event: any) {
+    if (event.target.value == "") return;
+    let API = `Scheme/SchemeMaster?SCHEME_UNIQUEID=${event.target.value}`;
+    let Sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((result: any) => {
+        let sataus = result.status.trim().toLowerCase();
+        if (sataus == "success") {
+          if (result.response["SCHEME_CUSTCODE"]) {
+            let event = {
+              target: { value: result.response["SCHEME_CUSTCODE"] },
+            };
+            this.searchValueChange(event, "CODE", true);
+          }
+          this.newSchemeItems = [];
+          this.newSchemeItems.push(result.response);
+        } else {
+          Swal.fire({
+            title: "Scheme Id Not Found",
+            text: "",
+            icon: "error",
+            showCancelButton: false,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ok",
+          }).then((result) => {
+            // if (result.isConfirmed) {
+            // }
+          });
+        }
+      });
+    this.subscriptions.push(Sub);
+  }
+  /**USE: grid click event */
   onRowClickHandler(event: any) {
     this.VIEWEDITFLAG = 'EDIT'
-    console.log(this.VIEWEDITFLAG);
-    
     this.dataIndex = event.dataIndex
     this.openNewSchemeDetails(event.data)
   }
@@ -250,39 +284,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.commonService.exportExcel(this.schemeReceiptList, 'Scheme Details')
   }
 
-  /**schemeID change function */
-  schemeIDChange(event: any) {
-    if (event.target.value == '') return
-    // let API = `Scheme/SchemeMaster?SCHEME_UNIQUEID=${event.target.value}`
-    let API = `SchemeMaster/GetSchemeMasterDetails/${this.commonService.branchCode}/${event.target.value}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result: any) => {
-        let sataus = result.status.trim().toLowerCase()
-        if (sataus == 'success') {
-          if (result.response['SCHEME_CUSTCODE']) {
-            let event = { target: { value: result.response['SCHEME_CUSTCODE'] } }
-            this.searchValueChange(event, 'CODE', true)
-          }
-          this.newSchemeItems = []
-          this.newSchemeItems.push(result.response)
-
-        } else {
-          Swal.fire({
-            title: 'Scheme Id Not Found',
-            text: "",
-            icon: 'error',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ok'
-          }).then((result) => {
-            // if (result.isConfirmed) {
-            // }
-          })
-        }
-      });
-    this.subscriptions.push(Sub)
-  }
+  
   /**USE get Nationalitycode from API */
   getIDtypes() {
     let API = 'GeneralMaster/GetGeneralMasterList/ID MASTER'
@@ -432,7 +434,7 @@ export class SchemeRegisterComponent implements OnInit {
       "SCHEME_STATUS": this.commonService.nullToString(data.Status),
       "SCHEME_UNITVALUE": this.commonService.emptyToZero(data.SchemeAmount),
       "SCHEME_CUSTCODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Code),
-      "sbranch_code": this.commonService.nullToString(data.Branch),
+      "BRANCH_CODE": this.commonService.nullToString(data.Branch),
       "PCS_SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "SalesManCode": this.commonService.nullToString(data.Salesman),
       "AttachmentPath": '',

@@ -167,11 +167,11 @@ export class MeltingTypeComponent implements OnInit {
     metal: ['', [Validators.required]],
     color: ['', [Validators.required]],
     karat: ['', [Validators.required]],
-    purity: ['', [Validators.required]],
+    purity: [''],
     alloy: ['', [Validators.required]],
     stockCode: ['', [Validators.required]],
-    stockCodeDes : ['', [Validators.required]],
-    divCode : ['', [Validators.required]],
+    stockCodeDes : [''],
+    divCode : [''],
    
   });
 
