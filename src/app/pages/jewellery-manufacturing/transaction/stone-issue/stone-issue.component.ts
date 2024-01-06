@@ -148,7 +148,7 @@ export class StoneIssueComponent implements OnInit {
   stoneissueFrom: FormGroup = this.formBuilder.group({
     voctype:['STI',[Validators.required]],
     vocno:['1',[Validators.required]],
-    vocdate:[new Date(),[Validators.required]],
+    vocdate:[new Date()],
     enteredBy:[''],
    basecurrency:[''],
    basecurrencyrate:[''],
