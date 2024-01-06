@@ -28,7 +28,6 @@ export class MetalIssueComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
-  ordered_items: any = [];
   viewOnly: boolean = false;
 
   private subscriptions: Subscription[] = [];

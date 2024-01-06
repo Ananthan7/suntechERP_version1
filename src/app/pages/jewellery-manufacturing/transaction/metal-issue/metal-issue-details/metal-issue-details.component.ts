@@ -22,7 +22,10 @@ export class MetalIssueDetailsComponent implements OnInit {
   currentDate = new Date();
   branchCode?: String;
   yearMonth?: String;
- 
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+  imageurl: any;
+  image: string | ArrayBuffer | null | undefined;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -162,6 +165,32 @@ export class MetalIssueDetailsComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  onFileChangedimage(event:any) {
+    this.imageurl = event.target.files[0].name
+    console.log(this.imageurl)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.image = reader.result; 
+      };
+    }
+  }
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
+  }
+
 
   metalIssueDetailsForm: FormGroup = this.formBuilder.group({
     jobNumber: [''],

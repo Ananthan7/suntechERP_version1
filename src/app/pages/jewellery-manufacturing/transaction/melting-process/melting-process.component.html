@@ -13,7 +13,7 @@
       <div class="container-fluid pt-3">
         <div class="row">
           <div class="col-md-6">
-            <h6>{{branchCode}} - {{userName}}</h6>
+            <h6>{{branchCode}} - {{companyName}}</h6>
           </div>
           <div class="col-md-6">
             <label for="inputPassword">Posted </label>
@@ -127,6 +127,8 @@
                 <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                   [allowEditing]="true" alignment="center" backgroundcolor="#000">
                 </dxi-column>
+                <dxi-column alignment="center" caption="TO_METAL_PCS"
+                dataField="data"></dxi-column>
               </dx-data-grid>
             </div>
             <div class="col-md-12 ">

@@ -123,37 +123,41 @@
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-12">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                [allowColumnReordering]="true"
-                                [allowColumnResizing]="true"
-                                [columnAutoWidth]="true">
-                                    <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
-                                    </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
-                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
-                                        backgroundcolor="#000">
-                                    </dxi-column>
-
-                                    <dxo-summary>
-                                        <dxi-total-item column="pcs" summaryType="sum"
-                                        >
-                                        </dxi-total-item>
-                                        <dxi-total-item column="total_amount"
-                                           displayFormat="AED {0}"
+                                <dx-data-grid
+                        id="gridContainer"
+                        [dataSource]="tableData"
+                        keyExpr="ID"
+                        [showBorders]="true"
+                        >
+                        <dxo-selection mode="single"></dxo-selection>
                     
-                                          >
-                                        </dxi-total-item>
-                                        <dxi-total-item column="net_amount"
-                                          summaryType="sum"
-                                          displayFormat="AED {0}" 
-                                        >
-                                        </dxi-total-item>
-                                      </dxo-summary>
-                                </dx-data-grid>
+                        <dxi-column dataField="Job Id" dataType="Job Id"  caption="Job Id"></dxi-column>
+                        <dxi-column dataField="Uniq Job Id"  caption="Uniq job Id"></dxi-column>
+                        <dxi-column dataField="Design" caption="Design"></dxi-column>
+                        <dxi-column dataField="Stock Code" caption="Stock Code"></dxi-column>
+                        <dxi-column dataField="Division" caption="Division"></dxi-column>
+                        <dxi-column dataField="Description" caption="Description"></dxi-column>
+                        <dxi-column dataField="Carat" caption="Carat"></dxi-column>
+                        <dxi-column dataField="Process" caption="Process"></dxi-column>
+                        <dxi-column dataField="Worker" caption="Worker"></dxi-column>
+                        <dxi-column dataField="Amount" caption="Amount"></dxi-column>      
+                    
+                        <dxo-summary>
+                            <dxi-total-item column="Carat"
+                                summaryType="sum"
+                                displayFormat="000.000" precision="2"
+                               >
+                              </dxi-total-item>
+
+                              <dxi-total-item column="Amount"
+                              summaryType="sum"
+                              displayFormat="0.00" precision="2"
+                             >
+                            </dxi-total-item>
+                    
+    
+                        </dxo-summary>
+                        </dx-data-grid>
                             </div>
                             <div class="col-md-4">
                                 <div class="row my-2">

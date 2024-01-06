@@ -91,13 +91,13 @@ export class MetalReturnDetailsComponent implements OnInit {
 
 
   metalReturnDetailsForm: FormGroup = this.formBuilder.group({
-    jobNumber : [''],
+    jobNumber : ['',[Validators.required]],
     jobDes : [''],
     subJobNo : [''],
     subJobNoDes : [''],
-    processCode : [''],
+    processCode : ['',[Validators.required]],
     processCodeDesc : [''],
-    workerCode : [''],
+    workerCode : ['',[Validators.required]],
     workerCodeDesc : [''],
     designCode : [''],
     partcode : [''],
@@ -106,8 +106,8 @@ export class MetalReturnDetailsComponent implements OnInit {
     makingAmountLC : [''],
     makingAmountFC : [''],
     treeNumber : [''], // no
-    location : [''],
-    stockCode : [''],
+    location : ['',[Validators.required]],
+    stockCode : ['',[Validators.required]],
     stockCodeDesc : [''],
     pcs : [''],
     purity : [''],
