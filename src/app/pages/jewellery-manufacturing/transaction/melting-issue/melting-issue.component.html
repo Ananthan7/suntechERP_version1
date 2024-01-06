@@ -144,7 +144,9 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true"  [showRowLines]="true" 
+                                 (onRowClick)="onRowClickHandler($event)"
+                                  [allowColumnReordering]="true" height="200" [dataSource]="tableData">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-selection mode="multiple"></dxo-selection>
