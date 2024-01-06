@@ -16,25 +16,24 @@ import { MeltingProcessDetailsComponent } from './melting-process-details/meltin
   styleUrls: ['./melting-process.component.scss']
 })
 export class MeltingProcessComponent implements OnInit {
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  voctype?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
-  meltingprocessDetailsData : any[] = [];
+  meltingprocessDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
 
 
+  columnhead: any[] = ['Sr #', 'Div', 'Job No', 'Stock Code', 'Stock Desc', 'Process', 'Worker', 'Pcs', 'Gross Wt', 'Stone Wt', 'Net Wt', 'Purity', 'Pure Wt', 'Balance Wt', 'Balance Pure'];
+  columnhead1: any[] = ['R to Stock', 'Stock Code', 'Gross Wt', 'Purity', 'Pure Wt', 'Location'];
+  columnhead2: any[] = ['R to Scrap', 'Stock Code', 'Gross Wt', 'Purity', 'Pure Wt', 'Location', 'Loss', 'Pure Wt', 'Bal Gross', 'Bal Pure'];
+  column: any[] = ['Sr', 'So No', 'Party Code', 'Party Name', 'Job No', 'job Desc', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', ' Req Metal', 'Stone Wt', 'Recd Gross Wt', 'Metal Allocated', 'Allocated Pure Wt', 'Job Pcs'];
 
-
-  columnhead:any[] = ['Sr #', 'Div','Job No','Stock Code','Stock Desc','Process','Worker','Pcs','Gross Wt','Stone Wt','Net Wt','Purity','Pure Wt','Balance Wt','Balance Pure'];
-  columnhead1:any[] = ['R to Stock','Stock Code','Gross Wt','Purity', 'Pure Wt','Location'];
-  columnhead2:any[] = ['R to Scrap','Stock Code','Gross Wt','Purity', 'Pure Wt','Location','Loss','Pure Wt','Bal Gross','Bal Pure'];
-  column:any[] = ['Sr','So No','Party Code', 'Party Name','Job No','job Desc','Design Code','UNQ Design ID','Process','Worker',' Req Metal','Stone Wt','Recd Gross Wt','Metal Allocated','Allocated Pure Wt','Job Pcs'];
-
- MeltingCodeData: MasterSearchModel = {
+  MeltingCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 94,
@@ -92,8 +91,8 @@ export class MeltingProcessComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
- 
+
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -106,50 +105,46 @@ export class MeltingProcessComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+    this.voctype = this.comService.getqueryParamMainVocType()
     this.yearMonth = this.comService.yearSelected;
+    this.meltingProcessFrom.controls.vocdate.setValue(this.currentDate)
+    this.meltingProcessFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    
 
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
-    this.userName = this.comService.userName;
   }
-
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
-  stockCodeSelected(e:any){
-    console.log(e); 
+  stockCodeSelected(e: any) {
+    console.log(e);
     this.meltingProcessFrom.controls.stockcodeRet.setValue(e.STOCK_CODE);
   }
-
-  stockCodeScpSelected(e:any){
-    console.log(e); 
+  
+ stockCodeScpSelected(e: any) {
+    console.log(e);
     this.meltingProcessFrom.controls.stockCodeScp.setValue(e.DESCRIPTION);
   }
-  processCodeScpSelected(e:any){
-    console.log(e); 
-    this.meltingProcessFrom.controls.process.setValue(e.PROCESS_CODE);
-    this.meltingProcessFrom.controls.processDesc.setValue(e.PROCESS_DESC);
-  }
 
-  MeltingCodeSelected(e:any){
+
+  MeltingCodeSelected(e: any) {
     console.log(e);
     this.meltingProcessFrom.controls.meltingType.setValue(e['Melting Type']);
   }
 
-  
-  locationCodeSelected(e:any){
+
+  locationCodeSelected(e: any) {
     console.log(e);
     this.meltingProcessFrom.controls.locationRet.setValue(e.LOCATION_CODE);
   }
 
-  locationCodeScpSelected(e:any){
+  locationCodeScpSelected(e: any) {
     console.log(e);
     this.meltingProcessFrom.controls.locationScp.setValue(e.DESCRIPTION);
   }
 
-  timeCodeSelected(e:any){
+  timeCodeSelected(e: any) {
     console.log(e);
     this.meltingProcessFrom.controls.time.setValue(e.CODE);
   }
@@ -196,50 +191,51 @@ export class MeltingProcessComponent implements OnInit {
     });
 
     modalRef.result.then((postData) => {
-      console.log(postData);      
+      console.log(postData);
       if (postData) {
-        console.log('Data from modal:', postData);       
+        console.log('Data from modal:', postData);
         this.meltingprocessDetailsData.push(postData);
         console.log(this.meltingprocessDetailsData);
-        
+
       }
     });
 
   }
 
-  deleteTableData(){
-   
+  deleteTableData() {
+
   }
   resetAllocation(){}
+  processCodeScpSelected(data:any){}
 
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
-    if (this.meltingProcessFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-  
+    // if (this.meltingProcessFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+
     let API = 'JobMeltingProcessDJ/InsertJobMeltingProcessDJ'
     let postData = {
       "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.meltingProcessFrom.value.vocType,
-      "VOCNO": this.meltingProcessFrom.value.vocNo,
-      "VOCDATE": this.meltingProcessFrom.value.vocDate,
+      "BRANCH_CODE": this.comService.nullToString(this.branchCode),
+      "VOCTYPE": this.comService.nullToString(this.meltingprocessDetailsData[0].vocType),
+      "VOCNO": this.comService.emptyToZero(this.meltingprocessDetailsData[0].vocNo),
+      "VOCDATE": this.comService.formatDateTime(this.meltingprocessDetailsData[0].vocdate),
       "YEARMONTH": this.yearMonth,
       "NAVSEQNO": 0,
-      "WORKER_CODE": this.meltingProcessFrom.value.worker,
-      "WORKER_DESC": this.meltingProcessFrom.value.workerDesc,
+      "WORKER_CODE": this.comService.nullToString(this.meltingprocessDetailsData[0].worker),
+      "WORKER_DESC": this.comService.nullToString(this.meltingprocessDetailsData[0].workerDesc),
       "SALESPERSON_CODE": "",
       "SALESPERSON_NAME": "",
       "DOCTIME": "2023-10-30T13:03:04.859Z",
-      "TOTAL_GROSSWT": this.meltingProcessFrom.value.TotalgrossWt,
-      "TOTAL_PUREWT": this.meltingProcessFrom.value.TotalpureWt,
-      "TOTAL_STONEWT": this.meltingProcessFrom.value.stoneWeight,
+      "TOTAL_GROSSWT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].TotalgrossWt),
+      "TOTAL_PUREWT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].TotalpureWt),
+      "TOTAL_STONEWT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].stoneWeight),
       "TOTAL_NETWT": 0,
       "TOTAL_WAXWT": 0,
       "TOTAL_IRONWT": 0,
@@ -258,36 +254,38 @@ export class MeltingProcessComponent implements OnInit {
       "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
-      "PROCESS_CODE": this.meltingProcessFrom.value.process,
-      "PROCESS_DESC": this.meltingProcessFrom.value.processDesc,
+      "PROCESS_CODE": this.comService.nullToString(this.meltingprocessDetailsData[0].process),
+      "PROCESS_DESC": this.comService.nullToString(this.meltingprocessDetailsData[0].processDesc),
       "PRINT_COUNT": 0,
-      "MELTING_TYPE":this.meltingProcessFrom.value.meltingType,
-      "COLOR": this.meltingProcessFrom.value.color,
-      "RET_STOCK_CODE": this.meltingProcessFrom.value.stockcodeRet,
-      "RET_GROSS_WT": this.meltingProcessFrom.value.RETgrossWt,
-      "RET_PURITY": this.meltingProcessFrom.value.purityRET,
-      "RET_PURE_WT": this.meltingProcessFrom.value.RETpureWt,
-      "RET_LOCATION_CODE": this.meltingProcessFrom.value.locationRet,
-      "SCP_STOCK_CODE": this.meltingProcessFrom.value.stockCodeScp,
+      "MELTING_TYPE": this.comService.nullToString(this.meltingprocessDetailsData[0].meltingType),
+      "COLOR": this.comService.nullToString(this.meltingprocessDetailsData[0].color),
+      "RET_STOCK_CODE": this.comService.nullToString(this.meltingprocessDetailsData[0].stockcodeRet),
+      "RET_GROSS_WT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].RETgrossWt),
+      "RET_PURITY": this.comService.emptyToZero(this.meltingprocessDetailsData[0].purityRET),
+      "RET_PURE_WT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].RETpureWt),
+      "RET_LOCATION_CODE": this.comService.nullToString(this.meltingprocessDetailsData[0].locationRet),
+      "SCP_STOCK_CODE": this.comService.nullToString(this.meltingprocessDetailsData[0].stockCodeScp),
       "SCP_GROSS_WT": 0,
       "SCP_PURITY": 0,
       "SCP_PURE_WT": 0,
-      "SCP_LOCATION_CODE": this.meltingProcessFrom.value.locationScp,
-      "LOSS_QTY": this.meltingProcessFrom.value.loss,
+      "SCP_LOCATION_CODE": this.comService.nullToString(this.meltingprocessDetailsData[0].locationScp),
+      "LOSS_QTY": this.comService.emptyToZero(this.meltingprocessDetailsData[0].loss),
       "LOSS_PURE_WT": 0,
-      "BALANCE_WT": this.meltingProcessFrom.value.balGross,
-      "BALANCE_PURE_WT": this.meltingProcessFrom.value.balPure,
-      "PURITY": this.meltingProcessFrom.value.purity,
+      "BALANCE_WT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].balGross),
+      "BALANCE_PURE_WT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].balPure),
+      "PURITY": this.comService.emptyToZero(this.meltingprocessDetailsData[0].purity),
       "PUDIFF": 0,
       "SCP_PUDIFF": 0,
       "SYSTEM_DATE": "2023-10-30T13:03:04.860Z",
-      "Details":this.meltingprocessDetailsData
+      "Details": this.meltingprocessDetailsData
     }
-    
+    console.log(this.meltingProcessFrom)
+
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -312,21 +310,21 @@ export class MeltingProcessComponent implements OnInit {
   setFormValues() {
   }
 
-  update(){
+  update() {
     if (this.meltingProcessFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-    let API = 'DiamondDismantle/UpdateDiamondDismantle'+ this.meltingProcessFrom.value.branchCode + this.meltingProcessFrom.value.voctype + this.meltingProcessFrom.value.vocno + this.meltingProcessFrom.value.yearMonth;
+    let API = 'DiamondDismantle/UpdateDiamondDismantle' + this.meltingProcessFrom.value.branchCode + this.meltingProcessFrom.value.voctype + this.meltingProcessFrom.value.vocno + this.meltingProcessFrom.value.yearMonth;
     let postData = {
 
-        
+
     }
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -347,7 +345,7 @@ export class MeltingProcessComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       Swal.fire({
@@ -372,7 +370,7 @@ export class MeltingProcessComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'DiamondDismantle/DeleteDiamondDismantle/'+ this.meltingProcessFrom.value.branchCode + this.meltingProcessFrom.value.voctype + this.meltingProcessFrom.value.vocno + this.meltingProcessFrom.value.yearMonth
+        let API = 'DiamondDismantle/DeleteDiamondDismantle/' + this.meltingProcessFrom.value.branchCode + this.meltingProcessFrom.value.voctype + this.meltingProcessFrom.value.vocno + this.meltingProcessFrom.value.yearMonth
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -413,7 +411,8 @@ export class MeltingProcessComponent implements OnInit {
       }
     });
   }
-  
 
 }
+
+
 
