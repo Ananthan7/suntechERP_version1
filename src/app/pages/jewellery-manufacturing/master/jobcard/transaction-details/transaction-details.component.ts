@@ -18,8 +18,8 @@ export class TransactionDetailsComponent implements OnInit {
   selectedTabIndex = 0;
   columnhead:any[] = [''];
   columnhead2:any[] = [''];
-  columnhead3:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','FRM_PROCESS','FRM_WROKER','TO_PROCESS','TO_WROKER','METAL_PCS','METAL_WT','STONE_PCS','STONE_WT'];
-  columnhead4:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','STOCK_CODE','GROSS_WEIGHT','METAL_WT','STONE_PCS','STONE_WT','AMOUNTFC','PRICE 1FC','PROCESS'];
+  columnhead3:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','FRM_PROCESS','FRM_WROKER','TO_PROCESS','TO_WROKER','METAL_PCS','METAL_WT','STONE_PCS','STONE_WT','LOSS_QTY','SCRAP_WT','APPROVE','APPROVE','PURE_WT','IN_DATE','OUT_DATE','TIME_CO','YEARMONTH','UNQ_DESIGN'];
+  columnhead4:any[] = ['VOCDATE','VOCTYPE','VOCNO','UNQ_JOB','DESIGN','STOCK_CODE','GROSS_WEIGHT','METAL_WT','STONE_PCS','STONE_WT','AMOUNTFC','PRICE 1FC','PROCESS','WORKER','METAL_AMOUNT','STONE_AMOUNT','LAB_AMOUNT','YEARMONTH','UNQ_DESIGN','COST_CODE'];
   orders: any = [];
   viewOnly: boolean = false;
   constructor(

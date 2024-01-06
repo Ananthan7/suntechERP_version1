@@ -34,6 +34,7 @@ export class JobcardComponent implements OnInit {
   yearMonth?: String; 
   currentDate: any = this.commonService.currentDate;
   urls: string | ArrayBuffer | null | undefined;
+  url: any;
   private subscriptions: Subscription[] = [];
 
   lengthCodeData: MasterSearchModel = {
@@ -321,6 +322,7 @@ export class JobcardComponent implements OnInit {
     instruction : [''],
     picture_name : [''],
   });
+ 
 
 
   constructor(
@@ -337,6 +339,10 @@ export class JobcardComponent implements OnInit {
     this.yearMonth = this.commonService.yearSelected;
     this.setInitialValues()
     this.jobCardFrom.controls['date'].disable()
+    console.log(this.content);
+    if(this.content){
+      this.setFormValues()
+    }
   }
 
   setInitialValues() {
@@ -350,8 +356,8 @@ export class JobcardComponent implements OnInit {
   }
 
   onFileChanged(event:any) {
-    this.urls = event.target.files[0]
-    console.log(this.urls)
+    this.url = event.target.files[0].name
+    console.log(this.url)
     let reader = new FileReader();
     if(event.target.files && event.target.files.length > 0) {
       let file = event.target.files[0];
@@ -511,6 +517,41 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.seqcode.setValue(e.SEQ_CODE);
   }
 
+  setFormValues() {
+    if (!this.content) return
+    this.jobCardFrom.controls.jobno.setValue(this.content.JOB_NUMBER)
+    this.jobCardFrom.controls.jobdate.setValue(this.content.JOB_DATE)
+    this.jobCardFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.jobCardFrom.controls.customer.setValue(this.content.CUSTOMER_CODE)
+    this.jobCardFrom.controls.costcode.setValue(this.content.COST_CODE)
+    this.jobCardFrom.controls.type.setValue(this.content.TYPE_CODE)
+    this.jobCardFrom.controls.category.setValue(this.content.CATEGORY_CODE)
+    this.jobCardFrom.controls.subcat.setValue(this.content.SUBCATEGORY_CODE)
+    this.jobCardFrom.controls.brand.setValue(this.content.BRAND_CODE)
+    this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
+    this.jobCardFrom.controls.seqcode.setValue(this.content.SEQ_CODE)
+    this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
+    this.jobCardFrom.controls.picture_name.setValue(this.url)
+    this.jobCardFrom.controls.setref.setValue(this.content.SET_REF)
+    this.jobCardFrom.controls.totalpcs.setValue(this.content.TOTAL_PCS)
+    this.jobCardFrom.controls.pending.setValue(this.content.PENDING_PCS)
+    this.jobCardFrom.controls.color.setValue(this.content.METAL_COLOR)
+    this.jobCardFrom.controls.karat.setValue(this.content.KARAT_CODE)
+    this.jobCardFrom.controls.prefix.setValue(this.content.PREFIX)
+    this.jobCardFrom.controls.deldate.setValue(this.content.DEL_DATE)
+    this.jobCardFrom.controls.time.setValue(this.content.TIME_CODE)
+    this.jobCardFrom.controls.range.setValue(this.content.RANGE_CODE)
+    this.jobCardFrom.controls.comments.setValue(this.content.COMMENTS_CODE)
+    this.jobCardFrom.controls.country.setValue(this.content.COUNTRY_CODE)
+    this.jobCardFrom.controls.salesman.setValue(this.content.SALESPERSON_CODE)
+    this.jobCardFrom.controls.size.setValue(this.content.SIZE)
+    this.jobCardFrom.controls.length.setValue(this.content.LENGTH)
+    this.jobCardFrom.controls.orderType.setValue(this.content.ORDER_TYPE)
+    this.jobCardFrom.controls.designtype.setValue(this.content.DESIGN_TYPE)
+    this.jobCardFrom.controls.purity.setValue(this.content.JOB_PURITY)
+    this.jobCardFrom.controls.customername.setValue(this.content.CUSTOMER_NAME)
+  }
+
 
   formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -539,7 +580,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME":this.urls || "",
+      "PICTURE_NAME":this.url || "",
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",
