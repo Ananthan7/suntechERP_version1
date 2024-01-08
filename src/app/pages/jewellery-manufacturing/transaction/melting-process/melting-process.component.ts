@@ -130,8 +130,8 @@ export class MeltingProcessComponent implements OnInit {
   }
   processCodeScpSelected(e:any){
     console.log(e); 
-    this.meltingProcessFrom.controls.process.setValue(e.PROCESS_CODE);
-    this.meltingProcessFrom.controls.processDesc.setValue(e.PROCESS_DESC);
+    this.meltingProcessFrom.controls.process.setValue(e.Process_Code);
+    this.meltingProcessFrom.controls.processDesc.setValue(e.Description);
   }
 
   MeltingCodeSelected(e:any){
