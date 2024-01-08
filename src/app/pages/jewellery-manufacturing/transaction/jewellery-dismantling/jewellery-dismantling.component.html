@@ -28,14 +28,14 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-6 ">Voc Date :</label>
+              <label for="inputPassword" class="col-sm-6 ">Voc Date * :</label>
               <div class="col-sm-6">
                 <!-- <mat-form-field style="width: 85%;">
                   <input type="date" matInput formControlName="vocdate" />
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
                   <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate"
-                    placeholder="YYYY/MM/DD" DateValidation />
+                    placeholder="DD/MM/YYYY" DateValidation />
                   <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                 </mat-form-field>
@@ -55,7 +55,7 @@
           </div>
           <div class="col-4">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5  ">Loss Account : </label>
+              <label for="inputPassword" class="col-sm-5  ">Loss Account*: </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="lossaccount" />
@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5">Metal Rate : </label>
+              <label for="inputPassword" class="col-sm-5">Metal Rate*: </label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
                   <input type="number" matInput formControlName="metalrate" />
@@ -91,7 +91,7 @@
           </div>
           <div class="col-4">
             <div class="row mb-1 pt-5">
-              <label for="inputPassword" class="col-sm-2 ">Base :</label>
+              <label for="inputPassword" class="col-sm-2 ">Base*:</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="base" />
@@ -159,7 +159,7 @@
                     <div class="row">
                       <div class="col-md-3">
                         <div class="row mb-1">
-                          <label for="inputPassword" class="col-sm-6"> Stock : </label>
+                          <label for="inputPassword" class="col-sm-6"> Stock*: </label>
                           <div class="col-sm-6">
                             <mat-form-field style="width: 100%;">
                               <input type="text" matInput formControlName="stock" />
@@ -195,7 +195,7 @@
                       </div>
                       <div class="col-md-3">
                         <div class="row mb-1">
-                          <label for="inputPassword" class="col-sm-6"> Mfg Date : </label>
+                          <label for="inputPassword" class="col-sm-6"> Mfg Date*: </label>
                           <div class="col-sm-6">
                             <mat-form-field style="width: 100%">
                               <input matInput [matDatepicker]="mfgDate" name="mfgDate" formControlName="mfgDate"
@@ -206,7 +206,7 @@
                           </div>
                         </div>
                         <div class="row mb-1">
-                          <label for="inputPassword" class="col-sm-6"> Loss Account : </label>
+                          <label for="inputPassword" class="col-sm-6"> Loss Account*: </label>
                           <div class="col-sm-6">
                             <mat-form-field style="width: 100%;">
                               <input type="text" matInput formControlName="lossAccount" />

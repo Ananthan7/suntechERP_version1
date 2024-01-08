@@ -107,7 +107,22 @@ export class SchemeMasterComponent implements OnInit {
     }
    
   }
-
+  getSchemeMasterList(event:any){
+    if (event.target.value == "") return;
+    let Sub: Subscription = this.dataService.getDynamicAPI('SchemeMaster/GetSchemeMasterList')
+    .subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+         let items = resp.response
+         items.forEach((element:any) => {
+          if(element.SCHEME_CODE == event.target.value){
+            this.comService.showSnackBarMsg('Scheme Already Exists')
+            this.schemeMasterForm.controls.code.setValue('')
+          }
+         });
+      }
+    });
+    this.subscriptions.push(Sub);
+  }
   setInitialValues() {
     this.schemeMasterForm.controls.startDate.setValue(this.currentDate)
   }
@@ -149,24 +164,24 @@ export class SchemeMasterComponent implements OnInit {
     let API = 'SchemeMaster/InsertSchemeMaster'
     let postData ={
           "MID": 0,
-          "BRANCH_CODE": this.branchCode,
-          "SCHEME_CODE": this.schemeMasterForm.value.code,
-          "SCHEME_NAME": this.schemeMasterForm.value.description,
+          "BRANCH_CODE": this.comService.nullToString(this.branchCode),
+          "SCHEME_CODE": this.comService.nullToString(this.schemeMasterForm.value.code),
+          "SCHEME_NAME": this.comService.nullToString(this.schemeMasterForm.value.description),
           "SCHEME_UNIT": 0,
           "SCHEME_BONUS": 1,
           "SCHEME_PERIOD": 0,
-          "SCHEME_REMARKS": this.schemeMasterForm.value.remarks,
-          "SCHEME_AMOUNT": parseFloat(this.schemeMasterForm.value.installmentAmount),
+          "SCHEME_REMARKS": this.comService.nullToString(this.schemeMasterForm.value.remarks),
+          "SCHEME_AMOUNT": this.comService.emptyToZero(this.schemeMasterForm.value.installmentAmount),
           "SCHEME_METALCURRENCY": 0,
-          "CANCEL_CHARGE": parseFloat(this.schemeMasterForm.value.cancelCharges),
-          "SCHEME_FREQUENCY": this.schemeMasterForm.value.frequency,
+          "CANCEL_CHARGE": this.comService.emptyToZero(this.schemeMasterForm.value.cancelCharges),
+          "SCHEME_FREQUENCY": this.comService.nullToString(this.schemeMasterForm.value.frequency),
           "STATUS": true,
           "START_DATE": this.schemeMasterForm.value.startDate,
           "SCHEME_CURRENCY_CODE": "stri",
-          "PREFIX_CODE": this.schemeMasterForm.value.prefix,
-          "BONUS_RECTYPE": this.schemeMasterForm.value.receiptModeTwo,
-          "CANCEL_RECTYPE": this.schemeMasterForm.value.receiptModeThree,
-          "INST_RECTYPE": this.schemeMasterForm.value.receiptModeone,
+          "PREFIX_CODE": this.comService.nullToString(this.schemeMasterForm.value.prefix),
+          "BONUS_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeTwo),
+          "CANCEL_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeThree),
+          "INST_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeone),
           "SCHEME_FIXEDAMT": true
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)

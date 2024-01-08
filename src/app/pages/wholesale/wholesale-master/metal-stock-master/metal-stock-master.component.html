@@ -15,7 +15,7 @@
             <div class="row justify-content-between">
               <div class="col-md-6">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Metal Type :</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Metal Type * :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 60%;">
                       <input type="text" matInput formControlName="metalType" />
@@ -23,7 +23,7 @@
                     <master-search [MasterSearchData]="metalTypeCodeData" (newRowClick)="metalTypeCodeSelected($event)">
                     </master-search>
                   </div>
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Code :</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Code * :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="code" />
@@ -39,7 +39,7 @@
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Description :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Description * :</label>
                   <div class="col-md-9">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="description" />
@@ -47,7 +47,7 @@
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Karat :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Karat * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="karat" />
@@ -55,7 +55,7 @@
                     <master-search [MasterSearchData]="karatCodeData" (newRowClick)="karatCodeSelected($event)">
                     </master-search>
                   </div>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Std Purity :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Std Purity * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;">
                       <input type="number" matInput formControlName="stdpurity" />
@@ -63,7 +63,7 @@
                   </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Making Charge :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Making Charge * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 80%;">
                       <mat-select formControlName="makingcharge">
@@ -73,7 +73,7 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Unit :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Unit * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="unit" />
@@ -117,7 +117,7 @@
                     <master-search [MasterSearchData]="costCenterData" (newRowClick)="costCenterSelected($event)">
                     </master-search>
                   </div>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Metal :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Metal * :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 70%;">
                       <input type="text" matInput formControlName="metal" />
@@ -238,7 +238,7 @@
                 <div class="row">
                   <div class="col-md-8">
                     <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-4 col-form-label">Price 1 :</label>
+                      <label for="inputPassword" class="col-sm-4 col-form-label">Price 1 * :</label>
                       <div class="col-md-4">
                         <mat-form-field style="width: 70%;">
                           <input type="text" matInput formControlName="price1" />
@@ -525,7 +525,7 @@
                       </div>
                     </div>
                     <div class="row align-items-center mb-1 pt-2">
-                      <label for="inputPassword" class="col-sm-6 col-form-label">Def. Sale Purity :</label>
+                      <label for="inputPassword" class="col-sm-6 col-form-label">Def. Sale Purity * :</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
                           <input type="number" matInput formControlName="defsalepurity" />

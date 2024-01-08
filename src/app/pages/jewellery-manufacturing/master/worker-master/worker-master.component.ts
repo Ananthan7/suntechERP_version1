@@ -335,7 +335,7 @@ export class WorkerMasterComponent implements OnInit {
             item.SrNo = i + 1;
             item.isChecked = false;
           });
-          this.tableData = result.response
+          this.tableData = result.response;
         } else {
           Swal.fire({
             title: '',

@@ -10,6 +10,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { ComponentsComponent } from './components/components.component';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { JobStickerPrintComponent } from './job-sticker-print/job-sticker-print.component';
+import themes from 'devextreme/ui/themes';
 
 @Component({
   selector: 'app-jobcard',
@@ -35,6 +36,9 @@ export class JobcardComponent implements OnInit {
   currentDate: any = this.commonService.currentDate;
   urls: string | ArrayBuffer | null | undefined;
   url: any;
+  allMode: string;
+  checkBoxesMode: string;
+  selectedIndexes: any = [];
   private subscriptions: Subscription[] = [];
 
   lengthCodeData: MasterSearchModel = {
@@ -283,7 +287,7 @@ export class JobcardComponent implements OnInit {
 
   jobCardFrom: FormGroup = this.formBuilder.group({
     orderType : [''],
-    jobno : ['53528'],
+    jobno : ['5'],
     designcode : [''],
     designtype : [''],
     customer : [''],
@@ -332,7 +336,10 @@ export class JobcardComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-  ) { }
+  ) { 
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+  }
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
@@ -396,6 +403,57 @@ export class JobcardComponent implements OnInit {
     });
   }
 
+  addTableData(){
+    let length = this.tableData.length;
+    let sn = length + 1;
+    let data =  {
+      "SI NO": sn,
+      "job_reference": "",
+      "part_code": "",
+      "Description": "",
+      "Pcs": "",
+      "metal_color": "",
+      "metal_wt": "",
+      "stone_wt": "",
+      "gross_wt": "",
+    };
+    this.tableData.push(data);
+  }
+
+  job_referencetemp(data:any,value: any){
+    console.log(data);
+    this.tableData[value.data.SINO - 1].job_reference = data.target.value;
+  }
+
+  part_codetemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].part_code = data.DESIGN_CODE;
+  }
+
+  descriptiontemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].Description = data.DESIGN_DESCRIPTION;
+  }
+
+  Pcstemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].Pcs = data.target.value;
+  }
+
+  metal_colortemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].metal_color = data.target.value;
+  }
+
+  metal_wttemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].metal_wt = data.target.value;
+  }
+
+  stone_wttemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].stone_wt = data.target.value;
+  }
+
+  gross_wttemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].gross_wt = data.target.value;
+  }
+
+
   formatDate(event: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue)
@@ -424,6 +482,20 @@ export class JobcardComponent implements OnInit {
     console.log(e);
     this.jobCardFrom.controls.designcode.setValue(e.DESIGN_CODE);
     this.jobCardFrom.controls.designtype.setValue(e.DESIGN_DESCRIPTION);
+    let length = this.tableData.length;
+    let sn = length + 1;
+    let data =  {
+      "SINO": sn,
+      "job_reference": '5/'+sn,
+      "part_code":   e.DESIGN_CODE,
+      "Description": e.DESIGN_DESCRIPTION,
+      "Pcs": "",
+      "metal_color": "",
+      "metal_wt": "",
+      "stone_wt": "",
+      "gross_wt": "",
+    };
+    this.tableData.push(data);
   }
 
   customerCodeSelected(e:any){

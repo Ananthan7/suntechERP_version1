@@ -26,6 +26,18 @@
                     Delete
                 </button>
             </div>
+            <div class="p-1" *ngIf="isViewSaveGridData">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="saveGridDataClicked()">
+                    Save Grid Data
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isViewChangeJob">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="changeJobClicked()">
+                    Change Job
+                </button>
+            </div>
             <div class="p-1" *ngIf="isViewContinue">
                 <button type="button" class="btn btn-danger text-center"
                     (click)="continueClicked()">

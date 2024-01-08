@@ -70,11 +70,11 @@ export class ProcessMasterComponent implements OnInit {
   accountStartData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 95,
+    LOOKUPID: 81,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'ACCOUNT CODE',
+    SEARCH_HEADING: 'LOSS ACCOUNT CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION:  "ACCODE<>'' AND account_mode not in ('B','P','R')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -82,11 +82,11 @@ export class ProcessMasterComponent implements OnInit {
   accountMiddleData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 95,
+    LOOKUPID: 81,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'ACCOUNT CODE',
+    SEARCH_HEADING: 'RECOVERY ACCOUNT CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -94,11 +94,11 @@ export class ProcessMasterComponent implements OnInit {
   accountEndData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 95,
+    LOOKUPID: 81,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'ACCOUNT CODE',
+    SEARCH_HEADING: 'ALLOW GAIN ACCOUNT CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

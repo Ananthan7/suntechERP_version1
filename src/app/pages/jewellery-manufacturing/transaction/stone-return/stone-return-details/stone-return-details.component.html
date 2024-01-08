@@ -8,361 +8,292 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 
-  <div class="container-fluid pt-3">
-    <form [formGroup]="stonereturndetailsFrom">
-          <div class="row">
-            <div class="col-md-8">
-              <div class="row">
-                <label for="inputPassword" class="col-sm-2 col-form-label">
-                  Job Number * :</label
-                >
-                <div class="col-sm-8">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="jobno" />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="subJobNoCodeData"
-                      (newRowClick)="subJobNoCodeSelected($event)"
-                    ></master-search
-                    >&nbsp;
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="subjobno" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Sub Job No * :</label
-                >
-                <div class="col-sm-8">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="subjobno" />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="subJobNoCodeData"
-                      (newRowClick)="subJobNoCodeSelected($event)"
-                    ></master-search>
-                    &nbsp;
-                    <mat-form-field style="width: 100%">
-                      <input
-                        type="text"
-                        matInput
-                        formControlName="subjobDesc"
-                      />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Design Code :
-                </label>
-                <div class="col-md-3">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 70%">
-                      <input
-                        type="text"
-                        matInput
-                        formControlName="designcode"
-                      />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="subJobNoCodeData"
-                      (newRowClick)="subJobNoCodeSelected($event)"
-                    ></master-search>
-                  </div>
-                </div>
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Salesorder No * :
-                </label>
-                <div class="col-md-3">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 70%">
-                      <input
-                        type="text"
-                        matInput
-                        formControlName="salesorderno"
-                      />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="upload-btn-wrapper">
-                <button class="btn btnnew border-dark"></button>
-                <input type="file" name="uploadproduct" class="uploadproduct" />
-              </div>
+<div class="container-fluid pt-3">
+  <form [formGroup]="stonereturndetailsFrom">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">
+            Job Number * :</label>
+          <div class="col-sm-8">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="jobno" />
+              </mat-form-field>
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)"></master-search>&nbsp;
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="subjobno" />
+              </mat-form-field>
             </div>
           </div>
-
-          
-          <div class="row">
-            <div class="col-md-8">
-              <div class="row">
-                <label for="inputPassword" class="col-sm-3 col-form-label"
-                  >Process * :</label
-                >
-                <div class="col-sm-7">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="process" />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="subJobNoCodeData"
-                      (newRowClick)="subJobNoCodeSelected($event)"
-                    ></master-search
-                    >&nbsp;
-                    <mat-form-field style="width: 100%">
-                      <input
-                        type="text"
-                        matInput
-                        formControlName="processname"
-                      />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <label for="inputPassword" class="col-sm-3 col-form-label">
-                  Worker * :</label
-                >
-                <div class="col-sm-7">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="worker" />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="subJobNoCodeData"
-                      (newRowClick)="subJobNoCodeSelected($event)"
-                    ></master-search
-                    >&nbsp;
-                    <mat-form-field style="width: 100%">
-                      <input
-                        type="text"
-                        matInput
-                        formControlName="workername"
-                      />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <label for="inputPassword" class="col-sm-3 col-form-label">
-                  Stock * :</label
-                >
-                <div class="col-sm-7">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="stock" />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="subJobNoCodeData"
-                      (newRowClick)="subJobNoCodeSelected($event)"
-                    ></master-search
-                    >&nbsp;
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="stock" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <label for="inputPassword" class="col-sm-3 col-form-label"
-                  >Batch ID:</label
-                >
-                <div class="col-sm-5">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="batchid" />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="subJobNoCodeData"
-                      (newRowClick)="subJobNoCodeSelected($event)"
-                    ></master-search>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="row mb-1 ml-1">
-                  <div class="col-sm-2">
-                    <mat-radio-button value="1">Broken</mat-radio-button>
-                  </div>
-                  <div class="col-sm-1"></div>
-                  <div class="col-sm-4">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="broken" />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-4">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="broken" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="row mb-1 ml-1">
-                  <div class="col-sm-2">
-                    <mat-radio-button value="1">Missing</mat-radio-button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-4">
-              <div class="row">
-                <label for="inputPassword" class="col-sm-4 col-form-label"
-                  >Location * :</label
-                >
-                <div class="col-md-7">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="location" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Sub Job No * :</label>
+          <div class="col-sm-8">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="subjobno" />
+              </mat-form-field>
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)"></master-search>
+              &nbsp;
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="subjobDesc" />
+              </mat-form-field>
             </div>
           </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Pieces :
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="pieces" />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="subJobNoCodeData"
-                      (newRowClick)="subJobNoCodeSelected($event)"
-                    ></master-search>
-                  </div>
-                </div>
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Size * :
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="size" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Sieve * :
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="sieve" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Carat :
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="carat" />
-                    </mat-form-field>
-                    <master-search
-                      [MasterSearchData]="subJobNoCodeData"
-                      (newRowClick)="subJobNoCodeSelected($event)"
-                    ></master-search>
-                  </div>
-                </div>
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Color:
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="color" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Sieve Set * :
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="sieveset" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Unit Rate :
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="unitrate" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Shape:
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="shape" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Clarity:
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="clarity" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label"
-                  >Amount :
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="amount" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <label
-                  for="inputPassword"
-                  class="col-sm-2 col-form-label offset-sm-4"
-                  >Pointer Wt * :
-                </label>
-                <div class="col-md-2">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%">
-                      <input type="text" matInput formControlName="pointerwt" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
+        </div>
+        <div class="row mb-1">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Design Code :
+          </label>
+          <div class="col-md-3">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 70%">
+                <input type="text" matInput formControlName="designcode" />
+              </mat-form-field>
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)"></master-search>
             </div>
           </div>
-       
-    </form>
-  </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Salesorder No * :
+          </label>
+          <div class="col-md-3">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 70%">
+                <input type="text" matInput formControlName="salesorderno" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-center">
+        <div class="upload-btn-wrapper">
+          <button class="btn btnnew border-dark"></button>
+          <input type="file" name="uploadproduct" class="uploadproduct" />
+        </div>
+      </div>
+    </div>
 
+
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+          <label for="inputPassword" class="col-sm-3 col-form-label">Process * :</label>
+          <div class="col-sm-7">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="process" />
+              </mat-form-field>
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)"></master-search>&nbsp;
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="processname" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-3 col-form-label">
+            Worker * :</label>
+          <div class="col-sm-7">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="worker" />
+              </mat-form-field>
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)"></master-search>&nbsp;
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="workername" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-3 col-form-label">
+            Stock * :</label>
+          <div class="col-sm-7">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="stock" />
+              </mat-form-field>
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)"></master-search>&nbsp;
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="stock" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-3 col-form-label">Batch ID:</label>
+          <div class="col-sm-5">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="batchid" />
+              </mat-form-field>
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)"></master-search>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="row mb-1 ml-1">
+            <div class="col-sm-2">
+              <mat-radio-button value="1">Broken</mat-radio-button>
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="broken" />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="broken" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="row mb-1 ml-1">
+            <div class="col-sm-2">
+              <mat-radio-button value="1">Missing</mat-radio-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="row">
+          <label for="inputPassword" class="col-sm-4 col-form-label">Location * :</label>
+          <div class="col-md-7">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="location" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row mb-1">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Pieces :
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="pieces" />
+              </mat-form-field>
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)"></master-search>
+            </div>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Size * :
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="size" />
+              </mat-form-field>
+            </div>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Sieve * :
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="sieve" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Carat :
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="carat" />
+              </mat-form-field>
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                (newRowClick)="subJobNoCodeSelected($event)"></master-search>
+            </div>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Color:
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="color" />
+              </mat-form-field>
+            </div>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Sieve Set * :
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="sieveset" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Unit Rate :
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="unitrate" />
+              </mat-form-field>
+            </div>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Shape:
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="shape" />
+              </mat-form-field>
+            </div>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Clarity:
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="clarity" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Amount :
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="amount" />
+              </mat-form-field>
+            </div>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label offset-sm-4">Pointer Wt * :
+          </label>
+          <div class="col-md-2">
+            <div class="position-relative d-flex">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="pointerwt" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>

@@ -148,15 +148,15 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.subStockCode.setValue(e.DESCRIPTION);
      this.metalIssueDetailsForm.controls.pcs.setValue(e.PCS);
-    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
-    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
+    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.DIVISION_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.STOCK_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes_1.setValue(e.DESCRIPTION);
     
   }
 
   jobchange(e:any){  
       console.log(e);
-      this.metalIssueDetailsForm.controls.jobNumber.setValue(e.job_number);
-      this.metalIssueDetailsForm.controls.jobNumDes.setValue(e.job_description);     
+      this.metalIssueDetailsForm.reset();   
   }
 
 
@@ -218,6 +218,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     pureWeight: [''],
     toStockCode: [''],
     toStockCodeDes: [''],
+    toStockCodeDes_1: [''],
     Comments: [''],
     location: [''],
     totalAmountFc: [''],
