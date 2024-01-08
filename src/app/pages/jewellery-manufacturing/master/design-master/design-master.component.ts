@@ -72,8 +72,8 @@ export class DesignMasterComponent implements OnInit {
   
   designmasterForm: FormGroup = this.formBuilder.group({
     mid:[],
-    code: [''],
-    designdesc: [''],
+    code: ['',[Validators.required]],
+    designdesc: ['',[Validators.required]],
     costcenter: ['',[Validators.required]],
     category: [''],
     subcategory: [''],
@@ -109,6 +109,7 @@ export class DesignMasterComponent implements OnInit {
     price4 : [''],
     price5 : [''],
     metalwt: [''],
+    prefix: ['',[Validators.required]],
   });
 
   adddata() {

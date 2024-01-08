@@ -48,7 +48,7 @@ export class CostcentreMagkingchargesComponent implements OnInit {
 
   costcentermakingForm: FormGroup = this.formBuilder.group({
     costcode: ['',[Validators.required]],
-    description: [''],
+    description: ['',[Validators.required]],
     purchase: [''],
     sales: [''],
     branchtransfer: [''],

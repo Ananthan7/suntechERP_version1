@@ -29,7 +29,9 @@ export class DesignMasterComponent implements OnInit {
   ) { }
 
   designmasterForm: FormGroup = this.formBuilder.group({
-    costcenter:[''],
+    design:['',[Validators.required]],
+    description:['',[Validators.required]],
+    costcenter:['',[Validators.required]],
     vendore:[''],
     type:[''],
     metalcolor:[''],
@@ -37,6 +39,8 @@ export class DesignMasterComponent implements OnInit {
     subcat:[''],
     brand:[''],
     country:[''],
+    currency:['',[Validators.required]],
+    karart:['',[Validators.required]],
   })
   ngOnInit(): void {
   }

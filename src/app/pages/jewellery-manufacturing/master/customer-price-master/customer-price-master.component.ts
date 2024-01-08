@@ -58,10 +58,10 @@ export class CustomerPriceMasterComponent implements OnInit {
 
 
   customerpricemasterForm: FormGroup = this.formBuilder.group({
-    customercode :[''],
+    customercode :['',[Validators.required]],
     desc :[''],
-    pricecode : [''],
-    labourtype:[''],
+    pricecode : ['',[Validators.required]],
+    labourtype:['',[Validators.required]],
     addonrate : [''],
     margin:[''],
     date:[new Date(),''],
