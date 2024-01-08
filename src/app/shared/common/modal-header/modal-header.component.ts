@@ -10,10 +10,14 @@ export class ModalHeaderComponent implements OnInit {
   @Output() cancelClick = new EventEmitter();
   @Output() deleteClick = new EventEmitter();
   @Output() continueClick = new EventEmitter();
+  @Output() ChangeJobClick = new EventEmitter();
+  @Output() SaveGridDataClick = new EventEmitter();
   @Input() isViewDelete: boolean = true;
   @Input() isViewMore: boolean = true;
   @Input() isViewArrow: boolean = true;
   @Input() isViewContinue: boolean = false;
+  @Input() isViewSaveGridData: boolean = false;
+  @Input() isViewChangeJob: boolean = false;
   @Input() isViewCancel: boolean = true;
   @Input() editSaveBtnText?: string = '';
 
@@ -35,6 +39,12 @@ export class ModalHeaderComponent implements OnInit {
   }
   continueClicked() {
     this.continueClick.emit();
+  }
+  saveGridDataClicked() {
+    this.SaveGridDataClick.emit();
+  }
+  changeJobClicked() {
+    this.ChangeJobClick.emit();
   }
 
 }
