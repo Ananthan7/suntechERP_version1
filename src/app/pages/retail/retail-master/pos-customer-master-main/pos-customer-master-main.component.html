@@ -58,7 +58,11 @@
                                     <div class="col-md-8">
                                         <mat-form-field>
                                             <mat-select formControlName="name">
-                                                <mat-option></mat-option>
+                                                <mat-select formControlName="gender">
+                                                    <mat-option value="Mr.">Mr.</mat-option>
+                                                    <mat-option value="Mrs.">Mrs.</mat-option>
+                                                    <mat-option value="Ms.">Ms.</mat-option>
+                                                </mat-select>
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
@@ -106,6 +110,7 @@
                                 <mat-form-field style="width:100%">
                                     <mat-select formControlName="maritalSt">
                                         <mat-option value="Single">Single</mat-option>
+                                        <mat-option value="Single">Married</mat-option>
                                         <mat-option></mat-option>
                                     </mat-select>
                                 </mat-form-field>
@@ -408,7 +413,18 @@
                                                     <div class="col-md-5">
                                                         <mat-form-field style="width: 70%;">
                                                             <mat-select formControlName="bloodGroup">
-                                                                <mat-option></mat-option>
+                                                                <mat-select formControlName="maritalSt">
+                                                                    <mat-option value="A+">A+</mat-option>
+                                                                    <mat-option value="A-">A-</mat-option>
+                                                                    <mat-option value="B+">B+</mat-option>
+                                                                    <mat-option value="B-">B-</mat-option>
+                                                                    <mat-option value="AB+">AB+</mat-option>
+                                                                    <mat-option value="AB-">AB-</mat-option>
+                                                                    <mat-option value="O+">O+</mat-option>
+                                                                    <mat-option value="O-">O-</mat-option> 
+                                                                    <mat-option value="unknown">unknown</mat-option>
+                                                                    <mat-option></mat-option>
+                                                                </mat-select>
                                                             </mat-select>
                                                         </mat-form-field>
                                                     </div>
@@ -596,8 +612,9 @@
                                                 Selection</label>
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
-                                                    <mat-select formControlName="productSelection">                    
-                                                        <mat-option></mat-option>
+                                                    <mat-select formControlName="productSelection">                 
+                                                            <mat-option value="Yes">Yes</mat-option>
+                                                            <mat-option value="No">No</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -607,7 +624,8 @@
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="service">                    
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Yes">Yes</mat-option>
+                                                        <mat-option value="No">No</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -618,7 +636,8 @@
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="makingChanges">                    
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Yes">Yes</mat-option>
+                                                            <mat-option value="No">No</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -629,7 +648,8 @@
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="brand">
-                                                      <mat-option></mat-option>
+                                                        <mat-option value="Yes">Yes</mat-option>
+                                                        <mat-option value="No">No</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -640,7 +660,8 @@
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="buyBackPolicy">                    
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Yes">Yes</mat-option>
+                                                        <mat-option value="No">No</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -651,7 +672,8 @@
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="loactionandParkingFacility">                    
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Yes">Yes</mat-option>
+                                                        <mat-option value="No">No</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -668,7 +690,10 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;" >
                                                     <mat-select formControlName="staffCourtesy">
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Excellent">Excellent</mat-option>
+                                                        <mat-option value="Good">Good</mat-option>
+                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
+                                                        <mat-option value="Poor">Poor</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -679,7 +704,10 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="productKnowledgeOfOurStaff">
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Excellent">Excellent</mat-option>
+                                                        <mat-option value="Good">Good</mat-option>
+                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
+                                                        <mat-option value="Poor">Poor</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -690,7 +718,10 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="locationandAmbienceOfShop">
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Excellent">Excellent</mat-option>
+                                                        <mat-option value="Good">Good</mat-option>
+                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
+                                                        <mat-option value="Poor">Poor</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -701,7 +732,10 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="varietyAndQualityOfJewellery">
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Excellent">Excellent</mat-option>
+                                                        <mat-option value="Good">Good</mat-option>
+                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
+                                                        <mat-option value="Poor">Poor</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -712,7 +746,10 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="overallExperience">
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Excellent">Excellent</mat-option>
+                                                        <mat-option value="Good">Good</mat-option>
+                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
+                                                        <mat-option value="Poor">Poor</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -723,7 +760,10 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="showroomAccessibility">
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Excellent">Excellent</mat-option>
+                                                        <mat-option value="Good">Good</mat-option>
+                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
+                                                        <mat-option value="Poor">Poor</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -734,7 +774,10 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="productRangeAvailability">
-                                                        <mat-option></mat-option>
+                                                        <mat-option value="Excellent">Excellent</mat-option>
+                                                        <mat-option value="Good">Good</mat-option>
+                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
+                                                        <mat-option value="Poor">Poor</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -849,13 +892,14 @@
                                 <button type="button" class="btn btn-primary add-btn">
                                     <i class="fas fa-camera-retro"></i>
                                 </button>
+                                <!-- <input type="file" name="uploadproduct" class="uploadproduct"> -->
                             </div>
                             <div class="p-1 bd-highlight">
                                 <button type="button" class="btn btn-primary add-btn">
                                     <i class="fas fa-image"></i>
                                 </button>
                             </div>
-
+                            
                         </div>
                     </div>
                 </div>
@@ -863,7 +907,8 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Created Branch</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input matInput="text" formControlName="createdBranch" />
+                            <h6> {{branchCode}} </h6>
+                            <input [disabled]="true" matInput="text" formControlName="createdBranch" />
                         </mat-form-field>
                     </div>
                 </div>

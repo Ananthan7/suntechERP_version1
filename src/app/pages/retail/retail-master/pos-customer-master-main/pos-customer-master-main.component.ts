@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
   selector: 'app-pos-customer-master-main',
@@ -9,8 +10,9 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
   styleUrls: ['./pos-customer-master-main.component.scss']
 })
 export class PosCustomerMasterMainComponent implements OnInit {
+  [x: string]: any;
 
-  
+  branchCode?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
 
@@ -70,11 +72,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   stateCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 27,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 48,
+    SEARCH_FIELD: 'STATE_CODE',
     SEARCH_HEADING: 'STATE CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "STATE_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -262,20 +264,27 @@ export class PosCustomerMasterMainComponent implements OnInit {
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.posCustomerMasterMainForm.controls['createdBranch'].disable();
   }
 
   countrySelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.country.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.countryCode.setValue(e.DESCRIPTION);
+    this.posCustomerMasterMainForm.controls.moblieCountry.setValue(e.MobileCountryCode);
+    this.posCustomerMasterMainForm.controls.moblie1Country.setValue(e.MobileCountryCode);
+    this.posCustomerMasterMainForm.controls.telRCountry.setValue(e.MobileCountryCode);
+    this.posCustomerMasterMainForm.controls.tel0Country.setValue(e.MobileCountryCode);
   }
 
   stateSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.stateCode.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.stateCode.setValue(e.STATE_CODE);
   }
 
   categorySelected(e: any) {
