@@ -4795,8 +4795,8 @@
           </mat-form-field>
         </div>
 
-        <div class="col-md-4">
-          <mat-form-field style="width: 100%">
+        <div class="col-md-4 d-flex align-content-center">
+          <mat-form-field style="width: 80%;">
             <input type="text" matInput formControlName="docType" />
           </mat-form-field>
           <master-search [MasterSearchData]="docTypeData"></master-search>
@@ -4852,7 +4852,7 @@
           color="primary"
           class="btn-m-r-10 mb-2"
           [disabled]="viewOnly"
-          (click)="submitAttachment()"
+          (click)="saveAttachment()"
         >
           Save
         </button>

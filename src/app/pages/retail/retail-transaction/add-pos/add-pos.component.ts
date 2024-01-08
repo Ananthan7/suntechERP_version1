@@ -536,6 +536,8 @@ export class AddPosComponent implements OnInit {
   ];
 
   transAttachmentList: any[] = [];
+  transAttachmentListData: any[] = [];
+
   transColumnList: any[] = [
     { title: 'MID', field: 'KYCrefmid' },
     { title: 'Voucher Type', field: 'VOCTYPE' },
@@ -575,6 +577,9 @@ export class AddPosComponent implements OnInit {
   get vocDateVal(): Date {
     return this.vocDataForm.controls.vocdate.value;
   }
+
+  attachmentFile: any;
+
 
   constructor(
     private modalService: NgbModal,
@@ -10834,41 +10839,143 @@ export class AddPosComponent implements OnInit {
 
 
   onFileSelected(event: any) {
-    const file: File = event.target.files[0];
+    const file: File = event.target.files;
     console.log(file);
+    this.attachmentFile = file;
   }
 
 
+  saveAttachment() {
+    if (!this.attachmentForm.invalid) {
+      const formData = new FormData();
+
+      formData.append('VOCNO', this.vocDataForm.value.fcn_voc_no);
+      formData.append('VOCTYPE', this.vocType);
+      formData.append('VOCDATE', this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()));
+      formData.append('REFMID', '1');
+      formData.append('ATTACHMENT_PATH', '');
+
+      formData.append('SRNO', '1');
+      formData.append('REMARKS', this.attachmentForm.value.remarks || '');
+      formData.append('UNIQUEID', '1');
+      formData.append('CODE', '');
+      formData.append('ATTACH_TYPE', '');
+      formData.append('EXPIRE_DATE', this.convertDateToYMD(this.attachmentForm.value.expDate) || this.dummyDate);
+      formData.append('BRANCH_CODE', this.strBranchcode);
+      formData.append('YEARMONTH', this.baseYear);
+      formData.append('DOC_TYPE', this.attachmentForm.value.docType || '');
+      formData.append('SUBLED_CODE', '');
+      formData.append('DOC_ACTIVESTATUS', 'false');
+      formData.append('DOC_LASTRENEWBY', '');
+      formData.append('DOC_NEXTRENEWDATE', '');
+      formData.append('DOC_LASTRENEWDATE', '');
+      formData.append('DOCUMENT_DATE', '');
+      formData.append('DOCUMENT_NO', '');
+      formData.append('FROM_KYC', 'false');
+
+      this.transAttachmentListData.push(formData);
+this.submitAttachment();
+      // const data = {
+      //   VOCNO: this.vocDataForm.value.fcn_voc_no,
+      //   VOCTYPE: this.vocType,
+      //   VOCDATE: this.convertDateWithTimeZero(
+      //     new Date(this.vocDataForm.value.vocdate).toISOString()
+      //   ),
+      //   REFMID: 1,
+      //   ATTACHMENT_PATH: '',
+
+      //   'SRNO': 1,
+      //   'REMARKS': this.attachmentForm.value.remarks || '',
+      //   'UNIQUEID': 1,
+      //   'CODE': '',
+      //   'ATTACH_TYPE':  '',
+      //   'EXPIRE_DATE': this.convertDateToYMD(this.attachmentForm.value.expDate) || this.dummyDate,
+      //   'BRANCH_CODE': this.strBranchcode,
+      //   'YEARMONTH': this.baseYear,
+      //   'DOC_TYPE': this.attachmentForm.value.docType || '',
+      //   'SUBLED_CODE': '',
+      //   'DOC_ACTIVESTATUS': 'false',
+      //   'DOC_LASTRENEWBY': '',
+      //   'DOC_NEXTRENEWDATE': '',
+      //   'DOC_LASTRENEWDATE': '',
+      //   'DOCUMENT_DATE': '',
+      //   'DOCUMENT_NO': '',
+      //   'FROM_KYC': 'false',
+
+      // };
+
+    } else {
+      this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
+    }
+  }
   submitAttachment() {
     if (!this.attachmentForm.invalid) {
       // this.modalReferenceUserAttachment.close(true);
 
       const formData = new FormData();
 
-      formData.append('Data.VOCNO', '');
-      formData.append('Data.VOCTYPE', '');
-      formData.append('Data.VOCDATE', this.convertDateWithTimeZero(
-        new Date(this.vocDataForm.value.vocdate).toISOString()
-      ),);
-      formData.append('Data.REFMID', '');
-      formData.append('Data.SRNO', '');
-      formData.append('Data.REMARKS', '');
-      formData.append('Data.ATTACHMENT_PATH', '');
-      formData.append('Data.UNIQUEID', '');
-      formData.append('Data.CODE', '');
-      formData.append('Data.ATTACH_TYPE', '');
-      formData.append('Data.EXPIRE_DATE', this.attachmentForm.value.expDate || this.dummyDate);
-      formData.append('Data.BRANCH_CODE', '');
-      formData.append('Data.YEARMONTH', '');
-      formData.append('Data.DOC_TYPE', '');
-      formData.append('Data.SUBLED_CODE', '');
-      formData.append('Data.DOC_ACTIVESTATUS', 'false');
-      formData.append('Data.DOC_LASTRENEWBY', '');
-      formData.append('Data.DOC_NEXTRENEWDATE', '');
-      formData.append('Data.DOC_LASTRENEWDATE', '');
-      formData.append('Data.DOCUMENT_DATE', '');
-      formData.append('Data.DOCUMENT_NO', '');
-      formData.append('Data.FROM_KYC', 'false');
+     const res =  this.transAttachmentListData.map((data, i) => {
+
+      const modifiedFormData = new FormData();
+      formData.forEach((value, key) => {
+          modifiedFormData.append(`Model.Data[${i}].${key}`, value);
+      });
+      
+        // formData.append(`Model.Data[${i}]VOCNO`, data.VOCNO);
+        // formData.append(`Model.Data[${i}]VOCTYPE`, data.VOCTYPE);
+        // formData.append(`Model.Data[${i}]VOCDATE`, data.VOCDATE);
+        // formData.append(`Model.Data[${i}]REFMID`, data.REFMID);
+        // formData.append(`Model.Data[${i}]SRNO`, data.SRNO);
+        // formData.append(`Model.Data[${i}]REMARKS`, data.REMARKS);
+        // formData.append(`Model.Data[${i}]ATTACHMENT_PATH`, data.ATTACHMENT_PATH);
+        // formData.append(`Model.Data[${i}]UNIQUEID`, data.UNIQUEID);
+        // formData.append(`Model.Data[${i}]CODE`, data.CODE);
+        // formData.append(`Model.Data[${i}]ATTACH_TYPE`, data.ATTACH_TYPE);
+        // formData.append(`Model.Data[${i}]EXPIRE_DATE`, data.EXPIRE_DATE);
+        // formData.append(`Model.Data[${i}]BRANCH_CODE`, data.BRANCH_CODE);
+        // formData.append(`Model.Data[${i}]YEARMONTH`, data.YEARMONTH);
+        // formData.append(`Model.Data[${i}]DOC_TYPE`, data.DOC_TYPE);
+        // formData.append(`Model.Data[${i}]SUBLED_CODE`, data.SUBLED_CODE);
+        // formData.append(`Model.Data[${i}]DOC_ACTIVESTATUS`, data.DOC_ACTIVESTATUS);
+        // formData.append(`Model.Data[${i}]DOC_LASTRENEWBY`, data.DOC_LASTRENEWBY);
+        // formData.append(`Model.Data[${i}]DOC_NEXTRENEWDATE`, data.DOC_NEXTRENEWDATE);
+        // formData.append(`Model.Data[${i}]DOC_LASTRENEWDATE`, data.DOC_LASTRENEWDATE);
+        // formData.append(`Model.Data[${i}]DOCUMENT_DATE`, data.DOCUMENT_DATE);
+        // formData.append(`Model.Data[${i}]DOCUMENT_NO`, data.DOCUMENT_NO);
+        // formData.append(`Model.Data[${i}]FROM_KYC`, data.FROM_KYC);
+
+        modifiedFormData.append('Model.Images[0].Image.File', this.attachmentFile, this.attachmentFile.name);
+
+      return modifiedFormData;
+
+
+      });
+
+      console.log('modifiedFormData', res);
+      
+      // const images: File[] = [/* your image files here */];
+      // for (let i = 0; i < images.length; i++) {
+      //   formData.append(Images[${i}], images[i], images[i].name);
+      // }
+
+      this.snackBar.open('Loading...');
+      this.suntechApi.postDynamicAPI('TransAttachments/InsertTransAttachments', formData).subscribe(
+        (res) => {
+          this.snackBar.dismiss();
+          if (res != null) {
+            if (res.status == 'SUCCESS') {
+
+              this.snackBar.open(res.message, 'OK', { duration: 2000 });
+
+            } else {
+
+            }
+          }
+
+        });
+
+
+      // attachmentFile
 
     } else {
       this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
