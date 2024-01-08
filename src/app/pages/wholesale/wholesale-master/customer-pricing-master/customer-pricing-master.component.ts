@@ -26,9 +26,11 @@ export class CustomerPricingMasterComponent implements OnInit {
   columnheaderTransaction : any[] = ['SrNo','Karat','Std Purity','Sales Purity','Purchase Purity'];
   subscriptions: any;
   @Input() content!: any; 
-  
+  Add:boolean= true;
+  Deduct:boolean= true;
   tableData: any[] = [];
   currentDate = new FormControl(new Date());
+  flexSwitchCheckChecked:boolean= true;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -65,6 +67,7 @@ export class CustomerPricingMasterComponent implements OnInit {
    });
    this.allSelected = newStatus;
  }
+ 
   customerpricemasterForm: FormGroup = this.formBuilder.group({
     division:['',[Validators.required]],
     date:[new Date(),''],
