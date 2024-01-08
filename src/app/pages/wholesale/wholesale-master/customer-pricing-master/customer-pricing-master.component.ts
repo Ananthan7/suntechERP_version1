@@ -72,15 +72,15 @@ export class CustomerPricingMasterComponent implements OnInit {
     division:['',[Validators.required]],
     date:[new Date(),''],
     approvalby:[''],
-    enteredBy:[''],
+    enteredBy:['',[Validators.required]],
     price:['',[Validators.required]],
     currency:['',[Validators.required]],
-    customername:[''],  
+    customername:['',[Validators.required]],  
     customercode:['',[Validators.required]],
-    labourtype:[''],
-    pricedesc:[''],
-    defaultCustomer:['',[Validators.required]],
-    defaultVendor:['',[Validators.required]],
+    labourtype:['',[Validators.required]],
+    pricedesc:['',[Validators.required]],
+    defaultCustomer:[''],
+    defaultVendor:[''],
   })
 
   user: MasterSearchModel = {

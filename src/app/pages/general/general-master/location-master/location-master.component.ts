@@ -31,8 +31,8 @@ export class LocationMasterComponent implements OnInit {
   }
 
   locationForm: FormGroup = this.formBuilder.group({
-    locationcode:[''],
-    codedesc:[''],
+    locationcode:['',[Validators.required]],
+    codedesc:['',[Validators.required]],
     type:[''],
     division:[''],
     branch:[''],
