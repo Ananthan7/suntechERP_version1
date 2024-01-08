@@ -128,6 +128,13 @@ export class MeltingProcessComponent implements OnInit {
     this.meltingProcessFrom.controls.stockCodeScp.setValue(e.DESCRIPTION);
   }
 
+  processCodeScpSelected(e:any){
+    console.log(e); 
+    this.meltingProcessFrom.controls.process.setValue(e.Process_Code);
+    this.meltingProcessFrom.controls.processDesc.setValue(e.Description);
+  }
+
+
 
   MeltingCodeSelected(e: any) {
     console.log(e);
@@ -207,7 +214,7 @@ export class MeltingProcessComponent implements OnInit {
 
   }
   resetAllocation(){}
-  processCodeScpSelected(data:any){}
+
 
   formSubmit() {
 
