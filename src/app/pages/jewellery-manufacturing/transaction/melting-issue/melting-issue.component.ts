@@ -170,7 +170,7 @@ export class MeltingIssueComponent implements OnInit {
   meltingIssueFrom: FormGroup = this.formBuilder.group({
     voctype:['',[Validators.required]],
     vocno:['',[Validators.required]],
-    vocdate:['',[Validators.required]],
+    vocdate:[''],
     voctime:[''],
     meltingtype:[''],
     jobno:[''],
@@ -180,7 +180,7 @@ export class MeltingIssueComponent implements OnInit {
     worker:[''],
     workerdes:[''],
     subjobno:[''], // Not in table
-    color:['',[Validators.required]],
+    color:[''],
     time:[''],  // Not in table
     remarks:[''],
     issued:[''],
