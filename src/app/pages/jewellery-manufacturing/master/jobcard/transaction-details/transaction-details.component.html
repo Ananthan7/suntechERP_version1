@@ -1,235 +1,200 @@
-
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Transaction Details </h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-      <i class="feather icon-x close-icon"></i>
-    </button>
-  </div>
-  <!-- modal header component -->
-  <!-- <modal-header ></modal-header> -->
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <form>
-          <div class="row">
-            <div class="col-md-12 mt-3">
-              <mat-tab-group style="background-color: #f5f2ee;" [selectedIndex]="selectedTabIndex">
-                <mat-tab label="Metal Transaction">
-                    <div class="row justify-content-center">
-                        <div class="col-md-11 pt-3 mb-2">
-                            <h6 class="p-l1">Issue</h6>
-                          <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                          [allowColumnReordering]="true"
-                          [allowColumnResizing]="true"
-                          [columnAutoWidth]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-                
-                            <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                              [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
-                          </dx-data-grid>
-                        </div>
-                      </div>
-                      <div class="row justify-content-center">
-                        <div class="col-md-11 pt-3 mb-2">
-                            <h6 class="p-l1">Return</h6>
-                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                            [allowColumnReordering]="true"
-                            [allowColumnResizing]="true"
-                            [columnAutoWidth]="true">
-                              <dxo-paging [enabled]="false"></dxo-paging>
-                              <dxo-editing mode="cell" [allowUpdating]="true">
-                              </dxo-editing>
-                              <dxo-selection mode="multiple"></dxo-selection>
-                              <dxo-scrolling mode="virtual"></dxo-scrolling>
-                  
-                              <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                              </dxi-column>
-                            </dx-data-grid>
-                        </div>
-                      </div>
-                </mat-tab>
-                <mat-tab label="Stone Transaction">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Transaction Details </h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+<!-- modal header component -->
+<!-- <modal-header ></modal-header> -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <form>
+        <div class="row">
+          <div class="col-md-12 mt-3">
+            <mat-tab-group style="background-color: #f5f2ee;" [selectedIndex]="selectedTabIndex">
+              <mat-tab label="Metal Transaction">
                 <div class="row justify-content-center">
-                    <div class="col-md-11 pt-3 mb-2">
-                        <h6 class="p-l1">Issue</h6>
-                        <dx-data-grid
-                            id="gridContainer"
-                            [dataSource]="orders"
-                            keyExpr="ID"
-                            [showBorders]="true"
-                            >
-                            <dxo-selection mode="single"></dxo-selection>
-                        
-                            <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>
-                            <dxi-column dataField="VOCTYPE"></dxi-column>
-                            <dxi-column dataField="VOCNO" caption="VOCNO"></dxi-column>
-                            <dxi-column dataField="UNQ_JOB" caption="UNQ_JOB"></dxi-column>
-                            <dxi-column dataField="DESIGN" caption="DESIGN"></dxi-column>
-                            <dxi-column dataField="PROCESS" caption="PROCESS"></dxi-column>
-                            <dxi-column dataField="WORKER" caption="WORKER"></dxi-column>
-                            <dxi-column dataField="DIVCODE" caption="DIVCODE"></dxi-column>
-                            <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"></dxi-column>
-                            <dxi-column dataField="PCS" caption="PCS"></dxi-column>
-                            <dxi-column dataField="GROSS_WEIGHT" caption="GROSS_WEIGHT"></dxi-column>
-                            <dxi-column dataField="RATELC" caption="RATELC"></dxi-column>
-                            <dxi-column dataField="AMOUNTLC" caption="AMOUNTLC"></dxi-column>
-                            <dxi-column dataField="LOCTYPE" caption="LOCTYPE"></dxi-column>
-                            <dxi-column dataField="SHAPE" caption="SHAPE"></dxi-column>
-                            <dxi-column dataField="COLOR" caption="COLOR"></dxi-column>
-                            <dxi-column dataField="CLARITY" caption="CLARITY"></dxi-column>
-                            <dxi-column dataField="SIZE" caption="SIZE"></dxi-column>
-                            <dxi-column dataField="SIEVE" caption="SIEVE"></dxi-column>
-                            <dxi-column dataField="SIEVE_SET" caption="SIEVE_SET"></dxi-column>
-                            <dxi-column dataField="STOCK_DESIGN" caption="STOCK_DESIGN"></dxi-column>
-                            <dxi-column dataField="SUB_STONE" caption="SUB_STONE"></dxi-column>
-                            <dxi-column dataField="YEARMONTH" caption="YEARMONTH"></dxi-column>
-                            <dxi-column dataField="WIP_ACCODE" caption="WIP_ACCODE"></dxi-column>
-                            <dxi-column dataField="UNQ_DESIGN" caption="UNQ_DESIGN"></dxi-column>
-                            <dxi-column dataField="RATEFC" caption="RATEFC"></dxi-column>
-                            <dxi-column dataField="AMOUNTFC" caption="AMOUNTFC"></dxi-column>
-                            
-                        
-                            <dxo-summary>
-                                <dxi-total-item
-                                column="PCS"
-                              >
-                              </dxi-total-item>
-                              <dxi-total-item
-                              column="GROSS_WEIGHT"
-                            >
-                            </dxi-total-item>
-                            <dxi-total-item
-                            column="AMOUNTLC" 
-                          >
-                          </dxi-total-item>
-                          <dxi-total-item
-                          column="AMOUNTFC" 
-                        >
-                        </dxi-total-item>
-                               
-                            </dxo-summary>
-                            </dx-data-grid>
-                    </div>
+                  <div class="col-md-11 pt-3 mb-2">
+                    <h6 class="p-l1">Issue</h6>
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                      [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                      <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-md-11 pt-3 mb-2">
-                      <h6 class="p-l1">Return</h6>
-                        <dx-data-grid
-                        id="gridContainer"
-                        [dataSource]="orders"
-                        keyExpr="ID"
-                        [showBorders]="true"
-                        >
-                        <dxo-selection mode="single"></dxo-selection>
-                    
-                        <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>
-                        <dxi-column dataField="VOCTYPE"></dxi-column>
-                        <dxi-column dataField="VOCNO" caption="VOCNO"></dxi-column>
-                        <dxi-column dataField="UNQ_JOB" caption="UNQ_JOB"></dxi-column>
-                        <dxi-column dataField="DESIGN" caption="DESIGN"></dxi-column>
-                        <dxi-column dataField="PROCESS" caption="PROCESS"></dxi-column>
-                        <dxi-column dataField="WORKER" caption="WORKER"></dxi-column>
-                        <dxi-column dataField="DIVCODE" caption="DIVCODE"></dxi-column>
-                        <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"></dxi-column>
-                        <dxi-column dataField="PCS" caption="PCS"></dxi-column>
-                        <dxi-column dataField="GROSS_WEIGHT" caption="GROSS_WEIGHT"></dxi-column>
-                        <dxi-column dataField="RATELC" caption="RATELC"></dxi-column>
-                        <dxi-column dataField="AMOUNTLC" caption="AMOUNTLC"></dxi-column>
-                        <dxi-column dataField="LOCTYPE" caption="LOCTYPE"></dxi-column>
-                        <dxi-column dataField="SHAPE" caption="SHAPE"></dxi-column>
-                        <dxi-column dataField="COLOR" caption="COLOR"></dxi-column>
-                        <dxi-column dataField="CLARITY" caption="CLARITY"></dxi-column>
-                        <dxi-column dataField="SIZE" caption="SIZE"></dxi-column>
-                        <dxi-column dataField="SIEVE" caption="SIEVE"></dxi-column>
-                        <dxi-column dataField="SIEVE_SET" caption="SIEVE_SET"></dxi-column>
-                        <dxi-column dataField="STOCK_DESIGN" caption="STOCK_DESIGN"></dxi-column>
-                        <dxi-column dataField="SUB_STONE" caption="SUB_STONE"></dxi-column>
-                        <dxi-column dataField="YEARMONTH" caption="YEARMONTH"></dxi-column>
-                        <dxi-column dataField="WIP_ACCODE" caption="WIP_ACCODE"></dxi-column>
-                        <dxi-column dataField="UNQ_DESIGN" caption="UNQ_DESIGN"></dxi-column>
-                        <dxi-column dataField="RATEFC" caption="RATEFC"></dxi-column>
-                        <dxi-column dataField="AMOUNTFC" caption="AMOUNTFC"></dxi-column>
-                        
-                        
-                    
-                        <dxo-summary>
-                            <dxi-total-item
-                            column="PCS"
-                          >
-                          </dxi-total-item>
-                          <dxi-total-item
-                          column="GROSS_WEIGHT"
-                        >
+                  <div class="col-md-11 pt-3 mb-2">
+                    <h6 class="p-l1">Return</h6>
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                      [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                      <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Stone Transaction">
+                <div class="row justify-content-center">
+                  <div class="col-md-11 pt-3 mb-2">
+                    <h6 class="p-l1">Issue</h6>
+                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true">
+                      <dxo-selection mode="single"></dxo-selection>
+
+                      <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>
+                      <dxi-column dataField="VOCTYPE"></dxi-column>
+                      <dxi-column dataField="VOCNO" caption="VOCNO"></dxi-column>
+                      <dxi-column dataField="UNQ_JOB" caption="UNQ_JOB"></dxi-column>
+                      <dxi-column dataField="DESIGN" caption="DESIGN"></dxi-column>
+                      <dxi-column dataField="PROCESS" caption="PROCESS"></dxi-column>
+                      <dxi-column dataField="WORKER" caption="WORKER"></dxi-column>
+                      <dxi-column dataField="DIVCODE" caption="DIVCODE"></dxi-column>
+                      <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"></dxi-column>
+                      <dxi-column dataField="PCS" caption="PCS"></dxi-column>
+                      <dxi-column dataField="GROSS_WEIGHT" caption="GROSS_WEIGHT"></dxi-column>
+                      <dxi-column dataField="RATELC" caption="RATELC"></dxi-column>
+                      <dxi-column dataField="AMOUNTLC" caption="AMOUNTLC"></dxi-column>
+                      <dxi-column dataField="LOCTYPE" caption="LOCTYPE"></dxi-column>
+                      <dxi-column dataField="SHAPE" caption="SHAPE"></dxi-column>
+                      <dxi-column dataField="COLOR" caption="COLOR"></dxi-column>
+                      <dxi-column dataField="CLARITY" caption="CLARITY"></dxi-column>
+                      <dxi-column dataField="SIZE" caption="SIZE"></dxi-column>
+                      <dxi-column dataField="SIEVE" caption="SIEVE"></dxi-column>
+                      <dxi-column dataField="SIEVE_SET" caption="SIEVE_SET"></dxi-column>
+                      <dxi-column dataField="STOCK_DESIGN" caption="STOCK_DESIGN"></dxi-column>
+                      <dxi-column dataField="SUB_STONE" caption="SUB_STONE"></dxi-column>
+                      <dxi-column dataField="YEARMONTH" caption="YEARMONTH"></dxi-column>
+                      <dxi-column dataField="WIP_ACCODE" caption="WIP_ACCODE"></dxi-column>
+                      <dxi-column dataField="UNQ_DESIGN" caption="UNQ_DESIGN"></dxi-column>
+                      <dxi-column dataField="RATEFC" caption="RATEFC"></dxi-column>
+                      <dxi-column dataField="AMOUNTFC" caption="AMOUNTFC"></dxi-column>
+
+
+                      <dxo-summary>
+                        <dxi-total-item column="PCS">
                         </dxi-total-item>
-                        <dxi-total-item
-                        column="AMOUNTLC" 
-                      >
-                      </dxi-total-item>
-                      <dxi-total-item
-                        column="AMOUNTFC" 
-                      >
-                      </dxi-total-item>
-                           
-                        </dxo-summary>
-                        </dx-data-grid>
-                      </div>
-                       
-                       
-                    </div>
-              
-                </mat-tab>
-                <mat-tab label="Process Transaction">
-                    <div class="row justify-content-center">
-                        <div class="col-md-11 pt-3 mb-2">
-                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                            [allowColumnReordering]="true"
-                            [allowColumnResizing]="true"
-                            [columnAutoWidth]="true">
-                              <dxo-paging [enabled]="false"></dxo-paging>
-                              <dxo-editing mode="cell" [allowUpdating]="true">
-                              </dxo-editing>
-                              <dxo-selection mode="multiple"></dxo-selection>
-                              <dxo-scrolling mode="virtual"></dxo-scrolling>
-                  
-                              <dxi-column *ngFor="let data of columnhead3" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                              </dxi-column>
-                            </dx-data-grid>
-                        </div>
-                      </div>
-                </mat-tab>
-                <mat-tab label="Production">
-                    <div class="row justify-content-center">
-                        <div class="col-md-11 pt-3 mb-2">
-                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                            [allowColumnReordering]="true"
-                            [allowColumnResizing]="true"
-                            [columnAutoWidth]="true">
-                              <dxo-paging [enabled]="false"></dxo-paging>
-                              <dxo-editing mode="cell" [allowUpdating]="true">
-                              </dxo-editing>
-                              <dxo-selection mode="multiple"></dxo-selection>
-                              <dxo-scrolling mode="virtual"></dxo-scrolling>
-                  
-                              <dxi-column *ngFor="let data of columnhead4" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                              </dxi-column>
-                            </dx-data-grid>
-                        </div>
-                      </div>
-                </mat-tab>
-              </mat-tab-group>
-                     
-            </div>
+                        <dxi-total-item column="GROSS_WEIGHT">
+                        </dxi-total-item>
+                        <dxi-total-item column="AMOUNTLC">
+                        </dxi-total-item>
+                        <dxi-total-item column="AMOUNTFC">
+                        </dxi-total-item>
+
+                      </dxo-summary>
+                    </dx-data-grid>
+                  </div>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-md-11 pt-3 mb-2">
+                    <h6 class="p-l1">Return</h6>
+                    <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true">
+                      <dxo-selection mode="single"></dxo-selection>
+
+                      <dxi-column dataField="VOCDATE" dataType="VOCDATE"></dxi-column>
+                      <dxi-column dataField="VOCTYPE"></dxi-column>
+                      <dxi-column dataField="VOCNO" caption="VOCNO"></dxi-column>
+                      <dxi-column dataField="UNQ_JOB" caption="UNQ_JOB"></dxi-column>
+                      <dxi-column dataField="DESIGN" caption="DESIGN"></dxi-column>
+                      <dxi-column dataField="PROCESS" caption="PROCESS"></dxi-column>
+                      <dxi-column dataField="WORKER" caption="WORKER"></dxi-column>
+                      <dxi-column dataField="DIVCODE" caption="DIVCODE"></dxi-column>
+                      <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"></dxi-column>
+                      <dxi-column dataField="PCS" caption="PCS"></dxi-column>
+                      <dxi-column dataField="GROSS_WEIGHT" caption="GROSS_WEIGHT"></dxi-column>
+                      <dxi-column dataField="RATELC" caption="RATELC"></dxi-column>
+                      <dxi-column dataField="AMOUNTLC" caption="AMOUNTLC"></dxi-column>
+                      <dxi-column dataField="LOCTYPE" caption="LOCTYPE"></dxi-column>
+                      <dxi-column dataField="SHAPE" caption="SHAPE"></dxi-column>
+                      <dxi-column dataField="COLOR" caption="COLOR"></dxi-column>
+                      <dxi-column dataField="CLARITY" caption="CLARITY"></dxi-column>
+                      <dxi-column dataField="SIZE" caption="SIZE"></dxi-column>
+                      <dxi-column dataField="SIEVE" caption="SIEVE"></dxi-column>
+                      <dxi-column dataField="SIEVE_SET" caption="SIEVE_SET"></dxi-column>
+                      <dxi-column dataField="STOCK_DESIGN" caption="STOCK_DESIGN"></dxi-column>
+                      <dxi-column dataField="SUB_STONE" caption="SUB_STONE"></dxi-column>
+                      <dxi-column dataField="YEARMONTH" caption="YEARMONTH"></dxi-column>
+                      <dxi-column dataField="WIP_ACCODE" caption="WIP_ACCODE"></dxi-column>
+                      <dxi-column dataField="UNQ_DESIGN" caption="UNQ_DESIGN"></dxi-column>
+                      <dxi-column dataField="RATEFC" caption="RATEFC"></dxi-column>
+                      <dxi-column dataField="AMOUNTFC" caption="AMOUNTFC"></dxi-column>
+
+
+
+                      <dxo-summary>
+                        <dxi-total-item column="PCS">
+                        </dxi-total-item>
+                        <dxi-total-item column="GROSS_WEIGHT">
+                        </dxi-total-item>
+                        <dxi-total-item column="AMOUNTLC">
+                        </dxi-total-item>
+                        <dxi-total-item column="AMOUNTFC">
+                        </dxi-total-item>
+
+                      </dxo-summary>
+                    </dx-data-grid>
+                  </div>
+
+
+                </div>
+
+              </mat-tab>
+              <mat-tab label="Process Transaction">
+                <div class="row justify-content-center">
+                  <div class="col-md-11 pt-3 mb-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                      [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                      <dxi-column *ngFor="let data of columnhead3" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Production">
+                <div class="row justify-content-center">
+                  <div class="col-md-11 pt-3 mb-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                      [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                      <dxi-column *ngFor="let data of columnhead4" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
+</div>

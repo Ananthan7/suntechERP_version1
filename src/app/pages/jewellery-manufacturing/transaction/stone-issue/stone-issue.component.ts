@@ -21,7 +21,7 @@ export class StoneIssueComponent implements OnInit {
   currentFilter: any;
 
   divisionMS: any = 'ID';
-
+  orders: any = [];
   columnhead:any[] = ['SR NO','JOB NO','UNQ JOD ID', 'Design','Stock Code','Division','Description ','Carat','Rate','Process','Amount','Worker','Sieve Set'];
   @Input() content!: any; 
   tableData: any[] = [];
