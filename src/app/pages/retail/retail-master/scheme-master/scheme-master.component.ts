@@ -107,7 +107,22 @@ export class SchemeMasterComponent implements OnInit {
     }
    
   }
-
+  getSchemeMasterList(event:any){
+    if (event.target.value == "") return;
+    let Sub: Subscription = this.dataService.getDynamicAPI('SchemeMaster/GetSchemeMasterList')
+    .subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+         let items = resp.response
+         items.forEach((element:any) => {
+          if(element.SCHEME_CODE == event.target.value){
+            this.comService.showSnackBarMsg('Scheme Already Exists')
+            this.schemeMasterForm.controls.code.setValue('')
+          }
+         });
+      }
+    });
+    this.subscriptions.push(Sub);
+  }
   setInitialValues() {
     this.schemeMasterForm.controls.startDate.setValue(this.currentDate)
   }

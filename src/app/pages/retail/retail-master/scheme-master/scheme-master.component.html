@@ -18,7 +18,8 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="code" />
+                            <input type="text" (focusout)="getSchemeMasterList($event)" 
+                                matInput formControlName="code" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Prefix</label>
