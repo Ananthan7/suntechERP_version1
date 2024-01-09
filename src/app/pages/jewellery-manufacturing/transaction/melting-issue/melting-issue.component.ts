@@ -23,6 +23,7 @@ export class MeltingIssueComponent implements OnInit {
   tableData: any[] = [];
   sequenceDetails: any[] = []
   voctype?: String;
+  selectRowIndex:any;
   currentDate = new Date();
   tableRowCount: number = 0;
   detailData: any[] = [];
@@ -169,6 +170,11 @@ export class MeltingIssueComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+    deleteTableData(): void {
+      this.tableRowCount = 0;
+      console.log(this.selectRowIndex)
+      this.tableData.splice(this.selectRowIndex ,1)
+    }
 
   
 
@@ -223,11 +229,18 @@ export class MeltingIssueComponent implements OnInit {
       }
     });
   }
-    onRowClickHandler(event: any) {
-      let selectedData = event.data
-      let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
-      let allDataSelected = [detailRow[0].DATA]
-      this.openaddMeltingIssueDetails(allDataSelected)
+  onRowClickHandler(event: any) {
+    
+    this.selectRowIndex = (event.dataIndex)
+    console.log(this.selectRowIndex, event);
+ 
+   }
+   onRowDoubleClick(event: any) {
+     let selectedData = event.data
+     let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+     let allDataSelected = [detailRow[0].DATA]
+     this.openaddMeltingIssueDetails(allDataSelected)
+     console.log(event)
   
     }
     setValuesToHeaderGrid(detailDataToParent: any) {
@@ -256,10 +269,6 @@ export class MeltingIssueComponent implements OnInit {
       }
     }
     
-
-  deleteTableData(){
-   
-  }
 
   formSubmit(){
 
@@ -515,7 +524,7 @@ export class MeltingIssueComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
-  }
+    }
   
   deleteRecord() {
     if (!this.content.VOCTYPE) {
@@ -531,6 +540,8 @@ export class MeltingIssueComponent implements OnInit {
       });
       return
     }
+  
+
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -582,6 +593,7 @@ export class MeltingIssueComponent implements OnInit {
       }
     });
   }
+
   
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
@@ -699,3 +711,7 @@ jobNumberValidate(event: any) {
 }
 
 }
+  function deleteRecord() {
+    throw new Error('Function not implemented.');
+  }
+

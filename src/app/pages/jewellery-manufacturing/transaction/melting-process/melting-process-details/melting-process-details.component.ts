@@ -277,97 +277,97 @@ export class MeltingProcessDetailsComponent implements OnInit {
 
     }
 
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.meltingprocessdetailsForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
+  //   let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         if (result.status == "Success") {
+  //           Swal.fire({
+  //             title: result.message || 'Success',
+  //             text: '',
+  //             icon: 'success',
+  //             confirmButtonColor: '#336699',
+  //             confirmButtonText: 'Ok'
+  //           }).then((result: any) => {
+  //             if (result.value) {
+  //               this.meltingprocessdetailsForm.reset()
+  //               this.tableData = []
+  //               this.close('reloadMainGrid')
+  //             }
+  //           });
+  //         }
+  //       } else {
+  //         this.toastr.error('Not saved')
+  //       }
+  //     }, err => alert(err))
+  //   this.subscriptions.push(Sub)
+  // }
 
-  deleteRecord() {
-    if (!this.content.VOCTYPE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'DiamondDismantle/DeleteDiamondDismantle/' + this.meltingprocessdetailsForm.value.branchCode + this.meltingprocessdetailsForm.value.voctype + this.meltingprocessdetailsForm.value.vocno + this.meltingprocessdetailsForm.value.yearMonth
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.meltingprocessdetailsForm.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.meltingprocessdetailsForm.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
-    });
+  // deleteRecord() {
+  //   if (!this.content.VOCTYPE) {
+  //     Swal.fire({
+  //       title: '',
+  //       text: 'Please Select data to delete!',
+  //       icon: 'error',
+  //       confirmButtonColor: '#336699',
+  //       confirmButtonText: 'Ok'
+  //     }).then((result: any) => {
+  //       if (result.value) {
+  //       }
+  //     });
+  //     return
+  //   }
+  //   Swal.fire({
+  //     title: 'Are you sure?',
+  //     text: "You won't be able to revert this!",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, delete!'
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       let API = 'DiamondDismantle/DeleteDiamondDismantle/' + this.meltingprocessdetailsForm.value.branchCode + this.meltingprocessdetailsForm.value.voctype + this.meltingprocessdetailsForm.value.vocno + this.meltingprocessdetailsForm.value.yearMonth
+  //       let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+  //         .subscribe((result) => {
+  //           if (result) {
+  //             if (result.status == "Success") {
+  //               Swal.fire({
+  //                 title: result.message || 'Success',
+  //                 text: '',
+  //                 icon: 'success',
+  //                 confirmButtonColor: '#336699',
+  //                 confirmButtonText: 'Ok'
+  //               }).then((result: any) => {
+  //                 if (result.value) {
+  //                   this.meltingprocessdetailsForm.reset()
+  //                   this.tableData = []
+  //                   this.close('reloadMainGrid')
+  //                 }
+  //               });
+  //             } else {
+  //               Swal.fire({
+  //                 title: result.message || 'Error please try again',
+  //                 text: '',
+  //                 icon: 'error',
+  //                 confirmButtonColor: '#336699',
+  //                 confirmButtonText: 'Ok'
+  //               }).then((result: any) => {
+  //                 if (result.value) {
+  //                   this.meltingprocessdetailsForm.reset()
+  //                   this.tableData = []
+  //                   this.close()
+  //                 }
+  //               });
+  //             }
+  //           } else {
+  //             this.toastr.error('Not deleted')
+  //           }
+  //         }, err => alert(err))
+  //       this.subscriptions.push(Sub)
+  //     }
+  //   });
+  // }
   }
-
 
   formatMetalDetailDataGrid() {
     this.metalDetailData.forEach((element: any) => {
