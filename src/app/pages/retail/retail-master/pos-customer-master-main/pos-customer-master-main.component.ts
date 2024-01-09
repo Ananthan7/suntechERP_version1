@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -10,11 +10,18 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
   styleUrls: ['./pos-customer-master-main.component.scss']
 })
 export class PosCustomerMasterMainComponent implements OnInit {
-  [x: string]: any;
 
+  genderList: any = [];
+  maritalStatusList: any = [];
+  nameList: any = [];
+  bloodGroupList: any = [];
+  opinionList: any = [];
+  ratingList: any = [];
   branchCode?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+
+
 
   countryCode: MasterSearchModel = {
     PAGENO: 1,
@@ -258,6 +265,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     branchLoc : [''],
     amount : [''],
     totalSale : [''],
+    fcn_cust_detail_gender: ['', Validators.required],
 
   })
 
@@ -270,6 +278,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.posCustomerMasterMainForm.controls['createdBranch'].disable();
+    this.getDropDownStatus();
   }
 
   countrySelected(e: any) {
@@ -330,6 +339,20 @@ export class PosCustomerMasterMainComponent implements OnInit {
   custStatusSelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.custStatusCode.setValue(e.CODE);
+  }
+
+  getDropDownStatus() {
+    this.maritalStatusList = this.comService.getComboFilterByID('Marital Status');
+    this.genderList = this.comService.getComboFilterByID('gender');
+    this.nameList = this.comService.getComboFilterByID('POS Customer Prefix');
+    this.bloodGroupList = this.comService.getComboFilterByID('Blood Group');
+    this.opinionList = this.comService.getComboFilterByID('Customer Opinion');
+    this.ratingList = this.comService.getComboFilterByID('Customer Rating');
+    
+    
+    
+    
+
   }
 
   close(data?: any) {

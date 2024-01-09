@@ -32,7 +32,7 @@
                                     <input matInput="text" formControlName="parentPosCode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="parentPosCode"
-                                (newRowClick)="parentPosSelected($event)"></master-search>
+                                    (newRowClick)="parentPosSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                                     <input matInput="text" formControlName="refBy" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="refByCode"
-                                (newRowClick)="refBySelected($event)"></master-search>
+                                    (newRowClick)="refBySelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
@@ -58,12 +58,16 @@
                                     <div class="col-md-8">
                                         <mat-form-field>
                                             <mat-select formControlName="name">
-                                                <mat-select formControlName="gender">
-                                                    <mat-option value="Mr.">Mr.</mat-option>
-                                                    <mat-option value="Mrs.">Mrs.</mat-option>
-                                                    <mat-option value="Ms.">Ms.</mat-option>
-                                                </mat-select>
+                                                <mat-option *ngFor="let data of nameList" [value]="data.ENGLISH">{{
+                                                    data.ENGLISH }}</mat-option>
                                             </mat-select>
+                                            <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                Name is <strong>required</strong>
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -95,9 +99,16 @@
                             <div class="col-md-8">
                                 <mat-form-field style="width:100%">
                                     <mat-select formControlName="gender">
-                                        <mat-option value="Male">Male</mat-option>
-                                        <mat-option value="Female">Female</mat-option>
+                                        <mat-option *ngFor="let data of genderList" [value]="data.ENGLISH">{{
+                                            data.ENGLISH }}</mat-option>
                                     </mat-select>
+                                    <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.gender.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                        Gender is <strong>required</strong>
+                                    </mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -109,10 +120,17 @@
                             <div class="col-md-5">
                                 <mat-form-field style="width:100%">
                                     <mat-select formControlName="maritalSt">
-                                        <mat-option value="Single">Single</mat-option>
-                                        <mat-option value="Single">Married</mat-option>
-                                        <mat-option></mat-option>
+                                        <mat-option *ngFor="let data of maritalStatusList" [value]="data.ENGLISH">{{
+                                            data.ENGLISH
+                                            }}</mat-option>
                                     </mat-select>
+                                    <mat-error *ngIf="
+                                    posCustomerMasterMainForm.controls.name.hasError(
+                                        'required'
+                                      )
+                                    ">
+                                        Name is <strong>required</strong>
+                                    </mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -158,7 +176,7 @@
                                     <input matInput="text" formControlName="countryCode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="countryCode"
-                                (newRowClick)="countrySelected($event)"></master-search>
+                                    (newRowClick)="countrySelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -244,7 +262,7 @@
                                     <input matInput="text" formControlName="nationality" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="nationalityCode"
-                                (newRowClick)="nationalitySelected($event)"></master-search>
+                                    (newRowClick)="nationalitySelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -254,7 +272,7 @@
                                     <input matInput="text" formControlName="state" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="stateCode"
-                                (newRowClick)="stateSelected($event)"></master-search>
+                                    (newRowClick)="stateSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -264,7 +282,7 @@
                                     <input matInput="text" formControlName="city" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="cityCode"
-                                (newRowClick)="citySelected($event)"></master-search>
+                                    (newRowClick)="citySelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -274,7 +292,7 @@
                                     <input matInput="text" formControlName="language" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="languageCode"
-                                (newRowClick)="languageSelected($event)"></master-search>
+                                    (newRowClick)="languageSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -284,7 +302,7 @@
                                     <input matInput="text" formControlName="favCelebration" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="favCelebrationCode"
-                                (newRowClick)="favCelebrationSelected($event)"></master-search>
+                                    (newRowClick)="favCelebrationSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row border">
@@ -373,7 +391,7 @@
                                                             <input matInput="text" formControlName="religion" />
                                                         </mat-form-field>
                                                         <master-search [MasterSearchData]="religionCode"
-                                                        (newRowClick)="religionSelected($event)"></master-search>
+                                                            (newRowClick)="religionSelected($event)"></master-search>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-1">
@@ -384,7 +402,7 @@
                                                             <input matInput="text" formControlName="category" />
                                                         </mat-form-field>
                                                         <master-search [MasterSearchData]="categoryCode"
-                                                        (newRowClick)="categorySelected($event)"></master-search>
+                                                            (newRowClick)="categorySelected($event)"></master-search>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-1">
@@ -395,7 +413,7 @@
                                                             <input matInput="text" formControlName="custStatus" />
                                                         </mat-form-field>
                                                         <master-search [MasterSearchData]="custStatusCode"
-                                                        (newRowClick)="custStatusSelected($event)"></master-search>
+                                                            (newRowClick)="custStatusSelected($event)"></master-search>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-1">
@@ -413,19 +431,17 @@
                                                     <div class="col-md-5">
                                                         <mat-form-field style="width: 70%;">
                                                             <mat-select formControlName="bloodGroup">
-                                                                <mat-select formControlName="maritalSt">
-                                                                    <mat-option value="A+">A+</mat-option>
-                                                                    <mat-option value="A-">A-</mat-option>
-                                                                    <mat-option value="B+">B+</mat-option>
-                                                                    <mat-option value="B-">B-</mat-option>
-                                                                    <mat-option value="AB+">AB+</mat-option>
-                                                                    <mat-option value="AB-">AB-</mat-option>
-                                                                    <mat-option value="O+">O+</mat-option>
-                                                                    <mat-option value="O-">O-</mat-option> 
-                                                                    <mat-option value="unknown">unknown</mat-option>
-                                                                    <mat-option></mat-option>
-                                                                </mat-select>
+                                                                <mat-option *ngFor="let data of bloodGroupList"
+                                                                    [value]="data.ENGLISH">{{ data.ENGLISH
+                                                                    }}</mat-option>
                                                             </mat-select>
+                                                            <mat-error *ngIf="
+                                                            posCustomerMasterMainForm.controls.name.hasError(
+                                                                'required'
+                                                              )
+                                                            ">
+                                                                Name is <strong>required</strong>
+                                                            </mat-error>
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -561,7 +577,8 @@
                                                     <mat-checkbox formControlName="online">ONLINE</mat-checkbox>
                                                 </div>
                                                 <div class="col-md-5 pt-3">
-                                                    <mat-checkbox formControlName="socialMedia">SOCIAL MEDIA</mat-checkbox>
+                                                    <mat-checkbox formControlName="socialMedia">SOCIAL
+                                                        MEDIA</mat-checkbox>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -584,7 +601,8 @@
                                 <div class="row mb-1">
                                     <div class="col-md-12">
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="promotionalOffers">Promotional Offers</mat-checkbox>
+                                            <mat-checkbox formControlName="promotionalOffers">Promotional
+                                                Offers</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
                                             <mat-checkbox formControlName="sportsEvents">Sports Events</mat-checkbox>
@@ -599,7 +617,8 @@
                                             <mat-checkbox formControlName="seminars">Seminars</mat-checkbox>
                                         </div>
                                         <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="personalSkills">Personal Skills</mat-checkbox>
+                                            <mat-checkbox formControlName="personalSkills">Personal
+                                                Skills</mat-checkbox>
                                         </div>
                                     </div>
                                 </div>
@@ -612,10 +631,18 @@
                                                 Selection</label>
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
-                                                    <mat-select formControlName="productSelection">                 
-                                                            <mat-option value="Yes">Yes</mat-option>
-                                                            <mat-option value="No">No</mat-option>
-                                                    </mat-select>
+                                                    <mat-select formControlName="productSelection">
+                                                        <mat-option *ngFor="let data of opinionList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -623,10 +650,18 @@
                                             <label for="inputPassword" class="col-sm-5 col-form-label">Service</label>
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
-                                                    <mat-select formControlName="service">                    
-                                                        <mat-option value="Yes">Yes</mat-option>
-                                                        <mat-option value="No">No</mat-option>
-                                                    </mat-select>
+                                                    <mat-select formControlName="service">
+                                                        <mat-option *ngFor="let data of opinionList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -635,10 +670,18 @@
                                                 Changes</label>
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
-                                                    <mat-select formControlName="makingChanges">                    
-                                                        <mat-option value="Yes">Yes</mat-option>
-                                                            <mat-option value="No">No</mat-option>
-                                                    </mat-select>
+                                                    <mat-select formControlName="makingChanges">
+                                                        <mat-option *ngFor="let data of opinionList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -648,9 +691,17 @@
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="brand">
-                                                        <mat-option value="Yes">Yes</mat-option>
-                                                        <mat-option value="No">No</mat-option>
-                                                    </mat-select>
+                                                        <mat-option *ngFor="let data of opinionList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -659,10 +710,18 @@
                                                 Policy</label>
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
-                                                    <mat-select formControlName="buyBackPolicy">                    
-                                                        <mat-option value="Yes">Yes</mat-option>
-                                                        <mat-option value="No">No</mat-option>
-                                                    </mat-select>
+                                                    <mat-select formControlName="buyBackPolicy">
+                                                        <mat-option *ngFor="let data of opinionList"
+                                                                    [value]="data.ENGLISH">{{ data.ENGLISH
+                                                                    }}</mat-option>
+                                                            </mat-select>
+                                                            <mat-error *ngIf="
+                                                            posCustomerMasterMainForm.controls.name.hasError(
+                                                                'required'
+                                                              )
+                                                            ">
+                                                                Name is <strong>required</strong>
+                                                            </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -671,10 +730,18 @@
                                                 Parking Facility</label>
                                             <div class="col-md-7">
                                                 <mat-form-field style="width: 100%;">
-                                                    <mat-select formControlName="loactionandParkingFacility">                    
-                                                        <mat-option value="Yes">Yes</mat-option>
-                                                        <mat-option value="No">No</mat-option>
-                                                    </mat-select>
+                                                    <mat-select formControlName="loactionandParkingFacility">
+                                                        <mat-option *ngFor="let data of opinionList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -688,13 +755,19 @@
                                             <label for="inputPassword" class="col-sm-6 col-form-label">Staff
                                                 Courtesy</label>
                                             <div class="col-md-6">
-                                                <mat-form-field style="width: 100%;" >
+                                                <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="staffCourtesy">
-                                                        <mat-option value="Excellent">Excellent</mat-option>
-                                                        <mat-option value="Good">Good</mat-option>
-                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
-                                                        <mat-option value="Poor">Poor</mat-option>
-                                                    </mat-select>
+                                                        <mat-option *ngFor="let data of ratingList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -704,11 +777,17 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="productKnowledgeOfOurStaff">
-                                                        <mat-option value="Excellent">Excellent</mat-option>
-                                                        <mat-option value="Good">Good</mat-option>
-                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
-                                                        <mat-option value="Poor">Poor</mat-option>
-                                                    </mat-select>
+                                                        <mat-option *ngFor="let data of ratingList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -718,11 +797,17 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="locationandAmbienceOfShop">
-                                                        <mat-option value="Excellent">Excellent</mat-option>
-                                                        <mat-option value="Good">Good</mat-option>
-                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
-                                                        <mat-option value="Poor">Poor</mat-option>
-                                                    </mat-select>
+                                                        <mat-option *ngFor="let data of ratingList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -732,11 +817,17 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="varietyAndQualityOfJewellery">
-                                                        <mat-option value="Excellent">Excellent</mat-option>
-                                                        <mat-option value="Good">Good</mat-option>
-                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
-                                                        <mat-option value="Poor">Poor</mat-option>
-                                                    </mat-select>
+                                                        <mat-option *ngFor="let data of ratingList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -746,11 +837,17 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="overallExperience">
-                                                        <mat-option value="Excellent">Excellent</mat-option>
-                                                        <mat-option value="Good">Good</mat-option>
-                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
-                                                        <mat-option value="Poor">Poor</mat-option>
-                                                    </mat-select>
+                                                        <mat-option *ngFor="let data of ratingList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -760,11 +857,17 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="showroomAccessibility">
-                                                        <mat-option value="Excellent">Excellent</mat-option>
-                                                        <mat-option value="Good">Good</mat-option>
-                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
-                                                        <mat-option value="Poor">Poor</mat-option>
-                                                    </mat-select>
+                                                        <mat-option *ngFor="let data of ratingList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -774,11 +877,17 @@
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%;">
                                                     <mat-select formControlName="productRangeAvailability">
-                                                        <mat-option value="Excellent">Excellent</mat-option>
-                                                        <mat-option value="Good">Good</mat-option>
-                                                        <mat-option value="Satisfactory">Satisfactory</mat-option>
-                                                        <mat-option value="Poor">Poor</mat-option>
-                                                    </mat-select>
+                                                        <mat-option *ngFor="let data of ratingList"
+                                                        [value]="data.ENGLISH">{{ data.ENGLISH
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="
+                                                posCustomerMasterMainForm.controls.name.hasError(
+                                                    'required'
+                                                  )
+                                                ">
+                                                    Name is <strong>required</strong>
+                                                </mat-error>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -899,7 +1008,7 @@
                                     <i class="fas fa-image"></i>
                                 </button>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -916,8 +1025,8 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Opened On</label>
                     <div class="col-md-8">
                         <mat-form-field style="width:100%">
-                            <input matInput [matDatepicker]="openedOn" [max]="vocMaxDate" name="openedOn" placeholder="DD/MM/YYYY"
-                                DateValidation formControlName="openedOn" />
+                            <input matInput [matDatepicker]="openedOn" [max]="vocMaxDate" name="openedOn"
+                                placeholder="DD/MM/YYYY" DateValidation formControlName="openedOn" />
                             <mat-datepicker-toggle matSuffix [for]="openedOn"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #openedOn></mat-datepicker>
                         </mat-form-field>
@@ -942,10 +1051,10 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Date</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input matInput [matDatepicker]="date" [max]="vocMaxDate" name="date" placeholder="DD/MM/YYYY"
-                                            DateValidation formControlName="date" />
-                                        <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
-                                        <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
+                                            <input matInput [matDatepicker]="date" [max]="vocMaxDate" name="date"
+                                                placeholder="DD/MM/YYYY" DateValidation formControlName="date" />
+                                            <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                                            <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
                                         </mat-form-field>
                                     </div>
                                 </div>
