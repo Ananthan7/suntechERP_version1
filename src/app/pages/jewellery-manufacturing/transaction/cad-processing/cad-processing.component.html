@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Cad/Sketch Process</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">CAD/Sketch Process</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -32,15 +32,18 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label">Voucher Date*: </label>
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Voucher Date: </label>
                             <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput formControlName="vocDate" />
-                                </mat-form-field>
+                                <mat-form-field style="width: 72%;">
+                                    <input matInput [matDatepicker]="vocDate"  formControlName="vocDate"
+                                    placeholder="YYYY/MM/DD"  DateValidation />
+                                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                                  </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label">Process : </label>
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Process* : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="process" />
@@ -50,7 +53,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label">Worker : </label>
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Worker* : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="worker" />
@@ -78,27 +81,27 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label ">Design : </label>
+                            <label for="inputPassword" class="col-sm-5 col-form-label ">Design* : </label>
 
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="design" />
                                 </mat-form-field>
                             </div>
-
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5 col-form-label ">Completed : </label>
-
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput formControlName="completed" />
-                                </mat-form-field>
+                                    <input matInput [matDatepicker]="completed"  formControlName="completed"
+                                    placeholder="YYYY/MM/DD"  DateValidation />
+                                  <mat-datepicker-toggle matSuffix [for]="completed"></mat-datepicker-toggle>
+                                  <mat-datepicker [startAt]="currentDate" #completed></mat-datepicker>
+                                  </mat-form-field>
                             </div>
-
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Worker : </label>
+                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Worker* : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="toWorker" />
@@ -108,7 +111,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Process : </label>
+                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Process* : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="toProcess" />
@@ -120,13 +123,12 @@
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-7 col-form-label">Job*: </label>
+                            <label for="inputPassword" class="col-sm-7 col-form-label">Job: </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="job" />
                                 </mat-form-field>
                             </div>
-
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-7 col-form-label">Sub Job Id : </label>
@@ -137,14 +139,13 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-8 col-form-label">Time Taken : </label>
-                            <div class="col-sm-4">
+                            <label for="inputPassword" class="col-sm-7 col-form-label">Time Taken : </label>
+                            <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="timeTaken" />
+                                    <input  type="time" matInput formControlName="timeTaken" step="2" />
                                 </mat-form-field>
                             </div>
                         </div>
-
                     </div>
                     <div class="col-md-3">
                         <div class="icons">
@@ -167,48 +168,172 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-3 d-flex mb-2">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-                            [viewImportBtn]="false"
-                            (addClick)="openaddalloyallocation()"
-                            (deleteClick)="deleteTableData()"
-                            >
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                            (addClick)="selectedTabIndex == 0 ? adddata():adddatas();"  (deleteClick)="selectedTabIndex == 0 ? removedata():removedatas()">
                         </menu-buttons>
                     </div>
-                    <div class="col-md-12">
-                        <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-                            <mat-tab label="Components">
+                    <div class="col-md-12" >
+                        <mat-tab-group   [(selectedIndex)]="selectedTabIndex"  >
+                            <mat-tab  label="Components" id="get" >
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                                            <dxo-paging [enabled]="false"></dxo-paging>
-                                            <dxo-editing mode="cell" [allowUpdating]="true">
-                                            </dxo-editing>
-                                            <dxo-selection mode="multiple"></dxo-selection>
-                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
+                                        [showRowLines]="true" class="mt-3">
+                                        <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
+                      
+                                     
+                                          <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                                          <dxi-column dataField="Division" caption="Division" cellTemplate="divisiontemp"></dxi-column>
+                                          <dxi-column dataField="StoneType" caption="Stone Type" cellTemplate="stonetypetemp"></dxi-column>
+                                          <dxi-column dataField="StockCode" caption="Stock Code" cellTemplate="stockcodetemp"></dxi-column>
+                                          <dxi-column dataField="Karat" caption="Karat" cellTemplate="karattemp"></dxi-column>
+                                          <dxi-column dataField="Color" caption="Color" cellTemplate="colortemp"></dxi-column>
+                                          <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp"></dxi-column>
+                                          <dxi-column dataField="Sieve" caption="Sieve" cellTemplate="sievetemp"></dxi-column>
+                                          <dxi-column dataField="Size" caption="Size" cellTemplate="sizetemp"></dxi-column>
+                                          <dxi-column dataField="Pcs" caption="Pcs" cellTemplate="Pcstemp"></dxi-column>
+                                          <dxi-column dataField="WtCt" caption="Wt/Ct" cellTemplate="wtcttemp"></dxi-column>
+                                          <dxi-column dataField="SettingType" caption="Setting Type" cellTemplate="settingtypetemp"></dxi-column>
+                                          <dxi-column dataField="PointerWt" caption="Pointer Wt" cellTemplate="pointerwttemp"></dxi-column>
+                                          <dxi-column dataField="Remarks" caption="Remarks" cellTemplate="remarkstemp"></dxi-column>
+                                    
+                                       
+                                          <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
 
-                                            <dxi-column *ngFor="let data of columnheadItemDetails"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
-                                            </dxi-column>
-                                        </dx-data-grid>
+                                          <div *dxTemplate="let data of 'divisiontemp'">
+                                            <input type="text" (change)="divisiontemp($event,data)" style="width: 100%;" />
+                                          </div>
+                      
+                                        <div *dxTemplate="let data of 'stonetypetemp'">
+                                          <input type="text" (change)="stonetypetemp($event,data)" style="width: 100%;" />
+                                        </div>
+
+                                        <div *dxTemplate="let data of 'stockcodetemp'">
+                                            <input type="text" (change)="stockcodetemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'karattemp'">
+                                            <input type="text" (change)="karattemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'colortemp'">
+                                            <input type="text" (change)="colortemp($event,data)" style="width: 100%;"  />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'shapetemp'">
+                                            <input type="text" (change)="shapetemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'sievetemp'">
+                                            <input type="text" (change)="sievetemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'sizetemp'">
+                                            <input type="text" (change)="sizetemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'Pcstemp'">
+                                            <input type="text" (change)="Pcstemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'wtcttemp'">
+                                            <input type="text" (change)="wtcttemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'settingtypetemp'">
+                                            <input type="text" (change)="settingtypetemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'pointerwttemp'">
+                                            <input type="text" (change)="pointerwttemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data of 'remarkstemp'">
+                                            <input type="text" (change)="remarkstemp($event,data)" style="width: 100%;" />
+                                          </div>
+
+                                      </dx-data-grid>
                                     </div>
                                 </div>
                             </mat-tab>
                             <mat-tab label="Components Set">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                                            <dxo-paging [enabled]="false"></dxo-paging>
-                                            <dxo-editing mode="cell" [allowUpdating]="true">
-                                            </dxo-editing>
-                                            <dxo-selection mode="multiple"></dxo-selection>
-                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                        <dx-data-grid id="gridContainer" [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
+                                        [showRowLines]="true" class="mt-3">
+                                        <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
+                      
+                                          <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                                          <dxi-column dataField="CompCode" caption="Comp Code" cellTemplate="compcodetemp"> </dxi-column>
+                                          <dxi-column dataField="Description" caption="Description" cellTemplate="descriptiontemp"></dxi-column>
+                                          <dxi-column dataField="Pcs" caption="Pcs" cellTemplate="Pcs2temp"></dxi-column>
+                                          <dxi-column dataField="SizeSet" caption="Size Set" cellTemplate="sizesettemp"></dxi-column>
+                                          <dxi-column dataField="SizeCode" caption="Size Code" cellTemplate="sizecodetemp"></dxi-column>
+                                          <dxi-column dataField="Type" caption="Type" cellTemplate="typetemp"></dxi-column>
+                                          <dxi-column dataField="Category" caption="Category" cellTemplate="categorytemp"></dxi-column>
+                                          <dxi-column dataField="Shape" caption="Shape" cellTemplate="shape2temp"></dxi-column>
+                                          <dxi-column dataField="Height" caption="Height" cellTemplate="heighttemp"></dxi-column>
+                                          <dxi-column dataField="Width" caption="Width" cellTemplate="widthtemp"></dxi-column>
+                                          <dxi-column dataField="Length" caption="Length" cellTemplate="lengthtemp"></dxi-column>
+                                          <dxi-column dataField="Radius" caption="Radius" cellTemplate="radiustemp"></dxi-column>
+                                          <dxi-column dataField="Remarks" caption="Remarks" cellTemplate="remarks2temp"></dxi-column>
+                                    
+                                       
+                                          <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
 
-                                            <dxi-column *ngFor="let data of columnheadItemDetails"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
-                                            </dxi-column>
-                                        </dx-data-grid>
+                                          <div *dxTemplate="let data2 of 'compcodetemp'">
+                                            <input type="text" (change)="compcodetemp($event,data2)" style="width: 100%;" />
+                                          </div>
+                      
+                                        <div *dxTemplate="let data2 of 'descriptiontemp'">
+                                          <input type="text" (change)="descriptiontemp($event,data2)" style="width: 100%;" />
+                                        </div>
+
+                                        <div *dxTemplate="let data2 of 'Pcs2temp'">
+                                            <input type="text" (change)="Pcs2temp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'sizesettemp'">
+                                            <input type="text" (change)="sizesettemp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'sizecodetemp'">
+                                            <input type="text" (change)="sizecodetemp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'typetemp'">
+                                            <input type="text" (change)="typetemp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'categorytemp'">
+                                            <input type="text" (change)="categorytemp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'shape2temp'">
+                                            <input type="text" (change)="shape2temp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'heighttemp'">
+                                            <input type="text" (change)="heighttemp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'widthtemp'">
+                                            <input type="text" (change)="widthtemp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'lengthtemp'">
+                                            <input type="text" (change)="lengthtemp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'radiustemp'">
+                                            <input type="text" (change)="radiustemp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                          <div *dxTemplate="let data2 of 'remarks2temp'">
+                                            <input type="text" (change)="remarks2temp($event,data2)" style="width: 100%;" />
+                                          </div>
+
+                                      </dx-data-grid>
                                     </div>
                                 </div>
                             </mat-tab>
@@ -232,7 +357,6 @@
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput formControlName="userId" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -240,9 +364,11 @@
                                                             class="col-sm-4 col-form-label ">Date: </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="date" matInput formControlName="date" />
-                                                            </mat-form-field>
-
+                                                                <input matInput [matDatepicker]="date"  formControlName="date"
+                                                                placeholder="YYYY/MM/DD"  DateValidation />
+                                                              <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                                                              <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
+                                                              </mat-form-field>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -252,7 +378,6 @@
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput formControlName="copy" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -262,12 +387,9 @@
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="number" matInput formControlName="type" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
-
                                                 </div>
-
                                                 <div class="col-md-7">
                                                     <div class="row">
                                                         <div class="p-1 bd-highlight">
@@ -293,7 +415,6 @@
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput formControlName="remarks" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -304,38 +425,34 @@
                                                                 <input type="text" matInput
                                                                     formControlName="attachments" />
                                                             </mat-form-field>
-
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <label for="inputPassword"
-                                                            class="col-sm-3 col-form-label ">Delivery On: </label>
-
+                                                            class="col-sm-4 col-form-label ">Delivery On: </label>
                                                         <div class="col-sm-3">
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput
                                                                     formControlName="deliveryOn" />
                                                             </mat-form-field>
                                                         </div>
-                                                        <div class="col-sm-3">
+                                                        <div class="col-sm-2">
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="number" matInput
                                                                     formControlName="deliveryOnDays" />
                                                             </mat-form-field>
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <mat-form-field style="width: 100%; ">
-                                                                <input type="date" matInput
-                                                                    formControlName="deliveryOnDate" />
-                                                            </mat-form-field>
+                                                            <mat-form-field style="width: 100%;">
+                                                                <input [disabled]="true"  matInput [matDatepicker]="deliveryOnDate"  formControlName="deliveryOnDate"
+                                                                placeholder="YYYY/MM/DD"  DateValidation />
+                                                              <mat-datepicker-toggle matSuffix [for]="deliveryOnDate"></mat-datepicker-toggle>
+                                                              <mat-datepicker [disabled]="true" [startAt]="currentDate" #deliveryOnDate></mat-datepicker>
+                                                              </mat-form-field>
                                                         </div>
-
                                                     </div>
-
                                                 </div>
                                             </div>
-
-
                                         </div>
                                         <div class="col-md-4 pt-2">
                                             <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
@@ -345,25 +462,47 @@
                                                 </dxo-editing>
                                                 <dxo-selection mode="multiple"></dxo-selection>
                                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                                <dxi-column *ngFor="let data of columnheadItemDetails"
+                                                <dxi-column *ngFor="let data of columnheadItemDetails2"
                                                     dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
                                                     alignment="center" backgroundcolor="#000">
                                                 </dxi-column>
                                             </dx-data-grid>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </mat-tab>
-
-
                         </mat-tab-group>
-
-
                     </div>
-
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    </dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxi-column *ngFor="let data of columnheadItemDetails3" dataField="{{ data }}"
+                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                        backgroundcolor="#000">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
+                            <div class="col-md-3">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    </dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxi-column *ngFor="let data of columnheadItemDetails2" dataField="{{ data }}"
+                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                        backgroundcolor="#000">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>

@@ -7,257 +7,202 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteStonepriceMaster()"></modal-header>
+    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+        (deleteClick)="deleteStonepriceMaster()"></modal-header>
     <!-- content section -->
     <div class="row">
-        
         <div class="p-4 ">
-           
-        
-                    <div class="row">
-                        <form [formGroup]="stonePrizeMasterForm">
-                        <div class="col-10">
-                            <div class="row">
-                                <div class="col-6">
-                                    <br>
-        
-        
-                                    <div class="row mb-1 head2">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Price Code* :</label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="price_code" />
-                                            </mat-form-field>
-                                         
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Sieve Set* : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="sleve_set" />
-                                            </mat-form-field>
-                                            <master-search [MasterSearchData]="sleve_setData"
-                                            (newRowClick)="sleve_setDataSelected($event)"
-                                                >
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Shape : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="shape" />
-                                            </mat-form-field>
-                                            <master-search [MasterSearchData]="shapeData"
-                                            (newRowClick)="shapeDataSelected($event)"
-                                                >
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Sieve From : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="sleve_form" />
-                                            </mat-form-field>
-                                            <master-search [MasterSearchData]="sleveData"
-                                            (newRowClick)="slevefromDataSelected($event)"
-                                                >
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Sieve To* : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="sleve_to" />
-                                            </mat-form-field>
-                                            <master-search [MasterSearchData]="sleveData"
-                                            (newRowClick)="slevetoDataSelected($event)"
-                                                >
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Color : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="color" />
-                                            </mat-form-field>
-                                            <master-search [MasterSearchData]="colorData"
-                                            (newRowClick)="colorDataSelected($event)"
-                                                >
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Clarity : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="clarity" />
-                                            </mat-form-field>
-                                            <master-search  [MasterSearchData]="clarityData"
-                                            (newRowClick)="clarityDataSelected($event)"
-                                                >
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label"> Size From : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="size_from" />
-                                            </mat-form-field>
-                                            <master-search [MasterSearchData]="sizefromData"
-                                            (newRowClick)="sievefromDataSelected($event)"
-                                                >
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Size  To : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="size_to" />
-                                            </mat-form-field>
-                                            <master-search [MasterSearchData]="sizetoData"
-                                            (newRowClick)="sievetoDataSelected($event)"
-                                                >
-                                            </master-search>
-                                        </div>
+            <div class="row">
+                <form [formGroup]="stonePrizeMasterForm">
+                    <div class="col-10">
+                        <div class="row">
+                            <div class="col-6">
+                                <br>
+                                <div class="row mb-1 head2">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Price Code * :</label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="15" formControlName="price_code" />
+                                        </mat-form-field>
                                     </div>
                                 </div>
-                                <div class="col-6 pt-5">
-                                    <br>
-        
-        
-                                    <div class="row mb-1 head2">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Currency :</label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 90%">
-                                                <input type="text" matInput
-                                                    
-                                                    maxlength="6"                                        
-                                                    formControlName="currency" />
-                                            </mat-form-field>
-                                            <master-search [MasterSearchData]="currencyData"
-                                            (newRowClick)="currencyDataSelected($event)"
-                                                >
-                                            </master-search>
-                                        </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Sieve Set : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="15" formControlName="sleve_set" />
+                                        </mat-form-field>
+                                        <master-search  [MasterSearchData]="sleve_setData"
+                                            (newRowClick)="sleve_setDataSelected($event)">
+                                        </master-search>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Carat Weight*  : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="carat_wt" />
-                                </mat-form-field>
-        
-                                        </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Shape * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="6" formControlName="shape" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="shapeData"
+                                            (newRowClick)="shapeDataSelected($event)">
+                                        </master-search>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Sieve From Desc : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="sieve_from_desc" />
-                                </mat-form-field>
-        
-                                        </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Sieve From * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="6" formControlName="sleve_form" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="sievefromData"
+                                            (newRowClick)="slevefromDataSelected($event)">
+                                        </master-search>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Sieve to Desc* : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="sieve_to_desc" />
-                                </mat-form-field>
-        
-                                        </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Sieve To * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="6" formControlName="sleve_to" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="sievetoData"
+                                            (newRowClick)="slevetoDataSelected($event)">
+                                        </master-search>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Weight From*: </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="wt_from" />
-                                </mat-form-field>
-        
-                                        </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Color * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="6" formControlName="color" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="colorData"
+                                            (newRowClick)="colorDataSelected($event)">
+                                        </master-search>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Weight To* : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="wt_to" />
-                                </mat-form-field>
-        
-                                        </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Clarity * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="6" formControlName="clarity" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="clarityData"
+                                            (newRowClick)="clarityDataSelected($event)">
+                                        </master-search>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Issue Rate : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="issue_rate" />
-                                </mat-form-field>
-        
-                                        </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label"> Size From : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="6" formControlName="size_from" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="sizefromData"
+                                            (newRowClick)="sievefromDataSelected($event)">
+                                        </master-search>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Selling %* : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="selling" />
-                                </mat-form-field>
-        
-                                        </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Size To : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="6" formControlName="size_to" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="sizetoData"
+                                            (newRowClick)="sievetoDataSelected($event)">
+                                        </master-search>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label for="inputPassword" class="col-sm-4 col-form-label">Selling Rate : </label>
-                                        <div class="col-sm-8">
-                                            <mat-form-field style="width: 100%; margin-left: 7px;">
-                                    <input type="text" matInput formControlName="selling_rate" />
-                                </mat-form-field>
-        
-                                        </div>
+                                </div>
+                            </div>
+                            <div class="col-6 pt-5">
+                                <br>
+                                <div class="row mb-1 head2">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Currency * :</label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 90%">
+                                            <input type="text" matInput maxlength="6" formControlName="currency" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="currencyData"
+                                            (newRowClick)="currencyDataSelected($event)">
+                                        </master-search>
                                     </div>
-        
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Carat Weight * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%; margin-left: 7px;">
+                                            <input type="text" matInput formControlName="carat_wt" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Sieve From Desc :
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%; margin-left: 7px;">
+                                            <input type="text" matInput formControlName="sieve_from_desc"
+                                                [disabled]="true" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Sieve to Desc * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%; margin-left: 7px;">
+                                            <input type="text" matInput formControlName="sieve_to_desc"
+                                                [disabled]="true" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Weight From: </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%; margin-left: 7px;">
+                                            <input type="text" matInput maxlength="15" formControlName="wt_from" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Weight To : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%; margin-left: 7px;">
+                                            <input type="text" matInput maxlength="15" formControlName="wt_to"
+                                                (change)="onweighttto($event)" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Issue Rate * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%; margin-left: 7px;">
+                                            <input type="text" matInput maxlength="15" formControlName="issue_rate" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Selling % * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%; margin-left: 7px;">
+                                            <input type="text" matInput maxlength="15" formControlName="selling" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Selling Rate * : </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%; margin-left: 7px;">
+                                            <input type="text" matInput maxlength="15" formControlName="selling_rate" />
+                                        </mat-form-field>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-        </form>
                     </div>
-        
-        
-                </div>
-                <div>
-                </div>
-           
+                </form>
+            </div>
+        </div>
+        <div>
+        </div>
     </div>
 </div>

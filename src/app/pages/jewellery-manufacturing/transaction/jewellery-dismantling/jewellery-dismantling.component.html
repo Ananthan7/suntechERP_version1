@@ -15,7 +15,7 @@
         <div class="row">
           <div class="col-4">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-6 ">Voc Type*:</label>
+              <label for="inputPassword" class="col-sm-6 ">Voc Type * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="voctype" />
@@ -28,14 +28,14 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-6 ">Voc Date*: </label>
+              <label for="inputPassword" class="col-sm-6 ">Voc Date * :</label>
               <div class="col-sm-6">
                 <!-- <mat-form-field style="width: 85%;">
                   <input type="date" matInput formControlName="vocdate" />
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
                   <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate"
-                    placeholder="YYYY/MM/DD" DateValidation />
+                    placeholder="DD/MM/YYYY" DateValidation />
                   <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                 </mat-form-field>
@@ -137,7 +137,10 @@
               <mat-tab label="Dismanting">
                 <div class="row">
                   <div class="col-md-12">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                    [allowColumnReordering]="true"
+                    [allowColumnResizing]="true"
+                    [columnAutoWidth]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
                       </dxo-editing>
@@ -213,7 +216,7 @@
                       </div>
                       <div class="col-md-3">
                         <div class="row mb-1">
-                          <label for="inputPassword" class="col-sm-6"> MfgFur Ref : </label>
+                          <label for="inputPassword" class="col-sm-6">Mfg/Fur Ref : </label>
                           <div class="col-sm-6">
                             <mat-form-field style="width: 100%;">
                               <input type="text" matInput formControlName="mfgfurRef" />
@@ -233,7 +236,10 @@
                       </div>
                     </div>
                     <div class="pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                      [allowColumnReordering]="true"
+                      [allowColumnResizing]="true"
+                      [columnAutoWidth]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
@@ -263,6 +269,14 @@
                         <div class="col-sm-6">
                           <mat-form-field style="width: 100%;">
                             <input type="text" matInput formControlName="labourCharge" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-6"> Rhodium : </label>
+                        <div class="col-sm-6">
+                          <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="polishing" />
                           </mat-form-field>
                         </div>
                       </div>

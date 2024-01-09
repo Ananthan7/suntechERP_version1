@@ -1,161 +1,236 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Scheme Register</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Scheme Registration</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="savePdf()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
-<div class="container-fluid pt-3">
-    <form>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Branch</label>
-                    <div class="col-md-2">
-                        <mat-form-field>
-                            <mat-select>
-                                <mat-option value="HO">HO</mat-option>
-                                <mat-option></mat-option>
+<div class="row">
+    <div class="col-md-9 col-sm-12">
+        <div class="card p-3">
+
+            <form [formGroup]="schemeRegistrationForm">
+                <!-- scheme header -->
+                <div class="row ">
+                    <div class="col-lg-5 col-md-5 d-flex pt-2">
+                        <h5>Scheme Registration</h5>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-12">
+                        <div class="d-flex">
+                            <span class="matlabels pt-3">Scheme Unique Id:
+                            </span>
+                            <mat-form-field style="width: 65%">
+                                <input type="text" matInput
+                                    (keyup.enter)="schemeIDChange($event)"
+                                    (focusout)="schemeIDChange($event)"
+                                    formControlName="SchemeId"
+                                    [readonly]="viewOnly" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 pt-2">
+                        <!-- <button mat-flat-button color="primary" style="font-size: 11px;padding: 0px 8px;">
+                            Unlock Scheme</button> -->
+                    </div>
+                </div>
+                <!-- search section -->
+                <div class="row border-top">
+                    <div class="col-lg-5 col-md-5 col-sm-12">
+                        <span class="matlabels">Code:
+                        </span>
+                        <mat-form-field style="width: 65%">
+                            <input type="text" matInput formControlName="Code"
+                                (focusout)="searchValueChange($event,'Code')" />
+                        </mat-form-field>
+                        <master-search [MasterSearchData]="customerMasterData"
+                            (newRowClick)="selectedCustomer($event)">
+                        </master-search>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-12">
+                        <span class="matlabels">Mobile No*:
+                        </span>
+                        <mat-form-field style="width: 65%">
+                            <input type="text" matInput
+                                (keypress)="isNumeric($event)"
+                                formControlName="MobileNo"
+                                (focusout)="searchValueChange($event,'Mobile')" />
+                        </mat-form-field>
+                        <master-search
+                            [MasterSearchData]="customerMasterWithMobile"
+                            (newRowClick)="selectedCustomer($event)">
+                        </master-search>
+                        <mat-error
+                            *ngIf="schemeRegistrationForm.controls.MobileNo.touched 
+                                    && schemeRegistrationForm.controls.MobileNo.hasError('required')">
+                            Mobile Number <strong>required</strong>
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5 col-md-5 col-sm-12">
+                        <span class="matlabels">Name:
+                        </span>
+                        <mat-form-field style="width: 65%">
+                            <input type="text" matInput
+                                formControlName="Name" />
+                        </mat-form-field>
+                        <master-search
+                            [MasterSearchData]="customerMasterWithName"
+                            (newRowClick)="selectedCustomer($event)">
+                        </master-search>
+                    </div>
+
+                    <div class="col-lg-5 col-md-5 col-sm-12">
+                        <span class="matlabels">Email:
+                        </span>
+                        <mat-form-field style="width: 65%">
+                            <input type="text" matInput
+                                formControlName="Email" />
+                            <mat-error
+                                *ngIf="schemeRegistrationForm.controls.Email.touched 
+                                    && schemeRegistrationForm.controls.Email.hasError('required')">
+                                Email <strong>required</strong>
+                            </mat-error>
+                            <mat-error
+                                *ngIf="schemeRegistrationForm.controls.Email.touched 
+                                    && schemeRegistrationForm.controls.Email.hasError('pattern')">
+                                Email Format Not Correct
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7 col-md-12 col-sm-12 d-flex">
+                        <span class="matlabels pt-3"
+                            style="width: 30%;">Government.ID
+                            Type/#ID:
+                        </span>
+                        <mat-form-field style="width: 20%;">
+                            <mat-label>Id Type</mat-label>
+                            <mat-select formControlName="GovIdType">
+                                <mat-option *ngFor="let item of IdTypesList"
+                                    [value]="item.CODE">
+                                    {{ item.CODE }}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Filter</label>
-                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">From</label>
-                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">To</label>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Show</label>
-                    <div class="col-md-2">
-                        <mat-form-field>
-                            <mat-select>
-                                <mat-option value="ALL">ALL</mat-option>
-                                <mat-option></mat-option>
-                            </mat-select>
+                        &nbsp;
+                        <mat-form-field style="width: 45%;">
+                            <input type="text" placeholder="Id" matInput
+                                formControlName="GovIdNumber">
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Date</label>
-                    <div class="col-md-2">
-                        <mat-form-field>
-                            <input matInput [matDatepicker]="fromDate" [max]="vocMaxDate" name="fromDate"
-                                placeholder="DD/MM/YYYY" DateValidation />
-                            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
-                            <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-2">
-                        <mat-form-field>
-                            <input matInput [matDatepicker]="toDate" [max]="vocMaxDate" name="toDate"
-                                placeholder="DD/MM/YYYY" DateValidation />
-                            <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
-                            <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Till Date :</label>
-                    <div class="col-md-2">
-                        <mat-form-field>
-                            <input matInput [matDatepicker]="tillDate" [max]="vocMaxDate" name="tillDate"
-                                placeholder="DD/MM/YYYY" DateValidation />
-                            <mat-datepicker-toggle matSuffix [for]="tillDate"></mat-datepicker-toggle>
-                            <mat-datepicker [startAt]="currentDate" #tillDate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-                    <label for="inputPassword" class="col-sm-2 offset-md-2 col-form-label">Report To</label>
-                    <div class="col-md-2">
-                        <mat-form-field>
-                            <mat-select>
-                                <mat-option value="PERVIEW">PERVIEW</mat-option>
-                                <mat-option></mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                </div>
-            </div>
+            </form>
 
         </div>
-    </form>
 
-    <div id="pdf_container" [hidden]="true">
-        <div class="scheme_register_pdf">
-            <div class="row border_bottom">
-                <div class="col-md-6">
-                    <div class="left_content">
-                        <h4>Pos Scheme Register</h4>
-                        <p>From 01/01/2023 &nbsp;&nbsp; To 20/11/2023</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="right_content text-end">
-                        <h4>Dhanak Goldmith</h4>
-                        <p>Old Deira, Gold Souq, Deira, Dubai U.A.E P.O. Box:65452</p>
-                    </div>
-                    <div class="email_address text-end">
-                        <p>Tel : 04-2263775</p>
-                        <p>Fax : 04-2263775</p>
-                        <p>Email : demoho@gmail.com</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">SI.No</th>
-                                    <th scope="col">Scheme Id</th>
-                                    <th scope="col">Open Date</th>
-                                    <th scope="col">Customer Moblie No</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Unit Value</th>
-                                    <th scope="col">No.Of Instal Paid</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Value Paid</th>
-                                    <th scope="col">Amt Redm</th>
-                                    <th scope="col">Amt Bal</th>
-                                    <th scope="col">Plan</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Matured/Cancelled/Redemed Date</th>
-                                    <th scope="col">Redeemed Ref.Pos No</th>
-                                    <th scope="col">Sales Man</th>
-                                    <th scope="col">Last Payment</th>
+    </div>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5 class="border-bottom">Address</h5>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
             </div>
         </div>
     </div>
-   
+    <div class="row">
+        <div class="card p-3 col-md-12">
+            <div class="row">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                    [viewImportBtn]="false"
+                    (addClick)="openNewSchemeDetails()"
+                    (deleteClick)="deleteTableData()">
+                </menu-buttons>
+                <!-- <div class="m-2">
+                    <button mat-flat-button color="primary" (click)="openMadalView()">Add New</button>
+                </div> -->
+            </div>
+            <div class="row">
+                <dx-data-grid width="100%" #gridContainer
+                    (onRowClick)="onRowClickHandler($event)"
+                    [loadPanel]="{ enabled: true, text: 'Loading...' }"
+                    id="gridContainer" [dataSource]="newSchemeItems"
+                    [showColumnLines]="true" [showRowLines]="true"
+                    [showBorders]="true" [remoteOperations]="true"
+                    [columnAutoWidth]="true"
+                    (onCellClick)="openAttchments($event)">
+                    <dxo-paging></dxo-paging>
+                    <dxo-selection mode="single"></dxo-selection>
+                    <!-- <dxi-column type="buttons" caption="" [visible]="disableDelete" [fixed]="true"
+                        fixedPosition="right">
+                        <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button>
+                    </dxi-column> -->
+                    <dxi-column dataField="SCHEME_UNIQUEID" caption="Unique ID"
+                        [allowEditing]="true"
+                        alignment="center">
+                    </dxi-column>
+
+                    <dxi-column dataField="SCHEME_ID" caption="Scheme ID"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="SCHEME_TOTAL_VALUE"
+                        caption="Total Value" [allowEditing]="true"
+                        alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="SCHEME_UNITS" caption="Units"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="SCHEME_STARTED" caption="Start Date"
+                        [customizeText]="customizeDate"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="SCHEME_ENDEDON" caption="End Date"
+                        [customizeText]="customizeDate"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="BRANCH_CODE" caption="Branch"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="SalesManCode" caption="Salesman"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="SCHEME_STATUS" caption="Status"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="IS_ATTACHMENT_PRESENT"
+                        cellTemplate="attachmentTemp" caption="Attachment"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <!-- <dxi-column dataField="BlockScheme"
+                        caption="Block Scheme"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column> -->
+                    <dxi-column type="buttons" [fixed]="true"
+                        fixedPosition="right">
+                        <dxi-button [onClick]="editRowDetails"
+                            icon="fa fa-eye"></dxi-button>
+                        <!-- <dxi-button [onClick]="deleteRow" icon="fa fa-edit"></dxi-button> -->
+                    </dxi-column>
+                    <div *dxTemplate="let data of 'attachmentTemp'">
+                        <a href="javascript:void(0)"
+                            [hidden]="data.value === false">
+                            <i class="fa fa-paperclip"
+                                style="color: #337ab7"></i></a>
+                        <dxi-button icon="fa fa-paperclip"></dxi-button>
+                    </div>
+                </dx-data-grid>
+            </div>
+        </div>
+    </div>
 
 </div>
+
+<!-- modal template -->
+<!-- <ng-template #add_scheme let-modal>
+    <app-add-scheme [dataToEdit]="dataToEditrow" (closebtnClick)="closeModal()"
+        (newRowSaveClick)="addNewRow($event)"></app-add-scheme>
+</ng-template> -->

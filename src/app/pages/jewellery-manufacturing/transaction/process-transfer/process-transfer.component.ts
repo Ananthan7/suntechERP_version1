@@ -67,7 +67,7 @@ export class ProcessTransferComponent implements OnInit {
   processTransferFrom: FormGroup = this.formBuilder.group({
     voctype: ['', [Validators.required]],
     vocdate: ['', [Validators.required]],
-    vocno: [''],
+    vocno: ['', [Validators.required]],
     salesman: [''],
     SalesmanName: [''],
     currency: [''],
@@ -94,7 +94,7 @@ export class ProcessTransferComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.processTransferFrom.controls.vocdate.setValue(this.currentDate)
-    this.processTransferFrom.controls.voctype.setValue('JPR')
+    this.processTransferFrom.controls.voctype.setValue('PTF')
     //this.commonService.getqueryParamVocType()
   }
   formatDate(event: any) {

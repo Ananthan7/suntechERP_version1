@@ -31,9 +31,9 @@ export class ComponentSizeMasterComponent implements OnInit {
   ngOnInit(): void {
   }
   componentsizemasterForm: FormGroup = this.formBuilder.group({
-    code:[''],
-    desc : [''],
-    height:[],
+    code:['',[Validators.required]],
+    desc : ['',[Validators.required]],
+    height:[''],
     width : [''],
     length:[''],
     radius:[''],

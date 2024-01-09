@@ -47,10 +47,10 @@ export class RateTypeComponent implements OnInit {
   
 
  ratetypeFrom: FormGroup = this.formBuilder.group({
-    metal:[''],
-    ratetype:[''],
+    metal:['',[Validators.required]],
+    ratetype:['',[Validators.required]],
     convfactGMS:[''],
-    currency:[''],
+    currency:['',[Validators.required]],
     status :[''],
     currrate:[''],
     ratevariance:[''],

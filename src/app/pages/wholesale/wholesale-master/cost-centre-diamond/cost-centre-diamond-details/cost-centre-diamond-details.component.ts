@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
   selector: 'app-cost-centre-diamond-details',
@@ -33,13 +34,27 @@ export class CostCentreDiamondDetailsComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
+  
   costcenterdiamonddetailsForm: FormGroup = this.formBuilder.group({
     branch:[''],
     purchase:[''],
+    purchaseImp:[''],
+    purchaseRep:[''],
     purchasereturn:[''],
+    purchasereturnImp:[''],
+    purchasereturnRep:[''],
     sales:[''],
+    salesRet:[''],
+    salesExp:[''],
+    salesRep:[''],
+    salesExb:[''],
+    salesOth:[''],
     salesreturn:[''],
+    salesreturnRet:[''],
+    salesreturnExp:[''],
+    salesreturnRep:[''],
+    salesreturnExb:[''],
+    salesreturnOth:[''],
     opening:[''],
     ownstock:[''],
     closingstock:[''],
@@ -56,14 +71,25 @@ export class CostCentreDiamondDetailsComponent implements OnInit {
     platecharges:[''],
     Stkrevalue:[''],
     customaccount:[''],
-    in:[''],
-    out:[''],
-    puregoldindiamondjewellery:[''],
-    puregoldindiamondjewelleryFixed:[''],
-    loosestonevalueindiamondjewellery:[''],
-    colorstonevalueindiamondjeweller:[''],
-    pearlvalueindiamondjewellery:[''],
+    branchtransferin:[''],
+    branchtransferout:[''],
   })
+
+  branchCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'GENERAL MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  branchCodeSelected(data: any) {
+    this.costcenterdiamonddetailsForm.controls.branch.setValue(data.BRANCH_CODE)
+  }
 
   formSubmit(){
 
@@ -90,8 +116,8 @@ export class CostCentreDiamondDetailsComponent implements OnInit {
       "STONEVALUE": "string",
       "STONEDIFF": this.costcenterdiamonddetailsForm.value.stonediff || "",
       "PURITYDIFF": "string",
-      "BRANCHTRANSFERIN": "string",
-      "BRANCHTRANSFEROUT": "string",
+      "BRANCHTRANSFERIN": this.costcenterdiamonddetailsForm.value.branchtransferin || "",
+      "BRANCHTRANSFEROUT": this.costcenterdiamonddetailsForm.value.branchtransferout || "",
       "MANUFACTURING": this.costcenterdiamonddetailsForm.value.manufacture || "",
       "OPENINGBALANCE": "string",
       "CLOSINGSTOCK": "string",
@@ -100,18 +126,18 @@ export class CostCentreDiamondDetailsComponent implements OnInit {
       "CLOSINGOWNSTOCK": this.costcenterdiamonddetailsForm.value.closingstock || "",
       "OWNSTOCK": this.costcenterdiamonddetailsForm.value.ownstock || "",
       "OPENINGSTONE": "string",
-      "POSSALES": "string",
-      "POSSRETURN": "string",
-      "EXBSALES": "string",
-      "EXBSRETURN": "string",
-      "EXPSALES": "string",
-      "EXPSRETURN": "string",
+      "POSSALES": this.costcenterdiamonddetailsForm.value.salesRet || "",
+      "POSSRETURN": this.costcenterdiamonddetailsForm.value.salesreturnRet || "",
+      "EXBSALES": this.costcenterdiamonddetailsForm.value.salesExb || "",
+      "EXBSRETURN": this.costcenterdiamonddetailsForm.value.salesreturnExb || "",
+      "EXPSALES": this.costcenterdiamonddetailsForm.value.salesExp || "",
+      "EXPSRETURN": this.costcenterdiamonddetailsForm.value.salesreturnExp || "",
       "SOH_GOLD_DMFG": this.costcenterdiamonddetailsForm.value.SOHmetalmanufacturing || "",
       "WASTAGE": this.costcenterdiamonddetailsForm.value.wastage || "",
-      "IMPPURCHASE": "string",
-      "IMPPURCHASERETURN": "string",
-      "OTHERSALES": "string",
-      "OTHERSRETURN": "string",
+      "IMPPURCHASE": this.costcenterdiamonddetailsForm.value.purchaseImp || "",
+      "IMPPURCHASERETURN": this.costcenterdiamonddetailsForm.value.purchasereturnImp || "",
+      "OTHERSALES": this.costcenterdiamonddetailsForm.value.salesOth || "",
+      "OTHERSRETURN": this.costcenterdiamonddetailsForm.value.salesreturnOth || "",
       "REFINING_CHARGEAC": "string",
       "DISCOUNTMETAL": "string",
       "STONEVALUESALES": "string",
@@ -156,11 +182,11 @@ export class CostCentreDiamondDetailsComponent implements OnInit {
       "UNFIXSALES": "string",
       "UNFIXSUPPLIERCTRLAC": "string",
       "UNFIXCUSTOMERCTRLAC": "string",
-      "REPAIRPURCHASE": this.costcenterdiamonddetailsForm.value.repairunfixpurchase || "",
-      "REPPURCHASERETURN": "string",
-      "REPAIRSALESRETURN": "string",
-      "REPAIRSALES": "string",
-      "REPUNFIXPURCHASE": "string",
+      "REPAIRPURCHASE": this.costcenterdiamonddetailsForm.value.purchaseRep || "",
+      "REPPURCHASERETURN": this.costcenterdiamonddetailsForm.value.purchasereturnRep || "",
+      "REPAIRSALESRETURN": this.costcenterdiamonddetailsForm.value.salesreturnRep || "",
+      "REPAIRSALES": this.costcenterdiamonddetailsForm.value.salesRep || "",
+      "REPUNFIXPURCHASE": this.costcenterdiamonddetailsForm.value.salesRep || "",
       "KUNDANVALUESALES": "string",
       "KUNDANVALUEPURCHASE": "string",
       "PREMIUM_CHARGES": "string",

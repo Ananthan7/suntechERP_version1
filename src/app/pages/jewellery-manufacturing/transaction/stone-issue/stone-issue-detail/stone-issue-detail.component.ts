@@ -122,6 +122,8 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneissuedetailsFrom.controls.jobDes.setValue(e.job_description);
     this.stoneissuedetailsFrom.controls.subjobnumber.setValue(e.job_number);
     this.stoneissuedetailsFrom.controls.subjobDes.setValue(e.job_description);
+    this.stoneissuedetailsFrom.controls.designcode.setValue(e.job_number);
+    this.stoneissuedetailsFrom.controls.partcode.setValue(e.job_description);
   }
 
   processCodeSelected(e: any) {
@@ -152,22 +154,22 @@ export class StoneIssueDetailComponent implements OnInit {
 
 
   stoneissuedetailsFrom: FormGroup = this.formBuilder.group({
-    jobNumber: [''],
+    jobNumber: ['',[Validators.required]],
     jobDes: [''],
-    subjobnumber: [''],
+    subjobnumber: ['',[Validators.required]],
     subjobDes: [''],
     designcode: [''],
     partcode: [''],
     salesorderno: [''],
-    process: [''],
+    process: ['',[Validators.required]],
     processname: [''],
-    worker: [''],
+    worker: ['',[Validators.required]],
     workername: [''],
-    stock: [''],
+    stock: ['',[Validators.required]],
     stockCode: [''],
     stockDes: [''],
     batchid: [''],
-    location: [''],
+    location: ['',[Validators.required]],
     pieces: [''],
     shape: [''],
     clarity: [''],
@@ -248,7 +250,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "CONSIGNMENT": 0,
       "SIEVE_SET": "0",
       "SUB_STOCK_CODE": "0",
-      "D_REMARKS": "Str",
+      "D_REMARKS": this.stoneissuedetailsFrom.value.remarks || "",
       "SIEVE_DESC": "0",
       "EXCLUDE_TRANSFER_WT": true,
       "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "",

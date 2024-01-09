@@ -494,12 +494,12 @@
                   type="text"
                   matInput
                   formControlName="fcn_customer_code"
-                  (change)="nameChange($event)"
-                  [readonly]="
-                    viewOnly ||
-                    this.customerDataForm.value.fcn_customer_code == ''
-                  "
+                  readonly
                 />
+                <!-- [readonly]="
+                viewOnly ||
+                this.customerDataForm.value.fcn_customer_code == ''
+              " -->
                 <mat-error
                   *ngIf="
                     customerDataForm.controls.fcn_customer_code.hasError(
@@ -623,7 +623,60 @@
               </button>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-md-2">
+              <mat-form-field>
+                <mat-label>Expiry Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="expDate"
+                  name="fcn_customer_exp_date"
+                  formControlName="fcn_customer_exp_date"
+                  placeholder="DD/MM/YYYY"
+                  [readonly]="viewOnly"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="expDate"
+                ></mat-datepicker-toggle>
+                <mat-datepicker
+                  [startAt]="currentDate"
+                  #expDate
+                ></mat-datepicker>
+
+                <mat-error
+                  *ngIf="
+                    customerDataForm.controls.fcn_customer_exp_date.hasError(
+                      'required'
+                    )
+                  "
+                >
+                  Expiry date is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3" *ngIf="posPlanetIssuing">
+              <mat-checkbox color="primary" formControlName="tourVatRefuncYN"
+                >Tourist VAT Refund Y/N</mat-checkbox
+              >
+            </div>
+
+            <div class="col-md-2" *ngIf="posPlanetIssuing">
+              <mat-form-field>
+                <mat-label>Tourist VAT Refund</mat-label>
+                <input type="text" matInput formControlName="tourVatRefundNo" />
+              </mat-form-field>
+            </div>
+          </div>
         </form>
+        <div class="text-right">
+
+        <button type="button"  mat-flat-button 
+        style="font-size: 12px; padding: 0px 9px"
+        color="primary" (click)="openUserAttachmentModal()">Add Attachment</button>
+      </div>
+        
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
           <mat-tab-group>
@@ -1164,118 +1217,96 @@
             </div>
           </div>
 
-          <div class="col-md-6" *ngIf="enableJawahara">
-            <div class="card m-t-10">
-              <div class="card-header">
-                <b>Boarding Pass Details</b>
+          <!-- <div class="col-md-6" *ngIf="enableJawahara"> -->
+          <div class="col-md-6">
+            <div *ngIf="this.comFunc.compAcCode == 'JHO001'">
+              <form [formGroup]="invoiceWiseForm" novalidate>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-checkbox color="primary" formControlName="serviceInv"
+                      >Service Invoice</mat-checkbox
+                    >
+                  </div>
+                  <div class="col-md-6">
+                    <mat-checkbox color="primary" formControlName="lifeTimeWarr"
+                      >Life Time Warranty</mat-checkbox
+                    >
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div
+              *ngIf="
+                this.comFunc.compAcCode == 'JHO001' && strBranchcode == 'JHRSDF'
+              "
+            >
+              <div class="row">
+                <mat-checkbox color="primary" [(ngModel)]="showBoarding"
+                  >Boarding Pass Details</mat-checkbox
+                >
               </div>
-              <div class="card-body">
-                <form [formGroup]="boardingPassForm" novalidate>
-                  <div class="row" style="margin-top: 0px">
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>Pass Details</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="passDetails"
-                          id="passDetails"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-                      <mat-form-field>
-                        <mat-label>Flight No.</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="flightNo"
-                          id="flightNo"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-                      <mat-form-field>
-                        <mat-label>Boarding To</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="boardingTo"
-                          id="boardingTo"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-                      <mat-form-field>
-                        <mat-label>Boarding Date</mat-label>
-                        <input
-                          matInput
-                          [matDatepicker]="boardingDate"
-                          name="boardingDate"
-                          formControlName="boardingDate"
-                          placeholder="DD/MM/YYYY"
-                          [readonly]="viewOnly"
-                        />
-                        <mat-datepicker-toggle
-                          matSuffix
-                          [for]="boardingDate"
-                        ></mat-datepicker-toggle>
-                        <mat-datepicker
-                          [startAt]="currentDate"
-                          #boardingDate
-                        ></mat-datepicker>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>INV NO.</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="invoiceNo"
-                          id="invoiceNo"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-                      <mat-form-field>
-                        <mat-label>INV DATE.</mat-label>
-                        <input
-                          matInput
-                          [matDatepicker]="invoiceDate"
-                          name="invoiceDate"
-                          formControlName="invoiceDate"
-                          placeholder="DD/MM/YYYY"
-                          [readonly]="viewOnly"
-                        />
-                        <mat-datepicker-toggle
-                          matSuffix
-                          [for]="invoiceDate"
-                        ></mat-datepicker-toggle>
-                        <mat-datepicker
-                          [startAt]="currentDate"
-                          #invoiceDate
-                        ></mat-datepicker>
-                      </mat-form-field>
-
-                      <mat-form-field>
-                        <mat-label>VOC TYPE</mat-label>
-                        <input
-                          type="text"
-                          matInput
-                          formControlName="vocType"
-                          id="vocType"
-                          [readonly]="viewOnly"
-                        />
-                      </mat-form-field>
-
-                      <div class="row">
-                        <mat-checkbox color="primary" formControlName="serviceInv"
-                          >Service Invoice</mat-checkbox
-                        >
+              <div class="card m-t-10" *ngIf="showBoarding">
+                <div class="card-header">
+                  <b>Boarding Pass Details</b>
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="boardingPassForm" novalidate>
+                    <div class="row" style="margin-top: 0px">
+                      <div class="col-md-6">
+                        <mat-form-field>
+                          <mat-label>Pass Details</mat-label>
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="passDetails"
+                            id="passDetails"
+                            [readonly]="viewOnly"
+                          />
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-label>Flight No.</mat-label>
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="flightNo"
+                            id="flightNo"
+                            [readonly]="viewOnly"
+                          />
+                        </mat-form-field>
                       </div>
-                      <div class="row">
-                        <mat-checkbox color="primary"  formControlName="lifeTimeWarr"
-                          >Life Time Warranty</mat-checkbox
-                        >
-                      </div>
-                      <div class="row">
+                      <div class="col-md-6">
+                        <mat-form-field>
+                          <mat-label>Boarding To</mat-label>
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="boardingTo"
+                            id="boardingTo"
+                            [readonly]="viewOnly"
+                          />
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-label>Boarding Date</mat-label>
+                          <input
+                            matInput
+                            [matDatepicker]="boardingDate"
+                            name="boardingDate"
+                            formControlName="boardingDate"
+                            placeholder="DD/MM/YYYY"
+                            [readonly]="viewOnly"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="boardingDate"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker
+                            [startAt]="currentDate"
+                            #boardingDate
+                          ></mat-datepicker>
+                        </mat-form-field>
+
+                        <!-- <div class="row">
                         <div class="col-md-6">
                           <button
                           class="rounded"
@@ -1295,22 +1326,23 @@
                             Boarding Pass Details
                           </button>
                         </div>
+                      </div> -->
                       </div>
 
                       <div class="text-center">
-
                         <button
-                        class="mt-2"
-                        mat-flat-button
-                        color="primary"
-                        [disabled]="viewOnly"
+                          class="mt-2"
+                          mat-flat-button
+                          color="primary"
+                          [disabled]="viewOnly"
+                          (click)="getCustDetails()"
                         >
-                        Get Customer Details
-                      </button>
+                          Get Customer Details
+                        </button>
+                      </div>
                     </div>
-                    </div>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -1535,7 +1567,10 @@
             </div>
           </div>
 
-          <div class="col-md-6 col-xl-6" (click)="printInvoice()">
+          <div
+            class="col-md-6 col-xl-6"
+            (click)="this.viewOnly || this.editOnly ? printInvoice() : ''"
+          >
             <!-- *ngIf="!viewOnly" -->
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
@@ -1543,7 +1578,10 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-xl-6" (click)="sendToEmail()">
+          <div
+            class="col-md-6 col-xl-6 mt-2"
+            (click)="this.viewOnly || this.editOnly ? sendToEmail() : ''"
+          >
             <div class="touch-big-button">
               <div class="touch-big-button-inner">
                 <i class="fa fa-print"></i> <span> Send Email</span>
@@ -1896,7 +1934,7 @@
           </div>
           <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
             <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Rec No.</mat-label>
                   <input
@@ -1920,7 +1958,31 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Customer Code</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="advanceCustCode"
+                    value
+                    id="advanceCustCode"
+                    (change)="changeAdvanceVocNo($event)"
+                    [readonly]="viewOnly"
+                  />
+
+                  <mat-error
+                    *ngIf="
+                      advanceReceiptForm.controls.advanceCustCode.hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Customer Code is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
                   <input
@@ -2108,12 +2170,12 @@
                     type="text"
                     matInput
                     formControlName="giftBranch"
-                    [matAutocomplete]="giftBranch"
                     id="giftBranch"
                     (focusout)="changeBranch($event)"
                     [readonly]="viewOnly"
                   />
-                  <mat-autocomplete
+                  <!-- [matAutocomplete]="giftBranch" -->
+                  <!-- <mat-autocomplete
                     #giftBranch="matAutocomplete"
                     autoActiveFirstOption
                   >
@@ -2125,7 +2187,8 @@
                     >
                       {{ option }}
                     </mat-option>
-                  </mat-autocomplete>
+                  </mat-autocomplete> -->
+
                   <mat-error
                     *ngIf="
                       giftReceiptForm.controls.giftBranch.hasError('required')
@@ -2146,8 +2209,8 @@
                     type="text"
                     matInput
                     formControlName="giftVocNo"
-                    value
                     id="giftVocNo"
+                    (change)="changeGiftVocNo($event)"
                     [readonly]="viewOnly"
                   />
                   <mat-error
@@ -2214,9 +2277,10 @@
                   >
                     <mat-option
                       *ngFor="let option of customAcCodeListOptions | async"
-                      [value]="option.CODE"
+                      [value]="option.ACCODE"
                     >
-                      {{ option.CODE + " - " + option.DESCRIPTION }}
+                      {{ option.ACCODE + " - " + option.ACCOUNT_HEAD }}
+                      <!-- {{ option.CODE + " - " + option.DESCRIPTION }} -->
                     </mat-option>
                   </mat-autocomplete>
                   <mat-error
@@ -3277,6 +3341,15 @@
                 >
                   Last Name is <strong>required</strong>
                 </mat-error>
+                <mat-error
+                  *ngIf="
+                    customerDetailForm.controls.fcn_customer_detail_lname.hasError(
+                      'maxlength'
+                    )
+                  "
+                >
+                  Last Name must not exceed 100 characters.
+                </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-3">
@@ -3681,6 +3754,37 @@
                 />
               </mat-form-field>
             </div>
+            <div class="col-md-3">
+              <mat-form-field>
+                <mat-label>Expiry Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="expDateCust"
+                  name="fcn_customer_exp_date"
+                  formControlName="fcn_customer_exp_date"
+                  placeholder="DD/MM/YYYY"
+                  [readonly]="viewOnly"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="expDateCust"
+                ></mat-datepicker-toggle>
+                <mat-datepicker
+                  [startAt]="currentDate"
+                  #expDateCust
+                ></mat-datepicker>
+
+                <mat-error
+                  *ngIf="
+                    customerDetailForm.controls.fcn_customer_exp_date.hasError(
+                      'required'
+                    )
+                  "
+                >
+                  Expiry date is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
           </div>
         </form>
       </div>
@@ -3739,7 +3843,7 @@
               <div class="col-md-12">
                 <div class="bg-gray-card">
                   <div class="form-group row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <mat-form-field>
                         <mat-label>Division </mat-label>
                         <input
@@ -3751,7 +3855,7 @@
                         />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <mat-form-field>
                         <mat-label>Item Code </mat-label>
                         <input
@@ -3792,6 +3896,18 @@
                           id="fcn_li_location"
                           readonly
                         />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-2" *ngIf="!newLineItem.GIFT_VOUCHER">
+                      <mat-form-field>
+                        <mat-label>Gift Type</mat-label>
+                        <mat-select formControlName="fcn_li_gift_type">
+                          <mat-option
+                            *ngFor="let option of giftTypeOptions"
+                            [value]="option.value"
+                            >{{ option.label }}</mat-option
+                          >
+                        </mat-select>
                       </mat-form-field>
                     </div>
                   </div>
@@ -4581,5 +4697,212 @@
             Cancel</button>&nbsp;
         </div> -->
     </div>
+  </div>
+</ng-template>
+
+<ng-template #userAuthModal let-modal modal-lg>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Authentication</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="authForm">
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="username"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error *ngIf="authForm.controls.username.hasError('required')">
+              Username is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input
+              type="password"
+              matInput
+              formControlName="password"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error *ngIf="authForm.controls.password.hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="text-right">
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          class="btn-m-r-10"
+          [disabled]="viewOnly"
+          (click)="submitAuth()"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #userAttachmentModal let-modal modal-lg>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Attachment</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="attachmentForm">
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Remarks</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="remarks"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error
+              *ngIf="attachmentForm.controls.remarks.hasError('required')"
+            >
+              Remarks is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4 d-flex align-content-center">
+          <mat-form-field style="width: 80%;">
+            <input type="text" matInput formControlName="docType" />
+          </mat-form-field>
+          <master-search [MasterSearchData]="docTypeData"></master-search>
+          <!-- (newRowClick)="StyleCodeSelected($event)" -->
+        </div>
+
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Expiry Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="expDateAttachment"
+              name="expDate"
+              formControlName="expDate"
+              placeholder="DD/MM/YYYY"
+              [readonly]="viewOnly"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="expDateAttachment"
+            ></mat-datepicker-toggle>
+            <mat-datepicker [startAt]="currentDate" #expDateAttachment></mat-datepicker>
+
+            <mat-error
+              *ngIf="
+              attachmentForm.controls.expDate.hasError(
+                  'required'
+                )
+              "
+            >
+              Expiry date is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <div class="row" >
+        <!-- <mat-form-field>
+          <mat-label>Attachment</mat-label>
+          <input  type="file" (change)="onFileSelected($event)">
+        </mat-form-field> -->
+        <div class="col-md-6">
+        
+        <label for="attachmentFile" class="form-label">Attachment</label>
+        <input class="form-control" type="file"  id="attachmentFile" (change)="onFileSelected($event)">
+
+      </div>
+    </div>
+      <div class="text-right">
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          class="btn-m-r-10 mb-2"
+          [disabled]="viewOnly"
+          (click)="saveAttachment()"
+        >
+          Save
+        </button>
+      </div>
+
+
+      <div class="row mb-2">
+        <div class="col-md-12">
+          <dx-data-grid
+            #dataGrid
+            id="gridContainer"
+            keyExpr="KYCrefmid"
+            [dataSource]="transAttachmentList"
+            [showBorders]="true"
+          >
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
+            <dxo-selection mode="multiple"></dxo-selection>
+
+            <dxi-column
+              *ngFor="let data of transColumnList"
+              dataField="{{ data.field }}"
+              caption="{{ data.title }}"
+              [allowEditing]="true"
+              alignment="center"
+              backgroundcolor="#000"
+            >
+            </dxi-column>
+            <dxi-column
+              dataField="ATTACHMENT_PATH"
+              cellTemplate="attachmentTemp"
+              caption="Attachment"
+              [allowEditing]="true"
+              alignment="center"
+            >
+            </dxi-column>
+
+            <div *dxTemplate="let data of 'attachmentTemp'">
+              <a
+                href="javascript:void(0)"
+                (click)="openAttachment(data.data.ATTACHMENT_PATH)"
+              >
+                <i class="fa fa-paperclip" style="color: #337ab7"></i>
+              </a>
+              <dxi-button icon="fa fa-paperclip"></dxi-button>
+            </div>
+          </dx-data-grid>
+        </div>
+      </div>
+
+    </form>
   </div>
 </ng-template>

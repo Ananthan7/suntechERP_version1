@@ -14,7 +14,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./casting-tree-up.component.scss']
 })
 export class CastingTreeUpComponent implements OnInit {
-
+  selectedTabIndex = 0;
   divisionMS: any = 'ID';
   branchCode?: String;
   yearMonth?: String;
@@ -22,12 +22,13 @@ export class CastingTreeUpComponent implements OnInit {
   closeResult:any;
   pageTitle: any;
   currentFilter: any;
-  columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Weight','Metal Weight','Stone Weight','RCVD Gross Weight','Karat Code','Purity','Pure Weight','Metal Color','RCVD Pure Weight','Stock Code','Pieces','Job Pcs','Loss Wt','Loss Pure'];
-  columnheader : any[] = ['Type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
+  // columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Weight','Metal Weight','Stone Weight','RCVD Gross Weight','Karat Code','Purity','Pure Weight','Metal Color','RCVD Pure Weight','Stock Code','Pieces','Job Pcs','Loss Wt','Loss Pure'];
+  // columnheader : any[] = ['Type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
 
    @Input() content!: any;
 
    tableData: any[] = [];
+   tableData1: any[] = [];
 
    userName = localStorage.getItem('username');
 
@@ -131,6 +132,11 @@ export class CastingTreeUpComponent implements OnInit {
    ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+
+    console.log(this.content);
+    if(this.content){
+      this.setFormValues()
+    }
    }
  
    close(data?: any) {
@@ -148,6 +154,21 @@ export class CastingTreeUpComponent implements OnInit {
       let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
       this.castingTreeUpFrom.controls.startdate.setValue(new Date(date));
     }
+  }
+
+  setFormValues() {
+    if(!this.content) return
+    console.log(this.content);
+
+    this.dataService.getDynamicAPI('JobTreeMasterDJ/GetJobTreeMasterDJ'+this.content.APPR_CODE).subscribe((data) => {
+      if (data.status == 'Success') {
+
+        this.tableData = data.response.approvalDetails;
+       
+
+      }
+    });
+   
   }
  
  
@@ -174,11 +195,56 @@ export class CastingTreeUpComponent implements OnInit {
    });
  
    adddata() {
-     let length = this.tableData.length;
-     let srno = length + 1;
-     let data =  {};
-     this.tableData.push(data);
+    let length = this.tableData.length;
+    let srno = length + 1;
+    let data =  {
+      "UNIQUEID": 12345,
+      "APPR_CODE": "string",
+      "SRNO": srno,
+      "Job_Code": "string",
+      'Unique_job_ID': "string",
+      'Design_Code': "string",
+      'Gross_Weight': "string",
+      'Metal_Weight': "string",
+      'Stone_Weight': "string",
+      'RCVD_Gross_Weight': "string",
+      'Karat_Code': "string",
+      'Purity': "string",
+      'Pure_Weight': "string",
+      'Metal_Color': "string",
+      'RCVD_Pure_Weight': "string",
+      'Stock_Code': "string",
+      'Pieces': "string",
+      'Job_Pcs': "string",
+      'Loss_Wt': "string",
+      'Loss_Pure': "string",
+      "EMAIL_ID": "test",
+    };
+    this.tableData.push(data);
  }
+
+ adddatas() {
+ let length1 = this.tableData1.length;
+    let srno1 = length1 + 1;
+    let data1 =  {
+      "UNIQUEID": 12345,
+      "APPR_CODE": "test",
+      "SRNO": srno1,
+      'Type':"string",
+      'Location_Code': "string",
+      'Stock_Code': "string",
+      'Sub_Stock_Code': "string",
+      'Divcode': "string",
+      'Gross_Weight': "string",
+      'Party': "string",
+      'Pure_Weiht': "string",
+      'Balance': "string",
+      'Pcs': "string",
+      
+    };
+    
+    this.tableData1.push(data1);
+  }
 
  processCodeSelected(e:any){
   console.log(e);
@@ -213,16 +279,43 @@ karatCodeSelected(e:any){
 }
 
 addTableData(){ 
-  
+  // let data = {
+  //   "Job_Code": "str",
+  //   "Unique_job_ID": "",
+  //   "Design_Code": "",
+  //   "Gross_Weight": "",
+  //   "Metal_Weight": 0,
+  //   "Stone_Weight": 0,
+  //   "RCVD_Gross_Weight":0,
+  //   "Karat Code": "",
+  //   "Purity": 0,
+  //   "Pure_Weight": 0,
+  //   "Metal_Color": 0,
+  //   "RCVD_Pure_Weight": "",
+  //   "Stock_Code": "",
+  //   "Pieces": 0,
+  //   "Job_Pcs": "",
+  //   "Loss_Wt": 0,
+  //   "Loss_Pure": 0,
+  // }
+  let length = this.tableData.length;
+  let srno = length + 1;
+  let data =  {};
+  this.tableData.push(data);
 }
 
 deleteTableData(){
- 
+  this.tableData.pop();
 }
 
  removedata(){
    this.tableData.pop();
  }
+
+ removedatas(){
+  this.tableData.pop();
+}
+
    formSubmit(){
  
      if(this.content && this.content.FLAG == 'EDIT'){
@@ -354,10 +447,10 @@ deleteTableData(){
      this.subscriptions.push(Sub)
    }
  
-   setFormValues() {
-     if(!this.content) return
-     console.log(this.content);
-   }
+  //  setFormValues() {
+  //    if(!this.content) return
+  //    console.log(this.content);
+  //  }
  
  
    update(){

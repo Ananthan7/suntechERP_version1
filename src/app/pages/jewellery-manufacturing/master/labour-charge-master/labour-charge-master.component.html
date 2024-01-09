@@ -11,397 +11,386 @@
   <!-- content section -->
   <div class="row">
     <!-- <div class="container-fluid pt-3"> -->
-
     <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
       <mat-tab label="Diamond Labour Master">
         <div class="container-fluid">
           <!-- <div class="card metal-sales-card">
             <div class="card-body sales-card-body p-2"> -->
-              <form [formGroup]="diamondlabourMasterForm">
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Division :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="division" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="divisionCodeData"
-                      (newRowClick)="divisionCodeSelected($event)"></master-search>
-                  </div>
+          <form [formGroup]="diamondlabourMasterForm">
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Division :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" matInput maxlength="6" formControlName="division" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="divisionCodeData"
+                  (newRowClick)="divisionCodeSelected($event)"></master-search>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Labour Code :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" matInput formControlName="labour_code" />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-5">
+                <mat-form-field>
+                  <input type="text" matInput formControlName="labour_description" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Labour Type :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-label>Select</mat-label>
+                  <mat-select formControlName="labourType">
+                    <mat-option *ngFor="let option of labourTypeList" [value]="option.value">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Unit :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-label>Select</mat-label>
+                  <mat-select formControlName="unitList">
+                    <mat-option *ngFor="let option of unitList" [value]="option.value">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Method :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-label>Select</mat-label>
+                  <mat-select formControlName="method">
+                    <mat-option *ngFor="let option of methodList" [value]="option.value">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Currency:</label>
+              <div class="col-sm-3">
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <mat-label>Select</mat-label>
+                    <mat-select formControlName="unitList">
+                      <mat-option *ngFor="let option of currencyList" [value]="option.CURRENCY_CODE">
+                        {{ option.CURRENCY_CODE }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Labour Code :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput formControlName="labour_code" />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-5">
-                    <mat-form-field>
-                      <input type="text" matInput formControlName="labour_description" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Labour Type :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <mat-label>Select</mat-label>
-                      <mat-select formControlName="labourType">
-                        <mat-option *ngFor="let option of labourTypeList" [value]="option.value">
-                          {{ option.name }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Unit :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <mat-label>Select</mat-label>
-                      <mat-select formControlName="unitList">
-                        <mat-option *ngFor="let option of unitList" [value]="option.value">
-                          {{ option.name }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Method :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <mat-label>Select</mat-label>
-                      <mat-select formControlName="method">
-                        <mat-option value="one"></mat-option>
-                        <mat-option value="two"></mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Currency:</label>
-                  <div class="col-sm-3">
-                    <div class="col-sm-3">
-                      <mat-form-field>
-                        <mat-label>Select</mat-label>
-                        <mat-select formControlName="unitList">
-                          <mat-option *ngFor="let option of currencyList" [value]="option.CURRENCY_CODE">
-                            {{ option.CURRENCY_CODE }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Shape :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="shape" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="shapeCodeData"
-                      (newRowClick)="shapeCodeSelected($event)"></master-search>
-                  </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Shape :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" matInput maxlength="6" formControlName="shape" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="shapeCodeData"
+                  (newRowClick)="shapeCodeSelected($event)"></master-search>
+              </div>
 
-                  <label for="input" class="col-sm-2 col-form-label">Process :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="process" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="processCodeData"
-                      (newRowClick)="processCodeSelected($event)"></master-search>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Size From :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="size_from" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="sizeFromCodeData"
-                      (newRowClick)="sizeFromCodeSelected($event)"></master-search>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Labour A/C :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="labour_ac" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="labouracCodeData"
-                      (newRowClick)="labouracSelected($event)"></master-search>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Size To :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="size_to" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="sizeToCodeData"
-                      (newRowClick)="sizeToCodeSelected($event)"></master-search>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Cost Rate :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="cost_rate" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Sieve :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="sieve" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="sieveCodeData"
-                      (newRowClick)="sieveSelected($event)"></master-search>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Selling Rate :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="selling_rate" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Sieve Desc :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="sieve_desc" />
-                    </mat-form-field>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Selling %*:</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="text" matInput maxlength="6" formControlName="selling" />
-                    </mat-form-field>
-
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Ct Wt From :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="number" matInput maxlength="6" formControlName="ctWtFrom" />
-                    </mat-form-field>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Setting Type :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <mat-label>Select</mat-label>
-                      <mat-select formControlName="unitList">
-                        <mat-option *ngFor="let option of currencyList" [value]="option.CURRENCY_CODE">
-                          {{ option.CURRENCY_CODE }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <input type="number" matInput maxlength="6" formControlName="ctWtTo" />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-6">
-                      <mat-checkbox class="example-margin" formControlName="accessories">Accessories</mat-checkbox>
-                  </div>
-                </div>
-              </form>
-            <!-- </div>
+              <label for="input" class="col-sm-2 col-form-label">Process * :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" matInput maxlength="6" formControlName="process" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="processCodeData"
+                  (newRowClick)="processCodeSelected($event)"></master-search>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Size From :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" matInput maxlength="6" formControlName="size_from" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="sizeFromCodeData"
+                  (newRowClick)="sizeFromCodeSelected($event)"></master-search>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Labour A/C :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" matInput maxlength="6" formControlName="labour_ac" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="labouracCodeData"
+                  (newRowClick)="labouracSelected($event)"></master-search>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Size To :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" matInput maxlength="6" formControlName="size_to" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="sizeToCodeData"
+                  (newRowClick)="sizeToCodeSelected($event)"></master-search>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="number" matInput maxlength="6" formControlName="cost_rate" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Sieve :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" matInput maxlength="6" formControlName="sieve" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="sieveCodeData" (newRowClick)="sieveSelected($event)"></master-search>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Selling Rate :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="number" matInput maxlength="6" formControlName="selling_rate" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Sieve Desc :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" matInput maxlength="6" formControlName="sieve_desc" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Selling % * :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="number" matInput maxlength="6" formControlName="selling" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Ct Wt From :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="number" matInput maxlength="6" formControlName="ctWtFrom" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Setting Type :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-label>Select</mat-label>
+                  <mat-select formControlName="unitList">
+                    <mat-option *ngFor="let option of currencyList" [value]="option.CURRENCY_CODE">
+                      {{ option.CURRENCY_CODE }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="number" matInput maxlength="6" formControlName="ctWtTo" />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-checkbox class="example-margin" formControlName="accessories">Accessories</mat-checkbox>
+              </div>
+            </div>
+          </form>
+          <!-- </div>
           </div> -->
         </div>
       </mat-tab>
+      
       <mat-tab label="Metal Labour Master">
         <div class="container-fluid">
           <!-- <div class="card metal-sales-card">
             <div class="card-body sales-card-body p-2"> -->
-              <form [formGroup]="metallabourMasterForm">
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Division :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput maxlength="6" formControlName="metalDivision">
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="divisionCodeData"
-                      (newRowClick)="metaldivisionCodeSelected($event)"></master-search>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Stock Code :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput maxlength="6" formControlName="stock_code" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="stockCodeData"
-                      (newRowClick)="stockCodeSelected($event)"></master-search>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Labour Code :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput formControlName="metallabour_code" />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-5">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput formControlName="metallabour_description" />
-                    </mat-form-field>
-
-                  </div>
-                </div>
-                <div class="row mb-2">
-
-                  <label for="input" class="col-sm-2 col-form-label">Labour Type :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <mat-label>Select</mat-label>
-                      <mat-select formControlName="metallabourType">
-                        <mat-option *ngFor="let option of labourTypeList" [value]="option.value">
-                          {{ option.name }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Currency :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput maxlength="6" formControlName="metalcurrency" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="currencyCodeData"
-                      (newRowClick)="currencyCodeSelected($event)"></master-search>
-                  </div>
-                </div>
-                <div class="row mb-2">
-
-                  <label for="input" class="col-sm-2 col-form-label">Karat :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput maxlength="6" formControlName="karat" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="karatCodeData"
-                      (newRowClick)="karatCodeSelected($event)"></master-search>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Labour A/C :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input matInput  type="text" formControlName="labourAc" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="labouracCodeData"
-                      (newRowClick)="labourAcSelected($event)"></master-search>
-                  </div>
-                </div>
-                <div class="row mb-2">
-
-                  <label for="input" class="col-sm-2 col-form-label">Color :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput maxlength="6" formControlName="color" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="colorData"
-                      (newRowClick)="colorDataSelected($event)"></master-search>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Cost Rate :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input  matInput type="text" formControlName="costRate" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Type :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput maxlength="6" formControlName="typecode" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="typeCodeData"
-                      (newRowClick)="typeCodeSelected($event)"></master-search>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Selling Rate :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input  matInput type="text" formControlName="metalselling_rate" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Category :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput maxlength="6" formControlName="category" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="categoryCodeData"
-                      (newRowClick)="categorySelected($event)"></master-search>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input  type="text" matInput formControlName="metalSelling" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row mb-2">
-
-                  <label for="input" class="col-sm-2 col-form-label">Sub Category :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput maxlength="6" formControlName="subCategory" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="subcategoryCodeData"
-                      (newRowClick)="subcategorySelected($event)"></master-search>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Wastage %* :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input  matInput type="text" formControlName="wastage" />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Brand :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input type="text" matInput maxlength="6" formControlName="brand" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="brandCodeData"
-                      (newRowClick)="brandSelected($event)"></master-search>
-                  </div>
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Unit :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field>
-                      <mat-label>Select</mat-label>
-                      <mat-select formControlName="metalunitList">
-                        <mat-option *ngFor="let option of unitList" [value]="option.value">
-                          {{ option.name }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <label for="input" class="col-sm-2 col-form-label">Purity :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input matInput  type="text" formControlName="purity">
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row mb-2">
-
-                  <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                      <input matInput  type="text" formControlName="wtFrom" />
-                    </mat-form-field>
-                  </div>
-
-                </div>
-                <div class="row mb-2">
-                  <label for="input" class="col-sm-2 col-form-label">Wt To :</label>
-                  <div class="col-sm-3">
-                    <mat-form-field style="width: 90%">
-                    <input matInput  type="text" formControlName="wtTo" />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-3 mb-2">
-                    <!-- <div class="form-check">
+          <form [formGroup]="metallabourMasterForm">
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Division :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput maxlength="6" formControlName="metalDivision">
+                </mat-form-field>
+                <master-search [MasterSearchData]="divisionCodeData"
+                  (newRowClick)="metaldivisionCodeSelected($event)"></master-search>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Stock Code :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput maxlength="6" formControlName="stock_code" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="stockCodeData"
+                  (newRowClick)="stockCodeSelected($event)"></master-search>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Labour Code :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput formControlName="metallabour_code" />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-5">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput formControlName="metallabour_description" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Labour Type :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-label>Select</mat-label>
+                  <mat-select formControlName="metallabourType">
+                    <mat-option *ngFor="let option of labourTypeList" [value]="option.value">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Currency :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput maxlength="6" formControlName="metalcurrency" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="currencyCodeData"
+                  (newRowClick)="currencyCodeSelected($event)"></master-search>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Karat :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput maxlength="6" formControlName="karat" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="karatCodeData"
+                  (newRowClick)="karatCodeSelected($event)"></master-search>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Labour A/C :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input matInput type="text" formControlName="labourAc" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="labouracCodeData"
+                  (newRowClick)="labourAcSelected($event)"></master-search>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Color :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput maxlength="6" formControlName="color" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="colorData" (newRowClick)="colorDataSelected($event)"></master-search>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Cost Rate :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input matInput type="text" formControlName="costRate" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Type :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput maxlength="6" formControlName="typecode" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="typeCodeData"
+                  (newRowClick)="typeCodeSelected($event)"></master-search>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Selling Rate :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input matInput type="text" formControlName="metalselling_rate" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Category :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput maxlength="6" formControlName="category" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="categoryCodeData"
+                  (newRowClick)="categorySelected($event)"></master-search>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="number" matInput formControlName="metalSelling" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Sub Category :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput maxlength="6" formControlName="subCategory" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="subcategoryCodeData"
+                  (newRowClick)="subcategorySelected($event)"></master-search>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Wastage % * :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input matInput type="number" formControlName="wastage" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Brand :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input type="text" matInput maxlength="6" formControlName="brand" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="brandCodeData" (newRowClick)="brandSelected($event)"></master-search>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Unit :</label>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-label>Select</mat-label>
+                  <mat-select formControlName="metalunitList">
+                    <mat-option *ngFor="let option of unitList" [value]="option.value">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Purity :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input matInput type="number" formControlName="purity">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input matInput type="text" formControlName="wtFrom" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="input" class="col-sm-2 col-form-label">Wt To :</label>
+              <div class="col-sm-3">
+                <mat-form-field style="width: 90%">
+                  <input matInput type="text" formControlName="wtTo" />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3 mb-2">
+                <!-- <div class="form-check">
                       <input class="form-check-input" type="radio" formControlName="onGrossWt">
                     <label class="form-check-label" for="onGrossWt">
                       On Gross Wt
@@ -413,17 +402,16 @@
                       For Design Only
                     </label>
                     </div> -->
-                    <mat-checkbox class="example-margin mx-2" formControlName="onGrossWt"> On Gross Wt</mat-checkbox>
-                    <mat-checkbox class="example-margin mx-2" formControlName="forDesignOnly">For Design Only</mat-checkbox>
-
-                    <!-- <mat-radio-group aria-label="Select an option">
+                <mat-checkbox class="example-margin mx-2" formControlName="onGrossWt"> On Gross Wt</mat-checkbox>
+                <mat-checkbox class="example-margin mx-2" formControlName="forDesignOnly">For Design Only</mat-checkbox>
+                <!-- <mat-radio-group aria-label="Select an option">
                       <mat-radio-button value="1"  formControlName="onGrossWt" class="mx-2"> On Gross Wt</mat-radio-button>
                       <mat-radio-button value="2"  formControlName="forDesignOnly" class="mx-2">For Design Only</mat-radio-button>
                     </mat-radio-group> -->
-                  </div>
-                </div>
-              </form>
-<!--             </div>
+              </div>
+            </div>
+          </form>
+          <!--             </div>
           </div> -->
         </div>
       </mat-tab>

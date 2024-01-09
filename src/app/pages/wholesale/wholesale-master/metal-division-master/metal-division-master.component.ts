@@ -33,7 +33,7 @@ export class MetalDivisionMasterComponent implements OnInit {
   }
 
   metaldivisionForm: FormGroup = this.formBuilder.group({
-    code:[''],
+    code:['',[Validators.maxLength(1)]],
     codedes:[''],
     costcenter:[''],
     stockcode:[''],

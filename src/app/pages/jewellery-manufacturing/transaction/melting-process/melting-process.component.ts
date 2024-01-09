@@ -34,6 +34,7 @@ export class MeltingProcessComponent implements OnInit {
   sequenceDetails: any[] = []
   meltingprocessDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
 
   columnhead: any[] = ['SRNO', 'Div', 'jobno', 'stockcode', 'stockcodedes', 'process','worker', 'pcs', 'grossweight', 'stoneweight', 'netweight', 'purity', 'pureweight', 'lossweight', 'purediff'];
   // columnhead: any[] = ['Sr #', 'Div', 'Job No', 'Stock Code', 'Stock Desc', 'Process', 'Worker', 'Pcs', 'Gross Wt', 'Stone Wt', 'Net Wt', 'Purity', 'Pure Wt', 'Balance Wt', 'Balance Pure'];
@@ -78,7 +79,17 @@ export class MeltingProcessComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
+  processCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'PROCESS_CODE',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true, 
+  }
   timeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -130,6 +141,13 @@ export class MeltingProcessComponent implements OnInit {
     this.meltingProcessFrom.controls.stockCodeScp.setValue(e.DESCRIPTION);
   }
 
+  processCodeScpSelected(e:any){
+    console.log(e); 
+    this.meltingProcessFrom.controls.process.setValue(e.Process_Code);
+    this.meltingProcessFrom.controls.processDesc.setValue(e.Description);
+  }
+
+
 
   MeltingCodeSelected(e: any) {
     console.log(e);
@@ -155,36 +173,36 @@ export class MeltingProcessComponent implements OnInit {
 
 
   meltingProcessFrom: FormGroup = this.formBuilder.group({
-    vocType: [''],
-    vocNo: [''],
-    vocDate: [''],
-    meltingType: [''],
-    process: [''],
-    processDesc: [''],
-    worker: [''],
-    workerDesc: [''],
-    color: [''],
-    time: [''],
-    stoneStockCode: [''],
-    stoneStockCodeNo: [''],
-    stoneStockCodeDesc: [''],
-    stoneStockCodeValue: [''],
-    stoneWeight: [''],
-    rate: [''],
-    stoneAmount: [''],
-    stockcodeRet: [''],
-    stockCodeScp: [''],
-    purityRET: [''],
-    purity: [''],
-    TotalpureWt: [''],
-    RETpureWt: [''],
-    TotalgrossWt: [''],
-    RETgrossWt: [''],
-    locationRet: [''],
-    locationScp: [''],
-    loss: [''],
-    balGross: [''],
-    balPure: [''],
+    vocType : ['MLP',[Validators.required]],
+    vocNo : ['1',[Validators.required]],
+    vocDate : [new Date(),''],
+    meltingType : ['',[Validators.required]],
+    process : [''],
+    processDesc : [''],
+    worker : ['',[Validators.required]],
+    workerDesc : ['',[Validators.required]],
+    color : ['',[Validators.required]],
+    time : [''],
+    stoneStockCode : [''],
+    stoneStockCodeNo : [''],
+    stoneStockCodeDesc : [''],
+    stoneStockCodeValue : [''],
+    stoneWeight : ['',[Validators.required]],
+    rate : [''],
+    stoneAmount : [''],
+    stockcodeRet : ['',[Validators.required]],
+    stockCodeScp : ['',[Validators.required]],
+    purityRET : ['',[Validators.required]],
+    purity : [''],
+    TotalpureWt : ['',[Validators.required]],
+    RETpureWt : ['',[Validators.required]],
+    TotalgrossWt : ['',[Validators.required]],
+    RETgrossWt : ['',[Validators.required]],
+    locationRet : ['',[Validators.required]],
+    locationScp : [''],
+    loss : ['',[Validators.required]],
+    balGross : ['',[Validators.required]],
+    balPure : ['',[Validators.required]],
   });
 
 
@@ -244,6 +262,7 @@ export class MeltingProcessComponent implements OnInit {
     // this.getSequenceDetailData(PROCESS_FORMDETAILS);
     
   }
+  resetAllocation(){}
   swapObjects(array1: any, array2: any, index: number) {
     // Check if the index is valid
     if (index >= 0 && index < array1.length) {

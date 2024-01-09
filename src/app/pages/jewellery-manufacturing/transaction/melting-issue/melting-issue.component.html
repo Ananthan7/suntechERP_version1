@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voc Type *:</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Voc Type * :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="voctype" />
@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voc Date *:</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Voc Date * :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="vocdate" />
@@ -37,6 +37,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="time" matInput formControlName="voctime" />
                                 </mat-form-field>
+                                
                             </div>
                         </div>
                         <div class="row">
@@ -52,7 +53,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Job Number *:</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Job Number :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="jobno" />
@@ -67,7 +68,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Process *:</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Process :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="processcode" />
@@ -82,7 +83,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Worker *:</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Worker :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="worker" />
@@ -118,7 +119,7 @@
                                     <input type="text" matInput formControlName="color" />
                                 </mat-form-field>
                             </div>
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Job Purity*:</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Job Purity :</label>
                         </div>
                         <div class="row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Time :</label>
@@ -163,7 +164,10 @@
                                 <label for="inputPassword"
                                     class="col-sm-12  col-form-label text-center border border-light bg-light text-dark">Pure
                                     / Alloy Ratio</label>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                [allowColumnReordering]="true"
+                                [allowColumnResizing]="true"
+                                [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-selection mode="multiple"></dxo-selection>
@@ -180,7 +184,10 @@
                 </div>
                 <div class="row py-2 border-top">
                     <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                        [allowColumnReordering]="true"
+                        [allowColumnResizing]="true"
+                        [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
@@ -195,27 +202,27 @@
                     <div class="col-md-12">
                         <div class="row">
                             <label for="inputPassword" class="col-sm-1 col-form-label">Total>></label>
-                            <label for="inputPassword" class="col-sm-1 col-form-label">Issued:</label>
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Issued :</label>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="issued" />
                                 </mat-form-field>
                             </div>
 
-                            <label for="inputPassword" class="col-sm-1 col-form-label">Required:</label>
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Required :</label>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="required" />
                                 </mat-form-field>
                             </div>
 
-                            <label for="inputPassword" class="col-sm-1 col-form-label">Allocated:</label>
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Allocated :</label>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="allocated" />
                                 </mat-form-field>
                             </div>
-                            <label for="inputPassword" class="col-sm-1 col-form-label">Balance:</label>
+                            <label for="inputPassword" class="col-sm-1 col-form-label">Balance :</label>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="balance" />

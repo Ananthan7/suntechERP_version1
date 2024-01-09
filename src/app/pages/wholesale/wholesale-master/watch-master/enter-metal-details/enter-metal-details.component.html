@@ -1,11 +1,11 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Add Metal Details</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Details</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
 <!-- modal header component -->
-<!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> -->
+<modal-header  (cancelClick)="close()" [isViewContinue]="true"></modal-header>
 <!-- content section -->
 
 <div class="container-fluid pt-3">
@@ -104,23 +104,6 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput />
                                 </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="row mb-2">
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-primary  text-center"
-                                    (saveClick)="formSubmit()">Save</button>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-primary text-center"
-                                    (cancelClick)="close()">Cancel</button>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-primary text-center"
-                                    (continueClick)="continue()">Continue</button>
                             </div>
                         </div>
                     </div>

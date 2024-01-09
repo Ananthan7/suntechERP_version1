@@ -74,3 +74,39 @@
 .rounded-pill{
     height: 26px;
 }
+
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  text-align: center;
+}
+
+.upload-btn-wrapper 
+.btnnew {
+  color: white;
+  font-size: 14px;
+  background: #ffffff;
+  margin-left: 14px;
+  width: 262px;
+  height: 200px;
+  
+}
+
+.upload-btn-wrapper 
+.uploadproduct {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  font-size: 100px;
+  cursor: pointer;
+}

@@ -191,8 +191,4 @@ export class EnterStoneDetailsComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
-  continue(){
-    
-  }
 }

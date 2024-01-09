@@ -16,19 +16,14 @@
                 <div class="col-md-4">
                     <div class="row">
                         <span>
-                            <label for="inputPassword"
-                                class="col-sm-4 col-form-label">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">
                                 Code*:</label>
                             <mat-form-field style="width: 20%">
-                                <input type="text" matInput
-                                    placeholder="Code" maxlength="6"
-                                    formControlName="sequenceCode"
-                                    (focusout)="checkSequenceExists($event)" />
+                                <input type="text" matInput placeholder="Code" maxlength="6"
+                                    formControlName="sequenceCode" (focusout)="checkSequenceExists($event)" />
                             </mat-form-field>
-                            <mat-form-field
-                                style="width: 40%; margin-left: 7px;">
-                                <input type="text" matInput
-                                    placeholder="Description"
+                            <mat-form-field style="width: 40%; margin-left: 7px;">
+                                <input type="text" matInput placeholder="Description"
                                     formControlName="sequenceDESCRIPTION" />
                             </mat-form-field>
                         </span>
@@ -37,49 +32,37 @@
                 <div class="col-md-4">
                     <div class="row">
                         <span>
-                            <label for="inputPassword"
-                                class="col-sm-4 col-form-label">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">
                                 Prefix*:</label>
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput
-                                    placeholder="Prefix Code"
-                                    maxlength="6"
-                                    (change)="PrefixCodeChange($event)"
-                                    formControlName="sequencePrefixCode" />
+                                <input type="text" matInput placeholder="Prefix Code" maxlength="6"
+                                    (change)="PrefixCodeChange($event)" formControlName="sequencePrefixCode" />
                             </mat-form-field>
-                            <master-search
-                                [MasterSearchData]="sequenceMasterData"
+                            <master-search [MasterSearchData]="sequenceMasterData"
                                 (newRowClick)="sequencePrefixCodeSelected($event)">
                             </master-search>
                         </span>
                     </div>
                 </div>
             </div>
-
         </form>
-
         <!-- table section starts -->
         <div class="row">
             <div class="col-md-11">
                 <div class="row ps-4" style="max-height: 60vh;overflow-y: scroll;">
-                    <div class="d-flex w-100"
-                        style="background-color: #427dae;color: #fff;text-align: center;">
-                        <div
-                            style="width: 38.5%; border-right: 1px solid #fff;">Sequence</div>
-                        <div
-                            style="width: 25.5%; border-right: 1px solid #fff;">Labour
+                    <div class="d-flex w-100" style="background-color: #427dae;color: #fff;text-align: center;">
+                        <div style="width: 38.5%; border-right: 1px solid #fff;">Sequence</div>
+                        <div style="width: 25.5%; border-right: 1px solid #fff;">Labour
                             Account</div>
                         <div style="width: 35%;">Manufacturing Loss</div>
                     </div>
                     <!-- drag and drop table -->
-                    <table
-                        class="table table-sm table-bordered table-striped text-center dragTable"
-                        cdkDropList
+                    <table class="table table-sm table-bordered table-striped text-center dragTable" cdkDropList
                         (cdkDropListDropped)="drop($event)">
                         <thead>
                             <tr>
-                                <th scope="col"><input type="checkbox"
-                                    class="inputSec" [(ngModel)]="selectAll" (change)="checkAll()"/></th>
+                                <th scope="col"><input type="checkbox" class="inputSec" [(ngModel)]="selectAll"
+                                        (change)="checkAll()"(change)="oncalculateChange($event)"/></th>
                                 <th scope="col">No</th>
                                 <th scope="col">Process</th>
                                 <th scope="col">Description</th>
@@ -95,43 +78,52 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr cdkDrag class="drag-item"
-                                *ngFor="let data of dataSource;let i=index">
-                                <td><input type="checkbox"
-                                        class="inputSec"
-                                        [(ngModel)]="data['isChecked']"
+                            <tr cdkDrag class="drag-item" *ngFor="let data of dataSource;let i=index">
+                                <td><input type="checkbox" class="inputSec" [(ngModel)]="data['isChecked']"
                                         (change)="changedCheckbox(data)" /></td>
                                 <td>{{i+1}}</td>
-                                <td cdkDragHandle>{{data['PROCESS_CODE']}}</td>
-                                <td style="text-align: left;"
-                                    cdkDragHandle>{{data['DESCRIPTION']}}</td>
-                                <td cdkDragHandle>{{data['WIP_ACCODE']}}</td>
-                                <td cdkDragHandle>{{data['GAIN_ACCODE']}}</td>
-                                <td class="text-right" cdkDragHandle>{{data['LAB_ACCODE']}}</td>
-                                <td class="text-right" cdkDragHandle>{{data['LOSS_ACCODE']}}</td>
-                                <td class="text-right" cdkDragHandle>{{data['STD_LOSS']}}</td>
-                                <td class="text-right" cdkDragHandle>{{data['MAX_LOSS']}}</td>
-                                <td cdkDragHandle>{{data['STDTIME']}}</td>
-                                <td cdkDragHandle>{{data['MAXTIME']}}</td>
                                 <td>
-                                    <input type="checkbox"
-                                        
-                                        [value]="data['TIMEON_PROCESS']" />
+                                    <input  type="text"  style="width: 100%;" [value]="data['PROCESS_CODE']"  />
                                 </td>
-
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['DESCRIPTION']"  />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['WIP_ACCODE']"  />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['GAIN_ACCODE']"  />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['LAB_ACCODE']"  />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['LOSS_ACCODE']"  />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['STD_LOSS']"  />
+                                </td>
+                                <td>
+                                    <input  type="text"  style="width: 100%;" [value]="data['MAX_LOSS']"  />
+                                </td>
+                                <td>
+                                    <input  type="time"  style="width: 100%;" [value]="data['STDTIME']"  step="2" />
+                                </td>
+                                <td>
+                                    <input  type="time"  style="width: 100%;" [value]="data['MAXTIME']" step="2" />
+                                </td>
+                                <td>
+                                    <input  type="checkbox"  [value]="data['TIMEON_PROCESS']"  />
+                                </td>
                                 <!-- Preview -->
-                                <div *cdkDragPreview
-                                    matchSize="true"
-                                    class="container dragdrop-placeholder">
+                                <div *cdkDragPreview matchSize="true" class="container dragdrop-placeholder">
                                     {{data}}
                                 </div>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
-
     </div>
 </div>

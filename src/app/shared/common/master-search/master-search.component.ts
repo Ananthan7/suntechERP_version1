@@ -43,12 +43,24 @@ export class MasterSearchComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    // this.getInitialValue()
-    // this.loadData();
     if(!this.MasterSearchData.LOAD_ONCLICK){
       this.loadData();
     }
   }
+  getAllValue() {
+    let API:string = this.MasterSearchData.API_VALUE || ''
+    this.subscriptions$ = this.dataService.getDynamicAPI(API)
+    .subscribe((result) => {
+      console.log(result);
+      if (result.response) {
+        this.dataSourceHead = this.MasterSearchData.SEARCH_FIELD?.split(',').map(item => item.trim()) || []
+        this.dataSource = result.response
+      } else {
+        this.toastr.error('Data Not Available')
+      }
+    }, err => alert(err))
+  }
+
   alphabetClicked(item:any){
     this.MasterSearchData.SEARCH_VALUE = item;
     this.currentPage = 1
@@ -65,6 +77,10 @@ export class MasterSearchComponent implements OnInit {
   }
   /**use: first call to load data */
   loadData() {
+    if (this.MasterSearchData.API_VALUE && this.MasterSearchData.API_VALUE != '') {
+      this.getAllValue()
+      return
+    }
     let param = {
       "PAGENO": this.currentPage ? this.currentPage : this.MasterSearchData.PAGENO,
       "RECORDS": this.MasterSearchData.RECORDS,

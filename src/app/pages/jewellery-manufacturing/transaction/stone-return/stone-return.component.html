@@ -13,12 +13,12 @@
     <form [formGroup]="stonereturnFrom">
       <div class="container-fluid pt-3">
         <div class="row mb-2">
-          <h6 class="p-l1">HO</h6>
+          <h6>{{branchCode}} - {{companyName}}</h6>
         </div>
         <div class="row mb-2">
           <div class="col-md-5">
             <div class="row mb-2">
-              <label for="input" class="col-sm-3 col-form-label">Voucher*:</label>
+              <label for="input" class="col-sm-3 col-form-label">Voucher * :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="voctype" />
@@ -31,10 +31,13 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-3 col-form-label">Voucher Date*:</label>
+              <label for="input" class="col-sm-3 col-form-label">Voucher Date * :</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="vocdate" />
+                  <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
+                  placeholder="DD/MM/YYYY"  DateValidation />
+                <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -82,7 +85,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-3 col-form-label">Currency :</label>
+              <label for="input" class="col-sm-3 col-form-label">Currency * :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="currency" />
@@ -133,7 +136,10 @@
                 </div>
               </div>
               <div class="row mt-1 pt-3">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                [allowColumnReordering]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>

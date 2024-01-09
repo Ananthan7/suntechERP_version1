@@ -93,9 +93,9 @@ export class JewelleryDismantlingComponent implements OnInit {
   }
 
  jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
-   voctype:[''],
-   vocno:[''],
-   vocdate:[''],
+   voctype:['MDM',[Validators.required]],
+   vocno:['1',[Validators.required]],
+   vocdate:[new Date(),[Validators.required]],
    enteredby:[''],
    lossaccount:[''],
    itemcurrency:[''],

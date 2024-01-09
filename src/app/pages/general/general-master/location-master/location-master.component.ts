@@ -31,8 +31,8 @@ export class LocationMasterComponent implements OnInit {
   }
 
   locationForm: FormGroup = this.formBuilder.group({
-    locationcode:[''],
-    codedesc:[''],
+    locationcode:['',[Validators.required]],
+    codedesc:['',[Validators.required]],
     type:[''],
     division:[''],
     branch:[''],
@@ -107,7 +107,10 @@ export class LocationMasterComponent implements OnInit {
   
   PLACCodeCodeSelected(e:any){
     console.log(e);
-    this.locationForm.controls.PLACCode.setValue(e.ACCODE);
+    this.locationForm.controls.PLACCode1.setValue(e.ACCODE);
+    this.locationForm.controls.PLACCode2.setValue(e.ACCODE);
+    this.locationForm.controls.PLACCode3.setValue(e.ACCODE);
+    this.locationForm.controls.PLACCode4.setValue(e.ACCODE);
   }
 
   close(data?: any) {

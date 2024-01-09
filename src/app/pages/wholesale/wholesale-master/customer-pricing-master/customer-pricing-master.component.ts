@@ -1,12 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
 
 @Component({
   selector: 'app-customer-pricing-master',
@@ -14,16 +17,20 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./customer-pricing-master.component.scss']
 })
 export class CustomerPricingMasterComponent implements OnInit {
-
+  @ViewChild('select')
+  select!: MatSelect; 
   divisionMS: any = 'ID';
-  columnheader:any[] = ['SrNo','Group 1','Group 2', 'Group 3','Group 4','Group 5','Group 6','Apply On U','Mkg On %','Std Mkg','Mkg Rate','Mkg Rate','Variance'];
+  columnheader:any[] = ['SrNo','Group 1','Group 2', 'Group 3','Group 4','Group 5','Group 6','Apply On U','Mkg On %','Std Mkg','Mkg Rate','Variance'];
   columnheader1:any[] = ['Branch','Making','Wastage', 'Apply',];
   columnheaderweightRange:any[] = ['SrNo','Division','Apply on Unit', 'From Weight','To Weight','Making Rate'];
   columnheaderTransaction : any[] = ['SrNo','Karat','Std Purity','Sales Purity','Purchase Purity'];
-
   subscriptions: any;
   @Input() content!: any; 
+  Add:boolean= true;
+  Deduct:boolean= true;
   tableData: any[] = [];
+  currentDate = new FormControl(new Date());
+  flexSwitchCheckChecked:boolean= true;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -36,16 +43,44 @@ export class CustomerPricingMasterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  allSelected=false;
+  apply: any[] = [
+   {value: 'Std Making Rate', viewValue: 'Std Making Rate'},
+   {value: 'Min Rate', viewValue: 'Min Rate'},
+   {value: 'Max Rate', viewValue: 'Max Rate'},
+   {value: 'Wastage %', viewValue: 'Wastage %'}
+ ];
+
+ toggleAllSelection() {
+   if (this.allSelected) {
+     this.select.options.forEach((item: MatOption) => item.select());
+   } else {
+     this.select.options.forEach((item: MatOption) => item.deselect());
+   }
+ }
+  optionClick() {
+   let newStatus = true;
+   this.select.options.forEach((item: MatOption) => {
+     if (!item.selected) {
+       newStatus = false;
+     }
+   });
+   this.allSelected = newStatus;
+ }
+ 
   customerpricemasterForm: FormGroup = this.formBuilder.group({
-    division:[],
-    approvalby:[],
-    enteredBy:[],
-    price:[],
-    currency:[],
-    customername:[],  
-    customercode:[],
-    labourtype:[],
-    pricedesc:[],
+    division:['',[Validators.required]],
+    date:[new Date(),''],
+    approvalby:[''],
+    enteredBy:['',[Validators.required]],
+    price:['',[Validators.required]],
+    currency:['',[Validators.required]],
+    customername:['',[Validators.required]],  
+    customercode:['',[Validators.required]],
+    labourtype:['',[Validators.required]],
+    pricedesc:['',[Validators.required]],
+    defaultCustomer:[''],
+    defaultVendor:[''],
   })
 
   user: MasterSearchModel = {
@@ -94,7 +129,7 @@ export class CustomerPricingMasterComponent implements OnInit {
   }
   custsuppCodeSelected(e:any){
     console.log(e); 
-    this.customerpricemasterForm.controls.custsupp.setValue(e.ACCODE);
+    this.customerpricemasterForm.controls.customercode.setValue(e.ACCODE);
   }
 
   approvalCodeData: MasterSearchModel = {
@@ -170,7 +205,7 @@ export class CustomerPricingMasterComponent implements OnInit {
       "PRICE_DESCRIPTION":this.customerpricemasterForm.value.pricedesc || "",
       "LABOUR_TYPE": this.customerpricemasterForm.value.labourtype || "",
       "DIVISION":this.customerpricemasterForm.value.division || "",
-      "CREATED_DATE": "2023-11-27T09:27:28.005Z",
+      "CREATED_DATE": this.customerpricemasterForm.value.date || "",
       "ENTERED_BY": this.customerpricemasterForm.value.enteredby || "",
       "IS_STOCK_CODE": true,
       "APPROVED_BY": this.customerpricemasterForm.value.approvalby || "",
@@ -179,8 +214,8 @@ export class CustomerPricingMasterComponent implements OnInit {
       "GROUP3": "string",
       "IS_ACTIVE": true,
       "BRANCH_CODE": "string",
-      "DEFAULT_CUST": true,
-      "DEFAULT_SUPP": true,
+      "DEFAULT_CUST": this.customerpricemasterForm.value.defaultCustomer,
+      "DEFAULT_SUPP": this.customerpricemasterForm.value.defaultVendor,
       "GROUP4": "string",
       "GROUP5": "string",
       "GROUP6": "string",

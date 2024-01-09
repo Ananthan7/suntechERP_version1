@@ -15,7 +15,7 @@
                       <div class="row">
                         <div class="col-md-10">
                           <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Code*:</label>
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Code * :</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;">
                                 <input type="text"  formControlName="code" matInput />
@@ -28,7 +28,7 @@
                       <div class="row">
                         <div class="col-md-10">
                           <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Description :</label>
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Description * :</label>
                             <div class="col-md-6">
                               <mat-form-field style="width: 100%;">
                                 <input type="text" formControlName="description"  matInput />
@@ -61,29 +61,39 @@
                   </div>
                   <div class="col-md-12">
                     <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
-                  [showRowLines]="true" class="mt-3">
+                  [showRowLines]="true" class="mt-3"
+                   keyExpr="SN"
+                   (onSelectionChanged)="onSelectionChanged($event)">
+
                   <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
 
-               
+                  <dxo-selection
+                  [selectAllMode]="allMode"
+                  [showCheckBoxesMode]="checkBoxesMode"
+                  mode="multiple"
+                ></dxo-selection>
                     <dxi-column dataField="SN" caption="SN"> </dxi-column>
-                    <dxi-column dataField="Code" caption="Code" cellTemplate="codetemp">
-                    </dxi-column>
-                    <dxi-column dataField="Description" caption="Description" cellTemplate="descriptiontemp">
+                    <dxi-column dataField="Code" caption="Code" cellTemplate="codetemp"></dxi-column>
+                    <dxi-column dataField="DESCRIPTION" caption="Description" cellTemplate="descriptiontemp">
                     </dxi-column>
               
                   <div *dxTemplate="let data of 'codetemp'">
                     <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
                     <div>
-                        <select (change)="codedataselected($event,data)" [value]="data.value" style="width: 100%;">
-                            <option value="1">2x3.5</option>
-                            <option value="2">4.95x3</option>
-                        </select>
+        
+                        <select (change)="codetemp($event,data)" [value]="data.value" style="width: 100%;">
+                          <option value=""></option>
+                          <option value="1">2x3.5</option>
+                          <option value="2">4.95x3</option>
+              
+                      </select>
                     </div>
+                    
 
                 </div>
 
                   <div *dxTemplate="let data of 'descriptiontemp'">
-                    <input type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" />
+                    <input  type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" [value]="data.value" />
                   </div>
                 </dx-data-grid>
                   </div>

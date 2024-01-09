@@ -11,6 +11,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./process-transfer-details.component.scss']
 })
 export class ProcessTransferDetailsComponent implements OnInit {
+  minEndDate: string = '';
   @Input() content!: any;
   divisionMS: any = 'ID';
   tableData: any[] = [];
@@ -213,16 +214,19 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls['enddate'].disable();
   }
   onStartDateChange() {
-
-    // Enable end date input if start date has a value
-    // You can also set some default value or logic here if needed
     this.processTransferdetailsForm.controls['enddate'].enable();
+
+    const startDateValue = this.processTransferdetailsForm.get('startdate')?.value;
+
+    if (startDateValue) {
+      // Enable the end date control
+      this.processTransferdetailsForm.controls['enddate'].enable();
+  
+      // Set the minimum end date to the selected start date
+      this.minEndDate = startDateValue;
+    }
   
 }
-  // changeEnddate(event: any) {
-  //   console.log(event);
-  //   this.processTransferdetailsForm.controls['enddate'].setValue("");
-  // }
 
   setAllInitialValues() {
     let dataFromParent = this.content[0].PROCESS_FORMDETAILS
@@ -493,11 +497,24 @@ export class ProcessTransferDetailsComponent implements OnInit {
   processCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.processFrom.setValue(event.Process_Code)
     this.processTransferdetailsForm.controls.PROCESSDESC.setValue(event.Description)
+   
   }
   processCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.processTo.setValue(event.Process_Code)
     this.processTransferdetailsForm.controls.processToDescription.setValue(event.Description)
+   
+
   }
+
+  metalprocessCodeFromSelected(event: any) {
+    this.processTransferdetailsForm.controls.METAL_processFrom.setValue(event.Process_Code)
+  }
+  metalprocessCodeToSelected(event: any) {
+    this.processTransferdetailsForm.controls.METAL_processTo.setValue(event.Process_Code)
+    this.processTransferdetailsForm.controls.METAL_processToDescription.setValue(event.Description)
+
+  }
+
   workerCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.workerFrom.setValue(event.WORKER_CODE)
   }
@@ -505,6 +522,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.workerTo.setValue(event.WORKER_CODE)
     this.processTransferdetailsForm.controls.workerToDescription.setValue(event.DESCRIPTION)
   }
+
+  metalworkerCodeFromSelected(event: any) {
+    this.processTransferdetailsForm.controls.METAL_workerFrom.setValue(event.WORKER_CODE)
+  }
+  
+  metalworkerCodeToSelected(event: any) {
+    this.processTransferdetailsForm.controls.METAL_workerTo.setValue(event.WORKER_CODE)
+    this.processTransferdetailsForm.controls.METAL_workerToDescription.setValue(event.DESCRIPTION)
+  }
+
   jobNumberSelected(event: any) {
     this.processTransferdetailsForm.controls.jobno.setValue(event.job_number)
     this.processTransferdetailsForm.controls.jobdes.setValue(event.job_description)

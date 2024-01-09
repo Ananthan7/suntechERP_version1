@@ -180,7 +180,7 @@ export class MeltingProcessDetailsComponent implements OnInit {
     barno: [''],
     ticketno: [''],
     tgold: [''],
-    sliver: [''],
+    sliver: ['',[Validators.required]],
 
   });
 

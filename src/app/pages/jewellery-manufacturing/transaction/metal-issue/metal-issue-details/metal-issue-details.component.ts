@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
@@ -19,17 +20,24 @@ export class MetalIssueDetailsComponent implements OnInit {
   columnhead: any[] = ['Div', 'Stock Code', 'Karat', 'Color', 'Req.Pcs', 'Req.Wt ', 'Issued Pcs', 'Issued Wt', 'Bal.pcs', 'Bal.Wt'];
   vocMaxDate = new Date();
   currentDate = new Date();
-  
- 
+  branchCode?: String;
+  yearMonth?: String;
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+  imageurl: any;
+  image: string | ArrayBuffer | null | undefined;
 
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
     if (this.content) {
       this.setFormValues()
     }
@@ -139,9 +147,16 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.subStockCode.setValue(e.DESCRIPTION);
-    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
-    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
+     this.metalIssueDetailsForm.controls.pcs.setValue(e.PCS);
+    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.DIVISION_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.STOCK_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes_1.setValue(e.DESCRIPTION);
     
+  }
+
+  jobchange(e:any){  
+      console.log(e);
+      this.metalIssueDetailsForm.reset();   
   }
 
 
@@ -150,6 +165,32 @@ export class MetalIssueDetailsComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  onFileChangedimage(event:any) {
+    this.imageurl = event.target.files[0].name
+    console.log(this.imageurl)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.image = reader.result; 
+      };
+    }
+  }
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
+  }
+
 
   metalIssueDetailsForm: FormGroup = this.formBuilder.group({
     jobNumber: [''],
@@ -166,7 +207,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     unqDesignId: [''],
     uniqueId:[''],
     treeNumber: [''],
-    jobPurity: [''],
+    jobPurity: ['',[Validators.required]],
     stockCode: [''],
     stockCodeDes: [''],
     pcs: [''],
@@ -177,12 +218,13 @@ export class MetalIssueDetailsComponent implements OnInit {
     pureWeight: [''],
     toStockCode: [''],
     toStockCodeDes: [''],
+    toStockCodeDes_1: [''],
     Comments: [''],
     location: [''],
     totalAmountFc: [''],
     subStockCode: [''],
     totalAmountLc: [''],
-    purityDiff: [''],
+    purityDiff: ['',[Validators.required]],
     amountFc: [''],
     jobPcs: [''],
     amountLc: [''],
@@ -262,7 +304,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           "MASTER_METAL": this.metalIssueDetailsForm.value.masterMetal,
           "STONE_WT": this.metalIssueDetailsForm.value.stoneWeight,
           "NET_WT": this.metalIssueDetailsForm.value.netWeight,
-          "DT_BRANCH_CODE": "dm3",
+          "DT_BRANCH_CODE": this.branchCode,
           "DT_VOCTYPE": "MIS",
           "DT_VOCNO": 0,
           "DT_YEARMONTH": "string",

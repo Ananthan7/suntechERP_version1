@@ -7,6 +7,10 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ComponentsComponent } from './components/components.component';
+import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
+import { JobStickerPrintComponent } from './job-sticker-print/job-sticker-print.component';
+import themes from 'devextreme/ui/themes';
 
 @Component({
   selector: 'app-jobcard',
@@ -28,7 +32,13 @@ export class JobcardComponent implements OnInit {
   userName = localStorage.getItem('username');
   columnhead:any[] = ['Sl No','Job Reference','Part Code','Description','Pcs','Metal Color','Metal Wt','Stone Wt','Gross Wt' ];
   branchCode?: String;
-  yearMonth?: String;
+  yearMonth?: String; 
+  currentDate: any = this.commonService.currentDate;
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+  allMode: string;
+  checkBoxesMode: string;
+  selectedIndexes: any = [];
   private subscriptions: Subscription[] = [];
 
   lengthCodeData: MasterSearchModel = {
@@ -48,17 +58,236 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 10,
     SEARCH_FIELD: 'DESCRIPTION',
-    SEARCH_HEADING: 'Ordertype Code',
+    SEARCH_HEADING: 'Order type',
     SEARCH_VALUE: '',
     WHERECONDITION: "DESCRIPTION<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
+  designCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Design type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DESIGN_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Customer Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  costCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  prefixCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Prefix type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 17,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 30,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  salesmanCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Salesman type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  subcatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Sub Category type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  brandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Brand type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  currencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  mainmetalCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Main Metal type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  timeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Time type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  rangeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Range type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  seqCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 93,
+    SEARCH_FIELD: 'SEQ_CODE',
+    SEARCH_HEADING: 'Sequence type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SEQ_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+
 
   jobCardFrom: FormGroup = this.formBuilder.group({
     orderType : [''],
-    jobno : [''],
+    jobno : ['5'],
     designcode : [''],
     designtype : [''],
     customer : [''],
@@ -72,7 +301,7 @@ export class JobcardComponent implements OnInit {
     comments : [''],
     size : [''],
     jobtype : [''],
-    jobdate : [''],
+    jobdate :  [''],
     date : [''],
     prefix : [''],
     type : [''],
@@ -81,7 +310,7 @@ export class JobcardComponent implements OnInit {
     setref : [''],
     length : [''],
     purity : [''],
-    deldate : [''],
+    deldate :  [''],
     salesman : [''],
     stockcode : [''],
     currency : [''],
@@ -93,8 +322,12 @@ export class JobcardComponent implements OnInit {
     totalpcs : [''],
     pending : [''],
     parts : [''],
-   
+    srewFiled : [''],
+    instruction : [''],
+    picture_name : [''],
   });
+ 
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -102,14 +335,136 @@ export class JobcardComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private comService: CommonServiceService,
-  ) { }
-
-  ngOnInit(): void {
-    this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
+    private commonService: CommonServiceService,
+  ) { 
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
+  ngOnInit(): void {
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
+    this.setInitialValues()
+    this.jobCardFrom.controls['date'].disable()
+    console.log(this.content);
+    if(this.content){
+      this.setFormValues()
+    }
+  }
+
+  setInitialValues() {
+    // this.branchCode = this.jobCardFrom.branchCode;
+    // this.companyName = this.commonService.companyName;
+    this.yearMonth = this.commonService.yearSelected;
+    this.jobCardFrom.controls.jobdate.setValue(this.currentDate)
+    this.jobCardFrom.controls.deldate.setValue(this.currentDate)
+    this.jobCardFrom.controls.date.setValue(this.currentDate)
+    //this.commonService.getqueryParamVocType()
+  }
+
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
+  }
+
+  
+  openaddcomponent() {
+    const modalRef: NgbModalRef = this.modalService.open(ComponentsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openaddtransactiondetails() {
+    const modalRef: NgbModalRef = this.modalService.open(TransactionDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openaddstickerprint() {
+    const modalRef: NgbModalRef = this.modalService.open(JobStickerPrintComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  addTableData(){
+    let length = this.tableData.length;
+    let sn = length + 1;
+    let data =  {
+      "SI NO": sn,
+      "job_reference": "",
+      "part_code": "",
+      "Description": "",
+      "Pcs": "",
+      "metal_color": "",
+      "metal_wt": "",
+      "stone_wt": "",
+      "gross_wt": "",
+    };
+    this.tableData.push(data);
+  }
+
+  job_referencetemp(data:any,value: any){
+    console.log(data);
+    this.tableData[value.data.SINO - 1].job_reference = data.target.value;
+  }
+
+  part_codetemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].part_code = data.DESIGN_CODE;
+  }
+
+  descriptiontemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].Description = data.DESIGN_DESCRIPTION;
+  }
+
+  Pcstemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].Pcs = data.target.value;
+  }
+
+  metal_colortemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].metal_color = data.target.value;
+  }
+
+  metal_wttemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].metal_wt = data.target.value;
+  }
+
+  stone_wttemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].stone_wt = data.target.value;
+  }
+
+  gross_wttemp(data:any,value: any){
+    this.tableData[value.data.SINO - 1].gross_wt = data.target.value;
+  }
+
+
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.jobCardFrom.controls.vocdate.setValue(new Date(date))
+    }
+  }
 
   /**USE: close modal window */
   close(data?: any) {
@@ -123,10 +478,152 @@ export class JobcardComponent implements OnInit {
   }
 
     
+  designCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.designcode.setValue(e.DESIGN_CODE);
+    this.jobCardFrom.controls.designtype.setValue(e.DESIGN_DESCRIPTION);
+    let length = this.tableData.length;
+    let sn = length + 1;
+    let data =  {
+      "SINO": sn,
+      "job_reference": '5/'+sn,
+      "part_code":   e.DESIGN_CODE,
+      "Description": e.DESIGN_DESCRIPTION,
+      "Pcs": "",
+      "metal_color": "",
+      "metal_wt": "",
+      "stone_wt": "",
+      "gross_wt": "",
+    };
+    this.tableData.push(data);
+  }
+
+  customerCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.customer.setValue(e.ACCODE);
+    this.jobCardFrom.controls.customername.setValue(e.DESCRIPTION);
+  }
+
+  costCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.costcode.setValue(e.COST_CODE);
+  }
+
+  prefixCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.prefix.setValue(e.PREFIX_CODE);
+  }
+
+  karatCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.karat.setValue(e.KARAT_CODE);
+  }
+
+  typeCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.type.setValue(e.CODE);
+  }
+
+  categoryCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.category.setValue(e.CODE);
+  }
+
+  colorCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.color.setValue(e.CODE);
+  }
+
+  countryCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.country.setValue(e.CODE);
+  }
+
+  salesmanCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.salesman.setValue(e.SALESPERSON_CODE);
+  }
+
   ordertypeCodeSelected(e:any){
     console.log(e);
     this.jobCardFrom.controls.orderType.setValue(e.DESCRIPTION);
   }
+
+  subcatCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.subcat.setValue(e.CODE);
+  }
+
+  brandCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.brand.setValue(e.CODE);
+  }
+
+  stockCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.stockcode.setValue(e.STOCK_CODE);
+  }
+
+  currencyCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.currency.setValue(e.CURRENCY_CODE);
+  }
+
+  mainmetalCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.mainmetal.setValue(e.COST_CODE);
+  }
+
+  timeCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.time.setValue(e.CODE);
+  }
+
+  rangeCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.range.setValue(e.CODE);
+  }
+
+  seqCodeSelected(e:any){
+    console.log(e);
+    this.jobCardFrom.controls.seqcode.setValue(e.SEQ_CODE);
+  }
+
+  setFormValues() {
+    if (!this.content) return
+    this.jobCardFrom.controls.jobno.setValue(this.content.JOB_NUMBER)
+    this.jobCardFrom.controls.jobdate.setValue(this.content.JOB_DATE)
+    this.jobCardFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.jobCardFrom.controls.customer.setValue(this.content.CUSTOMER_CODE)
+    this.jobCardFrom.controls.costcode.setValue(this.content.COST_CODE)
+    this.jobCardFrom.controls.type.setValue(this.content.TYPE_CODE)
+    this.jobCardFrom.controls.category.setValue(this.content.CATEGORY_CODE)
+    this.jobCardFrom.controls.subcat.setValue(this.content.SUBCATEGORY_CODE)
+    this.jobCardFrom.controls.brand.setValue(this.content.BRAND_CODE)
+    this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
+    this.jobCardFrom.controls.seqcode.setValue(this.content.SEQ_CODE)
+    this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
+    this.jobCardFrom.controls.picture_name.setValue(this.url)
+    this.jobCardFrom.controls.setref.setValue(this.content.SET_REF)
+    this.jobCardFrom.controls.totalpcs.setValue(this.content.TOTAL_PCS)
+    this.jobCardFrom.controls.pending.setValue(this.content.PENDING_PCS)
+    this.jobCardFrom.controls.color.setValue(this.content.METAL_COLOR)
+    this.jobCardFrom.controls.karat.setValue(this.content.KARAT_CODE)
+    this.jobCardFrom.controls.prefix.setValue(this.content.PREFIX)
+    this.jobCardFrom.controls.deldate.setValue(this.content.DEL_DATE)
+    this.jobCardFrom.controls.time.setValue(this.content.TIME_CODE)
+    this.jobCardFrom.controls.range.setValue(this.content.RANGE_CODE)
+    this.jobCardFrom.controls.comments.setValue(this.content.COMMENTS_CODE)
+    this.jobCardFrom.controls.country.setValue(this.content.COUNTRY_CODE)
+    this.jobCardFrom.controls.salesman.setValue(this.content.SALESPERSON_CODE)
+    this.jobCardFrom.controls.size.setValue(this.content.SIZE)
+    this.jobCardFrom.controls.length.setValue(this.content.LENGTH)
+    this.jobCardFrom.controls.orderType.setValue(this.content.ORDER_TYPE)
+    this.jobCardFrom.controls.designtype.setValue(this.content.DESIGN_TYPE)
+    this.jobCardFrom.controls.purity.setValue(this.content.JOB_PURITY)
+    this.jobCardFrom.controls.customername.setValue(this.content.CUSTOMER_NAME)
+  }
+
 
   formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
@@ -155,7 +652,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": "",
+      "PICTURE_NAME":this.url || "",
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",

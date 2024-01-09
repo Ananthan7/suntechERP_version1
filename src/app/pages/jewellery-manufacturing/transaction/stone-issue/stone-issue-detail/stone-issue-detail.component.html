@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<!-- <modal-header (saveClick)="formSubmit()"  (cancelClick)="close()"></modal-header> -->
+<modal-header (saveClick)="formSubmit()"  (cancelClick)="close()" [isViewContinue]="true"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="stoneissuedetailsFrom">
@@ -15,7 +15,7 @@
           <div class="row">
             <div class="col-8">
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Job Number*: </label>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Job Number * : </label>
                 <div class="col-md-4">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
@@ -35,7 +35,7 @@
 
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Sub Job No: </label>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Sub Job No * : </label>
                 <div class="col-md-4">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
@@ -71,7 +71,7 @@
 
             <div class="col-4">
               <div class="row mb-1 mt-3 p-t5">
-                <label for="inputPassword" class="col-sm-6 col-form-label">Salesorder No*: </label>
+                <label for="inputPassword" class="col-sm-6 col-form-label">Salesorder No: </label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="salesorderno" />
@@ -83,7 +83,7 @@
           <div class="row">
             <div class="col-10">
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Process: </label>
+                <label for="inputPassword" class="col-sm-2 col-form-label">Process * : </label>
                 <div class="col-md-3">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 90%;">
@@ -102,7 +102,7 @@
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Worker: </label>
+                <label for="inputPassword" class="col-sm-2 col-form-label">Worker * : </label>
                 <div class="col-md-3">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 90%;">
@@ -121,10 +121,10 @@
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Stock*: </label>
+                <label for="inputPassword" class="col-sm-2 col-form-label">Stock * : </label>
                 <div class="col-md-2">
                   <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 90%;">
                       <input type="text" matInput formControlName="stock" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="stockCodeData"
@@ -138,16 +138,16 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <div class="position-relative d-flex">
-                    <mat-form-field style="width: 95%;">
+                    <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="stockDes" />
                     </mat-form-field>
                   </div>
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Batch ID*: </label>
+                <label for="inputPassword" class="col-sm-2 col-form-label">Batch ID : </label>
                 <div class="col-md-4">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
@@ -160,7 +160,7 @@
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Location: </label>
+                <label for="inputPassword" class="col-sm-2 col-form-label">Location * : </label>
                 <div class="col-md-4">
                   <mat-form-field style="width: 90%;">
                     <input type="text" matInput formControlName="location" />
@@ -173,38 +173,10 @@
 
             <div class="col-2">
               <div class="row mb-1">
-                <div class="col-md-10">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="voctype" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-1">
-                <div class="col-md-10">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="voctype" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-1">
-                <div class="col-md-10">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="voctype" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-1">
-                <div class="col-md-10">
-                  <div class="position-relative d-flex">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="voctype" />
-                    </mat-form-field>
+                <div class="row pt-4">
+                  <div class="upload-btn-wrapper">
+                    <button class="btn btnnew border-dark"></button>
+                    <input type="file" name="uploadproduct" class="uploadproduct">
                   </div>
                 </div>
               </div>
@@ -213,7 +185,7 @@
           <div class="row al-1">
             <div class="col-12">
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Pieces: </label>
+                <label for="inputPassword" class="col-sm-2 col-form-label">Pieces : </label>
                 <div class="col-md-2">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
@@ -221,7 +193,7 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <label for="inputPassword" class="col-sm-1 col-form-label">Shape: </label>
+                <label for="inputPassword" class="col-sm-1 col-form-label">Shape : </label>
                 <div class="col-md-2">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 100%;">
@@ -255,7 +227,7 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <label for="inputPassword" class="col-sm-1 col-form-label">Sieve Set*: </label>
+                <label for="inputPassword" class="col-sm-1 col-form-label">Sieve Set : </label>
                 <div class="col-md-4">
                   <div class="position-relative d-flex">
                     <mat-form-field style="width: 90%;">
@@ -326,7 +298,7 @@
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Other Attr: </label>
+              <label for="inputPassword" class="col-sm-2 col-form-label">Other Attr : </label>
               <div class="col-md-5">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%;">
@@ -337,7 +309,7 @@
 
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Remarks: </label>
+              <label for="inputPassword" class="col-sm-2 col-form-label">Remarks : </label>
               <div class="col-md-9">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%;">
@@ -358,7 +330,10 @@
             <div class="col-12">
               <div class="row pt-1">
                 <div class="col">
-                  <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                  <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                  [allowColumnReordering]="true"
+                  [allowColumnResizing]="true"
+                  [columnAutoWidth]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true">
                     </dxo-editing>
@@ -377,26 +352,14 @@
 
 
         <div class="row mb-3">
-          <div class="col-md-6">
-            <div class="col-md-3">
-              <button type="button" class="btn btn-primary metal-issue-add-btn">Save Grid Data</button>
-            </div>
-          </div>
-
-          <div class="col-md-6 ">
-            <div class="row align-items-end">
-              <div class="col">
-                <button type="button" class="btn btn-primary metal-issue-add-btn button-spacing">Change Job</button>
-              </div>
-              <div class="col">
-                <button type="button" class="btn btn-primary metal-issue-add-btn button-spacing">Continue</button>
-              </div>
-              <div class="col">
-                <button type="button" class="btn btn-primary metal-issue-add-btn button-spacing">Save</button>
-              </div>
-              <div class="col">
-                <button type="button" class="btn btn-primary metal-issue-add-btn button-spacing">Cancel</button>
-              </div>
+          <div class="col-md-6 p-l">
+            <div class="row d-flex">
+              <button type="button"
+                class="mat-focus-indicator flatbutton mat-flat-button mat-button-base w-auto mx-1 cl-1">Save Grid
+                Data</button>
+              <button type="button"
+                class="mat-focus-indicator flatbutton mat-flat-button mat-button-base w-auto mx-1 cl-1">Change
+                Job</button>
             </div>
           </div>
         </div>

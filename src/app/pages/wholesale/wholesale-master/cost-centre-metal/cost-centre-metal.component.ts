@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CostCentreMetalDetailsComponent } from './cost-centre-metal-details/cost-centre-metal-details.component';
 
 @Component({
   selector: 'app-cost-centre-metal',
@@ -18,7 +19,7 @@ export class CostCentreMetalComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
-  columnhead:any[] = ['Branch','Opening' ,'Purchase','Purchase','Sales (W)','Sales Return','Sales (Return)','Sales Return','Branch','Branch','Closing','Purchase','Imppr'];
+  columnhead:any[] = ['UNIQUED_ID','COST_CODE' ,'TYPE','BRANCH_CODE','ADJUSTMENT','SALES','SALES RETURN','PURCHASE','PURCHASE RETURN','STONE VALUE','STONE DIFF','PURITY DIFF','BRANCH TRANSFERIN','BRANCH TRANSFERIN OUT','MANUFACTURING','OPEN ST'];
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -89,7 +90,12 @@ export class CostCentreMetalComponent implements OnInit {
 
 
   addTableData(){
-
+    const modalRef: NgbModalRef = this.modalService.open(CostCentreMetalDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    })
   }
   
   deleteTableData(){

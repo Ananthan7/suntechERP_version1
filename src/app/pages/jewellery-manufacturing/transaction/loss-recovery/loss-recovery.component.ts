@@ -147,9 +147,9 @@ export class LossRecoveryComponent implements OnInit {
 
 
   lossRecoveryFrom: FormGroup = this.formBuilder.group({
-    vocType : [''],
+    vocType : ['',[Validators.required]],
     vocDate : [''],
-    VocNo : [''],
+    VocNo : ['',[Validators.required]],
     EnterBy : [''],
     returnType : [''],   
     receicvedBy : [''],   

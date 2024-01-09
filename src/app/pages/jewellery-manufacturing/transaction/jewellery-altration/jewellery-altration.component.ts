@@ -85,10 +85,10 @@ export class JewelleryAltrationComponent implements OnInit {
 
 
   jewelleryaltrationFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocno:[''],
-   vocdate:[''],
-   metalrate:[''],
+    voctype:['',[Validators.required]],
+    vocno:['',[Validators.required]],
+   vocdate:['',[Validators.required]],
+   metalrate:['',[Validators.required]],
    metalratetype:[''],
    costcode:[''],
    lossaccount:[''],
