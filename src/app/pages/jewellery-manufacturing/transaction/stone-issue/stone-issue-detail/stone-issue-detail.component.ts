@@ -150,7 +150,10 @@ export class StoneIssueDetailComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-
+  jobchange(e:any){  
+    console.log(e);
+    this.stoneissuedetailsFrom.reset();   
+}
 
 
   stoneissuedetailsFrom: FormGroup = this.formBuilder.group({

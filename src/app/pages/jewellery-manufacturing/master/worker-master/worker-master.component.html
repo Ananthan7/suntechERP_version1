@@ -40,7 +40,7 @@
                                 <input type="text" matInput [readonly]="viewOnlyFlag" maxlength="6"
                                     (change)="workerCodeChange($event)" formControlName="WorkerAcCode" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="accountMasterData"
+                            <master-search [MasterSearchData]="accountMasterData"  *ngIf="viewMode == false"
                                 (newRowClick)="WorkerAcCodeSelected($event)">
                             </master-search>
                         </span>
@@ -53,7 +53,7 @@
                                 <input type="text" matInput maxlength="6" [readonly]="viewOnlyFlag"
                                     formControlName="NameOfSupervisor" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="supervisorData"
+                            <master-search [MasterSearchData]="supervisorData"  *ngIf="viewMode == false"
                                 (newRowClick)="supervisorSelected($event)">
                             </master-search>
                         </span>
@@ -66,7 +66,7 @@
                                 <input type="text" matInput maxlength="6" [readonly]="viewOnlyFlag"
                                     formControlName="DefaultProcess" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="processData"
+                            <master-search [MasterSearchData]="processData"  *ngIf="viewMode == false"
                                 (newRowClick)="defaultProcessSelected($event)">
                             </master-search>
                         </span>
