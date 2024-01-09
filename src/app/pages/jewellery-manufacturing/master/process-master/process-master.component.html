@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%; margin-left: 7px;">
-                                        <input type="text" matInput formControlName="processDesc" maxlength="40"  />
+                                        <input type="text" matInput formControlName="processDesc" maxlength="40" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                                     <mat-form-field style="width: 90%">
                                         <input type="text" matInput maxlength="6" formControlName="WIPaccount" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="accountMasterData"
+                                    <master-search [MasterSearchData]="accountMasterData" *ngIf="viewMode == false"
                                         (newRowClick)="ACCODESelected($event)">
                                     </master-search>
                                 </div>
@@ -95,7 +95,7 @@
                                     <mat-form-field style="width: 90%">
                                         <input type="text" matInput maxlength="6" formControlName="approvalCode" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="approvalCodeData"
+                                    <master-search [MasterSearchData]="approvalCodeData" *ngIf="viewMode == false"
                                         (newRowClick)="ApprovalCodeSelected($event)">
                                     </master-search>
                                 </div>
@@ -105,7 +105,7 @@
                                     <mat-form-field style="width: 90%">
                                         <input type="text" matInput maxlength="6" formControlName="approvalProcess" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="approvalProcessData"
+                                    <master-search [MasterSearchData]="approvalProcessData" *ngIf="viewMode == false"
                                         (newRowClick)="ApprovalProcessSelected($event)">
                                     </master-search>
                                 </div>
@@ -116,7 +116,7 @@
                                     <mat-form-field style="width: 90%">
                                         <input type="number" matInput maxlength="6" formControlName="recStockCode" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="StockProcessData"
+                                    <master-search [MasterSearchData]="StockProcessData" *ngIf="viewMode == false"
                                         (newRowClick)="StockProcesSelected($event)">
                                     </master-search>
                                 </div>
@@ -131,8 +131,8 @@
                                     Charge/Hour:</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%">
-                                        <input type="number" matInput AmountDecimalInput
-                                            formControlName="labour_charge" maxlength="15" />
+                                        <input type="number" matInput AmountDecimalInput formControlName="labour_charge"
+                                            maxlength="15" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -141,7 +141,8 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-check mt-md-5">
-                                <mat-checkbox formControlName="loss" class="example-margin"  (change)="onlossChange($event)">
+                                <mat-checkbox formControlName="loss" class="example-margin"
+                                    (change)="onlossChange($event)">
                                     Loss *</mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="loss"
                                     (change)="onlossChange($event)">
@@ -150,7 +151,8 @@
                                 </label> -->
                             </div>
                             <div class="form-check">
-                                <mat-checkbox formControlName="recovery" class="example-margin"  (change)="onRecovery($event)">
+                                <mat-checkbox formControlName="recovery" class="example-margin"
+                                    (change)="onRecovery($event)">
                                     Recovery * </mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="recovery">
                                 <label class="form-check-label">
@@ -158,7 +160,8 @@
                                 </label> -->
                             </div>
                             <div class="form-check">
-                                <mat-checkbox formControlName="allowGain" class="example-margin" (change)="onAllowGain($event)">
+                                <mat-checkbox formControlName="allowGain" class="example-margin"
+                                    (change)="onAllowGain($event)">
                                     Allow Gain * </mat-checkbox>
                                 <!-- <input class="form-check-input" type="checkbox" formControlName="AllowGain">
                                 <label class="form-check-label">
@@ -171,7 +174,7 @@
                                 <label for="input" class="col-sm-12 col-form-label">Standard % :</label>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="loss_standard" /> 
+                                        <input type="number" matInput formControlName="loss_standard" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
@@ -215,7 +218,7 @@
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput formControlName="accountStart" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="accountStartData"
+                                    <master-search [MasterSearchData]="accountStartData" *ngIf="viewMode == false"
                                         (newRowClick)="accountStartSelected($event)">
                                     </master-search>
                                 </div>
@@ -223,7 +226,7 @@
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput formControlName="accountMiddle" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="accountMiddleData"
+                                    <master-search [MasterSearchData]="accountMiddleData" *ngIf="viewMode == false"
                                         (newRowClick)="accountMiddleSelected($event)">
                                     </master-search>
                                 </div>
@@ -231,7 +234,7 @@
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput formControlName="accountEnd" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="accountEndData"
+                                    <master-search [MasterSearchData]="accountEndData" *ngIf="viewMode == false"
                                         (newRowClick)="accountEndSelected($event)">
                                     </master-search>
                                 </div>
@@ -266,45 +269,8 @@
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="Stone" class="example-margin">
-                                            Stone  </mat-checkbox>
+                                            Stone </mat-checkbox>
                                     </div>
-
-
-                                    <!-- <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="FinalProcess"
-                                            id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            Final Process
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="Setting"
-                                            id="flexRadioDefault2">
-                                        <label class="form-check-label" for="flexRadioDefault2">
-                                            Setting
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="LabProcess"
-                                            id="flexRadioDefault3">
-                                        <label class="form-check-label" for="flexRadioDefault3">
-                                            Lab Process
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="WaxProcess"
-                                            id="flexRadioDefault4">
-                                        <label class="form-check-label" for="flexRadioDefault4">
-                                            Wax Process
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="Stone"
-                                            id="flexRadioDefault5">
-                                        <label class="form-check-label" for="flexRadioDefault5">
-                                            Stone
-                                        </label>
-                                    </div> -->
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -330,41 +296,6 @@
                                             Consumable </mat-checkbox>
                                     </div>
 
-                                    <!-- <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="MergePices"
-                                            id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            Merge Pices
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="LockWeight"
-                                            id="flexRadioDefault2">
-                                        <label class="form-check-label" for="flexRadioDefault2">
-                                            Lock Weight
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="HaveTreeNo"
-                                            id="flexRadioDefault3">
-                                        <label class="form-check-label" for="flexRadioDefault3">
-                                            Have Tree No
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="NonQuantity"
-                                            id="flexRadioDefault4">
-                                        <label class="form-check-label" for="flexRadioDefault4">
-                                            Non Quantity
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="Consumable"
-                                            id="flexRadioDefault5">
-                                        <label class="form-check-label" for="flexRadioDefault5">
-                                            Consumable
-                                        </label>
-                                    </div> -->
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -374,8 +305,12 @@
                                             Refinery Auto Process </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
-                                        <mat-checkbox formControlName="RepairProcess" class="example-margin">
+                                        <mat-checkbox formControlName="ApplyAutoLossToRefinery" class="example-margin">
                                             Apply Auto Loss to Refinery </mat-checkbox>
+                                    </div>
+                                    <div class="form-check mt-2">
+                                        <mat-checkbox formControlName="RepairProcess" class="example-margin">
+                                            Repair Process </mat-checkbox>
                                     </div>
                                     <div class="form-check mt-2">
                                         <mat-checkbox formControlName="Metal" class="example-margin">
@@ -385,43 +320,6 @@
                                         <mat-checkbox formControlName="ApprovalRequired" class="example-margin">
                                             Approval Required </mat-checkbox>
                                     </div>
-
-
-                                    <!-- <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox"
-                                            formControlName="RefineryAutoProcess" id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            Refinery Auto Process
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox"
-                                            formControlName="ApplyAutoLossToRefinery" id="flexRadioDefault2">
-                                        <label class="form-check-label" for="flexRadioDefault2">
-                                            Apply Auto Loss to Refinery
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="RepairProcess"
-                                            id="flexRadioDefault3">
-                                        <label class="form-check-label" for="flexRadioDefault3">
-                                            Repair Process
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="Metal"
-                                            id="flexRadioDefault4">
-                                        <label class="form-check-label" for="flexRadioDefault4">
-                                            Metal
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox"
-                                            formControlName="ApprovalRequired" id="flexRadioDefault5">
-                                        <label class="form-check-label" for="flexRadioDefault5">
-                                            Approval Required
-                                        </label>
-                                    </div> -->
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -447,53 +345,6 @@
                                         <mat-checkbox formControlName="AutoTransfer" class="example-margin">
                                             Auto Transfer</mat-checkbox>
                                     </div>
-                                    <div class="form-check mt-2">
-                                        <mat-checkbox formControlName="ApplySetting" class="example-margin">
-                                            Apply Setting</mat-checkbox>
-                                    </div>
-
-                                    <!-- <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox"
-                                            formControlName="DeductPureWeight" id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            Deduct Pure Weight
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="StoneIncluded"
-                                            id="flexRadioDefault2">
-                                        <label class="form-check-label" for="flexRadioDefault2">
-                                            Stone Included
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox"
-                                            formControlName="TimeCalculateonProcess" id="flexRadioDefault3">
-                                        <label class="form-check-label" for="flexRadioDefault3">
-                                            Time Calculate on Process
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox"
-                                            formControlName="RecoveryProcess" id="flexRadioDefault4">
-                                        <label class="form-check-label" for="flexRadioDefault4">
-                                            Recovery Process
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="AutoTransfer"
-                                            id="flexRadioDefault5">
-                                        <label class="form-check-label" for="flexRadioDefault5">
-                                            Auto Transfer
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" formControlName="ApplySetting"
-                                            id="flexRadioDefault5">
-                                        <label class="form-check-label" for="flexRadioDefault5">
-                                            Apply Setting
-                                        </label>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>
