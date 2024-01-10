@@ -174,13 +174,14 @@
                                 <master-search [MasterSearchData]="colorCodeData"
                                 (newRowClick)="colorCodeSelected($event)"></master-search>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Brand *
+                            <label for="input" class="col-sm-3 col-form-label">Brand * 
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="brand" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="brandCodeData"
+                                (newRowClick)="brandCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -210,14 +211,14 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Size *
+                            <label for="input" class="col-sm-3 col-form-label">Size*
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="size" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Length *
+                            <label for="input" class="col-sm-3 col-form-label">Length*
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
@@ -238,19 +239,18 @@
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Job
-                                Type*:</label>
+                                Type * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="jobtype" />
+                                    <input type="text" matInput readonly formControlName="jobtype" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Purity *
+                            <label for="input" class="col-sm-3 col-form-label">Purity*
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="number" matInput formControlName="purity" />
+                                    <input type="number" matInput readonly formControlName="purity" />
                                 </mat-form-field>
-                                <master-search></master-search>
                             </div>
                         </div>
                     </div>
@@ -295,11 +295,13 @@
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-5 col-form-label">Stock
-                                Code*: </label>
+                                Code * : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="stockcode" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="stockCodeData"
+                                (newRowClick)="stockCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -366,7 +368,8 @@
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput formControlName="seqcode" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="seqCodeData"
+                                (newRowClick)="seqCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -374,14 +377,14 @@
                                 Pcs </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="totalpcs" />
+                                    <input type="number" matInput [max]="999999999" formControlName="totalpcs" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Pending
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="pending" />
+                                    <input type="number" matInput [max]="999999999" formControlName="pending" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -390,14 +393,14 @@
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="parts" />
+                                    <input type="text" matInput [max]="999999999" formControlName="parts" />
                                 </mat-form-field>
                             </div>
                             <label for="input" class="col-sm-3 col-form-label">Pending
                             </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="pending" />
+                                    <input type="number" matInput [max]="999999999" formControlName="pending" />
                                 </mat-form-field>
                             </div>
                         </div>

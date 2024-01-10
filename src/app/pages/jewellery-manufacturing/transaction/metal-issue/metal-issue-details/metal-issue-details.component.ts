@@ -66,7 +66,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
+    WHERECONDITION: "job_number<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -74,26 +74,28 @@ export class MetalIssueDetailsComponent implements OnInit {
     console.log(e);
     this.metalIssueDetailsForm.controls.jobNumber.setValue(e.job_number);
     this.metalIssueDetailsForm.controls.jobNumDes.setValue(e.job_description);
-    
-  }
-
-  subJobNoCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 46,
-    SEARCH_FIELD: 'job_number',
-    SEARCH_HEADING: 'Job Search',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  subJobNoCodeSelected(e:any){
-    console.log(e);
     this.metalIssueDetailsForm.controls.subJobNo.setValue(e.job_number);
     this.metalIssueDetailsForm.controls.subJobNoDes.setValue(e.job_description);
     
   }
+
+  // subJobNoCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 46,
+  //   SEARCH_FIELD: 'job_number',
+  //   SEARCH_HEADING: 'Job Search',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "job_number<> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
+  // subJobNoCodeSelected(e:any){
+  //   console.log(e);
+  //   this.metalIssueDetailsForm.controls.subJobNo.setValue(e.job_number);
+  //   this.metalIssueDetailsForm.controls.subJobNoDes.setValue(e.job_description);
+    
+  // }
 
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -226,7 +228,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     totalAmountLc: [''],
     purityDiff: ['',[Validators.required]],
     amountFc: [''],
-    jobPcs: [''],
+    jobPcs: ['1'],
     amountLc: [''],
     masterMetal:[false]
   });
