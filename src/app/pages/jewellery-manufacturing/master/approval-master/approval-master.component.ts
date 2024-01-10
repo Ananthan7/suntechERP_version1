@@ -117,6 +117,7 @@ export class ApprovalMasterComponent implements OnInit {
     if(this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "")
     {
       let length = this.tableData.length;
+     
       let srno = length + 1;
       let data =  {
         "UNIQUEID": 12345,
@@ -129,8 +130,8 @@ export class ApprovalMasterComponent implements OnInit {
         "ORG_MESSAGE": false,
         "EMAIL": false,
         "SYS_MESSAGE": false,
-        "EMAIL_ID": "",
-        "MOBILE_NO": ""
+        "EMAIL_ID": "string" ,
+        "MOBILE_NO": "string",
       };
       this.tableData.push(data);
       // this.approvalMasterForm.controls.code.setValue("");

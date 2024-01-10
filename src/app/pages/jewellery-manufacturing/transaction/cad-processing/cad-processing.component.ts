@@ -83,7 +83,7 @@ export class CADProcessingComponent implements OnInit {
     toProcess:['', [Validators.required]],
     job:[''],
     subJobId:[''],
-    timeTaken:['00:00:00',''],
+    timeTaken:['12:00:00',''],
     userId:[''], // No
     date:[new Date(),''],
     copy:[''], // no
@@ -310,14 +310,14 @@ removedatas(){
         {
           "UNIQUEID": 0,
           "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "str",
+          "DT_VOCTYPE": "string",
           "DT_VOCNO": 0,
           "DT_YEARMONTH": "stri",
           "SRNO": 0,
-          "METALSTONE": "s",
-          "DIVCODE": "s",
+          "METALSTONE": "string",
+          "DIVCODE": "string",
           "STONE_TYPE": "string",
-          "KARAT_CODE": "stri",
+          "KARAT_CODE": "string",
           "SIEVE_SET": "string",
           "SIEVE": "string",
           "COLOR": "string",
@@ -351,9 +351,9 @@ removedatas(){
           "PCS": 0,
           "REMARKS": "string",
           "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "str",
+          "DT_VOCTYPE": "string",
           "DT_VOCNO": 0,
-          "DT_YEARMONTH": "stri"
+          "DT_YEARMONTH": "string"
         }
       ]
      
@@ -425,14 +425,14 @@ removedatas(){
           {
             "UNIQUEID": 0,
             "DT_BRANCH_CODE": "string",
-            "DT_VOCTYPE": "str",
+            "DT_VOCTYPE": "string",
             "DT_vocNo": 0,
-            "DT_YEARMONTH": "stri",
+            "DT_YEARMONTH": "string",
             "SRNO": 0,
-            "METALSTONE": "s",
-            "DIVCODE": "s",
+            "METALSTONE": "string",
+            "DIVCODE": "string",
             "STONE_TYPE": "string",
-            "KARAT_CODE": "stri",
+            "KARAT_CODE": "string",
             "SIEVE_SET": "string",
             "SIEVE": "string",
             "COLOR": "string",
@@ -557,6 +557,18 @@ removedatas(){
   processSelected(e:any){
     console.log(e);
     this.cadProcessingForm.controls.process.setValue(e.Process_Code);
+  }
+  
+  toprocessCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
 
   toProcessSelected(e:any){
