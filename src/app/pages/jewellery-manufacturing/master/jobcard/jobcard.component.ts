@@ -201,7 +201,7 @@ export class JobcardComponent implements OnInit {
   brandCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 32,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Brand type',
     SEARCH_VALUE: '',
@@ -237,11 +237,11 @@ export class JobcardComponent implements OnInit {
   mainmetalCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Main Metal type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COST_CODE<> ''",
+    WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -281,6 +281,7 @@ export class JobcardComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
 
 
 
@@ -482,6 +483,8 @@ export class JobcardComponent implements OnInit {
     console.log(e);
     this.jobCardFrom.controls.designcode.setValue(e.DESIGN_CODE);
     this.jobCardFrom.controls.designtype.setValue(e.DESIGN_DESCRIPTION);
+    this.jobCardFrom.controls.jobtype.setValue(e.DESIGN_DESCRIPTION);
+    
     let length = this.tableData.length;
     let sn = length + 1;
     let data =  {
@@ -517,6 +520,9 @@ export class JobcardComponent implements OnInit {
   karatCodeSelected(e:any){
     console.log(e);
     this.jobCardFrom.controls.karat.setValue(e.KARAT_CODE);
+    this.jobCardFrom.controls.purity.setValue(e.STD_PURITY);
+    
+
   }
 
   typeCodeSelected(e:any){
@@ -571,7 +577,7 @@ export class JobcardComponent implements OnInit {
 
   mainmetalCodeSelected(e:any){
     console.log(e);
-    this.jobCardFrom.controls.mainmetal.setValue(e.COST_CODE);
+    this.jobCardFrom.controls.mainmetal.setValue(e.STOCK_CODE);
   }
 
   timeCodeSelected(e:any){

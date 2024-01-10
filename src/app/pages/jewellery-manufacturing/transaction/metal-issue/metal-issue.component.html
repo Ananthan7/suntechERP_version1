@@ -66,9 +66,11 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Entered
                                         By:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
+                                        <mat-form-field style="width: 70%;">
                                             <input type="text" matInput  formControlName="enteredBy"/>
                                         </mat-form-field>
+                                        <master-search [MasterSearchData]="enteredByCodeData" (newRowClick)="enteredByCodeSelected($event)">
+                                        </master-search>
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +94,11 @@
                                     <div class="col-md-7 d-flex">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput  formControlName="worker"/>
-                                        </mat-form-field>&nbsp;
+                                        </mat-form-field>
+                                         <master-search [MasterSearchData]="workerCodeData" (newRowClick)="workerCodeSelected($event)">
+                                        </master-search>
+                                        
+                                        &nbsp;
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput  formControlName="workerDes"/>
                                         </mat-form-field>
@@ -145,13 +151,13 @@
                         <dxo-summary>
                             <dxi-total-item column="Carat"
                                 summaryType="sum"
-                                displayFormat="000.000" precision="2"
+                                displayFormat="0.00" precision="2"
                                >
                               </dxi-total-item>
 
                               <dxi-total-item column="Amount"
                               summaryType="sum"
-                              displayFormat="0.00" precision="2"
+                              displayFormat="0.000" precision="2"
                              >
                             </dxi-total-item>
                     

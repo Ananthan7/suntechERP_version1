@@ -89,12 +89,49 @@ export class MetalIssueComponent implements OnInit {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
   }
 
+  
+  enteredByCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Entered by',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  enteredByCodeSelected(e:any){
+    console.log(e);
+    this.metalIssueForm.controls.enteredBy.setValue(e.SALESPERSON_CODE);
+  }
+
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  workerCodeSelected(e:any){
+    console.log(e);
+    this.metalIssueForm.controls.worker.setValue(e.WORKER_CODE);
+    this.metalIssueForm.controls.workerDes.setValue(e.DESCRIPTION);
+  }
+
+
   metalIssueForm: FormGroup = this.formBuilder.group({
     voctype: ['DMI',[Validators.required]],
     time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
     vocdate: [new Date(),[Validators.required]],
     enteredBy: [''],
-    vocno: ['1',''],
+    vocno: [''],
     worker: [''],
     workerDes: [''],
     remarks: [''],   
