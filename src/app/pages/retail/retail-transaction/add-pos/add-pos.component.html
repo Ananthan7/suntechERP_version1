@@ -4799,7 +4799,7 @@
           <mat-form-field style="width: 80%;">
             <input type="text" matInput formControlName="docType" />
           </mat-form-field>
-          <master-search [MasterSearchData]="docTypeData"></master-search>
+          <master-search [MasterSearchData]="docTypeData" (newRowClick)="docTypeSelected($event)"></master-search>
           <!-- (newRowClick)="StyleCodeSelected($event)" -->
         </div>
 
@@ -4841,7 +4841,7 @@
         <div class="col-md-6">
         
         <label for="attachmentFile" class="form-label">Attachment</label>
-        <input class="form-control" type="file"  id="attachmentFile" (change)="onFileSelected($event)">
+        <input class="form-control" type="file" formControlName="attachmentFile" id="attachmentFile" (change)="onFileSelected($event)" multiple>
 
       </div>
     </div>
@@ -4870,7 +4870,7 @@
           >
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
-            <dxo-selection mode="multiple"></dxo-selection>
+            <!-- <dxo-selection mode="multiple"></dxo-selection> -->
 
             <dxi-column
               *ngFor="let data of transColumnList"

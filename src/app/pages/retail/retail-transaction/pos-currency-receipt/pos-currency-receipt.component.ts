@@ -147,8 +147,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.posCurrencyReceiptForm.controls['vocType'].disable();
-    this.posCurrencyReceiptForm.controls['vocNo'].disable();
+    // this.posCurrencyReceiptForm.controls['vocType'].disable();
+    // this.posCurrencyReceiptForm.controls['vocNo'].disable();
 
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;

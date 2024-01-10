@@ -112,20 +112,25 @@
         </div>
         <div class="row mt-2">
           <div class="col-md-3 d-flex">
-            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-              (addClick)="openaddmeltingprocess()" (deleteClick)="deleteTableData()">
-            </menu-buttons>
+            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" 
+            [viewImportBtn]="false"
+            (addClick)="openaddmeltingprocess()"
+            (deleteClick)="deleteTableData()"
+            >
+        </menu-buttons>
           </div>
           <div class="row">
             <div class="col-md-12">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+              <dx-data-grid #dataGrid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
+              [showRowLines]="true" (onRowClick)="onRowClickHandler($event)" (onRowDoubleClick)="onRowDoubleClick($event)"
+              [allowColumnReordering]="true" height="200" [dataSource]="tableData">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
                 <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                  [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  [allowEditing]="false" alignment="center" backgroundcolor="#000">
                 </dxi-column>
                 <dxi-column alignment="center" caption="TO_METAL_PCS"
                 dataField="data"></dxi-column>
