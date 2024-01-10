@@ -15,27 +15,27 @@ import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-is
   styleUrls: ['./melting-issue.component.scss']
 })
 export class MeltingIssueComponent implements OnInit {
- 
-  columnhead:any[] = ['SRNO','DIV','jobno','stockcode','Main Stock','process','worker','pcs','grossweight','purity','pureweight','Rate','Amount']
-  columnheader : any[] = ['Sr#','SO No','Party Code','Party Name','Job Number','Job Description','Design Code','UNQ Design ID','Process','Worker','Metal Required','Metal Allocated','Allocated Pure','Job Pcs']
-  columnhead1 : any[] = ['Sr#','Ingredients','Qty']
+
+  columnhead: any[] = ['SRNO', 'DIV', 'jobno', 'stockcode', 'Main Stock', 'process', 'worker', 'pcs', 'grossweight', 'purity', 'pureweight', 'Rate', 'Amount']
+  columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure', 'Job Pcs']
+  columnhead1: any[] = ['Sr#', 'Ingredients', 'Qty']
   @Input() content!: any;
   tableData: any[] = [];
   sequenceDetails: any[] = []
   voctype?: String;
-  selectRowIndex:any;
+  selectRowIndex: any;
   currentDate = new Date();
   tableRowCount: number = 0;
   detailData: any[] = [];
   jobNumberDetailData: any[] = [];
-  meltingISsueDetailsData : any[] = [];
+  meltingISsueDetailsData: any[] = [];
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
 
   branchCode?: String;
   yearMonth?: String;
 
-    user: MasterSearchModel = {
+  user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 73,
@@ -58,12 +58,6 @@ export class MeltingIssueComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  WorkerCodeSelected(e:any){
-    console.log(e);
-    this.meltingIssueFrom.controls.worker.setValue(e.WORKER_CODE);
-    this.meltingIssueFrom.controls.workerdes.setValue(e.DESCRIPTION);
-    
-  }
 
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -76,15 +70,9 @@ export class MeltingIssueComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  ProcessCodeSelected(e:any){
-    console.log(e);
-    this.meltingIssueFrom.controls.processcode.setValue(e.Process_Code);
-    this.meltingIssueFrom.controls.processdes.setValue(e.Description);
-   
 
-  }
 
- 
+
   MeltingCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -96,12 +84,9 @@ export class MeltingIssueComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  MeltingCodeSelected(e:any){
-    console.log(e);
-    this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
-  }
 
- jobnoCodeData: MasterSearchModel = {
+
+  jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 46,
@@ -111,12 +96,6 @@ export class MeltingIssueComponent implements OnInit {
     WHERECONDITION: "job_number<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
-  jobnoCodeSelected(e:any){
-    console.log(e);
-    this.meltingIssueFrom.controls.jobno.setValue(e.job_number);
-    this.meltingIssueFrom.controls.jobdes.setValue(e.job_description);
-    this.jobNumberValidate({ target: { value: e.job_number } })
   }
 
   timeCodeData: MasterSearchModel = {
@@ -130,12 +109,38 @@ export class MeltingIssueComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  timeCodeSelected(e:any){
-    console.log(e);
-    this.meltingIssueFrom.controls.time.setValue(e.CODE);
-  }
 
-  constructor(    private activeModal: NgbActiveModal,
+  meltingIssueFrom: FormGroup = this.formBuilder.group({
+    voctype: [''],
+    vocno: [''],
+    vocdate: [''],
+    voctime: [''],
+    meltingtype: [''],
+    jobno: [''],
+    jobdes: [''],
+    processcode: [''],
+    processdes: [''],
+    worker: [''],
+    workerdes: [''],
+    subjobno: [''], // Not in table
+    color: [''],
+    time: [''],  // Not in table
+    remarks: [''],
+    issued: [''],
+    required: [''],
+    allocated: [''],
+    balance: [''],
+    TotalgrossWt: [''],
+    TotalpureWt: [''],
+    subJobDescription: [''],
+    process: [''],
+    currency: [''],
+    currencyrate: [''],
+
+
+  });
+
+  constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
@@ -149,10 +154,14 @@ export class MeltingIssueComponent implements OnInit {
     // this.voctype = this.comService.getqueryParamMainVocType()
     this.meltingIssueFrom.controls.vocdate.setValue(this.currentDate)
     this.meltingIssueFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    
-    
+    this.setCompanyCurrency()
+    this.setAllInitialValues
+  
   }
+  
+
   setAllInitialValues() {
+    console.log(this.content)
     let dataFromParent = this.content[0].PROCESS_FORMDETAILS
     if (!dataFromParent) return
     this.meltingIssueFrom.controls.jobno.setValue(dataFromParent.jobno)
@@ -164,47 +173,74 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.toggleSwitchtIssue.setValue(dataFromParent.toggleSwitchtIssue)
     this.meltingIssueFrom.controls.processFrom.setValue(dataFromParent.processFrom)
     this.meltingIssueFrom.controls.processTo.setValue(dataFromParent.processTo)
+    this.meltingIssueFrom.controls.currency.setValue(dataFromParent.currency)
+    this.meltingIssueFrom.controls.currencyrate.setValue(dataFromParent.currencyrate)
+    this.meltingIssueFrom.controls.TotalgrossWt.setValue(dataFromParent.TotalgrossWt)
+    this.meltingIssueFrom.controls.TotalpureWt.setValue(dataFromParent.TotalpureWt)
+    this.meltingIssueFrom.controls.TOTAL_STONEWT.setValue(dataFromParent.TOTAL_STONEWT)
+    this.meltingIssueFrom.controls.netweight.setValue(dataFromParent.netweight)
+    this.meltingIssueFrom.controls.TOTAL_WAXWT.setValue(dataFromParent.TOTAL_WAXWT)
+    this.meltingIssueFrom.controls.TOTAL_IRONWT.setValue(dataFromParent.TOTAL_IRONWT)
+    this.meltingIssueFrom.controls.pcs.setValue(dataFromParent.pcs)
+    this.meltingIssueFrom.controls.subjobno.setValue(dataFromParent.subjobno)
+    
+  }
+  
+  /**USE: to set currency from company parameter */
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.meltingIssueFrom.controls.currency.setValue(CURRENCY_CODE);
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  setCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.meltingIssueFrom.value.currency);
+    if (CURRENCY_RATE.length > 0) {
+      this.meltingIssueFrom.controls.currencyrate.setValue(
+        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.meltingIssueFrom.controls.currency.setValue('')
+      this.meltingIssueFrom.controls.currencyrate.setValue('')
+      this.commonService.toastErrorByMsgId('MSG1531')
+    }
   }
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-    deleteTableData(): void {
-      this.tableRowCount = 0;
-      console.log(this.selectRowIndex)
-      this.tableData.splice(this.selectRowIndex ,1)
-    }
+  deleteTableData(): void {
+    this.tableRowCount = 0;
+    console.log(this.selectRowIndex)
+    this.tableData.splice(this.selectRowIndex, 1)
+  }
 
-  
+  jobnoCodeSelected(e: any) {
+    console.log(e);
+    this.meltingIssueFrom.controls.jobno.setValue(e.job_number);
+    this.meltingIssueFrom.controls.jobdes.setValue(e.job_description);
+    this.jobNumberValidate({ target: { value: e.job_number } })
+  }
+  timeCodeSelected(e: any) {
+    console.log(e);
+    this.meltingIssueFrom.controls.time.setValue(e.CODE);
+  }
+  MeltingCodeSelected(e: any) {
+    console.log(e);
+    this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
+  }
+  ProcessCodeSelected(e: any) {
+    console.log(e);
+    this.meltingIssueFrom.controls.processcode.setValue(e.Process_Code);
+    this.meltingIssueFrom.controls.processdes.setValue(e.Description);
+  }
+  WorkerCodeSelected(e: any) {
+    console.log(e);
+    this.meltingIssueFrom.controls.worker.setValue(e.WORKER_CODE);
+    this.meltingIssueFrom.controls.workerdes.setValue(e.DESCRIPTION);
+  }
 
-  meltingIssueFrom: FormGroup = this.formBuilder.group({
-    voctype:['',[Validators.required]],
-    vocno:['',[Validators.required]],
-    vocdate:[''],
-    voctime:[''],
-    meltingtype:[''],
-    jobno:[''],
-    jobdes:[''],
-    processcode:[''],
-    processdes:[''],
-    worker:[''],
-    workerdes:[''],
-    subjobno:[''], // Not in table
-    color:[''],
-    time:[''],  // Not in table
-    remarks:[''],
-    issued:[''],
-    required:[''],
-    allocated:[''],
-    balance:[''],
-    TotalgrossWt: [''],
-    TotalpureWt: [''],
-    subJobDescription:[''],
-    process:[''],
-    
-
-  });
   openaddMeltingIssueDetails(data?: any) {
     if (data) {
       data[0].HEADERDETAILS = this.meltingIssueFrom.value;
@@ -219,60 +255,60 @@ export class MeltingIssueComponent implements OnInit {
     });
 
     modalRef.result.then((postData) => {
-      console.log(postData);      
+      console.log(postData);
       if (postData) {
-        console.log('Data from modal:', postData);       
+        console.log('Data from modal:', postData);
         this.meltingISsueDetailsData.push(postData.POSTDATA[0]);
         console.log(this.meltingISsueDetailsData);
-        this.setValuesToHeaderGrid(postData); 
-        
+        this.setValuesToHeaderGrid(postData);
+
       }
     });
   }
   onRowClickHandler(event: any) {
-    
+
     this.selectRowIndex = (event.dataIndex)
     console.log(this.selectRowIndex, event);
- 
-   }
-   onRowDoubleClick(event: any) {
-     let selectedData = event.data
-     let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
-     let allDataSelected = [detailRow[0].DATA]
-     this.openaddMeltingIssueDetails(allDataSelected)
-     console.log(event)
-  
-    }
-    setValuesToHeaderGrid(detailDataToParent: any) {
-      let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
-      if (PROCESS_FORMDETAILS.SRNO) {
-        this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
-      } else {
-        this.tableRowCount += 1
-        PROCESS_FORMDETAILS.SRNO = this.tableRowCount
-      }
-  
-      this.tableData.push(PROCESS_FORMDETAILS)
-  
-      if (detailDataToParent) {
-        this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
-      }
-      //  this.getSequenceDetailData(PROCESS_FORMDETAILS);
-      
-    }
-    swapObjects(array1: any, array2: any, index: number) {
-      // Check if the index is valid
-      if (index >= 0 && index < array1.length) {
-        array1[index] = array2[0];
-      } else {
-        console.error('Invalid index');
-      }
-    }
-    
 
-  formSubmit(){
+  }
+  onRowDoubleClick(event: any) {
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+    let allDataSelected = [detailRow[0].DATA]
+    this.openaddMeltingIssueDetails(allDataSelected)
+    console.log(event)
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+  }
+  setValuesToHeaderGrid(detailDataToParent: any) {
+    let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
+    if (PROCESS_FORMDETAILS.SRNO) {
+      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+    } else {
+      this.tableRowCount += 1
+      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+    }
+
+    this.tableData.push(PROCESS_FORMDETAILS)
+
+    if (detailDataToParent) {
+      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+    }
+    //  this.getSequenceDetailData(PROCESS_FORMDETAILS);
+
+  }
+  swapObjects(array1: any, array2: any, index: number) {
+    // Check if the index is valid
+    if (index >= 0 && index < array1.length) {
+      array1[index] = array2[0];
+    } else {
+      console.error('Invalid index');
+    }
+  }
+
+
+  formSubmit() {
+
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -280,7 +316,7 @@ export class MeltingIssueComponent implements OnInit {
     //   this.toastr.error('select all required fields')
     //   return
     // } 
-    
+
     let API = 'JobMeltingIssueDJ/InsertJobMeltingIssueDJ'
     let postData = {
       "MID": 0,
@@ -307,8 +343,8 @@ export class MeltingIssueComponent implements OnInit {
       "TOTAL_ISSUED_QTY": 0,
       "TOTAL_REQUIRED_QTY": 0,
       "TOTAL_ALLOCATED_QTY": 0,
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
+      "CURRENCY_CODE": this.comService.nullToString(this.meltingIssueFrom.value.currency),
+      "CURRENCY_RATE": this.comService.emptyToZero(this.meltingIssueFrom.value.currencyrate),
       "TRAY_WEIGHT": 0,
       "REMARKS": this.meltingIssueFrom.value.remarks,
       "AUTOPOSTING": true,
@@ -316,8 +352,8 @@ export class MeltingIssueComponent implements OnInit {
       "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
-      "PROCESS_CODE": this.comService.nullToString(this.meltingISsueDetailsData[0].process),
-      "PROCESS_DESC": this.comService.nullToString(this.meltingISsueDetailsData[0].processDesc),
+      "PROCESS_CODE": this.comService.nullToString(this.meltingIssueFrom.value.processcode),
+      "PROCESS_DESC": this.comService.nullToString(this.meltingIssueFrom.value.processdes),
       "PRINT_COUNT": 0,
       "MELTING_TYPE": "",
       "COLOR": this.comService.nullToString(this.meltingISsueDetailsData[0].color),
@@ -340,15 +376,15 @@ export class MeltingIssueComponent implements OnInit {
       "ATTACHMENT_FILE": this.comService.nullToString(this.meltingISsueDetailsData[0].ATTACHMENT_FILE),
       "SYSTEM_DATE": "2023-10-21T10:15:43.790Z",
       "Details": this.meltingISsueDetailsData
-    
+
     }
 
-    
-  
+
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status.trim() == "Success"){
+          if (result.status.trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -371,9 +407,9 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   setFormValues() {
-    if(!this.content) return
+    if (!this.content) return
     console.log(this.content);
-    
+
     this.meltingIssueFrom.controls.voctype.setValue(this.content.VOCTYPE)
     this.meltingIssueFrom.controls.vocno.setValue(this.content.VOCNO)
     this.meltingIssueFrom.controls.vocdate.setValue(this.content.VOCDATE)
@@ -388,19 +424,19 @@ export class MeltingIssueComponent implements OnInit {
   }
 
 
-  update(){
+  update() {
     if (this.meltingIssueFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/'+ this.meltingIssueFrom.value.voctype + this.meltingIssueFrom.value.vocno + this.meltingIssueFrom.value.vocdate
+
+    let API = 'JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/' + this.meltingIssueFrom.value.voctype + this.meltingIssueFrom.value.vocno + this.meltingIssueFrom.value.vocdate
     let postData = {
       "MID": 0,
       "BRANCH_CODE": "string",
       "VOCTYPE": this.meltingIssueFrom.value.voctype || "",
       "VOCNO": this.meltingIssueFrom.value.vocno || "",
-      "VOCDATE": this.meltingIssueFrom.value. vocdate || "",
+      "VOCDATE": this.meltingIssueFrom.value.vocdate || "",
       "YEARMONTH": "string",
       "NAVSEQNO": 0,
       "WORKER_CODE": this.meltingIssueFrom.value.worker || "",
@@ -433,7 +469,7 @@ export class MeltingIssueComponent implements OnInit {
       "PROCESS_DESC": this.meltingIssueFrom.value.processdes || "",
       "PRINT_COUNT": 0,
       "MELTING_TYPE": this.meltingIssueFrom.value.meltingtype || "",
-      "COLOR":this.meltingIssueFrom.value.color || "",
+      "COLOR": this.meltingIssueFrom.value.color || "",
       "RET_STOCK_CODE": "string",
       "RET_GROSS_WT": 0,
       "RET_PURITY": 0,
@@ -460,7 +496,7 @@ export class MeltingIssueComponent implements OnInit {
       "DT_VOCDATE": "2023-10-12T05:57:39.110Z",
       "DT_YEARMONTH": "string",
       "JOB_NUMBER": this.meltingIssueFrom.value.jobno || "",
-      "JOB_DESCRIPTION":this.meltingIssueFrom.value.jobdes || "",
+      "JOB_DESCRIPTION": this.meltingIssueFrom.value.jobdes || "",
       "STOCK_CODE": "string",
       "STOCK_DESCRIPTION": "string",
       "DIVCODE": "s",
@@ -498,13 +534,13 @@ export class MeltingIssueComponent implements OnInit {
       "ISALLOY": "s",
       "UNQ_JOB_ID": "string",
       "SUB_STOCK_CODE": "string",
-      "approvalDetails": this.tableData,  
+      "approvalDetails": this.tableData,
     }
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -524,8 +560,8 @@ export class MeltingIssueComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
-    }
-  
+  }
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       Swal.fire({
@@ -540,7 +576,7 @@ export class MeltingIssueComponent implements OnInit {
       });
       return
     }
-  
+
 
     Swal.fire({
       title: 'Are you sure?',
@@ -594,7 +630,7 @@ export class MeltingIssueComponent implements OnInit {
     });
   }
 
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
@@ -608,7 +644,7 @@ export class MeltingIssueComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.sequenceDetails = data.sequenceDetails
-          
+
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -617,101 +653,101 @@ export class MeltingIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  
 
-subJobNumberValidate(event?: any) {
-  let postData = {
-    "SPID": "040",
-    "parameter": {
-      'strUNQ_JOB_ID': this.meltingIssueFrom.value.subjobno,
-      'strBranchCode': this.comService.nullToString(this.branchCode),
-      'strCurrenctUser': ''
-    }
-  }
 
-  this.comService.showSnackBarMsg('MSG81447')
-  let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    .subscribe((result) => {
-      this.comService.closeSnackBarMsg()
-      if (result.dynamicData && result.dynamicData[0].length > 0) {
-        let data = result.dynamicData[0]
-        this.meltingIssueFrom.controls.processcode.setValue(data[0].PROCESS)
-        this.meltingIssueFrom.controls.worker.setValue(data[0].WORKER)
-        // this.meltingIssueFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
-        // this.meltingIssueFrom.controls.pureweight.setValue(data[0].PUREWT)
-        // this.meltingIssueFrom.controls.pcs.setValue(data[0].PCS)
-        this.meltingIssueFrom.controls.workerdes.setValue(data[0].WORKERDESC)
-        this.meltingIssueFrom.controls.processdes.setValue(data[0].PROCESSDESC)
-        // this.meltingIssueFrom.controls.grossweight.setValue(data[0].NETWT)
-        // this.meltingIssueFrom.controls.purity.setValue(data[0].PURITY)
-        // this.meltingIssueFrom.controls.netweight.setValue(data[0].NETWT)
-        // this.meltingIssueFrom.controls.MetalWeightFrom.setValue(
-        //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
-
-        // this.meltingIssueFrom.controls.StoneWeight.setValue(data[0].STONE)
-
-        // this.meltingIssueFrom.controls.PURITY.setValue(data[0].PURITY)
-        // this.meltingIssueFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
-        // this.meltingIssueFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
-        // this.stockCodeScrapValidate()
-        // this.meltingIssuedetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
-        // this.meltingIssuedetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
-        // this.meltingIssuedetailsFrom.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
-        // this.meltingIssuedetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
-        // this.meltingIssuedetailsFrom.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
-        // this.fillStoneDetails()
-      } else {
-        this.comService.toastErrorByMsgId('MSG1747')
+  subJobNumberValidate(event?: any) {
+    let postData = {
+      "SPID": "040",
+      "parameter": {
+        'strUNQ_JOB_ID': this.meltingIssueFrom.value.subjobno,
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
       }
-    }, err => {
-      this.comService.closeSnackBarMsg()
-      this.comService.toastErrorByMsgId('MSG1531')
-    })
-  this.subscriptions.push(Sub)
-}
-
-
-
-
-jobNumberValidate(event: any) {
-  if (event.target.value == '') return
-  let postData = {
-    "SPID": "028",
-    "parameter": {
-      'strBranchCode': this.comService.nullToString(this.branchCode),
-      'strJobNumber': this.comService.nullToString(event.target.value),
-      'strCurrenctUser': this.comService.nullToString(this.userName)
     }
-  }
 
-  this.comService.showSnackBarMsg('MSG81447')
-  let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    .subscribe((result) => {
-      this.comService.closeSnackBarMsg()
-      if (result.status == "Success" && result.dynamicData[0]) {
-        let data = result.dynamicData[0]
-        if (data[0] && data[0].UNQ_JOB_ID != '') {
-          this.jobNumberDetailData = data
-          this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
-          this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          this.meltingIssueFrom.controls.processcode.setValue(data[0].PROCESS)
+          this.meltingIssueFrom.controls.worker.setValue(data[0].WORKER)
+          // this.meltingIssueFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
+          // this.meltingIssueFrom.controls.pureweight.setValue(data[0].PUREWT)
+          // this.meltingIssueFrom.controls.pcs.setValue(data[0].PCS)
+          this.meltingIssueFrom.controls.workerdes.setValue(data[0].WORKERDESC)
+          this.meltingIssueFrom.controls.processdes.setValue(data[0].PROCESSDESC)
+          // this.meltingIssueFrom.controls.grossweight.setValue(data[0].NETWT)
+          // this.meltingIssueFrom.controls.purity.setValue(data[0].PURITY)
+          // this.meltingIssueFrom.controls.netweight.setValue(data[0].NETWT)
+          // this.meltingIssueFrom.controls.MetalWeightFrom.setValue(
+          //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
 
-          this.subJobNumberValidate()
+          // this.meltingIssueFrom.controls.StoneWeight.setValue(data[0].STONE)
+
+          // this.meltingIssueFrom.controls.PURITY.setValue(data[0].PURITY)
+          // this.meltingIssueFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
+          // this.meltingIssueFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          // this.stockCodeScrapValidate()
+          // this.meltingIssuedetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
+          // this.meltingIssuedetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
+          // this.meltingIssuedetailsFrom.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
+          // this.meltingIssuedetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
+          // this.meltingIssuedetailsFrom.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
+          // this.fillStoneDetails()
         } else {
-          this.comService.toastErrorByMsgId('MSG1531')
-          return
+          this.comService.toastErrorByMsgId('MSG1747')
         }
-      } else {
-        this.comService.toastErrorByMsgId('MSG1747')
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+
+
+
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strJobNumber': this.comService.nullToString(event.target.value),
+        'strCurrenctUser': this.comService.nullToString(this.userName)
       }
-    }, err => {
-      this.comService.closeSnackBarMsg()
-      this.comService.toastErrorByMsgId('MSG1531')
-    })
-  this.subscriptions.push(Sub)
-}
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.jobNumberDetailData = data
+            this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
+            this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
+
+            this.subJobNumberValidate()
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 
 }
-  function deleteRecord() {
-    throw new Error('Function not implemented.');
-  }
+function deleteRecord() {
+  throw new Error('Function not implemented.');
+}
 
