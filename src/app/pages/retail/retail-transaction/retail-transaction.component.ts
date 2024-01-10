@@ -181,8 +181,21 @@ export class RetailTransactionComponent implements OnInit {
 
   submitAuth() {
     if (!this.authForm.invalid) {
-      this.modalReferenceUserAuth.close(true);
-      this.authForm.controls.password.setValue(null);
+      let API = 'ValidatePassword/ValidateEditDelete';
+      const postData = {
+        "Username": this.authForm.value.username,
+        "Password": this.authForm.value.password
+      };
+      let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {
+        if (resp.status == 'Success') {
+          this.modalReferenceUserAuth.close(true);
+          this.authForm.controls.password.setValue(null);
+        } else {
+          this.snackBar.open(resp.message, 'OK', {duration: 2000})
+        }
+      });
+
+
     } else {
       this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
     }
