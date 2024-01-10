@@ -70,7 +70,7 @@ export class WorkerMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.content.FLAG);
+    // console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
       this.viewFormValues();
     }else if (this.content.FLAG == 'EDIT'){
@@ -140,7 +140,7 @@ export class WorkerMasterComponent implements OnInit {
     this.buttonField = false;
 
     if(this.content && this.content.FLAG == 'EDIT'){
-      this.selectProcess()
+      this.selectProcessMasterList()
       this.updateWorkerMaster()
       return
     }
@@ -325,40 +325,67 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   /**use: checkbox change */
-  changedCheckbox(cellInfo: any) {
-    let value = cellInfo.data
+  // changedCheckbox(cellInfo: any) {
+  //   let value = cellInfo.data
 
-    this.tableData.forEach((item: any) => {
-      if (value.SrNo == item.SrNo) {
-        value.isChecked = !value.isChecked
-      }
-      this.selectedProcessArr.push({
-        "UNIQUEID": 0,
-        "SRNO": value.SrNo,
-        "WORKER_CODE": value.PROCESS_DESC,
-        "PROCESS_CODE": value.PROCESS_CODE
-      })
-    })
-  }
+  //   this.tableData.forEach((item: any) => {
+  //     if (value.SrNo == item.SrNo) {
+  //       value.isChecked = !value.isChecked
+  //     }
+  //     this.selectedProcessArr.push({
+  //       "UNIQUEID": 0,
+  //       "SRNO": value.SrNo,
+  //       "WORKER_CODE": value.PROCESS_DESC,
+  //       "PROCESS_CODE": value.PROCESS_CODE
+  //     })
+  //   })
+  // }
   /**select process API call */
-  selectProcess() {
-    let params = {
-      "BranchCode": this.commonService.branchCode || '',
-      "UserName": this.commonService.userName || '',
-      "ProcessCode": this.workerMasterForm.value.DefaultProcess || '',
-      "SubJobNo": ""
-    }
-    let API = 'ProcessMasterDj/GetProcessMasterDJList'
+  // selectProcess() {
+  //   let params = {
+  //     "BranchCode": this.commonService.branchCode || '',
+  //     "UserName": this.commonService.userName || '',
+  //     "ProcessCode": this.workerMasterForm.value.DefaultProcess || '',
+  //     "SubJobNo": ""
+  //   }
+  //   let API = 'ProcessMasterDj/GetProcessMasterDJList'
 
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, params)
+  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, params)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         result.response.forEach((item: any, i: any) => {
+  //           item.SrNo = i + 1;
+  //           item.isChecked = false;
+  //         });
+  //         this.tableData = result.response;
+  //       } else {
+  //         Swal.fire({
+  //           title: '',
+  //           text: 'Data not available!',
+  //           icon: 'warning',
+  //           confirmButtonColor: '#336699',
+  //           confirmButtonText: 'Ok'
+  //         }).then((result: any) => {
+  //           if (result.value) {
+  //             this.workerMasterForm.reset()
+  //           }
+  //         });
+  //       }
+  //     }, err => alert(err))
+  //   this.subscriptions.push(Sub)
+  // }
+
+  selectProcessMasterList() {
+    let API = 'ProcessMasterDj/GetProcessMasterDJList'
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
+          console.log(result);
           result.response.forEach((item: any, i: any) => {
             item.SrNo = i + 1;
-            item.isChecked = false;
           });
-          this.tableData = result.response;
-        } else {
+          this.tableData = result.response; 
+        }else {
           Swal.fire({
             title: '',
             text: 'Data not available!',
@@ -373,7 +400,10 @@ export class WorkerMasterComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
-  }
+   }
+
+
+
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
   //   if (event.target.value == '' || this.viewOnlyFlag == true) return

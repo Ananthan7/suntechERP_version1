@@ -135,6 +135,7 @@ export class ApprovalMasterComponent implements OnInit {
         "SYS_MESSAGE": false,
         "EMAIL_ID": "" ,
         "MOBILE_NO": "",
+
       };
       this.tableData.push(data);
       // this.approvalMasterForm.controls.code.setValue("");

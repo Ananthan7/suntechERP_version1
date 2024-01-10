@@ -111,12 +111,12 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Process* : </label>
+                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Process * : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="toProcess" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="processCodeData"
+                                <master-search [MasterSearchData]="toprocessCodeData"
                                     (newRowClick)="toProcessSelected($event)"></master-search>
                             </div>
                         </div>

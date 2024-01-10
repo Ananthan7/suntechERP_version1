@@ -88,7 +88,7 @@ export class MeltingTypeComponent implements OnInit {
               this.meltingTypeForm.reset();
               this.tableData = [];
               this.close('reloadMainGrid')
-              this.slNo = 0;
+              
             }
           });
         }
@@ -197,7 +197,7 @@ export class MeltingTypeComponent implements OnInit {
       this.tableData.push(data);
       console.log(this.tableData);
   
-      this.metal=this.meltingTypeForm.value.metal
+      this.metal = this.meltingTypeForm.value.metal
       // this.description=this.meltingTypeForm.value.description
       // this.code=this.meltingTypeForm.value.code
       this.alloy=this.meltingTypeForm.value.alloy
