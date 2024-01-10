@@ -50,3 +50,64 @@
         <app-cardbox [header]="'Quantity'" [content]="'4M'"></app-cardbox>
     </div>
 </div>
+
+
+<ng-template #userAuthModal let-modal modal-lg>
+    <div class="modal-header" style="padding: 10px 20px">
+      <h4 class="modal-title" id="modal-pos-metal">Authentication</h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="authForm">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field>
+              <mat-label>Username</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="username"
+                 appNoEmptySpace
+                 readonly
+              />
+              <mat-error *ngIf="authForm.controls.username.hasError('required')">
+                Username is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field>
+              <mat-label>Password</mat-label>
+              <input
+                type="password"
+                matInput
+                formControlName="password"
+                 appNoEmptySpace
+              />
+              <mat-error *ngIf="authForm.controls.password.hasError('required')">
+                Password is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="text-right">
+          <button
+            type="submit"
+            mat-flat-button
+            color="primary"
+            class="btn-m-r-10"
+             (click)="submitAuth()"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>

@@ -6,7 +6,8 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()"  (cancelClick)="close()" [isViewContinue]="true"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (ChangeJobClick)="jobchange($event)"  [isViewContinue]="true"  [isViewChangeJob]="true" [isViewDelete]="false" [isViewMore]="false"></modal-header>
+
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="stoneissuedetailsFrom">

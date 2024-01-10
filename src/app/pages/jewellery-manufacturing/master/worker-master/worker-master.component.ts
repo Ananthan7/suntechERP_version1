@@ -21,6 +21,7 @@ export class WorkerMasterComponent implements OnInit {
   showFilterRow!: boolean;
   viewOnlyFlag: boolean = false;
   buttonField: boolean = true;
+  viewMode:boolean = false;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Process Code', 'Description'];
@@ -69,10 +70,12 @@ export class WorkerMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.content) {
-      this.setFormValues()
-    }  
-    
+    console.log(this.content.FLAG);
+    if (this.content.FLAG == 'VIEW') {
+      this.viewFormValues();
+    }else if (this.content.FLAG == 'EDIT'){
+      this.setFormValues();
+    }
   }
 
   workerMasterForm = this.formBuilder.group({
@@ -95,7 +98,7 @@ export class WorkerMasterComponent implements OnInit {
   })
   
   printBarcode(){
-     window.print();
+    //  window.print();
   }
 
   setFormValues() {
@@ -113,6 +116,25 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.content.TARGET_METAL_WT)
     this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT)
   }
+
+  viewFormValues(){
+    this.viewMode = true;
+    if (!this.content) return
+    this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE);
+    this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION);
+    this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE);
+    this.workerMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR);
+    this.workerMasterForm.controls.DefaultProcess.setValue(this.content.PROCESS_CODE);
+    this.workerMasterForm.controls.LossAllowed.setValue(this.content.LOSS_ALLOWED);
+    this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE);
+    this.workerMasterForm.controls.TrayWeight.setValue(this.content.TRAY_WEIGHT);
+    this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS);
+    this.workerMasterForm.controls.TargetCaratWt.setValue(this.content.TARGET_CARAT_WT);
+    this.workerMasterForm.controls.TargetMetalWt.setValue(this.content.TARGET_METAL_WT);
+    this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT);
+    this.workerMasterForm.disable();
+  }
+
   /**USE:  final save API call*/
   formSubmit() {
     this.buttonField = false;
@@ -326,7 +348,7 @@ export class WorkerMasterComponent implements OnInit {
       "ProcessCode": this.workerMasterForm.value.DefaultProcess || '',
       "SubJobNo": ""
     }
-    let API = 'ProcessCodeValidate/GetProcessCodeValidate'
+    let API = 'ProcessMasterDj/GetProcessMasterDJList'
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, params)
       .subscribe((result) => {
@@ -335,7 +357,7 @@ export class WorkerMasterComponent implements OnInit {
             item.SrNo = i + 1;
             item.isChecked = false;
           });
-          this.tableData = result.response
+          this.tableData = result.response;
         } else {
           Swal.fire({
             title: '',
