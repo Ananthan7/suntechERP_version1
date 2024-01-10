@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-approval-master',
@@ -16,6 +17,7 @@ import Swal from 'sweetalert2';
 export class ApprovalMasterComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
+  selectedIndexes: any = [];
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -35,6 +37,7 @@ export class ApprovalMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
   ) { }
 
@@ -75,10 +78,10 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   emailid(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].Length = data.target.value;
+    this.tableData[value.data.SRNO - 1].EMAIL_ID = data.target.value;
   }
   mobilenumber(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].Length = data.target.value;
+    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
   }
 
   
@@ -130,8 +133,9 @@ export class ApprovalMasterComponent implements OnInit {
         "ORG_MESSAGE": false,
         "EMAIL": false,
         "SYS_MESSAGE": false,
-        "EMAIL_ID": "string" ,
-        "MOBILE_NO": "string",
+        "EMAIL_ID": "" ,
+        "MOBILE_NO": "",
+
       };
       this.tableData.push(data);
       // this.approvalMasterForm.controls.code.setValue("");
@@ -142,9 +146,32 @@ export class ApprovalMasterComponent implements OnInit {
   }
 }
 
-  removedata(){
-    this.tableData.pop();
-  }
+onSelectionChanged(event: any) {
+  const values = event.selectedRowKeys;
+  console.log(values);
+  let indexes: Number[] = [];
+  this.tableData.reduce((acc, value, index) => {
+    if (values.includes(parseFloat(value.SRNO))) {
+      acc.push(index);
+    }
+    return acc;
+  }, indexes);
+  this.selectedIndexes = indexes;
+  console.log(this.selectedIndexes);
+  
+}
+
+removedata(){
+  console.log(this.selectedIndexes);
+
+  if (this.selectedIndexes.length > 0) {
+    this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+  } else {
+    this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+  }   
+}
+
+
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){

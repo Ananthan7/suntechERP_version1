@@ -557,7 +557,7 @@ export class JobcardComponent implements OnInit {
 
   subcatCodeSelected(e:any){
     console.log(e);
-    this.jobCardFrom.controls.subcat.setValue(e.CODE);
+    this.jobCardFrom.controls.subcat.setValue(e.SUBCATEGORY_CODE);
   }
 
   brandCodeSelected(e:any){

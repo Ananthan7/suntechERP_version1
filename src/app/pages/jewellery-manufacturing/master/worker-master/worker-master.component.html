@@ -178,33 +178,33 @@
                 <div class="col-md-5">
                     <div class="row my-3">
                         <div class="col-md-6">
-                            <button type="button" mat-flat-button color="primary" (click)="selectProcess()">Select
+                            <button type="button" mat-flat-button color="primary" (click)="selectProcessMasterList()">Select
                                 Process
                             </button>
                         </div>
                     </div>
                     <div class="row">
-                        <dx-data-grid #dataGrid id="gridContainer" width="100%" [dataSource]="tableData"
+                        <dx-data-grid #dataGrid id="gridContainer" width="100%" height="300px" [dataSource]="tableData"
                             [showBorders]="true">
                             <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
                             <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
                             <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
                             <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
+                            <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                            </dxo-editing> -->
                             <dxo-selection mode="multiple"></dxo-selection>
-                            <dxi-column width="auto" cellTemplate="limitTemplate" alignment="right"></dxi-column>
+                            <!-- <dxi-column width="auto" cellTemplate="limitTemplate" alignment="right"></dxi-column>
                             <div *dxTemplate="let cellInfo of 'limitTemplate'">
                                 <input type="checkbox" (change)="changedCheckbox(cellInfo)" />
-                            </div>
+                            </div> -->
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
                             <dxi-column dataField="SrNo" width="auto" caption="Sr No" [allowEditing]="true"
                                 alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="Process Code" width="auto" caption="Process Code "
+                            <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process Code "
                                 [allowEditing]="true" alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="Description" width="auto" caption="Description"
+                            <dxi-column dataField="DESCRIPTION" width="auto" caption="Description"
                                 [allowEditing]="true" alignment="center">
                             </dxi-column>
                         </dx-data-grid>

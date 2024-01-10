@@ -15,10 +15,11 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
   styleUrls: ['./metal-return.component.scss']
 })
 export class MetalReturnComponent implements OnInit {
+  divisionMS: any = 'ID';
+  orders: any = [];
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   currentFilter: any;
-  divisionMS: any = 'ID';
   tableData: any[] = ['Process','Worker','Job No','Sub.Job No','Design','Stock Code','Gross Wt.','Net Wt.','Purity','Pure Wt.'];
   metalReturnDetailsData : any[] = ['Job id','Unq job id','Process','Design','Stock Code','Worker',' Description','Carat','Rate','Division','Amount'];
   columnhead: any[] = [''];
