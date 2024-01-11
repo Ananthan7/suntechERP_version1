@@ -35,12 +35,12 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Worker A/c Code :</label>
+                                Worker A/c Code* :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput [readonly]="viewOnlyFlag" maxlength="6"
                                     (change)="workerCodeChange($event)" formControlName="WorkerAcCode" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="accountMasterData"
+                            <master-search [MasterSearchData]="accountMasterData"  *ngIf="viewMode == false"
                                 (newRowClick)="WorkerAcCodeSelected($event)">
                             </master-search>
                         </span>
@@ -48,12 +48,12 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Name of Supervisor :</label>
+                                Name of Supervisor*:</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6" [readonly]="viewOnlyFlag"
                                     formControlName="NameOfSupervisor" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="supervisorData"
+                            <master-search [MasterSearchData]="supervisorData"  *ngIf="viewMode == false"
                                 (newRowClick)="supervisorSelected($event)">
                             </master-search>
                         </span>
@@ -61,12 +61,12 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Default Process :</label>
+                                Default Process*:</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6" [readonly]="viewOnlyFlag"
                                     formControlName="DefaultProcess" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="processData"
+                            <master-search [MasterSearchData]="processData"  *ngIf="viewMode == false"
                                 (newRowClick)="defaultProcessSelected($event)">
                             </master-search>
                         </span>
@@ -88,14 +88,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <span class="col-sm-4 col-form-label">Tray Weight*:</span>
+                        <span class="col-sm-4 col-form-label">Tray Weight:</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput numericInput [readonly]="viewOnlyFlag" class="text-right"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
-                        <span class="col-sm-3 col-form-label">Target Pcs*:</span>
+                        <span class="col-sm-3 col-form-label">Target Pcs:</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="number" matInput numericInput [readonly]="viewOnlyFlag" class="text-right"
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <span class="col-sm-4 col-form-label">Target Metal Weight*
+                        <span class="col-sm-4 col-form-label">Target Metal Weight
                             :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
@@ -112,7 +112,7 @@
                                     class="text-right" formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
-                        <span class="col-sm-3 col-form-label">Target Carat Weight*
+                        <span class="col-sm-3 col-form-label">Target Carat Weight
                             :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
@@ -123,7 +123,7 @@
                     </div>
                     <div class="row align-items-center">
                         <span class="col-sm-4 col-form-label">Target
-                            Weight(GMS)*:</span>
+                            Weight(GMS):</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput [readonly]="viewOnlyFlag" class="text-right"
@@ -132,7 +132,7 @@
                         </div>
                         <div class="col-sm-5">
                             <div class="text-right mb-1">
-                                <mat-checkbox class="example-margin" formControlName="Active">Active*</mat-checkbox>
+                                <mat-checkbox class="example-margin" formControlName="Active">Active</mat-checkbox>
                             </div>
                             <div>
                                 <!-- <mat-radio-group aria-label="Select an option">
@@ -178,32 +178,33 @@
                 <div class="col-md-5">
                     <div class="row my-3">
                         <div class="col-md-6">
-                            <button type="button" mat-flat-button color="primary" (click)="selectProcess()">Select
+                            <button type="button" mat-flat-button color="primary" (click)="selectProcessMasterList()">Select
                                 Process
                             </button>
                         </div>
                     </div>
                     <div class="row">
-                        <dx-data-grid #dataGrid id="gridContainer" width="100%" [dataSource]="tableData"
+                        <dx-data-grid #dataGrid id="gridContainer" width="100%" height="300px" [dataSource]="tableData"
                             [showBorders]="true">
                             <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
                             <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
                             <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
                             <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxi-column width="auto" cellTemplate="limitTemplate" alignment="right"></dxi-column>
+                            <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                            </dxo-editing> -->
+                            <dxo-selection mode="multiple"></dxo-selection>
+                            <!-- <dxi-column width="auto" cellTemplate="limitTemplate" alignment="right"></dxi-column>
                             <div *dxTemplate="let cellInfo of 'limitTemplate'">
                                 <input type="checkbox" (change)="changedCheckbox(cellInfo)" />
-                            </div>
+                            </div> -->
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
                             <dxi-column dataField="SrNo" width="auto" caption="Sr No" [allowEditing]="true"
                                 alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="Process Code" width="auto" caption="Process Code "
+                            <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process Code "
                                 [allowEditing]="true" alignment="center">
                             </dxi-column>
-                            <dxi-column dataField="Description" width="auto" caption="Description"
+                            <dxi-column dataField="DESCRIPTION" width="auto" caption="Description"
                                 [allowEditing]="true" alignment="center">
                             </dxi-column>
                         </dx-data-grid>

@@ -670,36 +670,13 @@
             </div>
           </div>
         </form>
+        <div class="text-right">
 
-        <div class="row mb-2">
-          <div class="col-md-12">
-            <dx-data-grid #dataGrid id="gridContainer" keyExpr="KYCrefmid" 
-            [dataSource]="transAttachmentList"
-            [showBorders]="true"
-            >
-              <dxo-paging [enabled]="false"></dxo-paging>
-              <dxo-editing mode="cell" [allowUpdating]="true">
-              </dxo-editing>
-              <dxo-selection mode="multiple"></dxo-selection>
-
-              <dxi-column *ngFor="let data of transColumnList" dataField="{{ data.field }}" caption="{{ data.title }}"
-                [allowEditing]="true" alignment="center" backgroundcolor="#000">
-              </dxi-column>
-              <dxi-column dataField="ATTACHMENT_PATH"
-                        cellTemplate="attachmentTemp" caption="Attachment"
-                        [allowEditing]="true" alignment="center">
-                    </dxi-column>
-
-                    <div *dxTemplate="let data of 'attachmentTemp'">
-                      <a target="_blank" href="{{data}}"
-                         >
-                          <i class="fa fa-paperclip"
-                              style="color: #337ab7"></i></a>
-                      <dxi-button icon="fa fa-paperclip"></dxi-button>
-                  </div>
-            </dx-data-grid>
-          </div>
-        </div>
+        <button type="button"  mat-flat-button 
+        style="font-size: 12px; padding: 0px 9px"
+        color="primary" (click)="openUserAttachmentModal()">Add Attachment</button>
+      </div>
+        
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
           <mat-tab-group>
@@ -1559,6 +1536,29 @@
                       value="{{ order_received_amount }}" aria-describedby="" placeholder="0.00" readonly /> -->
                 </td>
               </tr>
+            
+              <tr>
+                <td
+                  class="td-w-40"
+                  style="background-color: #1a61a9; color: #fff"
+                >
+                  <b>VAT Round Off</b>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id="vatroundoff"
+                    [(ngModel)]="vatRoundOffAmt"
+                    aria-describedby
+                    placeholder="0.00"
+                    readonly
+                  />
+                  <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
+                      value="{{ order_received_amount }}" aria-describedby="" placeholder="0.00" readonly /> -->
+                </td>
+              </tr>
+            
             </table>
           </div>
         </div>
@@ -2211,7 +2211,7 @@
                       {{ option }}
                     </mat-option>
                   </mat-autocomplete> -->
-               
+
                   <mat-error
                     *ngIf="
                       giftReceiptForm.controls.giftBranch.hasError('required')
@@ -3925,7 +3925,11 @@
                       <mat-form-field>
                         <mat-label>Gift Type</mat-label>
                         <mat-select formControlName="fcn_li_gift_type">
-                          <mat-option *ngFor="let option of giftTypeOptions" [value]="option.value">{{ option.label }}</mat-option>
+                          <mat-option
+                            *ngFor="let option of giftTypeOptions"
+                            [value]="option.value"
+                            >{{ option.label }}</mat-option
+                          >
                         </mat-select>
                       </mat-form-field>
                     </div>
@@ -4777,6 +4781,151 @@
           Submit
         </button>
       </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #userAttachmentModal let-modal modal-lg>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Attachment</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="attachmentForm">
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Remarks</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="remarks"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error
+              *ngIf="attachmentForm.controls.remarks.hasError('required')"
+            >
+              Remarks is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4 d-flex align-content-center">
+          <mat-form-field style="width: 80%;">
+            <input type="text" matInput formControlName="docType" />
+          </mat-form-field>
+          <master-search [MasterSearchData]="docTypeData" (newRowClick)="docTypeSelected($event)"></master-search>
+          <!-- (newRowClick)="StyleCodeSelected($event)" -->
+        </div>
+
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Expiry Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="expDateAttachment"
+              name="expDate"
+              formControlName="expDate"
+              placeholder="DD/MM/YYYY"
+              [readonly]="viewOnly"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="expDateAttachment"
+            ></mat-datepicker-toggle>
+            <mat-datepicker [startAt]="currentDate" #expDateAttachment></mat-datepicker>
+
+            <mat-error
+              *ngIf="
+              attachmentForm.controls.expDate.hasError(
+                  'required'
+                )
+              "
+            >
+              Expiry date is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <div class="row" >
+        <!-- <mat-form-field>
+          <mat-label>Attachment</mat-label>
+          <input  type="file" (change)="onFileSelected($event)">
+        </mat-form-field> -->
+        <div class="col-md-6">
+        
+        <label for="attachmentFile" class="form-label">Attachment</label>
+        <input class="form-control" type="file" formControlName="attachmentFile" id="attachmentFile" (change)="onFileSelected($event)" multiple>
+
+      </div>
+    </div>
+      <div class="text-right">
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          class="btn-m-r-10 mb-2"
+          [disabled]="viewOnly"
+          (click)="saveAttachment()"
+        >
+          Save
+        </button>
+      </div>
+
+
+      <div class="row mb-2">
+        <div class="col-md-12">
+          <dx-data-grid
+            #dataGrid
+            id="gridContainer"
+            keyExpr="KYCrefmid"
+            [dataSource]="transAttachmentList"
+            [showBorders]="true"
+          >
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
+            <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+
+            <dxi-column
+              *ngFor="let data of transColumnList"
+              dataField="{{ data.field }}"
+              caption="{{ data.title }}"
+              [allowEditing]="true"
+              alignment="center"
+              backgroundcolor="#000"
+            >
+            </dxi-column>
+            <dxi-column
+              dataField="ATTACHMENT_PATH"
+              cellTemplate="attachmentTemp"
+              caption="Attachment"
+              [allowEditing]="true"
+              alignment="center"
+            >
+            </dxi-column>
+
+            <div *dxTemplate="let data of 'attachmentTemp'">
+              <a
+                href="javascript:void(0)"
+                (click)="openAttachment(data.data.ATTACHMENT_PATH)"
+              >
+                <i class="fa fa-paperclip" style="color: #337ab7"></i>
+              </a>
+              <dxi-button icon="fa fa-paperclip"></dxi-button>
+            </div>
+          </dx-data-grid>
+        </div>
+      </div>
+
     </form>
   </div>
 </ng-template>

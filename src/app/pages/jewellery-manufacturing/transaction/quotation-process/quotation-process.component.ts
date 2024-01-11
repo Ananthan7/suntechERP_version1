@@ -66,7 +66,7 @@ export class QuotationProcessComponent implements OnInit {
   }
 
   quotationProcessFrom: FormGroup = this.formBuilder.group({
-    voctype:['',[Validators.required]],
+    voctype:['OOT',[Validators.required]],
     vocdate : ['',[Validators.required]],
     vocno:['',[Validators.required]],
     documentype:[''],

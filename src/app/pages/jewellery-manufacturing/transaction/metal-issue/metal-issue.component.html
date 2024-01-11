@@ -20,7 +20,7 @@
                                 </div>
                                 <div class=" row">
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
-                                        Type*:</label>
+                                        Type * :</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput formControlName="voctype"/>
@@ -47,7 +47,7 @@
                             <div class="col-md-5">
                                 <div class=" row">
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
-                                        Date*:</label>
+                                        Date * :</label>
                                     <div class="col-md-7">
                                         <!-- <mat-form-field style="width: 100%;">
                                             <input type="date" matInput  formControlName="vocdate"/>
@@ -66,9 +66,11 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Entered
                                         By:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field style="width: 100%;">
+                                        <mat-form-field style="width: 70%;">
                                             <input type="text" matInput  formControlName="enteredBy"/>
                                         </mat-form-field>
+                                        <master-search [MasterSearchData]="enteredByCodeData" (newRowClick)="enteredByCodeSelected($event)">
+                                        </master-search>
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +79,7 @@
                             <div class="col-md-5">
                                 <div class=" row">
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
-                                        No*:</label>
+                                        No * :</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput  formControlName="vocno"/>
@@ -92,7 +94,11 @@
                                     <div class="col-md-7 d-flex">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput  formControlName="worker"/>
-                                        </mat-form-field>&nbsp;
+                                        </mat-form-field>
+                                         <master-search [MasterSearchData]="workerCodeData" (newRowClick)="workerCodeSelected($event)">
+                                        </master-search>
+                                        
+                                        &nbsp;
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput  formControlName="workerDes"/>
                                         </mat-form-field>
@@ -123,34 +129,72 @@
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-12">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                                    <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
-                                    </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                <dx-data-grid
+                        id="gridContainer"
+                        [dataSource]="tableData"
+                        [showBorders]="true"
+                        >
+                        <dxo-selection mode="single"></dxo-selection>
 
-                                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
-                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
-                                        backgroundcolor="#000">
-                                    </dxi-column>
-
-                                    <dxo-summary>
-                                        <dxi-total-item column="pcs" summaryType="sum"
-                                        >
-                                        </dxi-total-item>
-                                        <dxi-total-item column="total_amount"
-                                           displayFormat="AED {0}"
+                        <dxi-column dataField="SN" caption="SN"> </dxi-column>
+                        <dxi-column dataField="job_id" dataType="Job Id"  caption="Job Id" cellTemplate="job_idtemp"></dxi-column>
+                        <dxi-column dataField="uniq_job_id"  caption="Uniq job Id" cellTemplate="uniq_job_idtemp"></dxi-column>
+                        <dxi-column dataField="design" caption="Design" cellTemplate="designtemp"></dxi-column>
+                        <dxi-column dataField="stock_code" caption="Stock Code" cellTemplate="stock_codetemp"></dxi-column>
+                        <dxi-column dataField="division" caption="Division" cellTemplate="divisiontemp"></dxi-column>
+                        <dxi-column dataField="description" caption="Description" cellTemplate="descriptiontemp"></dxi-column>
+                        <dxi-column dataField="carat" caption="Carat" cellTemplate="carattemp"></dxi-column>
+                        <dxi-column dataField="process" caption="Process" cellTemplate="processtemp"></dxi-column>
+                        <dxi-column dataField="worker" caption="Worker" cellTemplate="workertemp"></dxi-column>
+                        <dxi-column dataField="amount" caption="Amount" cellTemplate="amounttemp"></dxi-column> 
+                        
+                        <div *dxTemplate="let data of 'job_idtemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'uniq_job_idtemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div> 
+                           <div *dxTemplate="let data of 'designtemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div> 
+                          <div *dxTemplate="let data of 'stock_codetemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                           <div *dxTemplate="let data of 'divisiontemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'descriptiontemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'carattemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'processtemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'workertemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'amounttemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div> 
                     
-                                          >
-                                        </dxi-total-item>
-                                        <dxi-total-item column="net_amount"
-                                          summaryType="sum"
-                                          displayFormat="AED {0}" 
-                                        >
-                                        </dxi-total-item>
-                                      </dxo-summary>
-                                </dx-data-grid>
+                        <dxo-summary>
+                            <dxi-total-item column="Carat"
+                                summaryType="sum"
+                                displayFormat="000.000" precision="2"
+                               >
+                              </dxi-total-item>
+
+                              <dxi-total-item column="Amount"
+                              summaryType="sum"
+                              displayFormat="0.00" precision="2"
+                             >
+                            </dxi-total-item>
+                    
+    
+                        </dxo-summary>
+                        </dx-data-grid>
                             </div>
                             <div class="col-md-4">
                                 <div class="row my-2">

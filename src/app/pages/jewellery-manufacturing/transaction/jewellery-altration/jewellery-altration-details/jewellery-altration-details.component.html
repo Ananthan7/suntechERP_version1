@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()"  (cancelClick)="close()"></modal-header>
+<modal-header  (cancelClick)="close()" [isViewContinue]="true"> </modal-header> 
 <div class="container-fluid pt-2">
         <form [formGroup]="jewelleryaltrationdetailsFrom">
                             <div class="col-md-12">
@@ -52,8 +52,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <label for="inputPassword" class="col-sm-7 col-form-label">Ref Voc
-                                                        :</label>
+                                                    <label for="inputPassword" class="col-sm-7 col-form-label">Ref Voc * :</label>
                                                     <div class="col-md-5">
                                                         <div class="position-relative d-flex">
                                                             <mat-form-field style="width: 100%;">
@@ -102,8 +101,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <label for="inputPassword" class="col-sm-7 col-form-label">Metal
-                                                        Color :</label>
+                                                    <label for="inputPassword" class="col-sm-7 col-form-label">Metal Color * :</label>
                                                     <div class="col-md-5">
                                                         <div class="position-relative d-flex">
                                                             <mat-form-field style="width: 100%;">
@@ -254,7 +252,9 @@
                                                 </div>
                                                 <div>
                                                     <div class="icon">
-                                                        <div class="image_boxs"></div>
+                                                        <div class="text-area">
+                                                            <textarea matInput style="height: 100px;"></textarea>
+                                                        </div>
                                                        
                                                     </div>
                                                 </div>
@@ -308,7 +308,7 @@
                                                         </div>
                                                     </div>
                                                 </mat-tab>
-                                                <mat-tab label="Orginal  Components">
+                                                <mat-tab label="Original Components">
                                                     <div class="row">
                                                         <div class="col">
                                                             <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
@@ -344,12 +344,12 @@
                                         <div class="row">
                                             <label for="inputPassword" class="col-sm-4 col-form-label">Price Scheme:</label>
                                             <div class="col-2">
-                                                <mat-form-field style="width: 100%;">
+                                                <mat-form-field style="width: 50%;">
                                                     <input type="text" matInput formControlName="pricescheme" />
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-2">
-                                                <mat-form-field style="width: 100%;">
+                                                <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput  />
                                                 </mat-form-field>
                                             </div>
@@ -482,9 +482,9 @@
                                         <div class="row">
 
                                             <div class="col-4"><label>Labour Charges</label></div>
-                                            <div class="col-3"><label>Current</label></div>
-                                            <div class="col-1"><label>New</label></div>&nbsp;
-                                            <div class="col-3"><label>Accounts</label></div>
+                                            <div class="col-2"><label>Current</label></div>
+                                            <div class="col-3"><label>New</label></div>
+                                            <div class="col-2"><label>Accounts</label></div>
 
                                         </div>
                                         <div class="row">

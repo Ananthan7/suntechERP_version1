@@ -17,7 +17,7 @@
               <h6>{{branchCode}} - {{companyName}}</h6>
             </div>
             <div class="row">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Voc Type*:</label>
+              <label for="inputPassword" class="col-sm-4 col-form-label">Voc Type * :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="voctype" />
@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="row">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Voc Number*:</label>
+              <label for="inputPassword" class="col-sm-4 col-form-label">Voc Number * :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 100%;">
                   <input type="number" matInput step="0.001" min="0" maxlength="4" formControlName="vocno" />
@@ -49,7 +49,7 @@
               </div>
             </div>
             <div class="row">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Process*:</label>
+              <label for="inputPassword" class="col-sm-4 col-form-label">Process * :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="processcode" />
@@ -59,7 +59,7 @@
               </div>
             </div>
             <div class="row">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Worker*:</label>
+              <label for="inputPassword" class="col-sm-4 col-form-label">Worker * :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="workercode" />
@@ -108,11 +108,13 @@
             <div class="row">
               <div class="col">
                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
-                  [showRowLines]="true" class="mt-5">
+                  [showRowLines]="true" class="mt-5"   [allowColumnReordering]="true"
+                  [allowColumnResizing]="true"
+                  [columnAutoWidth]="true">
                   <dxo-editing  mode="cell" ></dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
-                  <dxi-column>
+                 
                     <dxi-column dataField="SRNO" caption="SI No"> </dxi-column>
                     <dxi-column dataField="job_number" caption="Job Number" cellTemplate="jobNumbertemp">
                     </dxi-column>
@@ -133,7 +135,7 @@
                     </dxi-column>
                     <dxi-column dataField="IssuePcs" caption="Issue Pcs" cellTemplate="IssuePcstemp">
                     </dxi-column>
-                  </dxi-column>
+              
 
                   <div *dxTemplate="let data of 'jobNumbertemp'">
                     <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
@@ -215,7 +217,7 @@
               </div>
               <div class="col-md-4">
                 <div class="row my-2">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Remarks*:</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Remarks * :</label>
                   <div class="col-md-9">
                     <mat-form-field style="width: 100%;">
                       <input type="text" matInput formControlName="remarks" />

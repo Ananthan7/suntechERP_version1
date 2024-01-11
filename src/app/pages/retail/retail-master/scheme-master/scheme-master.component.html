@@ -18,7 +18,8 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="code" />
+                            <input type="text" (focusout)="getSchemeMasterList($event)" 
+                                matInput formControlName="code" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Prefix</label>
@@ -31,7 +32,7 @@
                     </div>
                     <label for="inputPassword" class="col-sm-1 col-form-label">Status</label>
                     <div class="col-md-3">
-                        <mat-checkbox>Components Details</mat-checkbox>
+                        <mat-checkbox formControlName="Active">Active</mat-checkbox>
                     </div>
                 </div>
                 <div class="row align-items-center">

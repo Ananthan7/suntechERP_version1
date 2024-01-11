@@ -28,7 +28,6 @@ export class MetalIssueComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
-  ordered_items: any = [];
   viewOnly: boolean = false;
 
   private subscriptions: Subscription[] = [];
@@ -66,9 +65,32 @@ export class MetalIssueComponent implements OnInit {
       if (postData) {
         console.log('Data from modal:', postData);       
         this.metalIssueDetailsData.push(postData);
-      }
-    });
 
+        let length = this.tableData.length;
+        let sn = length + 1;
+        let data =  {
+          "SN": sn,
+          "job_id": postData.JOB_NUMBER,
+          "uniq_job_id": postData.JOB_SO_NUMBER,
+          "design": postData.DESIGN_CODE,
+          "stock_code": postData.STOCK_CODE,
+          "division": postData.SUB_STOCK_CODE,
+          "description": postData.STOCK_DESCRIPTION,
+          "carat": postData.GROSS_WT,
+          "process": postData.PROCESS_CODE,
+          "worker": postData.WORKER_CODE,
+          "amount": postData.AMOUNTFC,
+        };
+        this.tableData.push(data);
+        
+      }
+     
+    });
+  }
+        
+  stock_codetemp(data:any,value: any){
+    console.log(data);
+    this.tableData[value.data.SN - 1].stock_code = data.postData.stockCode;
   }
 
   deleteTableData(){
@@ -90,12 +112,49 @@ export class MetalIssueComponent implements OnInit {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
   }
 
+  
+  enteredByCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Entered by',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  enteredByCodeSelected(e:any){
+    console.log(e);
+    this.metalIssueForm.controls.enteredBy.setValue(e.SALESPERSON_CODE);
+  }
+
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  workerCodeSelected(e:any){
+    console.log(e);
+    this.metalIssueForm.controls.worker.setValue(e.WORKER_CODE);
+    this.metalIssueForm.controls.workerDes.setValue(e.DESCRIPTION);
+  }
+
+
   metalIssueForm: FormGroup = this.formBuilder.group({
     voctype: ['DMI',[Validators.required]],
     time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
     vocdate: [new Date(),[Validators.required]],
     enteredBy: [''],
-    vocno: ['1',''],
+    vocno: [''],
     worker: [''],
     workerDes: [''],
     remarks: [''],   

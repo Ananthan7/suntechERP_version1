@@ -18,6 +18,11 @@ import { PictureTypeMasterComponent } from './picture-type-master/picture-type-m
 import { DesignMasterComponent } from './design-master/design-master.component';
 import { OtpMasterComponent } from './otp-master/otp-master.component';
 import { CustomerPriceMasterComponent } from './customer-price-master/customer-price-master.component';
+import { ComponentsComponent } from './jobcard/components/components.component';
+import { TransactionDetailsComponent } from './jobcard/transaction-details/transaction-details.component';
+import { JobStickerPrintComponent } from './jobcard/job-sticker-print/job-sticker-print.component';
+import { ComponentMasterComponent } from './component-master/component-master.component';
+import { StoneCostUpdationComponent } from './stone-cost-updation/stone-cost-updation.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +41,11 @@ import { CustomerPriceMasterComponent } from './customer-price-master/customer-p
     DesignMasterComponent,
     OtpMasterComponent,
     CustomerPriceMasterComponent,
+    ComponentsComponent,
+    TransactionDetailsComponent,
+    JobStickerPrintComponent,
+    ComponentMasterComponent,
+    StoneCostUpdationComponent,
     
   ],
   imports: [

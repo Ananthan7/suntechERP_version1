@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label">Voucher Date*: </label>
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Voucher Date: </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 72%;">
                                     <input matInput [matDatepicker]="vocDate"  formControlName="vocDate"
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label">Process : </label>
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Process* : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="process" />
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label">Worker : </label>
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Worker* : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="worker" />
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label ">Design : </label>
+                            <label for="inputPassword" class="col-sm-5 col-form-label ">Design* : </label>
 
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
@@ -101,7 +101,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Worker : </label>
+                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Worker* : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="toWorker" />
@@ -111,19 +111,19 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Process : </label>
+                            <label for="inputPassword" class="col-sm-5 col-form-label ">To Process * : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="toProcess" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="processCodeData"
+                                <master-search [MasterSearchData]="toprocessCodeData"
                                     (newRowClick)="toProcessSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-7 col-form-label">Job*: </label>
+                            <label for="inputPassword" class="col-sm-7 col-form-label">Job: </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="job" />

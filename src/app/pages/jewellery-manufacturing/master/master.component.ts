@@ -20,6 +20,8 @@ import { DesignMasterComponent } from './design-master/design-master.component';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { OtpMasterComponent } from './otp-master/otp-master.component';
 import { CustomerPriceMasterComponent } from './customer-price-master/customer-price-master.component';
+import { ComponentMasterComponent } from './component-master/component-master.component';
+import { StoneCostUpdationComponent } from './stone-cost-updation/stone-cost-updation.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -84,6 +86,8 @@ export class MasterComponent implements OnInit {
       'DesignMasterComponent': DesignMasterComponent,
       'OtpMasterComponent': OtpMasterComponent,
       'CustomerPriceMasterComponent': CustomerPriceMasterComponent,
+      'ComponentMasterComponent': ComponentMasterComponent,
+      'StoneCostUpdationComponent': StoneCostUpdationComponent,
       // Add components and update in operationals > menu updation grid form component name
     }
     let contents;

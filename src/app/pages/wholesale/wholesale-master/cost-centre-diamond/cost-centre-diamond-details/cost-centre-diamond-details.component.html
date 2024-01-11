@@ -4,7 +4,7 @@
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
- <!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header> -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true"></modal-header>
  <div class="row">
     <div class="col-md-12">
         <div class="container-fluid pt-3">
@@ -360,16 +360,7 @@
       
 
       
-            <div class="row mt-2 d-flex pb-2 p-l offset-9">
-                    <button type="button" class="btn btn-primary metal-issue-add-btn w-auto mx-2 text-center"
-                        (continueClick)="continue()">Continue</button>
 
-                    <button type="button" class="btn btn-primary metal-issue-add-btn w-auto mx-2 text-center"
-                        (continueClick)="continue()">Save</button>
-              
-                    <button type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2 text-center"
-                        (continueClick)="continue()">Cancel</button>
-            </div>
        
     
     </form>

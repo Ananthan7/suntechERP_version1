@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import themes from 'devextreme/ui/themes';
 
 @Component({
   selector: 'app-approval-master',
@@ -16,6 +18,9 @@ import Swal from 'sweetalert2';
 export class ApprovalMasterComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
+  selectedIndexes: any = [];
+  allMode: string;
+  checkBoxesMode: string;
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -35,8 +40,12 @@ export class ApprovalMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
-  ) { }
+  ) { 
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -75,11 +84,13 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   emailid(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].Length = data.target.value;
+    this.tableData[value.data.SRNO - 1].EMAIL_ID = data.target.value;
   }
   mobilenumber(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].Length = data.target.value;
+    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
   }
+
+  
 
   ngOnInit(): void {
     console.log(this.content);
@@ -106,16 +117,16 @@ export class ApprovalMasterComponent implements OnInit {
   }
   
   approvalMasterForm: FormGroup = this.formBuilder.group({
-    code: [''],
-    description: [''],
+    code: ['',[Validators.required]],
+    description: ['',[Validators.required]],
    
   });
   
   adddata() {
     if(this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "")
     {
-      console.log(this.commonService.transformDecimalVB(6,this.approvalMasterForm.value.code));
       let length = this.tableData.length;
+     
       let srno = length + 1;
       let data =  {
         "UNIQUEID": 12345,
@@ -128,21 +139,44 @@ export class ApprovalMasterComponent implements OnInit {
         "ORG_MESSAGE": false,
         "EMAIL": false,
         "SYS_MESSAGE": false,
-        "EMAIL_ID": "",
-        "MOBILE_NO": ""
+        "EMAIL_ID": "" ,
+        "MOBILE_NO": "",
       };
       this.tableData.push(data);
-      this.approvalMasterForm.controls.code.setValue("");
-      this.approvalMasterForm.controls.description.setValue("");
+      // this.approvalMasterForm.controls.code.setValue("");
+      // this.approvalMasterForm.controls.description.setValue("");
   }
   else {
     this.toastr.error('Please Fill all Mandatory Fields')
   }
 }
 
-  removedata(){
-    this.tableData.pop();
-  }
+onSelectionChanged(event: any) {
+  const values = event.selectedRowKeys;
+  console.log(values);
+  let indexes: Number[] = [];
+  this.tableData.reduce((acc, value, index) => {
+    if (values.includes(parseFloat(value.SRNO))) {
+      acc.push(index);
+    }
+    return acc;
+  }, indexes);
+  this.selectedIndexes = indexes;
+  console.log(this.selectedIndexes);
+  
+}
+
+removedata(){
+  console.log(this.selectedIndexes);
+
+  if (this.selectedIndexes.length > 0) {
+    this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+  } else {
+    this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+  }   
+}
+
+
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){

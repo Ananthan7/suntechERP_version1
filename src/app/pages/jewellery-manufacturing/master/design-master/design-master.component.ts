@@ -72,9 +72,9 @@ export class DesignMasterComponent implements OnInit {
   
   designmasterForm: FormGroup = this.formBuilder.group({
     mid:[],
-    code: [''],
-    designdesc: [''],
-    costcenter: [''],
+    code: ['',[Validators.required]],
+    designdesc: ['',[Validators.required]],
+    costcenter: ['',[Validators.required]],
     category: [''],
     subcategory: [''],
     type: [''],
@@ -84,7 +84,7 @@ export class DesignMasterComponent implements OnInit {
     description: [''],
     metal: [''],
     color: [''],
-    karat: [''],
+    karat: ['',[Validators.required]],
     purity: [''],
     alloy: [''],
     stockCode: [''],
@@ -94,7 +94,7 @@ export class DesignMasterComponent implements OnInit {
     size : [''],
     sizeset : [''],
     sieve : [''],
-    currency:[''],
+    currency:['',[Validators.required]],
     clarity:[''],
     vendor  : [''],
     metalcolor  : [''],
@@ -109,6 +109,7 @@ export class DesignMasterComponent implements OnInit {
     price4 : [''],
     price5 : [''],
     metalwt: [''],
+    prefix: ['',[Validators.required]],
   });
 
   adddata() {

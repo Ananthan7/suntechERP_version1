@@ -7,6 +7,8 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import themes from 'devextreme/ui/themes';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-mould-making',
@@ -21,6 +23,9 @@ export class MouldMakingComponent implements OnInit {
   columnheads : any[] = ['Stock Code','Description','Psc','Gross Weight','Rate','Amount','Location'];
   branchCode?: String;
   yearMonth?: String;
+  allMode: string;
+  checkBoxesMode: string;
+  selectedIndexes: any = [];
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -88,6 +93,18 @@ mouldCodeData: MasterSearchModel = {
   VIEW_TABLE: true,
 }
 
+stockCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 23,
+  SEARCH_FIELD: 'STOCK_CODE',
+  SEARCH_HEADING: 'Stock type',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "STOCK_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
 
  constructor(
     private activeModal: NgbActiveModal,
@@ -95,8 +112,12 @@ mouldCodeData: MasterSearchModel = {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private snackBar: MatSnackBar,
     private comService: CommonServiceService,
-  ) { }
+  ) { 
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+  }
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
@@ -130,36 +151,108 @@ mouldCodeData: MasterSearchModel = {
     this.mouldMakingForm.controls.mouldType.setValue(e.CODE);
   }
 
+  stockCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.stockcode.setValue(e.STOCK_CODE);
+  }
+
+  stock_codetemp(data:any,value: any){
+    console.log(data);
+    this.tableData[value.data.SN - 1].stock_code = data.STOCK_CODE;
+  }
+
+  descriptiontemp(data:any,value: any){
+    console.log(value);
+    console.log(data);
+    this.tableData[value.data.SN - 1].stock_code = data.STOCK_CODE;
+    this.tableData[value.data.SN - 1].description = data.DESCRIPTION;
+  }
+
+  Psctemp(data:any,value: any){
+    this.tableData[value.data.SN - 1].Psc = data.target.value;
+  }
+
+  gross_weighttemp(data:any,value: any){
+    this.tableData[value.data.SN - 1].gross_weight = data.target.value;
+  }
+
+  ratetemp(data:any,value: any){
+    this.tableData[value.data.SN - 1].rate = data.target.value;
+  }
+
+  amounttemp(data:any,value: any){
+    this.tableData[value.data.SN - 1].amount = data.target.value;
+  }
+
+  locationtemp(data:any,value: any){
+    this.tableData[value.data.SN - 1].location = data.target.value;
+  }
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
   
-  addTableData(){ 
-  
+  addTableData(){
+    let length = this.tableData.length;
+    let sn = length + 1;
+    let data =  {
+      "SN": sn,
+      "stock_code": "",
+      "description": "",
+      "Psc": "",
+      "gross_weight": "",
+      "rate": "",
+      "amount": "",
+      "location": "",
+    };
+    this.tableData.push(data);
   }
+
+ 
   
+ onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SN))) {
+        acc.push(index);
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
+    
+  }
+
   deleteTableData(){
-   
+    console.log(this.selectedIndexes);
+  
+    if (this.selectedIndexes.length > 0) {
+      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+    }   
   }
   
   mouldMakingForm: FormGroup = this.formBuilder.group({
     uniq : [''],
     uniqNo : [''],
     job : [''],
-    vocher :[''],
+    vocher :['',[Validators.required]],
     vocDate : [''],
     enteredBy : [''],
-    fromProcess : [''],
-    fromWorker : [''],
+    fromProcess : ['',[Validators.required]],
+    fromWorker : ['',[Validators.required]],
     jobNo : [''],
-    mouldNo : [''],
-    mouldType : [''],
+    mouldNo : ['',[Validators.required]],
+    mouldType : ['',[Validators.required]],
     noOfParts : [''],
     narration : [''],
-    toProcess : [''],
-    toWorker : [''],
-    designCode : [''],
+    toProcess : ['',[Validators.required]],
+    toWorker : ['',[Validators.required]],
+    designCode : ['',[Validators.required]],
     itemCurrency : [''],
     itemCurrencyRate : [''],
     location :[''],

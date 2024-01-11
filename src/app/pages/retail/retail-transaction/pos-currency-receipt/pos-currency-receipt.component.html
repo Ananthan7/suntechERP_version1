@@ -4,7 +4,7 @@
 
 <div class="card-content border-bottom d-flex justify-content-between p-2">
   <h5 class="pos-modaltitle" id="modal-dia-metal">
-    Point Of Sale Currency Receipt
+    Advance Receipt
   </h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
@@ -26,12 +26,12 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Voucher Type :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%">
-                  <input type="text" matInput formControlName="vocType" />
+                  <input  type="text" matInput readonly formControlName="vocType"/>
                 </mat-form-field>
               </div>
               <div class="col-md-5">
                 <mat-form-field style="width: 100%">
-                  <input type="number" matInput formControlName="vocNo"  />
+                  <input   type="number" matInput readonly formControlName="vocNo"/>
                 </mat-form-field>
               </div>
             </div>

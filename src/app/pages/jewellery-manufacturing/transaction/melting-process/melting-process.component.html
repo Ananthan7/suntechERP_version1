@@ -6,29 +6,29 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="meltingProcessFrom">
       <div class="container-fluid pt-3">
         <div class="row">
           <div class="col-md-6">
-            <h6>{{branchCode}} - {{userName}}</h6>
+            <h6>{{branchCode}} - {{companyName}}</h6>
           </div>
           <div class="col-md-6">
             <label for="inputPassword">Posted </label>
           </div>
           <div class="col-md-3">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-4">Voucher Type : </label>
+              <label for="inputPassword" class="col-sm-4">Voucher Type * :</label>
               <div class="col-sm-8 ">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="vocType" />
                 </mat-form-field>
-              </div>
+              </div> 
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-4">Voucher No : </label>
+              <label for="inputPassword" class="col-sm-4">Voucher No * :</label>
               <div class="col-sm-8">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="vocNo" />
@@ -38,21 +38,21 @@
           </div>
           <div class="col-md-3">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-4">Voucher Date : </label>
+              <label for="inputPassword" class="col-sm-4">Voucher Date :</label>
               <div class="col-sm-8">
                 <!-- <mat-form-field style="width: 100%;">
                   <input type="date" matInput />
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
-                  <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
-                    placeholder="DD/MM/YYYY" DateValidation />
-                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                  <input matInput [matDatepicker]="vocDate"  formControlName="vocDate"
+                  placeholder="YYYY/MM/DD"  DateValidation />
+                <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-4">Melting Type: </label>
+              <label for="inputPassword" class="col-sm-4">Melting Type * :</label>
               <div class="col-sm-8">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="meltingType" />
@@ -78,7 +78,7 @@
               </span>
             </div>
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-4">Worker :</label>
+              <label for="inputPassword" class="col-sm-4">Worker * :</label>
               <div class="col-sm-4">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="worker" />
@@ -93,7 +93,7 @@
           </div>
           <div class="col-md-3">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-4"> Color : </label>
+              <label for="inputPassword" class="col-sm-4"> Color * :</label>
               <div class="col-sm-8">
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="color" />
@@ -112,20 +112,25 @@
         </div>
         <div class="row mt-2">
           <div class="col-md-3 d-flex">
-            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-              (addClick)="openaddmeltingprocess()" (deleteClick)="deleteTableData()">
-            </menu-buttons>
+            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" 
+            [viewImportBtn]="false"
+            (addClick)="openaddmeltingprocess()"
+            (deleteClick)="deleteTableData()"
+            >
+        </menu-buttons>
           </div>
           <div class="row">
             <div class="col-md-12">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+              <dx-data-grid #dataGrid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
+              [showRowLines]="true" (onRowClick)="onRowClickHandler($event)" (onRowDoubleClick)="onRowDoubleClick($event)"
+              [allowColumnReordering]="true" height="200" [dataSource]="tableData">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
                 <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                  [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  [allowEditing]="false" alignment="center" backgroundcolor="#000">
                 </dxi-column>
                 <dxi-column alignment="center" caption="TO_METAL_PCS"
                 dataField="data"></dxi-column>
@@ -160,7 +165,7 @@
                 </div>
                 <div class="col-md-3">
                   <div class="row">
-                    <label for="inputPassword" class="col-sm-6 col-form-label">Stone Weight:</label>
+                    <label for="inputPassword" class="col-sm-6 col-form-label">Stone Weight * :</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;">
                         <input type="text" matInput formControlName="stoneWeight" />
@@ -202,7 +207,7 @@
             </div>
             <div class="col-md-4">
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-4"> Stock Code : </label>
+                <label for="inputPassword" class="col-sm-4"> Stock Code * :</label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="stockcodeRet" />
@@ -212,7 +217,7 @@
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-4"> Gross Wt : </label>
+                <label for="inputPassword" class="col-sm-4"> Gross Wt * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput formControlName="TotalgrossWt" />
@@ -228,7 +233,7 @@
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-4">Pure Wt : </label>
+                <label for="inputPassword" class="col-sm-4">Pure Wt * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput formControlName="TotalpureWt" />
@@ -236,7 +241,7 @@
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-4"> Location : </label>
+                <label for="inputPassword" class="col-sm-4"> Location * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="locationRet" />
@@ -248,7 +253,7 @@
             </div>
             <div class="col-md-8">
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-3">Stock Code : </label>
+                <label for="inputPassword" class="col-sm-3">Stock Code * :</label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 80%;">
                     <input type="text" matInput formControlName="stockCodeScp" />
@@ -256,7 +261,7 @@
                   <master-search [MasterSearchData]="stockCodeData"
                     (newRowClick)="stockCodeScpSelected($event)"></master-search>
                 </div>
-                <label for="inputPassword" class="col-sm-3">Loss : </label>
+                <label for="inputPassword" class="col-sm-3">Loss * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput formControlName="loss" />
@@ -264,13 +269,13 @@
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-3"> Gross Wt : </label>
+                <label for="inputPassword" class="col-sm-3"> Gross Wt * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput formControlName="RETgrossWt" />
                   </mat-form-field>
                 </div>
-                <label for="inputPassword" class="col-sm-3">Pure Wt : </label>
+                <label for="inputPassword" class="col-sm-3">Pure Wt * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput formControlName="RETpureWt" />
@@ -278,13 +283,13 @@
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="inputPassword" class="col-sm-3"> Purity : </label>
+                <label for="inputPassword" class="col-sm-3"> Purity * :</label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput formControlName="purityRET" />
                   </mat-form-field>
                 </div>
-                <label for="inputPassword" class="col-sm-3">Bal Gross : </label>
+                <label for="inputPassword" class="col-sm-3">Bal Gross * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput formControlName="balGross" />
@@ -298,7 +303,7 @@
                     <input type="number" matInput formControlName="RETpureWt" />
                   </mat-form-field>
                 </div>
-                <label for="inputPassword" class="col-sm-3">Bal Pure : </label>
+                <label for="inputPassword" class="col-sm-3">Bal Pure * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
                     <input type="number" matInput formControlName="balPure" />
@@ -317,7 +322,10 @@
               </div>
             </div>
             <div class="col-md-12 mt-2">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+              [allowColumnReordering]="true"
+              [allowColumnResizing]="true"
+              [columnAutoWidth]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
@@ -377,13 +385,6 @@
               <div class="p-2">
                 <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
                   (continueClick)="resetAllocation()">Reset Allocation</button>
-              </div>
-              <div class="p-2">
-                <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                  (saveClick)="formSubmit()">Save</button>
-              </div>
-              <div class="p-2"><button type="button" class="btn btn-primary metal-issue-add-btn text-center"
-                  (cancelClick)="close()">Cancel</button>
               </div>
             </div>
           </div>

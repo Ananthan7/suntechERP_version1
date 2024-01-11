@@ -21,19 +21,21 @@
     overflow: hidden;
     display: inline-block;
     text-align: center;
-}
-
-.upload-btn-wrapper 
-.btnnew {
+  }
+  
+  .upload-btn-wrapper 
+  .btnnew {
     color: white;
     font-size: 14px;
     background: #ffffff;
-    padding: 70px 80px;
     margin-left: 14px;
-}
-
-.upload-btn-wrapper 
-.uploadproduct {
+    width: 152px;
+    height: 150px;
+    
+  }
+  
+  .upload-btn-wrapper 
+  .uploadproduct {
     position: absolute;
     top: 0;
     left: 0;
@@ -41,7 +43,7 @@
     opacity: 0;
     font-size: 100px;
     cursor: pointer;
-}
+  }
 
 .btn-primary {
   // background-color: #012C57 !important;

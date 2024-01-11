@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="col-lg-5 col-md-5 col-sm-12">
-                        <span class="matlabels">Email:
+                        <span class="matlabels">Email*:
                         </span>
                         <mat-form-field style="width: 65%">
                             <input type="text" matInput
@@ -192,7 +192,7 @@
                         [customizeText]="customizeDate"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="sbranch_code" caption="Branch"
+                    <dxi-column dataField="BRANCH_CODE" caption="Branch"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
                     <dxi-column dataField="SalesManCode" caption="Salesman"
@@ -218,7 +218,7 @@
                     <div *dxTemplate="let data of 'attachmentTemp'">
                         <a href="javascript:void(0)"
                             [hidden]="data.value === false">
-                            <i class="fa fa-paperclip" (click)="getSchemeAttachment()"
+                            <i class="fa fa-paperclip"
                                 style="color: #337ab7"></i></a>
                         <dxi-button icon="fa fa-paperclip"></dxi-button>
                     </div>

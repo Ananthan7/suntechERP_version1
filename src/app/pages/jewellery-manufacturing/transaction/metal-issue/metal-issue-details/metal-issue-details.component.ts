@@ -22,7 +22,10 @@ export class MetalIssueDetailsComponent implements OnInit {
   currentDate = new Date();
   branchCode?: String;
   yearMonth?: String;
- 
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+  imageurl: any;
+  image: string | ArrayBuffer | null | undefined;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -63,7 +66,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
+    WHERECONDITION: "job_number<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -71,26 +74,28 @@ export class MetalIssueDetailsComponent implements OnInit {
     console.log(e);
     this.metalIssueDetailsForm.controls.jobNumber.setValue(e.job_number);
     this.metalIssueDetailsForm.controls.jobNumDes.setValue(e.job_description);
-    
-  }
-
-  subJobNoCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 46,
-    SEARCH_FIELD: 'job_number',
-    SEARCH_HEADING: 'Job Search',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  subJobNoCodeSelected(e:any){
-    console.log(e);
     this.metalIssueDetailsForm.controls.subJobNo.setValue(e.job_number);
     this.metalIssueDetailsForm.controls.subJobNoDes.setValue(e.job_description);
     
   }
+
+  // subJobNoCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 46,
+  //   SEARCH_FIELD: 'job_number',
+  //   SEARCH_HEADING: 'Job Search',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "job_number<> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
+  // subJobNoCodeSelected(e:any){
+  //   console.log(e);
+  //   this.metalIssueDetailsForm.controls.subJobNo.setValue(e.job_number);
+  //   this.metalIssueDetailsForm.controls.subJobNoDes.setValue(e.job_description);
+    
+  // }
 
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -141,19 +146,19 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   stockCodeSelected(e:any){
     console.log(e); 
-    this.metalIssueDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
-    this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.STOCK_CODE);
-    this.metalIssueDetailsForm.controls.subStockCode.setValue(e.DESCRIPTION);
+    this.metalIssueDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
+    this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
+    this.metalIssueDetailsForm.controls.subStockCode.setValue(e.DIVISION_CODE);
      this.metalIssueDetailsForm.controls.pcs.setValue(e.PCS);
-    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
-    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
+    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.DIVISION_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.STOCK_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes_1.setValue(e.DESCRIPTION);
     
   }
 
   jobchange(e:any){  
       console.log(e);
-      this.metalIssueDetailsForm.controls.jobNumber.setValue(e.job_number);
-      this.metalIssueDetailsForm.controls.jobNumDes.setValue(e.job_description);     
+      this.metalIssueDetailsForm.reset();   
   }
 
 
@@ -162,6 +167,32 @@ export class MetalIssueDetailsComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  onFileChangedimage(event:any) {
+    this.imageurl = event.target.files[0].name
+    console.log(this.imageurl)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.image = reader.result; 
+      };
+    }
+  }
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
+  }
+
 
   metalIssueDetailsForm: FormGroup = this.formBuilder.group({
     jobNumber: [''],
@@ -189,6 +220,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     pureWeight: [''],
     toStockCode: [''],
     toStockCodeDes: [''],
+    toStockCodeDes_1: [''],
     Comments: [''],
     location: [''],
     totalAmountFc: [''],
@@ -196,7 +228,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     totalAmountLc: [''],
     purityDiff: ['',[Validators.required]],
     amountFc: [''],
-    jobPcs: [''],
+    jobPcs: ['1'],
     amountLc: [''],
     masterMetal:[false]
   });

@@ -32,17 +32,17 @@ export class KaratMasterComponent implements OnInit {
 
     this.karatmasterFrom = this.formBuilder.group({
       division: ['',[Validators.required]],
-      karatcode: [''],
-      karatcodedes: [''],
+      karatcode: ['',[Validators.required]],
+      karatcodedes: ['',[Validators.required]],
       standardpurity: ['0.000000',[Validators.required]],
       minimum: ['0.000000'],
       maximum: ['0.000000'],
       sp_gravity: [''],
-      sp_variance: ['',[Validators.required]],
-      pos: ['',[Validators.required]],
-      pop_minmaxamt: ['',[Validators.required]],
-      scrap: [false,[Validators.required]],
-      showinweb: [false,[Validators.required]],
+      sp_variance: [''],
+      pos: [''],
+      pop_minmaxamt: [''],
+      scrap: [false],
+      showinweb: [false],
     })
 
     const standardpurityControl = this.karatmasterFrom.get('standardpurity');

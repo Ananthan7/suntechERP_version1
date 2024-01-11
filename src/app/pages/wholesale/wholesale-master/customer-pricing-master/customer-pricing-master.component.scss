@@ -65,3 +65,12 @@
     content: "";
     background: no-repeat 50%/50% 50%;
 }
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+}
+.select-all{
+  margin: 5px 17px;
+}

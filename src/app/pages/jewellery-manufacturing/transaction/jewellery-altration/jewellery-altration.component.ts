@@ -16,7 +16,7 @@ import { JewelleryAltrationDetailsComponent } from './jewellery-altration-detail
 })
 export class JewelleryAltrationComponent implements OnInit {
 
-  columnhead:any[] = ['SrNo','Stock Code','Description', 'Pcs','Metal/','Stone ','Gross','Cost (OLD)','Cost (New)','Remark'];
+  columnhead:any[] = ['SrNo','Stock Code','Description', 'Pcs','Metal','Stone ','Gross','Cost (OLD)','Cost (New)','Remark'];
   @Input() content!: any; 
   tableData: any[] = [];
   jewelleryaltrationdetail : any[] =[];
@@ -85,17 +85,17 @@ export class JewelleryAltrationComponent implements OnInit {
 
 
   jewelleryaltrationFrom: FormGroup = this.formBuilder.group({
-    voctype:['',[Validators.required]],
-    vocno:['',,[Validators.required]],
+    voctype:['DJA',[Validators.required]],
+    vocno:['1',[Validators.required]],
    vocdate:['',[Validators.required]],
-   metalrate:['',[Validators.required]],
-   metalratetype:[''],
+   metalrate:['18k',[Validators.required]],
+   metalratetype:['177.000000'],
    costcode:[''],
    lossaccount:[''],
    enteredby:[''],
-   itemcurrency:[''],
-   itemcurrencycc:[''],
-    narration:[''],
+   itemcurrency:['AED'],
+   itemcurrencycc:['1.000000'],
+   narration:[''],
   });
 
 

@@ -45,8 +45,8 @@ export class StoneReturnComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 8,
-    SEARCH_FIELD: 'currency',
-    SEARCH_HEADING: 'Button Color',
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CURRENCY_CODE<> ''",
     VIEW_INPUT: true,
@@ -91,9 +91,16 @@ export class StoneReturnComponent implements OnInit {
     this.stonereturnFrom.controls.worker.setValue(e.WORKER_CODE);
   }
 
-  CurrencyCodeSelected(e:any){
+  currencyCodeSelected(e:any){
     console.log(e);
     this.stonereturnFrom.controls.currency.setValue(e.CURRENCY_CODE);
+    this.stonereturnFrom.controls.currencyrate.setValue(e.CONV_RATE);
+  }
+
+  baseCurrencyCodeSelected(e:any){
+    console.log(e);
+    this.stonereturnFrom.controls.basecurrency.setValue(e.CURRENCY_CODE);
+    this.stonereturnFrom.controls.basecurrencyrate.setValue(e.CONV_RATE);
   }
 
   openaddstonereturndetails() {
@@ -117,15 +124,15 @@ export class StoneReturnComponent implements OnInit {
   }
 
   stonereturnFrom: FormGroup = this.formBuilder.group({
-    voctype:['',[Validators.required]],
-    vocno:['',[Validators.required]],
-    vocdate:['',[Validators.required]],
-   basecurrency:[''],
-   basecurrencyrate:[''],
-   currency:[''],
-   currencyrate:[''],
-   worker:[''],
-   workername:[''],
+    voctype:['STR'],
+    vocno:['1'],
+    vocdate:[new Date(),''],
+    basecurrency:[''],
+    basecurrencyrate:[''],
+    currency:[''],
+    currencyrate:[''],
+    worker:[''],
+    workername:[''], 
     remark:[''],
     enterdBy : [''],
     enteredByName :[''],

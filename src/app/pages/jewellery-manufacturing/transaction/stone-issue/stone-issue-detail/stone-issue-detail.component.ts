@@ -150,40 +150,43 @@ export class StoneIssueDetailComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-
+  jobchange(e:any){  
+    console.log(e);
+    this.stoneissuedetailsFrom.reset();   
+}
 
 
   stoneissuedetailsFrom: FormGroup = this.formBuilder.group({
-    jobNumber: [''],
+    jobNumber: ['',[Validators.required]],
     jobDes: [''],
-    subjobnumber: [''],
+    subjobnumber: ['',[Validators.required]],
     subjobDes: [''],
     designcode: [''],
     partcode: [''],
     salesorderno: [''],
-    process: [''],
+    process: ['',[Validators.required]],
     processname: [''],
-    worker: [''],
+    worker: ['',[Validators.required]],
     workername: [''],
-    stock: [''],
-    stockCode: ['',[Validators.required]],
+    stock: ['',[Validators.required]],
+    stockCode: [''],
     stockDes: [''],
     batchid: [''],
-    location: [''],
+    location: ['',[Validators.required]],
     pieces: [''],
     shape: [''],
     clarity: [''],
     karat: [''],
     size: [''],
-    sieveset: ['',[Validators.required]],
+    sieveset: [''],
     unitrate: [''],
     sieve: [''],
     amount: [''],
     color: [''],
     stockbal: [''],
     pointerwt: [''],
-    otheratt: ['',[Validators.required]],
-    remarks: ['',[Validators.required]],
+    otheratt: [''],
+    remarks: [''],
   });
 
 

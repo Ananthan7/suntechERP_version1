@@ -13,10 +13,12 @@ import Swal from 'sweetalert2';
   styleUrls: ['./stone-pricing-master.component.scss']
 })
 export class StonePricingMasterComponent implements OnInit {
+  [x: string]: any;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   tableData: any[] = [];
-
+  isReadOnly:any
+  isDisabled:boolean=true
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -157,21 +159,21 @@ export class StonePricingMasterComponent implements OnInit {
     shape: ['', [Validators.required]],
     sleve_form: ['', [Validators.required]],
     sleve_to: ['', [Validators.required]],
-    color: [''],
-    clarity: [''],
+    color: ['', [Validators.required]],
+    clarity: ['', [Validators.required]],
     sieve_from: [''],
     sieve_to: [''],
-    currency: [''],
-    carat_wt: [''],
+    currency: ['', [Validators.required]],
+    carat_wt: ['', [Validators.required]],
     sieve_from_desc: [''],
     sieve_to_desc: [''],
-    wt_from: ['', [Validators.required]],
-    wt_to: ['', [Validators.required]],
+    wt_from: [''],
+    wt_to: [''],
     size_to: [''],
     size_from: [''],
-    issue_rate: [''],
-    selling: [''],
-    selling_rate: [''],
+    issue_rate: ['', [Validators.required]],
+    selling: ['', [Validators.required]],
+    selling_rate: ['', [Validators.required]],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -248,7 +250,8 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
     this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
-    this.stonePrizeMasterForm.disable();
+    this.stonePrizeMasterForm.disable()
+
   }
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -492,4 +495,8 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
+}
+
+function disable(): HTMLElement | null {
+  throw new Error('Function not implemented.');
 }

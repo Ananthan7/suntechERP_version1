@@ -17,7 +17,7 @@
         <div class="row ">
           <div class="col-md-4">
             <div class="row">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Type:</label>
+              <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Type * :</label>
               <div class="col-md-3">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%;">
@@ -34,11 +34,11 @@
               </div>
             </div>
             <div class="row">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date:</label>
+              <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date * :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 72%;">
                   <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
-                  placeholder="YYYY/MM/DD" DateValidation />
+                  placeholder="DD/MM/YYYY" DateValidation />
                 <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                 </mat-form-field>
@@ -64,7 +64,7 @@
               </div>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput  />
+                  <input type="text" matInput formControlName="itemcurrencycc" />
                 </mat-form-field>
               </div>
             </div>
@@ -72,10 +72,10 @@
           <div class="col-md-4">
 
             <div class=" row ">
-              <label for="inputPassword" class="col-sm-4 col-form-label">Metal Rate :</label>
+              <label for="inputPassword" class="col-sm-4 col-form-label">Metal Rate * :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="metalrate" />
+                  <input type="text" matInput formControlName="metalrate" />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
@@ -141,7 +141,10 @@
 
       <div class="row">
         <div class="col pt-3">
-          <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+          <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true">
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-editing mode="cell" [allowUpdating]="true">
             </dxo-editing>

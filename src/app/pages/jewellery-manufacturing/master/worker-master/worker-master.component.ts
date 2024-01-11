@@ -21,6 +21,7 @@ export class WorkerMasterComponent implements OnInit {
   showFilterRow!: boolean;
   viewOnlyFlag: boolean = false;
   buttonField: boolean = true;
+  viewMode:boolean = false;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Process Code', 'Description'];
@@ -31,7 +32,7 @@ export class WorkerMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 152,
-    SEARCH_FIELD: 'ACCOUNT_HEAD',
+    SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Worker A/c Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE <> ''",
@@ -69,10 +70,12 @@ export class WorkerMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.content) {
-      this.setFormValues()
-    }  
-    
+    // console.log(this.content.FLAG);
+    if (this.content.FLAG == 'VIEW') {
+      this.viewFormValues();
+    }else if (this.content.FLAG == 'EDIT'){
+      this.setFormValues();
+    }
   }
 
   workerMasterForm = this.formBuilder.group({
@@ -95,7 +98,7 @@ export class WorkerMasterComponent implements OnInit {
   })
   
   printBarcode(){
-     window.print();
+    //  window.print();
   }
 
   setFormValues() {
@@ -113,12 +116,31 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.content.TARGET_METAL_WT)
     this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT)
   }
+
+  viewFormValues(){
+    this.viewMode = true;
+    if (!this.content) return
+    this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE);
+    this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION);
+    this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE);
+    this.workerMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR);
+    this.workerMasterForm.controls.DefaultProcess.setValue(this.content.PROCESS_CODE);
+    this.workerMasterForm.controls.LossAllowed.setValue(this.content.LOSS_ALLOWED);
+    this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE);
+    this.workerMasterForm.controls.TrayWeight.setValue(this.content.TRAY_WEIGHT);
+    this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS);
+    this.workerMasterForm.controls.TargetCaratWt.setValue(this.content.TARGET_CARAT_WT);
+    this.workerMasterForm.controls.TargetMetalWt.setValue(this.content.TARGET_METAL_WT);
+    this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT);
+    this.workerMasterForm.disable();
+  }
+
   /**USE:  final save API call*/
   formSubmit() {
     this.buttonField = false;
 
     if(this.content && this.content.FLAG == 'EDIT'){
-      this.selectProcess()
+      this.selectProcessMasterList()
       this.updateWorkerMaster()
       return
     }
@@ -303,40 +325,67 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   /**use: checkbox change */
-  changedCheckbox(cellInfo: any) {
-    let value = cellInfo.data
+  // changedCheckbox(cellInfo: any) {
+  //   let value = cellInfo.data
 
-    this.tableData.forEach((item: any) => {
-      if (value.SrNo == item.SrNo) {
-        value.isChecked = !value.isChecked
-      }
-      this.selectedProcessArr.push({
-        "UNIQUEID": 0,
-        "SRNO": value.SrNo,
-        "WORKER_CODE": value.PROCESS_DESC,
-        "PROCESS_CODE": value.PROCESS_CODE
-      })
-    })
-  }
+  //   this.tableData.forEach((item: any) => {
+  //     if (value.SrNo == item.SrNo) {
+  //       value.isChecked = !value.isChecked
+  //     }
+  //     this.selectedProcessArr.push({
+  //       "UNIQUEID": 0,
+  //       "SRNO": value.SrNo,
+  //       "WORKER_CODE": value.PROCESS_DESC,
+  //       "PROCESS_CODE": value.PROCESS_CODE
+  //     })
+  //   })
+  // }
   /**select process API call */
-  selectProcess() {
-    let params = {
-      "BranchCode": this.commonService.branchCode || '',
-      "UserName": this.commonService.userName || '',
-      "ProcessCode": this.workerMasterForm.value.DefaultProcess || '',
-      "SubJobNo": ""
-    }
-    let API = 'ProcessCodeValidate/GetProcessCodeValidate'
+  // selectProcess() {
+  //   let params = {
+  //     "BranchCode": this.commonService.branchCode || '',
+  //     "UserName": this.commonService.userName || '',
+  //     "ProcessCode": this.workerMasterForm.value.DefaultProcess || '',
+  //     "SubJobNo": ""
+  //   }
+  //   let API = 'ProcessMasterDj/GetProcessMasterDJList'
 
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, params)
+  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, params)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         result.response.forEach((item: any, i: any) => {
+  //           item.SrNo = i + 1;
+  //           item.isChecked = false;
+  //         });
+  //         this.tableData = result.response;
+  //       } else {
+  //         Swal.fire({
+  //           title: '',
+  //           text: 'Data not available!',
+  //           icon: 'warning',
+  //           confirmButtonColor: '#336699',
+  //           confirmButtonText: 'Ok'
+  //         }).then((result: any) => {
+  //           if (result.value) {
+  //             this.workerMasterForm.reset()
+  //           }
+  //         });
+  //       }
+  //     }, err => alert(err))
+  //   this.subscriptions.push(Sub)
+  // }
+
+  selectProcessMasterList() {
+    let API = 'ProcessMasterDj/GetProcessMasterDJList'
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
+          console.log(result);
           result.response.forEach((item: any, i: any) => {
             item.SrNo = i + 1;
-            item.isChecked = false;
           });
-          this.tableData = result.response
-        } else {
+          this.tableData = result.response; 
+        }else {
           Swal.fire({
             title: '',
             text: 'Data not available!',
@@ -351,7 +400,10 @@ export class WorkerMasterComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
-  }
+   }
+
+
+
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
   //   if (event.target.value == '' || this.viewOnlyFlag == true) return

@@ -16,6 +16,7 @@ import { SalesEstimationComponent } from './sales-estimation/sales-estimation.co
 import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
 import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-direct.component';
 import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -33,11 +34,22 @@ export class RetailTransactionComponent implements OnInit {
   private componentDbList: any = {}
   componentName: any;
 
+  @ViewChild('userAuthModal')
+  public userAuthModal!: NgbModal;
+  modalReferenceUserAuth!: NgbModalRef;
+
+  authForm: FormGroup = this.formBuilder.group({
+    username: [localStorage.getItem('username'), Validators.required],
+    password: ['', Validators.required],
+  });
+
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
     this.getMasterGridData()
@@ -58,10 +70,15 @@ export class RetailTransactionComponent implements OnInit {
     str.FLAG = 'VIEW'
     this.openModalView(str)
   }
-  editRowDetails(e: any) {
+  async editRowDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
-    this.openModalView(str)
+    let isAuth = await this.openAuthModal();
+    if (isAuth)
+      this.openModalView(str)
+    else
+      this.snackBar.open('Authentication Failed');
+
   }
   /**USE: open form components in modal*/
   openModalView(data?: any) {
@@ -74,7 +91,7 @@ export class RetailTransactionComponent implements OnInit {
       'PosSalesOrderCancellationComponent': PosSalesOrderCancellationComponent,
       'SalesEstimationComponent': SalesEstimationComponent,
       'PointOfSalesOrderComponent': PointOfSalesOrderComponent,
-      'PosPurchaseDirectComponent':PosPurchaseDirectComponent,
+      'PosPurchaseDirectComponent': PosPurchaseDirectComponent,
       'SchemeReceiptComponent': SchemeReceiptComponent,
 
       // Add components and update in operationals > menu updation grid form component name
@@ -125,5 +142,63 @@ export class RetailTransactionComponent implements OnInit {
       this.PERMISSIONS = data.PERMISSION;
     }
     this.masterGridComponent?.getMasterGridData(data)
+  }
+
+
+
+  openAuthModal() {
+
+    return new Promise((resolve) => {
+
+      this.modalReferenceUserAuth = this.modalService.open(
+        this.userAuthModal,
+        {
+          size: "lg",
+          backdrop: true,
+          keyboard: false,
+          windowClass: "modal-full-width",
+        }
+      );
+
+      this.modalReferenceUserAuth.result.then((result) => {
+        if (result) {
+          console.log("Result :", result);
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      },
+        (reason) => {
+          console.log(`Dismissed ${reason}`);
+          resolve(false);
+
+        }
+      );
+    });
+
+
+  }
+
+  submitAuth() {
+    if (!this.authForm.invalid) {
+      let API = 'ValidatePassword/ValidateEditDelete';
+      const postData = {
+        "Username": this.authForm.value.username,
+        "Password": this.authForm.value.password
+      };
+      let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {
+        if (resp.status == 'Success') {
+          this.modalReferenceUserAuth.close(true);
+          this.authForm.controls.password.setValue(null);
+        } else {
+          this.snackBar.open(resp.message, 'OK', {duration: 2000})
+        }
+      });
+
+
+    } else {
+      this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
+    }
+
   }
 }

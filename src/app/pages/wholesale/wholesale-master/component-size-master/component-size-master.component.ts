@@ -33,10 +33,10 @@ export class ComponentSizeMasterComponent implements OnInit {
   componentsizemasterForm: FormGroup = this.formBuilder.group({
     code:['',[Validators.required]],
     desc : ['',[Validators.required]],
-    height:['',[Validators.required]],
-    width : ['',[Validators.required]],
-    length:['',[Validators.required]],
-    radius:['',[Validators.required]],
+    height:[''],
+    width : [''],
+    length:[''],
+    radius:[''],
 
    });
   close(data?: any) {

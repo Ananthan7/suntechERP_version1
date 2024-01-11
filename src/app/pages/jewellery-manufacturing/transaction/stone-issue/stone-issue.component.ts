@@ -21,8 +21,8 @@ export class StoneIssueComponent implements OnInit {
   currentFilter: any;
 
   divisionMS: any = 'ID';
-
-  columnhead:any[] = ['SR NO','JOB NO','UNQ JOD ID', 'Design','Stock Code','Division','Description ','Carat','Rate','Process','Amount','Worker','Sieve Set'];
+  orders: any = [];
+  columnhead:any[] = ['SR No.','JOB NO','UNQ JOD ID', 'Design','Stock Code','Division','Description ','Carat','Rate','Process','Amount','Worker','Sieve Set'];
   @Input() content!: any; 
   tableData: any[] = [];
   stoneIssueData : any[] =[];
@@ -148,7 +148,7 @@ export class StoneIssueComponent implements OnInit {
   stoneissueFrom: FormGroup = this.formBuilder.group({
     voctype:['STI',[Validators.required]],
     vocno:['1',[Validators.required]],
-    vocdate:[new Date(),[Validators.required]],
+    vocdate:[new Date()],
     enteredBy:[''],
    basecurrency:[''],
    basecurrencyrate:[''],
@@ -157,9 +157,38 @@ export class StoneIssueComponent implements OnInit {
    worker:['',],
    workername:[''],
     narration:[''],
+    caratTotal:[''],
+    amountTotal:[''],
+    total:[''],
   });
 
- 
+  // addRow(): void {
+  //   const newRow = this.formBuilder.group({
+  //     serialNo: this.tableData.length + 1,
+  //     carat: 0,
+  //     amount: 0,
+  //     total: 0
+  //   });
+
+  //   this.tableData.push(newRow);
+  //   this.updateTotal();
+  // }
+
+  // updateTotal(): void {
+  //   let caratTotal = 0;
+  //   let amountTotal = 0;
+  //   let total = 0;
+
+  //   // this.tableData.controls.forEach((control: FormGroup) => {
+  //   //   caratTotal += control.get('carat').value;
+  //   //   amountTotal += control.get('amount').value;
+  //   // });
+
+  //   this.stoneissueFrom.patchValue({
+  //     caratTotal,
+  //     amountTotal
+  //   });
+  // }
 
 removedata(){
   this.tableData.pop();

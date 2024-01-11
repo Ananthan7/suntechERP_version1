@@ -1,12 +1,11 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild, } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild, } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import {  NgbActiveModal,  NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
-import { MasterFindIconComponent } from "src/app/shared/common/master-find-icon/master-find-icon.component";
 import Swal from "sweetalert2";
 import * as convert from "xml-js";
 import { AddReceiptComponent } from "./add-receipt/add-receipt.component";
@@ -18,9 +17,8 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
   styleUrls: ["./scheme-receipt.component.scss"],
 })
 export class SchemeReceiptComponent implements OnInit {
-  @ViewChild(MasterFindIconComponent, { static: false })
-  MasterFindIcon!: MasterFindIconComponent;
-  @ViewChild("content") contentTemplate: any;
+  @Input() content!: any;
+  // @ViewChild("content") contentTemplate: any;
   @ViewChild("inputElement") inputElement!: ElementRef;
   schemeReceiptList: any[] = [];
   schemeReceiptListHead: any[] = [];
@@ -29,7 +27,7 @@ export class SchemeReceiptComponent implements OnInit {
   branchArray: any[] = [];
   newReceiptData: any = {};
   currentDate: any = new Date();
-  dataToEditrow: any[] = [];
+  dataToEditrow: any;
 
   // filteredOptions!: Observable<any[]>;
   salesmanArray: any[] = [];
@@ -69,13 +67,6 @@ export class SchemeReceiptComponent implements OnInit {
     VIEW_TABLE: true,
   };
   SchemeMasterFindData: MasterSearchModel = {
-    // PAGENO: 1,
-    // RECORDS: 10,
-    // LOOKUPID: 72,
-    // SEARCH_FIELD: "SCH_SCHEME_CODE",
-    // SEARCH_HEADING: "Scheme Registration",
-    // SEARCH_VALUE: "",
-    // WHERECONDITION: "SCH_SCHEME_CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -103,7 +94,6 @@ export class SchemeReceiptComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  // dateRegPattern = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
   receiptDetailsForm: FormGroup = this.formBuilder.group({
     Branch: ["", [Validators.required]],
     Salesman: ["", [Validators.required]],
@@ -139,25 +129,56 @@ export class SchemeReceiptComponent implements OnInit {
     private snackBar: MatSnackBar,
     private activeModal: NgbActiveModal
   ) {
-    this.branchName = this.branchName?.BRANCH_NAME;
-    this.receiptDetailsForm.controls.Branch.setValue(this.commonService.branchCode);
-    this.receiptDetailsForm.controls.VocType.setValue(this.commonService.getqueryParamVocType());
-    this.receiptDetailsForm.controls.VocDate.setValue(this.currentDate);
-    this.receiptDetailsForm.controls.PostedDate.setValue(this.currentDate);
-    this.receiptDetailsForm.controls.RefDate.setValue(this.currentDate);
-    
     this.deleteRow = this.deleteRow.bind(this);
-    this.editRowDetails = this.editRowDetails.bind(this);
   }
 
   ngOnInit(): void {
-    this.fetchPartyCode();
-    this.getSalesmanList();
-    this.setCompanyCurrency();
+    if(!this.content) {
+      this.fetchPartyCode();
+      this.setCompanyCurrency();
+    }
+    this.setInitialValues()
+    // this.getSalesmanList();
 
     if (this.inputElement) {
       this.renderer.selectRootElement(this.inputElement.nativeElement).focus();
     }
+  }
+  /**USE: set values for view and edit */
+  setInitialValues() {
+    if (!this.content) {
+      this.branchName = this.branchName?.BRANCH_NAME;
+      this.receiptDetailsForm.controls.Branch.setValue(this.commonService.branchCode);
+      this.receiptDetailsForm.controls.VocType.setValue(this.commonService.getqueryParamVocType());
+      this.receiptDetailsForm.controls.VocDate.setValue(this.currentDate);
+      this.receiptDetailsForm.controls.PostedDate.setValue(this.currentDate);
+      this.receiptDetailsForm.controls.RefDate.setValue(this.currentDate);
+      return
+    }
+    console.log(this.content, 'content');
+    this.receiptDetailsForm.controls.Branch.setValue(this.commonService.nullToString(this.content.BRANCH_CODE));
+    this.receiptDetailsForm.controls.VocType.setValue(this.commonService.nullToString(this.content.VOCTYPE));
+    this.receiptDetailsForm.controls.VocDate.setValue(this.content.VOCDATE);
+    this.receiptDetailsForm.controls.PostedDate.setValue(this.content.POSTDATE);
+    this.receiptDetailsForm.controls.RefDate.setValue(this.content.POSTDATE);
+    this.receiptDetailsForm.controls.Salesman.setValue(this.content.SALESPERSON_CODE);
+    this.receiptDetailsForm.controls.VocNo.setValue(this.content.VOCNO);
+    this.receiptDetailsForm.controls.CurrCode.setValue(this.content.BASE_CURRENCY);
+    this.receiptDetailsForm.controls.CurrRate.setValue(this.content.BASE_CURR_RATE);
+    this.receiptDetailsForm.controls.RefNo.setValue(this.content.REFDOCNO);
+    this.receiptDetailsForm.controls.POSCustomerCode.setValue(this.content.POSCUSTOMERCODE);
+    this.receiptDetailsForm.controls.POSCustomerName.setValue(this.content.CUSTOMER_NAME);
+    this.receiptDetailsForm.controls.SchemeID.setValue(this.content.SCH_SCHEME_CODE);
+    this.receiptDetailsForm.controls.Narration.setValue(this.content.REMARKS);
+    this.receiptDetailsForm.controls.PartyCode.setValue(this.content.PARTYCODE);
+    this.getDetailsForEdit(this.content.MID)
+  }
+  VIEWEDITFLAG: string = '';
+  dataIndex: any;
+  onRowClickHandler(event: any) {
+    this.VIEWEDITFLAG = 'EDIT'
+    this.dataIndex = event.dataIndex
+    this.openNewSchemeDetails(event.data)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -185,20 +206,16 @@ export class SchemeReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId("MSG1531");
     }
   }
-  editRowDetails(event: any) {
-    let data = event.row.data;
-  }
-
+  /**USE: get details from API for EDIT and VIEW */
   getDetailsForEdit(MID: any) {
-    let API: string = `Scheme/CurrencyReceipt?MID=${MID}`;
-    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
-      (resp: any) => {
+    this.commonService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.getDynamicAPI(`SchemeCurrencyReceipt/${MID}`)
+    .subscribe((resp: any) => {
+        this.commonService.closeSnackBarMsg;
         if (resp.response) {
           if (resp.response) {
             let result = resp.response;
-            this.receiptDetailsForm.controls.SchemeID.setValue(
-              result.POSSCHEMEID
-            );
+            // this.receiptDetailsForm.controls.SchemeID.setValue( result.POSSCHEMEID );
             this.orderedItems = result.Details;
             this.orderedItems.forEach((item: any, i: any) => {
               item.SRNO = i + 1;
@@ -218,11 +235,8 @@ export class SchemeReceiptComponent implements OnInit {
             }
           );
         }
-      },
-      (err) => {
-        this.toastr.error("Server Error", "", {
-          timeOut: 3000,
-        });
+      },(err) => {
+        this.commonService.closeSnackBarMsg;
       }
     );
     this.subscriptions.push(Sub);
@@ -273,7 +287,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.PostedDate.setValue(this.currentDate);
     this.receiptDetailsForm.controls.RefDate.setValue(this.currentDate);
     this.fetchPartyCode();
-    this.getSalesmanList();
+    // this.getSalesmanList();
     this.editFlag = false;
     this.isViewSchemeMasterGrid = false;
   }
@@ -331,7 +345,7 @@ export class SchemeReceiptComponent implements OnInit {
   fetchSchemeWithCustCode(customerCode: string) {
     let custCode = "";
     custCode = customerCode;
-   
+
     this.SchemeMasterFindData = {
       SEARCH_FIELD: 'SCH_CUSTOMER_ID,SCH_SCHEME_CODE',
       VIEW_INPUT: false,
@@ -340,14 +354,15 @@ export class SchemeReceiptComponent implements OnInit {
       API_VALUE: `SchemeRegistration/GetSchemeWithCustomerCode/${custCode}`
     };
   }
-  fetchSchemeId(customerId:any){
+  fetchSchemeId(customerId: any) {
     let API = `SchemeRegistration/GetSchemeRegistrationDetail/${customerId}`;
 
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
-        if (result.response) {  
+        if (result.response) {
           let data = result.response;
-
+          console.log(data,' schemeid api response');
+          
           if (result.response.length > 0) {
             if (data[0].SCHEME_ID != "") {
               this.receiptDetailsForm.controls.SchemeID.setValue(data[0].SCH_SCHEME_CODE)
@@ -464,11 +479,8 @@ export class SchemeReceiptComponent implements OnInit {
       this.currencyCodeChange(data.CURRENCY_CODE);
     }
   }
-  selectedScheme(data: any) {    
-    this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID);
-    this.receiptDetailsForm.controls.SchemeUniqueID.setValue(
-      data.SCHEME_UNIQUEID
-    );
+  selectedScheme(data: any) {
+    this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_SCHEME_CODE);
     this.fetchSchemeId(data.SCH_CUSTOMER_ID)
     // this.receiptDetailsForm.controls.SchemeUnits.setValue(data.SCHEME_UNITS);
     // this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(data.SCHEME_TOTAL_VALUE);
@@ -799,26 +811,26 @@ export class SchemeReceiptComponent implements OnInit {
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
     if (data) {
-      this.dataToEditrow = [];
-      this.dataToEditrow.push(data);
+      this.dataToEditrow = data;
     } else {
-      this.dataToEditrow = [];
+      this.dataToEditrow = this.receiptDetailsForm.value;
     }
+    console.log(this.dataToEditrow,'dataToEditrow');
+    
     // if (this.receiptDetailsForm.invalid) {
     //   this.toastr.error('', 'select all details!', {
     //     timeOut: 1000
     //   });
     //   return
     // }
-    console.log(this.receiptDetailsForm.value,'this.receiptDetailsForm.value;');
-    
+
     const modalRef: NgbModalRef = this.modalService.open(AddReceiptComponent, {
       size: "xl",
       backdrop: true, //'static'
       keyboard: false,
       windowClass: "modal-full-width",
     });
-    modalRef.componentInstance.content = this.receiptDetailsForm.value;
+    modalRef.componentInstance.content = this.dataToEditrow;
     modalRef.result.then(
       (result) => {
         if (result) {
@@ -830,11 +842,11 @@ export class SchemeReceiptComponent implements OnInit {
       }
     );
   }
-  setDetailData(){
+  setDetailData() {
     let detailsArray: any = [];
     let datas: any = {};
     this.orderedItems.forEach((item: any) => {
-      datas =  {
+      datas = {
         "UNIQUEID": 0,
         "SRNO": item.SRNO,
         "BRANCH_CODE": item.Branch || "",
@@ -849,7 +861,7 @@ export class SchemeReceiptComponent implements OnInit {
         "CHEQUE_NO": "",
         "CHEQUE_DATE": this.commonService.formatDateTime(this.currentDate),
         "CHEQUE_BANK": "",
-        "REMARKS":  this.commonService.nullToString(item.Narration),
+        "REMARKS": this.commonService.nullToString(item.Narration),
         "BANKCODE": "",
         "PDCYN": "N",
         "HDACCOUNT_HEAD": this.commonService.nullToString(item.AC_Description),
@@ -863,10 +875,10 @@ export class SchemeReceiptComponent implements OnInit {
         "CARD_NO": "",
         "CARD_HOLDER": "",
         "CARD_EXPIRY": this.commonService.formatDateTime(this.currentDate),
-        "BASE_CONV_RATE":  this.commonService.emptyToZero(this.receiptDetailsForm.value.CurrRate),
+        "BASE_CONV_RATE": this.commonService.emptyToZero(this.receiptDetailsForm.value.CurrRate),
         "SUBLEDJER_CODE": "",
         "TOTAL_AMOUNTFC": this.TOTAL_AMOUNTFC,
-        "TOTAL_AMOUNTCC": this.TOTAL_AMOUNTLC ,
+        "TOTAL_AMOUNTCC": this.TOTAL_AMOUNTLC,
         "CGST_PER": 0,
         "CGST_AMOUNTFC": 0,
         "CGST_AMOUNTCC": 0,
@@ -941,7 +953,8 @@ export class SchemeReceiptComponent implements OnInit {
       });
       return;
     }
-   
+    console.log(this.receiptDetailsForm.value);
+    
     let postData = {
       "MID": 1,
       "BRANCH_CODE": this.receiptDetailsForm.value.Branch || "",
@@ -949,7 +962,7 @@ export class SchemeReceiptComponent implements OnInit {
       "VOCNO": this.receiptDetailsForm.value.VocNo || 0,
       "VOCDATE": this.commonService.formatDateTime(this.receiptDetailsForm.value.VocDate),
       "VALUE_DATE": this.commonService.formatDateTime(this.currentDate),
-      "YEARMONTH": this.commonService.yearSelected || "",
+      "YEARMONTH": this.commonService.yearSelected,
       "PARTYCODE": this.receiptDetailsForm.value.PartyCode || "",
       "PARTY_CURRENCY": this.receiptDetailsForm.value.CurrCode || "",
       "PARTY_CURR_RATE": this.receiptDetailsForm.value.CurrRate || 0,
@@ -1002,8 +1015,8 @@ export class SchemeReceiptComponent implements OnInit {
       "TDS_TOTALCC": 0,
       "ADRRETURNREF": "",
       "ADVRETURN": false,
-      "SCH_SCHEME_CODE": "",
-      "SCH_CUSTOMER_ID": "",
+      "SCH_SCHEME_CODE": this.receiptDetailsForm.value.SchemeID,
+      "SCH_CUSTOMER_ID": this.receiptDetailsForm.value.SchemeUniqueID,
       "REFDOCNO": "",
       "FROM_TOUCH": false,
       "SL_CODE": "",
@@ -1023,10 +1036,10 @@ export class SchemeReceiptComponent implements OnInit {
       return;
     }
 
-    this.snackBar.open("Loading ...");
+    this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI("SchemeCurrencyReceipt", postData)
       .subscribe((result: any) => {
-        this.snackBar.dismiss();
+        this.commonService.closeSnackBarMsg;
         if (result["status"] == "Success" || result.response) {
           this.isSaved = true;
           let respData = result.response;
@@ -1047,13 +1060,13 @@ export class SchemeReceiptComponent implements OnInit {
           });
         } else {
           this.toastr.error(
-            "Not saved try again",
-            result.Message ? result.Message : "",
-            {
+            "Not saved try again", "", {
               timeOut: 3000,
             }
           );
         }
+      },(err) => {
+        this.commonService.closeSnackBarMsg;
       });
   }
   submitEditedForm(postData: any) {

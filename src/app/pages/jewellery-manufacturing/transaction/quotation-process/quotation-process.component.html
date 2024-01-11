@@ -14,7 +14,7 @@
                 <div class="row mb-2">
                     <div class="col-md-3">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-6">Voucher*:</label>
+                            <label for="inputPassword" class="col-sm-6">Voucher * :</label>
                             <div class="col-md-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="voctype" />
@@ -30,14 +30,14 @@
 
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Voucher Date*: </label>
+                            <label for="inputPassword" class="col-sm-6">Voucher Date * : </label>
                             <div class="col-sm-6 ">
                                 <!-- <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="vocdate" />
                                 </mat-form-field> -->
                                 <mat-form-field style="width: 100%">
                                     <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate"
-                                      placeholder="YYYY/MM/DD" DateValidation />
+                                      placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                                   </mat-form-field>
@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Salesman*: </label>
+                            <label for="inputPassword" class="col-sm-6">Salesman * : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="salesman" />
@@ -74,7 +74,7 @@
                                 </mat-form-field> -->
                                 <mat-form-field style="width: 100%">
                                     <input matInput [matDatepicker]="ason" name="ason" formControlName="ason"
-                                      placeholder="YYYY/MM/DD" DateValidation />
+                                      placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="ason"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #ason></mat-datepicker>
                                   </mat-form-field>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Doc.Ref : </label>
+                            <label for="inputPassword" class="col-sm-6">Doc.Ref * : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="docref" />
@@ -108,7 +108,10 @@
                             <mat-tab label="Vocher Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                        [allowColumnReordering]="true"
+                                        [allowColumnResizing]="true"
+                                        [columnAutoWidth]="true">
                                             <dxo-paging [enabled]="false"></dxo-paging>
                                             <dxo-editing mode="cell" [allowUpdating]="true">
                                             </dxo-editing>
@@ -125,8 +128,7 @@
                                 <div class="row align-items-center pt-1">
                                     <div class="col-md-6">
                                         <div class="row my-2">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label">Narration
-                                                :</label>
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">Narration * :</label>
                                             <div class="col-md-8">
                                                 <mat-form-field style="width: 100%;">
                                                     <input type="text" matInput formControlName="narration" />
@@ -146,7 +148,10 @@
                             <mat-tab label="Item Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                        [allowColumnReordering]="true"
+                                        [allowColumnResizing]="true"
+                                        [columnAutoWidth]="true">
                                             <dxo-paging [enabled]="false"></dxo-paging>
                                             <dxo-editing mode="cell" [allowUpdating]="true">
                                             </dxo-editing>

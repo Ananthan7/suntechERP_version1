@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class=" row">
-                                <label for="inputPassword" class="col-sm-3 col-form-label">Code :</label>
+                                <label for="inputPassword" class="col-sm-3 col-form-label">Code*:</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput formControlName="code" />
@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                             <div class=" row">
-                                <label for="inputPassword" class="col-sm-3 col-form-label">Description :</label>
+                                <label for="inputPassword" class="col-sm-3 col-form-label">Description*:</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput formControlName="description" />
@@ -62,8 +62,11 @@
                             <div class="row">
                                 <div class="col">
                                     <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                                        [showColumnLines]="true" [showRowLines]="true" class="mt-3">
+                                        [showColumnLines]="true" [showRowLines]="true" class="mt-3" keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)">
                                         <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
+                                        <dxo-selection  [selectAllMode]="allMode"
+                                        [showCheckBoxesMode]="checkBoxesMode"
+                                        mode="multiple"></dxo-selection>
 
                                         <dxi-column caption="Details">
                                             <dxi-column dataField="SRNO" caption="SN"> </dxi-column>
@@ -79,10 +82,10 @@
                                         <dxi-column caption="Alert Type">
                                             <dxi-column dataField="ORG_MESSAGE" caption="Message"
                                                 cellTemplate="messagetemp"> </dxi-column>
-                                            <dxi-column dataField="MOBILE_NO" caption="Mobile Number"> </dxi-column>
+                                                <dxi-column dataField="MOBILE_NO" caption="Mobile Number" cellTemplate="mobilenumber"> </dxi-column>
                                             <dxi-column dataField="EMAIL" caption="Email" cellTemplate="emailtemp">
                                             </dxi-column>
-                                            <dxi-column dataField="EMAIL_ID" caption="Email ID"> </dxi-column>
+                                            <dxi-column dataField="EMAIL_ID" caption="Email ID" cellTemplate="emailid"> </dxi-column>
                                             <dxi-column dataField="SYS_MESSAGE" caption="System Message"
                                                 cellTemplate="systemtemp"> </dxi-column>
                                         </dxi-column>
@@ -131,7 +134,13 @@
                                             <input type="checkbox" (change)="systemcheckevent($event,data)"
                                                 [checked]="data.value" />
                                         </div>
+                                        <div *dxTemplate="let data of 'emailid'">
+                                            <input type="text" (change)="emailid($event,data)" [value]="data.value" style="width: 100%;"  />
+                                          </div>
 
+                                          <div *dxTemplate="let data of 'mobilenumber'">
+                                            <input type="text" (change)="mobilenumber($event,data)" [value]="data.value" style="width: 100%;"  />
+                                          </div>
 
                                     </dx-data-grid>
 
