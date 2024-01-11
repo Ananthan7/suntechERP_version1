@@ -136,11 +136,11 @@ export class AlloyMasterComponent implements OnInit {
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 30,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Category Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "types = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -148,11 +148,11 @@ export class AlloyMasterComponent implements OnInit {
   subcategoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 31,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Subcategory Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "types= 'SUB CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -164,7 +164,7 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Brand Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "types='BRAND MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

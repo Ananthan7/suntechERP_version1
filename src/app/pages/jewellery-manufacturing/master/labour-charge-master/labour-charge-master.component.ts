@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class LabourChargeMasterComponent implements OnInit {
   @Input() content!: any; 
-
+  viewMode:boolean = false;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branch = localStorage.getItem('userbranch');
@@ -77,6 +77,8 @@ export class LabourChargeMasterComponent implements OnInit {
     purity : [''],
     wtFrom : [''],
     wtTo : [''],
+    wtFromdeci: ['.000'],
+    wtToDeci: ['.000'],
     onGrossWt : [false,[Validators.required]],
     forDesignOnly : [false,[Validators.required]]
   });
@@ -289,40 +291,45 @@ sizeFromCodeData: MasterSearchModel = {
     if(this.content){
       this.setFormValues()
     }
+
+    this.metallabourMasterForm.controls['stock_code'].enable();
+    this.metallabourMasterForm.controls['color'].enable();
+    this.metallabourMasterForm.controls['metallabourType'].enable();
+
     this.getcurrencyOptions()
     this.labourTypeList =[
       {
-        'name':'SETTING',
-        'value':'SETTING'
+        'name':'MAKING',
+        'value':'MAKING'
       },
       {
-        'name':'HANDLING',
-        'value':'HANDLING'
+        'name':'POLISH',
+        'value':'POLISH'
       },
       {
-        'name':'CERTIFICATE',
-        'value':'CERTIFICATE'
+        'name':'FINISHING',
+        'value':'FINISHING'
       },
-      // {
-      //   'name':'CASTING',
-      //   'value':'CASTING'
-      // },
+      {
+        'name':'CASTING',
+        'value':'CASTING'
+      },
       {
         'name':'GENERAL',
         'value':'GENERAL'
       },
-      // {
-      //   'name':'RHODIUM',
-      //   'value':'RHODIUM'
-      // },
-      // {
-      //   'name':'STAMPING',
-      //   'value':'STAMPING'
-      // },
-      // {
-      //   'name':'WASTAGE',
-      //   'value':'WASTAGE'
-      // },
+      {
+        'name':'RHODIUM',
+        'value':'RHODIUM'
+      },
+      {
+        'name':'STAMPING',
+        'value':'STAMPING'
+      },
+      {
+        'name':'WASTAGE',
+        'value':'WASTAGE'
+      },
     ]
     this.unitList= [
       {
@@ -425,6 +432,8 @@ sizeFromCodeData: MasterSearchModel = {
   currencyCodeSelected(e:any){
     console.log(e); 
     this.metallabourMasterForm.controls.metalcurrency.setValue(e.CURRENCY_CODE);
+    this.metallabourMasterForm.controls.currency.setValue(e.CURRENCY_CODE);
+    
   }
   
   karatCodeSelected(e:any){
@@ -730,6 +739,18 @@ sizeFromCodeData: MasterSearchModel = {
         }
       });
     }
+
+    onforDesignOnlyChange(event:any){  
+      console.log(event);
+      if(event.checked === true){
+        this.metallabourMasterForm.controls['stock_code'].disable();
+        this.metallabourMasterForm.controls['color'].disable();
+        this.metallabourMasterForm.controls['metallabourType'].disable();
+      }
+      else{
+        this.metallabourMasterForm.controls['stock_code'].enable();
+        this.metallabourMasterForm.controls['color'].enable();
+        this.metallabourMasterForm.controls['metallabourType'].enable();
+      }
+    }
 }
-
-
