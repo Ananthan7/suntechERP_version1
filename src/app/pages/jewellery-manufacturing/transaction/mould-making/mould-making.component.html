@@ -254,9 +254,13 @@
                   <input  type="text" (change)="stock_codetemp($event,data)" style="width: 100%;" [value]="data.value" />
                 </div>
 
-              <div *dxTemplate="let data of 'descriptiontemp'">
-                  <input  type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" [value]="data.value"/> 
-              </div>
+                <div *dxTemplate="let data of 'descriptiontemp'">
+                  <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                  <master-search [MasterSearchData]="stockCodeData"
+                    (newRowClick)="descriptiontemp($event,data)">
+                  </master-search>
+                </div>
+
               <div *dxTemplate="let data of 'Psctemp'">
                 <input  type="text" (change)="Psctemp($event,data)" style="width: 100%;" [value]="data.value" />
               </div>

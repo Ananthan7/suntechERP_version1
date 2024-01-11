@@ -65,9 +65,32 @@ export class MetalIssueComponent implements OnInit {
       if (postData) {
         console.log('Data from modal:', postData);       
         this.metalIssueDetailsData.push(postData);
-      }
-    });
 
+        let length = this.tableData.length;
+        let sn = length + 1;
+        let data =  {
+          "SN": sn,
+          "job_id": postData.JOB_NUMBER,
+          "uniq_job_id": postData.JOB_SO_NUMBER,
+          "design": postData.DESIGN_CODE,
+          "stock_code": postData.STOCK_CODE,
+          "division": postData.SUB_STOCK_CODE,
+          "description": postData.STOCK_DESCRIPTION,
+          "carat": postData.GROSS_WT,
+          "process": postData.PROCESS_CODE,
+          "worker": postData.WORKER_CODE,
+          "amount": postData.AMOUNTFC,
+        };
+        this.tableData.push(data);
+        
+      }
+     
+    });
+  }
+        
+  stock_codetemp(data:any,value: any){
+    console.log(data);
+    this.tableData[value.data.SN - 1].stock_code = data.postData.stockCode;
   }
 
   deleteTableData(){

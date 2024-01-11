@@ -8,6 +8,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import themes from 'devextreme/ui/themes';
 
 @Component({
   selector: 'app-approval-master',
@@ -18,6 +19,8 @@ export class ApprovalMasterComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   selectedIndexes: any = [];
+  allMode: string;
+  checkBoxesMode: string;
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -39,7 +42,10 @@ export class ApprovalMasterComponent implements OnInit {
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
-  ) { }
+  ) { 
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -135,7 +141,6 @@ export class ApprovalMasterComponent implements OnInit {
         "SYS_MESSAGE": false,
         "EMAIL_ID": "" ,
         "MOBILE_NO": "",
-
       };
       this.tableData.push(data);
       // this.approvalMasterForm.controls.code.setValue("");

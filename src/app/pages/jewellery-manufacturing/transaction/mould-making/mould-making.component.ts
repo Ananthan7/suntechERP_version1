@@ -93,6 +93,18 @@ mouldCodeData: MasterSearchModel = {
   VIEW_TABLE: true,
 }
 
+stockCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 23,
+  SEARCH_FIELD: 'STOCK_CODE',
+  SEARCH_HEADING: 'Stock type',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "STOCK_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
 
  constructor(
     private activeModal: NgbActiveModal,
@@ -139,15 +151,21 @@ mouldCodeData: MasterSearchModel = {
     this.mouldMakingForm.controls.mouldType.setValue(e.CODE);
   }
 
+  stockCodeSelected(e:any){
+    console.log(e);
+    this.mouldMakingForm.controls.stockcode.setValue(e.STOCK_CODE);
+  }
+
   stock_codetemp(data:any,value: any){
     console.log(data);
-    this.tableData[value.data.SN - 1].stock_code = data.target.value;
+    this.tableData[value.data.SN - 1].stock_code = data.STOCK_CODE;
   }
 
   descriptiontemp(data:any,value: any){
     console.log(value);
     console.log(data);
-    this.tableData[value.data.SRNO - 1].description = data.target.value;
+    this.tableData[value.data.SN - 1].stock_code = data.STOCK_CODE;
+    this.tableData[value.data.SN - 1].description = data.DESCRIPTION;
   }
 
   Psctemp(data:any,value: any){

@@ -132,21 +132,52 @@
                                 <dx-data-grid
                         id="gridContainer"
                         [dataSource]="tableData"
-                        keyExpr="ID"
                         [showBorders]="true"
                         >
                         <dxo-selection mode="single"></dxo-selection>
-                    
-                        <dxi-column dataField="Job Id" dataType="Job Id"  caption="Job Id"></dxi-column>
-                        <dxi-column dataField="Uniq Job Id"  caption="Uniq job Id"></dxi-column>
-                        <dxi-column dataField="Design" caption="Design"></dxi-column>
-                        <dxi-column dataField="Stock Code" caption="Stock Code"></dxi-column>
-                        <dxi-column dataField="Division" caption="Division"></dxi-column>
-                        <dxi-column dataField="Description" caption="Description"></dxi-column>
-                        <dxi-column dataField="Carat" caption="Carat"></dxi-column>
-                        <dxi-column dataField="Process" caption="Process"></dxi-column>
-                        <dxi-column dataField="Worker" caption="Worker"></dxi-column>
-                        <dxi-column dataField="Amount" caption="Amount"></dxi-column>      
+
+                        <dxi-column dataField="SN" caption="SN"> </dxi-column>
+                        <dxi-column dataField="job_id" dataType="Job Id"  caption="Job Id" cellTemplate="job_idtemp"></dxi-column>
+                        <dxi-column dataField="uniq_job_id"  caption="Uniq job Id" cellTemplate="uniq_job_idtemp"></dxi-column>
+                        <dxi-column dataField="design" caption="Design" cellTemplate="designtemp"></dxi-column>
+                        <dxi-column dataField="stock_code" caption="Stock Code" cellTemplate="stock_codetemp"></dxi-column>
+                        <dxi-column dataField="division" caption="Division" cellTemplate="divisiontemp"></dxi-column>
+                        <dxi-column dataField="description" caption="Description" cellTemplate="descriptiontemp"></dxi-column>
+                        <dxi-column dataField="carat" caption="Carat" cellTemplate="carattemp"></dxi-column>
+                        <dxi-column dataField="process" caption="Process" cellTemplate="processtemp"></dxi-column>
+                        <dxi-column dataField="worker" caption="Worker" cellTemplate="workertemp"></dxi-column>
+                        <dxi-column dataField="amount" caption="Amount" cellTemplate="amounttemp"></dxi-column> 
+                        
+                        <div *dxTemplate="let data of 'job_idtemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'uniq_job_idtemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div> 
+                           <div *dxTemplate="let data of 'designtemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div> 
+                          <div *dxTemplate="let data of 'stock_codetemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                           <div *dxTemplate="let data of 'divisiontemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'descriptiontemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'carattemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'processtemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'workertemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div>
+                          <div *dxTemplate="let data of 'amounttemp'">
+                            <input  type="text"  style="width: 100%;" [value]="data.value" />
+                          </div> 
                     
                         <dxo-summary>
                             <dxi-total-item column="Carat"
