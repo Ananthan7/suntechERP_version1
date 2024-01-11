@@ -79,7 +79,7 @@ export class SchemeRegisterComponent implements OnInit {
     Code: ['', Validators.required],
     Name: ['', Validators.required],
     MobileNo: ['', Validators.required],
-    Email: ['', [Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
+    Email: ['',[Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
     GovIdType: [''],
     GovIdNumber: [''],
     VOCTYPE: [''],

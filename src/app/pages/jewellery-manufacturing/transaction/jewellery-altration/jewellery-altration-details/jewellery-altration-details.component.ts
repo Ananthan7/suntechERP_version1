@@ -122,7 +122,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
    price4:[''],
    price4FC:[''],
    price4LC:[''],
-   price4PER:[''],
+   price4PER:['1'],
    price5:[''],
    price5FC:[''],
    price5LC:[''],

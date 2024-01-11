@@ -3398,11 +3398,23 @@ export class AddPosComponent implements OnInit {
       .subscribe((resp) => {
         this.snackBar.dismiss();
 
-        console.log('=================resp===================');
-        console.log(resp);
-        console.log('====================================');
         if (resp.status == 'Success') {
           this.transAttachmentList = resp.response;
+
+          this.transAttachmentList.map(data => {
+
+            const formData = new FormData();
+
+            formData.append('VOCTYPE', data.VOCTYPE);
+            formData.append('REFMID', data.KYCrefmid);
+            formData.append('ATTACHMENT_PATH', data.ATTACHMENT_PATH);
+            formData.append('REMARKS', data.REMARKS || '');
+            formData.append('EXPIRE_DATE', data.EXPIRE_DATE);
+            formData.append('DOC_TYPE', data.DOC_TYPE);
+
+            this.transAttachmentListData.push(formData);
+
+          });
 
         } else {
           this.transAttachmentList = [];
@@ -6889,14 +6901,6 @@ export class AddPosComponent implements OnInit {
     console.log('====================================');
   }
 
-  //need to work
-  setTransAttachmentData() {
-    this.transAttachmentList.forEach((data: any) => {
-
-    });
-
-  }
-
   postRetailSalesMaster() {
     console.log('====================this.karatRateDetails================');
     console.log(this.karatRateDetails);
@@ -7303,9 +7307,11 @@ export class AddPosComponent implements OnInit {
                 if (res.status == 'SUCCESS') {
                   this.snackBar.open('POS Updated Successfully', 'OK');
 
-          // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
-                  
+                  // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+
                   // this.close('reloadMainGrid');
+
+      this.submitAttachment();
 
                 } else {
                   this.isSaved = false;
@@ -7330,7 +7336,9 @@ export class AddPosComponent implements OnInit {
               if (res.status == 'SUCCESS') {
                 // this.close('reloadMainGrid');
 
-          // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+                // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+
+      this.submitAttachment();
 
                 this.snackBar.open('POS Saved', 'OK');
                 setTimeout(() => {
@@ -10855,6 +10863,7 @@ export class AddPosComponent implements OnInit {
 
       formData.append('VOCNO', this.vocDataForm.value.fcn_voc_no);
       formData.append('VOCTYPE', this.vocType);
+      // formData.append('VOCTYPE', 'MASPOS');
       formData.append('VOCDATE', this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()));
       formData.append('REFMID', this.vocDataForm.value.fcn_voc_no);
       formData.append('ATTACHMENT_PATH', '');
@@ -10863,12 +10872,12 @@ export class AddPosComponent implements OnInit {
       formData.append('REMARKS', this.attachmentForm.value.remarks || '');
       formData.append('UNIQUEID', '1');
       formData.append('CODE', '');
-      formData.append('ATTACH_TYPE', this.attachmentForm.value.docType || '');
+      formData.append('ATTACH_TYPE', this.attachmentFile[0].name.split('.')[1] || ''); //pass extension
       formData.append('EXPIRE_DATE', this.convertDateToYMD(this.attachmentForm.value.expDate));
       formData.append('BRANCH_CODE', this.strBranchcode);
       formData.append('YEARMONTH', this.baseYear);
       formData.append('DOC_TYPE', this.attachmentForm.value.docType || '');
-      formData.append('SUBLED_CODE', '');
+      formData.append('SUBLED_CODE', this.customerDataForm.value.fcn_customer_code || '');
       formData.append('DOC_ACTIVESTATUS', 'false');
       formData.append('DOC_LASTRENEWBY', '');
       formData.append('DOC_NEXTRENEWDATE', '');
@@ -10902,41 +10911,41 @@ export class AddPosComponent implements OnInit {
   }
   submitAttachment() {
     // if (!this.attachmentForm.invalid) {
-      const modifiedFormData = new FormData();
-      const res = this.transAttachmentListData.map((data, i) => {
-        let j=0;
-        data.forEach((value: any, key: any) => {
-          if (key.includes('Model.Images')){
-            modifiedFormData.append(`Model.modelData[${i}].Images[${j}].Image.File`, value);
-            j++;
-          }
-          else  if (['SRNO', 'UNIQUEID', 'CODE'].includes(key))
-          modifiedFormData.append(`Model.modelData[${i}].Data.${key}`, (i+1).toString());
-          else
+    const modifiedFormData = new FormData();
+    const res = this.transAttachmentListData.map((data, i) => {
+      let j = 0;
+      data.forEach((value: any, key: any) => {
+        if (key.includes('Model.Images')) {
+          modifiedFormData.append(`Model.modelData[${i}].Images[${j}].Image.File`, value);
+          j++;
+        }
+        else if (['SRNO', 'UNIQUEID', 'CODE'].includes(key))
+          modifiedFormData.append(`Model.modelData[${i}].Data.${key}`, (i + 1).toString());
+        else
           modifiedFormData.append(`Model.modelData[${i}].Data.${key}`, value);
 
 
-        });
+      });
+    });
+
+    this.snackBar.open('Loading...');
+    this.suntechApi.postDynamicAPI('TransAttachments/InsertTransAttachments', modifiedFormData).subscribe(
+      (res) => {
+        this.snackBar.dismiss();
+        if (res != null) {
+          if (res.status == 'SUCCESS') {
+
+            this.snackBar.open(res.message, 'OK', { duration: 2000 });
+
+          } else {
+
+          }
+        }
+
       });
 
-      this.snackBar.open('Loading...');
-      this.suntechApi.postDynamicAPI('TransAttachments/InsertTransAttachments',modifiedFormData).subscribe(
-        (res) => {
-          this.snackBar.dismiss();
-          if (res != null) {
-            if (res.status == 'SUCCESS') {
 
-              this.snackBar.open(res.message, 'OK', { duration: 2000 });
-
-            } else {
-
-            }
-          }
-
-        });
-
-
-      // attachmentFile
+    // attachmentFile
 
     // } else {
     //   this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
