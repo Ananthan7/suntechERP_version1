@@ -8,6 +8,10 @@ import { PcrSelectionComponent } from "./pcr-selection/pcr-selection.component";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { CommonServiceService } from "src/app/services/common-service.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Subscription } from "rxjs";
+import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-advance-return",
@@ -16,6 +20,7 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 })
 export class AdvanceReturnComponent implements OnInit {
   @Input() content!: any;
+  branchCode?: String;
   
   vocMaxDate = new Date();
   currentDate = new Date();
@@ -113,15 +118,23 @@ export class AdvanceReturnComponent implements OnInit {
     total: [""],
   });
 
+  private subscriptions: Subscription[] = [];
+
+  
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private comService: CommonServiceService
+    private comService: CommonServiceService,
+    private snackBar: MatSnackBar,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+
   ) {}
 
   ngOnInit(): void {
 
+    this.branchCode = this.comService.branchCode;
     
   }
 
@@ -155,6 +168,46 @@ export class AdvanceReturnComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.advanceReturnForm.controls.partyCode.setValue(e.ACCODE);
+    this.partyCodeChange({ target: { value: e.ACCODE } })
+  }
+  partyCodeChange(event: any) {
+    if (event.target.value == '') return
+    this.snackBar.open('Loading...')
+    // this.PartyCodeData.SEARCH_VALUE = event.target.value
+    let postData = {
+      "SPID": "001",
+      "parameter": {
+        "ACCODE": event.target.value || "",
+        "BRANCH_CODE": this.branchCode
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.snackBar.dismiss()
+        if (result.status == "Success") { //
+          if (result.dynamicData.length > 0) {
+
+            let data = result.dynamicData[0]
+            console.log('data', data);
+
+            if (data && data[0].CURRENCY_CODE) {
+              this.advanceReturnForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE)
+              this.advanceReturnForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
+           }
+          }
+
+        } else {
+          this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.snackBar.dismiss()
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
+    this.subscriptions.push(Sub)
   }
 
   partyCurrencyCodeSelected(e: any) {

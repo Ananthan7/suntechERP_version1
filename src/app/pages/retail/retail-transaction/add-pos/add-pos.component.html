@@ -1536,6 +1536,29 @@
                       value="{{ order_received_amount }}" aria-describedby="" placeholder="0.00" readonly /> -->
                 </td>
               </tr>
+            
+              <tr>
+                <td
+                  class="td-w-40"
+                  style="background-color: #1a61a9; color: #fff"
+                >
+                  <b>VAT Round Off</b>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id="vatroundoff"
+                    [(ngModel)]="vatRoundOffAmt"
+                    aria-describedby
+                    placeholder="0.00"
+                    readonly
+                  />
+                  <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
+                      value="{{ order_received_amount }}" aria-describedby="" placeholder="0.00" readonly /> -->
+                </td>
+              </tr>
+            
             </table>
           </div>
         </div>
