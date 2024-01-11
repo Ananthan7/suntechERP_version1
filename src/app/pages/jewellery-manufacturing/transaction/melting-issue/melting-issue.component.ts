@@ -477,14 +477,14 @@ export class MeltingIssueComponent implements OnInit {
       return
     }
 
-    let API = `JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/${this.branchCode}/${this.meltingIssueFrom.value.voctype}/${this.meltingIssueFrom.value.vocno}/${this.comService.yearSelected}`
+    let API = `JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/${this.branchCode}/${this.meltingIssueFrom.value.voctype}/${this.meltingIssueFrom.value.vocno}/${this.commonService.yearSelected}`
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.meltingIssueFrom.value.voctype || "",
       "VOCNO": this.meltingIssueFrom.value.vocno || "",
       "VOCDATE": this.meltingIssueFrom.value.vocdate || "",
-      "YEARMONTH": this.comService.yearSelected,
+      "YEARMONTH": this.commonService.yearSelected,
       "NAVSEQNO": 0,
       "WORKER_CODE": this.meltingIssueFrom.value.worker || "",
       "WORKER_DESC": this.meltingIssueFrom.value.workerdes || "",
