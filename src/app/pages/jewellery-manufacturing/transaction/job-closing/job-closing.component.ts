@@ -34,13 +34,19 @@ export class JobClosingComponent implements OnInit {
 
 
   jobCloseingFrom: FormGroup = this.formBuilder.group({
-
-
       vocType: ['', [Validators.required]],
       vocNum: ['', [Validators.required]],
-      sLoctype: ['', [Validators.required]],
-      mLoctype: ['', [Validators.required]], 
+      vocdate: ['',],
+      user_name: ['',],
+      party_code: ['',],
+      job_no: ['',],
+      worker: ['',],
+      reason : ['',],
+      stone_loc: ['', [Validators.required]],
+      metal_loc: ['', [Validators.required]], 
+      doc_ref: ['',], 
   });
+
 
   formSubmit(){
 

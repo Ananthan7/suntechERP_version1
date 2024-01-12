@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'jewellery-manufacturing-transaction-grid',
     loadChildren: () => import('../jewellery-manufacturing/transaction/transaction.module').then(m => m.TransactionModule)
   },
+  {
+    path: 'jewellery-manufacturing-utilities-grid',
+    loadChildren: () => import('../jewellery-manufacturing/utilities/utilities.module').then(m => m.UtilitiesModule)
+  },
 ];
 
 @NgModule({

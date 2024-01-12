@@ -367,9 +367,12 @@
                                         <div class="row">
                                             <label for="inputPassword" class="col-sm-4 col-form-label">Price 1 :</label>
                                             <div class="col-2">
-                                                <mat-form-field style="width: 100%;">
+                                                <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="price1PER" />
                                                 </mat-form-field>
+                                                <master-search [MasterSearchData]="price1CodeData"
+                                                            (newRowClick)="price1CodeSelected($event)">
+                                                        </master-search>
                                             </div>
                                             <div class="col-2">
                                                 <mat-form-field style="width: 100%;">
@@ -390,9 +393,12 @@
                                         <div class="row">
                                             <label for="inputPassword" class="col-sm-4 col-form-label">Price 2 :</label>
                                             <div class="col-2">
-                                                <mat-form-field style="width: 100%;">
+                                                <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="price2PER" />
                                                 </mat-form-field>
+                                                <master-search [MasterSearchData]="price2CodeData"
+                                                            (newRowClick)="price2CodeSelected($event)">
+                                                        </master-search>
                                             </div>
                                             <div class="col-2">
                                                 <mat-form-field style="width: 100%;">
@@ -413,9 +419,12 @@
                                         <div class="row">
                                             <label for="inputPassword" class="col-sm-4 col-form-label">Price 3 :</label>
                                             <div class="col-2">
-                                                <mat-form-field style="width: 100%;">
+                                                <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="price3PER" />
                                                 </mat-form-field>
+                                                <master-search [MasterSearchData]="price3CodeData"
+                                                            (newRowClick)="price3CodeSelected($event)">
+                                                        </master-search>
                                             </div>
                                             <div class="col-2">
                                                 <mat-form-field style="width: 100%;">
@@ -436,9 +445,12 @@
                                         <div class="row">
                                             <label for="inputPassword" class="col-sm-4 col-form-label">Price 4 :</label>
                                             <div class="col-2">
-                                                <mat-form-field style="width: 100%;">
+                                                <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="price4PER" />
                                                 </mat-form-field>
+                                                <master-search [MasterSearchData]="price4CodeData"
+                                                            (newRowClick)="price4CodeSelected($event)">
+                                                        </master-search>
                                             </div>
                                             <div class="col-2">
                                                 <mat-form-field style="width: 100%;">
@@ -459,9 +471,12 @@
                                         <div class="row">
                                             <label for="inputPassword" class="col-sm-4 col-form-label">Price 5 :</label>
                                             <div class="col-2">
-                                                <mat-form-field style="width: 100%;">
+                                                <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="price5PER" />
                                                 </mat-form-field>
+                                                <master-search [MasterSearchData]="price5CodeData"
+                                                            (newRowClick)="price5CodeSelected($event)">
+                                                        </master-search>
                                             </div>
                                             <div class="col-2">
                                                 <mat-form-field style="width: 100%;">

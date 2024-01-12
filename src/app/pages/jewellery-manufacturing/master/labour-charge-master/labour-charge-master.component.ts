@@ -23,8 +23,10 @@ export class LabourChargeMasterComponent implements OnInit {
 
   methodList: any[] = [];
   labourTypeList: any[] = [];
+  DialabourTypeList: any[] = [];
   unitList: any[] = [];
   currencyList : any[] = [];
+  settingTypeList: any[] = [];
   divisionMS: any = 'ID';
 
 
@@ -290,13 +292,67 @@ sizeFromCodeData: MasterSearchModel = {
   ngOnInit(): void {
     if(this.content){
       this.setFormValues()
-    }
+    } 
+
+    this.diamondlabourMasterForm = this.formBuilder.group({
+      labourType: new FormControl(''),
+      settingType: new FormControl({ value: '', disabled: true }),
+      method: new FormControl({ value: '', disabled: true }),
+
+    });
+
+    this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
+      const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
+      const methodControl = this.diamondlabourMasterForm.get('method');
+
+      if (selectedLabourType === 'SETTING') {
+        settingTypeControl?.enable();
+        methodControl?.enable();
+      } else {
+        settingTypeControl?.disable();
+        methodControl?.disable();
+      }
+    });
+   
 
     this.metallabourMasterForm.controls['stock_code'].enable();
     this.metallabourMasterForm.controls['color'].enable();
     this.metallabourMasterForm.controls['metallabourType'].enable();
 
     this.getcurrencyOptions()
+
+
+
+    this.DialabourTypeList = [
+      {
+        'name':'SETTING',
+        'value':'SETTING'
+      },
+      {
+        'name':'HANDLING',
+        'value':'HANDLING'
+      },
+      {
+        'name':'CERTIFICATE',
+        'value':'CERTIFICATE'
+      },
+      {
+        'name':'GENERAL',
+        'value':'GENERAL'
+      },
+    ]
+
+    this.settingTypeList = [
+      {
+        'name':'GEN',
+        'value':'GEN'
+      },
+      {
+        'name':'PRESSURE',
+        'value':'PRESSURE'
+      },
+    ]
+
     this.labourTypeList =[
       {
         'name':'MAKING',
@@ -372,7 +428,10 @@ sizeFromCodeData: MasterSearchModel = {
     },
     
     ]
+
   }
+
+
 
   categorySelected(e:any){
     console.log(e); 
@@ -753,4 +812,6 @@ sizeFromCodeData: MasterSearchModel = {
         this.metallabourMasterForm.controls['metallabourType'].enable();
       }
     }
+
+
 }
