@@ -160,7 +160,6 @@ export class MeltingIssueComponent implements OnInit {
   
   }
   
-
   setAllInitialValues() {
     console.log(this.content)
     if (!this.content) return
@@ -170,21 +169,41 @@ export class MeltingIssueComponent implements OnInit {
         if (result.response) {
           let data = result.response
           console.log(data)
-          this.meltingIssueFrom.controls.voctype.setValue(this.content.VOCTYPE)
-          this.meltingIssueFrom.controls.vocno.setValue(this.content.VOCNO)
-          this.meltingIssueFrom.controls.vocdate.setValue(this.content.VOCDATE)
-          this.meltingIssueFrom.controls.processcode.setValue(this.content.PROCESS_CODE)
-          this.meltingIssueFrom.controls.worker.setValue(this.content.WORKER_CODE)
-          this.meltingIssueFrom.controls.workerdes.setValue(this.content.WORKER_DESC)
-          this.meltingIssueFrom.controls.processdes.setValue(this.content.PROCESS_DESC)
-          this.meltingIssueFrom.controls.jobno.setValue(this.content.JOB_NUMBER)
-          this.meltingIssueFrom.controls.jobdes.setValue(this.content.JOB_DESCRIPTION)
-          this.meltingIssueFrom.controls.color.setValue(this.content.COLOR)
-          this.meltingIssueFrom.controls.grossweight.setValue(this.content.Details.GROSS_WT)
-          this.meltingIssueFrom.controls.pureweight.setValue(this.content.detail.PUREWT)
-          this.meltingIssueFrom.controls.pcs.setValue(this.content.detail.PCS)
-          this.meltingIssueFrom.controls.stockcode.setValue(this.content.detail.STOCK_CODE)
-          this.meltingIssueFrom.controls.purity.setValue(this.content.detail.PURITY)
+          data.Details.forEach((element:any) => {
+            this.tableData.push({
+              jobno: element.JOB_NUMBER,
+              stockcode: element.STOCK_CODE,
+              process: element.PROCESS_CODE,
+              worker: element.WORKER_CODE,
+              pcs: element.PCS,
+              grossweight: element.GROSS_WT,
+              purity: element.PURITY,
+              pureweight: element.PUREWT,
+              SRNO: element.SRNO,
+              Rate: element.RATE,
+              Amount: element.Amount,
+            
+
+            })
+          });
+          this.meltingIssueFrom.controls.voctype.setValue(data.VOCTYPE)
+          this.meltingIssueFrom.controls.vocno.setValue(data.VOCNO)
+          this.meltingIssueFrom.controls.vocdate.setValue(data.VOCDATE)
+          this.meltingIssueFrom.controls.processcode.setValue(data.PROCESS_CODE)
+          this.meltingIssueFrom.controls.worker.setValue(data.WORKER_CODE)
+          this.meltingIssueFrom.controls.workerdes.setValue(data.WORKER_DESC)
+          this.meltingIssueFrom.controls.processdes.setValue(data.PROCESS_DESC)
+          this.meltingIssueFrom.controls.jobno.setValue(data.Details[0].JOB_NUMBER)
+          this.meltingIssueFrom.controls.jobdes.setValue(data.Details[0].JOB_DESCRIPTION)
+          this.meltingIssueFrom.controls.color.setValue(data.COLOR)
+          this.meltingIssueFrom.controls.grossweight.setValue(data.Details[0].GROSS_WT)
+          this.meltingIssueFrom.controls.pureweight.setValue(data.Details[0].PUREWT)
+          this.meltingIssueFrom.controls.pcs.setValue(data.Details[0].PCS)
+          this.meltingIssueFrom.controls.stockcode.setValue(data.Details[0].STOCK_CODE)
+          this.meltingIssueFrom.controls.purity.setValue(data.Details[0].PURITY)
+          this.meltingIssueFrom.controls.SRNO.setValue(data.Details[0].SRNO)
+          
+       
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -407,6 +426,7 @@ export class MeltingIssueComponent implements OnInit {
       "ATTACHMENT_FILE": this.comService.nullToString(this.meltingISsueDetailsData[0].ATTACHMENT_FILE),
       "SYSTEM_DATE": "2023-10-21T10:15:43.790Z",
       "Details": this.meltingISsueDetailsData
+      
 
     }
 
@@ -461,14 +481,14 @@ export class MeltingIssueComponent implements OnInit {
       return
     }
 
-    let API = 'JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/' + this.meltingIssueFrom.value.voctype + this.meltingIssueFrom.value.vocno + this.meltingIssueFrom.value.vocdate
+    let API = `JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/${this.branchCode}/${this.meltingIssueFrom.value.voctype}/${this.meltingIssueFrom.value.vocno}/${this.comService.yearSelected}`
     let postData = {
       "MID": 0,
-      "BRANCH_CODE": "string",
+      "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.meltingIssueFrom.value.voctype || "",
       "VOCNO": this.meltingIssueFrom.value.vocno || "",
       "VOCDATE": this.meltingIssueFrom.value.vocdate || "",
-      "YEARMONTH": "string",
+      "YEARMONTH": this.comService.yearSelected,
       "NAVSEQNO": 0,
       "WORKER_CODE": this.meltingIssueFrom.value.worker || "",
       "WORKER_DESC": this.meltingIssueFrom.value.workerdes || "",
