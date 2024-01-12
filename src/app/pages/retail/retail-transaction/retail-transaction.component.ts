@@ -41,6 +41,8 @@ export class RetailTransactionComponent implements OnInit {
   authForm: FormGroup = this.formBuilder.group({
     username: [localStorage.getItem('username'), Validators.required],
     password: ['', Validators.required],
+    reason: ['', Validators.required],
+    description: ['', Validators.required],
   });
 
   constructor(
