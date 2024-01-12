@@ -143,6 +143,7 @@ export class ApprovalMasterComponent implements OnInit {
         "MOBILE_NO": "",
       };
       this.tableData.push(data);
+     this.tableData.filter((data,i)=>data.SRNO = i+1)
       // this.approvalMasterForm.controls.code.setValue("");
       // this.approvalMasterForm.controls.description.setValue("");
   }
@@ -151,6 +152,8 @@ export class ApprovalMasterComponent implements OnInit {
   }
 }
 
+
+
 onSelectionChanged(event: any) {
   const values = event.selectedRowKeys;
   console.log(values);
@@ -158,22 +161,23 @@ onSelectionChanged(event: any) {
   this.tableData.reduce((acc, value, index) => {
     if (values.includes(parseFloat(value.SRNO))) {
       acc.push(index);
+      console.log(acc);
+      
     }
     return acc;
   }, indexes);
   this.selectedIndexes = indexes;
   console.log(this.selectedIndexes);
-  
 }
 
 removedata(){
   console.log(this.selectedIndexes);
-
   if (this.selectedIndexes.length > 0) {
     this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
   } else {
     this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
-  }   
+  }  
+   
 }
 
 

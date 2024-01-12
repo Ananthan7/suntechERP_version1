@@ -129,71 +129,19 @@
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-12">
-                                <dx-data-grid
-                        id="gridContainer"
-                        [dataSource]="tableData"
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" 
+                        [dataSource]="metalIssueDetailsData"
                         [showBorders]="true"
+                        (onSelectionChanged)="onSelectionChanged($event)"
                         >
-                        <dxo-selection mode="single"></dxo-selection>
-
-                        <dxi-column dataField="SN" caption="SN"> </dxi-column>
-                        <dxi-column dataField="job_id" dataType="Job Id"  caption="Job Id" cellTemplate="job_idtemp"></dxi-column>
-                        <dxi-column dataField="uniq_job_id"  caption="Uniq job Id" cellTemplate="uniq_job_idtemp"></dxi-column>
-                        <dxi-column dataField="design" caption="Design" cellTemplate="designtemp"></dxi-column>
-                        <dxi-column dataField="stock_code" caption="Stock Code" cellTemplate="stock_codetemp"></dxi-column>
-                        <dxi-column dataField="division" caption="Division" cellTemplate="divisiontemp"></dxi-column>
-                        <dxi-column dataField="description" caption="Description" cellTemplate="descriptiontemp"></dxi-column>
-                        <dxi-column dataField="carat" caption="Carat" cellTemplate="carattemp"></dxi-column>
-                        <dxi-column dataField="process" caption="Process" cellTemplate="processtemp"></dxi-column>
-                        <dxi-column dataField="worker" caption="Worker" cellTemplate="workertemp"></dxi-column>
-                        <dxi-column dataField="amount" caption="Amount" cellTemplate="amounttemp"></dxi-column> 
-                        
-                        <div *dxTemplate="let data of 'job_idtemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div>
-                          <div *dxTemplate="let data of 'uniq_job_idtemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div> 
-                           <div *dxTemplate="let data of 'designtemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div> 
-                          <div *dxTemplate="let data of 'stock_codetemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div>
-                           <div *dxTemplate="let data of 'divisiontemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div>
-                          <div *dxTemplate="let data of 'descriptiontemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div>
-                          <div *dxTemplate="let data of 'carattemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div>
-                          <div *dxTemplate="let data of 'processtemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div>
-                          <div *dxTemplate="let data of 'workertemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div>
-                          <div *dxTemplate="let data of 'amounttemp'">
-                            <input  type="text"  style="width: 100%;" [value]="data.value" />
-                          </div> 
-                    
-                        <dxo-summary>
-                            <dxi-total-item column="Carat"
-                                summaryType="sum"
-                                displayFormat="000.000" precision="2"
-                               >
-                              </dxi-total-item>
-
-                              <dxi-total-item column="Amount"
-                              summaryType="sum"
-                              displayFormat="0.00" precision="2"
-                             >
-                            </dxi-total-item>
-                    
-    
-                        </dxo-summary>
+                          <dxo-paging [enabled]="false"></dxo-paging>
+                          <dxo-editing mode="cell" [allowUpdating]="true">
+                          </dxo-editing>
+                          <dxo-selection mode="multiple"></dxo-selection>
+        
+                          <dxi-column *ngFor="let data of columnhead" dataField="{{ data.field }}" caption="{{ data.title }}"
+                            [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                          </dxi-column>
                         </dx-data-grid>
                             </div>
                             <div class="col-md-4">

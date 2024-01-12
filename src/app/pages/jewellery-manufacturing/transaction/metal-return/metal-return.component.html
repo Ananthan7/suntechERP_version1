@@ -129,7 +129,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true">
-                            <dxo-selection mode="single"></dxo-selection>
+                            <dxo-selection  [selectAllMode]="allMode"
+                                        [showCheckBoxesMode]="checkBoxesMode"
+                                        mode="multiple"></dxo-selection>
           
                             <dxi-column dataField="Job Id" dataType="Job Id"  caption="Job Id"></dxi-column>
                         <dxi-column dataField="Uniq Job Id"  caption="Uniq job Id"></dxi-column>
