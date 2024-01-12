@@ -1,0 +1,67 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Job Transaction</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<div class="row">
+    <div class="col-md-12">
+        <form [formGroup]="jobtransactionFrom">
+            <div class="container-fluid pt-3">
+
+                <div class="row">
+
+
+                    <div class="col-md-12">
+
+
+                        <div class="row pt-2">
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+
+                                    <div class="row mb-1 ">
+                                        <label for="inputPassword" class="col-sm-2">Party Code :</label>
+                                        <div class="col-md-3">
+                                            <div class="position-relative d-flex">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="vocType" />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <label for="inputPassword" class="col-sm-2">Invoice No :</label>
+                                        <div class="col-md-3">
+                                            <div class="position-relative d-flex">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="vocType" />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                    [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                    [columnAutoWidth]="true">
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    </dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                    <dxi-column *ngFor="let data of columnheadItemDetails" dataField="{{ data }}"
+                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                        backgroundcolor="#000">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+::ng-deep {
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
+    .mat-tab-body-content {
+      overflow: hidden !important;
+    }
+  }
+
+  .add-btn {
+    font-size: 12px;
+    padding: 3px 20px !important;
+    border-radius: 5px !important;
+  }
+
+  .box_wrap{
+    width: 100%;
+    border: 1px solid #ddd;
+    height: 200px;
+  }
+
+  .label_padding{
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
