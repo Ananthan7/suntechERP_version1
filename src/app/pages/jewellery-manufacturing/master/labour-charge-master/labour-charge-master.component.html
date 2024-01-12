@@ -46,7 +46,7 @@
                 <mat-form-field>
                   <mat-label>Select</mat-label>
                   <mat-select formControlName="labourType">
-                    <mat-option *ngFor="let option of labourTypeList" [value]="option.value">
+                    <mat-option *ngFor="let option of DialabourTypeList" [value]="option.value">
                       {{ option.name }}
                     </mat-option>
                   </mat-select>
@@ -178,9 +178,9 @@
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
-                  <mat-select formControlName="unitList">
-                    <mat-option *ngFor="let option of currencyList" [value]="option.CURRENCY_CODE">
-                      {{ option.CURRENCY_CODE }}
+                  <mat-select formControlName="settingType">
+                    <mat-option *ngFor="let option of settingTypeList" [value]="option.value">
+                      {{ option.name }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
