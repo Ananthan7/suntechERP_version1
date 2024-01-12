@@ -26,6 +26,7 @@ import { QuotationProcessComponent } from './quotation-process/quotation-process
 import { TreeDownComponent } from './tree-down/tree-down.component';
 import { MouldMakingComponent } from './mould-making/mould-making.component';
 import { LossRecoveryComponent } from './loss-recovery/loss-recovery.component';
+import { DiamondJobBoqIssueComponent } from './diamond-job-boq-issue/diamond-job-boq-issue.component';
 
 @Component({
   selector: 'app-transaction',
@@ -88,6 +89,7 @@ export class TransactionComponent implements OnInit {
       'TreeDownComponent': TreeDownComponent,
       'MouldMakingComponent': MouldMakingComponent,
       'LossRecoveryComponent': LossRecoveryComponent,
+      'DiamondJobBoqIssueComponent':DiamondJobBoqIssueComponent,
   
       // Add components and update in operationals > menu updation grid form component name
     }
