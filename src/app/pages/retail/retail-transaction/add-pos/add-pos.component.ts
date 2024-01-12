@@ -176,6 +176,7 @@ export class AddPosComponent implements OnInit {
 
   receiptTotalNetAmt: any;
   balanceAmount: any;
+  vatRoundOffAmt: any;
 
   dataForm = new FormGroup({
     vocdate: new FormControl(new Date(new Date())),
@@ -6038,6 +6039,37 @@ export class AddPosComponent implements OnInit {
     this.prnt_inv_total_tax_amount = tax_sum;
     this.order_items_total_tax = tax_sum;
 
+
+    // added by moorthy jebu reference - 11-01-2024
+    // if (StaticValues.strBRANCHTAXTYPE == Formcontrols.TaxType.VAT.ToString())
+    // {
+    let dblRounddiff = 0.00;
+    let dblVatTot = 0.00;
+    let dblVatAmtRd = 0.00;
+    let IgstVatPer: any = this.ordered_items.filter((data) => data.taxPer != 0 && data.taxPer != '');
+    if (IgstVatPer.length > 0) {
+      IgstVatPer = parseFloat(IgstVatPer[0].taxPer);
+    }
+    console.log('=========IgstVatPer===========================');
+    console.log(IgstVatPer);
+    console.log('====================================');
+    if (this.comFunc.compCurrency == "AED" || this.comFunc.compCurrency == "BHD") {
+
+      if (IgstVatPer > 0) {
+        this.vatRoundOffAmt = 0.00;
+         dblRounddiff = this.comFunc.emptyToZero(this.comFunc.CCToFC( this.comFunc.compCurrency, (  (parseFloat(this.order_items_total_tax)  * IgstVatPer)) / (100.0 + IgstVatPer)));
+      
+         dblVatTot = this.comFunc.emptyToZero(this.order_items_total_tax);
+        if ((dblRounddiff - dblVatTot) < 0.05) {
+          this.vatRoundOffAmt =this.comFunc.CCToFC(this.comFunc.compCurrency , (dblRounddiff - dblVatTot));
+          dblVatAmtRd = this.comFunc.emptyToZero(this.vatRoundOffAmt);
+          this.order_items_total_tax  = this.comFunc.emptyToZero( this.order_items_total_tax)  + this.comFunc.emptyToZero( dblVatAmtRd);
+
+        }
+      }
+    }
+    // }
+
     this.order_items_total_gross_amount = net_sum;
     this.order_items_total_discount_amount = 0.0;
     // sales return items
@@ -7260,34 +7292,35 @@ export class AddPosComponent implements OnInit {
             }
           ]
         },
-        "transattachment": [
-          {
-            "VOCNO": 0,
-            "VOCTYPE": "string",
-            "VOCDATE": "2023-12-22T05:22:31.297Z",
-            "REFMID": 0,
-            "SRNO": 0,
-            "REMARKS": "string",
-            "ATTACHMENT_PATH": "string",
-            "UNIQUEID": "string",
-            "CODE": "string",
-            "ATTACH_TYPE": "string",
-            "EXPIRE_DATE": "2023-12-22T05:22:31.297Z",
-            "BRANCH_CODE": "string",
-            "YEARMONTH": "string",
-            "DOC_TYPE": "string",
-            "SUBLED_CODE": "string",
-            "DOC_ACTIVESTATUS": true,
-            "DOC_LASTRENEWBY": "string",
-            "DOC_NEXTRENEWDATE": "2023-12-22T05:22:31.297Z",
-            "DOC_LASTRENEWDATE": "2023-12-22T05:22:31.297Z",
-            "DOCUMENT_DATE": "2023-12-22T05:22:31.297Z",
-            "DOCUMENT_NO": "string",
-            "FROM_KYC": true,
+        // "transattachment": [
+        //   {
+        //     "VOCNO": 0,
+        //     "VOCTYPE": "string",
+        //     "VOCDATE": "2023-12-22T05:22:31.297Z",
+        //     "REFMID": 0,
+        //     "SRNO": 0,
+        //     "REMARKS": "string",
+        //     "ATTACHMENT_PATH": "string",
+        //     "UNIQUEID": "string",
+        //     "CODE": "string",
+        //     "ATTACH_TYPE": "string",
+        //     "EXPIRE_DATE": "2023-12-22T05:22:31.297Z",
+        //     "BRANCH_CODE": "string",
+        //     "YEARMONTH": "string",
+        //     "DOC_TYPE": "string",
+        //     "SUBLED_CODE": "string",
+        //     "DOC_ACTIVESTATUS": true,
+        //     "DOC_LASTRENEWBY": "string",
+        //     "DOC_NEXTRENEWDATE": "2023-12-22T05:22:31.297Z",
+        //     "DOC_LASTRENEWDATE": "2023-12-22T05:22:31.297Z",
+        //     "DOCUMENT_DATE": "2023-12-22T05:22:31.297Z",
+        //     "DOCUMENT_NO": "string",
+        //     "FROM_KYC": true,
 
 
-          }
-        ]
+        //   }
+        // ]
+
       };
       this.isSaved = true;
       this.snackBar.open('Processing...');
@@ -7311,7 +7344,7 @@ export class AddPosComponent implements OnInit {
 
                   // this.close('reloadMainGrid');
 
-      this.submitAttachment();
+                  this.submitAttachment();
 
                 } else {
                   this.isSaved = false;
@@ -7338,7 +7371,7 @@ export class AddPosComponent implements OnInit {
 
                 // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
 
-      this.submitAttachment();
+                this.submitAttachment();
 
                 this.snackBar.open('POS Saved', 'OK');
                 setTimeout(() => {
