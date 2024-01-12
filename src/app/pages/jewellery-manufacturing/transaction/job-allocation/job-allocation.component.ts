@@ -6,14 +6,16 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
-  selector: 'app-job-closing',
-  templateUrl: './job-closing.component.html',
-  styleUrls: ['./job-closing.component.scss']
+  selector: 'app-job-allocation',
+  templateUrl: './job-allocation.component.html',
+  styleUrls: ['./job-allocation.component.scss']
 })
-export class JobClosingComponent implements OnInit {
+
+
+export class JobAllocationComponent implements OnInit {
   
   tableData: any[] = [];  
-  columnheadItemDetails:any[] = ['  ',];
+  columnheadItemDetails:any[] = ['Design','Order.No','Process','Worker','Doc.Attachment','Std.Time','Priority','Customer','Job Number','Unq.Job.Id','Pcs',''];
   divisionMS: any = 'ID';
 
   constructor(private activeModal: NgbActiveModal,
@@ -24,6 +26,8 @@ export class JobClosingComponent implements OnInit {
     private commonService: CommonServiceService,) { }
 
     
+   
+
   ngOnInit(): void {
   }
 
@@ -33,22 +37,17 @@ export class JobClosingComponent implements OnInit {
   }
 
 
-  jobCloseingFrom: FormGroup = this.formBuilder.group({
+  jobaloocationFrom: FormGroup = this.formBuilder.group({
+
+
       vocType: ['', [Validators.required]],
       vocNum: ['', [Validators.required]],
-      vocdate: ['',],
-      user_name: ['',],
-      party_code: ['',],
-      job_no: ['',],
-      worker: ['',],
-      reason : ['',],
-      stone_loc: ['', [Validators.required]],
-      metal_loc: ['', [Validators.required]], 
-      doc_ref: ['',], 
+      sLoctype: ['', [Validators.required]],
+      mLoctype: ['', [Validators.required]], 
   });
-
 
   formSubmit(){
 
   }
 }
+

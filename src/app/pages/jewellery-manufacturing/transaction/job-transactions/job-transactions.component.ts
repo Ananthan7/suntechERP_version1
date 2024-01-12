@@ -1,3 +1,5 @@
+
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -6,14 +8,15 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
-  selector: 'app-job-closing',
-  templateUrl: './job-closing.component.html',
-  styleUrls: ['./job-closing.component.scss']
+  selector: 'app-job-transactions',
+  templateUrl: './job-transactions.component.html',
+  styleUrls: ['./job-transactions.component.scss']
 })
-export class JobClosingComponent implements OnInit {
+
+export class JobTransactionsComponent implements OnInit {
   
   tableData: any[] = [];  
-  columnheadItemDetails:any[] = ['  ',];
+  columnheadItemDetails:any[] = ['JoBNo','VocType','VocNo','Process Code','Worker Code','GrossWt','LossWt','PureWt','VocDate'];
   divisionMS: any = 'ID';
 
   constructor(private activeModal: NgbActiveModal,
@@ -24,6 +27,8 @@ export class JobClosingComponent implements OnInit {
     private commonService: CommonServiceService,) { }
 
     
+   
+
   ngOnInit(): void {
   }
 
@@ -33,22 +38,18 @@ export class JobClosingComponent implements OnInit {
   }
 
 
-  jobCloseingFrom: FormGroup = this.formBuilder.group({
+  jobtransactionFrom: FormGroup = this.formBuilder.group({
+
+
       vocType: ['', [Validators.required]],
       vocNum: ['', [Validators.required]],
-      vocdate: ['',],
-      user_name: ['',],
-      party_code: ['',],
-      job_no: ['',],
-      worker: ['',],
-      reason : ['',],
-      stone_loc: ['', [Validators.required]],
-      metal_loc: ['', [Validators.required]], 
-      doc_ref: ['',], 
+      sLoctype: ['', [Validators.required]],
+      mLoctype: ['', [Validators.required]], 
   });
-
 
   formSubmit(){
 
   }
 }
+
+

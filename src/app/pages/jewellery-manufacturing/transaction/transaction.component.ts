@@ -27,6 +27,9 @@ import { TreeDownComponent } from './tree-down/tree-down.component';
 import { MouldMakingComponent } from './mould-making/mould-making.component';
 import { LossRecoveryComponent } from './loss-recovery/loss-recovery.component';
 import { DiamondJobBoqIssueComponent } from './diamond-job-boq-issue/diamond-job-boq-issue.component';
+import { DiamondJobBoqReceiptComponent } from './diamond-job-boq-receipt/diamond-job-boq-receipt.component';
+import { JobAllocationComponent } from './job-allocation/job-allocation.component';
+import { JobTransactionsComponent } from './job-transactions/job-transactions.component';
 
 @Component({
   selector: 'app-transaction',
@@ -90,6 +93,9 @@ export class TransactionComponent implements OnInit {
       'MouldMakingComponent': MouldMakingComponent,
       'LossRecoveryComponent': LossRecoveryComponent,
       'DiamondJobBoqIssueComponent':DiamondJobBoqIssueComponent,
+      'DiamondJobBoqReceiptComponent': DiamondJobBoqReceiptComponent,
+      'JobAllocationComponent':JobAllocationComponent,
+      'JobTransactionsComponent':JobTransactionsComponent,
   
       // Add components and update in operationals > menu updation grid form component name
     }

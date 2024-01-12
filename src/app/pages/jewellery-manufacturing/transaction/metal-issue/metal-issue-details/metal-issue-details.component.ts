@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class MetalIssueDetailsComponent implements OnInit {
   @Input() content!: any;
+  @Input() isViewChangeJob: boolean = true;
   private subscriptions: Subscription[] = [];
   tableData: any[] = [];
   columnhead: any[] = ['Div', 'Stock Code', 'Karat', 'Color', 'Req.Pcs', 'Req.Wt ', 'Issued Pcs', 'Issued Wt', 'Bal.pcs', 'Bal.Wt'];
@@ -29,6 +30,7 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   constructor(
     private activeModal: NgbActiveModal,
+    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
@@ -156,17 +158,20 @@ export class MetalIssueDetailsComponent implements OnInit {
     
   }
 
+  
   jobchange(e:any){  
-      console.log(e);
-      this.metalIssueDetailsForm.reset();   
-  }
+    console.log(e);
+    this.formSubmit()
+    this.metalIssueDetailsForm.reset(); 
 
+}
 
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
 
   onFileChangedimage(event:any) {
     this.imageurl = event.target.files[0].name
@@ -316,8 +321,15 @@ export class MetalIssueDetailsComponent implements OnInit {
           "JOB_PURITY":  this.metalIssueDetailsForm.value.jobPurity,
           "EXCLUDE_TRANSFER_WT": true
         }
-    this.close(postData);
+        if(this.isViewChangeJob == true){
+          console.log(postData);  
+          this.close(postData);
+        }else{
+          this.close(postData);  
+        }
+          
   }
+
 
   updateMeltingType() {
     let API = 'JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/'+ this.metalIssueDetailsForm.value.brnachCode + this.metalIssueDetailsForm.value.voctype + this.metalIssueDetailsForm.value.vocNo + this.metalIssueDetailsForm.value.yearMoth ;
@@ -488,7 +500,12 @@ export class MetalIssueDetailsComponent implements OnInit {
       }
     });
   }
+
+
+
 }
+
+
 
 
 

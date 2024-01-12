@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { MetalReturnDetailsComponent } from './metal-return-details/metal-return-details.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import themes from 'devextreme/ui/themes';
 
 @Component({
   selector: 'app-metal-return',
@@ -28,6 +29,9 @@ export class MetalReturnComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate: any = this.commonService.currentDate;
   userName = this.commonService.userName;
+
+  allMode: string;
+  checkBoxesMode: string;
 
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
 
@@ -101,7 +105,10 @@ export class MetalReturnComponent implements OnInit {
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
 
-  ) { }
+  ) {
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+   }
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
