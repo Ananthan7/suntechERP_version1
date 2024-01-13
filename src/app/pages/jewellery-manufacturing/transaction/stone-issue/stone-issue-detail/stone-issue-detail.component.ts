@@ -129,7 +129,7 @@ export class StoneIssueDetailComponent implements OnInit {
     pointerwt: [],
     otheratt: [],
     remarks: [''],
-    consignment:[false],
+    consignment:[0],
   });
 
 
@@ -219,16 +219,6 @@ continueClick(){
 }
 
 
-
-
-  onchangeCheckBox(e: any){
-    if(e == true){    
-     return 1;
-    }else{ 
-     return 0;
-    }     
-   }
-
   removedata() {
     this.tableData.pop();
   }
@@ -289,7 +279,7 @@ continueClick(){
       "DT_VOCTYPE": "STI",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
-      "CONSIGNMENT": this.onchangeCheckBox(this.stoneissuedetailsFrom.value.consignment),
+      "CONSIGNMENT": this.stoneissuedetailsFrom.value.consignment,
       "SIEVE_SET": this.stoneissuedetailsFrom.value.sieveset,
       "SUB_STOCK_CODE": "0",
       "D_REMARKS": this.stoneissuedetailsFrom.value.remarks,
@@ -384,7 +374,7 @@ continueClick(){
       "DT_VOCTYPE": "STI",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
-      "CONSIGNMENT": this.onchangeCheckBox(this.stoneissuedetailsFrom.value.consignment),
+      "CONSIGNMENT": this.stoneissuedetailsFrom.value.consignment,
       "SIEVE_SET": this.stoneissuedetailsFrom.value.sieveset,
       "SUB_STOCK_CODE": "0",
       "D_REMARKS": this.stoneissuedetailsFrom.value.remarks,
