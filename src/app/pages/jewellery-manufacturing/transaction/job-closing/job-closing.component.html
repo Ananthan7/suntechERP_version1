@@ -34,18 +34,22 @@
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-6">Voucher Date:</label>
                             <div class="col-sm-6 ">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput />
-                                </mat-form-field>
+                                <mat-form-field style="width: 72%;">
+                                    <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
+                                    placeholder="DD/MM/YYYY"  DateValidation />
+                                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                                  <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                                  </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <label for="inputPassword" class="col-sm-6">User Name : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="user_name" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="UserCodeData"
+                                (newRowClick)="UserCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
@@ -62,18 +66,20 @@
                             <label for="inputPassword" class="col-sm-5">Party Code:</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="party_code" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="partyCodeData"
+                                    (newRowClick)="partyCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <label for="inputPassword" class="col-sm-5">Job No: </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="job_no" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="jobCodeData"
+                                (newRowClick)="jobCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
@@ -82,18 +88,20 @@
                             <label for="inputPassword" class="col-sm-5">Worker :</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="worker" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="workerCodeData"
+                                (newRowClick)="workerCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5">Reason : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="reason" />
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="reasonCodeData"
+                                (newRowClick)="reasonCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2 text-right">
@@ -111,25 +119,27 @@
                             <label for="inputPassword" class="col-sm-6">Metal Location * :</label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="mLoctype"/>
+                                    <input type="text" matInput formControlName="metal_loc"/>
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="MetalLocCodeData"
+                                (newRowClick)="MetalLocCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-6">Stone Location * : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="sLoctype"/>
+                                    <input type="text" matInput formControlName="stone_loc"/>
                                 </mat-form-field>
-                                <master-search></master-search>
+                                <master-search [MasterSearchData]="StoneLocCodeData"
+                                (newRowClick)="StoneLocCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-6">Doc.Ref : </label>
                             <div class="col-sm-6 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="doc_ref" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -142,7 +152,7 @@
                     <div class="col-md-12 mb-1">
                         <div class="d-flex">
                             <div class="form-check">
-                                <mat-radio-button value="1">All</mat-radio-button>
+                                <mat-radio-button value="1" [checked]=true>All</mat-radio-button>
                             </div>
                             <div class="form-check ">
                                 <mat-radio-button value="1">WIP</mat-radio-button>

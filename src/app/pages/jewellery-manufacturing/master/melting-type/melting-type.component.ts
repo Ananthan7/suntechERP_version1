@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 
@@ -28,6 +28,7 @@ export class MeltingTypeComponent implements OnInit {
   code:any;
   alloy:any;
   slNo = 0;
+  selectedIndexes: any = [];
 
 
   constructor(
@@ -35,6 +36,7 @@ export class MeltingTypeComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
   ) { }
 
@@ -42,6 +44,22 @@ export class MeltingTypeComponent implements OnInit {
     if(this.content){
       this.setFormValues()
     }
+  }
+
+  onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        console.log(acc);
+        
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
   }
   
   formSubmit(){
@@ -55,6 +73,9 @@ export class MeltingTypeComponent implements OnInit {
     //   this.toastr.error('select all required fields')
     //   return
     // }
+    
+
+
 
     let API = 'MeltingType/InsertMeltingType'
     let postData=
@@ -197,20 +218,20 @@ export class MeltingTypeComponent implements OnInit {
       this.tableData.push(data);
       console.log(this.tableData);
   
-      this.metal = this.meltingTypeForm.value.metal
+      // this.metal = this.meltingTypeForm.value.metal
       // this.description=this.meltingTypeForm.value.description
       // this.code=this.meltingTypeForm.value.code
-      this.alloy=this.meltingTypeForm.value.alloy
-      this.meltingTypeForm.controls.code.setValue("");
-      this.meltingTypeForm.controls.description.setValue("");
-      this.meltingTypeForm.controls.karat.setValue("");
-      this.meltingTypeForm.controls.purity.setValue("");
-      this.meltingTypeForm.controls.divCode.setValue("");
-      this.meltingTypeForm.controls.stockCode.setValue("");
-      this.meltingTypeForm.controls.stockCodeDes.setValue("");
-      this.meltingTypeForm.controls.alloy.setValue("");
-      this.meltingTypeForm.controls.color.setValue("");
-      this.meltingTypeForm.controls.metal.setValue("");
+      // this.alloy=this.meltingTypeForm.value.alloy
+      // this.meltingTypeForm.controls.code.setValue("");
+      // this.meltingTypeForm.controls.description.setValue("");
+      // this.meltingTypeForm.controls.karat.setValue("");
+      // this.meltingTypeForm.controls.purity.setValue("");
+      // this.meltingTypeForm.controls.divCode.setValue("");
+      // this.meltingTypeForm.controls.stockCode.setValue("");
+      // this.meltingTypeForm.controls.stockCodeDes.setValue("");
+      // this.meltingTypeForm.controls.alloy.setValue("");
+      // this.meltingTypeForm.controls.color.setValue("");
+      // this.meltingTypeForm.controls.metal.setValue("");
     }
   else {
     this.toastr.error('Please Fill all Mandatory Fields')
@@ -355,8 +376,12 @@ export class MeltingTypeComponent implements OnInit {
   deleteTableData(){
     console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
   //  this.tableData.push(data);
-   this.tableData.pop()
-    console.log(this.tableData);
+  console.log(this.selectedIndexes);
+  if (this.selectedIndexes.length > 0) {
+    this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+  } else {
+    this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+  } 
     
   }
 }
