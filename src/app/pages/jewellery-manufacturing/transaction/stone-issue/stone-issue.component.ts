@@ -22,15 +22,17 @@ export class StoneIssueComponent implements OnInit {
 
   divisionMS: any = 'ID';
   orders: any = [];
-  columnhead:any[] = ['SR No.','JOB NO','UNQ JOD ID', 'Design','Stock Code','Division','Description ','Carat','Rate','Process','Amount','Worker','Sieve Set'];
+  // columnhead:any[] = ['SR No.','JOB NO','UNQ JOD ID', 'Design','Stock Code','Division','Description ','Carat','Rate','Process','Amount','Worker','Sieve Set'];
   @Input() content!: any; 
   tableData: any[] = [];
   stoneIssueData : any[] =[];
   userName = localStorage.getItem('username');
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
   currentDate = new FormControl(new Date());
+  vocMaxDate = new Date();
 
     user: MasterSearchModel = {
       PAGENO: 1,
@@ -134,9 +136,9 @@ export class StoneIssueComponent implements OnInit {
       if (postData) {
         console.log('Data from modal:', postData);       
         this.stoneIssueData.push(postData);
+
       }
     });
-
   }
 
   deleteTableData(){
@@ -147,15 +149,13 @@ export class StoneIssueComponent implements OnInit {
 
   stoneissueFrom: FormGroup = this.formBuilder.group({
     voctype:['STI',[Validators.required]],
-    vocno:['1',[Validators.required]],
+    vocno:[1,[Validators.required]],
     vocdate:[new Date()],
     enteredBy:[''],
-   basecurrency:[''],
-   basecurrencyrate:[''],
-   currency:["AED",''],
-   currencyrate:['1',''],
-   worker:['',],
-   workername:[''],
+    currency:["AED",''],
+    currencyrate:[1,''],
+    worker:['',],
+    workername:[''],
     narration:[''],
     caratTotal:[''],
     amountTotal:[''],
@@ -206,32 +206,32 @@ removedata(){
   
     let API = 'JobStoneIssueMasterDJ/InsertJobStoneIssueMasterDJ'
     let postData = {
-  "MID": 0,
-  "VOCTYPE": this.stoneissueFrom.value.voctype || "",
-  "BRANCH_CODE": this.branchCode,
-  "VOCNO": this.stoneissueFrom.value.vocno || "",
-  "VOCDATE": this.stoneissueFrom.value.vocdate || "",
-  "YEARMONTH": this.yearMonth,
-  "DOCTIME": "2023-10-19T06:55:16.030Z",
-  "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
-  "CURRENCY_RATE": this.stoneissueFrom.value.currencyrate || "",
-  "TOTAL_PCS": 0,
-  "TOTAL_GROSS_WT": 0,
-  "TOTAL_AMOUNTFC": 0,
-  "TOTAL_AMOUNTLC": 0,
-  "SMAN": this.stoneissueFrom.value.enteredBy,
-  "REMARKS": this.stoneissueFrom.value.narration || "",
-  "NAVSEQNO": 0,
-  "BASE_CURRENCY": this.stoneissueFrom.value.basecurrency || "",
-  "BASE_CURR_RATE": this.stoneissueFrom.value.basecurrencyrate || "",
-  "BASE_CONV_RATE": 0,
-  "AUTOPOSTING": true,
-  "POSTDATE": "",
-  "SYSTEM_DATE": "2023-10-19T06:55:16.030Z",
-  "PRINT_COUNT": 0,
-  "PRINT_COUNT_ACCOPY": 0,
-  "PRINT_COUNT_CNTLCOPY": 0,
-  "Details": this.stoneIssueData,
+      "MID": 0,
+      "VOCTYPE": this.stoneissueFrom.value.voctype,
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.stoneissueFrom.value.vocno,
+      "VOCDATE": this.stoneissueFrom.value.vocdate ,
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2023-10-19T06:55:16.030Z",
+      "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
+      "CURRENCY_RATE": this.stoneissueFrom.value.currencyrate || 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_GROSS_WT": 0,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
+      "SMAN": this.stoneissueFrom.value.enteredBy,
+      "REMARKS": this.stoneissueFrom.value.narration || "",
+      "NAVSEQNO": 0,
+      "BASE_CURRENCY": "",
+      "BASE_CURR_RATE": 0,
+      "BASE_CONV_RATE": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "SYSTEM_DATE": "2023-10-19T06:55:16.030Z",
+      "PRINT_COUNT": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "Details": this.stoneIssueData,
     }
   
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -261,13 +261,10 @@ removedata(){
 
   setFormValues() {
     if(!this.content) return
-    console.log(this.content);
-    
+    console.log(this.content);    
     this.stoneissueFrom.controls.voctype.setValue(this.content.VOCTYPE)
     this.stoneissueFrom.controls.vocno.setValue(this.content.VOCNO)
     this.stoneissueFrom.controls.vocdate.setValue(this.content.VOCDATE)
-    this.stoneissueFrom.controls.basecurrency.setValue(this.content.BASE_CURRENCY)
-    this.stoneissueFrom.controls.basecurrencyrate.setValue(this.content.BASE_CURR_RATE)
     this.stoneissueFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
     this.stoneissueFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
     this.stoneissueFrom.controls.worker.setValue(this.content.WORKER_CODE)
@@ -300,8 +297,8 @@ removedata(){
   "SMAN": "string",
   "REMARKS": this.stoneissueFrom.value.narration || "",
   "NAVSEQNO": 0,
-  "BASE_CURRENCY": this.stoneissueFrom.value.basecurrency || "",
-  "BASE_CURR_RATE": this.stoneissueFrom.value.basecurrencyrate || "",
+  "BASE_CURRENCY": "",
+  "BASE_CURR_RATE": 0,
   "BASE_CONV_RATE": 0,
   "AUTOPOSTING": true,
   "POSTDATE": "string",
