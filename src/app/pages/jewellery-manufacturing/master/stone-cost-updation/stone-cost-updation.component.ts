@@ -11,10 +11,15 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
   styleUrls: ['./stone-cost-updation.component.scss']
 })
 export class StoneCostUpdationComponent implements OnInit {
- 
-  tableData: any[] = [];  
-  columnheadItemDetails:any[] = ['  ',];
+
+  tableData: any[] = [];
+  columnhead: any[] = ['Sr No', 'Customer', 'So Number', 'Job Number', 'Job Ref#', 'Pcs', 'Weight', 'Rate', 'Amount', 'New Rate LC', 'New Amount LC', 'New Rate FC', 'New Amount FC',];
   divisionMS: any = 'ID';
+
+  branchCode?: String;
+  userName = this.commonService.userName;
+
+  companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
 
   constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -23,8 +28,13 @@ export class StoneCostUpdationComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,) { }
 
-    
+
   ngOnInit(): void {
+    this.branchCode = this.commonService.branchCode;
+  }
+
+  setInitialValues() {
+    this.branchCode = this.commonService.branchCode;
   }
 
   close(data?: any) {
@@ -36,13 +46,13 @@ export class StoneCostUpdationComponent implements OnInit {
   jobCloseingFrom: FormGroup = this.formBuilder.group({
 
 
-      vocType: ['', [Validators.required]],
-      vocNum: ['', [Validators.required]],
-      sLoctype: ['', [Validators.required]],
-      mLoctype: ['', [Validators.required]], 
+    vocType: ['', [Validators.required]],
+    vocNum: ['', [Validators.required]],
+    sLoctype: ['', [Validators.required]],
+    mLoctype: ['', [Validators.required]],
   });
 
-  formSubmit(){
+  formSubmit() {
 
   }
 }
