@@ -15,10 +15,12 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class ComponentSizeMasterComponent implements OnInit {
 
+  componentsizemasterForm!: FormGroup;
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
-  
+  radius!:number;
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -29,16 +31,40 @@ export class ComponentSizeMasterComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+    this.componentsizemasterForm = this.formBuilder.group({
+      code:['',[Validators.required]],
+      desc : ['',[Validators.required]],
+      height:[''],
+      width : [''],
+      length:[''],
+      radius:['']
+     });
+     this.subscribeToFormChanges();
   }
-  componentsizemasterForm: FormGroup = this.formBuilder.group({
-    code:['',[Validators.required]],
-    desc : ['',[Validators.required]],
-    height:[''],
-    width : [''],
-    length:[''],
-    radius:[''],
+  
+  private subscribeToFormChanges() {
+    this.componentsizemasterForm.valueChanges.subscribe(() => {
+      this.calculateRadius();
+    });
+  }
 
-   });
+  private calculateRadius() {
+    const height = this.componentsizemasterForm.get('height')?.value;
+    const width = this.componentsizemasterForm.get('width')?.value;
+    const length = this.componentsizemasterForm.get('length')?.value;
+
+    if (height !== null && width !== null && length !== null) {
+      const radiusValue = Math.sqrt((height ** 2) + (width ** 2) + (length ** 2)) / 2;
+      
+      const formattedRadius = radiusValue.toFixed(2);
+
+      this.componentsizemasterForm.patchValue({
+        radius: formattedRadius
+      }, { emitEvent: false });
+    }
+  }
+  
+  
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);

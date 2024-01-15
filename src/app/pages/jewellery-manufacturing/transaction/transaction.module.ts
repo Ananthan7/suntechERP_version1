@@ -44,6 +44,11 @@ import { MeltingProcessDetailsComponent } from './melting-process/melting-proces
 import { LossRecoveryComponent } from './loss-recovery/loss-recovery.component';
 import { ProductionStockDetailComponent } from './production-mfg/production-stock-detail/production-stock-detail.component';
 import { CompanyDetailComponent } from './diamond-salesorder/company-detail/company-detail.component';
+import { DiamondJobBoqIssueComponent } from './diamond-job-boq-issue/diamond-job-boq-issue.component';
+import { DiamondJobBoqReceiptComponent } from './diamond-job-boq-receipt/diamond-job-boq-receipt.component';
+import { JobAllocationComponent } from './job-allocation/job-allocation.component';
+import { JobTransactionsComponent } from './job-transactions/job-transactions.component';
+
 
 
 @NgModule({
@@ -89,6 +94,11 @@ import { CompanyDetailComponent } from './diamond-salesorder/company-detail/comp
     LossRecoveryComponent,
     ProductionStockDetailComponent,
     CompanyDetailComponent,
+    DiamondJobBoqIssueComponent,
+    DiamondJobBoqReceiptComponent,
+    JobAllocationComponent,
+    JobTransactionsComponent,
+
   ],
   imports: [
   CommonModule,

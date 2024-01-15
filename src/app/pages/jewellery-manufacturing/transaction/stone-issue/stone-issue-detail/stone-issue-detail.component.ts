@@ -16,7 +16,8 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class StoneIssueDetailComponent implements OnInit {
 
   columnhead1: any[] = ['Div', 'Stock Code','Shape', 'Color', 'Clarity', 'Size', 'Sieve Set', 'Pcs'];
-
+  srNo : any = 0;
+  subJobNo: any;
   @Input() content!: any;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
@@ -96,6 +97,41 @@ export class StoneIssueDetailComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  stoneissuedetailsFrom: FormGroup = this.formBuilder.group({
+    jobNumber: ['', [Validators.required]],
+    jobDes: [''],
+    subjobnumber: ['', [Validators.required]],
+    subjobDes: [''],
+    designcode: [''],
+    partcode: [''],
+    salesorderno: [0],
+    process: ['', [Validators.required]],
+    processname: [''],
+    worker: ['', [Validators.required]],
+    workername: [''],
+    stock: ['', [Validators.required]],
+    stockCode: [''],
+    stockDes: [''],
+    batchid: [''],
+    location: ['', [Validators.required]],
+    pieces: [],
+    shape: [''],
+    clarity: [''],
+    carat: [''],
+    size: [],
+    sieveset: [''],
+    unitrate: [],
+    sieve: [''],
+    sieveDesc: [''],
+    amount: [],
+    color: [''],
+    stockbal: [],
+    pointerwt: [],
+    otheratt: [],
+    remarks: [''],
+    consignment:[0],
+  });
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -118,9 +154,10 @@ export class StoneIssueDetailComponent implements OnInit {
 
   jobNumberCodeSelected(e: any) {
     console.log(e);
+    this.subJobNo=`${e.job_number}/${this.srNo + 1}`;
     this.stoneissuedetailsFrom.controls.jobNumber.setValue(e.job_number);
     this.stoneissuedetailsFrom.controls.jobDes.setValue(e.job_description);
-    this.stoneissuedetailsFrom.controls.subjobnumber.setValue(e.job_number);
+    this.stoneissuedetailsFrom.controls.subjobnumber.setValue(this.subJobNo);
     this.stoneissuedetailsFrom.controls.subjobDes.setValue(e.job_description);
     this.stoneissuedetailsFrom.controls.designcode.setValue(e.job_number);
     this.stoneissuedetailsFrom.controls.partcode.setValue(e.job_description);
@@ -155,46 +192,38 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneissuedetailsFrom.reset();   
 }
 
-
-  stoneissuedetailsFrom: FormGroup = this.formBuilder.group({
-    jobNumber: ['',[Validators.required]],
-    jobDes: [''],
-    subjobnumber: ['',[Validators.required]],
-    subjobDes: [''],
-    designcode: [''],
-    partcode: [''],
-    salesorderno: [''],
-    process: ['',[Validators.required]],
-    processname: [''],
-    worker: ['',[Validators.required]],
-    workername: [''],
-    stock: ['',[Validators.required]],
-    stockCode: [''],
-    stockDes: [''],
-    batchid: [''],
-    location: ['',[Validators.required]],
-    pieces: [''],
-    shape: [''],
-    clarity: [''],
-    karat: [''],
-    size: [''],
-    sieveset: [''],
-    unitrate: [''],
-    sieve: [''],
-    amount: [''],
-    color: [''],
-    stockbal: [''],
-    pointerwt: [''],
-    otheratt: [''],
-    remarks: [''],
-  });
+continueClick(){
+  this.stoneissuedetailsFrom.controls.stock.setValue('')
+  this.stoneissuedetailsFrom.controls.stockDes.setValue('')
+  this.stoneissuedetailsFrom.controls.sieve.setValue('')
+  this.stoneissuedetailsFrom.controls.shape.setValue('')
+  this.stoneissuedetailsFrom.controls.color.setValue('R')
+  this.stoneissuedetailsFrom.controls.clarity.setValue('')
+  this.stoneissuedetailsFrom.controls.size.setValue('')
+  this.stoneissuedetailsFrom.controls.pieces.setValue('')
+  this.stoneissuedetailsFrom.controls.process.setValue('')
+  this.stoneissuedetailsFrom.controls.processname.setValue('')
+  this.stoneissuedetailsFrom.controls.worker.setValue('')
+  this.stoneissuedetailsFrom.controls.workername.setValue('')
+  this.stoneissuedetailsFrom.controls.location.setValue('')
+  this.stoneissuedetailsFrom.controls.consignment.setValue('')
+  this.stoneissuedetailsFrom.controls.sieveset.setValue('')
+  this.stoneissuedetailsFrom.controls.remarks.setValue('')
+  this.stoneissuedetailsFrom.controls.sieveset.setValue('')
+  this.stoneissuedetailsFrom.controls.otheratt.setValue('')
+  this.stoneissuedetailsFrom.controls.unitrate.setValue('')
+  this.stoneissuedetailsFrom.controls.amount.setValue('')
+  this.stoneissuedetailsFrom.controls.stockCode.setValue('')
+  this.stoneissuedetailsFrom.controls.carat.setValue('')
+  this.stoneissuedetailsFrom.controls.batchid.setValue('')
+}
 
 
   removedata() {
     this.tableData.pop();
   }
-  formSubmit() {
 
+  formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
@@ -206,57 +235,57 @@ export class StoneIssueDetailComponent implements OnInit {
 
     let API = 'JobStoneIssueMasterDJ/InsertJobStoneIssueMasterDJ'
     let postData = {
-      "SRNO": 0,
+      "SRNO": this.srNo + 1,
       "VOCNO": 0,
-      "VOCTYPE": "JWA",
+      "VOCTYPE": "STI",
       "VOCDATE": "2023-10-19T06:55:16.030Z",
-      "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobnumber || "",
+      "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobnumber,
       "JOB_DATE": "2023-10-19T06:55:16.030Z",
-      "JOB_SO_NUMBER": this.stoneissuedetailsFrom.value.subjobnumber || "",
+      "JOB_SO_NUMBER": this.stoneissuedetailsFrom.value.subjobnumber ,
       "UNQ_JOB_ID": "",
-      "JOB_DESCRIPTION": this.stoneissuedetailsFrom.value.jobdes || "",
+      "JOB_DESCRIPTION": this.stoneissuedetailsFrom.value.jobdes,
       "BRANCH_CODE": this.branchCode,
-      "DESIGN_CODE": this.stoneissuedetailsFrom.value.designcode || "",
+      "DESIGN_CODE": this.stoneissuedetailsFrom.value.designcode,
       "DIVCODE": "",
-      "STOCK_CODE": this.stoneissuedetailsFrom.value.stock || "",
-      "STOCK_DESCRIPTION": this.stoneissuedetailsFrom.value.stock || "",
-      "SIEVE": this.stoneissuedetailsFrom.value.sieve || "",
-      "SHAPE": this.stoneissuedetailsFrom.value.shape || "",
-      "COLOR": this.stoneissuedetailsFrom.value.color || "",
-      "CLARITY": this.stoneissuedetailsFrom.value.clarity || "",
-      "SIZE": this.stoneissuedetailsFrom.value.size || "",
+      "STOCK_CODE": this.stoneissuedetailsFrom.value.stock,
+      "STOCK_DESCRIPTION": this.stoneissuedetailsFrom.value.stockDes ,
+      "SIEVE": this.stoneissuedetailsFrom.value.sieve,
+      "SHAPE": this.stoneissuedetailsFrom.value.shape,
+      "COLOR": this.stoneissuedetailsFrom.value.color,
+      "CLARITY": this.stoneissuedetailsFrom.value.clarity,
+      "SIZE": this.stoneissuedetailsFrom.value.size,
       "JOB_PCS": 0,
-      "PCS": 0,
+      "PCS": this.stoneissuedetailsFrom.value.pieces,
       "GROSS_WT": 0,
       "CURRENCY_CODE": "",
       "CURRENCY_RATE": 0,
       "RATEFC": 0,
       "RATELC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTLC": 0,
-      "PROCESS_CODE": this.stoneissuedetailsFrom.value.process || "",
-      "PROCESS_NAME": this.stoneissuedetailsFrom.value.processname || "",
-      "WORKER_CODE": this.stoneissuedetailsFrom.value.worker || "",
-      "WORKER_NAME": this.stoneissuedetailsFrom.value.workername || "",
+      "AMOUNTFC": this.stoneissuedetailsFrom.value.unitrate,
+      "AMOUNTLC": this.stoneissuedetailsFrom.value.amount,
+      "PROCESS_CODE": this.stoneissuedetailsFrom.value.process,
+      "PROCESS_NAME": this.stoneissuedetailsFrom.value.processname,
+      "WORKER_CODE": this.stoneissuedetailsFrom.value.worker,
+      "WORKER_NAME": this.stoneissuedetailsFrom.value.workername,
       "UNQ_DESIGN_ID": "",
       "WIP_ACCODE": "",
       "UNIQUEID": 0,
-      "LOCTYPE_CODE": this.stoneissuedetailsFrom.value.location || "",
+      "LOCTYPE_CODE": this.stoneissuedetailsFrom.value.location,
       "PICTURE_NAME": "",
-      "PART_CODE": this.stoneissuedetailsFrom.value.partcode || "",
+      "PART_CODE": this.stoneissuedetailsFrom.value.partcode,
       "REPAIRJOB": 0,
       "BASE_CONV_RATE": 0,
       "DT_BRANCH_CODE": this.branchCode,
-      "DT_VOCTYPE": "Str",
+      "DT_VOCTYPE": "STI",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
-      "CONSIGNMENT": 0,
-      "SIEVE_SET": "0",
+      "CONSIGNMENT": this.stoneissuedetailsFrom.value.consignment,
+      "SIEVE_SET": this.stoneissuedetailsFrom.value.sieveset,
       "SUB_STOCK_CODE": "0",
-      "D_REMARKS": this.stoneissuedetailsFrom.value.remarks || "",
-      "SIEVE_DESC": "0",
+      "D_REMARKS": this.stoneissuedetailsFrom.value.remarks,
+      "SIEVE_DESC": this.stoneissuedetailsFrom.value.sieveset,
       "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "",
+      "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt,
     }
 
     this.close(postData);
@@ -270,29 +299,26 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneissuedetailsFrom.controls.jobdes.setValue(this.content.JOB_DESCRIPTION)
     this.stoneissuedetailsFrom.controls.subjobnumber.setValue(this.content.JOB_SO_NUMBER)
     this.stoneissuedetailsFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
-    this.stoneissuedetailsFrom.controls.partcode.setValue(this.content.PART_CODE)
-    this.stoneissuedetailsFrom.controls.salesorderno.setValue(this.content.WORKER_CODE)
+    this.stoneissuedetailsFrom.controls.stock.setValue(this.content.STOCK_CODE)
+    this.stoneissuedetailsFrom.controls.stockDes.setValue(this.content.STOCK_DESCRIPTION)
+    this.stoneissuedetailsFrom.controls.sieve.setValue(this.content.SIEVE)
+    this.stoneissuedetailsFrom.controls.shape.setValue(this.content.SHAPE)
+    this.stoneissuedetailsFrom.controls.color.setValue(this.content.COLOR)
+    this.stoneissuedetailsFrom.controls.clarity.setValue(this.content.CLARITY)
+    this.stoneissuedetailsFrom.controls.size.setValue(this.content.SIZE)
+    this.stoneissuedetailsFrom.controls.pieces.setValue(this.content.PCS)
     this.stoneissuedetailsFrom.controls.process.setValue(this.content.PROCESS_CODE)
     this.stoneissuedetailsFrom.controls.processname.setValue(this.content.PROCESS_NAME)
     this.stoneissuedetailsFrom.controls.worker.setValue(this.content.WORKER_CODE)
     this.stoneissuedetailsFrom.controls.workername.setValue(this.content.WORKER_NAME)
-    this.stoneissuedetailsFrom.controls.stock.setValue(this.content.STOCK_CODE)
-    this.stoneissuedetailsFrom.controls.batchid.setValue(this.content.REMARKS)
     this.stoneissuedetailsFrom.controls.location.setValue(this.content.LOCTYPE_CODE)
-    this.stoneissuedetailsFrom.controls.pieces.setValue(this.content.REMARKS)
-    this.stoneissuedetailsFrom.controls.shape.setValue(this.content.SHAPE)
-    this.stoneissuedetailsFrom.controls.clarity.setValue(this.content.CLARITY)
-    this.stoneissuedetailsFrom.controls.karat.setValue(this.content.REMARKS)
-    this.stoneissuedetailsFrom.controls.size.setValue(this.content.SIZE)
+    this.stoneissuedetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
     this.stoneissuedetailsFrom.controls.sieveset.setValue(this.content.SIEVE_SET)
-    this.stoneissuedetailsFrom.controls.unitrate.setValue(this.content.REMARKS)
-    this.stoneissuedetailsFrom.controls.sieve.setValue(this.content.SIEVE)
-    this.stoneissuedetailsFrom.controls.amount.setValue(this.content.REMARKS)
-    this.stoneissuedetailsFrom.controls.color.setValue(this.content.COLOR)
-    this.stoneissuedetailsFrom.controls.stockbal.setValue(this.content.REMARKS)
-    this.stoneissuedetailsFrom.controls.pointerwt.setValue(this.content.REMARKS)
+    this.stoneissuedetailsFrom.controls.remarks.setValue(this.content.D_REMARKS)
+    this.stoneissuedetailsFrom.controls.sieveset.setValue(this.content.SIEVE_DESC)
     this.stoneissuedetailsFrom.controls.otheratt.setValue(this.content.OTHER_ATTR)
-    this.stoneissuedetailsFrom.controls.remarks.setValue(this.content.REMARKS)
+    this.stoneissuedetailsFrom.controls.unitrate.setValue(this.content.AMOUNTFC)
+    this.stoneissuedetailsFrom.controls.amount.setValue(this.content.AMOUNTLC)
   }
 
 
@@ -306,55 +332,55 @@ export class StoneIssueDetailComponent implements OnInit {
     let postData = {
       "SRNO": 0,
       "VOCNO": 0,
-      "VOCTYPE": "str",
+      "VOCTYPE": "STI",
       "VOCDATE": "2023-10-19T06:55:16.030Z",
-      "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobnumber || "",
+      "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobnumber,
       "JOB_DATE": "2023-10-19T06:55:16.030Z",
-      "JOB_SO_NUMBER": this.stoneissuedetailsFrom.value.subjobnumber || "",
+      "JOB_SO_NUMBER": this.stoneissuedetailsFrom.value.subjobnumber ,
       "UNQ_JOB_ID": "",
-      "JOB_DESCRIPTION": this.stoneissuedetailsFrom.value.jobdes || "",
+      "JOB_DESCRIPTION": this.stoneissuedetailsFrom.value.jobdes,
       "BRANCH_CODE": this.branchCode,
-      "DESIGN_CODE": this.stoneissuedetailsFrom.value.designcode || "",
+      "DESIGN_CODE": this.stoneissuedetailsFrom.value.designcode,
       "DIVCODE": "",
-      "STOCK_CODE": this.stoneissuedetailsFrom.value.stock || "",
-      "STOCK_DESCRIPTION": this.stoneissuedetailsFrom.value.stock || "",
-      "SIEVE": this.stoneissuedetailsFrom.value.sieve || "",
-      "SHAPE": this.stoneissuedetailsFrom.value.shape || "",
-      "COLOR": this.stoneissuedetailsFrom.value.color || "",
-      "CLARITY": this.stoneissuedetailsFrom.value.clarity || "",
-      "SIZE": this.stoneissuedetailsFrom.value.size || "",
+      "STOCK_CODE": this.stoneissuedetailsFrom.value.stock,
+      "STOCK_DESCRIPTION": this.stoneissuedetailsFrom.value.stockDes ,
+      "SIEVE": this.stoneissuedetailsFrom.value.sieve,
+      "SHAPE": this.stoneissuedetailsFrom.value.shape,
+      "COLOR": this.stoneissuedetailsFrom.value.color,
+      "CLARITY": this.stoneissuedetailsFrom.value.clarity,
+      "SIZE": this.stoneissuedetailsFrom.value.size,
       "JOB_PCS": 0,
-      "PCS": 0,
+      "PCS": this.stoneissuedetailsFrom.value.pieces,
       "GROSS_WT": 0,
       "CURRENCY_CODE": "",
       "CURRENCY_RATE": 0,
       "RATEFC": 0,
       "RATELC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTLC": 0,
-      "PROCESS_CODE": this.stoneissuedetailsFrom.value.process || "",
-      "PROCESS_NAME": this.stoneissuedetailsFrom.value.processname || "",
-      "WORKER_CODE": this.stoneissuedetailsFrom.value.worker || "",
-      "WORKER_NAME": this.stoneissuedetailsFrom.value.workername || "",
+      "AMOUNTFC": this.stoneissuedetailsFrom.value.unitrate,
+      "AMOUNTLC": this.stoneissuedetailsFrom.value.amount,
+      "PROCESS_CODE": this.stoneissuedetailsFrom.value.process,
+      "PROCESS_NAME": this.stoneissuedetailsFrom.value.processname,
+      "WORKER_CODE": this.stoneissuedetailsFrom.value.worker,
+      "WORKER_NAME": this.stoneissuedetailsFrom.value.workername,
       "UNQ_DESIGN_ID": "",
       "WIP_ACCODE": "",
       "UNIQUEID": 0,
-      "LOCTYPE_CODE": this.stoneissuedetailsFrom.value.location || "",
+      "LOCTYPE_CODE": this.stoneissuedetailsFrom.value.location,
       "PICTURE_NAME": "",
-      "PART_CODE": this.stoneissuedetailsFrom.value.partcode || "",
+      "PART_CODE": this.stoneissuedetailsFrom.value.partcode,
       "REPAIRJOB": 0,
       "BASE_CONV_RATE": 0,
       "DT_BRANCH_CODE": this.branchCode,
-      "DT_VOCTYPE": "QWA",
+      "DT_VOCTYPE": "STI",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
-      "CONSIGNMENT": 0,
-      "SIEVE_SET": "0",
+      "CONSIGNMENT": this.stoneissuedetailsFrom.value.consignment,
+      "SIEVE_SET": this.stoneissuedetailsFrom.value.sieveset,
       "SUB_STOCK_CODE": "0",
-      "D_REMARKS": "Str",
-      "SIEVE_DESC": "0",
+      "D_REMARKS": this.stoneissuedetailsFrom.value.remarks,
+      "SIEVE_DESC": this.stoneissuedetailsFrom.value.sieveset,
       "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt || "",
+      "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt,
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)

@@ -52,7 +52,7 @@
 </div>
 
 
-<ng-template #userAuthModal let-modal modal-lg>
+<ng-template #userAuthModal let-modal modal-md>
     <div class="modal-header" style="padding: 10px 20px">
       <h4 class="modal-title" id="modal-pos-metal">Authentication</h4>
       <button
@@ -67,7 +67,7 @@
     <div class="modal-body">
       <form [formGroup]="authForm">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <mat-form-field>
               <mat-label>Username</mat-label>
               <input
@@ -82,7 +82,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <mat-form-field>
               <mat-label>Password</mat-label>
               <input
@@ -96,7 +96,40 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <div class="col-md-4">
+            <mat-form-field>
+              <mat-label>Reason</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="reason"
+                 appNoEmptySpace
+                 readonly
+              />
+              <mat-error *ngIf="authForm.controls.reason.hasError('required')">
+                Reason is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
+        <div class="row">
+          <div class="col-md-12">
+            <mat-form-field>
+              <mat-label>Description</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="description"
+                 appNoEmptySpace
+                 readonly
+              />
+              <mat-error *ngIf="authForm.controls.description.hasError('required')">
+                Description is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        
         <div class="text-right">
           <button
             type="submit"

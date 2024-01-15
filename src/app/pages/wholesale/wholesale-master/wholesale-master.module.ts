@@ -30,6 +30,9 @@ import { EnterMetalDetailsComponent } from './watch-master/enter-metal-details/e
 import { EnterStoneDetailsComponent } from './watch-master/enter-stone-details/enter-stone-details.component';
 import { CostCenterMakingChargesDetailsComponent } from './costcentre-magkingcharges/cost-center-making-charges-details/cost-center-making-charges-details.component';
 import { PriceschemesMasterComponent } from './priceschemes-master/priceschemes-master.component';
+import { CostCenterConsumablesDetailsComponent } from './costcentre-consumable/cost-center-consumables-details/cost-center-consumables-details.component';
+
+
 
 
 @NgModule({
@@ -61,6 +64,10 @@ import { PriceschemesMasterComponent } from './priceschemes-master/priceschemes-
     EnterStoneDetailsComponent,
     CostCenterMakingChargesDetailsComponent,
     PriceschemesMasterComponent,
+    CostCenterConsumablesDetailsComponent,
+
+ 
+   
     
   ],
   imports: [

@@ -28,6 +28,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { environment } from 'src/environments/environment';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { IndexedApiService } from 'src/app/services/indexed-api.service';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -467,7 +468,8 @@ export class AddPosComponent implements OnInit {
 
   strBranchcode: any = '';
   strUser: any = '';
-  vocType: any = 'POS';
+  vocType: any = '';
+  mainVocType: any = '';
   baseYear: any = localStorage.getItem('YEAR') || '';
   updateBtn!: boolean;
   all_branch: any;
@@ -595,6 +597,8 @@ export class AddPosComponent implements OnInit {
     // public service: NgxBarcodeScannerService,
     private acRoute: ActivatedRoute,
     private indexedDb: IndexedDbService,
+
+    public indexedApiService: IndexedApiService,
 
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
@@ -915,6 +919,18 @@ export class AddPosComponent implements OnInit {
 
     });
 
+
+    this.setVoctypeMaster();
+
+  }
+  setVoctypeMaster() {
+    let branch = localStorage.getItem('userbranch')
+    this.indexedDb.getAllData('VocTypeMaster').subscribe((data) => {
+      if (data.length == 0 || data.length == 1) {
+        this.indexedApiService.getVocTypeMaster(branch);
+      }
+      this.comFunc.VocTypeMasterData = data;
+    });
   }
   // async getAllCompanyParameters() {
   //   let map = new Map();
@@ -979,6 +995,7 @@ export class AddPosComponent implements OnInit {
 
     // need to enable
     // this.vocType = this.comFunc.getqueryParamVocType()
+
 
     if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
 
@@ -1490,6 +1507,10 @@ export class AddPosComponent implements OnInit {
     */
 
 
+    // this.strBranchcode = this.content.BRANCH_CODE;
+    this.vocType = this.comFunc.getqueryParamVocType();
+    this.mainVocType = this.comFunc.getqueryParamVocType();
+    // this.baseYear = this.content.YEARMONTH;
 
     let isLayoutRTL = false;
     this.page_language = 'ENGLISH';
@@ -3265,7 +3286,6 @@ export class AddPosComponent implements OnInit {
             this.customerDataForm.controls.fcn_customer_code.setValue(
               result.CODE
             );
-            this.getUserAttachments();
 
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               result.MOBILE
@@ -3340,6 +3360,8 @@ export class AddPosComponent implements OnInit {
 
             this.customerDetails = result;
 
+            this.getUserAttachments();
+
             if (this.amlNameValidation)
               if (!result.AMLNAMEVALIDATION && result.DIGISCREENED) {
                 this.amlNameValidationData = false;
@@ -3394,7 +3416,10 @@ export class AddPosComponent implements OnInit {
     const custCode = this.customerDataForm.value.fcn_customer_code;
 
     this.snackBar.open('Loading...');
-    let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
+    // TransAttachments/GetTransAttachments
+    let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
+    // let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
+    // let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         this.snackBar.dismiss();
@@ -3412,6 +3437,19 @@ export class AddPosComponent implements OnInit {
             formData.append('REMARKS', data.REMARKS || '');
             formData.append('EXPIRE_DATE', data.EXPIRE_DATE);
             formData.append('DOC_TYPE', data.DOC_TYPE);
+            formData.append('VOCNO', data.VOCNO);
+            formData.append('VOCDATE', data.VOCDATE);
+            formData.append('ATTACH_TYPE', data.ATTACH_TYPE);
+            formData.append('BRANCH_CODE', data.BRANCH_CODE);
+            formData.append('YEARMONTH', data.YEARMONTH);
+            formData.append('SUBLED_CODE', data.SUBLED_CODE);
+            formData.append('DOC_ACTIVESTATUS', data.DOC_ACTIVESTATUS);
+            formData.append('DOC_LASTRENEWBY', data.DOC_LASTRENEWBY);
+            formData.append('DOC_NEXTRENEWDATE', data.DOC_NEXTRENEWDATE);
+            formData.append('DOC_LASTRENEWDATE', data.DOC_LASTRENEWDATE);
+            formData.append('DOCUMENT_DATE', data.DOCUMENT_DATE);
+            formData.append('DOCUMENT_NO', data.DOCUMENT_NO);
+            formData.append('FROM_KYC', data.FROM_KYC);
 
             this.transAttachmentListData.push(formData);
 
@@ -6046,29 +6084,7 @@ export class AddPosComponent implements OnInit {
     let dblRounddiff = 0.00;
     let dblVatTot = 0.00;
     let dblVatAmtRd = 0.00;
-    let IgstVatPer: any = this.ordered_items.filter((data) => data.taxPer != 0 && data.taxPer != '');
-    if (IgstVatPer.length > 0) {
-      IgstVatPer = parseFloat(IgstVatPer[0].taxPer);
-    }
-    console.log('=========IgstVatPer===========================');
-    console.log(IgstVatPer);
-    console.log('====================================');
-    if (this.comFunc.compCurrency == "AED" || this.comFunc.compCurrency == "BHD") {
-
-      if (IgstVatPer > 0) {
-        this.vatRoundOffAmt = 0.00;
-         dblRounddiff = this.comFunc.emptyToZero(this.comFunc.CCToFC( this.comFunc.compCurrency, (  (parseFloat(this.order_items_total_tax)  * IgstVatPer)) / (100.0 + IgstVatPer)));
-      
-         dblVatTot = this.comFunc.emptyToZero(this.order_items_total_tax);
-        if ((dblRounddiff - dblVatTot) < 0.05) {
-          this.vatRoundOffAmt =this.comFunc.CCToFC(this.comFunc.compCurrency , (dblRounddiff - dblVatTot));
-          dblVatAmtRd = this.comFunc.emptyToZero(this.vatRoundOffAmt);
-          this.order_items_total_tax  = this.comFunc.emptyToZero( this.order_items_total_tax)  + this.comFunc.emptyToZero( dblVatAmtRd);
-
-        }
-      }
-    }
-    // }
+    let intVocCCRoundoff = 2;
 
     this.order_items_total_gross_amount = net_sum;
     this.order_items_total_discount_amount = 0.0;
@@ -6106,6 +6122,43 @@ export class AddPosComponent implements OnInit {
     );
     // alert('this.order_items_total_net_amount ' + this.order_items_total_net_amount);
 
+
+
+
+    let IgstVatData: any = this.ordered_items.filter((data) => data.taxPer != 0 && data.taxPer != '');
+    let IgstVatPer: number = 0;
+    let taxType;
+    if (IgstVatData.length > 0) {
+      IgstVatPer = parseFloat(IgstVatData[0].taxPer);
+    }
+
+    if (this.comFunc.allbranchMaster.BRANCH_TAXTYPE == 'VAT') {
+
+      if (this.comFunc.compCurrency == "AED" || this.comFunc.compCurrency == "BHD") {
+
+        const vocTypeMaster = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocType, this.mainVocType)
+
+        if (vocTypeMaster != null) {
+          intVocCCRoundoff = vocTypeMaster.ROUNDOFFCC;
+        }
+        if (IgstVatPer > 0) {
+          this.vatRoundOffAmt = 0.00;
+          dblRounddiff = this.comFunc.emptyToZero(this.comFunc.transformDecimalVB(
+            intVocCCRoundoff,
+            ((parseFloat(this.order_items_total_gross_amount) * IgstVatPer) / (100.0 + IgstVatPer))));
+          dblVatTot = this.comFunc.emptyToZero(this.order_items_total_tax);
+
+          if ((dblRounddiff - dblVatTot) < 0.05) {
+            this.vatRoundOffAmt = this.comFunc.CCToFC(this.comFunc.compCurrency, (dblRounddiff - dblVatTot));
+            dblVatAmtRd = this.comFunc.emptyToZero(this.vatRoundOffAmt);
+            this.order_items_total_tax = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, (this.comFunc.emptyToZero(this.order_items_total_tax) + this.comFunc.emptyToZero(dblVatAmtRd)));
+
+          }
+        }
+      }
+    }
+
+
     this.sumReceiptItem();
     // this.prnt_inv_net_total_with_tax = this.order_items_total_net_amount;
 
@@ -6130,6 +6183,9 @@ export class AddPosComponent implements OnInit {
     // this.prnt_received_amount = this.receiptTotalNetAmt;
     // this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);
     // console.log(this.prnt_received_amount_words);
+
+
+
   }
 
   addItemtoList(btn: any) {
@@ -10896,7 +10952,6 @@ export class AddPosComponent implements OnInit {
 
       formData.append('VOCNO', this.vocDataForm.value.fcn_voc_no);
       formData.append('VOCTYPE', this.vocType);
-      // formData.append('VOCTYPE', 'MASPOS');
       formData.append('VOCDATE', this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()));
       formData.append('REFMID', this.vocDataForm.value.fcn_voc_no);
       formData.append('ATTACHMENT_PATH', '');
