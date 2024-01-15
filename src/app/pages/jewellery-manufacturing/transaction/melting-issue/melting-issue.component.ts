@@ -139,6 +139,7 @@ export class MeltingIssueComponent implements OnInit {
 
 
   });
+  router: any;
 
   constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -291,8 +292,9 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   openaddMeltingIssueDetails(data?: any) {
+    console.log(data)
     if (data) {
-      data[0].HEADERDETAILS = this.meltingIssueFrom.value;
+      data[0] = this.meltingIssueFrom.value;
     } else {
       data = [{ HEADERDETAILS: this.meltingIssueFrom.value }]
     }
@@ -317,17 +319,17 @@ export class MeltingIssueComponent implements OnInit {
   onRowClickHandler(event: any) {
 
     this.selectRowIndex = (event.dataIndex)
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+    this.openaddMeltingIssueDetails(selectedData)
+    console.log(selectedData)
+    console.log("fired.")
     console.log(this.selectRowIndex, event);
 
   }
-  onRowDoubleClick(event: any) {
-    let selectedData = event.data
-    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
-    let allDataSelected = [detailRow[0].DATA]
-    this.openaddMeltingIssueDetails(allDataSelected)
-    console.log(event)
-
-  }
+   
+   
+  
   setValuesToHeaderGrid(detailDataToParent: any) {
     let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
     if (PROCESS_FORMDETAILS.SRNO) {
@@ -371,7 +373,7 @@ export class MeltingIssueComponent implements OnInit {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.meltingIssueFrom.value.voctype,
-      "VOCNO": this.meltingIssueFrom.value.vocno,
+      "VOCNO": this.meltingIssueFrom.value.VOCNO,
       "VOCDATE": this.meltingIssueFrom.value.vocdate,
       "YEARMONTH": this.yearMonth,
       "NAVSEQNO": 0,
@@ -383,6 +385,10 @@ export class MeltingIssueComponent implements OnInit {
       "SALESPERSON_NAME": "",
       "DOCTIME": "2023-10-21T10:15:43.789Z",
       "TOTAL_GROSSWT": 0,
+      "MELTING_TYPE": "string",
+      "COLOR": "",
+      "RET_STOCK_CODE": "string",
+      "RET_LOCATION_CODE": "string",
       "TOTAL_PUREWT": 0,
       "TOTAL_STONEWT": 0,
       "TOTAL_NETWT": 0,
@@ -470,7 +476,6 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.remark.setValue(this.content.REMARKS)
   }
 
-
   update() {
     if (this.meltingIssueFrom.invalid) {
       this.toastr.error('select all required fields')
@@ -479,110 +484,126 @@ export class MeltingIssueComponent implements OnInit {
 
     let API = `JobMeltingIssueDJ/UpdateJobMeltingIssueDJ/${this.branchCode}/${this.meltingIssueFrom.value.voctype}/${this.meltingIssueFrom.value.vocno}/${this.commonService.yearSelected}`
     let postData = {
-      "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.meltingIssueFrom.value.voctype || "",
-      "VOCNO": this.meltingIssueFrom.value.vocno || "",
-      "VOCDATE": this.meltingIssueFrom.value.vocdate || "",
-      "YEARMONTH": this.commonService.yearSelected,
-      "NAVSEQNO": 0,
-      "WORKER_CODE": this.meltingIssueFrom.value.worker || "",
-      "WORKER_DESC": this.meltingIssueFrom.value.workerdes || "",
-      "SALESPERSON_CODE": "string",
-      "SALESPERSON_NAME": "string",
-      "DOCTIME": "2023-10-12T05:57:39.110Z",
-      "TOTAL_GROSSWT": 0,
-      "TOTAL_PUREWT": 0,
-      "TOTAL_STONEWT": 0,
-      "TOTAL_NETWT": 0,
-      "TOTAL_WAXWT": 0,
-      "TOTAL_IRONWT": 0,
-      "TOTAL_MKGVALUEFC": 0,
-      "TOTAL_MKGVALUECC": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_ISSUED_QTY": 0,
-      "TOTAL_REQUIRED_QTY": 0,
-      "TOTAL_ALLOCATED_QTY": 0,
-      "CURRENCY_CODE": "stri",
-      "CURRENCY_RATE": 0,
-      "TRAY_WEIGHT": 0,
-      "REMARKS": this.meltingIssueFrom.value.remarks || "",
-      "AUTOPOSTING": true,
-      "POSTDATE": "string",
-      "BASE_CURRENCY": "stri",
-      "BASE_CURR_RATE": 0,
-      "BASE_CONV_RATE": 0,
-      "PROCESS_CODE": this.meltingIssueFrom.value.processcode || "",
-      "PROCESS_DESC": this.meltingIssueFrom.value.processdes || "",
-      "PRINT_COUNT": 0,
-      "MELTING_TYPE": this.meltingIssueFrom.value.meltingtype || "",
-      "COLOR": this.meltingIssueFrom.value.color || "",
-      "RET_STOCK_CODE": "string",
-      "RET_GROSS_WT": 0,
-      "RET_PURITY": 0,
-      "RET_PURE_WT": 0,
-      "RET_LOCATION_CODE": "string",
-      "SCP_STOCK_CODE": "string",
-      "SCP_GROSS_WT": 0,
-      "SCP_PURITY": 0,
-      "SCP_PURE_WT": 0,
-      "SCP_LOCATION_CODE": "string",
-      "LOSS_QTY": 0,
-      "LOSS_PURE_WT": 0,
-      "IS_AUTHORISE": true,
-      "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string",
-      "SYSTEM_DATE": "2023-10-12T05:57:39.110Z",
-      "UNIQUEID": 0,
-      "SRNO": 0,
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "stri",
-      "DT_VOCNO": 0,
-      "DT_VOCDATE": "2023-10-12T05:57:39.110Z",
-      "DT_YEARMONTH": "string",
-      "JOB_NUMBER": this.meltingIssueFrom.value.jobno || "",
-      "JOB_DESCRIPTION": this.meltingIssueFrom.value.jobdes || "",
-      "STOCK_CODE": "string",
-      "STOCK_DESCRIPTION": "string",
-      "DIVCODE": "s",
-      "KARAT_CODE": "stri",
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "STONE_WT": 0,
-      "PURITY": 0,
-      "PUREWT": 0,
-      "PUDIFF": 0,
-      "IRON_WT": 0,
-      "NET_WT": 0,
-      "TOTAL_WEIGHT": 0,
-      "IRON_PER": 0,
-      "STONEDIFF": 0,
-      "WAX_WT": 0,
-      "TREE_NO": "string",
-      "WIP_ACCODE": "string",
-      "MKG_RATEFC": 0,
-      "MKG_RATECC": 0,
-      "MKGVALUEFC": 0,
-      "MKGVALUECC": 0,
-      "DLOC_CODE": "string",
-      "LOCTYPE_CODE": "string",
-      "TOSTOCKCODE": "string",
-      "LOSSWT": 0,
-      "TODIVISION_CODE": "s",
-      "LOT_NO": "string",
-      "BAR_NO": "string",
-      "TICKET_NO": "string",
-      "SILVER_PURITY": 0,
-      "SILVER_PUREWT": 0,
-      "TOPURITY": 0,
-      "PUR_PER": 0,
-      "ISALLOY": "s",
-      "UNQ_JOB_ID": "string",
-      "SUB_STOCK_CODE": "string",
-      "approvalDetails": this.tableData,
-    }
+        "MID": 0,
+        "BRANCH_CODE": this.branchCode,
+        "VOCTYPE": this.meltingIssueFrom.value.voctype,
+        "VOCNO": this.meltingIssueFrom.value.VOCNO,
+        "VOCDATE": this.meltingIssueFrom.value.vocdate,
+        "YEARMONTH":  this.yearMonth,
+        "NAVSEQNO": 0,
+        "WORKER_CODE": this.meltingIssueFrom.value.worker,
+        "WORKER_DESC": this.meltingIssueFrom.value.workerdes,
+        "SALESPERSON_CODE": "string",
+        "SALESPERSON_NAME": "string",
+        "DOCTIME": "2024-01-15T21:36:42.913Z",
+        "TOTAL_GROSSWT": 0,
+        "TOTAL_PUREWT": 0,
+        "TOTAL_STONEWT": 0,
+        "TOTAL_NETWT": 0,
+        "TOTAL_WAXWT": 0,
+        "TOTAL_IRONWT": 0,
+        "TOTAL_MKGVALUEFC": 0,
+        "TOTAL_MKGVALUECC": 0,
+        "TOTAL_PCS": 0,
+        "TOTAL_ISSUED_QTY": 0,
+        "TOTAL_REQUIRED_QTY": 0,
+        "TOTAL_ALLOCATED_QTY": 0,
+        "CURRENCY_CODE": "stri",
+        "CURRENCY_RATE": 0,
+        "TRAY_WEIGHT": 0,
+        "REMARKS": "string",
+        "AUTOPOSTING": true,
+        "POSTDATE": "string",
+        "BASE_CURRENCY": "stri",
+        "BASE_CURR_RATE": 0,
+        "BASE_CONV_RATE": 0,
+        "PROCESS_CODE": this.meltingIssueFrom.value.processcode,
+        "PROCESS_DESC": this.meltingIssueFrom.value.processdes,
+        "PRINT_COUNT": 0,
+        "MELTING_TYPE": "string",
+        "COLOR": "string",
+        "RET_STOCK_CODE": "string",
+        "RET_GROSS_WT": 0,
+        "RET_PURITY": 0,
+        "RET_PURE_WT": 0,
+        "RET_LOCATION_CODE": "string",
+        "SCP_STOCK_CODE": "string",
+        "SCP_GROSS_WT": 0,
+        "SCP_PURITY": 0,
+        "SCP_PURE_WT": 0,
+        "SCP_LOCATION_CODE": "string",
+        "LOSS_QTY": 0,
+        "LOSS_PURE_WT": 0,
+        "IS_AUTHORISE": true,
+        "IS_REJECT": true,
+        "REASON": "string",
+        "REJ_REMARKS": "string",
+        "ATTACHMENT_FILE": "string",
+        "SYSTEM_DATE": "2024-01-15T21:36:42.913Z",
+        "Details": [
+          {
+            "UNIQUEID": 0,
+            "SRNO": 0,
+            "DT_BRANCH_CODE": "string",
+            "DT_VOCTYPE": "stri",
+            "DT_VOCNO": 0,
+            "DT_VOCDATE": "2024-01-15T21:36:42.913Z",
+            "DT_YEARMONTH": "string",
+            "JOB_NUMBER": "string",
+            "JOB_DESCRIPTION": "string",
+            "PROCESS_CODE": "string",
+            "PROCESS_DESC": "string",
+            "WORKER_CODE": "string",
+            "WORKER_DESC": "string",
+            "STOCK_CODE": "string",
+            "STOCK_DESCRIPTION": "string",
+            "DIVCODE": "s",
+            "KARAT_CODE": "stri",
+            "PCS": 0,
+            "GROSS_WT": 0,
+            "STONE_WT": 0,
+            "PURITY": 0,
+            "PUREWT": 0,
+            "PUDIFF": 0,
+            "IRON_WT": 0,
+            "NET_WT": 0,
+            "TOTAL_WEIGHT": 0,
+            "IRON_PER": 0,
+            "STONEDIFF": 0,
+            "WAX_WT": 0,
+            "TREE_NO": "string",
+            "WIP_ACCODE": "string",
+            "CURRENCY_CODE": "stri",
+            "CURRENCY_RATE": 0,
+            "MKG_RATEFC": 0,
+            "MKG_RATECC": 0,
+            "MKGVALUEFC": 0,
+            "MKGVALUECC": 0,
+            "DLOC_CODE": "string",
+            "REMARKS": "string",
+            "LOCTYPE_CODE": "string",
+            "TOSTOCKCODE": "string",
+            "LOSSWT": 0,
+            "TODIVISION_CODE": "s",
+            "LOT_NO": "string",
+            "BAR_NO": "string",
+            "TICKET_NO": "string",
+            "SILVER_PURITY": 0,
+            "SILVER_PUREWT": 0,
+            "TOPURITY": 0,
+            "PUR_PER": 0,
+            "MELTING_TYPE": "string",
+            "ISALLOY": "s",
+            "UNQ_JOB_ID": "string",
+            "SUB_STOCK_CODE": "string",
+            "IS_REJECT": true,
+            "REASON": "string",
+            "REJ_REMARKS": "string",
+            "ATTACHMENT_FILE": "string"
+          }
+        ]
+      }
+  
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
