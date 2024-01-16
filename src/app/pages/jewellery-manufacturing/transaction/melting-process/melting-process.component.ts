@@ -21,7 +21,6 @@ export class MeltingProcessComponent implements OnInit {
   @Input() content!: any;
   tableData: any[] = [];
   detailData: any[] = [];
-  setAllInitialValues: any[] = [];
   dataToParent: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
@@ -122,10 +121,65 @@ export class MeltingProcessComponent implements OnInit {
     // this.meltingProcessFrom.controls.vocdate.setValue(this.currentDate)
     this.meltingProcessFrom.controls.vocType.setValue(this.comService.getqueryParamVocType())
     console.log(this.meltingProcessFrom.value.vocType, 'this is voctype')
-    this.setAllInitialValues = this.dataToParent;
+    // this.setAllInitialValues = this.dataToParent;
+    this.setAllInitialValues()
+   
 
 
   }
+  
+  setAllInitialValues() {
+    console.log(this.content)
+    if (!this.content) return
+    let API = `JobMeltingProcessDJ/GetJobMeltingProcessDJWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data)
+          data.Details.forEach((element:any) => {
+            this.tableData.push({
+              jobno: element.JOB_NUMBER,
+              stockcode: element.STOCK_CODE,
+              process: element.PROCESS_CODE,
+              worker: element.WORKER_CODE,
+              pcs: element.PCS,
+              grossweight: element.GROSS_WT,
+              purity: element.PURITY,
+              pureweight: element.PUREWT,
+              SRNO: element.SRNO,
+              Rate: element.RATE,
+              Amount: element.Amount,
+            
+
+            })
+          });
+          this.meltingProcessFrom.controls.voctype.setValue(data.content.VOCTYPE)
+          this.meltingProcessFrom.controls.vocno.setValue(data.VOCNO)
+          this.meltingProcessFrom.controls.vocdate.setValue(data.VOCDATE)
+          this.meltingProcessFrom.controls.processcode.setValue(data.content.PROCESS_CODE)
+          this.meltingProcessFrom.controls.worker.setValue(data.WORKER_CODE)
+          this.meltingProcessFrom.controls.workerdes.setValue(data.WORKER_DESC)
+          this.meltingProcessFrom.controls.processdes.setValue(data.PROCESS_DESC)
+          this.meltingProcessFrom.controls.jobno.setValue(data.JOB_NUMBER)
+          this.meltingProcessFrom.controls.jobdes.setValue(data.Details[0].JOB_DESCRIPTION)
+          this.meltingProcessFrom.controls.color.setValue(data.COLOR)
+          this.meltingProcessFrom.controls.grossweight.setValue(data.Details[0].GROSS_WT)
+          this.meltingProcessFrom.controls.pureweight.setValue(data.Details[0].PUREWT)
+          this.meltingProcessFrom.controls.pcs.setValue(data.Details[0].PCS)
+          this.meltingProcessFrom.controls.stockcode.setValue(data.Details[0].STOCK_CODE)
+          this.meltingProcessFrom.controls.purity.setValue(data.Details[0].PURITY)
+          this.meltingProcessFrom.controls.SRNO.setValue(data.Details[0].SRNO)
+          
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -176,40 +230,40 @@ export class MeltingProcessComponent implements OnInit {
     vocType : ['MLP',[Validators.required]],
     vocNo : ['1',[Validators.required]],
     vocDate : [new Date(),''],
-    meltingType : ['',[Validators.required]],
+    meltingType : [''],
     process : [''],
     processDesc : [''],
-    worker : ['',[Validators.required]],
-    workerDesc : ['',[Validators.required]],
-    color : ['',[Validators.required]],
+    worker : [''],
+    workerDesc : [''],
+    color : [''],
     time : [''],
     stoneStockCode : [''],
     stoneStockCodeNo : [''],
     stoneStockCodeDesc : [''],
     stoneStockCodeValue : [''],
-    stoneWeight : ['',[Validators.required]],
+    stoneWeight : [''],
     rate : [''],
     stoneAmount : [''],
-    stockcodeRet : ['',[Validators.required]],
-    stockCodeScp : ['',[Validators.required]],
-    purityRET : ['',[Validators.required]],
+    stockcodeRet : [''],
+    stockCodeScp : [''],
+    purityRET : [''],
     purity : [''],
-    TotalpureWt : ['',[Validators.required]],
-    RETpureWt : ['',[Validators.required]],
-    TotalgrossWt : ['',[Validators.required]],
-    RETgrossWt : ['',[Validators.required]],
-    locationRet : ['',[Validators.required]],
+    TotalpureWt : [''],
+    RETpureWt : [''],
+    TotalgrossWt : [''],
+    RETgrossWt : [''],
+    locationRet : [''],
     locationScp : [''],
-    loss : ['',[Validators.required]],
-    balGross : ['',[Validators.required]],
-    balPure : ['',[Validators.required]],
+    loss : [''],
+    balGross : [''],
+    balPure : [''],
   });
 
 
 
   openaddmeltingprocess(data?: any) {
     if (data) {
-      data[0].HEADERDETAILS = this.meltingProcessFrom.value;
+      data[0] = this.meltingProcessFrom.value;
     } else {
       data = [{ HEADERDETAILS: this.meltingProcessFrom.value }]
     }
@@ -235,16 +289,19 @@ export class MeltingProcessComponent implements OnInit {
   onRowClickHandler(event: any) {
     
    this.selectRowIndex = (event.dataIndex)
-   console.log(this.selectRowIndex, event);
+   let selectedData = event.data
+   let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+   this.openaddmeltingprocess(selectedData)
+   console.log(event)
 
   }
-  onRowDoubleClick(event: any) {
-    let selectedData = event.data
-    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
-    let allDataSelected = [detailRow[0].DATA]
-    this.openaddmeltingprocess(allDataSelected)
-    console.log(event)
-  }
+  // onRowDoubleClick(event: any) {
+  //   let selectedData = event.data
+  //   let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+  //   let allDataSelected = [detailRow[0].DATA]
+  //   this.openaddmeltingprocess(allDataSelected)
+  //   console.log(event)
+  // }
   setValuesToHeaderGrid(detailDataToParent: any) {
     let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
     if (PROCESS_FORMDETAILS.SRNO) {
@@ -282,13 +339,13 @@ export class MeltingProcessComponent implements OnInit {
   
  
   formSubmit() {
-
+    console.log("required")
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
   
-    
+   
 
     // if (this.meltingProcessFrom.invalid) {
     //   this.toastr.error('select all required fields')
@@ -312,7 +369,7 @@ export class MeltingProcessComponent implements OnInit {
         "DOCTIME": "2023-10-30T13:03:04.859Z",
         "TOTAL_GROSSWT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].TotalgrossWt),
         "TOTAL_PUREWT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].TotalpureWt),
-        "TOTAL_STONEWT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].STONE_WT),
+        "TOTAL_STONEWT": this.comService.emptyToZero(this.meltingprocessDetailsData[0].TOTAL_STONEWT),
         "TOTAL_NETWT": 0,
         "TOTAL_WAXWT": 0,
         "TOTAL_IRONWT": 0,
@@ -355,6 +412,7 @@ export class MeltingProcessComponent implements OnInit {
         "SCP_PUDIFF": 0,
         "SYSTEM_DATE": "2023-10-30T13:03:04.860Z",
         "Details": this.meltingprocessDetailsData
+        
       }
     
   
