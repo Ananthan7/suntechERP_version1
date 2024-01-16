@@ -11,7 +11,6 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 export class PriceschemesMasterComponent implements OnInit {
   priceSchemaMasterForm!: FormGroup;
   @Input() content!: any;
-  tableData: any[] = [];
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -27,41 +26,70 @@ export class PriceschemesMasterComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
 
-
   ) { }
 
   ngOnInit(): void {
-    this.priceSchemaMasterForm = this.formBuilder.group({
-      priceCode: ['',[Validators.required]],
-      priceCodeList: ['',[Validators.required]],
-      price1: ['',[Validators.required]],
-      price2: ['',[Validators.required]],
-      price3: ['',[Validators.required]],
-      price4: [''],
-      price5: [''],
-    })
+    this.initializeForm();
   }
 
-  priceOneCodeSelected(e:any){
-    console.log(e);
-    this.priceSchemaMasterForm.controls.price1.setValue(e.PRICE_CODE);
+  priceOneCodeSelected(e: any) {
+    try {
+      console.log(e);
+      this.priceSchemaMasterForm.controls.price1.setValue(e.PRICE_CODE);
+    } catch (error) {
+      console.error('Error in priceOneCodeSelected:', error);
+    }
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    try {
+      this.activeModal.close(data);
+    } catch (error) {
+      console.error('Error in close:', error);
+    }
   }
-
-
 
   formSubmit() {
+    try {
 
+    } catch (error) {
+      console.error('Error in formSubmit:', error);
+
+    }
   }
+
   update() {
+    try {
 
+    } catch (error) {
+      console.error('Error in update:', error);
+
+    }
   }
-  deleteRecord() {
 
+  deleteRecord() {
+    try {
+
+    } catch (error) {
+      console.error('Error in deleteRecord:', error);
+
+    }
+  }
+
+  private initializeForm() {
+    try {
+      this.priceSchemaMasterForm = this.formBuilder.group({
+        priceCode: ['', [Validators.required]],
+        priceCodeList: ['', [Validators.required]],
+        price1: ['', [Validators.required]],
+        price2: ['', [Validators.required]],
+        price3: ['', [Validators.required]],
+        price4: [''],
+        price5: [''],
+      })
+    } catch (error) {
+      console.error('Error in initializeForm:', error);
+    }
   }
 
 }

@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="priceListMasterForm">
@@ -18,7 +18,7 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Price Code:</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text"  matInput formControlName="priceCode" />
+                                            <input type="text" matInput maxlength="6" formControlName="priceCode" />
                                         </mat-form-field>
 
                                     </div>
@@ -35,7 +35,8 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Price Type :</label>
                                     <div class="col-sm-10 d-flex align-items-center">
                                         <mat-form-field style="width: 150px; margin-right: 10px;">
-                                            <mat-select formControlName="priceMethod">
+                                            <mat-select (selectionChange)="onPriceTypeChange()"
+                                                formControlName="priceMethod">
                                                 <mat-option *ngFor="let priceType of priceTypeList"
                                                     [value]="priceType.value">
                                                     {{ priceType.type }}
@@ -43,7 +44,7 @@
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-form-field style="width: 80px; margin-right: 10px;">
-                                            <mat-select formControlName="priceSign">
+                                            <mat-select [disabled]="isDisabled" formControlName="priceSign">
                                                 <mat-option *ngFor="let option of allOperatorList"
                                                     [value]="option.operator">
                                                     {{ option.operator }}
@@ -51,7 +52,8 @@
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-form-field style="width: 100px; margin-right: 10px;">
-                                            <input type="number"  (input)="onInputChange($event)"  matInput formControlName="priceValue" />
+                                            <input type="number" (input)="onInputChange($event,'priceValue', 5)"
+                                                matInput formControlName="priceValue" />
                                         </mat-form-field>
 
                                         <mat-form-field style="width: 80px; margin-right: 10px;">
@@ -62,12 +64,12 @@
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-form-field style="width: 100px;">
-                                            <input type="number" matInput (input)="onInputChange($event)"  formControlName="finalPriceValue" />
+                                            <input type="number" matInput
+                                                (input)="onInputChange($event,'finalPriceValue', 5)"
+                                                formControlName="finalPriceValue" />
                                         </mat-form-field>
                                     </div>
                                 </div>
-
-
 
                                 <div class="row align-items-center mb-2">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Addl Value With Cost
@@ -80,29 +82,29 @@
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
-                                        <mat-form-field style="width: 100px; margin-right: 10px;">
-                                                <input type="number"  (input)="onInputChange($event)"  maxlength="6" matInput AmountDecimalInput
-                                                    formControlName="addlValue" />
-                                            </mat-form-field>
 
-
+                                        <mat-form-field style="width: 100px;">
+                                            <input type="number" matInput (input)="onInputChange($event,'addlValue', 5)"
+                                                formControlName="addlValue" />
+                                        </mat-form-field>
                                     </div>
                                 </div>
 
                                 <div class="row mb-1">
                                     <div class="col-sm-12 d-flex align-items-center">
                                         <section class="example-section">
-                                            <mat-checkbox class="example-margin" formControlName="priceRoundoff">Round off
+                                            <mat-checkbox class="example-margin" formControlName="priceRoundoff">Round
+                                                off
                                                 Digits</mat-checkbox>
                                         </section>
                                         <div class="col-md-2" style="margin-left: 20px;">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="roundoff_digit" />
+                                                <input type="number" (input)="onInputChange($event,'roundoff_digit', 1)"
+                                                    matInput formControlName="roundoff_digit" />
                                             </mat-form-field>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row mb-1">
                                     <div class="col-sm-12 d-flex align-items-center">
                                         <section class="example-section">
@@ -111,8 +113,6 @@
                                         </section>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
