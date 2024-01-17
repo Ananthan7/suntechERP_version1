@@ -3417,7 +3417,7 @@ export class AddPosComponent implements OnInit {
 
     this.snackBar.open('Loading...');
     // TransAttachments/GetTransAttachments
-    let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
+    let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&CUSTOMER_CODE=${custCode}`
     // let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
     // let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
     this.suntechApi.getDynamicAPI(API)
