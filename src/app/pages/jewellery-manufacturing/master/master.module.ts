@@ -23,6 +23,9 @@ import { TransactionDetailsComponent } from './jobcard/transaction-details/trans
 import { JobStickerPrintComponent } from './jobcard/job-sticker-print/job-sticker-print.component';
 import { ComponentMasterComponent } from './component-master/component-master.component';
 import { StoneCostUpdationComponent } from './stone-cost-updation/stone-cost-updation.component';
+import { DesignSequenceComponent } from './design-master/design-sequence/design-sequence.component';
+import { LabourChargesDetailsComponent } from './design-master/labour-charges-details/labour-charges-details.component';
+import { DesignTransactionComponent } from './design-master/design-transaction/design-transaction.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,9 @@ import { StoneCostUpdationComponent } from './stone-cost-updation/stone-cost-upd
     JobStickerPrintComponent,
     ComponentMasterComponent,
     StoneCostUpdationComponent,
+    DesignSequenceComponent,
+    LabourChargesDetailsComponent,
+    DesignTransactionComponent,
     
   ],
   imports: [

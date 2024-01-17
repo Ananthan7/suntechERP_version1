@@ -1,0 +1,29 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Labour Charges Details</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- content section -->
+<div class="container-fluid">
+    <form [formGroup]="labourChargesDetailsForm">
+        <div class="row">
+            <div class="col-md-12">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                width="100%">
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="cell" [allowUpdating]="true">
+                </dxo-editing>
+                <dxo-selection mode="multiple"></dxo-selection>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
+                    caption="{{ data }}" [allowEditing]="true" alignment="center" [width]="100"
+                    backgroundcolor="#000">
+                </dxi-column>
+            </dx-data-grid>
+            </div>
+        </div>
+    </form>
+</div>

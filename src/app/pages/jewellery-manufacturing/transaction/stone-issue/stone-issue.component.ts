@@ -19,7 +19,7 @@ import { event } from 'devextreme/events';
 export class StoneIssueComponent implements OnInit {
 
   currentFilter: any;
-
+  srNo:any=0;
   divisionMS: any = 'ID';
   orders: any = [];
   // columnhead:any[] = ['SR No.','JOB NO','UNQ JOD ID', 'Design','Stock Code','Division','Description ','Carat','Rate','Process','Amount','Worker','Sieve Set'];
@@ -125,20 +125,27 @@ export class StoneIssueComponent implements OnInit {
   }
 
   openaddstoneissuedetail() {
+    // let i = 0;
+    this.srNo= this.srNo+1;
     const modalRef: NgbModalRef = this.modalService.open(StoneIssueDetailComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+
     modalRef.result.then((postData) => {
-      console.log(postData);      
+      // console.log(postData);      
       if (postData) {
-        console.log('Data from modal:', postData);       
+        console.log('Data from modal:', postData);    
+        if (postData.reopen= true) {
+          this.openaddstoneissuedetail();
+        }   
         this.stoneIssueData.push(postData);
 
       }
     });
+    modalRef.componentInstance.content = this.srNo;
   }
 
   deleteTableData(){
@@ -150,7 +157,7 @@ export class StoneIssueComponent implements OnInit {
   stoneissueFrom: FormGroup = this.formBuilder.group({
     voctype:['STI',[Validators.required]],
     vocno:[1,[Validators.required]],
-    vocdate:[new Date()],
+    vocDate:[new Date()],
     enteredBy:[''],
     currency:["AED",''],
     currencyrate:[1,''],
@@ -190,11 +197,11 @@ export class StoneIssueComponent implements OnInit {
   //   });
   // }
 
-removedata(){
-  this.tableData.pop();
-}
-  formSubmit(){
+  removedata(){
+    this.tableData.pop();
+  }
 
+  formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
@@ -210,7 +217,7 @@ removedata(){
       "VOCTYPE": this.stoneissueFrom.value.voctype,
       "BRANCH_CODE": this.branchCode,
       "VOCNO": this.stoneissueFrom.value.vocno,
-      "VOCDATE": this.stoneissueFrom.value.vocdate ,
+      "VOCDATE": this.stoneissueFrom.value.vocDate ,
       "YEARMONTH": this.yearMonth,
       "DOCTIME": "2023-10-19T06:55:16.030Z",
       "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
@@ -264,7 +271,7 @@ removedata(){
     console.log(this.content);    
     this.stoneissueFrom.controls.voctype.setValue(this.content.VOCTYPE)
     this.stoneissueFrom.controls.vocno.setValue(this.content.VOCNO)
-    this.stoneissueFrom.controls.vocdate.setValue(this.content.VOCDATE)
+    this.stoneissueFrom.controls.vocDate.setValue(this.content.VOCDATE)
     this.stoneissueFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
     this.stoneissueFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
     this.stoneissueFrom.controls.worker.setValue(this.content.WORKER_CODE)
@@ -282,85 +289,85 @@ removedata(){
     let API = 'JobStoneIssueMasterDJ/UpdateJobStoneIssueMasterDJ/'+ this.stoneissueFrom.value.branchCode + this.stoneissueFrom.value.voctype + this.stoneissueFrom.value.vocno + this.stoneissueFrom.value.yearMonth
     let postData = {
       "MID": 0,
-  "VOCTYPE": this.stoneissueFrom.value.voctype || "",
-  "BRANCH_CODE": this.branchCode,
-  "VOCNO": this.stoneissueFrom.value.vocno || "",
-  "VOCDATE": this.stoneissueFrom.value.vocdate || "",
-  "YEARMONTH": this.yearMonth,
-  "DOCTIME": "2023-10-19T06:55:16.030Z",
-  "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
-  "CURRENCY_RATE": this.stoneissueFrom.value.currencyrate || "",
-  "TOTAL_PCS": 0,
-  "TOTAL_GROSS_WT": 0,
-  "TOTAL_AMOUNTFC": 0,
-  "TOTAL_AMOUNTLC": 0,
-  "SMAN": "string",
-  "REMARKS": this.stoneissueFrom.value.narration || "",
-  "NAVSEQNO": 0,
-  "BASE_CURRENCY": "",
-  "BASE_CURR_RATE": 0,
-  "BASE_CONV_RATE": 0,
-  "AUTOPOSTING": true,
-  "POSTDATE": "string",
-  "SYSTEM_DATE": "2023-10-19T06:55:16.030Z",
-  "PRINT_COUNT": 0,
-  "PRINT_COUNT_ACCOPY": 0,
-  "PRINT_COUNT_CNTLCOPY": 0,
-  "Details": [
-    {
-      "SRNO": 0,
-      "VOCNO": 0,
-      "VOCTYPE": "str",
-      "VOCDATE": "2023-10-19T06:55:16.030Z",
-      "JOB_NUMBER": "string",
-      "JOB_DATE": "2023-10-19T06:55:16.030Z",
-      "JOB_SO_NUMBER": 0,
-      "UNQ_JOB_ID": "string",
-      "JOB_DESCRIPTION": "string",
-      "BRANCH_CODE": "string",
-      "DESIGN_CODE": "string",
-      "DIVCODE": "s",
-      "STOCK_CODE": "string",
-      "STOCK_DESCRIPTION": "string",
-      "SIEVE": "string",
-      "SHAPE": "string",
-      "COLOR": "string",
-      "CLARITY": "string",
-      "SIZE": "string",
-      "JOB_PCS": 0,
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "CURRENCY_CODE": "stri",
-      "CURRENCY_RATE": 0,
-      "RATEFC": 0,
-      "RATELC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTLC": 0,
-      "PROCESS_CODE": "string",
-      "PROCESS_NAME": "string",
-      "WORKER_CODE": "string",
-      "WORKER_NAME": "string",
-      "UNQ_DESIGN_ID": "string",
-      "WIP_ACCODE": "string",
-      "UNIQUEID": 0,
-      "LOCTYPE_CODE": "string",
-      "PICTURE_NAME": "string",
-      "PART_CODE": "string",
-      "REPAIRJOB": 0,
+      "VOCTYPE": this.stoneissueFrom.value.voctype || "",
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.stoneissueFrom.value.vocno || "",
+      "VOCDATE": this.stoneissueFrom.value.vocDate || "",
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2023-10-19T06:55:16.030Z",
+      "CURRENCY_CODE": this.stoneissueFrom.value.currency || "",
+      "CURRENCY_RATE": this.stoneissueFrom.value.currencyrate || "",
+      "TOTAL_PCS": 0,
+      "TOTAL_GROSS_WT": 0,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
+      "SMAN": "string",
+      "REMARKS": this.stoneissueFrom.value.narration || "",
+      "NAVSEQNO": 0,
+      "BASE_CURRENCY": "",
+      "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "CONSIGNMENT": 0,
-      "SIEVE_SET": "string",
-      "SUB_STOCK_CODE": "string",
-      "D_REMARKS": "string",
-      "SIEVE_DESC": "string",
-      "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": "string"
-    }
-  ] 
+      "AUTOPOSTING": true,
+      "POSTDATE": "string",
+      "SYSTEM_DATE": "2023-10-19T06:55:16.030Z",
+      "PRINT_COUNT": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "Details": [
+        {
+          "SRNO": 0,
+          "VOCNO": 0,
+          "VOCTYPE": "str",
+          "VOCDATE": "2023-10-19T06:55:16.030Z",
+          "JOB_NUMBER": "string",
+          "JOB_DATE": "2023-10-19T06:55:16.030Z",
+          "JOB_SO_NUMBER": 0,
+          "UNQ_JOB_ID": "string",
+          "JOB_DESCRIPTION": "string",
+          "BRANCH_CODE": "string",
+          "DESIGN_CODE": "string",
+          "DIVCODE": "s",
+          "STOCK_CODE": "string",
+          "STOCK_DESCRIPTION": "string",
+          "SIEVE": "string",
+          "SHAPE": "string",
+          "COLOR": "string",
+          "CLARITY": "string",
+          "SIZE": "string",
+          "JOB_PCS": 0,
+          "PCS": 0,
+          "GROSS_WT": 0,
+          "CURRENCY_CODE": "stri",
+          "CURRENCY_RATE": 0,
+          "RATEFC": 0,
+          "RATELC": 0,
+          "AMOUNTFC": 0,
+          "AMOUNTLC": 0,
+          "PROCESS_CODE": "string",
+          "PROCESS_NAME": "string",
+          "WORKER_CODE": "string",
+          "WORKER_NAME": "string",
+          "UNQ_DESIGN_ID": "string",
+          "WIP_ACCODE": "string",
+          "UNIQUEID": 0,
+          "LOCTYPE_CODE": "string",
+          "PICTURE_NAME": "string",
+          "PART_CODE": "string",
+          "REPAIRJOB": 0,
+          "BASE_CONV_RATE": 0,
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "str",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "string",
+          "CONSIGNMENT": 0,
+          "SIEVE_SET": "string",
+          "SUB_STOCK_CODE": "string",
+          "D_REMARKS": "string",
+          "SIEVE_DESC": "string",
+          "EXCLUDE_TRANSFER_WT": true,
+          "OTHER_ATTR": "string"
+        }
+      ] 
     }
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)

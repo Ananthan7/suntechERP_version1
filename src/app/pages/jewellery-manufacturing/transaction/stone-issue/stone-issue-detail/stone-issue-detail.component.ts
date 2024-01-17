@@ -16,7 +16,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class StoneIssueDetailComponent implements OnInit {
 
   columnhead1: any[] = ['Div', 'Stock Code','Shape', 'Color', 'Clarity', 'Size', 'Sieve Set', 'Pcs'];
-  srNo : any = 0;
+  serialNo : any;
   subJobNo: any;
   @Input() content!: any;
   tableData: any[] = [];
@@ -129,7 +129,7 @@ export class StoneIssueDetailComponent implements OnInit {
     pointerwt: [],
     otheratt: [],
     remarks: [''],
-    consignment:[0],
+    consignment:[false],
   });
 
 
@@ -145,6 +145,10 @@ export class StoneIssueDetailComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    // this.srNo= srNo;
+    console.log(this.content);
+    this.serialNo = this.content;
+    
   }
 
   locationCodeSelected(e: any) {
@@ -154,13 +158,13 @@ export class StoneIssueDetailComponent implements OnInit {
 
   jobNumberCodeSelected(e: any) {
     console.log(e);
-    this.subJobNo=`${e.job_number}/${this.srNo + 1}`;
     this.stoneissuedetailsFrom.controls.jobNumber.setValue(e.job_number);
     this.stoneissuedetailsFrom.controls.jobDes.setValue(e.job_description);
+    this.subJobNo=`${e.job_number}/${this.serialNo}`;
     this.stoneissuedetailsFrom.controls.subjobnumber.setValue(this.subJobNo);
     this.stoneissuedetailsFrom.controls.subjobDes.setValue(e.job_description);
-    this.stoneissuedetailsFrom.controls.designcode.setValue(e.job_number);
-    this.stoneissuedetailsFrom.controls.partcode.setValue(e.job_description);
+    // this.stoneissuedetailsFrom.controls.designcode.setValue(e.job_number);
+    // this.stoneissuedetailsFrom.controls.partcode.setValue(e.job_description);
   }
 
   processCodeSelected(e: any) {
@@ -187,17 +191,23 @@ export class StoneIssueDetailComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  jobchange(e:any){  
-    console.log(e);
-    this.stoneissuedetailsFrom.reset();   
-}
+  closed(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+    data.reopen=true;
+  }
+
+  jobchange(){  
+    this.formSubmit();
+  }
 
 continueClick(){
+  this.formSubmit();
   this.stoneissuedetailsFrom.controls.stock.setValue('')
   this.stoneissuedetailsFrom.controls.stockDes.setValue('')
   this.stoneissuedetailsFrom.controls.sieve.setValue('')
   this.stoneissuedetailsFrom.controls.shape.setValue('')
-  this.stoneissuedetailsFrom.controls.color.setValue('R')
+  this.stoneissuedetailsFrom.controls.color.setValue('')
   this.stoneissuedetailsFrom.controls.clarity.setValue('')
   this.stoneissuedetailsFrom.controls.size.setValue('')
   this.stoneissuedetailsFrom.controls.pieces.setValue('')
@@ -218,6 +228,14 @@ continueClick(){
   this.stoneissuedetailsFrom.controls.batchid.setValue('')
 }
 
+onchangeCheckBox(e: any){
+  if(e == true){    
+   return 1;
+  }else{ 
+   return 0;
+  }     
+ }
+
 
   removedata() {
     this.tableData.pop();
@@ -235,15 +253,15 @@ continueClick(){
 
     let API = 'JobStoneIssueMasterDJ/InsertJobStoneIssueMasterDJ'
     let postData = {
-      "SRNO": this.srNo + 1,
+      "SRNO": this.serialNo,
       "VOCNO": 0,
       "VOCTYPE": "STI",
       "VOCDATE": "2023-10-19T06:55:16.030Z",
-      "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobnumber,
+      "JOB_NUMBER": this.stoneissuedetailsFrom.value.jobNumber,
       "JOB_DATE": "2023-10-19T06:55:16.030Z",
-      "JOB_SO_NUMBER": this.stoneissuedetailsFrom.value.subjobnumber ,
+      "JOB_SO_NUMBER": this.stoneissuedetailsFrom.value.subjobnumber,
       "UNQ_JOB_ID": "",
-      "JOB_DESCRIPTION": this.stoneissuedetailsFrom.value.jobdes,
+      "JOB_DESCRIPTION": this.stoneissuedetailsFrom.value.jobDes,
       "BRANCH_CODE": this.branchCode,
       "DESIGN_CODE": this.stoneissuedetailsFrom.value.designcode,
       "DIVCODE": "",
@@ -279,7 +297,7 @@ continueClick(){
       "DT_VOCTYPE": "STI",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
-      "CONSIGNMENT": this.stoneissuedetailsFrom.value.consignment,
+      "CONSIGNMENT": this.onchangeCheckBox(this.stoneissuedetailsFrom.value.consignment),
       "SIEVE_SET": this.stoneissuedetailsFrom.value.sieveset,
       "SUB_STOCK_CODE": "0",
       "D_REMARKS": this.stoneissuedetailsFrom.value.remarks,
@@ -287,8 +305,8 @@ continueClick(){
       "EXCLUDE_TRANSFER_WT": true,
       "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt,
     }
-
-    this.close(postData);
+  //  this.postdata;
+    this.closed(postData);
   }
 
   setFormValues() {
