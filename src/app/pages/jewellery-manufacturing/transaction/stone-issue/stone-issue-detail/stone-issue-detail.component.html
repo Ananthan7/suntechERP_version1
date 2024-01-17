@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (ChangeJobClick)="jobchange($event)" (continueClick)="continueClick()"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (changeJobClick)="jobchange()" (continueClick)="continueClick()"
   [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false" [isViewMore]="false"></modal-header>
 
 <div class="container-fluid pt-3">
@@ -121,7 +121,7 @@
             </mat-form-field>
           </div>
           <div class="col-sm-4 mt-3">
-            <mat-radio-button value="1" formControlName="consignment">Consignment</mat-radio-button>
+            <mat-checkbox class="example-margin" formControlName="consignment">Consignment</mat-checkbox>
           </div>
         </div>
         <div class="row mb-1">

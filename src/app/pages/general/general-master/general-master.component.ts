@@ -9,6 +9,7 @@ import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-gr
 import { ChartOfAccountsComponent } from './chart-of-accounts/chart-of-accounts.component';
 import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.component';
 import { LocationMasterComponent } from './location-master/location-master.component';
+import { PricelistMasterComponent } from './pricelist-master/pricelist-master.component';
 @Component({
   selector: 'app-general-master',
   templateUrl: './general-master.component.html',
@@ -64,6 +65,7 @@ export class GeneralMasterComponent implements OnInit {
       'ChartOfAccountsComponent': ChartOfAccountsComponent,
       'JewelleryMasterComponent': JewelleryMasterComponent,
       'LocationMasterComponent': LocationMasterComponent,
+      'PricelistMasterComponent': PricelistMasterComponent,
       // Add components and update in operationals > menu updation grid form component name
     }
     let contents;

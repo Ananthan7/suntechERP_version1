@@ -29,6 +29,7 @@ import { CostCentreDiamondDetailsComponent } from './cost-centre-diamond/cost-ce
 import { EnterMetalDetailsComponent } from './watch-master/enter-metal-details/enter-metal-details.component';
 import { EnterStoneDetailsComponent } from './watch-master/enter-stone-details/enter-stone-details.component';
 import { CostCenterMakingChargesDetailsComponent } from './costcentre-magkingcharges/cost-center-making-charges-details/cost-center-making-charges-details.component';
+import { PriceschemesMasterComponent } from './priceschemes-master/priceschemes-master.component';
 import { CostCenterConsumablesDetailsComponent } from './costcentre-consumable/cost-center-consumables-details/cost-center-consumables-details.component';
 
 
@@ -62,6 +63,7 @@ import { CostCenterConsumablesDetailsComponent } from './costcentre-consumable/c
     EnterMetalDetailsComponent,
     EnterStoneDetailsComponent,
     CostCenterMakingChargesDetailsComponent,
+    PriceschemesMasterComponent,
     CostCenterConsumablesDetailsComponent,
 
  

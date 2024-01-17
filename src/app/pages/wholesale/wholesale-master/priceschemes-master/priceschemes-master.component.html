@@ -1,0 +1,85 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Price Schemes Master </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<div class="row">
+    <div class="col-md-12">
+        <form [formGroup]="priceSchemaMasterForm">
+            <div class="container-fluid pt-3">
+                <div class="card metal-sales-card">
+                    <div class="card-body sales-card-body p-2">
+                        <div class="row justify-content-between">
+                            <div class="col-md-8">
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Price Code:</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="priceCode" />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 100%;">
+                                            <input type="text" matInput formControlName="priceCodeList" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Price 1 :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="priceCode" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="priceCodeData"
+                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                    </div>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Price 3 :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="price3" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="priceCodeData"
+                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                    </div>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Price 5 :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="price5" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="priceCodeData"
+                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Price 2 :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="price2" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="priceCodeData"
+                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                    </div>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Price 4 :</label>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="price4" />
+                                        </mat-form-field>
+                                        <master-search [MasterSearchData]="priceCodeData"
+                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+          
+              
+            </form>
+            </div>
+            </div>

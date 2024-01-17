@@ -10,15 +10,21 @@ export class ModalHeaderComponent implements OnInit {
   @Output() cancelClick = new EventEmitter();
   @Output() deleteClick = new EventEmitter();
   @Output() continueClick = new EventEmitter();
-  @Output() ChangeJobClick = new EventEmitter();
+  @Output() stockClick = new EventEmitter();
   @Output() SaveGridDataClick = new EventEmitter();
+  @Output() changeJobClick = new EventEmitter();
+  @Output() auditTrailClick = new EventEmitter();
+  @Output() PostClick = new EventEmitter();
   @Input() isViewDelete: boolean = true;
   @Input() isViewMore: boolean = true;
   @Input() isViewArrow: boolean = true;
   @Input() isViewContinue: boolean = false;
   @Input() isViewSaveGridData: boolean = false;
   @Input() isViewChangeJob: boolean = false;
+  @Input() isViewStock: boolean = false;
   @Input() isViewCancel: boolean = true;
+  @Input() isViewAuditTrail: boolean = false;
+  @Input() isViewPost: boolean = false;
   @Input() editSaveBtnText?: string = '';
 
   branchCode: any = localStorage.getItem('userbranch')
@@ -44,7 +50,16 @@ export class ModalHeaderComponent implements OnInit {
     this.SaveGridDataClick.emit();
   }
   changeJobClicked() {
-    this.ChangeJobClick.emit();
+    this.changeJobClick.emit();
+  }
+  stockClicked() {
+    this.stockClick.emit();
+  }
+  auditTrailClicked() {
+    this.auditTrailClick.emit();
+  }
+  PostClicked() {
+    this.PostClick.emit();
   }
 
 }

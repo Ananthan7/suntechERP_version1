@@ -37,6 +37,7 @@ export class MasterGridComponent implements OnInit {
   ) {
     this.viewRowDetails = this.viewRowDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
+    this.tableName = this.CommonService.getqueryParamTable()
     this.getMasterGridData()
   }
 
@@ -102,9 +103,9 @@ export class MasterGridComponent implements OnInit {
       this.orderedItemsHead = [];
       this.vocType = data.VOCTYPE;
       this.mainVocType = data.MAIN_VOCTYPE;
-      this.tableName = data.HEADER_TABLE;
+      // this.tableName = data.HEADER_TABLE;
     } else {
-      this.tableName = this.CommonService.getqueryParamTable()
+      // this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
     }
     if(this.orderedItems.length == 0){
