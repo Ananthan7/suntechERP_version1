@@ -22,24 +22,24 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date</label>
                             <div class="col-md-8">
-                                <mat-form-field style="width: 100%">
-                                    <input matInput [matDatepicker]="vocDate" [max]="vocMaxDate" name="vocDate"
-                                        formControlName="vocDate" placeholder="DD/MM/YYYY" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-                                </mat-form-field>
+                                <mat-form-field style="width: 72%;">
+                                    <input matInput [matDatepicker]="vocDate"  formControlName="vocDate"
+                                    placeholder="DD/MM/YYYY"  DateValidation />
+                                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                                  </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Voucher No</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="voctype" readonly />
+                                    <input type="text" matInput formControlName="voctype" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%">
-                                    <input type="text" matInput formControlName="vocno" readonly />
+                                    <input type="text" matInput formControlName="vocno" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Time</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="time" />
+                                    <input type="time" matInput formControlName="time" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="currencyDesc" />
+                                    <input type="number" matInput formControlName="currencyDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="baseCurrencyDesc" />
+                                    <input type="number" matInput formControlName="baseCurrencyDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
