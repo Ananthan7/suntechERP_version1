@@ -21,7 +21,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
 
-  columnhead:any[] = ['SI.Bo','Design ID','Job Id','Order No','Pcs'];
+  columnhead:any[] = ['SI.No','Design ID','Job Id','Order No','Pcs'];
   columnheadSummary:any[] = ['SI.No','Job No','Design ID','Div','Stock Id','Pcs','Gross.Wt','Color','Clarity','Shape','size','Slieve','Karat','So No','Job ID','unq Job Id','St.Wt','Net Wt','RateFc','RateLC','AmountFC','AmountLC','MetalStone','Purity','Pure.Wt','Broken Stone','Broken Stone','Broken Stock'];
   columnheadSummaryLabour:any[] = ['SI.No','Job ID','Process','Worker','Lab']
   columnheadJobDetails:any[] = ['SI.No','Job No','Design ID','Div','Stock Id','Pcs','Gross.Wt','Color','Clarity','Shape','size','Slieve','Karat','Broken Stone','Broken Stone','Broken Stock']
