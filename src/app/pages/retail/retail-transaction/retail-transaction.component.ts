@@ -79,7 +79,7 @@ export class RetailTransactionComponent implements OnInit {
     if (isAuth)
       this.openModalView(str)
     else
-      this.snackBar.open('Authentication Failed');
+      this.snackBar.open('Authentication Failed', 'OK');
 
   }
   /**USE: open form components in modal*/
