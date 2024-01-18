@@ -22,6 +22,32 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
 
+  currencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 176,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'CURRENCY CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  enteredByCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Users',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
   columnhead:any[] = ['SI.No','Design ID','Job Id','Order No','Pcs'];
   columnheadSummary:any[] = ['SI.No','Job No','Design ID','Div','Stock Id','Pcs','Gross.Wt','Color','Clarity','Shape','size','Slieve','Karat','So No','Job ID','unq Job Id','St.Wt','Net Wt','RateFc','RateLC','AmountFC','AmountLC','MetalStone','Purity','Pure.Wt','Broken Stone','Broken Stone','Broken Stock'];
   columnheadSummaryLabour:any[] = ['SI.No','Job ID','Process','Worker','Lab']
@@ -75,6 +101,19 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  currencyDataSelected(value: any) {
+    console.log(value);
+       this.diamondJobBoqReceipt.controls.currency.setValue(value.CURRENCY_CODE);
+       this.diamondJobBoqReceipt.controls.currencyDesc.setValue(value.CONV_RATE);
+       this.diamondJobBoqReceipt.controls.baseCurrency.setValue(value.CURRENCY_CODE);
+       this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue(value.CONV_RATE);
+  }
+
+  enteredByDataSelected(value: any) {
+    console.log(value);
+       this.diamondJobBoqReceipt.controls.enteredBy.setValue(value.UsersName);
+    
+  }
  
 
   setFormValues() {
@@ -101,11 +140,11 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
 
     let API = 'JobBoqReceiptMasterDJ/InsertJobBoqReceiptMaster'
     let postData = {
-      "MID": 0,
+  "MID": 0,
   "VOCTYPE": this.diamondJobBoqReceipt.value.voctype || "",
   "BRANCH_CODE": this.branchCode,
-  "VOCNO": this.diamondJobBoqReceipt.value.vocno|| "",
-  "YEARMONTH": this.yearMonth,
+  "VOCNO": 0,
+  "YEARMONTH":  "",
   "VOCDATE": this.diamondJobBoqReceipt.value.vocDate|| "",
   "DOCTIME": "2024-01-17T10:20:08.860Z",
   "SMAN": this.diamondJobBoqReceipt.value.enteredBy|| "",
@@ -272,12 +311,12 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
       return
     }
 
-    let API = 'JobBoqReceiptMasterDJ/UpdateJobBoqReceiptMaster/' + this.branchCode + this.diamondJobBoqReceipt.value.voctype + this.diamondJobBoqReceipt.value.vocno + this.yearMonth
+    let API = 'JobBoqReceiptMasterDJ/UpdateJobBoqReceiptMaster/' + this.branchCode +'/'+ this.diamondJobBoqReceipt.value.voctype +'/'+ this.diamondJobBoqReceipt.value.vocno +'/'+ this.yearMonth
     let postData = {
       "MID": 0,
       "VOCTYPE": this.diamondJobBoqReceipt.value.voctype || "",
       "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.diamondJobBoqReceipt.value.vocno|| "",
+      "VOCNO":  0,
       "YEARMONTH": this.yearMonth,
       "VOCDATE": this.diamondJobBoqReceipt.value.vocDate|| "",
       "DOCTIME": "2024-01-17T10:20:08.860Z",

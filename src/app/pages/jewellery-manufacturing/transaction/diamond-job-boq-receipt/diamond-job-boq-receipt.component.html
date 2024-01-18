@@ -46,9 +46,11 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Entered By</label>
                             <div class="col-md-8">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 80%">
                                     <input type="text" matInput formControlName="enteredBy" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="enteredByCodeData" (newRowClick)="enteredByDataSelected($event)">
+                                </master-search>
                             </div>
                         </div>
                     </div>
@@ -77,13 +79,15 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Currency</label>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 80%">
                                     <input type="text" matInput formControlName="currency" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="currencyCodeData" (newRowClick)="currencyDataSelected($event)">
+                                </master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="number" matInput formControlName="currencyDesc" />
+                                    <input type="text" matInput formControlName="currencyDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -96,7 +100,7 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="number" matInput formControlName="baseCurrencyDesc" />
+                                    <input type="text" matInput formControlName="baseCurrencyDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
