@@ -61,6 +61,11 @@ export class AddPosComponent implements OnInit {
 
   @ViewChild('userAttachmentModal')
   public userAttachmentModal!: NgbModal;
+
+  @ViewChild('pendingSalesOrderModal')
+  public pendingSalesOrderModal!: NgbModal;
+  @ViewChild('salesEstimationModal')
+  public salesEstimationModal!: NgbModal;
   selectedModal: NgbModalRef | undefined;
 
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
@@ -169,6 +174,8 @@ export class AddPosComponent implements OnInit {
   modalReferenceSalesReturn: any;
   modalReferenceUserAuth!: NgbModalRef;
   modalReferenceUserAttachment!: NgbModalRef;
+  modalRefePendingSalesOrder!: NgbModalRef;
+  modalRefePendingSalesEstimation!: NgbModalRef;
 
   closeResult: any;
   karatRateDetails: any = [];
@@ -258,6 +265,12 @@ export class AddPosComponent implements OnInit {
     docType: ['', Validators.required],
     expDate: ['', Validators.required],
     attachmentFile: [''],
+  });
+
+  pendingSalesOrderForm: FormGroup = this.formBuilder.group({
+    branchTo: ['', Validators.required],
+    orderNo: ['', Validators.required],
+    customerCode: ['', Validators.required],
   });
 
   docTypeData: MasterSearchModel =
@@ -576,6 +589,51 @@ export class AddPosComponent implements OnInit {
     // { title: 'Document Number', field: 'DOCUMENT_NO' },
     // { title: 'From KYC', field: 'FROM_KYC' },
   ];
+
+  pendingOrderList: any[] = [];
+  pendingOrderColumnList: any[] = [
+    { title: 'Order No.', field: 'orderno' },
+    { title: 'Order Date', field: 'orderdate' },
+    { title: 'Delivery Date', field: 'deliverydate' },
+    { title: 'Amount', field: 'amount' },
+    { title: 'Cusomer Code', field: 'custcode' },
+  ];
+
+  estimationList: any[] = [];
+  estimationColumnList: any[] = [
+    { title: 'Estimation Date', field: 'orderdate' },
+    { title: 'Estimation No.', field: 'orderno' },
+    { title: 'Sales Man Code', field: 'custcode' },
+    { title: 'Cusomer Code', field: 'custcode' },
+    { title: 'Cusomer Mobile', field: 'custcode' },
+    { title: 'Cusomer Name', field: 'custcode' },
+    { title: 'Amount', field: 'amount' },
+  ];
+
+  branchCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 5,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'Branch Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'POS Customer Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   get vocDateVal(): Date {
     return this.vocDataForm.controls.vocdate.value;
@@ -2945,8 +3003,8 @@ export class AddPosComponent implements OnInit {
 
           // new fields added 27-12-2023
           "ATTACHMENT_FROM_SCANNER": true,
-          "GOOD_QUALITY_A_K_A": "string",
-          "LOW_QUALITY_A_K_A": "string",
+          "GOOD_QUALITY_A_K_A": "",
+          "LOW_QUALITY_A_K_A": "",
           "POSKNOWNABOUT": 0
         };
 
@@ -3417,14 +3475,14 @@ export class AddPosComponent implements OnInit {
 
     this.snackBar.open('Loading...');
     // TransAttachments/GetTransAttachments
-    let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
+    let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&CUSTOMER_CODE=${custCode}`
     // let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
     // let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         this.snackBar.dismiss();
 
-        if (resp.status == 'Success') {
+        if (resp?.status.toString().trim() == 'Success') {
           this.transAttachmentList = resp.response;
 
           this.transAttachmentList.map(data => {
@@ -4001,7 +4059,7 @@ export class AddPosComponent implements OnInit {
 
 
       // new fields added - 28-12-2023
-      "COMPONENT_PRICE_TYPE": "string",
+      "COMPONENT_PRICE_TYPE": "",
       "DUFIX_METALGROSSWT": 0,
       "DUFIX_DIAPCS": 0,
       "DUFIX_DIACARAT": 0,
@@ -4029,7 +4087,7 @@ export class AddPosComponent implements OnInit {
       "DUFIX_DWASTAGE": 0,
       "DUFIX_PURITY": 0,
       "DUFIX_PUDIFF": 0,
-      "DUFIX_DKARAT_CODE": "string",
+      "DUFIX_DKARAT_CODE": "",
       "DUFIX_METLA_WT": 0,
       "DUFIX_DWASTAGEPER": 0,
       "DUFIX_DWASTAGEAMOUNTFC": 0,
@@ -4050,11 +4108,11 @@ export class AddPosComponent implements OnInit {
       "GSTMAKINGAMT_CC": 0,
       "GSTOTHERAMT_CC": 0,
       "GSTMETALAMT_FC": 0,
-      "HSNCODE": "string",
-      "LESSTHANCOST_USER": "string",
+      "HSNCODE": "",
+      "LESSTHANCOST_USER": "",
       "NEWUNIQUEID": 0,
       "STOCKCHECKOTHERBRANCH": true,
-      "VATCODE": "string"
+      "VATCODE": ""
 
     };
 
@@ -4972,7 +5030,7 @@ export class AddPosComponent implements OnInit {
       // new fields added - 27-12-2023
       "NEWUNIQUEID": 0,
       "DETAILPCS": 0,
-      "D_REMARKS": "string",
+      "D_REMARKS": "",
       "DONE_REEXPORTYN": true,
 
     };
@@ -5685,8 +5743,8 @@ export class AddPosComponent implements OnInit {
       "DTSALESPERSON_CODE": "0",
 
       // new fields added - 28-12-2023
-      "COMPONENT_PRICE_TYPE": "string",
-      "DTREMARKS": "string",
+      "COMPONENT_PRICE_TYPE": "",
+      "DTREMARKS": "",
       "DUFIX_METALGROSSWT": 0,
       "DUFIX_DIAPCS": 0,
       "DUFIX_DIACARAT": 0,
@@ -5714,7 +5772,7 @@ export class AddPosComponent implements OnInit {
       "DUFIX_DWASTAGE": 0,
       "DUFIX_PURITY": 0,
       "DUFIX_PUDIFF": 0,
-      "DUFIX_DKARAT_CODE": "string",
+      "DUFIX_DKARAT_CODE": "",
       "DUFIX_METLA_WT": 0,
       "DUFIX_DWASTAGEPER": 0,
       "DUFIX_DWASTAGEAMOUNTFC": 0,
@@ -5728,8 +5786,8 @@ export class AddPosComponent implements OnInit {
       "DUFIX_DLABRATECC": 0,
       "DUFIX_DCHARGABLEWEIGHT": 0,
       "GIFT_ITEM": false,
-      "HSNCODE": "string",
-      "LESSTHANCOST_USER": "string",
+      "HSNCODE": "",
+      "LESSTHANCOST_USER": "",
       "NEWUNIQUEID": 0,
       "STOCKCHECKOTHERBRANCH": false,
     };
@@ -7330,8 +7388,8 @@ export class AddPosComponent implements OnInit {
 
           // new fields added 27-12-2023
           "ATTACHMENT_FROM_SCANNER": true,
-          "GOOD_QUALITY_A_K_A": "string",
-          "LOW_QUALITY_A_K_A": "string",
+          "GOOD_QUALITY_A_K_A": "",
+          "LOW_QUALITY_A_K_A": "",
           "POSKNOWNABOUT": 0
         },
         retailReceipt: this.receiptDetailsList,
@@ -7343,7 +7401,7 @@ export class AddPosComponent implements OnInit {
         "additionalInfo": {
           "giftInfo": [
             {
-              "GIFT_TYPE": this.lineItemForm.value.fcn_li_gift_type,
+              "GIFT_TYPE": this.lineItemForm.value.fcn_li_gift_type || '',
               "GIFT_CODE": this.giftTypeOptions.find(e => e.value == this.lineItemForm.value.fcn_li_gift_type)
             }
           ]
@@ -9518,8 +9576,12 @@ export class AddPosComponent implements OnInit {
       GJVMID: 0, //need
       holdbarcode: false,
       PROMO_CODE: '',
-      VATAMOUNTFCROUND: 0,
-      VATAMOUNTFCROUNDCC: 0,
+      VATAMOUNTFCROUND:  this.comFunc.emptyToZero(this.vatRoundOffAmt),
+      VATAMOUNTFCROUNDCC:
+      this.comFunc.FCToCC(
+        this.comFunc.compCurrency,
+        this.comFunc.emptyToZero(this.vatRoundOffAmt)
+      ),
       LIFETIMEWARRANTY: this.invoiceWiseForm.value.lifeTimeWarr || false,
       SALESORDER_VALIDITYDATE: this.dummyDate, //need
       EmiratesSkywardsMile: false,
@@ -9985,23 +10047,23 @@ export class AddPosComponent implements OnInit {
       // new fields added 27-12-2023
       "DISCOUNT_PERGRM": 0,
       "EXCLUDE_VAT": true,
-      "H_AIRWAYBILL": "string",
-      "H_BASIS": "string",
-      "H_DESTINATION": "string",
-      "H_MINER": "string",
-      "H_SHIPMENTMODE": "string",
-      "H_SHIPPER": "string",
+      "H_AIRWAYBILL": "",
+      "H_BASIS": "",
+      "H_DESTINATION": "",
+      "H_MINER": "",
+      "H_SHIPMENTMODE": "",
+      "H_SHIPPER": "",
       "INTERNALFIXEDQTY": 0,
       "ITEMROUNDVALUEFC": 0,
       "NEWMID": 0,
       "PARTYROUNDVALUEFC": 0,
       "PARTYTRANSWISE_METALVATONMAKING": true,
-      "PLACEOFSUPPLY": "string",
+      "PLACEOFSUPPLY": "",
       "POSPRICESFIXED": true,
-      "SHIPMENTCOMPANY": "string",
-      "SHIPMENTPORT": "string",
+      "SHIPMENTCOMPANY": "",
+      "SHIPMENTPORT": "",
       "TAX_APPLICABLE": true,
-      "TRANSFER_BRANCH": "string",
+      "TRANSFER_BRANCH": "",
       "VATAMOUNTFCROUND": 0,
       "VATAMOUNTFCROUNDCC": 0,
 
@@ -10252,7 +10314,7 @@ export class AddPosComponent implements OnInit {
       "EMIRATESSKYWARDSMILE": true,
       "NEWMID": 0,
       "PLANETRESPONSEFLG": true,
-      "POSREFERENCEREPAIRINVOICE": "string",
+      "POSREFERENCEREPAIRINVOICE": "",
 
       retailSReturnDetails: this.currentsalesReturnItems,
     };
@@ -10912,6 +10974,50 @@ export class AddPosComponent implements OnInit {
     window.open(url, '_blank');
   }
 
+  importSalesEstimation(){
+    this.modalRefePendingSalesEstimation = this.modalService.open(
+      this.salesEstimationModal,
+      {
+        size: "lg",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
+
+    this.modalRefePendingSalesEstimation.result.then((result) => {
+      if (result) {
+        console.log("Result :", result);
+      } else {
+      }
+    },
+      (reason) => {
+        console.log(`Dismissed ${reason}`);
+      }
+    );
+  }
+  importSalesOrder(){
+    this.modalRefePendingSalesOrder = this.modalService.open(
+      this.pendingSalesOrderModal,
+      {
+        size: "lg",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
+
+    this.modalRefePendingSalesOrder.result.then((result) => {
+      if (result) {
+        console.log("Result :", result);
+      } else {
+      }
+    },
+      (reason) => {
+        console.log(`Dismissed ${reason}`);
+      }
+    );
+  }
 
   openUserAttachmentModal() {
 
@@ -11044,5 +11150,13 @@ export class AddPosComponent implements OnInit {
   docTypeSelected(e: any) {
     console.log(e);
     this.attachmentForm.controls.docType.setValue(e.CODE);
+  }
+
+  branchSelected(e:any){
+    this.pendingSalesOrderForm.controls.branchTo.setValue(e.BRANCH_CODE);
+  }
+
+  customerCodeSelected(e: any) {
+      this.pendingSalesOrderForm.controls.customerCode.setValue(e.CODE);
   }
 }

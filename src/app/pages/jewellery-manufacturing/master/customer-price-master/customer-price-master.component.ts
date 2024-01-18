@@ -28,7 +28,9 @@ export class CustomerPriceMasterComponent implements OnInit {
   tableData: any[] = [];
   currentDate: any = this.commonService.currentDate;
   branchCode?: String;
-  yearMonth?: String; 
+  yearMonth?: String;
+  value: any;
+  rateInput: any; 
 
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -41,6 +43,9 @@ export class CustomerPriceMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -76,6 +81,9 @@ export class CustomerPriceMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+
+
   customerCodeScpSelected(e:any){
     console.log(e); 
     this.customerpricemasterForm.controls.customercode.setValue(e.CUSTOMER_CODE);

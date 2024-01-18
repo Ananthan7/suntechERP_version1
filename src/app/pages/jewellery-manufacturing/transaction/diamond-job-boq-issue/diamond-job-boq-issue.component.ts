@@ -81,7 +81,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   }
   diamondJobBoqIssue: FormGroup = this.formBuilder.group({
 
-    vocType: ['DMR',[Validators.required]],
+    vocType: ['JBI',[Validators.required]],
     vocNo : ['1',[Validators.required]],
     vocDate : ['',[Validators.required]],
     // vocTime : [new Date().toTimeString().slice(0, 5),[Validators.required]],
@@ -119,7 +119,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     // this.companyName = this.commonService.companyName;
     this.yearMonth = this.commonService.yearSelected;
     this.diamondJobBoqIssue.controls.vocDate.setValue(this.currentDate)
-    this.diamondJobBoqIssue.controls.vocType.setValue('DMR')
+    this.diamondJobBoqIssue.controls.vocType.setValue('JBI')
     //this.commonService.getqueryParamVocType()
   }
   formatDate(event: any) {
