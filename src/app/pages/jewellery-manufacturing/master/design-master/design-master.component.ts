@@ -332,7 +332,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -348,7 +348,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Category Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -364,7 +364,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Subcategory Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -380,7 +380,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Brand Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'BRAND MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -396,7 +396,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Style Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -428,7 +428,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -444,7 +444,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Country Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -460,7 +460,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

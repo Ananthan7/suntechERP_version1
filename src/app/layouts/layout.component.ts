@@ -179,7 +179,7 @@ export class LayoutComponent implements OnInit {
   }
 
   /**
-  * Layout Sidebar Color Set
+  * Layout Sidebar COLOR MASTER
   */
   SidebarColor(color: string) {
     switch (color) {

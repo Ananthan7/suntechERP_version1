@@ -295,7 +295,7 @@ export class MetalStockMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR SET'",
+    WHERECONDITION: "TYPES = 'COLOR MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
