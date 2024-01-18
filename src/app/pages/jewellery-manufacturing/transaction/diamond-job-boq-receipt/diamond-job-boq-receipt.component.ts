@@ -20,6 +20,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   yearMonth?: String;
   currentDate = new Date();
   tableData: any[] = [];
+  viewMode:boolean = false;
   private subscriptions: Subscription[] = [];
 
   currencyCodeData: MasterSearchModel = {
@@ -91,8 +92,10 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     //console.log(this.content);
-    if(this.content && this.content.FLAG == 'EDIT'){
-      this.setFormValues()
+    if (this.content.FLAG == 'VIEW') {
+      this.viewFormValues();
+    }else if (this.content.FLAG == 'EDIT'){
+      this.setFormValues();
     }
   }
 
@@ -117,6 +120,19 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
  
 
   setFormValues() {
+    if (!this.content) return
+    this.diamondJobBoqReceipt.controls.voctype.setValue(this.content.VOCTYPE)
+    this.diamondJobBoqReceipt.controls.vocno.setValue(this.content.VOCNO)
+    this.diamondJobBoqReceipt.controls.vocDate.setValue(this.content.VOCDATE)
+    this.diamondJobBoqReceipt.controls.enteredBy.setValue(this.content.SMAN)
+    this.diamondJobBoqReceipt.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.diamondJobBoqReceipt.controls.currencyDesc.setValue(this.content.CURRENCY_RATE)
+    this.diamondJobBoqReceipt.controls.baseCurrency.setValue(this.content.BASE_CURRENCY)
+    this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue(this.content.BASE_CURR_RATE)
+  }
+
+  viewFormValues(){
+    this.viewMode = true;
     if (!this.content) return
     this.diamondJobBoqReceipt.controls.voctype.setValue(this.content.VOCTYPE)
     this.diamondJobBoqReceipt.controls.vocno.setValue(this.content.VOCNO)

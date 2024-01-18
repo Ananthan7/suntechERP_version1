@@ -39,6 +39,8 @@ export class JobcardComponent implements OnInit {
   allMode: string;
   checkBoxesMode: string;
   selectedIndexes: any = [];
+  serialNo : any;
+  JobNo: any;
   private subscriptions: Subscription[] = [];
 
   lengthCodeData: MasterSearchModel = {
@@ -288,7 +290,7 @@ export class JobcardComponent implements OnInit {
 
   jobCardFrom: FormGroup = this.formBuilder.group({
     orderType : [''],
-    jobno : ['5'],
+    jobno : [''],
     designcode : [''],
     designtype : [''],
     customer : [''],
@@ -351,6 +353,9 @@ export class JobcardComponent implements OnInit {
     if(this.content){
       this.setFormValues()
     }
+    console.log(this.content);
+    this.serialNo = this.content;
+    
   }
 
   setInitialValues() {
@@ -553,11 +558,13 @@ export class JobcardComponent implements OnInit {
   ordertypeCodeSelected(e:any){
     console.log(e);
     this.jobCardFrom.controls.orderType.setValue(e.DESCRIPTION);
+    this.JobNo=`5/${this.serialNo}`;
+    this.jobCardFrom.controls.jobno.setValue(this.JobNo);
   }
 
   subcatCodeSelected(e:any){
     console.log(e);
-    this.jobCardFrom.controls.subcat.setValue(e.SUBCATEGORY_CODE);
+    this.jobCardFrom.controls.subcat.setValue(e.CODE);
   }
 
   brandCodeSelected(e:any){

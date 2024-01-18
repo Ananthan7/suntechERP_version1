@@ -31,6 +31,7 @@ export class CustomerPriceMasterComponent implements OnInit {
   yearMonth?: String;
   value: any;
   rateInput: any; 
+  text="Deduct";
 
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -43,6 +44,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
 
 
 
@@ -82,6 +84,15 @@ export class CustomerPriceMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  change(event:any){
+    console.log(event);
+    this.text = event.target.value;
+    if(event.target.checked == true){
+       this.text="Add";
+    }else{
+      this.text="Deduct";
+    }
+  }
 
 
   customerCodeScpSelected(e:any){

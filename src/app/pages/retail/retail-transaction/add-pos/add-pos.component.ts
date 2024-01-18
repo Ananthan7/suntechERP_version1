@@ -610,7 +610,7 @@ export class AddPosComponent implements OnInit {
     { title: 'Amount', field: 'amount' },
   ];
 
-  branchCodeData:MasterSearchModel = {
+  branchCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 5,
@@ -622,7 +622,7 @@ export class AddPosComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  
+
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -3490,7 +3490,7 @@ export class AddPosComponent implements OnInit {
             const formData = new FormData();
 
             formData.append('VOCTYPE', data.VOCTYPE);
-            formData.append('REFMID', data.KYCrefmid);
+            formData.append('REFMID', data.REFMID);
             formData.append('ATTACHMENT_PATH', data.ATTACHMENT_PATH);
             formData.append('REMARKS', data.REMARKS || '');
             formData.append('EXPIRE_DATE', data.EXPIRE_DATE);
@@ -8111,10 +8111,7 @@ export class AddPosComponent implements OnInit {
     let isAuth: any = false;
     // if(this.userwiseDiscount)
     isAuth = await this.openAuthModal();
-    alert(`validated ${isAuth}`);
-
-
-
+    // alert(`validated ${isAuth}`);
 
     if (this.blockMinimumPrice == 'B') {
       if (this.lineItemModalForSalesReturn || parseFloat(this.blockMinimumPriceValue) >= parseFloat(value)) {
@@ -8191,6 +8188,11 @@ export class AddPosComponent implements OnInit {
   }
 
   changeRate(event: any) {
+
+    const karatComp22 = this.comFunc.allbranchMaster?.KARATCOMPANY22;
+    const minBranchProfitPercentMetal = this.comFunc.allbranchMaster?.MINBRANCHPROFITPERCENTMETAL;
+    alert(karatComp22 + ' - ' + minBranchProfitPercentMetal)
+
     const preVal = localStorage.getItem('fcn_li_rate');
     const value = event.target.value;
     if (event.target.value != '') {
@@ -8201,7 +8203,66 @@ export class AddPosComponent implements OnInit {
         console.log('================changeRate====================');
         console.log(this.lineItemModalForSalesReturn, value, this.newLineItem.STOCK_COST);
         console.log('====================================');
+
+        let dblStockCost: any = this.newLineItem.STOCK_COST;
+        let dblStockFcCost: any;
+        let karatCode = this.newLineItem.KARAT_CODE;
+
+        // if (this.comFunc.compCurrency == 'AED') { //need to discuss // add textbox 
+        //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) { 
+        //     if (karatCode.toString() == "24") {
+        //       dblStockFcCost = dblStockCost + 1;
+        //     }
+        //     else {
+        //       dblStockFcCost = dblStockCost + 5;
+        //     }
+        //   }
+        //   else
+        //     if ((dblStockCost <= .5) && (this.comFunc.compAcCode == "JHROR1")) {
+        //       dblStockCost = dblStockCost + .5;
+        //     }
+        //     else {
+        //       dblStockFcCost = dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00);
+        //     }
+        // }
+        // else {
+        //   if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
+        //     if (karatCode == "24") {
+        //       dblStockFcCost =
+        //         this.comFunc.CCToFC(this.comFunc.compCurrency, value);
+        //       // doubt  objComnUnction.CCToFC(txtCurrency.Text.Trim(), objSqlObjects.Empty2zero(txtCurRate.Text.Trim()), (dblStockCost + 1));
+        //     }
+        //     else {
+
+        //       dblStockFcCost =
+        //         this.comFunc.CCToFC(this.comFunc.compCurrency, value);
+
+        //       //doubt objComnUnction.CCToFC(txtCurrency.Text.Trim(), objSqlObjects.Empty2zero(txtCurRate.Text.Trim()), (dblStockCost + 5));
+        //     }
+        //   }
+        //   else {
+        //     dblStockFcCost =
+        //       this.comFunc.CCToFC(this.comFunc.compCurrency, value);
+        //     // doubt objComnUnction.CCToFC(txtCurrency.Text.Trim(), objSqlObjects.Empty2zero(txtCurRate.Text.Trim()), dblStockCost + (dblStockCost * minBranchProfitPercentMetal / 100.00));
+        //   }
+        // }
+        
+// if(this.newLineItem.LESSTHANCOST){ // need to work
+
+// if (blnCheckBulk == false && blnLessThanCost == false)
+//                             {
+//                                 if (objSqlObjects.Empty2zero(txtMMkgRate.Text.Trim()) < dblStockFcCost)
+//                                 {
+//                                     MessageBox.Show("Rate Cannot be Less Than Cost");//Rate Cannot be Less Than Cost
+//                                     txtMMkgRate.Tag = string.Empty;
+//                                     txtMMkgRate.Focus();
+//                                     return;
+//                                 }
+// }
+        // value = dblStockFcCost; // like this?
+
         if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
+
           this.rateFunc(value);
         }
         else {
@@ -9576,12 +9637,12 @@ export class AddPosComponent implements OnInit {
       GJVMID: 0, //need
       holdbarcode: false,
       PROMO_CODE: '',
-      VATAMOUNTFCROUND:  this.comFunc.emptyToZero(this.vatRoundOffAmt),
+      VATAMOUNTFCROUND: this.comFunc.emptyToZero(this.vatRoundOffAmt),
       VATAMOUNTFCROUNDCC:
-      this.comFunc.FCToCC(
-        this.comFunc.compCurrency,
-        this.comFunc.emptyToZero(this.vatRoundOffAmt)
-      ),
+        this.comFunc.FCToCC(
+          this.comFunc.compCurrency,
+          this.comFunc.emptyToZero(this.vatRoundOffAmt)
+        ),
       LIFETIMEWARRANTY: this.invoiceWiseForm.value.lifeTimeWarr || false,
       SALESORDER_VALIDITYDATE: this.dummyDate, //need
       EmiratesSkywardsMile: false,
@@ -10974,7 +11035,7 @@ export class AddPosComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  importSalesEstimation(){
+  importSalesEstimation() {
     this.modalRefePendingSalesEstimation = this.modalService.open(
       this.salesEstimationModal,
       {
@@ -10996,7 +11057,7 @@ export class AddPosComponent implements OnInit {
       }
     );
   }
-  importSalesOrder(){
+  importSalesOrder() {
     this.modalRefePendingSalesOrder = this.modalService.open(
       this.pendingSalesOrderModal,
       {
@@ -11087,7 +11148,7 @@ export class AddPosComponent implements OnInit {
       this.transAttachmentListData.push(formData);
 
       this.transAttachmentList.push({
-        "KYCrefmid": 0,
+        "REFMID": 0,
         "REMARKS": this.attachmentForm.value.remarks || '',
         "ATTACHMENT_PATH": "",
         "DOC_TYPE": this.attachmentForm.value.docType || '',
@@ -11152,11 +11213,11 @@ export class AddPosComponent implements OnInit {
     this.attachmentForm.controls.docType.setValue(e.CODE);
   }
 
-  branchSelected(e:any){
+  branchSelected(e: any) {
     this.pendingSalesOrderForm.controls.branchTo.setValue(e.BRANCH_CODE);
   }
 
   customerCodeSelected(e: any) {
-      this.pendingSalesOrderForm.controls.customerCode.setValue(e.CODE);
+    this.pendingSalesOrderForm.controls.customerCode.setValue(e.CODE);
   }
 }

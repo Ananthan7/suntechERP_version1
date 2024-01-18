@@ -374,7 +374,8 @@ export class CommonServiceService {
     amount = typeof (amount) == 'number' ? this.emptyToZero(amount) : this.emptyToZero(amount);
     let convertedAmount = 0;
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
-    if (result.MUL_DIV == 'M') {
+   
+    if (result[0].MUL_DIV == 'M') {
       convertedAmount = amount / rate;
       return convertedAmount;
     } else {
@@ -409,7 +410,7 @@ export class CommonServiceService {
     let convertedAmount = 0;
 
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
-    if (result.MUL_DIV == 'M') {
+    if (result[0].MUL_DIV == 'M') {
       convertedAmount = amount / rate;
 
       return this.transformDecimalVB(this.amtDecimals, convertedAmount);
