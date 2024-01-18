@@ -201,40 +201,40 @@ export class StoneIssueDetailComponent implements OnInit {
     this.formSubmit();
   }
 
-continueClick(){
-  this.formSubmit();
-  this.stoneissuedetailsFrom.controls.stock.setValue('')
-  this.stoneissuedetailsFrom.controls.stockDes.setValue('')
-  this.stoneissuedetailsFrom.controls.sieve.setValue('')
-  this.stoneissuedetailsFrom.controls.shape.setValue('')
-  this.stoneissuedetailsFrom.controls.color.setValue('')
-  this.stoneissuedetailsFrom.controls.clarity.setValue('')
-  this.stoneissuedetailsFrom.controls.size.setValue('')
-  this.stoneissuedetailsFrom.controls.pieces.setValue('')
-  this.stoneissuedetailsFrom.controls.process.setValue('')
-  this.stoneissuedetailsFrom.controls.processname.setValue('')
-  this.stoneissuedetailsFrom.controls.worker.setValue('')
-  this.stoneissuedetailsFrom.controls.workername.setValue('')
-  this.stoneissuedetailsFrom.controls.location.setValue('')
-  this.stoneissuedetailsFrom.controls.consignment.setValue('')
-  this.stoneissuedetailsFrom.controls.sieveset.setValue('')
-  this.stoneissuedetailsFrom.controls.remarks.setValue('')
-  this.stoneissuedetailsFrom.controls.sieveset.setValue('')
-  this.stoneissuedetailsFrom.controls.otheratt.setValue('')
-  this.stoneissuedetailsFrom.controls.unitrate.setValue('')
-  this.stoneissuedetailsFrom.controls.amount.setValue('')
-  this.stoneissuedetailsFrom.controls.stockCode.setValue('')
-  this.stoneissuedetailsFrom.controls.carat.setValue('')
-  this.stoneissuedetailsFrom.controls.batchid.setValue('')
-}
+  continueClick(){
+    this.formSubmit();
+    this.stoneissuedetailsFrom.controls.stock.setValue('')
+    this.stoneissuedetailsFrom.controls.stockDes.setValue('')
+    this.stoneissuedetailsFrom.controls.sieve.setValue('')
+    this.stoneissuedetailsFrom.controls.shape.setValue('')
+    this.stoneissuedetailsFrom.controls.color.setValue('')
+    this.stoneissuedetailsFrom.controls.clarity.setValue('')
+    this.stoneissuedetailsFrom.controls.size.setValue('')
+    this.stoneissuedetailsFrom.controls.pieces.setValue('')
+    this.stoneissuedetailsFrom.controls.process.setValue('')
+    this.stoneissuedetailsFrom.controls.processname.setValue('')
+    this.stoneissuedetailsFrom.controls.worker.setValue('')
+    this.stoneissuedetailsFrom.controls.workername.setValue('')
+    this.stoneissuedetailsFrom.controls.location.setValue('')
+    this.stoneissuedetailsFrom.controls.consignment.setValue('')
+    this.stoneissuedetailsFrom.controls.sieveset.setValue('')
+    this.stoneissuedetailsFrom.controls.remarks.setValue('')
+    this.stoneissuedetailsFrom.controls.sieveset.setValue('')
+    this.stoneissuedetailsFrom.controls.otheratt.setValue('')
+    this.stoneissuedetailsFrom.controls.unitrate.setValue('')
+    this.stoneissuedetailsFrom.controls.amount.setValue('')
+    this.stoneissuedetailsFrom.controls.stockCode.setValue('')
+    this.stoneissuedetailsFrom.controls.carat.setValue('')
+    this.stoneissuedetailsFrom.controls.batchid.setValue('')
+  }
 
-onchangeCheckBox(e: any){
-  if(e == true){    
-   return 1;
-  }else{ 
-   return 0;
-  }     
- }
+  onchangeCheckBox(e: any){
+    if(e == true){    
+    return 1;
+    }else{ 
+    return 0;
+    }     
+  }
 
 
   removedata() {
@@ -305,6 +305,11 @@ onchangeCheckBox(e: any){
       "EXCLUDE_TRANSFER_WT": true,
       "OTHER_ATTR": this.stoneissuedetailsFrom.value.otheratt,
     }
+    // if (postData.reopen=true) {
+    //   this.closed(postData);
+    // }else{
+    //   this.close(postData);
+    // }
   //  this.postdata;
     this.closed(postData);
   }

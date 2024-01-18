@@ -376,6 +376,7 @@ export class WorkerMasterComponent implements OnInit {
   // }
 
   selectProcessMasterList() {
+    console.log('This Click Here')
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -385,19 +386,16 @@ export class WorkerMasterComponent implements OnInit {
             item.SrNo = i + 1;
           });
           this.tableData = result.response; 
-        }else {
-          Swal.fire({
-            title: '',
-            text: 'Data not available!',
-            icon: 'warning',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.workerMasterForm.reset()
-            }
-          });
         }
+        // }else {
+        //   Swal.fire({
+        //     title: '',
+        //     text: 'Data not available!',
+        //     icon: 'warning',
+        //     confirmButtonColor: '#336699',
+        //     confirmButtonText: 'Ok'
+        //   });
+        // }
       }, err => alert(err))
     this.subscriptions.push(Sub)
    }
