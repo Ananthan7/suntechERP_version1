@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -17,6 +17,10 @@ export class JobClosingComponent implements OnInit {
   columnheadItemDetails:any[] = ['  ',];
   divisionMS: any = 'ID';
   currentDate = new FormControl(new Date());
+  text="Sales Order";
+  checked:boolean = true
+
+  
 
   constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -34,6 +38,17 @@ export class JobClosingComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+
+  change(event:any){
+    console.log(event);
+    this.text = event.target.value;
+    if(event.target.checked == true){
+       this.text="Non Sales Order";
+    }else{
+      this.text="Sales Order";
+    }
+  }
+ 
   partyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,

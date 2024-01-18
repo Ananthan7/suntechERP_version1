@@ -31,6 +31,8 @@ export class CustomerPricingMasterComponent implements OnInit {
   tableData: any[] = [];
   currentDate = new FormControl(new Date());
   flexSwitchCheckChecked:boolean= true;
+  text="Deduct";
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -67,6 +69,17 @@ export class CustomerPricingMasterComponent implements OnInit {
    });
    this.allSelected = newStatus;
  }
+
+ change(event:any){
+  console.log(event);
+  this.text = event.target.value;
+  if(event.target.checked == true){
+     this.text="Add";
+  }else{
+    this.text="Deduct";
+  }
+}
+
  
   customerpricemasterForm: FormGroup = this.formBuilder.group({
     division:['',[Validators.required]],
