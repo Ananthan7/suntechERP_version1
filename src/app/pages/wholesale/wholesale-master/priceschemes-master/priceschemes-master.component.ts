@@ -69,7 +69,7 @@ export class PriceschemesMasterComponent implements OnInit {
   update() {
     if (!this.validateForm()) return;
 
-    let API = `PriceSchemeMaster/UpdatePriceSchemeMaster/${this.priceSchemaMasterForm.value.priceCode}`;
+    let API = `PriceSchemeMaster/UpdatePriceSchemeMaster`;
     let postData = this.createPostData();
 
     try {
