@@ -844,4 +844,14 @@ export class CommonServiceService {
   cDateFormat(value: any) {
     return this.datePipe.transform(value, 'yyyy-MM-ddTHH:mm:ss');
   }
+
+  getVoctypeMasterByVocTypeMain(branch: string, voctype: string, mainVocType: string){
+    const res = this.VocTypeMasterData.filter((data: any)=> 
+      data.BRANCH_CODE == branch && data.VOCTYPE == voctype && data.MAIN_VOCTYPE == mainVocType
+    );
+    if(res.length > 0){
+      return res[0];
+    }
+      return null;
+  }
 }

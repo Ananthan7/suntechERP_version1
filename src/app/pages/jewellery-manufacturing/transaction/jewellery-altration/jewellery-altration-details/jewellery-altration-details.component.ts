@@ -12,7 +12,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 @Component({
   selector: 'app-jewellery-altration-details',
   templateUrl: './jewellery-altration-details.component.html',
-  styleUrls: ['./jewellery-altration-details.component.scss']
+  styleUrls: ['./jewellery-altration-details.component.scss'],
 })
 export class JewelleryAltrationDetailsComponent implements OnInit {
 
@@ -53,6 +53,65 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   }
  
+  price1CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  price2CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  price3CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  price4CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  price5CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -76,6 +135,31 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   stockCodeSelected(e:any){
     console.log(e);
     this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
+  }
+
+  price1CodeSelected(e:any){
+    console.log(e);
+    this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(e.PRICE_CODE);
+  }
+
+  price2CodeSelected(e:any){
+    console.log(e);
+    this.jewelleryaltrationdetailsFrom.controls.price2PER.setValue(e.PRICE_CODE);
+  }
+
+  price3CodeSelected(e:any){
+    console.log(e);
+    this.jewelleryaltrationdetailsFrom.controls.price3PER.setValue(e.PRICE_CODE);
+  }
+
+  price4CodeSelected(e:any){
+    console.log(e);
+    this.jewelleryaltrationdetailsFrom.controls.price4PER.setValue(e.PRICE_CODE);
+  }
+
+  price5CodeSelected(e:any){
+    console.log(e);
+    this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(e.PRICE_CODE);
   }
 
   addTableData(){ 
@@ -122,7 +206,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
    price4:[''],
    price4FC:[''],
    price4LC:[''],
-   price4PER:['1'],
+   price4PER:[''],
    price5:[''],
    price5FC:[''],
    price5LC:[''],

@@ -38,10 +38,28 @@
                     Change Job
                 </button>
             </div>
+            <div class="p-1" *ngIf="isViewStock">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="stockClicked()">
+                    Stock
+                </button>
+            </div>
             <div class="p-1" *ngIf="isViewContinue">
                 <button type="button" class="btn btn-danger text-center"
                     (click)="continueClicked()">
                     Continue
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isViewAuditTrail">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="auditTrailClicked()">
+                    Audit Trail
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isViewPost">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="PostClicked()">
+                    Post
                 </button>
             </div>
             <div class="p-1 dropdown text-right" *ngIf="isViewMore">
@@ -66,7 +84,7 @@
                         </button>
                         <button ngbDropdownItem>
                             <!-- <i class="fa fa-print"></i>  -->
-                            Print Barcode</button>
+                            Print</button>
                         <button ngbDropdownItem>
                             <!-- <i class="fa fa-envelopes-bulk icon-common"></i> -->
                             Attachment</button>

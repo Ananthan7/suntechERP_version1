@@ -41,6 +41,8 @@ export class RetailTransactionComponent implements OnInit {
   authForm: FormGroup = this.formBuilder.group({
     username: [localStorage.getItem('username'), Validators.required],
     password: ['', Validators.required],
+    reason: ['', Validators.required],
+    description: ['', Validators.required],
   });
 
   constructor(
@@ -77,7 +79,7 @@ export class RetailTransactionComponent implements OnInit {
     if (isAuth)
       this.openModalView(str)
     else
-      this.snackBar.open('Authentication Failed');
+      this.snackBar.open('Authentication Failed', 'OK');
 
   }
   /**USE: open form components in modal*/

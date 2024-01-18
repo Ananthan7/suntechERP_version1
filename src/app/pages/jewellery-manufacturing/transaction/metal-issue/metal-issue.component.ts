@@ -19,7 +19,17 @@ export class MetalIssueComponent implements OnInit {
   currentFilter: any;
   divisionMS: any = 'ID';
   tableData: any[] = [];
-  columnhead: any[] = ['Job Id','Uniq job Id','Design','Stock Code','Division','Description','Carat','Process','Worker','Amount'];
+  columnhead: any[] = [
+    { title: 'Job Id', field: 'JOB_NUMBER' },
+    { title: 'Uniq job Id', field: 'JOB_SO_NUMBER' },
+    { title: 'Design', field: 'DESIGN_CODE' },
+    { title: 'Stock Code', field: 'STOCK_CODE' },
+    { title: 'Division', field: 'SUB_STOCK_CODE' },
+    { title: 'Description', field: 'STOCK_DESCRIPTION' },
+    { title: 'Carat', field: 'GROSS_WT' },
+    { title: 'Process', field: 'PROCESS_CODE' },
+    { title: 'Worker', field: 'WORKER_CODE' },
+    { title: 'Amount.', field: 'AMOUNTFC' },];
   metalIssueDetailsData : any[] = [];
   @Input() content!: any; 
   userName = localStorage.getItem('username');
@@ -29,6 +39,7 @@ export class MetalIssueComponent implements OnInit {
   currentDate = new Date();
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   viewOnly: boolean = false;
+  selectedIndexes: any = [];
 
   private subscriptions: Subscription[] = [];
   constructor(
@@ -64,25 +75,7 @@ export class MetalIssueComponent implements OnInit {
       console.log(postData);      
       if (postData) {
         console.log('Data from modal:', postData);       
-        this.metalIssueDetailsData.push(postData);
-
-        let length = this.tableData.length;
-        let sn = length + 1;
-        let data =  {
-          "SN": sn,
-          "job_id": postData.JOB_NUMBER,
-          "uniq_job_id": postData.JOB_SO_NUMBER,
-          "design": postData.DESIGN_CODE,
-          "stock_code": postData.STOCK_CODE,
-          "division": postData.SUB_STOCK_CODE,
-          "description": postData.STOCK_DESCRIPTION,
-          "carat": postData.GROSS_WT,
-          "process": postData.PROCESS_CODE,
-          "worker": postData.WORKER_CODE,
-          "amount": postData.AMOUNTFC,
-        };
-        this.tableData.push(data);
-        
+        this.metalIssueDetailsData.push(postData);     
       }
      
     });
@@ -148,6 +141,18 @@ export class MetalIssueComponent implements OnInit {
     this.metalIssueForm.controls.workerDes.setValue(e.DESCRIPTION);
   }
 
+  
+  onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    let indexes: Number[] = [];
+    this.metalIssueDetailsData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+  }
 
   metalIssueForm: FormGroup = this.formBuilder.group({
     voctype: ['DMI',[Validators.required]],

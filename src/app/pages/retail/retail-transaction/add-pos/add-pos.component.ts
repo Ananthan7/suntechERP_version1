@@ -28,6 +28,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { environment } from 'src/environments/environment';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { IndexedApiService } from 'src/app/services/indexed-api.service';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -60,6 +61,11 @@ export class AddPosComponent implements OnInit {
 
   @ViewChild('userAttachmentModal')
   public userAttachmentModal!: NgbModal;
+
+  @ViewChild('pendingSalesOrderModal')
+  public pendingSalesOrderModal!: NgbModal;
+  @ViewChild('salesEstimationModal')
+  public salesEstimationModal!: NgbModal;
   selectedModal: NgbModalRef | undefined;
 
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
@@ -168,6 +174,8 @@ export class AddPosComponent implements OnInit {
   modalReferenceSalesReturn: any;
   modalReferenceUserAuth!: NgbModalRef;
   modalReferenceUserAttachment!: NgbModalRef;
+  modalRefePendingSalesOrder!: NgbModalRef;
+  modalRefePendingSalesEstimation!: NgbModalRef;
 
   closeResult: any;
   karatRateDetails: any = [];
@@ -257,6 +265,12 @@ export class AddPosComponent implements OnInit {
     docType: ['', Validators.required],
     expDate: ['', Validators.required],
     attachmentFile: [''],
+  });
+
+  pendingSalesOrderForm: FormGroup = this.formBuilder.group({
+    branchTo: ['', Validators.required],
+    orderNo: ['', Validators.required],
+    customerCode: ['', Validators.required],
   });
 
   docTypeData: MasterSearchModel =
@@ -467,7 +481,8 @@ export class AddPosComponent implements OnInit {
 
   strBranchcode: any = '';
   strUser: any = '';
-  vocType: any = 'POS';
+  vocType: any = '';
+  mainVocType: any = '';
   baseYear: any = localStorage.getItem('YEAR') || '';
   updateBtn!: boolean;
   all_branch: any;
@@ -575,6 +590,51 @@ export class AddPosComponent implements OnInit {
     // { title: 'From KYC', field: 'FROM_KYC' },
   ];
 
+  pendingOrderList: any[] = [];
+  pendingOrderColumnList: any[] = [
+    { title: 'Order No.', field: 'orderno' },
+    { title: 'Order Date', field: 'orderdate' },
+    { title: 'Delivery Date', field: 'deliverydate' },
+    { title: 'Amount', field: 'amount' },
+    { title: 'Cusomer Code', field: 'custcode' },
+  ];
+
+  estimationList: any[] = [];
+  estimationColumnList: any[] = [
+    { title: 'Estimation Date', field: 'orderdate' },
+    { title: 'Estimation No.', field: 'orderno' },
+    { title: 'Sales Man Code', field: 'custcode' },
+    { title: 'Cusomer Code', field: 'custcode' },
+    { title: 'Cusomer Mobile', field: 'custcode' },
+    { title: 'Cusomer Name', field: 'custcode' },
+    { title: 'Amount', field: 'amount' },
+  ];
+
+  branchCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 5,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'Branch Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'POS Customer Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
   get vocDateVal(): Date {
     return this.vocDataForm.controls.vocdate.value;
   }
@@ -595,6 +655,8 @@ export class AddPosComponent implements OnInit {
     // public service: NgxBarcodeScannerService,
     private acRoute: ActivatedRoute,
     private indexedDb: IndexedDbService,
+
+    public indexedApiService: IndexedApiService,
 
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
@@ -915,6 +977,18 @@ export class AddPosComponent implements OnInit {
 
     });
 
+
+    this.setVoctypeMaster();
+
+  }
+  setVoctypeMaster() {
+    let branch = localStorage.getItem('userbranch')
+    this.indexedDb.getAllData('VocTypeMaster').subscribe((data) => {
+      if (data.length == 0 || data.length == 1) {
+        this.indexedApiService.getVocTypeMaster(branch);
+      }
+      this.comFunc.VocTypeMasterData = data;
+    });
   }
   // async getAllCompanyParameters() {
   //   let map = new Map();
@@ -979,6 +1053,7 @@ export class AddPosComponent implements OnInit {
 
     // need to enable
     // this.vocType = this.comFunc.getqueryParamVocType()
+
 
     if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
 
@@ -1490,6 +1565,10 @@ export class AddPosComponent implements OnInit {
     */
 
 
+    // this.strBranchcode = this.content.BRANCH_CODE;
+    this.vocType = this.comFunc.getqueryParamVocType();
+    this.mainVocType = this.comFunc.getqueryParamVocType();
+    // this.baseYear = this.content.YEARMONTH;
 
     let isLayoutRTL = false;
     this.page_language = 'ENGLISH';
@@ -2924,8 +3003,8 @@ export class AddPosComponent implements OnInit {
 
           // new fields added 27-12-2023
           "ATTACHMENT_FROM_SCANNER": true,
-          "GOOD_QUALITY_A_K_A": "string",
-          "LOW_QUALITY_A_K_A": "string",
+          "GOOD_QUALITY_A_K_A": "",
+          "LOW_QUALITY_A_K_A": "",
           "POSKNOWNABOUT": 0
         };
 
@@ -3265,7 +3344,6 @@ export class AddPosComponent implements OnInit {
             this.customerDataForm.controls.fcn_customer_code.setValue(
               result.CODE
             );
-            this.getUserAttachments();
 
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               result.MOBILE
@@ -3340,6 +3418,8 @@ export class AddPosComponent implements OnInit {
 
             this.customerDetails = result;
 
+            this.getUserAttachments();
+
             if (this.amlNameValidation)
               if (!result.AMLNAMEVALIDATION && result.DIGISCREENED) {
                 this.amlNameValidationData = false;
@@ -3394,12 +3474,15 @@ export class AddPosComponent implements OnInit {
     const custCode = this.customerDataForm.value.fcn_customer_code;
 
     this.snackBar.open('Loading...');
-    let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
+    // TransAttachments/GetTransAttachments
+    let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&CUSTOMER_CODE=${custCode}`
+    // let API = `TransAttachments/GetTransAttachments?VOCTYPE=${this.vocType}&MID=${this.customerDetails?.MID}`
+    // let API = `RetailSalesDataInDotnet/GetTransAttachmentMulti/${custCode}/${this.vocType}`
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         this.snackBar.dismiss();
 
-        if (resp.status == 'Success') {
+        if (resp?.status.toString().trim() == 'Success') {
           this.transAttachmentList = resp.response;
 
           this.transAttachmentList.map(data => {
@@ -3412,6 +3495,19 @@ export class AddPosComponent implements OnInit {
             formData.append('REMARKS', data.REMARKS || '');
             formData.append('EXPIRE_DATE', data.EXPIRE_DATE);
             formData.append('DOC_TYPE', data.DOC_TYPE);
+            formData.append('VOCNO', data.VOCNO);
+            formData.append('VOCDATE', data.VOCDATE);
+            formData.append('ATTACH_TYPE', data.ATTACH_TYPE);
+            formData.append('BRANCH_CODE', data.BRANCH_CODE);
+            formData.append('YEARMONTH', data.YEARMONTH);
+            formData.append('SUBLED_CODE', data.SUBLED_CODE);
+            formData.append('DOC_ACTIVESTATUS', data.DOC_ACTIVESTATUS);
+            formData.append('DOC_LASTRENEWBY', data.DOC_LASTRENEWBY);
+            formData.append('DOC_NEXTRENEWDATE', data.DOC_NEXTRENEWDATE);
+            formData.append('DOC_LASTRENEWDATE', data.DOC_LASTRENEWDATE);
+            formData.append('DOCUMENT_DATE', data.DOCUMENT_DATE);
+            formData.append('DOCUMENT_NO', data.DOCUMENT_NO);
+            formData.append('FROM_KYC', data.FROM_KYC);
 
             this.transAttachmentListData.push(formData);
 
@@ -3963,7 +4059,7 @@ export class AddPosComponent implements OnInit {
 
 
       // new fields added - 28-12-2023
-      "COMPONENT_PRICE_TYPE": "string",
+      "COMPONENT_PRICE_TYPE": "",
       "DUFIX_METALGROSSWT": 0,
       "DUFIX_DIAPCS": 0,
       "DUFIX_DIACARAT": 0,
@@ -3991,7 +4087,7 @@ export class AddPosComponent implements OnInit {
       "DUFIX_DWASTAGE": 0,
       "DUFIX_PURITY": 0,
       "DUFIX_PUDIFF": 0,
-      "DUFIX_DKARAT_CODE": "string",
+      "DUFIX_DKARAT_CODE": "",
       "DUFIX_METLA_WT": 0,
       "DUFIX_DWASTAGEPER": 0,
       "DUFIX_DWASTAGEAMOUNTFC": 0,
@@ -4012,11 +4108,11 @@ export class AddPosComponent implements OnInit {
       "GSTMAKINGAMT_CC": 0,
       "GSTOTHERAMT_CC": 0,
       "GSTMETALAMT_FC": 0,
-      "HSNCODE": "string",
-      "LESSTHANCOST_USER": "string",
+      "HSNCODE": "",
+      "LESSTHANCOST_USER": "",
       "NEWUNIQUEID": 0,
       "STOCKCHECKOTHERBRANCH": true,
-      "VATCODE": "string"
+      "VATCODE": ""
 
     };
 
@@ -4934,7 +5030,7 @@ export class AddPosComponent implements OnInit {
       // new fields added - 27-12-2023
       "NEWUNIQUEID": 0,
       "DETAILPCS": 0,
-      "D_REMARKS": "string",
+      "D_REMARKS": "",
       "DONE_REEXPORTYN": true,
 
     };
@@ -5647,8 +5743,8 @@ export class AddPosComponent implements OnInit {
       "DTSALESPERSON_CODE": "0",
 
       // new fields added - 28-12-2023
-      "COMPONENT_PRICE_TYPE": "string",
-      "DTREMARKS": "string",
+      "COMPONENT_PRICE_TYPE": "",
+      "DTREMARKS": "",
       "DUFIX_METALGROSSWT": 0,
       "DUFIX_DIAPCS": 0,
       "DUFIX_DIACARAT": 0,
@@ -5676,7 +5772,7 @@ export class AddPosComponent implements OnInit {
       "DUFIX_DWASTAGE": 0,
       "DUFIX_PURITY": 0,
       "DUFIX_PUDIFF": 0,
-      "DUFIX_DKARAT_CODE": "string",
+      "DUFIX_DKARAT_CODE": "",
       "DUFIX_METLA_WT": 0,
       "DUFIX_DWASTAGEPER": 0,
       "DUFIX_DWASTAGEAMOUNTFC": 0,
@@ -5690,8 +5786,8 @@ export class AddPosComponent implements OnInit {
       "DUFIX_DLABRATECC": 0,
       "DUFIX_DCHARGABLEWEIGHT": 0,
       "GIFT_ITEM": false,
-      "HSNCODE": "string",
-      "LESSTHANCOST_USER": "string",
+      "HSNCODE": "",
+      "LESSTHANCOST_USER": "",
       "NEWUNIQUEID": 0,
       "STOCKCHECKOTHERBRANCH": false,
     };
@@ -6046,29 +6142,7 @@ export class AddPosComponent implements OnInit {
     let dblRounddiff = 0.00;
     let dblVatTot = 0.00;
     let dblVatAmtRd = 0.00;
-    let IgstVatPer: any = this.ordered_items.filter((data) => data.taxPer != 0 && data.taxPer != '');
-    if (IgstVatPer.length > 0) {
-      IgstVatPer = parseFloat(IgstVatPer[0].taxPer);
-    }
-    console.log('=========IgstVatPer===========================');
-    console.log(IgstVatPer);
-    console.log('====================================');
-    if (this.comFunc.compCurrency == "AED" || this.comFunc.compCurrency == "BHD") {
-
-      if (IgstVatPer > 0) {
-        this.vatRoundOffAmt = 0.00;
-         dblRounddiff = this.comFunc.emptyToZero(this.comFunc.CCToFC( this.comFunc.compCurrency, (  (parseFloat(this.order_items_total_tax)  * IgstVatPer)) / (100.0 + IgstVatPer)));
-      
-         dblVatTot = this.comFunc.emptyToZero(this.order_items_total_tax);
-        if ((dblRounddiff - dblVatTot) < 0.05) {
-          this.vatRoundOffAmt =this.comFunc.CCToFC(this.comFunc.compCurrency , (dblRounddiff - dblVatTot));
-          dblVatAmtRd = this.comFunc.emptyToZero(this.vatRoundOffAmt);
-          this.order_items_total_tax  = this.comFunc.emptyToZero( this.order_items_total_tax)  + this.comFunc.emptyToZero( dblVatAmtRd);
-
-        }
-      }
-    }
-    // }
+    let intVocCCRoundoff = 2;
 
     this.order_items_total_gross_amount = net_sum;
     this.order_items_total_discount_amount = 0.0;
@@ -6106,6 +6180,43 @@ export class AddPosComponent implements OnInit {
     );
     // alert('this.order_items_total_net_amount ' + this.order_items_total_net_amount);
 
+
+
+
+    let IgstVatData: any = this.ordered_items.filter((data) => data.taxPer != 0 && data.taxPer != '');
+    let IgstVatPer: number = 0;
+    let taxType;
+    if (IgstVatData.length > 0) {
+      IgstVatPer = parseFloat(IgstVatData[0].taxPer);
+    }
+
+    if (this.comFunc.allbranchMaster.BRANCH_TAXTYPE == 'VAT') {
+
+      if (this.comFunc.compCurrency == "AED" || this.comFunc.compCurrency == "BHD") {
+
+        const vocTypeMaster = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocType, this.mainVocType)
+
+        if (vocTypeMaster != null) {
+          intVocCCRoundoff = vocTypeMaster.ROUNDOFFCC;
+        }
+        if (IgstVatPer > 0) {
+          this.vatRoundOffAmt = 0.00;
+          dblRounddiff = this.comFunc.emptyToZero(this.comFunc.transformDecimalVB(
+            intVocCCRoundoff,
+            ((parseFloat(this.order_items_total_gross_amount) * IgstVatPer) / (100.0 + IgstVatPer))));
+          dblVatTot = this.comFunc.emptyToZero(this.order_items_total_tax);
+
+          if ((dblRounddiff - dblVatTot) < 0.05) {
+            this.vatRoundOffAmt = this.comFunc.CCToFC(this.comFunc.compCurrency, (dblRounddiff - dblVatTot));
+            dblVatAmtRd = this.comFunc.emptyToZero(this.vatRoundOffAmt);
+            this.order_items_total_tax = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, (this.comFunc.emptyToZero(this.order_items_total_tax) + this.comFunc.emptyToZero(dblVatAmtRd)));
+
+          }
+        }
+      }
+    }
+
+
     this.sumReceiptItem();
     // this.prnt_inv_net_total_with_tax = this.order_items_total_net_amount;
 
@@ -6130,6 +6241,9 @@ export class AddPosComponent implements OnInit {
     // this.prnt_received_amount = this.receiptTotalNetAmt;
     // this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);
     // console.log(this.prnt_received_amount_words);
+
+
+
   }
 
   addItemtoList(btn: any) {
@@ -7274,8 +7388,8 @@ export class AddPosComponent implements OnInit {
 
           // new fields added 27-12-2023
           "ATTACHMENT_FROM_SCANNER": true,
-          "GOOD_QUALITY_A_K_A": "string",
-          "LOW_QUALITY_A_K_A": "string",
+          "GOOD_QUALITY_A_K_A": "",
+          "LOW_QUALITY_A_K_A": "",
           "POSKNOWNABOUT": 0
         },
         retailReceipt: this.receiptDetailsList,
@@ -7287,7 +7401,7 @@ export class AddPosComponent implements OnInit {
         "additionalInfo": {
           "giftInfo": [
             {
-              "GIFT_TYPE": this.lineItemForm.value.fcn_li_gift_type,
+              "GIFT_TYPE": this.lineItemForm.value.fcn_li_gift_type || '',
               "GIFT_CODE": this.giftTypeOptions.find(e => e.value == this.lineItemForm.value.fcn_li_gift_type)
             }
           ]
@@ -9462,8 +9576,12 @@ export class AddPosComponent implements OnInit {
       GJVMID: 0, //need
       holdbarcode: false,
       PROMO_CODE: '',
-      VATAMOUNTFCROUND: 0,
-      VATAMOUNTFCROUNDCC: 0,
+      VATAMOUNTFCROUND:  this.comFunc.emptyToZero(this.vatRoundOffAmt),
+      VATAMOUNTFCROUNDCC:
+      this.comFunc.FCToCC(
+        this.comFunc.compCurrency,
+        this.comFunc.emptyToZero(this.vatRoundOffAmt)
+      ),
       LIFETIMEWARRANTY: this.invoiceWiseForm.value.lifeTimeWarr || false,
       SALESORDER_VALIDITYDATE: this.dummyDate, //need
       EmiratesSkywardsMile: false,
@@ -9929,23 +10047,23 @@ export class AddPosComponent implements OnInit {
       // new fields added 27-12-2023
       "DISCOUNT_PERGRM": 0,
       "EXCLUDE_VAT": true,
-      "H_AIRWAYBILL": "string",
-      "H_BASIS": "string",
-      "H_DESTINATION": "string",
-      "H_MINER": "string",
-      "H_SHIPMENTMODE": "string",
-      "H_SHIPPER": "string",
+      "H_AIRWAYBILL": "",
+      "H_BASIS": "",
+      "H_DESTINATION": "",
+      "H_MINER": "",
+      "H_SHIPMENTMODE": "",
+      "H_SHIPPER": "",
       "INTERNALFIXEDQTY": 0,
       "ITEMROUNDVALUEFC": 0,
       "NEWMID": 0,
       "PARTYROUNDVALUEFC": 0,
       "PARTYTRANSWISE_METALVATONMAKING": true,
-      "PLACEOFSUPPLY": "string",
+      "PLACEOFSUPPLY": "",
       "POSPRICESFIXED": true,
-      "SHIPMENTCOMPANY": "string",
-      "SHIPMENTPORT": "string",
+      "SHIPMENTCOMPANY": "",
+      "SHIPMENTPORT": "",
       "TAX_APPLICABLE": true,
-      "TRANSFER_BRANCH": "string",
+      "TRANSFER_BRANCH": "",
       "VATAMOUNTFCROUND": 0,
       "VATAMOUNTFCROUNDCC": 0,
 
@@ -10196,7 +10314,7 @@ export class AddPosComponent implements OnInit {
       "EMIRATESSKYWARDSMILE": true,
       "NEWMID": 0,
       "PLANETRESPONSEFLG": true,
-      "POSREFERENCEREPAIRINVOICE": "string",
+      "POSREFERENCEREPAIRINVOICE": "",
 
       retailSReturnDetails: this.currentsalesReturnItems,
     };
@@ -10856,6 +10974,50 @@ export class AddPosComponent implements OnInit {
     window.open(url, '_blank');
   }
 
+  importSalesEstimation(){
+    this.modalRefePendingSalesEstimation = this.modalService.open(
+      this.salesEstimationModal,
+      {
+        size: "lg",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
+
+    this.modalRefePendingSalesEstimation.result.then((result) => {
+      if (result) {
+        console.log("Result :", result);
+      } else {
+      }
+    },
+      (reason) => {
+        console.log(`Dismissed ${reason}`);
+      }
+    );
+  }
+  importSalesOrder(){
+    this.modalRefePendingSalesOrder = this.modalService.open(
+      this.pendingSalesOrderModal,
+      {
+        size: "lg",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
+
+    this.modalRefePendingSalesOrder.result.then((result) => {
+      if (result) {
+        console.log("Result :", result);
+      } else {
+      }
+    },
+      (reason) => {
+        console.log(`Dismissed ${reason}`);
+      }
+    );
+  }
 
   openUserAttachmentModal() {
 
@@ -10896,7 +11058,6 @@ export class AddPosComponent implements OnInit {
 
       formData.append('VOCNO', this.vocDataForm.value.fcn_voc_no);
       formData.append('VOCTYPE', this.vocType);
-      // formData.append('VOCTYPE', 'MASPOS');
       formData.append('VOCDATE', this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()));
       formData.append('REFMID', this.vocDataForm.value.fcn_voc_no);
       formData.append('ATTACHMENT_PATH', '');
@@ -10989,5 +11150,13 @@ export class AddPosComponent implements OnInit {
   docTypeSelected(e: any) {
     console.log(e);
     this.attachmentForm.controls.docType.setValue(e.CODE);
+  }
+
+  branchSelected(e:any){
+    this.pendingSalesOrderForm.controls.branchTo.setValue(e.BRANCH_CODE);
+  }
+
+  customerCodeSelected(e: any) {
+      this.pendingSalesOrderForm.controls.customerCode.setValue(e.CODE);
   }
 }

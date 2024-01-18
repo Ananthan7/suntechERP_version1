@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CostCenterConsumablesDetailsComponent } from './cost-center-consumables-details/cost-center-consumables-details.component';
 
 @Component({
   selector: 'app-costcentre-consumable',
@@ -29,6 +30,16 @@ export class CostcentreConsumableComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+  }
+
+  openCostCentreConsumables() {
+    const modalRef: NgbModalRef = this.modalService.open(CostCenterConsumablesDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+
   }
 
   costcenterconsumbleForm: FormGroup = this.formBuilder.group({

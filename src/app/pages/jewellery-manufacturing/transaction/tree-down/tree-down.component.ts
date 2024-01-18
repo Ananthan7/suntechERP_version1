@@ -177,13 +177,23 @@ export class TreeDownComponent implements OnInit {
  processCodeSelected(e:any){
   console.log(e);
   this.treeDownFrom.controls.processCode.setValue(e.Process_Code);
+ 
+}
+processCode1Selected(e:any){
+  console.log(e);
   this.treeDownFrom.controls.toProcess.setValue(e.Process_Code)
+ 
 }
 
 WorkerCodeSelected(e:any){
   console.log(e);
   this.treeDownFrom.controls.worker.setValue(e.WORKER_CODE);
+ 
+}
+WorkerCode1Selected(e:any){
+  console.log(e);
   this.treeDownFrom.controls.toWorker.setValue(e.WORKER_CODE);
+ 
 }
 
 userDataSelected(value: any) {

@@ -1,1 +1,228 @@
-<p>component-master works!</p>
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Component Master </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header></modal-header>
+  <div class="container-fluid pt-3">
+    <form [formGroup]="componentmasterForm">
+<div class="col-md-12">
+    <div class="sales-card-body p-2">
+        <div class="row">
+            <div class="col-md-6">
+              
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-2 col-form-label">Code :</label>
+                    <div class="col-sm-3">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="code" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="codedes" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-2 col-form-label">Size Set :</label>
+                    <div class="col-sm-3">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="size_set" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <label for="input" class="col-sm-2 col-form-label">Type :</label>
+                    <div class="col-sm-3">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="type" />
+                        </mat-form-field>
+                        <master-search [MasterSearchData]="typeCodeData"
+                                (newRowClick)="typeCodeSelected($event)"></master-search>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-2 col-form-label">Size :</label>
+                    <div class="col-sm-3">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="size" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <label for="input" class="col-sm-2 col-form-label">Category :</label>
+                    <div class="col-sm-3">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="category" />
+                        </mat-form-field>
+                        <master-search [MasterSearchData]="categoryCodeData"
+                        (newRowClick)="categoryCodeSelected($event)"></master-search>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-2 col-form-label">Shape :</label>
+                    <div class="col-sm-3">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="shape" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <label for="input" class="col-sm-2 col-form-label">Setting Type:</label>
+                    <div class="col-sm-3">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="setting_type" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-2 col-form-label">Remarks :</label>
+                    <div class="col-sm-8">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="remarks" />
+                        </mat-form-field>
+                       
+                    </div>
+                </div>
+               
+            </div>
+
+            <div class="col-md-5">
+                
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-2 col-form-label">Height :</label>
+                    <div class="col-sm-4">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="height" />
+                        </mat-form-field>
+
+                    </div>
+                    <label for="input" class="col-sm-2 col-form-label">Length :</label>
+                    <div class="col-sm-4">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="length" />
+                        </mat-form-field>
+        
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-2 col-form-label">Width :</label>
+                    <div class="col-sm-4">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="width" />
+                        </mat-form-field>
+                
+                    </div>
+                    <label for="input" class="col-sm-2 col-form-label">Radious :</label>
+                    <div class="col-sm-4">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="radious" />
+                        </mat-form-field>
+                
+                    </div>
+                </div>
+
+
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-4 col-form-label">Process Sequence :</label>
+                    <div class="col-sm-7">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="process_seq" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-4 col-form-label">Cost Center :</label>
+                    <div class="col-sm-7">
+                        <mat-form-field style="width: 80%;">
+                            <input type="text" matInput formControlName="cost_center" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+
+                </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-sm-3 d-flex">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                [viewImportBtn]="false"
+                (addClick)="addTableData()"
+                (deleteClick)="deleteTableData()"
+                >
+            </menu-buttons>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <mat-tab-group   [(selectedIndex)]="selectedTabIndex"  >
+                    <mat-tab  label="Components">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                        [allowColumnReordering]="true"
+                        [allowColumnResizing]="true"
+                        [columnAutoWidth]="true">
+                            <dxo-paging [enabled]="false"></dxo-paging>
+                            <dxo-editing mode="cell" [allowUpdating]="true">
+                            </dxo-editing>
+                            <dxo-selection mode="multiple"></dxo-selection>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                            <dxi-column *ngFor="let data of columnhead"
+                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+                                alignment="center" backgroundcolor="#000">
+                            </dxi-column>
+                        </dx-data-grid>
+        </mat-tab>
+
+        <mat-tab  label="Main Design Details"  >
+            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+            [allowColumnReordering]="true"
+            [allowColumnResizing]="true"
+            [columnAutoWidth]="true">
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="cell" [allowUpdating]="true">
+                </dxo-editing>
+                <dxo-selection mode="multiple"></dxo-selection>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <dxi-column *ngFor="let data of columnhead2"
+                    dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+                    alignment="center" backgroundcolor="#000">
+                </dxi-column>
+            </dx-data-grid>
+        </mat-tab>
+    </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="row mb-2">
+        <div class="col-md-5 offset-sm-11">
+            <div class="row">
+                <button type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
+                  Image
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </form>
+  </div>

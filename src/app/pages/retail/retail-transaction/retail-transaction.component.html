@@ -52,7 +52,7 @@
 </div>
 
 
-<ng-template #userAuthModal let-modal modal-lg>
+<ng-template #userAuthModal let-modal modal-md>
     <div class="modal-header" style="padding: 10px 20px">
       <h4 class="modal-title" id="modal-pos-metal">Authentication</h4>
       <button
@@ -68,7 +68,7 @@
       <form [formGroup]="authForm">
         <div class="row">
           <div class="col-md-6">
-            <mat-form-field>
+            <mat-form-field style="width: 100%">
               <mat-label>Username</mat-label>
               <input
                 type="text"
@@ -83,7 +83,7 @@
             </mat-form-field>
           </div>
           <div class="col-md-6">
-            <mat-form-field>
+            <mat-form-field style="width: 100%">
               <mat-label>Password</mat-label>
               <input
                 type="password"
@@ -96,7 +96,38 @@
               </mat-error>
             </mat-form-field>
           </div>
+          
         </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field style="width: 100%">  
+              <mat-label>Reason</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="reason"
+                 appNoEmptySpace
+              />
+              <mat-error *ngIf="authForm.controls.reason.hasError('required')">
+                Reason is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field style="width: 100%">
+              <mat-label>Description</mat-label>
+              <textarea 
+                matInput
+                formControlName="description"
+                 appNoEmptySpace
+                 ></textarea>
+              <mat-error *ngIf="authForm.controls.description.hasError('required')">
+                Description is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        
         <div class="text-right">
           <button
             type="submit"

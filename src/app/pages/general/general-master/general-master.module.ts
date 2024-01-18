@@ -9,6 +9,7 @@ import { LocationMasterComponent } from './location-master/location-master.compo
 import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.component';
 import { EnterMetalDetailsComponent } from './jewellery-master/enter-metal-details/enter-metal-details.component';
 import { StoneDetailsComponent } from './jewellery-master/stone-details/stone-details.component';
+import { PricelistMasterComponent } from './pricelist-master/pricelist-master.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { StoneDetailsComponent } from './jewellery-master/stone-details/stone-de
     LocationMasterComponent,
     JewelleryMasterComponent,
     EnterMetalDetailsComponent,
-    StoneDetailsComponent
+    StoneDetailsComponent,
+    PricelistMasterComponent
   ],
   imports: [
     CommonModule,

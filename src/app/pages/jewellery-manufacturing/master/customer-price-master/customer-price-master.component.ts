@@ -28,7 +28,9 @@ export class CustomerPriceMasterComponent implements OnInit {
   tableData: any[] = [];
   currentDate: any = this.commonService.currentDate;
   branchCode?: String;
-  yearMonth?: String; 
+  yearMonth?: String;
+  value: any;
+  rateInput: any; 
 
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -41,6 +43,9 @@ export class CustomerPriceMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -64,6 +69,8 @@ export class CustomerPriceMasterComponent implements OnInit {
     labourtype:['',[Validators.required]],
     addonrate : [''],
     margin:[''],
+    markup:[''],
+    metal_loss:[''],
     date:[new Date(),''],
     
    });
@@ -74,6 +81,9 @@ export class CustomerPriceMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+
+
   customerCodeScpSelected(e:any){
     console.log(e); 
     this.customerpricemasterForm.controls.customercode.setValue(e.CUSTOMER_CODE);
@@ -94,16 +104,16 @@ export class CustomerPriceMasterComponent implements OnInit {
       "MID": 0,
       "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode || "",
       "DESCRIPTION":  this.customerpricemasterForm.value.desc || "",
-      "GOLD_LOSS_PER": 0,
+      "GOLD_LOSS_PER":  this.customerpricemasterForm.value.metal_loss || "",
       "UPDATE_ON": "2023-11-28T05:47:14.177Z",
       "PRICECODE": this.customerpricemasterForm.value.pricecode || "",
-      "MARGIN_PER":0,
+      "MARGIN_PER": this.customerpricemasterForm.value.margin || "",
       "LAB_TYPE": this.customerpricemasterForm.value.labourtype || "",
-      "MARKUP_PER": 0,
+      "MARKUP_PER":  this.customerpricemasterForm.value.markup || "",
       "CUSTOMER_NAME": "",
       "PRINT_COUNT": 0,
       "VALID_FROM": this.customerpricemasterForm.value.date,
-      "ADD_ON_RATE":0,
+      "ADD_ON_RATE":this.customerpricemasterForm.value.addonrate,
       "CURRENCY_CODE": "stri",
       "CURRENCY_RATE": 0,
       "MAIN_VOCTYPE": "string",

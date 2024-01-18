@@ -656,7 +656,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-3" *ngIf="posPlanetIssuing">
+            <div class="col-md-3 mt-3" *ngIf="posPlanetIssuing">
               <mat-checkbox color="primary" formControlName="tourVatRefuncYN"
                 >Tourist VAT Refund Y/N</mat-checkbox
               >
@@ -671,12 +671,34 @@
           </div>
         </form>
         <div class="text-right">
+          <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            (click)="importSalesEstimation()"
+          >
+            Import Sales Estimation
+          </button>
 
-        <button type="button"  mat-flat-button 
-        style="font-size: 12px; padding: 0px 9px"
-        color="primary" (click)="openUserAttachmentModal()">Add Attachment</button>
-      </div>
-        
+          <button
+            type="button"
+            class="mx-2"
+            mat-flat-button
+            color="primary"
+            (click)="importSalesOrder()"
+          >
+            Import Sales Order
+          </button>
+
+          <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            (click)="openUserAttachmentModal()"
+          >
+            Add Attachment
+          </button>
+        </div>
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
           <mat-tab-group>
@@ -1536,7 +1558,7 @@
                       value="{{ order_received_amount }}" aria-describedby="" placeholder="0.00" readonly /> -->
                 </td>
               </tr>
-            
+
               <tr>
                 <td
                   class="td-w-40"
@@ -1558,7 +1580,6 @@
                       value="{{ order_received_amount }}" aria-describedby="" placeholder="0.00" readonly /> -->
                 </td>
               </tr>
-            
             </table>
           </div>
         </div>
@@ -4819,10 +4840,13 @@
         </div>
 
         <div class="col-md-4 d-flex align-content-center">
-          <mat-form-field style="width: 80%;">
+          <mat-form-field style="width: 80%">
             <input type="text" matInput formControlName="docType" />
           </mat-form-field>
-          <master-search [MasterSearchData]="docTypeData" (newRowClick)="docTypeSelected($event)"></master-search>
+          <master-search
+            [MasterSearchData]="docTypeData"
+            (newRowClick)="docTypeSelected($event)"
+          ></master-search>
           <!-- (newRowClick)="StyleCodeSelected($event)" -->
         </div>
 
@@ -4841,33 +4865,37 @@
               matSuffix
               [for]="expDateAttachment"
             ></mat-datepicker-toggle>
-            <mat-datepicker [startAt]="currentDate" #expDateAttachment></mat-datepicker>
+            <mat-datepicker
+              [startAt]="currentDate"
+              #expDateAttachment
+            ></mat-datepicker>
 
             <mat-error
-              *ngIf="
-              attachmentForm.controls.expDate.hasError(
-                  'required'
-                )
-              "
+              *ngIf="attachmentForm.controls.expDate.hasError('required')"
             >
               Expiry date is <strong>required</strong>
             </mat-error>
           </mat-form-field>
         </div>
       </div>
-      
-      <div class="row" >
+
+      <div class="row">
         <!-- <mat-form-field>
           <mat-label>Attachment</mat-label>
           <input  type="file" (change)="onFileSelected($event)">
         </mat-form-field> -->
         <div class="col-md-6">
-        
-        <label for="attachmentFile" class="form-label">Attachment</label>
-        <input class="form-control" type="file" formControlName="attachmentFile" id="attachmentFile" (change)="onFileSelected($event)" multiple>
-
+          <label for="attachmentFile" class="form-label">Attachment</label>
+          <input
+            class="form-control"
+            type="file"
+            formControlName="attachmentFile"
+            id="attachmentFile"
+            (change)="onFileSelected($event)"
+            multiple
+          />
+        </div>
       </div>
-    </div>
       <div class="text-right">
         <button
           type="submit"
@@ -4880,7 +4908,6 @@
           Save
         </button>
       </div>
-
 
       <div class="row mb-2">
         <div class="col-md-12">
@@ -4925,7 +4952,216 @@
           </dx-data-grid>
         </div>
       </div>
-
     </form>
+  </div>
+</ng-template>
+
+<ng-template #pendingSalesOrderModal let-modal modal-lg>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Pending Sales Order</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="pendingSalesOrderForm">
+      <div class="row">
+        <div class="col-md-5">
+          <mat-form-field style="width: 80%; display:inline-block !important" class="mat-form-field-pending-so">
+            <mat-label>Branch To</mat-label>
+
+            <input type="text" matInput formControlName="branchTo" />
+            <mat-error
+              *ngIf="
+                pendingSalesOrderForm.controls.branchTo.hasError('required')
+              "
+            >
+              Branch To is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <master-search
+            [MasterSearchData]="branchCodeData"
+            (newRowClick)="branchSelected($event)"
+          ></master-search>
+        </div>
+        <!-- <div class="col-md-3">
+          <mat-form-field style="width: 100%">
+            <mat-label>Branch To</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="branchTo"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error
+              *ngIf="
+                pendingSalesOrderForm.controls.branchTo.hasError('required')
+              "
+            >
+              Branch To is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div> -->
+        <div class="col-md-5">
+          <mat-form-field style="width: 100%">
+            <mat-label>Order No.</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="orderNo"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error
+              *ngIf="
+                pendingSalesOrderForm.controls.orderNo.hasError('required')
+              "
+            >
+              Order No. is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        </div>
+      <div class="row">
+        <div class="col-md-5">
+          <mat-form-field style="width: 80%; display:inline-block !important" class="mat-form-field-pending-so">
+            <mat-label>Customer</mat-label>
+
+            <input type="text" matInput formControlName="customerCode" />
+          
+
+            <mat-error
+              *ngIf="
+                pendingSalesOrderForm.controls.customerCode.hasError('required')
+              "
+            >
+              Customer is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <master-search
+          [MasterSearchData]="customerCodeData"
+          (newRowClick)="customerCodeSelected($event)"
+        ></master-search>
+          <!-- <mat-form-field style="width: 100%">
+            <mat-label>Customer</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="customerCode"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error
+              *ngIf="
+                pendingSalesOrderForm.controls.customerCode.hasError('required')
+              "
+            >
+              Customer is <strong>required</strong>
+            </mat-error>
+          </mat-form-field> -->
+        </div>
+        <div class="col-md-6 text-right">
+          <button type="button" mat-flat-button color="primary">Search</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="row mb-2">
+      <div class="col-md-12">
+        <dx-data-grid
+          #dataGrid
+          id="pendingSalesOrdergrid"
+          keyExpr="orderno"
+          [dataSource]="pendingOrderList"
+          [showBorders]="true"
+        >
+          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
+          <dxi-column
+            *ngFor="let data of pendingOrderColumnList"
+            dataField="{{ data.field }}"
+            caption="{{ data.title }}"
+            [allowEditing]="true"
+            alignment="center"
+            backgroundcolor="#000"
+          >
+          </dxi-column>
+        </dx-data-grid>
+      </div>
+    </div>
+
+    <div class="text-right my-3">
+      <button class="mx-2" mat-flat-button color="primary" *ngIf="!viewOnly">
+        Apply
+      </button>
+      <button
+        mat-flat-button
+        color="warn"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Close
+      </button>
+      &nbsp;
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #salesEstimationModal let-modal modal-lg>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Sales Estimation</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row mb-2">
+      <div class="col-md-12">
+        <dx-data-grid
+          #dataGrid
+          id="estimationgrid"
+          keyExpr="orderno"
+          [dataSource]="estimationList"
+          [showBorders]="true"
+        >
+          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
+          <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+          <dxi-column
+            *ngFor="let data of estimationColumnList"
+            dataField="{{ data.field }}"
+            caption="{{ data.title }}"
+            [allowEditing]="true"
+            alignment="center"
+            backgroundcolor="#000"
+          >
+          </dxi-column>
+        </dx-data-grid>
+      </div>
+    </div>
+
+    <div class="text-right my-3">
+      <button mat-flat-button color="primary" class="mx-2" *ngIf="!viewOnly">
+        Apply
+      </button>
+      <button
+        mat-flat-button
+        color="warn"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Close
+      </button>
+      &nbsp;
+    </div>
   </div>
 </ng-template>
