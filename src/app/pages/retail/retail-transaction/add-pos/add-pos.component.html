@@ -2314,7 +2314,7 @@
                     id="customAcCodeList"
                     [readonly]="viewOnly"
                   />
-                  <mat-autocomplete
+                  <mat-autocomplete panelWidth="50%"
                     #customAcCodeList="matAutocomplete"
                     autoActiveFirstOption
                     (optionSelected)="changeCustAcCode($event.option.value)"
@@ -4914,7 +4914,7 @@
           <dx-data-grid
             #dataGrid
             id="gridContainer"
-            keyExpr="KYCrefmid"
+            keyExpr="REFMID"
             [dataSource]="transAttachmentList"
             [showBorders]="true"
           >
