@@ -11,6 +11,10 @@ const routes: Routes = [
     path: 'wholesale-master-grid',
     loadChildren: () => import('../wholesale/wholesale-master/wholesale-master.module').then(m => m.WholesaleMasterModule)
   },
+  {
+    path: 'wholesale-transaction-grid',
+    loadChildren: () => import('../wholesale/wholesale-transaction/wholesale-transaction.module').then(m => m.WholesaleTransactionModule)
+  },
 ];
 
 @NgModule({

@@ -18,24 +18,26 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Price Code:</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="priceCode" />
+                                            <input type="text" matInput formControlName="priceCode" placeholder="Code"
+                                                maxlength="20" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="priceCodeList" />
+                                            <input type="text" matInput formControlName="priceDescription"
+                                                placeholder="Description" />
                                         </mat-form-field>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row align-items-center mb-1">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Price 1 :</label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="priceCode" />
+                                            <input type="text" matInput formControlName="price1" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                            (newRowClick)="priceCodeSelected($event, 'price1')"> </master-search>
                                     </div>
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Price 3 :</label>
                                     <div class="col-md-2">
@@ -43,7 +45,7 @@
                                             <input type="text" matInput formControlName="price3" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                            (newRowClick)="priceCodeSelected($event, 'price3')"> </master-search>
                                     </div>
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Price 5 :</label>
                                     <div class="col-md-2">
@@ -51,7 +53,7 @@
                                             <input type="text" matInput formControlName="price5" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                            (newRowClick)="priceCodeSelected($event, 'price5')"> </master-search>
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -61,7 +63,7 @@
                                             <input type="text" matInput formControlName="price2" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                            (newRowClick)="priceCodeSelected($event, 'price2')"> </master-search>
                                     </div>
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Price 4 :</label>
                                     <div class="col-md-2">
@@ -69,7 +71,7 @@
                                             <input type="text" matInput formControlName="price4" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceOneCodeSelected($event)"> </master-search>
+                                            (newRowClick)="priceCodeSelected($event, 'price4')"> </master-search>
                                     </div>
                                 </div>
                             </div>
@@ -78,8 +80,8 @@
                 </div>
             </div>
 
-          
-              
-            </form>
-            </div>
-            </div>
+
+
+        </form>
+    </div>
+</div>
