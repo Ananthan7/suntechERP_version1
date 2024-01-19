@@ -5,7 +5,7 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header></modal-header>
+  <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
   <div class="container-fluid pt-3">
     <form [formGroup]="componentmasterForm">
 <div class="col-md-12">
@@ -24,7 +24,8 @@
                         <mat-form-field style="width: 80%;">
                             <input type="text" matInput formControlName="codedes" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="codeCodeData" (newRowClick)="codeCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
 
@@ -32,9 +33,10 @@
                     <label for="input" class="col-sm-2 col-form-label">Size Set :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 80%;">
-                            <input type="text" matInput formControlName="size_set" />
+                            <input type="text" matInput formControlName="sizeSet" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="sizeSetCodeData" (newRowClick)="sizeSetCodeSelected($event)">
+                        </master-search>
                     </div>
                     <label for="input" class="col-sm-2 col-form-label">Type :</label>
                     <div class="col-sm-3">
@@ -52,7 +54,8 @@
                         <mat-form-field style="width: 80%;">
                             <input type="text" matInput formControlName="size" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="sizeCodeData" (newRowClick)="sizeCodeSelected($event)">
+                        </master-search>
                     </div>
                     <label for="input" class="col-sm-2 col-form-label">Category :</label>
                     <div class="col-sm-3">
@@ -70,14 +73,16 @@
                         <mat-form-field style="width: 80%;">
                             <input type="text" matInput formControlName="shape" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="shapeCodeData" (newRowClick)="shapeCodeSelected($event)">
+                        </master-search>
                     </div>
                     <label for="input" class="col-sm-2 col-form-label">Setting Type:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 80%;">
-                            <input type="text" matInput formControlName="setting_type" />
+                            <input type="text" matInput formControlName="settingType" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="settingTypeCodeData" (newRowClick)="settingTypeCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
 
@@ -134,9 +139,10 @@
                     <label for="input" class="col-sm-4 col-form-label">Process Sequence :</label>
                     <div class="col-sm-7">
                         <mat-form-field style="width: 80%;">
-                            <input type="text" matInput formControlName="process_seq" />
+                            <input type="text" matInput formControlName="processSeq" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="processSeqCodeData" (newRowClick)="processSeqCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
 
@@ -144,9 +150,10 @@
                     <label for="input" class="col-sm-4 col-form-label">Cost Center :</label>
                     <div class="col-sm-7">
                         <mat-form-field style="width: 80%;">
-                            <input type="text" matInput formControlName="cost_center" />
+                            <input type="text" matInput formControlName="costCenter" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="costCenterCodeData" (newRowClick)="costCenterCodeSelected($event)">
+                        </master-search>
                     </div>
                 </div>
 
