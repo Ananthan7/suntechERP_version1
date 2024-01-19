@@ -532,7 +532,8 @@ export class DiamondSalesorderComponent implements OnInit {
       if (item.CURRENCY_CODE == this.PartyDetailsOrderForm.value.ItemCurrency) {
         COSTFC = item.STOCK_FCCOST
       } else {
-        COSTFC = this.commonService.CCToFC((Number(this.PartyDetailsOrderForm.value.ItemCurrencyRate)), Number(item.STOCK_LCCOST))
+        COSTFC = Number(item.STOCK_LCCOST)
+        // COSTFC = this.commonService.CCToFC((Number(this.PartyDetailsOrderForm.value.ItemCurrencyRate)), Number(item.STOCK_LCCOST))
       }
       detailArrayValues = {
         "UNIQUEID": 0,
@@ -750,6 +751,8 @@ export class DiamondSalesorderComponent implements OnInit {
       return
     }
     this.commonService.showSnackBarMsg('Loading....')
+    console.log(this.postDataToSave,'this.postDataToSave');
+    
     let API = 'DaimondSalesOrder/InsertDaimondSalesOrder'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, this.postDataToSave[0])
       .subscribe((result) => {
