@@ -15,7 +15,6 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class ComponentMasterComponent implements OnInit {
 
-  subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
 
@@ -35,22 +34,24 @@ export class ComponentMasterComponent implements OnInit {
    
   }
 
+  private subscriptions: Subscription[] = [];
+
   componentmasterForm: FormGroup = this.formBuilder.group({
     code: [""],
     codedes: [""],
-    size_set : [""],
+    sizeSet : [""],
     size: [""],
     type : [""],
     category: [""],
     shape: [""],
-    setting_type: [""],
+    settingType: [""],
     remarks : [""],
     height : [""],
     length  : [""],
     width  : [""],
     radious  : [""],
-    process_seq : [""],
-    cost_center  : [""],
+    processSeq : [""],
+    costCenter  : [""],
   });
   
   categoryCodeData: MasterSearchModel = {
@@ -69,6 +70,24 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.category.setValue(e.CODE);
   }
 
+  codeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,    
+    LOAD_ONCLICK: true,
+  }
+  codeCodeSelected(e:any){
+    console.log(e);
+    this.componentmasterForm.controls.code.setValue(e.PREFIX_CODE);
+    this.componentmasterForm.controls.codedes.setValue(e.DESCRIPTION); 
+  }
+
   typeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -84,7 +103,105 @@ export class ComponentMasterComponent implements OnInit {
     console.log(e);
     this.componentmasterForm.controls.type.setValue(e.CODE);
   }
+
+  sizeSetCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 90,
+    SEARCH_FIELD: 'COMPSET_CODE',
+    SEARCH_HEADING: 'Size set',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COMPSET_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  sizeSetCodeSelected(e:any){
+    console.log(e);
+    this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
+  }
+
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'COMPSIZE_CODE',
+    SEARCH_HEADING: 'Size',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COMPSIZE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  sizeCodeSelected(e:any){
+    console.log(e);
+    this.componentmasterForm.controls.size.setValue(e.COMPSIZE_CODE);
+  }
+
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Shape',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  shapeCodeSelected(e:any){
+    console.log(e);
+    this.componentmasterForm.controls.shape.setValue(e.CODE);
+  }
+
+  settingTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Setting Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  settingTypeCodeSelected(e:any){
+    console.log(e);
+    this.componentmasterForm.controls.settingType.setValue(e.CODE);
+  }
+
+  processSeqCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 93,
+    SEARCH_FIELD: 'SEQ_CODE',
+    SEARCH_HEADING: 'Sequence ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SEQ_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  processSeqCodeSelected(e:any){
+    console.log(e);
+    this.componentmasterForm.controls.processSeq.setValue(e.SEQ_CODE);
+  }
+
+  costCenterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_HEADING: 'Cost Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  costCenterCodeSelected(e:any){
+    console.log(e);
+    this.componentmasterForm.controls.costCenter.setValue(e.COST_CODE);
+  }
   
+
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -98,9 +215,6 @@ export class ComponentMasterComponent implements OnInit {
 
 
   }
-
- 
-
 
 
   formSubmit(){
@@ -117,27 +231,27 @@ export class ComponentMasterComponent implements OnInit {
     let API = 'DesignMaster/InsertDesignMaster'
     let postData = {
       "DESIGN_CODE": this.componentmasterForm.value.code || "",
-      "DESIGN_DESCRIPTION":  this.componentmasterForm.value.designdesc || "",
+      "DESIGN_DESCRIPTION":  this.componentmasterForm.value.codedes || "",
       "CURRENCY_CODE": "string",
       "CC_RATE": 0,
-      "COST_CODE": "string",
+      "COST_CODE": this.componentmasterForm.value.costCenter|| "",
       "TYPE_CODE": this.componentmasterForm.value.type|| "",
       "CATEGORY_CODE": this.componentmasterForm.value.category|| "",
-      "SUBCATEGORY_CODE": this.componentmasterForm.value.subcategory || "",
-      "BRAND_CODE":  this.componentmasterForm.value.brand || "",
-      "COUNTRY_CODE":  this.componentmasterForm.value.country || "",
+      "SUBCATEGORY_CODE": "string",
+      "BRAND_CODE":  "string",
+      "COUNTRY_CODE":  "string",
       "SUPPLIER_CODE": "string",
       "SUPPLIER_REF": "string",
-      "SET_REF":this.componentmasterForm.value.setref || "",
+      "SET_REF":"string",
       "PICTURE_NAME": "string",
-      //"PICTURE_NAME1": "string",
+      "PICTURE_NAME1": "",
       "STOCK_FCCOST": 0,
       "STOCK_LCCOST": 0,
-      "PRICE1PER": this.componentmasterForm.value.price1 || "",
-      "PRICE2PER": this.componentmasterForm.value.price2 || "",
-      "PRICE3PER": this.componentmasterForm.value.price3 || "",
-      "PRICE4PER": this.componentmasterForm.value.price4 || "",
-      "PRICE5PER":this.componentmasterForm.value.price5 || "",
+      "PRICE1PER": "",
+      "PRICE2PER":"string",
+      "PRICE3PER": "string",
+      "PRICE4PER": "string",
+      "PRICE5PER": "string",
       "PRICE1FC": 0,
       "PRICE1LC": 0,
       "PRICE2FC": 0,
@@ -159,10 +273,10 @@ export class ComponentMasterComponent implements OnInit {
       "CHARGE5FC": 0,
       "CHARGE5LC": 0,
       "SHORT_ID": "string",
-      "COLOR":  this.componentmasterForm.value.color || "",
-      "CLARITY":  this.componentmasterForm.value.clarity || "",
+      "COLOR":  "string",
+      "CLARITY": "string",
       "SIZE":  this.componentmasterForm.value.size || "",
-      "SIEVE":  this.componentmasterForm.value.sieve || "",
+      "SIEVE":  "string",
       "SHAPE":  this.componentmasterForm.value.shape || "",
       "GRADE": "string",
       "FLUOR": "string",
@@ -279,7 +393,7 @@ export class ComponentMasterComponent implements OnInit {
       "DREFERENCE": "string",
       "DWIDTH": 0,
       "DTHICKNESS": 0,
-      "METAL_WT":this.componentmasterForm.value.metalwt || "",
+      "METAL_WT": 0,
       "CAD_DESIGNER": "string",
       "DESIGNER": "string",
       "INSTRUCTOR": "string",
@@ -327,8 +441,8 @@ export class ComponentMasterComponent implements OnInit {
       "METAL_GROSSWT": 0,
       "METAL_VALUEFC": 0,
       "METAL_VALUECC": 0,
-      "PAIR_REF": this.componentmasterForm.value.pairref || "",
-      "SURFACEPROPERTY": this.componentmasterForm.value.surface || "",
+      "PAIR_REF": "string",
+      "SURFACEPROPERTY": "string",
       "WIDTH": 0,
       "THICKNESS": 0,
       "ENGRAVING_TEXT": "string",
@@ -596,8 +710,8 @@ export class ComponentMasterComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
- 
   }
+
   update(){
     if (this.componentmasterForm.invalid) {
       this.toastr.error('select all required fields')
@@ -621,7 +735,7 @@ export class ComponentMasterComponent implements OnInit {
       "SUPPLIER_REF": "string",
       "SET_REF": "string",
       "PICTURE_NAME": "string",
-      //"PICTURE_NAME1": "string",
+      "PICTURE_NAME1": "string",
       "STOCK_FCCOST": 0,
       "STOCK_LCCOST": 0,
       "PRICE1PER": "string",
