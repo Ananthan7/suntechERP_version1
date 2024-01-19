@@ -5,12 +5,14 @@ import { WholesaleTransactionRoutingModule } from './wholesale-transaction.routi
 import { WholesaleTransactionComponent } from './wholesale-transaction.component';
 import { JewelleryAssemblingComponent } from './jewellery-assembling/jewellery-assembling.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling/jewellery-assembling-details/jewellery-assembling-details.component';
 
 
 @NgModule({
   declarations: [
     WholesaleTransactionComponent,
-    JewelleryAssemblingComponent
+    JewelleryAssemblingComponent,
+    JewelleryAssemblingDetailsComponent
   ],
   imports: [
     CommonModule,
