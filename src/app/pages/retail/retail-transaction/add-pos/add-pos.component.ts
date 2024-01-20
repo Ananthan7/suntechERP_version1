@@ -7412,6 +7412,40 @@ export class AddPosComponent implements OnInit {
             }
           ]
         },
+        "doctranslog": [ // doubt
+          {
+            "MID": 0,
+            "VOCTYPE": this.vocType,
+            "REFMID": this.vocDataForm.value.fcn_voc_no,
+            "USERNAME": this.strUser,
+            "MODE": "",
+            "DATETIME": this.comFunc.cDateFormat(new Date()),
+            "REMARKS": "",
+            "SYSTEMNAME": "",
+            "VOCNO": 0,
+            "VOCDATE": this.comFunc.cDateFormat(this.vocDataForm.value.vocdate),
+            "BRANCH_CODE": this.strBranchcode,
+            "MODECHECKED": false,
+            "FROM_BRANCH_CODE": this.strBranchcode,
+            "AUTH_TOTAL_AMT": 0,
+            "AUTH_MAKING_AMT": 0,
+            "AUTH_METAL_AMT": 0,
+            "AUTH_GROSSWT": 0,
+            "AUTH_PUREWT": 0,
+            "TVMODECHECKED": false,
+            "STOCK_CODE": "",
+            "YEARMONTH": this.baseYear,
+            "UNIQUEID": "",
+            "GROUPSUMMARY": "",
+            "PRINTMODECHECKED": false,
+            "PARTY_CODE": "",
+            "TRANS_REMARKS": "",
+            "TOTAL_AMOUNTCC": 0,
+            "AUTHORISED_TIME": this.comFunc.cDateFormat(new Date()),
+            "AUTHORISED_PERSON": "",
+            "EXEVERSIONMONTHYEAR": ""
+          }
+        ]
         // "transattachment": [
         //   {
         //     "VOCNO": 0,
@@ -7446,7 +7480,8 @@ export class AddPosComponent implements OnInit {
       this.snackBar.open('Processing...');
 
 
-      // this.submitAttachment();
+      // this.submitAttachment(); // added here for testing purpose
+      this.posPlanetFileInsert(); // added here for testing purpose
 
 
       if (this.editOnly) {
@@ -7464,6 +7499,7 @@ export class AddPosComponent implements OnInit {
 
                   // this.close('reloadMainGrid');
 
+                  this.posPlanetFileInsert();
                   this.submitAttachment();
 
                 } else {
@@ -7491,6 +7527,7 @@ export class AddPosComponent implements OnInit {
 
                 // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
 
+                this.posPlanetFileInsert();
                 this.submitAttachment();
 
                 this.snackBar.open('POS Saved', 'OK');
@@ -11227,32 +11264,37 @@ export class AddPosComponent implements OnInit {
   }
 
   posPlanetFileInsert() {
+    const items = this.currentLineItems.map((data: any)=> {
+      return {
+              "Description": data.STOCK_DOCDESC,
+              "Quantity": data.PCS || '', //doubt
+              "GrossAmount": data.GROSS_AMT, //doubt
+              "Code": data.STOCK_CODE, //doubt
+              "UnitPrice": 0, //doubt
+              "NetAmount": 0, 
+              "VatRate": data.VAT_PER, //doubt
+              "VatCode": data.VATCODE,
+              "VatAmount": data.VAT_AMOUNTFC, 
+              "MerchandiseGroup": 0, //doubt
+              "TaxRefundEligible": false, //doubt
+              "SerialNumber": "" //doubt
+      }
+    });
     let postData = {
       "Version": environment.app_version,
-      "ReceiptNumber": this.vocDataForm.value.fcn_voc_no,
+      "ReceiptNumber": this.vocDataForm.value.fcn_voc_no.toString(),
       "Date": this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()) || '',
       "Terminal": "",
       "Type": "",
-      "Order": { // need to work for this
-        "Total": 0,
-        "TotalBeforeVAT": 0,
-        "VatIncl": 0,
-        "Items": [
-          {
-            "Description": "",
-            "Quantity": 0,
-            "GrossAmount": 0,
-            "Code": "string",
-            "UnitPrice": 0,
-            "NetAmount": 0,
-            "VatRate": 0,
-            "VatCode": "",
-            "VatAmount": 0,
-            "MerchandiseGroup": 0,
-            "TaxRefundEligible": true,
-            "SerialNumber": ""
-          }
-        ]
+      "Order": { 
+        "Total": this.order_items_total_gross_amount,
+        "TotalBeforeVAT":  this.comFunc.transformDecimalVB(
+          this.comFunc.amtDecimals,
+          this.order_items_total_tax
+        ),
+        "VatIncl": 0, //doubt
+        "Items": items,
+
       },
       "Shopper": {
         "FirstName": this.customerDetailForm.value.fcn_customer_detail_fname || '',
