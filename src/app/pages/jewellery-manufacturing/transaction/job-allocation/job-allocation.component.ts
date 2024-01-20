@@ -1,13 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClient } from '@angular/common/http';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-job-allocation',
@@ -18,12 +18,12 @@ import { HttpClient } from '@angular/common/http';
 
 export class JobAllocationComponent implements OnInit {
   gridData: any[] = [];
-
+  @ViewChild('dataGrid', { static: false }) dataGrid!: DxDataGridComponent;
   branchCode?: String;
   yearMonth?: String;
   @Input() content!: any; 
   tableData: any[] = [];  
-   columnheadItemDetails:any[] = ['Design','Order.No','Process','Worker','Doc.Attachment','Std.Time','Priority','Customer','Job Number','Unq.Job.Id','Pcs',''];
+  columnheadItemDetails:any[] = [];
   divisionMS: any = 'ID';
   private subscriptions: Subscription[] = [];
   constructor(private activeModal: NgbActiveModal,
@@ -32,19 +32,25 @@ export class JobAllocationComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-    private http: HttpClient,) { }
+    ) {
+      this.dataGrid = {} as DxDataGridComponent;
+
+     }
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
 
     console.log(this.content);
-    if(this.content){
+    console.log(Object.keys(this.content));
+    
+    if(Object.keys(this.content)?.length != 0){
       this.setFormValues()
     }
-
-    this.refreshGridData();
+       
   }
+
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -85,7 +91,8 @@ export class JobAllocationComponent implements OnInit {
       vocDate:[''],
       userName:[''],
       date:[''],
-      remarks:['']
+      remarks:[''],
+      job:['']
   });
 
   formSubmit(){
@@ -313,12 +320,26 @@ export class JobAllocationComponent implements OnInit {
       }
     }
 
-    refreshGridData(): void {
-      const apiUrl = 'http://94.200.156.234:85/api/WebEnquiry/DiamondSalesOrder'; 
+
+  refreshGridData(){
+    
+// console.log(this.jobalocationFrom.value.job);
+
+    if(this.jobalocationFrom.value.job == 1){
+      const apiUrl = 'DaimondSalesOrder/GetDaimondSalesOrderList/DMCC/DSO/2023';
   
-      this.http.get(apiUrl).subscribe((data: any) => {
+      let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
+        if (resp.status == 'Success') {
+          this.gridData = resp.response
+          // localStorage.setItem('userRole', resp['response']['GROUP_NAME']);
+          // localStorage.setItem('userLang', resp['response']['USER_LANGUAGE']);
+        
+        }
        
-        this.gridData = data;
       });
-    }
+  }else{
+    this.gridData = [];
   }
+}
+
+}
