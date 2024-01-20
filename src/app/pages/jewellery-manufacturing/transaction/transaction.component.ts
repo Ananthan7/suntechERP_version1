@@ -30,6 +30,7 @@ import { DiamondJobBoqIssueComponent } from './diamond-job-boq-issue/diamond-job
 import { DiamondJobBoqReceiptComponent } from './diamond-job-boq-receipt/diamond-job-boq-receipt.component';
 import { JobAllocationComponent } from './job-allocation/job-allocation.component';
 import { JobTransactionsComponent } from './job-transactions/job-transactions.component';
+import { ProcessTransferNewComponent } from './process-transfer-new/process-transfer-new.component';
 
 @Component({
   selector: 'app-transaction',
@@ -96,6 +97,7 @@ export class TransactionComponent implements OnInit {
       'DiamondJobBoqReceiptComponent': DiamondJobBoqReceiptComponent,
       'JobAllocationComponent':JobAllocationComponent,
       'JobTransactionsComponent':JobTransactionsComponent,
+      'ProcessTransferNewComponent':ProcessTransferNewComponent,
   
       // Add components and update in operationals > menu updation grid form component name
     }

@@ -40,6 +40,7 @@ export class MasterComponent implements OnInit {
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
   private componentDbList: any = {}
+  srNo:any=0;
   //subscription variable
   subscriptions$!: Subscription;
   constructor(
@@ -98,6 +99,7 @@ export class MasterComponent implements OnInit {
         duration: 3000,
       });
     }
+    this.srNo= this.srNo+1;
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
       backdrop: 'static',//'static'
@@ -112,7 +114,8 @@ export class MasterComponent implements OnInit {
     }, (reason) => {
       // Handle modal dismissal (if needed)
     });
-    modalRef.componentInstance.content = data;
+    modalRef.componentInstance.content = data,this.srNo;
+    
   }
 
   /**USE: to get table data from API */

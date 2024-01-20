@@ -39,7 +39,7 @@ export class RetailTransactionComponent implements OnInit {
   modalReferenceUserAuth!: NgbModalRef;
 
   authForm: FormGroup = this.formBuilder.group({
-    username: [localStorage.getItem('username'), Validators.required],
+    // username: [localStorage.getItem('username'), Validators.required],
     password: ['', Validators.required],
     reason: ['', Validators.required],
     description: ['', Validators.required],
@@ -79,7 +79,7 @@ export class RetailTransactionComponent implements OnInit {
     if (isAuth)
       this.openModalView(str)
     else
-      this.snackBar.open('Authentication Failed');
+      this.snackBar.open('Authentication Failed', 'OK');
 
   }
   /**USE: open form components in modal*/
@@ -185,7 +185,8 @@ export class RetailTransactionComponent implements OnInit {
     if (!this.authForm.invalid) {
       let API = 'ValidatePassword/ValidateEditDelete';
       const postData = {
-        "Username": this.authForm.value.username,
+        // "Username": this.authForm.value.username,
+        "Username": localStorage.getItem('username') || '',
         "Password": this.authForm.value.password
       };
       let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {

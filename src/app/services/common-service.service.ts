@@ -90,8 +90,8 @@ export class CommonServiceService {
     }
     if (typeof number === 'number' && !isNaN(number)) {
       number = number.toString(10);
-    } 
-    
+    }
+
     //Creates an array with the number's digits and
     //adds the necessary amount of 0 to make it fully
     //divisible by 3
@@ -220,7 +220,7 @@ export class CommonServiceService {
     //Joins all the string into one and returns it
     return digitsGroup.join(' ');
   }
-  
+
   getMenuList() {
     let item: any = localStorage.getItem('MENU_LIST')
     return JSON.parse(item)
@@ -366,15 +366,14 @@ export class CommonServiceService {
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
     return result.length > 0 ? result[0]?.CONV_RATE : 0;
   }
-  CCToFC(currency: any, amount: any) {
-
-    let rate = this.getCurrRate(currency);
+  CCToFC(currency: any, amount: any, rate: any = null) {
+    rate = rate || this.getCurrRate(currency);
     currency = currency;
     rate = typeof (rate) == 'number' ? this.emptyToZero(rate) : this.emptyToZero(rate);
     amount = typeof (amount) == 'number' ? this.emptyToZero(amount) : this.emptyToZero(amount);
     let convertedAmount = 0;
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
-    if (result.MUL_DIV == 'M') {
+    if (result[0].MUL_DIV == 'M') {
       convertedAmount = amount / rate;
       return convertedAmount;
     } else {
@@ -382,6 +381,25 @@ export class CommonServiceService {
       return convertedAmount;
     }
   }
+  // CCToFC(currency: any, amount: any) {
+
+  //   let rate = this.getCurrRate(currency);
+  //   currency = currency;
+  //   rate = typeof (rate) == 'number' ? this.emptyToZero(rate) : this.emptyToZero(rate);
+  //   amount = typeof (amount) == 'number' ? this.emptyToZero(amount) : this.emptyToZero(amount);
+  //   let convertedAmount = 0;
+  //   const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
+  //  console.log('=========cctofc result===========================');
+  //  console.log(result, rate);
+  //  console.log('====================================');
+  //   if (result[0].MUL_DIV == 'M') {
+  //     convertedAmount = amount / rate;
+  //     return convertedAmount;
+  //   } else {
+  //     convertedAmount = amount * rate;
+  //     return convertedAmount;
+  //   }
+  // }
   // Transform number to decimal
   transformDecimalVB(format: any, num: any) {
     // alert((42385.6075).toFixed(1))
@@ -400,8 +418,8 @@ export class CommonServiceService {
     // return parseFloat( parseFloat(num).toFixed(format));
   }
 
-  FCToCC(currency: any, amount: any) {
-    let rate = this.getCurrRate(currency);
+  FCToCC(currency: any, amount: any, rate: any = null) {
+    rate = rate || this.getCurrRate(currency);
     currency = currency;
     rate = typeof (rate) == 'number' ? rate : rate;
     amount = typeof (amount) == 'number' ? amount : this.emptyToZero(amount);
@@ -409,7 +427,10 @@ export class CommonServiceService {
     let convertedAmount = 0;
 
     const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
-    if (result.MUL_DIV == 'M') {
+    console.log('=====fctocc result===============================');
+    console.log(result, rate);
+    console.log('====================================');
+    if (result[0].MUL_DIV == 'M') {
       convertedAmount = amount / rate;
 
       return this.transformDecimalVB(this.amtDecimals, convertedAmount);
@@ -418,6 +439,27 @@ export class CommonServiceService {
       return this.transformDecimalVB(this.amtDecimals, convertedAmount);
     }
   }
+  // FCToCC(currency: any, amount: any) {
+  //   let rate = this.getCurrRate(currency);
+  //   currency = currency;
+  //   rate = typeof (rate) == 'number' ? rate : rate;
+  //   amount = typeof (amount) == 'number' ? amount : this.emptyToZero(amount);
+
+  //   let convertedAmount = 0;
+
+  //   const result = this.allBranchCurrency.filter((data: any) => data.CURRENCY_CODE == currency);
+  //   console.log('=====fctocc result===============================');
+  //   console.log(result, rate);
+  //   console.log('====================================');
+  //   if (result[0].MUL_DIV == 'M') {
+  //     convertedAmount = amount / rate;
+
+  //     return this.transformDecimalVB(this.amtDecimals, convertedAmount);
+  //   } else {
+  //     convertedAmount = amount * rate;
+  //     return this.transformDecimalVB(this.amtDecimals, convertedAmount);
+  //   }
+  // }
 
   setCompParaValues() {
     this.allCompanyParams.map((data: any) => {
@@ -727,7 +769,7 @@ export class CommonServiceService {
   }
   /**purpose: Get a date time as a string, using the ISO standard*/
   formatDateTime(date: any) {
-    if(!date) return '';
+    if (!date) return '';
     return date.toISOString()
   }
 
@@ -845,13 +887,13 @@ export class CommonServiceService {
     return this.datePipe.transform(value, 'yyyy-MM-ddTHH:mm:ss');
   }
 
-  getVoctypeMasterByVocTypeMain(branch: string, voctype: string, mainVocType: string){
-    const res = this.VocTypeMasterData.filter((data: any)=> 
+  getVoctypeMasterByVocTypeMain(branch: string, voctype: string, mainVocType: string) {
+    const res = this.VocTypeMasterData.filter((data: any) =>
       data.BRANCH_CODE == branch && data.VOCTYPE == voctype && data.MAIN_VOCTYPE == mainVocType
     );
-    if(res.length > 0){
+    if (res.length > 0) {
       return res[0];
     }
-      return null;
+    return null;
   }
 }

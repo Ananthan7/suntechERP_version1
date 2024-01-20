@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,6 +7,9 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { DesignSequenceComponent } from './design-sequence/design-sequence.component';
+import { LabourChargesDetailsComponent } from './labour-charges-details/labour-charges-details.component';
+import { DesignTransactionComponent } from './design-transaction/design-transaction.component';
 
 
 @Component({
@@ -60,6 +63,7 @@ export class DesignMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private modalService: NgbModal,
   ) { }
 
   close(data?: any) {
@@ -111,6 +115,33 @@ export class DesignMasterComponent implements OnInit {
     metalwt: [''],
     prefix: ['',[Validators.required]],
   });
+
+  openaddDesignSequence() {
+    const modalRef: NgbModalRef = this.modalService.open(DesignSequenceComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openaddLabourChargesDetails() {
+    const modalRef: NgbModalRef = this.modalService.open(LabourChargesDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openaddDesignTransaction() {
+    const modalRef: NgbModalRef = this.modalService.open(DesignTransactionComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
 
   adddata() {
     let length = this.tableData.length;
@@ -301,7 +332,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -317,7 +348,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Category Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -333,7 +364,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Subcategory Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -349,7 +380,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Brand Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'BRAND MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -365,7 +396,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Style Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -397,7 +428,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -413,7 +444,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Country Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -429,7 +460,7 @@ removedatas(){
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

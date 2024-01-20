@@ -28,7 +28,10 @@ export class CustomerPriceMasterComponent implements OnInit {
   tableData: any[] = [];
   currentDate: any = this.commonService.currentDate;
   branchCode?: String;
-  yearMonth?: String; 
+  yearMonth?: String;
+  value: any;
+  rateInput: any; 
+  text="Deduct";
 
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -41,6 +44,10 @@ export class CustomerPriceMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
+
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -76,6 +83,18 @@ export class CustomerPriceMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  change(event:any){
+    console.log(event);
+    this.text = event.target.value;
+    if(event.target.checked == true){
+       this.text="Add";
+    }else{
+      this.text="Deduct";
+    }
+  }
+
+
   customerCodeScpSelected(e:any){
     console.log(e); 
     this.customerpricemasterForm.controls.customercode.setValue(e.CUSTOMER_CODE);

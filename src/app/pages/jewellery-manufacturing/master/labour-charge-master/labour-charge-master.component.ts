@@ -14,8 +14,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./labour-charge-master.component.scss']
 })
 export class LabourChargeMasterComponent implements OnInit {
-  @Input() content!: any; 
-  viewMode:boolean = false;
+  @Input() content!: any;
+  viewMode: boolean = false;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branch = localStorage.getItem('userbranch');
@@ -25,64 +25,64 @@ export class LabourChargeMasterComponent implements OnInit {
   labourTypeList: any[] = [];
   DialabourTypeList: any[] = [];
   unitList: any[] = [];
-  currencyList : any[] = [];
+  currencyList: any[] = [];
   settingTypeList: any[] = [];
   divisionMS: any = 'ID';
 
 
   diamondlabourMasterForm: FormGroup = this.formBuilder.group({
-    mid:[],
+    mid: [],
     division: [''],
     labour_code: [''],
     labour_description: [''],
     shape: [''],
-    process: ['',[Validators.required]],
+    process: ['', [Validators.required]],
     size_from: [''],
     labour_ac: [''],
     size_to: [''],
-    cost_rate : ['',[Validators.required]],
-    sieve : [''],
-    selling_rate : [''],
-    sieve_desc : [''],
-    selling : ['',[Validators.required]],
-    ctWtFrom : [''],
-    ctWtTo : [''],
-    settingType : [''],
-    labourType : [''],
-    unitList : [''],
-    method : [''],
-    currency : [''],
-    accessories : [''],
-   
+    cost_rate: ['', [Validators.required]],
+    sieve: [''],
+    selling_rate: [''],
+    sieve_desc: [''],
+    selling: ['', [Validators.required]],
+    ctWtFrom: [''],
+    ctWtTo: [''],
+    settingType: [''],
+    labourType: [''],
+    unitList: [''],
+    method: [''],
+    currency: [''],
+    accessories: [''],
+
   });
 
   metallabourMasterForm: FormGroup = this.formBuilder.group({
-    mid:[],
+    mid: [],
     metalDivision: [''],
     stock_code: [''],
     metallabour_code: [''],
     metallabour_description: [''],
     metallabourType: [''],
     metalcurrency: [''],
-    karat: ['',[Validators.required]],
+    karat: ['', [Validators.required]],
     labourAc: [''],
-    color : [''],
-    costRate : [''],
-    typecode : ['',[Validators.required]],
-    metalselling_rate : [''],
-    category : ['',[Validators.required]],
-    metalSelling : [''],
-    subCategory : [''],
-    wastage : ['',[Validators.required]],
-    brand : ['',[Validators.required]],
-    metalunitList : [''],
-    purity : [''],
-    wtFrom : [''],
-    wtTo : [''],
+    color: [''],
+    costRate: [''],
+    typecode: ['', [Validators.required]],
+    metalselling_rate: [''],
+    category: ['', [Validators.required]],
+    metalSelling: [''],
+    subCategory: [''],
+    wastage: ['', [Validators.required]],
+    brand: ['', [Validators.required]],
+    metalunitList: [''],
+    purity: [''],
+    wtFrom: [''],
+    wtTo: [''],
     wtFromdeci: ['.000'],
     wtToDeci: ['.000'],
-    onGrossWt : [false,[Validators.required]],
-    forDesignOnly : [false,[Validators.required]]
+    onGrossWt: [false, [Validators.required]],
+    forDesignOnly: [false, [Validators.required]]
   });
 
   divisionCodeData: MasterSearchModel = {
@@ -97,19 +97,19 @@ export class LabourChargeMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
- shapeCodeData: MasterSearchModel = {
+  shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 33,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SHAPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-processCodeData: MasterSearchModel = {
+  processCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 20,
@@ -123,14 +123,14 @@ processCodeData: MasterSearchModel = {
 
 
 
-sizeFromCodeData: MasterSearchModel = {
+  sizeFromCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 36,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size From',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -140,11 +140,11 @@ sizeFromCodeData: MasterSearchModel = {
   sizeToCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 36,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size To',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -165,11 +165,11 @@ sizeFromCodeData: MasterSearchModel = {
   sieveCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -200,7 +200,7 @@ sizeFromCodeData: MasterSearchModel = {
     VIEW_TABLE: true,
   }
 
- 
+
 
   karatCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -223,7 +223,7 @@ sizeFromCodeData: MasterSearchModel = {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR SET'",
+    WHERECONDITION: "TYPES = 'COLOR MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -236,43 +236,43 @@ sizeFromCodeData: MasterSearchModel = {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  categoryCodeData:MasterSearchModel = {
+  categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Category Data',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  subcategoryCodeData:MasterSearchModel = {
+  subcategoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Subcategory Data',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  brandCodeData:MasterSearchModel = {
+  brandCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Brand Data',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'BRAND MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -290,9 +290,9 @@ sizeFromCodeData: MasterSearchModel = {
 
 
   ngOnInit(): void {
-    if(this.content){
+    if (this.content) {
       this.setFormValues()
-    } 
+    }
 
     this.diamondlabourMasterForm = this.formBuilder.group({
       labourType: new FormControl(''),
@@ -313,7 +313,7 @@ sizeFromCodeData: MasterSearchModel = {
         methodControl?.disable();
       }
     });
-   
+
 
     this.metallabourMasterForm.controls['stock_code'].enable();
     this.metallabourMasterForm.controls['color'].enable();
@@ -325,131 +325,131 @@ sizeFromCodeData: MasterSearchModel = {
 
     this.DialabourTypeList = [
       {
-        'name':'SETTING',
-        'value':'SETTING'
+        'name': 'SETTING',
+        'value': 'SETTING'
       },
       {
-        'name':'HANDLING',
-        'value':'HANDLING'
+        'name': 'HANDLING',
+        'value': 'HANDLING'
       },
       {
-        'name':'CERTIFICATE',
-        'value':'CERTIFICATE'
+        'name': 'CERTIFICATE',
+        'value': 'CERTIFICATE'
       },
       {
-        'name':'GENERAL',
-        'value':'GENERAL'
+        'name': 'GENERAL',
+        'value': 'GENERAL'
       },
     ]
 
     this.settingTypeList = [
       {
-        'name':'GEN',
-        'value':'GEN'
+        'name': 'GEN',
+        'value': 'GEN'
       },
       {
-        'name':'PRESSURE',
-        'value':'PRESSURE'
+        'name': 'PRESSURE',
+        'value': 'PRESSURE'
       },
     ]
 
-    this.labourTypeList =[
+    this.labourTypeList = [
       {
-        'name':'MAKING',
-        'value':'MAKING'
+        'name': 'MAKING',
+        'value': 'MAKING'
       },
       {
-        'name':'POLISH',
-        'value':'POLISH'
+        'name': 'POLISH',
+        'value': 'POLISH'
       },
       {
-        'name':'FINISHING',
-        'value':'FINISHING'
+        'name': 'FINISHING',
+        'value': 'FINISHING'
       },
       {
-        'name':'CASTING',
-        'value':'CASTING'
+        'name': 'CASTING',
+        'value': 'CASTING'
       },
       {
-        'name':'GENERAL',
-        'value':'GENERAL'
+        'name': 'GENERAL',
+        'value': 'GENERAL'
       },
       {
-        'name':'RHODIUM',
-        'value':'RHODIUM'
+        'name': 'RHODIUM',
+        'value': 'RHODIUM'
       },
       {
-        'name':'STAMPING',
-        'value':'STAMPING'
+        'name': 'STAMPING',
+        'value': 'STAMPING'
       },
       {
-        'name':'WASTAGE',
-        'value':'WASTAGE'
+        'name': 'WASTAGE',
+        'value': 'WASTAGE'
       },
     ]
-    this.unitList= [
+    this.unitList = [
       {
-      'name':'Lumpsum ',
-      'value':'Lumpsum '
-    },
-    {
-      'name':'PCS',
-      'value':'PCS'
-    },
-    {
-      'name':'Grams',
-      'value':'Grams'
-    },
-    {
-      'name':'Carat',
-      'value':'Carat'
-    },
-    {
-      'name':'Hours',
-      'value':'Hours'
-    }
+        'name': 'Lumpsum ',
+        'value': 'Lumpsum '
+      },
+      {
+        'name': 'PCS',
+        'value': 'PCS'
+      },
+      {
+        'name': 'Grams',
+        'value': 'Grams'
+      },
+      {
+        'name': 'Carat',
+        'value': 'Carat'
+      },
+      {
+        'name': 'Hours',
+        'value': 'Hours'
+      }
     ]
-    this.methodList= [
+    this.methodList = [
       {
-      'name':'Hand Setting ',
-      'value':'Hand Setting '
-    },
-    {
-      'name':'Wax Setting',
-      'value':'Wax Setting'
-    },
-    {
-      'name':'Other Setting',
-      'value':'Other Setting'
-    },
-    {
-      'name':'GENERAL',
-      'value':'GENERAL'
-    },
-    
+        'name': 'Hand Setting ',
+        'value': 'Hand Setting '
+      },
+      {
+        'name': 'Wax Setting',
+        'value': 'Wax Setting'
+      },
+      {
+        'name': 'Other Setting',
+        'value': 'Other Setting'
+      },
+      {
+        'name': 'GENERAL',
+        'value': 'GENERAL'
+      },
+
     ]
 
   }
 
 
 
-  categorySelected(e:any){
-    console.log(e); 
+  categorySelected(e: any) {
+    console.log(e);
     this.metallabourMasterForm.controls.category.setValue(e.CODE);
   }
 
-  subcategorySelected(e:any){
-    console.log(e); 
+  subcategorySelected(e: any) {
+    console.log(e);
     this.metallabourMasterForm.controls.subCategory.setValue(e.CODE);
   }
 
-  brandSelected(e:any){
-    console.log(e); 
+  brandSelected(e: any) {
+    console.log(e);
     this.metallabourMasterForm.controls.brand.setValue(e.CODE);
   }
 
-  typeCodeSelected(e:any){
-    console.log(e); 
+  typeCodeSelected(e: any) {
+    console.log(e);
     this.metallabourMasterForm.controls.typecode.setValue(e.CODE);
   }
 
@@ -457,79 +457,79 @@ sizeFromCodeData: MasterSearchModel = {
     this.metallabourMasterForm.controls.color.setValue(data.CODE)
   }
 
-  divisionCodeSelected(e:any){
-    console.log(e); 
+  divisionCodeSelected(e: any) {
+    console.log(e);
     this.diamondlabourMasterForm.controls.division.setValue(e.DIVISION_CODE);
   }
 
-  metaldivisionCodeSelected(e:any){
+  metaldivisionCodeSelected(e: any) {
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
   }
 
-  labouracSelected(e:any){
-    console.log(e); 
+  labouracSelected(e: any) {
+    console.log(e);
     this.diamondlabourMasterForm.controls.labour_ac.setValue(e.ACCODE);
   }
 
-  labourAcSelected(e:any){
-    console.log(e); 
+  labourAcSelected(e: any) {
+    console.log(e);
     this.metallabourMasterForm.controls.labourAc.setValue(e.ACCODE);
   }
 
-  sieveSelected(e:any){
-    console.log(e); 
+  sieveSelected(e: any) {
+    console.log(e);
     this.diamondlabourMasterForm.controls.sieve.setValue(e.CODE);
   }
 
-  stockCodeSelected(e:any){
-    console.log(e); 
+  stockCodeSelected(e: any) {
+    console.log(e);
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
   }
 
-  currencyCodeSelected(e:any){
-    console.log(e); 
+  currencyCodeSelected(e: any) {
+    console.log(e);
     this.metallabourMasterForm.controls.metalcurrency.setValue(e.CURRENCY_CODE);
     this.metallabourMasterForm.controls.currency.setValue(e.CURRENCY_CODE);
-    
+
   }
-  
-  karatCodeSelected(e:any){
-    console.log(e); 
+
+  karatCodeSelected(e: any) {
+    console.log(e);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
   }
 
-  shapeCodeSelected(e:any){
-    console.log(e); 
+  shapeCodeSelected(e: any) {
+    console.log(e);
     this.diamondlabourMasterForm.controls.shape.setValue(e.CODE);
   }
 
-  processCodeSelected(e:any){
-    console.log(e); 
+  processCodeSelected(e: any) {
+    console.log(e);
     this.diamondlabourMasterForm.controls.process.setValue(e.Process_Code);
   }
 
-  sizeToCodeSelected(e:any){
-    console.log(e); 
+  sizeToCodeSelected(e: any) {
+    console.log(e);
     this.diamondlabourMasterForm.controls.size_to.setValue(e.CODE);
   }
 
-  sizeFromCodeSelected(e:any){
-      console.log(e); 
-      this.diamondlabourMasterForm.controls.size_from.setValue(e.CODE);
+  sizeFromCodeSelected(e: any) {
+    console.log(e);
+    this.diamondlabourMasterForm.controls.size_from.setValue(e.CODE);
   }
 
-  
-  
-  
 
-   // USE: get select options Process TypeMaster
-   private getcurrencyOptions():void {
-    let API = '/BranchCurrencyMaster/GetBranchCurrencyMasterDetail/'+this.branch;
+
+
+
+  // USE: get select options Process TypeMaster
+  private getcurrencyOptions(): void {
+    let API = '/BranchCurrencyMaster/GetBranchCurrencyMasterDetail/' + this.branch;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
-      if(result.response){
+      if (result.response) {
         this.currencyList = result.response;
       }
     });
@@ -537,7 +537,7 @@ sizeFromCodeData: MasterSearchModel = {
   }
 
   setFormValues() {
-    if(!this.content) return
+    if (!this.content) return
     this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
     this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
     this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
@@ -574,14 +574,14 @@ sizeFromCodeData: MasterSearchModel = {
   }
 
 
-   
-  
+
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
-  formSubmit(){
+  formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updatelabourChargeMaster()
       return
@@ -597,221 +597,221 @@ sizeFromCodeData: MasterSearchModel = {
       "MID": 0,
       "SRNO": 0,
       "CODE": this.diamondlabourMasterForm.value.labour_code || "str",
-      "DESCRIPTION":  this.diamondlabourMasterForm.value.labour_description || "str",
-      "LABTYPE":  this.diamondlabourMasterForm.value.labourType || "",
-      "METHOD":  this.diamondlabourMasterForm.value.method  || "",
-      "DIVISION":  this.diamondlabourMasterForm.value.division,
-      "SHAPE":  this.diamondlabourMasterForm.value.shape,
-      "SIZE_FROM":  this.diamondlabourMasterForm.value.size_from,
-      "SIZE_TO":  this.diamondlabourMasterForm.value.size_to,
-      "CURRENCYCODE":  this.diamondlabourMasterForm.value.currency  || "",
-      "UNITCODE":  this.diamondlabourMasterForm.value.unitList  || "",
+      "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description || "str",
+      "LABTYPE": this.diamondlabourMasterForm.value.labourType || "",
+      "METHOD": this.diamondlabourMasterForm.value.method || "",
+      "DIVISION": this.diamondlabourMasterForm.value.division,
+      "SHAPE": this.diamondlabourMasterForm.value.shape,
+      "SIZE_FROM": this.diamondlabourMasterForm.value.size_from,
+      "SIZE_TO": this.diamondlabourMasterForm.value.size_to,
+      "CURRENCYCODE": this.diamondlabourMasterForm.value.currency || "",
+      "UNITCODE": this.diamondlabourMasterForm.value.unitList || "",
       "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
       "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate,
       "LAST_COST_RATE": 0,
       "LAST_SELLING_RATE": 0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
-      "CRACCODE":  "",
+      "CRACCODE": "",
       "DIVISION_CODE": this.metallabourMasterForm.value.division || "S",
-      "CURRENCY_CODE":  this.metallabourMasterForm.value.currency  || "",
+      "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
       "SELLING_PER": this.diamondlabourMasterForm.value.selling,
       "ACCESSORIES": 0,
       "CARATWT_FROM": this.diamondlabourMasterForm.value.ctWtFrom || 0,
       "CARATWT_TO": this.diamondlabourMasterForm.value.ctWtTo || 0,
-      "SIEVE":  this.diamondlabourMasterForm.value.sieve,
+      "SIEVE": this.diamondlabourMasterForm.value.sieve,
       "WASTAGE_PER": this.metallabourMasterForm.value.wastage,
       "WASTAGE_AMT": 0,
-      "TYPE_CODE":  this.diamondlabourMasterForm.value.typecode||"",
-      "CATEGORY_CODE":  this.metallabourMasterForm.value.category,
-      "SUB_CATEGORY_CODE":  this.metallabourMasterForm.value.subCategory,
+      "TYPE_CODE": this.diamondlabourMasterForm.value.typecode || "",
+      "CATEGORY_CODE": this.metallabourMasterForm.value.category,
+      "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory,
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process,
       "KARAT_CODE": this.metallabourMasterForm.value.karat,
       "METALSTONE": "s",
-      "STOCK_CODE":  this.metallabourMasterForm.value.stock_code,
+      "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
-      "COLOR":  this.metallabourMasterForm.value.color,
+      "COLOR": this.metallabourMasterForm.value.color,
       "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly,
-      "SIEVEFROM_DESC":  this.diamondlabourMasterForm.value.sieve_desc,
+      "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc,
       "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-    .subscribe((result) => {
-      if (result.response) {
-        if (result.status == "Success") {
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.diamondlabourMasterForm.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.diamondlabourMasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
         }
-      } else {
-        this.toastr.error('Not saved')
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
 
-  updatelabourChargeMaster(){
-    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/'+ this.diamondlabourMasterForm.value.mid;
+  updatelabourChargeMaster() {
+    let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.diamondlabourMasterForm.value.mid;
     let postData = {
       "MID": 0,
       "SRNO": 0,
       "CODE": this.diamondlabourMasterForm.value.labour_code,
-      "DESCRIPTION":  this.diamondlabourMasterForm.value.labour_description,
-      "LABTYPE":  this.diamondlabourMasterForm.value.labourType || "",
-      "METHOD":  this.diamondlabourMasterForm.value.method  || "",
-      "DIVISION":  this.diamondlabourMasterForm.value.division,
-      "SHAPE":  this.diamondlabourMasterForm.value.shape,
-      "SIZE_FROM":  this.diamondlabourMasterForm.value.size_from,
-      "SIZE_TO":  this.diamondlabourMasterForm.value.size_to,
-      "CURRENCYCODE":  this.diamondlabourMasterForm.value.currency  || "",
-      "UNITCODE":  this.diamondlabourMasterForm.value.unitList  || "",
+      "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description,
+      "LABTYPE": this.diamondlabourMasterForm.value.labourType || "",
+      "METHOD": this.diamondlabourMasterForm.value.method || "",
+      "DIVISION": this.diamondlabourMasterForm.value.division,
+      "SHAPE": this.diamondlabourMasterForm.value.shape,
+      "SIZE_FROM": this.diamondlabourMasterForm.value.size_from,
+      "SIZE_TO": this.diamondlabourMasterForm.value.size_to,
+      "CURRENCYCODE": this.diamondlabourMasterForm.value.currency || "",
+      "UNITCODE": this.diamondlabourMasterForm.value.unitList || "",
       "COST_RATE": this.diamondlabourMasterForm.value.cost_rate || "",
       "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate || "",
       "LAST_COST_RATE": 0,
       "LAST_SELLING_RATE": 0,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
-      "CRACCODE":  "",
+      "CRACCODE": "",
       "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision,
-      "CURRENCY_CODE":  this.metallabourMasterForm.value.currency  || "",
+      "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
       "SELLING_PER": this.diamondlabourMasterForm.value.selling || "",
       "ACCESSORIES": 0,
       "CARATWT_FROM": this.diamondlabourMasterForm.value.ctWtFrom || 0,
       "CARATWT_TO": this.diamondlabourMasterForm.value.ctWtTo || 0,
-      "SIEVE":  this.diamondlabourMasterForm.value.sieve || "",
+      "SIEVE": this.diamondlabourMasterForm.value.sieve || "",
       "WASTAGE_PER": this.metallabourMasterForm.value.wastage || "",
       "WASTAGE_AMT": 0,
-      "TYPE_CODE":  this.diamondlabourMasterForm.value.typecode||"",
-      "CATEGORY_CODE":  this.metallabourMasterForm.value.category || "",
-      "SUB_CATEGORY_CODE":  this.metallabourMasterForm.value.subCategory || "",
+      "TYPE_CODE": this.diamondlabourMasterForm.value.typecode || "",
+      "CATEGORY_CODE": this.metallabourMasterForm.value.category || "",
+      "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory || "",
       "BRAND_CODE": this.metallabourMasterForm.value.brand || "",
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
       "KARAT_CODE": this.metallabourMasterForm.value.karat || "0",
       "METALSTONE": "s",
-      "STOCK_CODE":  this.metallabourMasterForm.value.stock_code || "",
+      "STOCK_CODE": this.metallabourMasterForm.value.stock_code || "",
       "PURITY": this.metallabourMasterForm.value.purity || 0,
-      "COLOR":  this.metallabourMasterForm.value.color || "",
+      "COLOR": this.metallabourMasterForm.value.color || "",
       "FOR_DESIGN": this.metallabourMasterForm.value.forDesignOnly,
-      "SIEVEFROM_DESC":  this.diamondlabourMasterForm.value.sieve_desc || "",
+      "SIEVEFROM_DESC": this.diamondlabourMasterForm.value.sieve_desc || "",
       "ON_GROSSWT": this.metallabourMasterForm.value.onGrossWt
     }
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-    .subscribe((result) => {
-      if (result.response) {
-        if (result.status == "Success") {
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.diamondlabourMasterForm.reset()
-              this.metallabourMasterForm.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.diamondlabourMasterForm.reset()
+                this.metallabourMasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
         }
-      } else {
-        this.toastr.error('Not saved')
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
 
-    /**USE: delete Melting Type From Row */
-    deleteMeltingType() {
-      if (!this.content.WORKER_CODE) {
-        Swal.fire({
-          title: '',
-          text: 'Please Select data to delete!',
-          icon: 'error',
-          confirmButtonColor: '#336699',
-          confirmButtonText: 'Ok'
-        }).then((result: any) => {
-          if (result.value) {
-          }
-        });
-        return
-      }
+  /**USE: delete Melting Type From Row */
+  deleteMeltingType() {
+    if (!this.content.WORKER_CODE) {
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          let API = 'LabourChargeMasterDj/DeleteLabourChargeMaster/' + this.content.MID;
-          let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-            .subscribe((result) => {
-              if (result) {
-                if (result.status == "Success") {
-                  Swal.fire({
-                    title: result.message || 'Success',
-                    text: '',
-                    icon: 'success',
-                    confirmButtonColor: '#336699',
-                    confirmButtonText: 'Ok'
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.diamondlabourMasterForm.reset()
-                      this.metallabourMasterForm.reset()
-                      this.tableData = []
-                      this.close('reloadMainGrid')
-                    }
-                  });
-                } else {
-                  Swal.fire({
-                    title: result.message || 'Error please try again',
-                    text: '',
-                    icon: 'error',
-                    confirmButtonColor: '#336699',
-                    confirmButtonText: 'Ok'
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.diamondlabourMasterForm.reset()
-                      this.metallabourMasterForm.reset()
-                      this.tableData = []
-                      this.close()
-                    }
-                  });
-                }
-              } else {
-                this.toastr.error('Not deleted')
-              }
-            }, err => alert(err))
-          this.subscriptions.push(Sub)
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
         }
       });
+      return
     }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'LabourChargeMasterDj/DeleteLabourChargeMaster/' + this.content.MID;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.diamondlabourMasterForm.reset()
+                    this.metallabourMasterForm.reset()
+                    this.tableData = []
+                    this.close('reloadMainGrid')
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.diamondlabourMasterForm.reset()
+                    this.metallabourMasterForm.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
+      }
+    });
+  }
 
-    onforDesignOnlyChange(event:any){  
-      console.log(event);
-      if(event.checked === true){
-        this.metallabourMasterForm.controls['stock_code'].disable();
-        this.metallabourMasterForm.controls['color'].disable();
-        this.metallabourMasterForm.controls['metallabourType'].disable();
-      }
-      else{
-        this.metallabourMasterForm.controls['stock_code'].enable();
-        this.metallabourMasterForm.controls['color'].enable();
-        this.metallabourMasterForm.controls['metallabourType'].enable();
-      }
+  onforDesignOnlyChange(event: any) {
+    console.log(event);
+    if (event.checked === true) {
+      this.metallabourMasterForm.controls['stock_code'].disable();
+      this.metallabourMasterForm.controls['color'].disable();
+      this.metallabourMasterForm.controls['metallabourType'].disable();
     }
+    else {
+      this.metallabourMasterForm.controls['stock_code'].enable();
+      this.metallabourMasterForm.controls['color'].enable();
+      this.metallabourMasterForm.controls['metallabourType'].enable();
+    }
+  }
 
 
 }

@@ -26,6 +26,8 @@ export class MouldMakingComponent implements OnInit {
   allMode: string;
   checkBoxesMode: string;
   selectedIndexes: any = [];
+  vocMaxDate = new Date();
+  currentDate = new Date();
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -240,8 +242,9 @@ stockCodeData: MasterSearchModel = {
     uniq : [''],
     uniqNo : [''],
     job : [''],
-    vocher :['',[Validators.required]],
-    vocDate : [''],
+    vocher :['MLM',[Validators.required]],
+    vocherNo:[1],
+    vocDate : [new Date()],
     enteredBy : [''],
     fromProcess : ['',[Validators.required]],
     fromWorker : ['',[Validators.required]],
@@ -253,8 +256,8 @@ stockCodeData: MasterSearchModel = {
     toProcess : ['',[Validators.required]],
     toWorker : ['',[Validators.required]],
     designCode : ['',[Validators.required]],
-    itemCurrency : [''],
-    itemCurrencyRate : [''],
+    itemCurrency : ['AED'],
+    itemCurrencyRate : [1.000000],
     location :[''],
 
   });

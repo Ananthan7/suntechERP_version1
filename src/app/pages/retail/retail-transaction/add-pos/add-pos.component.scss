@@ -111,6 +111,9 @@ button[aria-label="Close"]:focus {
 .mat-form-field {
   display: inline !important;
 }
+.mat-form-field-pending-so {
+  display: inline-block  !important;
+}
 
 .rhs-table-1 .td-w-40 {
   width: 40% !important;
@@ -184,3 +187,4 @@ fieldset {
 
 
 }
+

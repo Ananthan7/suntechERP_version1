@@ -25,6 +25,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   urls: string | ArrayBuffer | null | undefined;
   url: any;
 
+
   currencyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -105,6 +106,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
 
   onFileChanged(event:any) {
     this.url = event.target.files[0].name

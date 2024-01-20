@@ -162,8 +162,8 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="row form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" [(ngModel)]="flexSwitchCheckChecked == true ? Add : Deduct">
-                      <label class="col-sm-5" for="flexSwitchCheckChecked">Add</label>
+                      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" [(ngModel)]="text" (click)="change($event)">
+                      <label class="col-sm-5" for="flexSwitchCheckChecked">{{text}}</label>
                       <div class="col-md-7">
                         <mat-form-field style="width: 100%;">
                           <input type="text" matInput />
