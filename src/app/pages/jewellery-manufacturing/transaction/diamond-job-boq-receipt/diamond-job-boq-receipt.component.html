@@ -237,8 +237,12 @@
                                             </div>
                                         </div>
                                         <div class="col-md-5">
-                                            <div class="box_wrap">
-
+                                            <div class="upload-btn-wrapper">
+                                                <button class="btn btnnew border-dark">
+                                                    <img src={{urls}} style="width:130px;height:185px">
+                                                    
+                                                </button>
+                                                <input type="file" formControlName="picture_name" class="uploadproduct" (change)="onFileChanged($event)">
                                             </div>
                                         </div>
                                     </div>

@@ -11,6 +11,7 @@ import { WholesaleMasterModule } from './wholesale-master/wholesale-master.modul
 @NgModule({
   declarations: [
     WholesaleComponent,
+    
   ],
   imports: [
     CommonModule,

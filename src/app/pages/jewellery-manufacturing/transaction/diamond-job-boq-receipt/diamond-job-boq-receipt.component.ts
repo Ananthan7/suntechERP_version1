@@ -22,6 +22,9 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   tableData: any[] = [];
   viewMode:boolean = false;
   private subscriptions: Subscription[] = [];
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+
 
   currencyCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -103,6 +106,21 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
+  }
+
 
   currencyDataSelected(value: any) {
     console.log(value);
