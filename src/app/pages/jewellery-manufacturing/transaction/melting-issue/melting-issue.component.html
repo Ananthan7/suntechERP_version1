@@ -37,7 +37,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="time" matInput formControlName="voctime" />
                                 </mat-form-field>
-                                
+
                             </div>
                         </div>
                         <div class="row">
@@ -145,9 +145,9 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8">
-                                <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true"  [showRowLines]="true" 
-                                 (onRowClick)="onRowClickHandler($event)" 
-                                  [allowColumnReordering]="true" height="200" [dataSource]="tableData">
+                                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
+                                    (onRowClick)="onRowClickHandler($event)" [allowColumnReordering]="true" height="200"
+                                    [dataSource]="tableData">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <!-- <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing> -->
                                     <dxo-selection mode="single"></dxo-selection>
@@ -165,9 +165,8 @@
                                     class="col-sm-12  col-form-label text-center border border-light bg-light text-dark">Pure
                                     / Alloy Ratio</label>
                                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                [allowColumnReordering]="true"
-                                [allowColumnResizing]="true"
-                                [columnAutoWidth]="true">
+                                    [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                    [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-selection mode="multiple"></dxo-selection>
@@ -175,19 +174,71 @@
                                     <dxi-column *ngFor="let data of columnhead1" dataField="{{ data }}"
                                         caption="{{ data }}" [allowEditing]="true" alignment="left"
                                         backgroundcolor="#000">
+
                                     </dxi-column>
                                 </dx-data-grid>
+                                <button class="btn btn-sm btn-outline-primary" (click)="open(mymodal)">Alloy
+                                    Allocation</button>
+                                    
+                                <div class="col-md-8">
+                                    <ng-template #mymodal let-modal modal-sm>
+                                        <div class="" style="padding: 10px 20px">
+                                            <div class="modal-header d-flex justify-content-end">
+                                               
+                                                    
+                                            
+                                            <button
+                                            style="border: none"
+                                            type="button"
+                                            class="close "
+                                            aria-label="Close"
+                                            (click)="modal.dismiss('close1')">
+                                            
+                                            <span aria-hidden="true" >x</span>
+                                    
+                                          </button>
+                                                    
+                                               
+                                            </div>
+                                            <br>
+                                        <div class="col-md-12">
+                                            <div class="modal-content">
+                                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                                [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                                [columnAutoWidth]="true">
+                                                <dxo-paging [enabled]="false"></dxo-paging>
+                                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                                <dxo-selection mode="multiple"></dxo-selection>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxi-column *ngFor="let data of db1" dataField="{{ data }}"
+                                                    caption="{{ data }}" [allowEditing]="true" alignment="left"
+                                                    backgroundcolor="#000">
+
+                                                </dxi-column>
+                                            </dx-data-grid>
+                                           
+                                              <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary">Apply</button>
+                                                        <button type="button" class="btn btn-primary">Cancel</button>
+                                                        
+                                                    </div>
+                                            </div>
+                                                </div>
+
+                                            </div>
+                                       
+                                    </ng-template>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
+
                 <div class="row py-2 border-top">
                     <div class="col-md-12">
                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                        [allowColumnReordering]="true"
-                        [allowColumnResizing]="true"
-                        [columnAutoWidth]="true">
+                            [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
@@ -229,9 +280,9 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3">
-                               <div class="pt-3">
-                                <button class="btn btn-primary add-btn">Reset</button>
-                               </div>
+                                <div class="pt-3">
+                                    <button class="btn btn-primary add-btn">Reset</button>
+                                </div>
                             </div>
                         </div>
                     </div>
