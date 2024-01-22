@@ -35,13 +35,15 @@ export class MetalIssueComponent implements OnInit {
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  srNo:any=0;
   vocMaxDate = new Date();
   currentDate = new Date();
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   viewOnly: boolean = false;
   selectedIndexes: any = [];
-
+  getdata!: any[];
   private subscriptions: Subscription[] = [];
+ 
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -65,6 +67,7 @@ export class MetalIssueComponent implements OnInit {
   }
 
   openaddmetalissue() {
+    this.srNo= this.srNo+1;
     const modalRef: NgbModalRef = this.modalService.open(MetalIssueDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
@@ -74,11 +77,14 @@ export class MetalIssueComponent implements OnInit {
     modalRef.result.then((postData) => {
       console.log(postData);      
       if (postData) {
-        console.log('Data from modal:', postData);       
-        this.metalIssueDetailsData.push(postData);     
+        console.log('Data from modal:', postData);    
+        if (postData.reopen= true) {
+          this.openaddmetalissue();    
+        }   
+        this.metalIssueDetailsData.push(postData);
       }
-     
     });
+    modalRef.componentInstance.data = this.metalIssueDetailsData;
   }
         
   stock_codetemp(data:any,value: any){
