@@ -917,7 +917,7 @@ export class AddPosComponent implements OnInit {
         this.comFunc.allMessageBoxData = data;
 
         console.log(this.comFunc.allMessageBoxData);
-        console.log('====================================');
+        console.log('==============allMessageBoxData======================');
       }
     });
     this.indexedDb.getAllData('comboFilter').subscribe((data) => {
@@ -11271,7 +11271,7 @@ export class AddPosComponent implements OnInit {
               "GrossAmount": data.GROSS_AMT, //doubt
               "Code": data.STOCK_CODE, //doubt
               "UnitPrice": 0, //doubt
-              "NetAmount": 0, 
+              "NetAmount": data.NETTOTAL, 
               "VatRate": data.VAT_PER, //doubt
               "VatCode": data.VATCODE,
               "VatAmount": data.VAT_AMOUNTFC, 
