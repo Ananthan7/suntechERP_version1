@@ -70,17 +70,20 @@
 
                     <div class="col-md-6 py-4">
                         <div class="d-flex">
-                            <div class="form-check">
-                                <mat-radio-button value="1">All Jobs</mat-radio-button>
-                            </div>
-                            <div class="form-check ">
-                                <mat-radio-button value="1">Jobs Start From</mat-radio-button>
-                            </div>
+                             <!-- <mat-radio-group aria-label="Select an option">
+                      <mat-radio-button value="1"  formControlName="onGrossWt" class="mx-2"> All Jobs</mat-radio-button>
+                      <mat-radio-button value="2"  formControlName="forDesignOnly" class="mx-2">Jobs Start From</mat-radio-button>
+                    </mat-radio-group>  -->
+                    <mat-radio-group aria-label="Select an option" formControlName="job">
+                        <mat-radio-button value="1" class="mx-2">All Jobs</mat-radio-button>
+                        <mat-radio-button value="2" class="mx-2">Jobs Start From</mat-radio-button>
+                    </mat-radio-group>
                             <div class="form-check ">
                                 <mat-form-field style="width: 50%;">
                                     <input type="date" matInput formControlName="date" />
                                 </mat-form-field>
-                            </div>
+                            </div> 
+                           
                         </div>
                     </div>
                 </div>
@@ -109,7 +112,7 @@
                                 </div> -->
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                      <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true"
                                                     [allowColumnReordering]="true" [allowColumnResizing]="true"
                                                     [columnAutoWidth]="true" [dataSource]="gridData">
                                         <dxo-paging [enabled]="false"></dxo-paging>
@@ -117,13 +120,14 @@
                                         <dxo-selection mode="multiple"></dxo-selection>
                                         <dxo-scrolling mode="virtual"></dxo-scrolling>
                                   
-                                        <dxi-column *ngFor="let data of columnheadItemDetails"
-                                                    [dataField]="data" [caption]="data" [allowEditing]="true"
-                                                    alignment="center" backgroundcolor="#000">
-                                        </dxi-column>
+                                        <!-- <dxi-column *ngFor="let data of columnheadItemDetails"
+                                        [dataField]="data" [caption]="data" [allowEditing]="true"
+                                        alignment="center" backgroundcolor="#000">
+                            </dxi-column> -->
                                       </dx-data-grid>
                                     </div>
                                   </div>
+
                                 <div class="row align-items-center pt-1">
                                     <div class="col-md-6">
                                         <div class="row my-2">
