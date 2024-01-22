@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-issue-details.component';
+
 
 @Component({
   selector: 'app-melting-issue',
@@ -19,6 +20,7 @@ export class MeltingIssueComponent implements OnInit {
   columnhead: any[] = ['SRNO', 'DIV', 'jobno', 'stockcode', 'Main Stock', 'process', 'worker', 'pcs', 'grossweight', 'purity', 'pureweight', 'Rate', 'Amount']
   columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure', 'Job Pcs']
   columnhead1: any[] = ['Sr#', 'Ingredients', 'Qty']
+  db1: any[] = ['Sr#','Division','Stock Code', 'Description','Alloy','Alloy Qty','Rate','Amount']
   @Input() content!: any;
   tableData: any[] = [];
   sequenceDetails: any[] = []
@@ -140,6 +142,8 @@ export class MeltingIssueComponent implements OnInit {
 
   });
   router: any;
+  onClose: any;
+  modalRef: NgbModalRef| null = null
 
   constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -290,7 +294,47 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.worker.setValue(e.WORKER_CODE);
     this.meltingIssueFrom.controls.workerdes.setValue(e.DESCRIPTION);
   }
+  @ViewChild('mymodal') public mymodal!: NgbModal;
 
+  open(modalname?: any) {
+      
+      const modalRef: NgbModalRef = this.modalService.open(modalname, {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        windowClass: 'modal-full-width'
+      });
+  
+      modalRef.result.then((result) => {
+       
+      }, (reason) => {
+       
+      });
+    }
+    openModal(item: any) {
+      // Open the modal and store the reference
+      this.modalRef = this.modalService.open('mymodal', { size: 'sm' });
+      // Pass item data to the modal if needed
+      // this.modalRef.componentInstance.itemData = item;
+    }
+  
+    closeModal() {
+      // Check if the modal reference exists before trying to close
+      if (this.modalRef) {
+        // Close the modal using the reference
+        this.modalRef.close();
+      }
+    }
+      close1(data: any = null) {
+        this.modalService.dismissAll(data);
+      }
+    
+  
+    
+  
+  
+  
+  
   openaddMeltingIssueDetails(data?: any) {
     console.log(data)
     if (data) {
