@@ -78,10 +78,10 @@ export class ProcessTransferAuthorisationComponent implements OnInit {
       this.update()
       return
     }
-    if (this.processTransferAuthorisationForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.processTransferAuthorisationForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
 
     let API = 'ProcessAuthorize/InsertProcessAuthorize'
     let postData = {
@@ -113,7 +113,7 @@ export class ProcessTransferAuthorisationComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
     .subscribe((result) => {
       if (result.response) {
-        if (result.status == "Success") {
+        if (result.status.trim() == "Success") {
           Swal.fire({
             title: result.message || 'Success',
             text: '',
@@ -136,22 +136,18 @@ export class ProcessTransferAuthorisationComponent implements OnInit {
 }
 
   setFormValues() {
-    if(!this.content) return
-    console.log(this.content);
+    // if(!this.content) return
+    // console.log(this.content);
     
     this.processTransferAuthorisationForm.controls.mid.setValue(this.content.MID);
 
   }
 
   update() {
-    if (this.processTransferAuthorisationForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
+   
     let API = 'ProcessAuthorize/UpdateProcessAuthorize/' + this.processTransferAuthorisationForm.value.mid;
     let postData = {
-      "MID":  0,
+      "MID":  this.processTransferAuthorisationForm.value.mid,
       "BRANCH_CODE":  this.branchCode,
       "VOCTYPE": this.processTransferAuthorisationForm.value.vocType,
       "VOCNO": 0,
@@ -176,10 +172,10 @@ export class ProcessTransferAuthorisationComponent implements OnInit {
       "ATTACHMENT_FILE": "string"
     }
 
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status == "Success") {
+          if (result.status.trim()  == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
