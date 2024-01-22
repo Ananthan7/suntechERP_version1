@@ -328,7 +328,30 @@
             </button>
           </div>
         </div>
-        <div class="col-md-3 m-t-10 pt-2">
+        <div class="col-md-1 m-t-10 pt-2">
+          <mat-form-field>
+            <mat-label>Currency</mat-label>
+            <input
+              type="text"
+              matInput
+              id="txtCurrency"
+              formControlName="txtCurrency"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-md-1 m-t-10 pt-2">
+          <mat-form-field>
+            <mat-label>Rate</mat-label>
+            <input
+              type="text"
+              matInput
+              id="txtCurRate"
+              formControlName="txtCurRate"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-2 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>{{ date_lbl }}</mat-label>
             <!-- [matDatepicker]="vocDate" -->
@@ -366,7 +389,7 @@
             />
           </mat-form-field>
         </div>
-        <div class="col-md-3 m-t-10 pt-2">
+        <div class="col-md-2 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>{{ sales_person_lbl }}</mat-label>
             <input
@@ -419,6 +442,12 @@
           </div>
         </div>
       </div>
+
+      <!-- <div class="row">
+        <div class="col-md-6 row mb-1">
+         
+        </div>
+      </div> -->
     </form>
   </div>
 </div>
@@ -670,6 +699,7 @@
             </div>
           </div>
         </form>
+       
         <div class="text-right">
           <button
             type="button"
@@ -2314,7 +2344,8 @@
                     id="customAcCodeList"
                     [readonly]="viewOnly"
                   />
-                  <mat-autocomplete panelWidth="50%"
+                  <mat-autocomplete
+                    panelWidth="50%"
                     #customAcCodeList="matAutocomplete"
                     autoActiveFirstOption
                     (optionSelected)="changeCustAcCode($event.option.value)"
@@ -4972,7 +5003,10 @@
     <form [formGroup]="pendingSalesOrderForm">
       <div class="row">
         <div class="col-md-5">
-          <mat-form-field style="width: 80%; display:inline-block !important" class="mat-form-field-pending-so">
+          <mat-form-field
+            style="width: 80%; display: inline-block !important"
+            class="mat-form-field-pending-so"
+          >
             <mat-label>Branch To</mat-label>
 
             <input type="text" matInput formControlName="branchTo" />
@@ -5027,14 +5061,16 @@
             </mat-error>
           </mat-form-field>
         </div>
-        </div>
+      </div>
       <div class="row">
         <div class="col-md-5">
-          <mat-form-field style="width: 80%; display:inline-block !important" class="mat-form-field-pending-so">
+          <mat-form-field
+            style="width: 80%; display: inline-block !important"
+            class="mat-form-field-pending-so"
+          >
             <mat-label>Customer</mat-label>
 
             <input type="text" matInput formControlName="customerCode" />
-          
 
             <mat-error
               *ngIf="
@@ -5045,9 +5081,9 @@
             </mat-error>
           </mat-form-field>
           <master-search
-          [MasterSearchData]="customerCodeData"
-          (newRowClick)="customerCodeSelected($event)"
-        ></master-search>
+            [MasterSearchData]="customerCodeData"
+            (newRowClick)="customerCodeSelected($event)"
+          ></master-search>
           <!-- <mat-form-field style="width: 100%">
             <mat-label>Customer</mat-label>
             <input
