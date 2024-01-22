@@ -262,7 +262,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         "SRNO": 0,
         "BRANCH_CODE": this.branchCode,
         "RECPAY_TYPE": "",
-        "MODE": "",
+        "MODE": this.posCurrencyReceiptDetailsForm.value.modeOfSelect,
         "ACCODE": this.posCurrencyReceiptDetailsForm.value.debitAmount,
         "CURRENCY_CODE": this.posCurrencyReceiptDetailsForm.value.currencyCode,
         "CURRENCY_RATE": this.posCurrencyReceiptDetailsForm.value.currencyRate,

@@ -746,11 +746,14 @@
                           (onRowRemoved)="removeLineItemsGrid($event)"
                           (onEditingStart)="editTable($event)"
                         >
-                          <dxo-editing
+                          <dxo-editing 
+                          
                             [allowUpdating]="true"
                             [allowDeleting]="!viewOnly"
                           >
                             <dxo-texts
+                              caption="Action"
+                              alignment="right"
                               [editRow]="viewOnly ? 'View' : 'Edit'"
                               deleteRow="Remove"
                             >
@@ -818,7 +821,7 @@
                             precision="2"
                           >
                           </dxi-column>
-
+                         
                           <!-- <dxi-column type="buttons" >
                                                       <dxi-button template="orders">
                                                           <div *dxTemplate="let data of 'orders'">
@@ -916,6 +919,8 @@
                           (onRowRemoved)="removeSalesReturnGrid($event)"
                           (onEditingStart)="editTableSalesReturn($event)"
                           [showBorders]="true"
+                          [allowColumnResizing]="true"
+                          [columnAutoWidth]="true"
                         >
                           <dxo-editing
                             [allowUpdating]="true"
@@ -930,7 +935,7 @@
                           <dxo-selection mode="single"></dxo-selection>
                           <dxi-column
                             dataField="sn_no"
-                            [width]="100"
+                            [width]="70"
                             caption="SL No."
                             [allowEditing]="false"
                           >
@@ -949,7 +954,7 @@
                           <dxi-column
                             dataField="weight"
                             caption="Weight"
-                            [width]="100"
+                            [width]="70"
                             [allowEditing]="false"
                           >
                           </dxi-column>
@@ -963,6 +968,7 @@
                             dataField="mkg_amount"
                             alignment="right"
                             format="currency"
+                            [width]="200"
                             [format]="{ style: 'currency', currency: 'AED' }"
                             [allowEditing]="false"
                           ></dxi-column>
