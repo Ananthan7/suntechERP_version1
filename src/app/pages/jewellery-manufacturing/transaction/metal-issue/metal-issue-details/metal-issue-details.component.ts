@@ -28,6 +28,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   url: any;
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
+  isViewContinue!: boolean;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -44,10 +45,10 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (this.content) {
       this.setFormValues()
     }
-    console.log(this.data);
-    if (this.data) {
-      this.jobcontinue()
-    }
+    //console.log(this.data);
+    // if (this.data) {
+    //   this.jobcontinue()
+    // }
     
   }
 
@@ -165,48 +166,14 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
 
   
-  jobchange(){  
-  this.formSubmit()
+  jobchange(){
+    this.formSubmit()
   }
 
   jobcontinue(data?: any){
     this.formSubmit()
-    console.log(this.data);
-   if(this.data){
-    this.metalIssueDetailsForm.controls.jobNumber.setValue(this.data[0].JOB_NUMBER)
-    this.metalIssueDetailsForm.controls.subJobNo.setValue(this.data[0].JOB_SO_NUMBER)
-    this.metalIssueDetailsForm.controls.subJobNoDes.setValue(this.data[0].JOB_DESCRIPTION)
-    this.metalIssueDetailsForm.controls.designCode.setValue(this.data[0].DESIGN_CODE)
-    this.metalIssueDetailsForm.controls.stockCode.setValue(this.data[0].STOCK_CODE)
-    this.metalIssueDetailsForm.controls.stockCodeDes.setValue(this.data[0].STOCK_DESCRIPTION)
-    this.metalIssueDetailsForm.controls.subStockCode.setValue(this.data[0].SUB_STOCK_CODE)
-    this.metalIssueDetailsForm.controls.jobPcs.setValue(this.data[0].JOB_PCS)
-    this.metalIssueDetailsForm.controls.pcs.setValue(this.data[0].PCS)
-    this.metalIssueDetailsForm.controls.grossWeight.setValue(this.data[0].GROSS_WT)
-    this.metalIssueDetailsForm.controls.purity.setValue(this.data[0].PURITY)
-    this.metalIssueDetailsForm.controls.pureWeight.setValue(this.data[0].PURE_WT)
-    this.metalIssueDetailsForm.controls.totalAmountFc.setValue(this.data[0].TOTAL_AMOUNTFC)
-    this.metalIssueDetailsForm.controls.totalAmountLc.setValue(this.data[0].TOTAL_AMOUNTLC)
-    this.metalIssueDetailsForm.controls.processCode.setValue(this.data[0].PROCESS_CODE)
-    this.metalIssueDetailsForm.controls.processCodeDesc.setValue(this.data[0].PROCESS_NAME)
-    this.metalIssueDetailsForm.controls.workerCode.setValue(this.data[0].WORKER_CODE)
-    this.metalIssueDetailsForm.controls.workerCodeDes.setValue(this.data[0].WORKER_NAME)
-    this.metalIssueDetailsForm.controls.unqDesignId.setValue(this.data[0].UNQ_DESIGN_ID)
-    this.metalIssueDetailsForm.controls.location.setValue(this.data[0].LOCTYPE_CODE)
-    this.metalIssueDetailsForm.controls.amountFc.setValue(this.data[0].AMOUNTFC)
-    this.metalIssueDetailsForm.controls.amountLc.setValue(this.data[0].AMOUNTLC)
-    this.metalIssueDetailsForm.controls.pictureName.setValue(this.data[0].PICTURE_NAME)
-    this.metalIssueDetailsForm.controls.partCode.setValue(this.data[0].PART_CODE)
-    this.metalIssueDetailsForm.controls.masterMetal.setValue(this.data[0].MASTER_METAL)
-    this.metalIssueDetailsForm.controls.stoneWeight.setValue(this.data[0].STONE_WT)
-    this.metalIssueDetailsForm.controls.netWeight.setValue(this.data[0].NET_WT)
-    this.metalIssueDetailsForm.controls.toStockCode.setValue(this.data[0].TO_STOCK_CODE)
-    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(this.data[0].TO_STOCK_DESCRIPTION)
-    this.metalIssueDetailsForm.controls.purityDiff.setValue(this.data[0].PUDIFF)
-    this.metalIssueDetailsForm.controls.jobPurity.setValue(this.data[0].JOB_PURITY)
-   }
-    
-  }
+   } 
+  
 
   close(data?: any) {
     //TODO reset forms and data before closing

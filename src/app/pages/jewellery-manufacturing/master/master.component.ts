@@ -100,7 +100,6 @@ export class MasterComponent implements OnInit {
         duration: 3000,
       });
     }
-    this.srNo= this.srNo+1;
     const modalRef: NgbModalRef = this.modalService.open(contents, {
       size: 'xl',
       backdrop: 'static',//'static'
@@ -116,7 +115,6 @@ export class MasterComponent implements OnInit {
       // Handle modal dismissal (if needed)
     });
     modalRef.componentInstance.content = data;
-    
   }
 
   /**USE: to get table data from API */
