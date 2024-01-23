@@ -16,7 +16,7 @@ const routes: Routes = [
     loadChildren: () => import('../operationals/menu-updation/menu-updation.module').then(m => m.MenuUpdationModule)
   },
   {
-    path: 'menu-updation',
+    path: 'grid-settings',
     loadChildren: () => import('../operationals/grid-settings/grid-settings.module').then(m => m.GridSettingsModule)
   },
 ];
