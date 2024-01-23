@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'menu-updation',
     loadChildren: () => import('../operationals/menu-updation/menu-updation.module').then(m => m.MenuUpdationModule)
   },
+  {
+    path: 'menu-updation',
+    loadChildren: () => import('../operationals/grid-settings/grid-settings.module').then(m => m.GridSettingsModule)
+  },
 ];
 
 @NgModule({
