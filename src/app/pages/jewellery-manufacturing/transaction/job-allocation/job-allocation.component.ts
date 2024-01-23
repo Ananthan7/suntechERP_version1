@@ -330,10 +330,7 @@ export class JobAllocationComponent implements OnInit {
   
       let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
         if (resp.status == 'Success') {
-          this.gridData = resp.response
-          // localStorage.setItem('userRole', resp['response']['GROUP_NAME']);
-          // localStorage.setItem('userLang', resp['response']['USER_LANGUAGE']);
-        
+          this.gridData = resp.response;        
         }
        
       });
