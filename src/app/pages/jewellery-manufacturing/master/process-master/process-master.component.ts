@@ -19,6 +19,9 @@ export class ProcessMasterComponent implements OnInit {
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   processTypeList: any[] = [];
+  islossReadOnly = true;
+  isRecovReadOnly = true;
+  isAlloWGainReadOnly = true;
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -171,14 +174,14 @@ export class ProcessMasterComponent implements OnInit {
   ngOnInit(): void {
 
     this.getProcessTypeOptions()
-    this.processMasterForm.controls['loss_max'].disable();
-    this.processMasterForm.controls['loss_min'].disable();
-    this.processMasterForm.controls['min_end'].disable();
-    this.processMasterForm.controls['accountStart'].disable();
-    this.processMasterForm.controls['loss_standard'].disable();
-    this.processMasterForm.controls['standard_end'].disable();
-    this.processMasterForm.controls['accountMiddle'].disable();
-    this.processMasterForm.controls['accountEnd'].disable();
+    // this.processMasterForm.controls['loss_max'].disable();
+    // this.processMasterForm.controls['loss_min'].disable();
+    // this.processMasterForm.controls['min_end'].disable();
+    // this.processMasterForm.controls['accountStart'].disable();
+    // this.processMasterForm.controls['loss_standard'].disable();
+    // this.processMasterForm.controls['standard_end'].disable();
+    // this.processMasterForm.controls['accountMiddle'].disable();
+    // this.processMasterForm.controls['accountEnd'].disable();
 
     console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
@@ -450,7 +453,7 @@ export class ProcessMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.content.MID
+    let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.processCode
     let postData = {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode,
@@ -606,49 +609,56 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   onlossChange(event:any){  
+    this.islossReadOnly = !this.islossReadOnly;
     console.log(event);
-    if(event.checked === true){
-      this.processMasterForm.controls['loss_max'].enable();
-      this.processMasterForm.controls['loss_min'].enable();
-      this.processMasterForm.controls['accountStart'].enable();
-      this.processMasterForm.controls['loss_standard'].enable();
-    }
-    else{
-      this.processMasterForm.controls['loss_min'].disable();
-      this.processMasterForm.controls['loss_max'].disable();
-      this.processMasterForm.controls['accountStart'].disable();
-      this.processMasterForm.controls['loss_standard'].disable();
-      this.processMasterForm.controls['loss_min'].reset();
-      this.processMasterForm.controls['loss_max'].reset();
-      this.processMasterForm.controls['accountStart'].reset();
-      this.processMasterForm.controls['loss_standard'].reset();
-    }
+    // if(event.checked === true){
+    //   this.processMasterForm.controls['loss_max'].enable();
+    //   this.processMasterForm.controls['loss_min'].enable();
+    //   this.processMasterForm.controls['accountStart'].enable();
+    //   this.processMasterForm.controls['loss_standard'].enable();
+    // }
+    // else{
+    //   this.processMasterForm.controls['loss_min'].disable();
+    //   this.processMasterForm.controls['loss_max'].disable();
+    //   this.processMasterForm.controls['accountStart'].disable();
+    //   this.processMasterForm.controls['loss_standard'].disable();
+    //   this.processMasterForm.controls['loss_min'].disable();
+    //   this.processMasterForm.controls['loss_max'].disable();
+    //   this.processMasterForm.controls['accountStart'].disable();
+    //   this.processMasterForm.controls['loss_standard'].disable();
+    // }
   }
 
-  onRecovery(event:any){  
+  onRecovery(event:any){ 
+    this.isRecovReadOnly = !this.isRecovReadOnly; 
+    
     console.log(event);
-    if(event.checked === true){
-      this.processMasterForm.controls['standard_end'].enable();
-      this.processMasterForm.controls['min_end'].enable();
-      this.processMasterForm.controls['accountMiddle'].enable();
-    }
-    else{
-      this.processMasterForm.controls['standard_end'].disable();
-      this.processMasterForm.controls['min_end'].disable();
-      this.processMasterForm.controls['accountMiddle'].disable();
-      this.processMasterForm.controls['standard_end'].reset();
-      this.processMasterForm.controls['min_end'].reset();
-      this.processMasterForm.controls['accountMiddle'].reset();
-    }
+    // if(event.checked === true){
+    //   this.processMasterForm.controls['standard_end'].enable();
+    //   this.processMasterForm.controls['min_end'].enable();
+    //   this.processMasterForm.controls['accountMiddle'].enable();
+    // }
+    // else{
+    //   this.processMasterForm.controls['standard_end'].disable();
+    //   this.processMasterForm.controls['min_end'].disable();
+    //   this.processMasterForm.controls['accountMiddle'].disable();
+    //   this.processMasterForm.controls['standard_end'].disable();
+    //   this.processMasterForm.controls['min_end'].disable();
+    //   this.processMasterForm.controls['accountMiddle'].disable();
+    // }
   }
 
   onAllowGain(event:any){
-    if(event.checked == true){
-      this.processMasterForm.controls['accountEnd'].enable();
-    }else{
-      this.processMasterForm.controls['accountEnd'].disable();
-      this.processMasterForm.controls['accountEnd'].reset();
-    }
+    this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly; 
+    
+    console.log(event);
+    // if(event.checked == true){
+    //   this.processMasterForm.controls['accountEnd'].enable();
+    //  }
+     //else{
+    //   this.processMasterForm.controls['accountEnd'].disable();
+    //   this.processMasterForm.controls['accountEnd'].disable();
+    // }
   }
   
 }

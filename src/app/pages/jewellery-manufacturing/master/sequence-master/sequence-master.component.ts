@@ -37,6 +37,7 @@ export class SequenceMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   sequenceMasterForm: FormGroup = this.formBuilder.group({
+    mid:[''],
     sequenceCode: ['', [Validators.required]],
     sequenceDESCRIPTION: ['', [Validators.required]],
     sequencePrefixCode: ['', [Validators.required]],
@@ -51,7 +52,7 @@ export class SequenceMasterComponent implements OnInit {
     this.getTableData()
   }
   ngOnInit(): void {
-    this.sequenceMasterForm.controls['calculatetime'].disable();
+    // this.sequenceMasterForm.controls['calculatetime'].disable();
     if (this.content) {
       this.setFormValues()
     }
@@ -87,6 +88,7 @@ export class SequenceMasterComponent implements OnInit {
   }
   setFormValues() {
     if (!this.content) return
+    this.sequenceMasterForm.controls.mid.setValue(this.content.MID)
     this.sequenceMasterForm.controls.sequenceCode.setValue(this.content.SEQ_CODE)
     this.sequenceMasterForm.controls.sequenceDESCRIPTION.setValue(this.content.DESCRIPTION)
     this.sequenceMasterForm.controls.sequencePrefixCode.setValue(this.content.PREFIX_CODE)
@@ -147,7 +149,7 @@ export class SequenceMasterComponent implements OnInit {
       "DESCRIPTION": this.sequenceMasterForm.value.sequenceDESCRIPTION || "",
       "PRINT_COUNT": 0,
       "PREFIX_CODE": this.sequenceMasterForm.value.sequencePrefixCode || "",
-      "MID": 0,
+      "MID": this.sequenceMasterForm.value.mid || 0,
       "sequenceDetails": this.selectedSequence || []
     }
 
@@ -375,9 +377,9 @@ export class SequenceMasterComponent implements OnInit {
    
      
     }
-    else{
-      this.sequenceMasterForm.controls['calculatetime'].disable();
-       
-    }
+  //   else{
+  //     this.sequenceMasterForm.controls['calculatetime'].disable();
+  //      
+  //   }
 }
 }
