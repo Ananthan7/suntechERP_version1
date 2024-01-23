@@ -13,6 +13,7 @@ import { map, startWith } from 'rxjs/operators';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { IndexedApiService } from 'src/app/services/indexed-api.service';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 
 @Component({
@@ -45,7 +46,8 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router,
     public dataService: SuntechAPIService,
-    
+    private comService: CommonServiceService
+
   ) {
     let isLayoutRTL = false;
     this.changeRtlLayout(isLayoutRTL);
@@ -54,8 +56,15 @@ export class LoginComponent implements OnInit {
       branch: new FormControl('', Validators.required),
       year: new FormControl('', Validators.required),
     });
+
+
   }
   ngAfterViewInit() {
+
+    this.comService.formControlSetReadOnly('password', true);
+    this.comService.formControlSetReadOnly('branch', true);
+    this.comService.formControlSetReadOnly('year', true);
+
     // this.getCompanyParameter()
     // this.getMessageBox()
   }
@@ -78,6 +87,7 @@ export class LoginComponent implements OnInit {
   }
   ngOnInit() {
 
+
   }
 
   private _filter(value: string): string[] {
@@ -95,7 +105,7 @@ export class LoginComponent implements OnInit {
       option.toLowerCase().includes(filterValue)
     );
   }
-  changeTextUpperCase(event: any){
+  changeTextUpperCase(event: any) {
     event.target.value = event.target.value.toString().toUpperCase();
     this.user_name = event.target.value;
   }
@@ -106,10 +116,16 @@ export class LoginComponent implements OnInit {
       let API = 'UserDetailNetMaster/' + this.user_name
       let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
         if (resp.status == 'Success') {
+
+          this.comService.formControlSetReadOnly('password', false);
+
           this.userDetails = resp.response
           // localStorage.setItem('userRole', resp['response']['GROUP_NAME']);
           // localStorage.setItem('userLang', resp['response']['USER_LANGUAGE']);
           this.validateState = 1;
+        } else {
+          this.comService.formControlSetReadOnly('password', true);
+
         }
         this.snackBar.dismiss();
       });
@@ -122,6 +138,7 @@ export class LoginComponent implements OnInit {
     let password = event.target.value;
     if (this.validateState == 1) {
       if (password != '') {
+
         this.snackBarRef = this.snackBar.open(
           'Validating Username & Password ...'
         );
@@ -129,32 +146,44 @@ export class LoginComponent implements OnInit {
         let API = 'ValidatePassword?strusername=' + this.user_name + '&strPassword=' + password
         let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
           if (resp.status == 'Success') {
+      this.snackBar.open('loading...');
             let API2 = 'UseBranchNetMaster/' + this.user_name + ''
             let sub2: Subscription = this.dataService.getDynamicAPI(API2).subscribe((resp) => {
-              this.all_branch = resp.response;
-              var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
+              if (resp.status == 'Success') {
+                this.snackBar.dismiss();
 
-              this.options = data;
-              this.filteredOptions =
-                this.dataForm.controls.branch.valueChanges.pipe(
-                  startWith(''),
-                  map((value) => this._filter(value))
-                );
+                this.comService.formControlSetReadOnly('branch', false);
+
+                this.all_branch = resp.response;
+                var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
+
+                this.options = data;
+                this.filteredOptions =
+                  this.dataForm.controls.branch.valueChanges.pipe(
+                    startWith(''),
+                    map((value) => this._filter(value))
+                  );
+              } else {
+                this.comService.formControlSetReadOnly('branch', true);
+
+              }
+
             });
             this.subscriptions.push(sub2)
             this.validateState = 2;
             this.snackBar.dismiss();
           } else {
+            this.snackBar.dismiss();
+
             this.snackBar.open(
               'Invalid User Credentials! Check Username & Password.',
-              '',
+              'OK',
               {
-                duration: 3000,
+                duration: 5000,
               }
             );
             this.filteredOptions = undefined;
           }
-          this.snackBar.dismiss();
         });
         //to unsubscribe
         this.subscriptions.push(sub)
@@ -165,10 +194,10 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-  validateYear(event:any){
-    if(event.target.value == '') return;
-    let yearSelected = this.options_year.filter((item:any) => item == event.target.value)
-    if(yearSelected.length==0){
+  validateYear(event: any) {
+    if (event.target.value == '') return;
+    let yearSelected = this.options_year.filter((item: any) => item == event.target.value)
+    if (yearSelected.length == 0) {
       this.dataForm.controls.year.setValue('')
     }
   }
@@ -178,70 +207,81 @@ export class LoginComponent implements OnInit {
   }
   /**USE: branch change function to call financial year API */
   changeBranch(e: any) {
-    if(e.target.value == '') return;
-    let optionsSelected = this.options.filter((item:any) => item == (e.target.value).toUpperCase())
-    if(optionsSelected.length==0){
+    if (e.target.value == '') return;
+    let optionsSelected = this.options.filter((item: any) => item == (e.target.value).toUpperCase())
+    if (optionsSelected.length == 0) {
       this.dataForm.controls.branch.setValue('')
       return
     }
     let selectedBranch = this.dataForm.value.branch;
     if (selectedBranch != '') {
+      this.snackBar.open('loading...');
       let API = `FinancialYear?branchcode=${selectedBranch}&strusername=${this.user_name}`
       let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp) => {
-        this.all_year = resp.response;
-        this.options_year = this.all_year.map((item: any) => item.fyearcode);
 
-        this.filteredOptions_year =
-          this.dataForm.controls.year.valueChanges.pipe(
-            startWith(''),
-            map((value) => this._filteryear(value))
-          );
+        if (resp.status == 'Success') {
+          this.snackBar.dismiss();
+          this.comService.formControlSetReadOnly('year', false);
+
+          this.all_year = resp.response;
+          this.options_year = this.all_year.map((item: any) => item.fyearcode);
+
+          this.filteredOptions_year =
+            this.dataForm.controls.year.valueChanges.pipe(
+              startWith(''),
+              map((value) => this._filteryear(value))
+            );
+
+        } else {
+          this.comService.formControlSetReadOnly('year', true);
+
+        }
       });
       //to unsubscribe
       this.subscriptions.push(sub)
     }
-    
+
   }
   /**USE: sign in with API branchmaster */
   signin() {
     let branch = this.dataForm.value.branch;
     let year = this.dataForm.value.year;
-    
+
     if (branch != '' && this.validateState == 2 && year != '') {
       let API = 'BranchMaster/' + branch
       let sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((resp: any) => {
-        //to unsubscribe
-        this.subscriptions.push(sub)
-        this.unsubscribeAll();
-        if (resp.status == 'Success') {
-          console.log('fired1');
-          
-          // if (resp.status == 'Success') {
-          this.validateState = 3;
-          localStorage.setItem('USER_PARAMETER', JSON.stringify(this.userDetails));
-          localStorage.setItem('BRANCH_PARAMETER', JSON.stringify(resp.response));
-          // this.comFunc.allbranchMaster = resp.response;
-          // localStorage.setItem('currentUser', JSON.stringify(this.userDetails));
-          localStorage.setItem('username', this.user_name);
-          localStorage.setItem('userbranch', branch);
-          localStorage.setItem('YEAR', year);
-          console.log('fired2');
-          
-          // this.getBranchCurrencyMaster();
-          // this.router.navigate(['/']);
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 500);
-        }
-        this.snackBar.dismiss();
-      },(err)=>{
-        //to unsubscribe
-        this.subscriptions.push(sub)
-        this.unsubscribeAll();
-        alert('Server error ')
-      });
-     
+        .subscribe((resp: any) => {
+          //to unsubscribe
+          this.subscriptions.push(sub)
+          this.unsubscribeAll();
+          if (resp.status == 'Success') {
+            console.log('fired1');
+
+            // if (resp.status == 'Success') {
+            this.validateState = 3;
+            localStorage.setItem('USER_PARAMETER', JSON.stringify(this.userDetails));
+            localStorage.setItem('BRANCH_PARAMETER', JSON.stringify(resp.response));
+            // this.comFunc.allbranchMaster = resp.response;
+            // localStorage.setItem('currentUser', JSON.stringify(this.userDetails));
+            localStorage.setItem('username', this.user_name);
+            localStorage.setItem('userbranch', branch);
+            localStorage.setItem('YEAR', year);
+            console.log('fired2');
+
+            // this.getBranchCurrencyMaster();
+            // this.router.navigate(['/']);
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 500);
+          }
+          this.snackBar.dismiss();
+        }, (err) => {
+          //to unsubscribe
+          this.subscriptions.push(sub)
+          this.unsubscribeAll();
+          alert('Server error ')
+        });
+
     } else {
       this.snackBar.open('Invalid Credentials', '', {
         duration: 2000,

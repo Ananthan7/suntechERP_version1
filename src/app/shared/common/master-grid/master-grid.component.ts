@@ -182,11 +182,11 @@ export class MasterGridComponent implements OnInit {
             });
 
 
-          // console.log('=================visibleFields===================');
-          // console.log(this.visibleFields, this.orderedItemsHead);
+          console.log('=================visibleFields===================');
+          console.log(this.visibleFields, this.orderedItemsHead);
 
-          // console.log('====================================');
-          // console.log(this.visibleFields.filter((data: any)=> data.VISIBLE === true).length);
+          console.log('====================================');
+          // console.log(this.visibleFields.filter((data: any) => data.VISIBLE === true).map((data: any) => data.FIELD_NAME));
 
           this.orderedItemsHead = this.visibleFields.filter((data: any, i) => {
 
@@ -204,8 +204,13 @@ export class MasterGridComponent implements OnInit {
               if (data.DATA_TYPE == 'datetime') data.DATATYPE = 'date';
               // data.DATA_TYPE == 'numeric' ? { type: 'fixedPoint', precision: 2, useGrouping: true } : (data.FIELD_NAME.toString().toLowerCase() == 'vocdate' ? 'dd-MM-yyyy' : auto)"
 
+              // if (['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME)) {
+              //   console.log('field ', data.FIELD_NAME);
 
-              return data.FIELD_NAME === val.FIELD_NAME && data.VISIBLE == true
+              //   return true;
+              // }
+              // else
+                return  ['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME) || data.FIELD_NAME === val.FIELD_NAME && data.VISIBLE == true
             }
             )
             console.log('headData ', headData);
