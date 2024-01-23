@@ -59,6 +59,7 @@ export class MasterComponent implements OnInit {
     /**USE: to get table data from API */
     this.menuTitle = this.CommonService.getModuleName()
     this.componentName = this.CommonService.getFormComponentName()
+  
   }
 
   viewRowDetails(e: any) {
@@ -114,7 +115,7 @@ export class MasterComponent implements OnInit {
     }, (reason) => {
       // Handle modal dismissal (if needed)
     });
-    modalRef.componentInstance.content = data,this.srNo;
+    modalRef.componentInstance.content = data;
     
   }
 

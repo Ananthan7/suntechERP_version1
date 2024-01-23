@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (ChangeJobClick)="jobchange($event)"  [isViewContinue]="true"  [isViewChangeJob]="true" [isViewDelete]="false" [isViewMore]="false"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (changeJobClick)="jobchange()"  (continueClick)="jobcontinue($event)" [isViewContinue]="true"  [isViewChangeJob]="true" [isViewDelete]="false" [isViewMore]="false"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metalIssueDetailsForm">
@@ -85,7 +85,7 @@
                                                 <img src={{image}} style="width:126px;height:124px">
                                                 
                                             </button>
-                                            <input type="file"  class="uploadproduct" (change)="onFileChangedimage($event)">
+                                            <input type="file"  class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -120,7 +120,7 @@
                                                 <img src={{urls}} style="width:126px;height:124px">
                                                 
                                             </button>
-                                            <input type="file"  class="uploadproduct" (change)="onFileChanged($event)">
+                                            <input type="file"  class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChanged($event)">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
