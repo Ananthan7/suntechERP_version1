@@ -74,6 +74,8 @@ export class CustomerPriceMasterComponent implements OnInit {
     markup:[''],
     metal_loss:[''],
     date:[new Date(),''],
+    text:[''],
+    changePrice:[''],
     
    });
 
@@ -105,10 +107,10 @@ export class CustomerPriceMasterComponent implements OnInit {
       this.update()
       return
     }
-    if (this.customerpricemasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.customerpricemasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
   
     let API = 'CustomerPriceMaster/InsertCustomerPriceMaster'
     let postData = {
@@ -121,11 +123,11 @@ export class CustomerPriceMasterComponent implements OnInit {
       "MARGIN_PER": this.customerpricemasterForm.value.margin || "",
       "LAB_TYPE": this.customerpricemasterForm.value.labourtype || "",
       "MARKUP_PER":  this.customerpricemasterForm.value.markup || "",
-      "CUSTOMER_NAME": "",
+      "CUSTOMER_NAME":  this.customerpricemasterForm.value.text,
       "PRINT_COUNT": 0,
       "VALID_FROM": this.customerpricemasterForm.value.date,
       "ADD_ON_RATE":this.customerpricemasterForm.value.addonrate,
-      "CURRENCY_CODE": "stri",
+      "CURRENCY_CODE": this.customerpricemasterForm.value.changePrice,
       "CURRENCY_RATE": 0,
       "MAIN_VOCTYPE": "string",
       "CUSTOMER_PRICE_DET": [
@@ -231,6 +233,7 @@ export class CustomerPriceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
   update(){
     if (this.customerpricemasterForm.invalid) {
       this.toastr.error('select all required fields')
@@ -238,21 +241,20 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
   
     let API = 'CustomerPriceMaster/UpdateCustomerPriceMaster/'+this.content.PRICECODE
-    let postData = 
-    {
+    let postData = {
       "MID": 0,
-      "CUSTOMER_CODE": "string",
-      "DESCRIPTION": "string",
-      "GOLD_LOSS_PER": 0,
-      "UPDATE_ON": "2023-11-28T05:53:11.589Z",
-      "PRICECODE": "string",
-      "MARGIN_PER": 0,
-      "LAB_TYPE": "string",
-      "MARKUP_PER": 0,
-      "CUSTOMER_NAME": "string",
+      "CUSTOMER_CODE": this.customerpricemasterForm.value.customercode || "",
+      "DESCRIPTION":  this.customerpricemasterForm.value.desc || "",
+      "GOLD_LOSS_PER":  this.customerpricemasterForm.value.metal_loss || "",
+      "UPDATE_ON": "2023-11-28T05:47:14.177Z",
+      "PRICECODE": this.customerpricemasterForm.value.pricecode || "",
+      "MARGIN_PER": this.customerpricemasterForm.value.margin || "",
+      "LAB_TYPE": this.customerpricemasterForm.value.labourtype || "",
+      "MARKUP_PER":  this.customerpricemasterForm.value.markup || "",
+      "CUSTOMER_NAME": this.customerpricemasterForm.value.text,
       "PRINT_COUNT": 0,
-      "VALID_FROM": "2023-11-28T05:53:11.589Z",
-      "ADD_ON_RATE": 0,
+      "VALID_FROM": this.customerpricemasterForm.value.date,
+      "ADD_ON_RATE":this.customerpricemasterForm.value.addonrate,
       "CURRENCY_CODE": "stri",
       "CURRENCY_RATE": 0,
       "MAIN_VOCTYPE": "string",
@@ -270,7 +272,7 @@ export class CustomerPriceMasterComponent implements OnInit {
           "CURRENCYCODE": "string",
           "ISSUE_RATE": 0,
           "SELLING_RATE": 0,
-          "UPDATE_ON": "2023-11-28T05:53:11.590Z",
+          "UPDATE_ON": "2023-11-28T05:47:14.178Z",
           "CARAT_WT": 0,
           "SIEVE": "string",
           "SELLING_PER": 0,
@@ -289,7 +291,7 @@ export class CustomerPriceMasterComponent implements OnInit {
           "WEIGHT_TO": 0,
           "SIEVE_TO": "string",
           "CUSTOMER_NAME": "string",
-          "DT_VALID_FROM": "2023-11-28T05:53:11.590Z",
+          "DT_VALID_FROM": "2023-11-28T05:47:14.178Z",
           "PRICECODE": "string",
           "SRNO": 0
         }
@@ -309,7 +311,7 @@ export class CustomerPriceMasterComponent implements OnInit {
           "UNITCODE": "string",
           "COST_RATE": 0,
           "SELLING_RATE": 0,
-          "LAST_UPDATE": "2023-11-28T05:53:11.590Z",
+          "LAST_UPDATE": "2023-11-28T05:47:14.178Z",
           "CRACCODE": "string",
           "ACCESSORIES": 0,
           "DIVISION_CODE": "string",
@@ -317,7 +319,7 @@ export class CustomerPriceMasterComponent implements OnInit {
           "CARATWT_FROM": 0,
           "CARATWT_TO": 0,
           "SIEVE": "string",
-          "DT_VALID_FROM": "2023-11-28T05:53:11.590Z",
+          "DT_VALID_FROM": "2023-11-28T05:47:14.178Z",
           "PRICECODE": "string",
           "SRNO": 0,
           "PROCESS_TYPE": "string"
@@ -359,6 +361,7 @@ export class CustomerPriceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
   deleteRecord() {
     if (!this.content.MID) {
       Swal.fire({
