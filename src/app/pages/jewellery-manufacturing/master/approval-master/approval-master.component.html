@@ -139,7 +139,7 @@
                                           </div>
 
                                           <div *dxTemplate="let data of 'mobilenumber'">
-                                            <input type="number" (change)="mobilenumber($event,data)" [value]="data.value" style="width: 100%;" [disabled]="isdiabled" />
+                                            <input type="number" (change)="mobilenumber($event,data)" [dir]="'rtl'" style="text-align: right;" [value]="data.value" style="width: 100%;" [disabled]="isdiabled" />
                                           </div>
 
                                     </dx-data-grid>
