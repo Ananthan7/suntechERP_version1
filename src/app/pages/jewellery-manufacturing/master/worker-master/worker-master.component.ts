@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
   selector: 'app-worker-master',
   templateUrl: './worker-master.component.html',
   styleUrls: ['./worker-master.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkerMasterComponent implements OnInit {
  
@@ -67,12 +67,15 @@ export class WorkerMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     // private ChangeDetector: ChangeDetectorRef,
-  ) { }
+  ) {
+    this.setInitialValues()
+   }
 
   ngOnInit(): void {
-    // console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
-      this.viewFormValues();
+      this.viewMode = true;
+      this.setFormValues();
+      this.workerMasterForm.disable();
     }else if (this.content.FLAG == 'EDIT'){
       this.setFormValues();
     }
@@ -97,10 +100,14 @@ export class WorkerMasterComponent implements OnInit {
     Active : [true]
   })
   
-  printBarcode(){
-    //  window.print();
+  setInitialValues() {
+    this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0,'AMOUNT'))
+    this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0,'METAL'))
+    this.workerMasterForm.controls.TargetPcs.setValue(0)
+    this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(0,'METAL'))
+    this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(0,'METAL'))
+    this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(0,'METAL'))
   }
-
   setFormValues() {
     if (!this.content) return
     this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE)
@@ -115,24 +122,6 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.content.TARGET_CARAT_WT)
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.content.TARGET_METAL_WT)
     this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT)
-  }
-
-  viewFormValues(){
-    this.viewMode = true;
-    if (!this.content) return
-    this.workerMasterForm.controls.WorkerCode.setValue(this.content.WORKER_CODE);
-    this.workerMasterForm.controls.WorkerDESCRIPTION.setValue(this.content.DESCRIPTION);
-    this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE);
-    this.workerMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR);
-    this.workerMasterForm.controls.DefaultProcess.setValue(this.content.PROCESS_CODE);
-    this.workerMasterForm.controls.LossAllowed.setValue(this.content.LOSS_ALLOWED);
-    this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE);
-    this.workerMasterForm.controls.TrayWeight.setValue(this.content.TRAY_WEIGHT);
-    this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS);
-    this.workerMasterForm.controls.TargetCaratWt.setValue(this.content.TARGET_CARAT_WT);
-    this.workerMasterForm.controls.TargetMetalWt.setValue(this.content.TARGET_METAL_WT);
-    this.workerMasterForm.controls.TargetWeight.setValue(this.content.TARGET_WEIGHT);
-    this.workerMasterForm.disable();
   }
 
   /**USE:  final save API call*/
@@ -325,21 +314,26 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   /**use: checkbox change */
-  // changedCheckbox(cellInfo: any) {
-  //   let value = cellInfo.data
-
-  //   this.tableData.forEach((item: any) => {
-  //     if (value.SrNo == item.SrNo) {
-  //       value.isChecked = !value.isChecked
-  //     }
-  //     this.selectedProcessArr.push({
-  //       "UNIQUEID": 0,
-  //       "SRNO": value.SrNo,
-  //       "WORKER_CODE": value.PROCESS_DESC,
-  //       "PROCESS_CODE": value.PROCESS_CODE
-  //     })
-  //   })
-  // }
+  changedCheckbox(cellInfo: any) {
+    let value = cellInfo.data
+    console.log(value);
+    
+    this.tableData.forEach((item: any) => {
+      if (value.SrNo == item.SrNo) {
+        value.isChecked = !value.isChecked
+        if(value.isChecked == true){
+          this.selectedProcessArr.push({
+            "UNIQUEID": 0,
+            "SRNO": value.SrNo,
+            "WORKER_CODE": this.workerMasterForm.value.WorkerCode,
+            "PROCESS_CODE": value.PROCESS_CODE
+          })
+        }else if(value.isChecked == false){
+          this.selectedProcessArr = this.selectedProcessArr.filter((element)=> element.SRNO != value.SrNo)
+        }
+      }
+    })
+  }
   /**select process API call */
   // selectProcess() {
   //   let params = {
@@ -376,27 +370,26 @@ export class WorkerMasterComponent implements OnInit {
   // }
 
   selectProcessMasterList() {
-    console.log('This Click Here')
+    if(this.workerMasterForm.value.WorkerCode == ''){
+      this.commonService.toastErrorByMsgId('Worker Code Required');
+      return
+    }
+    this.commonService.toastSuccessByMsgId('MSG81447');
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
         if (result.response) {
-          console.log(result);
-          result.response.forEach((item: any, i: any) => {
+          this.tableData = result.response; 
+          this.tableData.forEach((item: any, i: any) => {
             item.SrNo = i + 1;
           });
-          this.tableData = result.response; 
+          
         }
-        // }else {
-        //   Swal.fire({
-        //     title: '',
-        //     text: 'Data not available!',
-        //     icon: 'warning',
-        //     confirmButtonColor: '#336699',
-        //     confirmButtonText: 'Ok'
-        //   });
-        // }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
     this.subscriptions.push(Sub)
    }
 

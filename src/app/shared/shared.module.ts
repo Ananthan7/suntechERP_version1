@@ -70,6 +70,7 @@ import { MetalDecimalDirective } from './directives/format-metal-decimal.directi
 import { StoneDecimalDirective } from './directives/format-stone-decimal.directive';
 import { FormatSixDecimalDirective } from './directives/format-six-decimal.directive';
 import { CalendarModule } from 'primeng/calendar';
+import { UppercaseDirective } from './directives/uppercase.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -95,7 +96,8 @@ import { CalendarModule } from 'primeng/calendar';
     AmountDecimalDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
-    FormatSixDecimalDirective
+    FormatSixDecimalDirective,
+    UppercaseDirective
   ],
   imports: [
     CommonModule,
