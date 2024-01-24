@@ -24,7 +24,7 @@ export class CADProcessingComponent implements OnInit {
   columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
   divisionMS: any = 'ID';
   columnheadItemDetails3:any[] = ['Comp Code','Srno','Division','Stone Type','Stock Code','Karat','Color','Shape','Sieve Std','Sieve Set'];
-  columnheadItemDetails2:any[] = ['']
+  columnheadItemDetails2:any[] = ['SR#']
   branchCode?: String;
   yearMonth?: String;
   currentDate = new FormControl(new Date());
@@ -33,6 +33,7 @@ export class CADProcessingComponent implements OnInit {
   table: any;
   status: boolean= true;
   selectedTabIndex = 0;
+  setAllInitialValues: any;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -45,6 +46,7 @@ export class CADProcessingComponent implements OnInit {
   ngOnInit(): void {
     if (this.content) {
       // this.setFormValues()
+     
       
     }
     this.branchCode = this.comService.branchCode;
@@ -94,6 +96,7 @@ export class CADProcessingComponent implements OnInit {
     deliveryOn:[''],
     deliveryOnDays:[''],
     deliveryOnDate:[new Date(),{disabled: true,value:''}],
+    salesPersonCode:['']
   });
 
  
@@ -325,6 +328,75 @@ componentSet(){
 }
 
   
+setDetaills(){
+  let Details:any=[]
+  this.tableData.forEach((Element: any)=> {
+    Details.push(
+      {
+        "UNIQUEID": 0,
+        "DT_BRANCH_CODE": this.branchCode,
+        "DT_VOCTYPE": this.cadProcessingForm.value.voctype,
+        "DT_VOCNO": 0,
+        "DT_YEARMONTH": this.yearMonth,
+        "SRNO": Element.Srno,
+        "METALSTONE": this.comService.nullToString(Element.METALSTONE),
+        "DIVCODE": this.comService.nullToString(Element.DIVCODE),
+        "STONE_TYPE": Element.StoneType,
+        "KARAT_CODE": this.comService.nullToString(Element.KARAT_CODE),
+        "SIEVE_SET": "",
+        "SIEVE": Element.Sieve,
+        "COLOR": Element.Color,
+        "CLARITY": "",
+        "SHAPE": Element.Shape,
+        "SIZE": this.comService.nullToString(Element.Size),
+        "PCS": this.comService.emptyToZero(Element.Pcs),
+        "GROSS_WT": 0,
+        "D_REMARKS": Element.Remarks,
+        "PROCESS_TYPE": "",
+        "POINTER_WT": Element.PointerWt,
+        "STOCK_CODE": Element.StockCode,
+        "COMP_CODE": ""
+      }
+    )
+    
+  }
+  )
+  return Details  
+}
+
+componentSet(){
+  let Components:any=[]
+  this.tableDatas.forEach((item: any)=>{
+    Components.push(
+       {
+          "REFMID": 0,
+          "SRNO": item.Srno,
+          "COMP_CODE": item.CompCode,
+          "COMP_DESCRIPTION": item.Description,
+          "COMP_SHAPE": "",
+          "TYPE_CODE": item.Type,
+          "CATEGORY_CODE": item.Category,
+          "COMPSIZE_CODE": "string",
+          "COMPSET_CODE": "string",
+          "HEIGHT": item.Height,
+          "WIDTH": item.Width,
+          "LENGTH": item.Length,
+          "RADIUS": item.Radius,
+          "PCS": this.comService.emptyToZero(item.PCS),
+          "REMARKS": item.Remarks,
+          "DT_BRANCH_CODE": this.branchCode,
+          "DT_VOCTYPE": this.cadProcessingForm.value.voctype,
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": this.yearMonth
+        }
+
+    ) 
+  }
+  )
+  return Components
+}
+
+  
 
 
   formSubmit() {
@@ -355,23 +427,23 @@ componentSet(){
       "PROCESS_CODE": this.cadProcessingForm.value.process,
       "WORKER_CODE": this.cadProcessingForm.value.worker,
       "JOB_NUMBER": this.cadProcessingForm.value.job,
-      "UNQ_JOB_ID": "",
+      "UNQ_JOB_ID": "string",
       "JOB_SO_NUMBER": this.cadProcessingForm.value.subJobId,
       "DESIGN_CODE": this.cadProcessingForm.value.design,
       "UNQ_DESIGN_ID": "",
       "PART_CODE": "",
       "PCS": 0,
-      "TIME_TAKEN": this.comService.nullToString(this.cadProcessingForm.value.TIME_TAKEN),
+      "TIME_TAKEN": this.cadProcessingForm.value.timeTaken,
       "JOB_SO_MID": 0,
-      "CAD_STATUS": "",
-      "APPR_CODE": "",
+      "CAD_STATUS": "string",
+      "APPR_CODE": "string",
       "APPR_TYPE": this.cadProcessingForm.value.type,
-      "TRANS_REF": "",
+      "TRANS_REF": "string",
       "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
       "TO_PROCESS_CODE": this.cadProcessingForm.value.toProcess,
       "TO_WORKER_CODE": this.cadProcessingForm.value.toWorker,
       "SO_DELIVERY_TYPE": this.cadProcessingForm.value.deliveryOn,
-      "SO_DELIVERY_DAYS": this.cadProcessingForm.value.deliveryOnDays,
+      "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.cadProcessingForm.value.deliveryOnDays),
       "SO_DELIVERY_DATE": this.cadProcessingForm.value.deliveryOnDate,
       "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
       "SO_CR_DAYS": 0,

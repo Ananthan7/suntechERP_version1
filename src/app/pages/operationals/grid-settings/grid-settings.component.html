@@ -1,1 +1,282 @@
-<p>grid-settings works!</p>
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Transaction Main Settings
+    </h5>
+    <!-- <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button> -->
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewDelete]="false"
+    [isViewMore]="false"></modal-header>
+<div class="container-fluid pt-3">
+    <form [formGroup]="gridSettingsForm">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Select Voc Type</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%">
+                            <input type="text" matInput formControlName="selectVocType" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Main Voc Type</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%">
+                            <input type="text" matInput formControlName="mainVocType" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 70%">
+                            <input type="text" matInput formControlName="mainVocTypeCode" />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-checkbox class="example-margin" formControlName="copyToAllBranch">Copy To All
+                            Branch</mat-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <mat-tab-group [selectedIndex]="">
+            <mat-tab label="Header Grid">
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                            <dxo-paging [enabled]="false"></dxo-paging>
+                            <dxo-editing mode="cell">
+                            </dxo-editing>
+                            <dxo-selection mode="multiple"></dxo-selection>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                            <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                            </dxi-column>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Detail Grid">
+            </mat-tab>
+        </mat-tab-group>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="border my-2 p-2">
+                    <div class="row align-items-center">
+                        <h6 class="col-md-12">Header Grid View</h6>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Odd Row Color</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%">
+                                <mat-select>
+                                    <mat-option></mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Font Size</label>
+                        <div class="col-md-2">
+                            <mat-form-field style="width: 100%">
+                                <input type="text" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                            <mat-checkbox class="example-margin">Show Group
+                                Count</mat-checkbox>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">Focus Row Color</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%">
+                                <mat-select>
+                                    <mat-option></mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Font Name</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%">
+                                <mat-select>
+                                    <mat-option></mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">No of Records</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%">
+                                <input type="text" matInput />
+                            </mat-form-field>
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Skin List</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%">
+                                <mat-select>
+                                    <mat-option></mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <mat-checkbox class="example-margin">All to Resize Row</mat-checkbox>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-checkbox class="example-margin">Show Auto Filter Row</mat-checkbox>
+                        </div>
+                        <div class="col-md-2">
+                            <mat-checkbox class="example-margin">Show Footer</mat-checkbox>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-checkbox class="example-margin">Show Grouping Panel</mat-checkbox>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="border my-2 p-2">
+                            <div class="row">
+                                <h6 class="col-md-12">Main Grid View Header</h6>
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Font Name</label>
+                                <div class="col-md-8">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-select>
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Font Size</label>
+                                <div class="col-md-4">
+                                    <mat-form-field style="width: 100%">
+                                        <input type="text" matInput />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-checkbox class="example-margin">Bold Text</mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border my-2 p-2">
+                            <div class="row">
+                                <h6 class="col-md-12">Transaction Main Footer Setting</h6>
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Font Name</label>
+                                <div class="col-md-8">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-select>
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Font Size</label>
+                                <div class="col-md-4">
+                                    <mat-form-field style="width: 100%">
+                                        <input type="text" matInput />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-checkbox class="example-margin">Bold Text</mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="border my-2 p-2">
+                    <div class="row">
+                        <h6 class="col-md-12">Detail Grid view</h6>
+                        <div class="col-md-3">
+                            <mat-checkbox class="example-margin">Show Footer</mat-checkbox>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-checkbox class="example-margin">Show Grouping Panel</mat-checkbox>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-checkbox class="example-margin">Show Auto Filter Row</mat-checkbox>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-checkbox class="example-margin">Show Group Count</mat-checkbox>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="border my-2 p-2">
+                            <div class="row">
+                                <h6 class="col-md-12">Detail Grid View Header</h6>
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Font Name</label>
+                                <div class="col-md-8">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-select>
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Font Size</label>
+                                <div class="col-md-4">
+                                    <mat-form-field style="width: 100%">
+                                        <input type="text" matInput />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-checkbox class="example-margin">Bold Text</mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border my-2 p-2">
+                            <div class="row align-items-center">
+                                <h6 class="col-md-12">Detail Footer Setting</h6>
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Font Size</label>
+                                <div class="col-md-4">
+                                    <mat-form-field style="width: 100%">
+                                        <input type="text" matInput />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-checkbox class="example-margin">Bold Text</mat-checkbox>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Font Name</label>
+                                <div class="col-md-8">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-select>
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Template</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 100%">
+                                    <mat-select>
+                                        <mat-option></mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
