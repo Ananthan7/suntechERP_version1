@@ -41,7 +41,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 6,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Debit Amount',
+    SEARCH_HEADING: 'CASH accounts',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE<> ''",
     VIEW_INPUT: true,

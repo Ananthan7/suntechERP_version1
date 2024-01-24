@@ -54,6 +54,7 @@ export class LabourChargeMasterComponent implements OnInit {
     currency: [''],
     accessories: [''],
 
+
   });
 
   metallabourMasterForm: FormGroup = this.formBuilder.group({
@@ -625,7 +626,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "CATEGORY_CODE": this.metallabourMasterForm.value.category,
       "SUB_CATEGORY_CODE": this.metallabourMasterForm.value.subCategory,
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
-      "PROCESS_TYPE": this.diamondlabourMasterForm.value.process,
+      "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
       "KARAT_CODE": this.metallabourMasterForm.value.karat,
       "METALSTONE": "s",
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,

@@ -1,6 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
@@ -12,6 +15,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
 
   vocMaxDate = new Date();
   currentDate = new Date();
+  branchOptions:any[] =[];
 
   retailAdvanceReceiptRegisterForm: FormGroup = this.formBuilder.group({
     branch : [''],
@@ -36,9 +40,9 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   }
   
   salesmanSelected(e: any) {
-
+    console.log(e);    
     this.retailAdvanceReceiptRegisterForm.controls.salesman.setValue(e.SALESPERSON_CODE);
-    this.retailAdvanceReceiptRegisterForm.controls.salesmanCode.setValue(e.description);
+    this.retailAdvanceReceiptRegisterForm.controls.salesmanCode.setValue(e.DESCRIPTION);
 
   }
 
@@ -48,9 +52,22 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private http: HttpClient,
+    private dataService: SuntechAPIService,
+
   ) { }
 
   ngOnInit(): void {
+    
+    const apiUrl = '/UseBranchNetMaster/ADMIN';
+  
+      let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
+        if (resp.status == 'Success') {
+          this.branchOptions = resp.response;
+          console.log(this.branchOptions);
+        }
+       
+      });
   }
 
   savePdf() {

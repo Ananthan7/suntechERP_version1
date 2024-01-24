@@ -35,14 +35,14 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3"  *ngIf="posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Credit Card'">
               <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="modeCODE" />
               </mat-form-field>
               <master-search [MasterSearchData]="modeOfData"
                 (newRowClick)="receiptModeSelected($event)"></master-search>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" *ngIf="posCurrencyReceiptDetailsForm.value.modeOfSelect == 'Credit Card'">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="modeDesc" />
               </mat-form-field>
