@@ -18,7 +18,7 @@
             <div class="card-body sales-card-body p-2"> -->
           <form [formGroup]="diamondlabourMasterForm">
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Division :</label>
+              <label for="input" class="col-sm-2 col-form-label">Division * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput maxlength="6" formControlName="division" />
@@ -28,7 +28,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Labour Code :</label>
+              <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput formControlName="labour_code" />
@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Labour Type :</label>
+              <label for="input" class="col-sm-2 col-form-label">Labour Type * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
@@ -52,7 +52,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Unit :</label>
+              <label for="input" class="col-sm-2 col-form-label">Unit * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
@@ -65,7 +65,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Method :</label>
+              <label for="input" class="col-sm-2 col-form-label">Method * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
@@ -76,7 +76,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Currency:</label>
+              <label for="input" class="col-sm-2 col-form-label">Currency  * :</label>
               <div class="col-sm-3">
                   <mat-form-field>
                     <input type="text" matInput  formControlName="currency" />
@@ -86,7 +86,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Shape :</label>
+              <label for="input" class="col-sm-2 col-form-label">Shape * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput maxlength="6" formControlName="shape" />
@@ -105,7 +105,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Size From :</label>
+              <label for="input" class="col-sm-2 col-form-label">Size From * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput maxlength="6" formControlName="size_from" />
@@ -113,7 +113,7 @@
                 <master-search [MasterSearchData]="sizeFromCodeData"
                   (newRowClick)="sizeFromCodeSelected($event)"></master-search>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Labour A/C :</label>
+              <label for="input" class="col-sm-2 col-form-label">Labour A/C * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput maxlength="6" formControlName="labour_ac" />
@@ -123,7 +123,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Size To :</label>
+              <label for="input" class="col-sm-2 col-form-label">Size To * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput maxlength="6" formControlName="size_to" />
@@ -139,14 +139,14 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Sieve :</label>
+              <label for="input" class="col-sm-2 col-form-label">Sieve * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="text" matInput maxlength="6" formControlName="sieve" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="sieveCodeData" (newRowClick)="sieveSelected($event)"></master-search>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Selling Rate :</label>
+              <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="number" matInput maxlength="6" formControlName="selling_rate" />
@@ -160,7 +160,7 @@
                   <input type="text" matInput maxlength="6" formControlName="sieve_desc" />
                 </mat-form-field>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Selling % * :</label>
+              <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="number" matInput maxlength="6" formControlName="selling" />
@@ -168,7 +168,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Ct Wt From :</label>
+              <label for="input" class="col-sm-2 col-form-label">Ct Wt From * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="number" matInput maxlength="6" formControlName="ctWtFrom" />
@@ -187,7 +187,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
+              <label for="input" class="col-sm-2 col-form-label">Ct Wt to * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <input type="number" matInput maxlength="6" formControlName="ctWtTo" />
@@ -209,7 +209,7 @@
             <div class="card-body sales-card-body p-2"> -->
           <form [formGroup]="metallabourMasterForm">
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Division :</label>
+              <label for="input" class="col-sm-2 col-form-label">Division * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput maxlength="6" formControlName="metalDivision">
@@ -227,7 +227,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Labour Code :</label>
+              <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput formControlName="metallabour_code" />
@@ -240,7 +240,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Labour Type :</label>
+              <label for="input" class="col-sm-2 col-form-label">Labour Type * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>
@@ -251,7 +251,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Currency :</label>
+              <label for="input" class="col-sm-2 col-form-label">Currency * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput maxlength="6" formControlName="metalcurrency" />
@@ -269,7 +269,7 @@
                 <master-search [MasterSearchData]="karatCodeData"
                   (newRowClick)="karatCodeSelected($event)"></master-search>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Labour A/C :</label>
+              <label for="input" class="col-sm-2 col-form-label">Labour A/C * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input matInput type="text" formControlName="labourAc" />
@@ -351,7 +351,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Unit :</label>
+              <label for="input" class="col-sm-2 col-form-label">Unit * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
                   <mat-label>Select</mat-label>

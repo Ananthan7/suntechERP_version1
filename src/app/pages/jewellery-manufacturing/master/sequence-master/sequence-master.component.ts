@@ -40,7 +40,7 @@ export class SequenceMasterComponent implements OnInit {
     mid:[''],
     sequenceCode: ['', [Validators.required]],
     sequenceDESCRIPTION: ['', [Validators.required]],
-    sequencePrefixCode: ['', [Validators.required]],
+    sequencePrefixCode: [''],
   })
   constructor(
     private activeModal: NgbActiveModal,

@@ -83,9 +83,9 @@ export class AddNewdiamondquotationComponent implements OnInit {
   /**USE: details main form group*/
   diamondSalesDetailForm: FormGroup = this.formBuilder.group({
     designCode: ['', [Validators.required]],
-    designDescription: [''],
-    StockCode: [''],
-    StockCodeDesc: [''],
+    designDescription: ['', [Validators.required]],
+    StockCode: ['', [Validators.required]],
+    StockCodeDesc: ['', [Validators.required]],
     DeliveryType: ['', [Validators.required]],
     DeliveryType2: ['', [Validators.required]],
     ProductionDate: [this.currentDate, [Validators.required]],

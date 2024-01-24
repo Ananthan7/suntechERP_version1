@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="d-flex">
                             <label class="col-sm-4 col-form-label">
-                                Worker Code & Name :</label>
+                                Worker Code & Name * :</label>
                             <mat-form-field style="width: 20%">
                                 <input type="text" FocusOnLoad matInput placeholder="Code" maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" [readonly]="viewOnlyFlag"
@@ -35,7 +35,7 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Worker A/c Code* :</label>
+                                Worker A/c Code :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput [readonly]="viewOnlyFlag" maxlength="6"
                                     (change)="workerCodeChange($event)" formControlName="WorkerAcCode" />
@@ -48,7 +48,7 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Name of Supervisor*:</label>
+                                Name of Supervisor :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6" [readonly]="viewOnlyFlag"
                                     formControlName="NameOfSupervisor" />
@@ -61,7 +61,7 @@
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label">
-                                Default Process*:</label>
+                                Default Process :</label>
                             <mat-form-field style="width: 150px">
                                 <input type="text" matInput maxlength="6" [readonly]="viewOnlyFlag"
                                     formControlName="DefaultProcess" />
@@ -79,8 +79,7 @@
                                     formControlName="LossAllowed" [readonly]="viewOnlyFlag" />
                             </mat-form-field>
                         </div>
-                        <span class="col-sm-3 col-form-label">Password
-                            (optional):</span>
+                        <span class="col-sm-3 col-form-label">Password (optional) :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="password" matInput autocomplete="Password" formControlName="Password" />
@@ -88,14 +87,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <span class="col-sm-4 col-form-label">Tray Weight:</span>
+                        <span class="col-sm-4 col-form-label">Tray Weight :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput numericInput [readonly]="viewOnlyFlag" class="text-right"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
-                        <span class="col-sm-3 col-form-label">Target Pcs:</span>
+                        <span class="col-sm-3 col-form-label">Target Pcs :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="number" matInput numericInput [readonly]="viewOnlyFlag" class="text-right"
@@ -104,16 +103,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <span class="col-sm-4 col-form-label">Target Metal Weight
-                            :</span>
+                        <span class="col-sm-4 col-form-label">Target Metal Weight :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput AmountDecimalInput [readonly]="viewOnlyFlag"
                                     class="text-right" formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
-                        <span class="col-sm-3 col-form-label">Target Carat Weight
-                            :</span>
+                        <span class="col-sm-3 col-form-label">Target Carat Weight :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="number" class="text-right" [readonly]="viewOnlyFlag" matInput
@@ -123,7 +120,7 @@
                     </div>
                     <div class="row align-items-center">
                         <span class="col-sm-4 col-form-label">Target
-                            Weight(GMS):</span>
+                            Weight(GMS) :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput [readonly]="viewOnlyFlag" class="text-right"
