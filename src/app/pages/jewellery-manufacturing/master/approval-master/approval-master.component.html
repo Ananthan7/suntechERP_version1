@@ -19,7 +19,7 @@
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Code*:</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="code" />
+                                        <input type="text" matInput formControlName="code" oninput="this.value = this.value.toUpperCase()"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -27,7 +27,7 @@
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Description*:</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="description" />
+                                        <input type="text" matInput formControlName="description" oninput="this.value = this.value.toUpperCase()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -135,11 +135,11 @@
                                                 [checked]="data.value" />
                                         </div>
                                         <div *dxTemplate="let data of 'emailid'">
-                                            <input type="text" (change)="emailid($event,data)" [value]="data.value" style="width: 100%;"  />
+                                            <input type="email" (change)="emailid($event,data)" [value]="data.value" style="width: 100%;" required />
                                           </div>
 
                                           <div *dxTemplate="let data of 'mobilenumber'">
-                                            <input type="number" (change)="mobilenumber($event,data)" [value]="data.value" style="width: 100%;"  />
+                                            <input type="number" (change)="mobilenumber($event,data)" [value]="data.value" style="width: 100%;" [disabled]="isdiabled" />
                                           </div>
 
                                     </dx-data-grid>

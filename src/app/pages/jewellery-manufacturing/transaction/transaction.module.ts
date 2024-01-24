@@ -50,6 +50,7 @@ import { JobAllocationComponent } from './job-allocation/job-allocation.componen
 import { JobTransactionsComponent } from './job-transactions/job-transactions.component';
 import { ProcessTransferNewComponent } from './process-transfer-new/process-transfer-new.component';
 import { ProcessTransferNewDetailComponent } from './process-transfer-new/process-transfer-new-detail/process-transfer-new-detail.component';
+import { CommonMfgModule } from '../common-mfg/common-mfg.module';
 
 
 
@@ -107,7 +108,8 @@ import { ProcessTransferNewDetailComponent } from './process-transfer-new/proces
   imports: [
   CommonModule,
     TransactionRoutingModule,
-    SharedModule
+    SharedModule,
+    CommonMfgModule
   ]
 })
 export class TransactionModule { }

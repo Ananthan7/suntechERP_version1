@@ -248,7 +248,7 @@ stockCodeData: MasterSearchModel = {
     enteredBy : [''],
     fromProcess : ['',[Validators.required]],
     fromWorker : ['',[Validators.required]],
-    jobNo : [''],
+    jobNo : ['',[Validators.required]],
     mouldNo : ['',[Validators.required]],
     mouldType : ['',[Validators.required]],
     noOfParts : [''],

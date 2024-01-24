@@ -1,0 +1,43 @@
+<p-skeleton *ngIf="skeltonLoading" styleClass="mt-2"></p-skeleton>
+<p-skeleton *ngIf="skeltonLoading" styleClass="mt-2"></p-skeleton>
+<p-skeleton *ngIf="skeltonLoading" height="10rem"></p-skeleton>
+<ng-container *ngIf="!skeltonLoading">
+    <!-- table Header -->
+    <div class="table_header">
+        <div class="d-flex">
+            <button class="btn btn-white add-btn" (click)="addButtonClick()">
+                <i class="fa fa-plus"></i> Add
+            </button>
+            <div class="icons_wrap">
+                <a class="pe-2">
+                    <img src="../../../assets/images/menu/xls.png" 
+                        alt="excel" width="24px" height="23px" />
+                </a>
+                <div (click)="getMasterGridData({})">
+                    <i-feather class="icon-sm" name="refresh-ccw"></i-feather>
+                </div>
+            </div>
+         
+        </div>
+    </div>
+    <!-- common data grid -->
+    <dx-data-grid width="100%" #gridContainer id="gridContainer" 
+        [allowColumnReordering]="true"
+        [dataSource]="orderedItems" [showColumnLines]="true" 
+        [remoteOperations]="true" [showRowLines]="true"
+        [showBorders]="true" [columnAutoWidth]="true" 
+        height="400" (onContentReady)="onContentReady($event)">
+        <dxo-filter-row visible="true"></dxo-filter-row>
+        <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
+        <dxo-paging [enabled]="false" [pageSize]="pageSize" [pageIndex]="pageIndex"></dxo-paging>
+        <!-- <dxo-selection mode="single"></dxo-selection> -->
+        <dxi-column type="buttons" caption="Edit | View" [fixed]="true" fixedPosition="left">
+            <dxi-button [onClick]="editRowDetails" icon="fa fa-edit"></dxi-button>
+            <dxi-button [onClick]="viewRowDetails" icon="fa fa-eye"></dxi-button>
+        </dxi-column>
+
+        <dxi-column *ngFor="let data of orderedItemsHead" 
+            dataField="{{data}}" caption="{{data}}">
+        </dxi-column>
+    </dx-data-grid>
+</ng-container>

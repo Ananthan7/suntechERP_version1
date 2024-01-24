@@ -21,6 +21,7 @@ export class ApprovalMasterComponent implements OnInit {
   selectedIndexes: any = [];
   allMode: string;
   checkBoxesMode: string;
+  isdiabled :boolean=true
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -46,6 +47,9 @@ export class ApprovalMasterComponent implements OnInit {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
+  
+  
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -75,6 +79,11 @@ export class ApprovalMasterComponent implements OnInit {
   }
   messagecheckevent(data:any,value: any){
     this.tableData[value.data.SRNO - 1].ORG_MESSAGE = data.target.checked;
+    if(data.target.checked == true){
+      this.isdiabled = !this.isdiabled
+    }else{
+      this.isdiabled = true
+    }
   }
   emailcheckevent(data:any,value: any){ 
   this.tableData[value.data.SRNO - 1].EMAIL = data.target.checked;

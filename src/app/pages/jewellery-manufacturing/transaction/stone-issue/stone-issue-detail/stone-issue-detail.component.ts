@@ -117,7 +117,7 @@ export class StoneIssueDetailComponent implements OnInit {
     pieces: [],
     shape: [''],
     clarity: [''],
-    carat: [''],
+    carat: ['', [Validators.required]],
     size: [],
     sieveset: [''],
     unitrate: [],
