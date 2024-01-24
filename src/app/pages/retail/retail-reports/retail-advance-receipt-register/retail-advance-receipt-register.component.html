@@ -18,8 +18,13 @@
                     <div class="col-md-2">
                         <mat-form-field>
                             <mat-select formControlName="branch">
-                                <mat-option  value="HO">HO</mat-option>
-                                <mat-option></mat-option>
+                                <!-- <mat-option  value="HO">HO</mat-option>
+                                <mat-option></mat-option> -->
+                                <mat-option
+                                *ngFor="let branchCode of branchOptions"
+                                [value]="branchCode.BRANCH_CODE"
+                                >{{ branchCode.BRANCH_CODE }}</mat-option
+                              >
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -32,8 +37,10 @@
                     <div class="col-md-2">
                         <mat-form-field>
                             <mat-select formControlName="show">
-                                <mat-option value="ALL">ALL</mat-option>
-                                <mat-option></mat-option>
+                                <mat-option value="0">ALL</mat-option>
+                                <mat-option value="1">Pending</mat-option>
+                                <mat-option value="2">Finished</mat-option>
+                                <mat-option value="3">Cancelled</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -75,8 +82,12 @@
                     <div class="col-md-2">
                         <mat-form-field>
                             <mat-select formControlName="reportTo">
-                                <mat-option value="PREVIEW">PREVIEW</mat-option>
-                                <mat-option></mat-option>
+                                <mat-option value="0">PREVIEW</mat-option>
+                                <mat-option value="1">PRINT</mat-option>
+                                <mat-option value="2">CATALOGUE</mat-option>
+                                <mat-option value="3">EXCEL</mat-option>
+                                <mat-option value="4">PDF</mat-option>
+                                <mat-option value="5">EMAIL</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>

@@ -32,7 +32,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: 'Account Head', field: 'HDACCOUNT_HEAD' },
     { title: 'Currency', field: 'CURRENCY_CODE' },
     { title: 'Curr.Rate', field: 'CURRENCY_RATE' },
-    { title: 'Amount', field: 'TOTAL_AMOUNTFC' },
+    { title: 'Amount', field: 'AMOUNTCC' },
     { title: 'VAT_E_', field: '' },
     { title: 'VAT_E_.', field: '' },
   ];
@@ -47,7 +47,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   vocMaxDate = new Date();
   currentDate = new Date();
-
   branchCode?: String;
   yearMonth?: String;
   userName?: String;
@@ -280,19 +279,15 @@ export class PosCurrencyReceiptComponent implements OnInit {
           this.posCurrencyReceiptForm.controls.partyCurr.setValue(data.PARTY_CURRENCY);
           this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(data.TOTAL_AMOUNTFC);
           // this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(data.TOTAL_AMOUNTCC);
-
-
         }
-
       });
+    }
 
-  }
-
-  enteredBySelected(e: any) {
-    console.log(e);
-    this.posCurrencyReceiptForm.controls.enteredby.setValue(e.SALESPERSON_CODE);
-    this.posCurrencyReceiptForm.controls.enteredbyuser.setValue(e.DESCRIPTION);
-  }
+    enteredBySelected(e: any) {
+      console.log(e);
+      this.posCurrencyReceiptForm.controls.enteredby.setValue(e.SALESPERSON_CODE);
+      this.posCurrencyReceiptForm.controls.enteredbyuser.setValue(e.DESCRIPTION);
+    }
 
   // PartyCodeChange(event: any) {
   //   this.PartyCodeData.SEARCH_VALUE = event.target.value
@@ -303,8 +298,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.partyCode.setValue(e.ACCODE);
     this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e['ACCOUNT HEAD']);
     this.partyCodeChange({ target: { value: e.ACCODE } })
-
   }
+
   //party Code Change
   partyCodeChange(event: any) {
     if (event.target.value == '') return
@@ -364,8 +359,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e.CURRENCY_CODE);
   }
 
-
-
   customerCodeSelected(e: any) {
     console.log(e);
     this.customerData = e;
@@ -374,9 +367,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.mobile.setValue(e.MOBILE);
     this.posCurrencyReceiptForm.controls.email.setValue(e.EMAIL);
   }
-
-
-
 
   openaddposdetails() {
     const modalRef: NgbModalRef = this.modalService.open(PosCurrencyReceiptDetailsComponent, {
@@ -406,7 +396,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     }
   }
 
-
   formSubmit() {
 
     // if (this.content && this.content.FLAG == 'EDIT') {
@@ -431,8 +420,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       "PARTYCODE": this.posCurrencyReceiptForm.value.partyCode || "",
       "PARTY_CURRENCY": this.posCurrencyReceiptForm.value.partyCurrency || "",
       "PARTY_CURR_RATE": this.posCurrencyReceiptForm.value.partyCurrencyRate || "0",
-      "TOTAL_AMOUNTFC": this.posCurrencyReceiptForm.value.partyAmountFC || "",
-      "TOTAL_AMOUNTCC": this.posCurrencyReceiptForm.value.partyAmountFC || "",
+      "TOTAL_AMOUNTFC": this.posCurrencyReceiptForm.value.partyAmountFC || 0,
+      "TOTAL_AMOUNTCC": this.posCurrencyReceiptForm.value.partyAmountFC || 0,
       "REMARKS": this.posCurrencyReceiptForm.value.narration || "",
       "SYSTEM_DATE": "2023-10-10T11:05:50.756Z",
       "NAVSEQNO": 0,
@@ -539,9 +528,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-
-
-
   deleteCurrencyReceipt() {
     if (this.content.MID == null) {
       Swal.fire({
@@ -604,7 +590,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     });
   }
 
-
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
     let indexes: Number[] = [];
@@ -617,7 +602,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.selectedIndexes = indexes;
   }
 
-
   /**USE: close modal window */
   close(data?: any) {
     // this.activeModal.close();
@@ -625,10 +609,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   }
 
-
   // customer master add, view
   openCustMaster() {
-
     const modalRef: NgbModalRef = this.modalService.open(PosCustomerMasterComponent, {
       size: 'lg',
       backdrop: true,
@@ -655,9 +637,6 @@ export class PosCurrencyReceiptComponent implements OnInit {
         console.log(`Dismissed ${reason}`);
       }
     );
-
-
-
   }
 
 }

@@ -158,7 +158,7 @@ export class MeltingIssueComponent implements OnInit {
     // this.voctype = this.commonService.getqueryParamMainVocType()
     this.meltingIssueFrom.controls.vocdate.setValue(this.currentDate)
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
-    this.setAllInitialValues()
+    // this.setAllInitialValues()
     this.setCompanyCurrency()
     
   

@@ -256,6 +256,75 @@ removedata(){
 removedatas(){
   this.tableDatas.pop();
 }
+setDetaills(){
+  let Details:any=[]
+  this.tableData.forEach((Element: any)=> {
+    Details.push(
+      {
+        "UNIQUEID": 0,
+        "DT_BRANCH_CODE": this.branchCode,
+        "DT_VOCTYPE": this.cadProcessingForm.value.voctype,
+        "DT_VOCNO": 0,
+        "DT_YEARMONTH": this.yearMonth,
+        "SRNO": Element.Srno,
+        "METALSTONE": "string",
+        "DIVCODE": Element.Division,
+        "STONE_TYPE": Element.StoneType,
+        "KARAT_CODE": Element.Karat,
+        "SIEVE_SET": "string",
+        "SIEVE": Element.Sieve,
+        "COLOR": Element.Color,
+        "CLARITY": "string",
+        "SHAPE": Element.Shape,
+        "SIZE": Element.Size,
+        "PCS": Element.Pcs,
+        "GROSS_WT": 0,
+        "D_REMARKS": Element.Remarks,
+        "PROCESS_TYPE": "string",
+        "POINTER_WT": Element.PointerWt,
+        "STOCK_CODE": Element.StockCode,
+        "COMP_CODE": "string"
+      }
+    )
+  }
+  )
+  return Details
+
+  
+}
+componentSet(){
+  let Components:any=[]
+  this.tableDatas.forEach((item: any)=>{
+    Components.push(
+       {
+          "REFMID": 0,
+          "SRNO": item.Srno,
+          "COMP_CODE": item.CompCode,
+          "COMP_DESCRIPTION": item.Description,
+          "COMP_SHAPE": "",
+          "TYPE_CODE": item.Type,
+          "CATEGORY_CODE": item.Category,
+          "COMPSIZE_CODE": "string",
+          "COMPSET_CODE": "string",
+          "HEIGHT": item.Height,
+          "WIDTH": item.Width,
+          "LENGTH": item.Length,
+          "RADIUS": item.Radius,
+          "PCS": item.Pcs,
+          "REMARKS": item.Remarks,
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "string",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "string"
+        }
+
+    ) 
+  }
+  )
+  return Components
+}
+
+  
 
 
   formSubmit() {
@@ -276,28 +345,28 @@ removedatas(){
       "VOCTYPE": this.cadProcessingForm.value.voctype,
       "vocNo": this.cadProcessingForm.value.vocNo,
       "YEARMONTH": this.yearMonth,
-      "SALESPERSON_CODE": "string",
+      "SALESPERSON_CODE": "",
       "SYSTEM_DATE": this.cadProcessingForm.value.date,
-      "MACHINEID": "string",
-      "DOC_REF": "string",
+      "MACHINEID": "",
+      "DOC_REF": "",
       "REMARKS": this.cadProcessingForm.value.remarks,
       "VOCDATE": this.cadProcessingForm.value.vocDate,
       "NAVSEQNO": 0,
       "PROCESS_CODE": this.cadProcessingForm.value.process,
       "WORKER_CODE": this.cadProcessingForm.value.worker,
       "JOB_NUMBER": this.cadProcessingForm.value.job,
-      "UNQ_JOB_ID": "string",
+      "UNQ_JOB_ID": "",
       "JOB_SO_NUMBER": this.cadProcessingForm.value.subJobId,
       "DESIGN_CODE": this.cadProcessingForm.value.design,
-      "UNQ_DESIGN_ID": "string",
-      "PART_CODE": "string",
+      "UNQ_DESIGN_ID": "",
+      "PART_CODE": "",
       "PCS": 0,
-      "TIME_TAKEN": this.cadProcessingForm.value.timeTaken,
+      "TIME_TAKEN": this.comService.nullToString(this.cadProcessingForm.value.TIME_TAKEN),
       "JOB_SO_MID": 0,
-      "CAD_STATUS": "string",
-      "APPR_CODE": "string",
+      "CAD_STATUS": "",
+      "APPR_CODE": "",
       "APPR_TYPE": this.cadProcessingForm.value.type,
-      "TRANS_REF": "string",
+      "TRANS_REF": "",
       "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
       "TO_PROCESS_CODE": this.cadProcessingForm.value.toProcess,
       "TO_WORKER_CODE": this.cadProcessingForm.value.toWorker,
@@ -306,56 +375,10 @@ removedatas(){
       "SO_DELIVERY_DATE": this.cadProcessingForm.value.deliveryOnDate,
       "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
       "SO_CR_DAYS": 0,
-      "Details": [
-        {
-          "UNIQUEID": 0,
-          "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "string",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "stri",
-          "SRNO": 0,
-          "METALSTONE": "string",
-          "DIVCODE": "string",
-          "STONE_TYPE": "string",
-          "KARAT_CODE": "string",
-          "SIEVE_SET": "string",
-          "SIEVE": "string",
-          "COLOR": "string",
-          "CLARITY": "string",
-          "SHAPE": "string",
-          "SIZE": "string",
-          "PCS": 0,
-          "GROSS_WT": 0,
-          "D_REMARKS": "string",
-          "PROCESS_TYPE": "string",
-          "POINTER_WT": 0,
-          "STOCK_CODE": "string",
-          "COMP_CODE": "string"
-        }
-      ],
-      "Components": [
-        {
-          "REFMID": 0,
-          "SRNO": 0,
-          "COMP_CODE": "string",
-          "COMP_DESCRIPTION": "string",
-          "COMP_SHAPE": "string",
-          "TYPE_CODE": "string",
-          "CATEGORY_CODE": "string",
-          "COMPSIZE_CODE": "string",
-          "COMPSET_CODE": "string",
-          "HEIGHT": 0,
-          "WIDTH": 0,
-          "LENGTH": 0,
-          "RADIUS": 0,
-          "PCS": 0,
-          "REMARKS": "string",
-          "DT_BRANCH_CODE": "string",
-          "DT_VOCTYPE": "string",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": "string"
-        }
-      ]
+      "Details":this.setDetaills(),
+
+      "Components":this.componentSet(),
+       
      
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
