@@ -71,8 +71,6 @@ import { StoneDecimalDirective } from './directives/format-stone-decimal.directi
 import { FormatSixDecimalDirective } from './directives/format-six-decimal.directive';
 import { CalendarModule } from 'primeng/calendar';
 import { UppercaseDirective } from './directives/uppercase.directive';
-import { ManufacturingGridComponent } from './grid-list/manufacturing-grid/manufacturing-grid.component';
-import { WholesaleGridComponent } from './grid-list/wholesale-grid/wholesale-grid.component';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -100,8 +98,6 @@ import { WholesaleGridComponent } from './grid-list/wholesale-grid/wholesale-gri
     StoneDecimalDirective,
     FormatSixDecimalDirective,
     UppercaseDirective,
-    ManufacturingGridComponent,
-    WholesaleGridComponent
   ],
   imports: [
     CommonModule,
