@@ -81,9 +81,9 @@ export class WorkerMasterComponent implements OnInit {
   workerMasterForm = this.formBuilder.group({
     WorkerCode: ['', [Validators.required]],
     WorkerDESCRIPTION: ['', [Validators.required]],
-    WorkerAcCode: ['', [Validators.required]],
-    NameOfSupervisor: ['', [Validators.required]],
-    DefaultProcess: ['', [Validators.required]],
+    WorkerAcCode: [''],
+    NameOfSupervisor: [''],
+    DefaultProcess: [''],
     LossAllowed: [''],
     Password: [''],
     TrayWeight: [''],

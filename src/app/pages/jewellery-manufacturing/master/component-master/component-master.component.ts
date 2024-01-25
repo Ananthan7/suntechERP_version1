@@ -75,7 +75,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 14,
     SEARCH_FIELD: 'PREFIX_CODE',
-    SEARCH_HEADING: 'Process Code',
+    SEARCH_HEADING: 'Prefix master',
     SEARCH_VALUE: '',
     WHERECONDITION: "PREFIX_CODE<> ''",
     VIEW_INPUT: true,

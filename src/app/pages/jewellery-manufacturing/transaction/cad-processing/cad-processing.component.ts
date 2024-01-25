@@ -270,6 +270,75 @@ setDetaills(){
         "DT_VOCNO": 0,
         "DT_YEARMONTH": this.yearMonth,
         "SRNO": Element.Srno,
+        "METALSTONE": "string",
+        "DIVCODE": Element.Division,
+        "STONE_TYPE": Element.StoneType,
+        "KARAT_CODE": Element.Karat,
+        "SIEVE_SET": "string",
+        "SIEVE": Element.Sieve,
+        "COLOR": Element.Color,
+        "CLARITY": "string",
+        "SHAPE": Element.Shape,
+        "SIZE": Element.Size,
+        "PCS": Element.Pcs,
+        "GROSS_WT": 0,
+        "D_REMARKS": Element.Remarks,
+        "PROCESS_TYPE": "string",
+        "POINTER_WT": Element.PointerWt,
+        "STOCK_CODE": Element.StockCode,
+        "COMP_CODE": "string"
+      }
+    )
+  }
+  )
+  return Details
+
+  
+}
+componentSet(){
+  let Components:any=[]
+  this.tableDatas.forEach((item: any)=>{
+    Components.push(
+       {
+          "REFMID": 0,
+          "SRNO": item.Srno,
+          "COMP_CODE": item.CompCode,
+          "COMP_DESCRIPTION": item.Description,
+          "COMP_SHAPE": "",
+          "TYPE_CODE": item.Type,
+          "CATEGORY_CODE": item.Category,
+          "COMPSIZE_CODE": "string",
+          "COMPSET_CODE": "string",
+          "HEIGHT": item.Height,
+          "WIDTH": item.Width,
+          "LENGTH": item.Length,
+          "RADIUS": item.Radius,
+          "PCS": item.Pcs,
+          "REMARKS": item.Remarks,
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "string",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "string"
+        }
+
+    ) 
+  }
+  )
+  return Components
+}
+
+  
+setDetaills(){
+  let Details:any=[]
+  this.tableData.forEach((Element: any)=> {
+    Details.push(
+      {
+        "UNIQUEID": 0,
+        "DT_BRANCH_CODE": this.branchCode,
+        "DT_VOCTYPE": this.cadProcessingForm.value.voctype,
+        "DT_VOCNO": 0,
+        "DT_YEARMONTH": this.yearMonth,
+        "SRNO": Element.Srno,
         "METALSTONE": this.comService.nullToString(Element.METALSTONE),
         "DIVCODE": this.comService.nullToString(Element.DIVCODE),
         "STONE_TYPE": Element.StoneType,
@@ -348,7 +417,7 @@ componentSet(){
       "VOCTYPE": this.cadProcessingForm.value.voctype,
       "vocNo": this.cadProcessingForm.value.vocNo,
       "YEARMONTH": this.yearMonth,
-      "SALESPERSON_CODE": "string",
+      "SALESPERSON_CODE": "",
       "SYSTEM_DATE": this.cadProcessingForm.value.date,
       "MACHINEID": "",
       "DOC_REF": "",
@@ -358,18 +427,18 @@ componentSet(){
       "PROCESS_CODE": this.cadProcessingForm.value.process,
       "WORKER_CODE": this.cadProcessingForm.value.worker,
       "JOB_NUMBER": this.cadProcessingForm.value.job,
-      "UNQ_JOB_ID": "",
-      "JOB_SO_NUMBER": this.comService.emptyToZero(this.cadProcessingForm.value.subJobId),
+      "UNQ_JOB_ID": "string",
+      "JOB_SO_NUMBER": this.cadProcessingForm.value.subJobId,
       "DESIGN_CODE": this.cadProcessingForm.value.design,
       "UNQ_DESIGN_ID": "",
       "PART_CODE": "",
       "PCS": 0,
-      "TIME_TAKEN": this.comService.emptyToZero(this.cadProcessingForm.value.TIME_TAKEN),
+      "TIME_TAKEN": this.cadProcessingForm.value.timeTaken,
       "JOB_SO_MID": 0,
-      "CAD_STATUS": "",
-      "APPR_CODE": "",
-      "APPR_TYPE": this.comService.emptyToZero(this.cadProcessingForm.value.type),
-      "TRANS_REF": "",
+      "CAD_STATUS": "string",
+      "APPR_CODE": "string",
+      "APPR_TYPE": this.cadProcessingForm.value.type,
+      "TRANS_REF": "string",
       "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
       "TO_PROCESS_CODE": this.cadProcessingForm.value.toProcess,
       "TO_WORKER_CODE": this.cadProcessingForm.value.toWorker,

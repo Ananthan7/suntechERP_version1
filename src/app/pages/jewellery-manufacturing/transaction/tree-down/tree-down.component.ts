@@ -146,25 +146,25 @@ export class TreeDownComponent implements OnInit {
  
  
    treeDownFrom: FormGroup = this.formBuilder.group({
-    vocType:['',[Validators.required]],
-    vocNo:['',[Validators.required]],
-    vocDate:['',[Validators.required]],
+    vocType:[''],
+    vocNo:[''],
+    vocDate:[''],
     processCode:['',[Validators.required]],
     cylinder:[''],
-    tree:['',[Validators.required]],
-    stoneWt:['',[Validators.required]],
-    treeNo:['',[Validators.required]],
+    tree:[''],
+    stoneWt:[''],
+    treeNo:[''],
     worker:['',[Validators.required]],
     convFact:['',[Validators.required]],
     waxWt:['',[Validators.required]],
     reqMetal:['',[Validators.required]],
-    toProcess : [''],
+    toProcess : ['',[Validators.required]],
     enteredBy : [''],
     karatCode : ['',[Validators.required]],
     base : [''],
     recMetal :[''],
-    toWorker : [''],
-    color : [''],
+    toWorker : ['',[Validators.required]],
+    color : ['',[Validators.required]],
    });
  
    adddata() {

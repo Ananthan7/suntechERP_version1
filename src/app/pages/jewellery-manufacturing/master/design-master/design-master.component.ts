@@ -72,8 +72,41 @@ export class DesignMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setAllInitialValues()
   }
-  
+  setAllInitialValues() {
+    console.log(this.content)
+    if (!this.content) return
+    let API = `DesignMaster/InsertDesignMaster/${this.content.DESIGN_CODE}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data)
+          this.designmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
+          this.designmasterForm.controls.designdesc.setValue(this.content.DESIGN_DESCRIPTION)
+          this.designmasterForm.controls.costcenter.setValue(this.content.COST_CODE)
+          this.designmasterForm.controls.subcategory.setValue(this.content.SUBCATEGORY_CODE)
+          this.designmasterForm.controls.brand.setValue(this.content.BRAND_CODE)
+          this.designmasterForm.controls.style.setValue(this.content.STYLE)
+          this.designmasterForm.controls.range.setValue(this.content.RANGE_CODE)
+          this.designmasterForm.controls.description.setValue(this.content.DESCRIPTION)
+          this.designmasterForm.controls.metal.setValue(this.content.JOB_DESCRIPTION)
+          this.designmasterForm.controls.color.setValue(this.content.COLOR)
+          this.designmasterForm.controls.karat.setValue(this.content.Details.GROSS_WT)
+          this.designmasterForm.controls.purity.setValue(this.content.detail.PUREWT)
+          this.designmasterForm.controls.alloy.setValue(this.content.detail.PCS)
+          this.designmasterForm.controls.stockCode.setValue(this.content.detail.STOCK_CODE)
+          this.designmasterForm.controls.stockCodeDes.setValue(this.content.detail.PURITY)
+
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   designmasterForm: FormGroup = this.formBuilder.group({
     mid:[],
     code: ['',[Validators.required]],
@@ -1104,7 +1137,7 @@ removedatas(){
       this.toastr.error('select all required fields')
       return
     }
-  
+  console.log(this.designmasterForm,'working')
     let API = 'DesignMaster/UpdateDesignMaster/'+this.content.DESIGN_CODE
     let postData = {
       "DESIGN_CODE": this.designmasterForm.value.code || "",

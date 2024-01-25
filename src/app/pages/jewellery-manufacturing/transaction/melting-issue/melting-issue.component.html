@@ -150,7 +150,7 @@
                                     [dataSource]="tableData">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <!-- <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing> -->
-                                    <dxo-selection mode="single"></dxo-selection>
+                                    <dxo-selection mode="multiple"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                                     <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
@@ -181,10 +181,14 @@
                                     Allocation</button>
                                     
                                 <div class="col-md-8">
+                                    
                                     <ng-template #mymodal let-modal modal-sm>
+                                        
                                         <div class="" style="padding: 10px 20px">
                                             <div class="modal-header d-flex justify-content-end">
-                                               
+                               
+                                                    <h5 class="meltingissueheading" id="modal-dia-metal"style="text-righ t">Melting Issue </h5>
+                                                
                                                     
                                             
                                             <button
@@ -197,8 +201,9 @@
                                             <span aria-hidden="true" >x</span>
                                     
                                           </button>
-                                                    
+                                            
                                                
+                                            
                                             </div>
                                             <br>
                                         <div class="col-md-12">
@@ -216,6 +221,14 @@
 
                                                 </dxi-column>
                                             </dx-data-grid>
+                                            <div class="row my-2">
+                                                <label for="inputPassword" class="col-sm-3 col-form-label">Required Alloy Qty:</label>
+                                                <div class="col-md-6">
+                                                    <mat-form-field style="width: 70%;">
+                                                        <input type="text" matInput formControlName="remarks" />
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
                                            
                                               <div class="modal-footer">
                                                         <button type="button" class="btn btn-primary">Apply</button>
