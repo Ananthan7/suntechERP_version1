@@ -34,6 +34,7 @@ import { PosPurchaseDirectDetailComponent } from './pos-purchase-direct/pos-purc
 import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.component';
 import { AddReceiptComponent } from './scheme-receipt/add-receipt/add-receipt.component';
 import { AddSchemeComponent } from './scheme-register/add-scheme/add-scheme.component';
+import { CommonRetailModule } from '../common-retail/common-retail.module';
 
 
 
@@ -71,6 +72,7 @@ import { AddSchemeComponent } from './scheme-register/add-scheme/add-scheme.comp
     CommonModule,
     RetailTransactionRoutingModule,
     SharedModule,
+    CommonRetailModule
   ],
 
 

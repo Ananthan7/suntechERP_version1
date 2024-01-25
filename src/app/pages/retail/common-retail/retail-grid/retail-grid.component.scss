@@ -1,0 +1,37 @@
+.table_header {
+    // background: #3599cc;
+    background: #778da9;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .btn-white {
+      background: #fff;
+      padding: 2px 8px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-right: 10px;
+    }
+    .icons_wrap {
+      display: flex;
+      align-items: center;
+      a {
+        margin-left: 10px;
+      }
+      .icons {
+        font-size: 24px;
+        margin-right: 10px;
+        color: #fff;
+      }
+      .custom-control-label {
+        font-size: 16px;
+        font-weight: 400;
+        margin-top: 2px;
+        color: #fff;
+      }
+    }
+  }
+  .skeltonLoading{
+    width: 100% !important;
+    height: 100% !important;
+  }

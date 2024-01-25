@@ -1072,6 +1072,9 @@ export class AddPosComponent implements OnInit {
         this.viewOnly = true;
       }
 
+    }else{
+    this.generateVocNo();
+
     }
 
     // this.acRoute.queryParams.subscribe((params) => {
@@ -1629,7 +1632,6 @@ export class AddPosComponent implements OnInit {
     this.getMaritalStatus();
     this.getAccountLookup();
 
-    this.generateVocNo();
 
     // this.getComboFilters();
 
