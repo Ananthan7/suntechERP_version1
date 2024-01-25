@@ -33,9 +33,11 @@
                             </mat-form-field>
                             <mat-form-field
                                 style="width: 40%; margin-left: 7px;">
-                                <input type="text" matInput placeholder="DESCRIPTION"
-                                    formControlName="WorkerDESCRIPTION" #WorkerDESCRIPTION
-                                    (input)="WorkerDESCRIPTION.value = WorkerDESCRIPTION.value.toUpperCase()"/>
+                                <input type="text" matInput
+                                    placeholder="DESCRIPTION"
+                                    formControlName="WorkerDESCRIPTION"
+                                    #WorkerDESCRIPTION
+                                    (input)="WorkerDESCRIPTION.value = WorkerDESCRIPTION.value.toUpperCase()" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -113,7 +115,7 @@
                             :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="number" MetalDecimalInput matInput 
+                                <input type="number" MetalDecimalInput matInput
                                     [readonly]="viewOnlyFlag" class="text-right"
                                     formControlName="TrayWeight" />
                             </mat-form-field>
@@ -134,7 +136,8 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput MetalDecimalInput
-                                    class="text-right" formControlName="TargetMetalWt" />
+                                    class="text-right"
+                                    formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Target Carat
@@ -219,7 +222,8 @@
                     </div>
                     <div class="row">
                         <dx-data-grid #dataGrid id="gridContainer" width="100%"
-                            height="400px" [dataSource]="tableData" [showRowLines]="true"
+                            height="400px" [dataSource]="tableData"
+                            [showRowLines]="true"
                             [showBorders]="true">
                             <!-- <dxo-filter-row [visible]="showFilterRow"
                                 [applyFilter]="currentFilter"></dxo-filter-row>
@@ -230,9 +234,12 @@
                             <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing> -->
                             <!-- <dxo-selection mode="multiple"></dxo-selection> -->
-                            <dxi-column width="auto" cellTemplate="limitTemplate" alignment="right"></dxi-column>
+                            <dxi-column width="auto"
+                                cellTemplate="limitTemplate"
+                                alignment="right"></dxi-column>
                             <div *dxTemplate="let cellInfo of 'limitTemplate'">
-                                <mat-checkbox (change)="changedCheckbox(cellInfo)"></mat-checkbox>
+                                <mat-checkbox
+                                    (change)="changedCheckbox(cellInfo)"></mat-checkbox>
 
                                 <!-- <input type="checkbox" (change)="changedCheckbox(cellInfo)" /> -->
                             </div>
