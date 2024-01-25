@@ -886,7 +886,10 @@ export class CommonServiceService {
   cDateFormat(value: any) {
     return this.datePipe.transform(value, 'yyyy-MM-ddTHH:mm:ss');
   }
-
+  validateEmail(email:any) {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailRegex.test(email);
+  }
   getVoctypeMasterByVocTypeMain(branch: string, voctype: string, mainVocType: string) {
     const res = this.VocTypeMasterData.filter((data: any) =>
       data.BRANCH_CODE == branch && data.VOCTYPE == voctype && data.MAIN_VOCTYPE == mainVocType

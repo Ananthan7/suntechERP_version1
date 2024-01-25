@@ -14,7 +14,9 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 export class JobClosingComponent implements OnInit {
   
   tableData: any[] = [];  
-  columnheadItemDetails:any[] = ['  ',];
+  columnheadItemDetails:any[] = ['UNIQUEID','SRNO','DT_BRANCH_CODE','DT_VOCTYPE','DT_VOCNO','DT_YEARMOTH','JOB_NUMBER','JOB_SO_NUMBER','UNQ_JOB_ID','JOB_DESCRIPTION','DESIGN_CODE','JOB_PCS','UNQ_DESIGN_ID','PICTURE_NAME','PART_CODE','JOB_DATE','JOB_SO_MID'];
+  columnheadItemDetails1:any[] = ['SRNO','Job Number','Unq.Job Id','DESIGN','METALSTONE','DIVCODE','Stock_Code','Batch_Id','STOCK_DESCRIPTION','COLOR','CLARITY','SHAPE','SIZE','SIEVE','PCS','GROSS_WT','RATE','AMOUNTLC','AMOUNTFC','PROCESS_CODE','WORKER_CODE','RATEFC','PUREWT','PURITY','STONE_WT','NET_WT','NET_WT','KARAT_CODE','Job Pcs'];
+  columnheadItemDetails2:any[] = ['METALSTONE','DIVCODE','Stock_Code','Sub_stock','Karat_code','Color','Clarity','Size','Sieve','Shape','Sieve_set','Pcs','GROSS_WT'];
   divisionMS: any = 'ID';
   currentDate = new FormControl(new Date());
   text="Sales Order";

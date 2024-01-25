@@ -323,8 +323,10 @@ export class StonePricingMasterComponent implements OnInit {
       return
     }
 
-    let API = 'StonePriceMasterDJ/UpdateStonePriceMaster/' + this.content.MID
+    let API = 'StonePriceMasterDJ/UpdateStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code 
+
     let postData = {
+      
       "MID": this.content.MID,
       "SRNO": 0,
       "CODE": this.stonePrizeMasterForm.value.price_code || "",
