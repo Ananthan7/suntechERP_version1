@@ -49,7 +49,7 @@ export class ComponentMasterComponent implements OnInit {
     height : [""],
     length  : [""],
     width  : [""],
-    radious  : [""],
+    radius  : [""],
     processSeq : [""],
     costCenter  : [""],
   });
