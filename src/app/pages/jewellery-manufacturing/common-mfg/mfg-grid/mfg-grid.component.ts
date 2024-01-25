@@ -5,7 +5,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
-  selector: 'app-mfg-grid',
+  selector: 'mfg-grid',
   templateUrl: './mfg-grid.component.html',
   styleUrls: ['./mfg-grid.component.scss']
 })

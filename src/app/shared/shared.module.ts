@@ -97,7 +97,7 @@ import { UppercaseDirective } from './directives/uppercase.directive';
     MetalDecimalDirective,
     StoneDecimalDirective,
     FormatSixDecimalDirective,
-    UppercaseDirective
+    UppercaseDirective,
   ],
   imports: [
     CommonModule,

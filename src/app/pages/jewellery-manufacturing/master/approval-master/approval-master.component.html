@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    (deleteClick)="deleteRecord()"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -16,18 +17,24 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class=" row">
-                                <label for="inputPassword" class="col-sm-3 col-form-label">Code*:</label>
+                                <label for="inputPassword"
+                                    class="col-sm-3 col-form-label">Code*:</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="code" oninput="this.value = this.value.toUpperCase()"/>
+                                        <input type="text" matInput
+                                            formControlName="code"
+                                            oninput="this.value = this.value.toUpperCase()" />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class=" row">
-                                <label for="inputPassword" class="col-sm-3 col-form-label">Description*:</label>
+                                <label for="inputPassword"
+                                    class="col-sm-3 col-form-label">Description*:</label>
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="description" oninput="this.value = this.value.toUpperCase()" />
+                                        <input type="text" matInput
+                                            formControlName="description"
+                                            oninput="this.value = this.value.toUpperCase()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -51,96 +58,153 @@
                                     </div>
                                 </div> -->
                                 <div class="col-md-3 d-flex mb-2">
-                                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                                    <menu-buttons [viewAddBtn]="true"
+                                        [viewDeleteBtn]="true"
                                         [viewImportBtn]="false"
                                         (addClick)="adddata()"
-                                        (deleteClick)="removedata()"
-                                        >
+                                        (deleteClick)="removedata()">
                                     </menu-buttons>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                                        [showColumnLines]="true" [showRowLines]="true" class="mt-3" keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)">
+                                    <dx-data-grid id="gridContainer"
+                                        [dataSource]="tableData"
+                                        [showBorders]="true"
+                                        [showColumnLines]="true"
+                                        [showRowLines]="true" class="mt-3"
+                                        keyExpr="SRNO"
+                                        (onSelectionChanged)="onSelectionChanged($event)">
                                         <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
-                                        <dxo-selection  [selectAllMode]="allMode"
-                                        [showCheckBoxesMode]="checkBoxesMode"
-                                        mode="multiple"></dxo-selection>
+                                        <dxo-selection [selectAllMode]="allMode"
+                                            [showCheckBoxesMode]="checkBoxesMode"
+                                            mode="multiple"></dxo-selection>
 
                                         <dxi-column caption="Details">
-                                            <dxi-column dataField="SRNO" caption="SN"> </dxi-column>
-                                            <dxi-column dataField="USER_CODE" caption="User Id" cellTemplate="usertemp">
+                                            <dxi-column dataField="SRNO"
+                                                caption="SN"> </dxi-column>
+                                            <dxi-column dataField="USER_CODE"
+                                                caption="User Id"
+                                                cellTemplate="usertemp">
                                             </dxi-column>
-                                            <dxi-column dataField="APPR_TYPE" caption="Type" cellTemplate="typetemp">
+                                            <dxi-column dataField="APPR_TYPE"
+                                                caption="Type"
+                                                cellTemplate="typetemp">
                                             </dxi-column>
-                                            <dxi-column dataField="APPRREQUIRED" caption="Mandatory"
-                                                cellTemplate="Mandatorytemp"> </dxi-column>
-                                            <dxi-column dataField="ATTACH_REQ" caption="Attachment Required"
-                                                cellTemplate="atttemp"> </dxi-column>
+                                            <dxi-column dataField="APPRREQUIRED"
+                                                caption="Mandatory"
+                                                cellTemplate="Mandatorytemp">
+                                            </dxi-column>
+                                            <dxi-column dataField="ATTACH_REQ"
+                                                caption="Attachment Required"
+                                                cellTemplate="atttemp">
+                                            </dxi-column>
                                         </dxi-column>
                                         <dxi-column caption="Alert Type">
-                                            <dxi-column dataField="ORG_MESSAGE" caption="Message"
-                                                cellTemplate="messagetemp"> </dxi-column>
-                                                <dxi-column dataField="MOBILE_NO" caption="Mobile Number" cellTemplate="mobilenumber"> </dxi-column>
-                                            <dxi-column dataField="EMAIL" caption="Email" cellTemplate="emailtemp">
+                                            <dxi-column dataField="ORG_MESSAGE"
+                                                caption="Message"
+                                                cellTemplate="messagetemp">
                                             </dxi-column>
-                                            <dxi-column dataField="EMAIL_ID" caption="Email ID" cellTemplate="emailid"> </dxi-column>
-                                            <dxi-column dataField="SYS_MESSAGE" caption="System Message"
-                                                cellTemplate="systemtemp"> </dxi-column>
+                                            <dxi-column dataField="MOBILE_NO"
+                                                caption="Mobile Number"
+                                                cellTemplate="mobilenumber">
+                                            </dxi-column>
+                                            <dxi-column dataField="EMAIL"
+                                                caption="Email"
+                                                cellTemplate="emailtemp">
+                                            </dxi-column>
+                                            <dxi-column dataField="EMAIL_ID"
+                                                caption="Email ID"
+                                                cellTemplate="emailid">
+                                            </dxi-column>
+                                            <dxi-column dataField="SYS_MESSAGE"
+                                                caption="System Message"
+                                                cellTemplate="systemtemp">
+                                            </dxi-column>
                                         </dxi-column>
 
-                                        <div *dxTemplate="let data of 'usertemp'">
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="user"
+                                        <div
+                                            *dxTemplate="let data of 'usertemp'">
+                                            <a href="javascript:void(0)"
+                                                class="mx-1"
+                                                [innerHTML]="data.value"></a>
+                                            <master-search
+                                                [MasterSearchData]="user"
                                                 (newRowClick)="userDataSelected($event,data)">
                                             </master-search>
                                         </div>
 
-                                        <div *dxTemplate="let data of 'typetemp'">
+                                        <div
+                                            *dxTemplate="let data of 'typetemp'">
                                             <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
                                             <div>
-                                                <select (change)="typedataselected($event,data)" [value]="data.value">
-                                                    <option value=""></option>
-                                                    <option value="1">Initial</option>
-                                                    <option value="2">Intermediate</option>
-                                                    <option value="3">Final</option>
+                                                <select
+                                                    (change)="typedataselected($event,data)"
+                                                    [value]="data.value">
+                                                    <option value></option>
+                                                    <option
+                                                        value="1">Initial</option>
+                                                    <option
+                                                        value="2">Intermediate</option>
+                                                    <option
+                                                        value="3">Final</option>
                                                 </select>
                                             </div>
 
                                         </div>
 
-                                        <div *dxTemplate="let data1 of 'Mandatorytemp'">
+                                        <div
+                                            *dxTemplate="let data1 of 'Mandatorytemp'">
 
-                                            <input type="checkbox" (change)="Mandatorycheckevent($event,data1)"
+                                            <input type="checkbox"
+                                                (change)="Mandatorycheckevent($event,data1)"
                                                 [checked]="data1.value" />
                                         </div>
 
-                                        <div *dxTemplate="let data2 of 'atttemp'">
-                                            <input type="checkbox" (change)="attachcheckevent($event,data2)"
+                                        <div
+                                            *dxTemplate="let data2 of 'atttemp'">
+                                            <input type="checkbox"
+                                                (change)="attachcheckevent($event,data2)"
                                                 [checked]="data2.value" />
                                         </div>
 
-                                        <div *dxTemplate="let data of 'messagetemp'">
-                                            <input type="checkbox" (change)="messagecheckevent($event,data)"
+                                        <div
+                                            *dxTemplate="let data of 'messagetemp'">
+                                            <input type="checkbox"
+                                                (change)="messagecheckevent($event,data)"
                                                 [checked]="data.value" />
                                         </div>
 
-                                        <div *dxTemplate="let data of 'emailtemp'">
-                                            <input type="checkbox" (change)="emailcheckevent($event,data)"
+                                        <div
+                                            *dxTemplate="let data of 'emailtemp'">
+                                            <input type="checkbox"
+                                                (change)="emailcheckevent($event,data)"
                                                 [checked]="data.value" />
                                         </div>
-                                        <div *dxTemplate="let data of 'systemtemp'">
-                                            <input type="checkbox" (change)="systemcheckevent($event,data)"
+                                        <div
+                                            *dxTemplate="let data of 'systemtemp'">
+                                            <input type="checkbox"
+                                                (change)="systemcheckevent($event,data)"
                                                 [checked]="data.value" />
                                         </div>
-                                        <div *dxTemplate="let data of 'emailid'">
-                                            <input type="email" (change)="emailid($event,data)" [value]="data.value" style="width: 100%;" required />
-                                          </div>
+                                        <div
+                                            *dxTemplate="let data of 'emailid'">
+                                            <input type="email"
+                                                (change)="emailid($event,data)"
+                                                [value]="data.value"
+                                                style="width: 100%;" required />
+                                        </div>
 
-                                          <div *dxTemplate="let data of 'mobilenumber'">
-                                            <input type="number" (change)="mobilenumber($event,data)" [dir]="'rtl'" style="text-align: right;" [value]="data.value" style="width: 100%;" [disabled]="isdiabled" />
-                                          </div>
+                                        <div
+                                            *dxTemplate="let data of 'mobilenumber'">
+                                            <input type="number"
+                                                (change)="mobilenumber($event,data)"
+                                                [dir]="'rtl'"
+                                                style="text-align: right;"
+                                                [value]="data.value"
+                                                style="width: 100%;"
+                                                [disabled]="isdiabled" />
+                                        </div>
 
                                     </dx-data-grid>
 
@@ -148,8 +212,6 @@
                             </div>
 
                         </div>
-
-
 
                     </div>
                 </div>
