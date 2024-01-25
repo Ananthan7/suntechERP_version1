@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { GridSettingsRoutingModule } from './grid-settings.routing';
 import { GridSettingsComponent } from './grid-settings.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { GridSettingsComponent } from './grid-settings.component';
   ],
   imports: [
     CommonModule,
-    GridSettingsRoutingModule
+    GridSettingsRoutingModule,
+    SharedModule
   ]
 })
 export class GridSettingsModule { }

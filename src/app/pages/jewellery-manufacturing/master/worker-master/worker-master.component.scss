@@ -11,3 +11,25 @@
 .numericInput {
   text-align: right;
 }
+
+.mat-input-element {
+  font-size: 14px !important;
+}
+//styles common
+.favItems {
+  color: #3599cc;
+}
+
+.searchIcon:hover {
+  cursor: pointer;
+}
+
+.excelbtn:hover {
+  cursor: pointer;
+}
+
+::ng-deep {
+  .mat-form-field {
+    font-weight: 600 !important;
+  }
+}

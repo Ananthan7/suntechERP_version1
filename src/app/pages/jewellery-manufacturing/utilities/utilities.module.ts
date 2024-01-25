@@ -13,7 +13,7 @@ import { ProcessTransferAuthorisationComponent } from './process-transfer-author
   imports: [
     CommonModule,
     UtilitiesRoutingModule,
-    SharedModule
+    SharedModule,
   ]
 })
 export class UtilitiesModule { }

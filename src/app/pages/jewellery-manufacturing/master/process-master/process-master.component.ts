@@ -62,11 +62,11 @@ export class ProcessMasterComponent implements OnInit {
   StockProcessData:MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'RECOV_STOCK_CODE',
-    SEARCH_HEADING: 'Recov Stock Code',
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'Stock_Code',
+    SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "RECOV_STOCK_CODE<> ''",
+    WHERECONDITION: "Stock_Code <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -106,24 +106,26 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   
-
+  maxInputLength: number = 2
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
     processCode: ['',[Validators.required]],
     processDesc: ['',[Validators.required]],
     processType: [null],
+    stand_Day: ['',[Validators.required]],
     stand_time: ['',[Validators.required]],
     WIPaccount: ['',[Validators.required]],
+    max_Day: ['',[Validators.maxLength(2)]],
     max_time: ['',[Validators.required]],
     Position: [''],
     trayWeight: [''],
     approvalCode: [''],
     approvalProcess: [''],
     recStockCode: [''],
-    labour_charge: [],
-    accountStart: ['',[Validators.required]],
-    accountMiddle: ['',[Validators.required]],
-    accountEnd: ['',[Validators.required]],
+    labour_charge: [''],
+    accountStart: [''],
+    accountMiddle: [''],
+    accountEnd: [''],
     loss: [false],
     recovery: [false],
     allowGain: [false],
@@ -169,28 +171,19 @@ export class ProcessMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-  ) { }
+  ) { 
+    this.setInitialValues()
+  }
 
   ngOnInit(): void {
-
     this.getProcessTypeOptions()
-    // this.processMasterForm.controls['loss_max'].disable();
-    // this.processMasterForm.controls['loss_min'].disable();
-    // this.processMasterForm.controls['min_end'].disable();
-    // this.processMasterForm.controls['accountStart'].disable();
-    // this.processMasterForm.controls['loss_standard'].disable();
-    // this.processMasterForm.controls['standard_end'].disable();
-    // this.processMasterForm.controls['accountMiddle'].disable();
-    // this.processMasterForm.controls['accountEnd'].disable();
-
-    console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
-      this.viewFormValues();
+      this.viewMode = true;
+      this.setFormValues();
+      this.processMasterForm.disable();
     }else if(this.content.FLAG == 'EDIT'){
       this.setFormValues();
     }
-
-    
   }
   // USE: get select options Process TypeMaster
   private getProcessTypeOptions():void {
@@ -204,6 +197,11 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  private setInitialValues() {
+    this.processMasterForm.controls.trayWeight.setValue(this.commonService.decimalQuantityFormat(0,'METAL'))
+    this.processMasterForm.controls.labour_charge.setValue(this.commonService.decimalQuantityFormat(0,'AMOUNT'))
+
+  }
   private setFormValues() {
     if (!this.content) return
     this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
@@ -249,66 +247,19 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
     this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
   }
-  viewFormValues() {
-    this.viewMode = true;
-    if (!this.content) return
-    this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
-    this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
-    this.processMasterForm.controls.RepairProcess.setValue(this.content.REPAIR_PROCESS);
-    this.processMasterForm.controls.FinalProcess.setValue(this.content.FINAL_PROCESS);
-    this.processMasterForm.controls.Setting.setValue(this.content.SETTING_PROCESS);
-    this.processMasterForm.controls.LockWeight.setValue(this.content.LOCK_WEIGHT);
-    this.processMasterForm.controls.LabProcess.setValue(this.content.LAB_PROCESS);
-    this.processMasterForm.controls.WaxProcess.setValue(this.content.WAX_PROCESS);
-    this.processMasterForm.controls.allowGain.setValue(this.content.ALLOW_GAIN);
-    this.processMasterForm.controls.DeductPureWeight.setValue(this.content.DEDUCT_PURE_WT);
-    this.processMasterForm.controls.approvalCode.setValue(this.content.APPR_CODE);
-    this.processMasterForm.controls.ApplySetting.setValue(this.content.APPLY_SETTING);
-    this.processMasterForm.controls.TimeCalculateonProcess.setValue(this.content.TIMEON_PROCESS);
-    this.processMasterForm.controls.StoneIncluded.setValue(this.content.STONE_INCLUDED);
-    this.processMasterForm.controls.RecoveryProcess.setValue(this.content.RECOVERY_PROCESS);
-    this.processMasterForm.controls.Metal.setValue(this.content.ALLOW_METAL);
-    this.processMasterForm.controls.Stone.setValue(this.content.ALLOW_STONE);
-    this.processMasterForm.controls.Consumable.setValue(this.content.ALLOW_CONSUMABLE);
-    this.processMasterForm.controls.ApprovalRequired.setValue(this.content.APPROVAL_REQUIRED);
-    this.processMasterForm.controls.NonQuantity.setValue(this.content.NON_QUANTITY);
-    this.processMasterForm.controls.RefineryAutoProcess.setValue(this.content.DF_REFINERY);
-    this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.content.AUTO_LOSS);
-    this.processMasterForm.controls.HaveTreeNo.setValue(this.content.TREE_NO);
-    this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
-    this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
-    this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
-    this.processMasterForm.controls.processType.setValue(this.content.PROCESS_TYPE);
-    this.processMasterForm.controls.Position.setValue(this.content.POSITION);
-    this.processMasterForm.controls.recStockCode.setValue(this.content.RECOV_STOCK_CODE);
-    this.processMasterForm.controls.approvalProcess.setValue(this.content.APPR_PROCESS);
-    this.processMasterForm.controls.loss_standard.setValue(this.content.STD_LOSS);
-    this.processMasterForm.controls.loss_min.setValue(this.content.MIN_LOSS);
-    this.processMasterForm.controls.loss_max.setValue(this.content.MAX_LOSS);
-    this.processMasterForm.controls.loss_on_gross.setValue(this.content.LOSS_ON_GROSS);
-    this.processMasterForm.controls.trayWeight.setValue(this.content.TRAY_WT);
-    this.processMasterForm.controls.labour_charge.setValue(this.content.LABCHRG_PERHOUR);
-    this.processMasterForm.controls.loss.setValue(this.content.ALLOW_LOSS);
-    this.processMasterForm.controls.standard_end.setValue(this.content.RECOV_MIN);
-    this.processMasterForm.controls.min_end.setValue(this.content.RECOV_VAR1);
-    this.processMasterForm.controls.accountMiddle.setValue(this.content.RECOV_ACCODE);
-    this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
-    this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
-    this.processMasterForm.disable();
-  }
-
   onchangeCheckBox(e: any){
     if(e == true){    
      return 1;
-
     }else{ 
      return 0;
-
     }     
    }
 
   // final save
   formSubmit() {
+    console.log(this.processMasterForm.value.stand_time,'this.processMasterForm.value.stand_time');
+    
+    let time = this.commonService.timeToMinutes(this.processMasterForm.value.stand_time)
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateProcessMaster()
       return
@@ -324,8 +275,8 @@ export class ProcessMasterComponent implements OnInit {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode,
       "DESCRIPTION": this.processMasterForm.value.processDesc,
-      "STD_TIME": this.processMasterForm.value.stand_time || 0,
-      "MAX_TIME":this.processMasterForm.value.max_time || 0,
+      "STD_TIME": this.commonService.emptyToZero(this.processMasterForm.value.stand_time),
+      "MAX_TIME": this.commonService.emptyToZero(this.processMasterForm.value.max_time),
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -413,35 +364,28 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   ApprovalCodeSelected(e: any) {
-    console.log(e);
     this.processMasterForm.controls.approvalCode.setValue(e.APPR_CODE);
   }
   ApprovalProcessSelected(e: any) {
-    console.log(e);
     this.processMasterForm.controls.approvalProcess.setValue(e.Process_Code);
   }
   ACCODESelected(e: any) {
-    console.log(e);
     this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
   }
 
   StockProcesSelected(e: any){
-    console.log(e);
-    this.processMasterForm.controls.recStockCode.setValue(e.Process_Code);
+    this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
   }
 
   accountStartSelected(e: any){
-    console.log(e);
     this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
   }
 
   accountMiddleSelected(e: any){
-    console.log(e);
     this.processMasterForm.controls.accountMiddle.setValue(e.ACCODE);
   }
 
   accountEndSelected(e: any){
-    console.log(e);
     this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
   }
 

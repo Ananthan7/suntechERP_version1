@@ -26,6 +26,7 @@ import { StoneCostUpdationComponent } from './stone-cost-updation/stone-cost-upd
 import { DesignSequenceComponent } from './design-master/design-sequence/design-sequence.component';
 import { LabourChargesDetailsComponent } from './design-master/labour-charges-details/labour-charges-details.component';
 import { DesignTransactionComponent } from './design-master/design-transaction/design-transaction.component';
+import { CommonMfgModule } from '../common-mfg/common-mfg.module';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,7 @@ import { DesignTransactionComponent } from './design-master/design-transaction/d
     CommonModule,
     MasterRoutingModule,
     SharedModule,
-
+    CommonMfgModule
   ],
   // schemas: [
   //   CUSTOM_ELEMENTS_SCHEMA

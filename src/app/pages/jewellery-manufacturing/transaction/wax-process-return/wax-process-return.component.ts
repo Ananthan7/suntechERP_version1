@@ -106,13 +106,13 @@ export class WaxProcessReturnComponent implements OnInit {
 
   waxprocessFrom: FormGroup = this.formBuilder.group({
     voctype:['',[Validators.required]],
-    vocDate : ['',[Validators.required]],
-    vocno:[''],
+    vocDate : [''],
+    vocno: ['',[Validators.required]],
     enteredBy : [''],
     process:['',[Validators.required]],
     worker:['',[Validators.required]],
-    toworker:['',[Validators.required]],
-    toprocess:['',[Validators.required]],
+    toworker:[''],
+    toprocess:[''],
     waxcode:[''],
     remark:[''],
    });

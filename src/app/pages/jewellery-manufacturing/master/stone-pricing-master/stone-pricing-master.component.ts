@@ -155,7 +155,7 @@ export class StonePricingMasterComponent implements OnInit {
 
   stonePrizeMasterForm: FormGroup = this.formBuilder.group({
     price_code: ['', [Validators.required]],
-    sleve_set: ['', [Validators.required]],
+    sleve_set: [''],
     shape: ['', [Validators.required]],
     sleve_form: ['', [Validators.required]],
     sleve_to: ['', [Validators.required]],

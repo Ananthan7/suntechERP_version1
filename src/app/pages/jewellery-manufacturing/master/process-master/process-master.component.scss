@@ -97,8 +97,16 @@
   .mat-form-field-appearance-fill .mat-form-field-flex {
     background-color: #ffff !important;
   }
+
+  .mat-form-field {
+    font-weight: 600 !important;
+  }
 }
 
 .example-margin {
   margin-top: 15px;
+}
+
+.mat-input-element {
+  font-size: 13px !important;
 }
