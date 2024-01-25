@@ -22,6 +22,8 @@ export class SequenceMasterComponent implements OnInit {
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
   selectAll = false
+  isReadOnly:boolean=true
+  isdisabled:boolean=true
 
   private subscriptions: Subscription[] = [];
 
@@ -249,7 +251,14 @@ export class SequenceMasterComponent implements OnInit {
 
   /**use: checkbox change */
   changedCheckbox(value: any) {
+    if(value.isChecked == true){
+     this.isdisabled = !this.isdisabled
+    }
+
     if (this.sequenceMasterForm.value.sequenceCode == "") {
+      this.isdisabled = false
+      if(value.isChecked == false){this.isdisabled = true}
+
       Swal.fire({
         title: '',
         text: 'Code cannot be empty!',

@@ -21,7 +21,8 @@ export class AlloyMasterComponent implements OnInit {
   userName = localStorage.getItem('username');
   currentDate = new FormControl(new Date());
   private subscriptions: Subscription[] = [];
-
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -38,6 +39,33 @@ export class AlloyMasterComponent implements OnInit {
   ngOnInit(): void {
     this.alloyMastereForm.controls['createdBy'].disable();
   }
+
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
+  }
+
+   formatNumber(input:any) {
+    // Get the input value and remove non-digit characters
+    let inputValue = input.value.replace(/\D/g, '');
+
+    // Check if the input value is not empty
+    if (inputValue) {
+        // Format the input value as "00.00.000"
+        const formattedValue = inputValue.replace(/(\d{2})(\d{2})(\d{3})/, '$1.$2.$3');
+
+        // Update the input value with the formatted value
+        input.value = formattedValue;
+    }
+}
   
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid:[],
