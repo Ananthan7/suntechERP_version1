@@ -24,7 +24,7 @@ export class CADProcessingComponent implements OnInit {
   columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
   divisionMS: any = 'ID';
   columnheadItemDetails3:any[] = ['Comp Code','Srno','Division','Stone Type','Stock Code','Karat','Color','Shape','Sieve Std','Sieve Set'];
-  columnheadItemDetails2:any[] = ['SR#']
+  columnheadItemDetails2:any[] = ['']
   branchCode?: String;
   yearMonth?: String;
   currentDate = new FormControl(new Date());
@@ -33,7 +33,7 @@ export class CADProcessingComponent implements OnInit {
   table: any;
   status: boolean= true;
   selectedTabIndex = 0;
-  setAllInitialValues: any;
+  // setAllInitialValues: any;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -45,9 +45,9 @@ export class CADProcessingComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.content) {
-      // this.setFormValues()
-     
-      
+      // this.setFormValues()  
+      this.setAllInitialValues()
+      this.setAllInitialValues1()
     }
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
@@ -55,6 +55,86 @@ export class CADProcessingComponent implements OnInit {
       this.setFormValues()
     }
     this.cadProcessingForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
+    
+  }
+  
+  setAllInitialValues() {
+    console.log(this.content)
+    if (!this.content) return
+    let API = `JobCadProcessDJ/GetJobCadProcessDJWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data)
+          data.Details.forEach((element:any) => {
+            this.tableData.push({
+              voctype: element.VOCTYPE,
+              Srno: element.SRNO,
+              Division:element.Division,
+              StoneType:element.StoneType,
+              Karat:element.Karat,
+              Sieve:element.SIEVE,
+              Color:element.COLOR,
+              Shape:element.SHAPE,
+              Size:element.SIZE,
+              Pcs:element.PCS,
+              Remarks:element.REMARKS,
+              PointerWt:element.POINTER_WT,
+              StockCode:element.STOCK_CODE
+
+            })
+          });
+          this.cadProcessingForm.controls.voctype.setValue(data.VOCTYPE)
+          this.cadProcessingForm.controls.Srno.setValue(data.SRNO)
+          this.cadProcessingForm.controls.Division.setValue(data.Division)
+          this.cadProcessingForm.controls.StoneType.setValue(data.StoneType)
+          this.cadProcessingForm.controls.Karat.setValue(data.KARAT_CODE)
+          this.cadProcessingForm.controls.Sieve.setValue(data.SIEVE)
+          this.cadProcessingForm.controls.Color.setValue(data.COLOR)
+          this.cadProcessingForm.controls.Shape.setValue(data.SHAPE)
+          this.cadProcessingForm.controls.Size.setValue(data.SIZE)
+          this.cadProcessingForm.controls.Pcs.setValue(data.PCS)
+          this.cadProcessingForm.controls.Remarks.setValue(data.REMARKS)
+          this.cadProcessingForm.controls.PointerWt.setValue(data.POINTER_WT)
+          this.cadProcessingForm.controls.StockCode.setValue(data.STOCK_CODE)
+
+        } else {
+          this.comService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  setAllInitialValues1() {
+    console.log(this.content)
+    if (!this.content) return
+    let API = `JobCadProcessDJ/GetJobCadProcessDJWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data)
+          data.Details.forEach((element:any) => {
+            this.tableDatas.push({
+              Srno: element.SRNO,
+              
+             
+            
+
+            })
+          });
+          this.cadProcessingForm.controls.Srno.setValue(data.SRNO)
+          
+
+        } else {
+          this.comService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
   close(data?: any) {
@@ -70,7 +150,10 @@ export class CADProcessingComponent implements OnInit {
         this.tableData = data.response.WaxProcessDetails;
       }
     });
+    
   }
+ 
+  
   cadProcessingForm: FormGroup = this.formBuilder.group({
     voctype: ['CAD',''],
     vocNo: ['1',''],
@@ -348,7 +431,7 @@ componentSet(){
       "VOCTYPE": this.cadProcessingForm.value.voctype,
       "vocNo": this.cadProcessingForm.value.vocNo,
       "YEARMONTH": this.yearMonth,
-      "SALESPERSON_CODE": "",
+      "SALESPERSON_CODE": "string",
       "SYSTEM_DATE": this.cadProcessingForm.value.date,
       "MACHINEID": "",
       "DOC_REF": "",
@@ -358,21 +441,21 @@ componentSet(){
       "PROCESS_CODE": this.cadProcessingForm.value.process,
       "WORKER_CODE": this.cadProcessingForm.value.worker,
       "JOB_NUMBER": this.cadProcessingForm.value.job,
-      "UNQ_JOB_ID": "string",
+      "UNQ_JOB_ID": "",
       "JOB_SO_NUMBER": this.cadProcessingForm.value.subJobId,
       "DESIGN_CODE": this.cadProcessingForm.value.design,
       "UNQ_DESIGN_ID": "",
       "PART_CODE": "",
       "PCS": 0,
-      "TIME_TAKEN": this.cadProcessingForm.value.timeTaken,
+      "TIME_TAKEN": this.comService.emptyToZero(this.cadProcessingForm.value.TIME_TAKEN),
       "JOB_SO_MID": 0,
-      "CAD_STATUS": "string",
-      "APPR_CODE": "string",
-      "APPR_TYPE": this.cadProcessingForm.value.type,
-      "TRANS_REF": "string",
+      "CAD_STATUS": "",
+      "APPR_CODE": "",
+      "APPR_TYPE": this.comService.emptyToZero(this.cadProcessingForm.value.type),
+      "TRANS_REF": "",
       "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
-      "TO_PROCESS_CODE": this.cadProcessingForm.value.toProcess,
-      "TO_WORKER_CODE": this.cadProcessingForm.value.toWorker,
+      "TO_PROCESS_CODE": this.comService.nullToString(this.cadProcessingForm.value.toProcess),
+      "TO_WORKER_CODE": this.comService.nullToString(this.cadProcessingForm.value.toWorker),
       "SO_DELIVERY_TYPE": this.cadProcessingForm.value.deliveryOn,
       "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.cadProcessingForm.value.deliveryOnDays),
       "SO_DELIVERY_DATE": this.cadProcessingForm.value.deliveryOnDate,
@@ -410,10 +493,11 @@ componentSet(){
   }
 
   updateMeltingType() {
+    console.log(this.branchCode,'working')
     let API = '/JobCadProcessDJ/UpdateJobCadProcessDJ'+ this.cadProcessingForm.value.brnachCode + this.cadProcessingForm.value.voctype + this.cadProcessingForm.value.vocNo + this.cadProcessingForm.value.yearMoth ;
       let postData ={
         "MID": 0,
-        "BRANCH_CODE": "string",
+        "BRANCH_CODE":this.branchCode,
         "VOCTYPE": this.cadProcessingForm.value.voctype,
         "vocNo": this.cadProcessingForm.value.vocNo,
         "YEARMONTH": "stri",
@@ -433,7 +517,7 @@ componentSet(){
         "UNQ_DESIGN_ID": "string",
         "PART_CODE": "string",
         "PCS": 0,
-        "TIME_TAKEN": this.cadProcessingForm.value.timeTaken,
+        "TIME_TAKEN": this.comService.emptyToZero(this.cadProcessingForm.value.TIME_TAKEN),
         "JOB_SO_MID": 0,
         "CAD_STATUS": "string",
         "APPR_CODE": "string",
