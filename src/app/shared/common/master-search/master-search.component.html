@@ -21,6 +21,12 @@
                                 (focusout)="searchValueChange($event)" />
                             <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
                         </mat-form-field>
+                        
+                    </div>
+                    <div class="col-md-3 pt-3">
+                        <button class="btn btn-white search-btn">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="letters" *ngIf="MasterSearchData.VIEW_INPUT">
