@@ -217,7 +217,7 @@
                         <dx-data-grid #dataGrid id="gridContainer" width="100%"
                             height="400px" [dataSource]="tableData"
                             [showRowLines]="true"
-                            keyExpr="SrNo"
+                            keyExpr="SRNO"
                             [selectedRowKeys]="selectedKey"
                             (onSelectionChanged)="changedCheckbox($event)"
                             [showBorders]="true">
@@ -238,7 +238,7 @@
                                     (change)="changedCheckbox(cellInfo)"></mat-checkbox>
                             </div> -->
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
-                            <dxi-column dataField="SrNo" width="auto"
+                            <dxi-column dataField="SRNO" width="auto"
                                 caption="Sr No" [allowEditing]="true"
                                 alignment="center">
                             </dxi-column>

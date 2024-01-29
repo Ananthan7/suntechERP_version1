@@ -25,7 +25,6 @@ export class WorkerMasterComponent implements OnInit {
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Process Code', 'Description'];
   selectedProcessArr: any[] = [];
-  selectProcessClickNo: number = 0
   selectedKey: number[] = []
   private subscriptions: Subscription[] = [];
 
@@ -97,6 +96,7 @@ export class WorkerMasterComponent implements OnInit {
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
+      this.selectProcessMasterList()
     } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
       this.setFormValues();
@@ -136,8 +136,8 @@ export class WorkerMasterComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           const set2 = new Set(data.workerDetails.map((obj: any) => obj.SRNO));
-          let dataSet = this.tableData.filter(obj => set2.has(obj.SrNo));
-          this.selectedKey = dataSet.map(item => item.SrNo );
+          let dataSet = this.tableData.filter(obj => set2.has(obj.SRNO));
+          this.selectedKey = dataSet.map(item => item.SRNO );
         }
       }, err => {
         this.commonService.closeSnackBarMsg()
@@ -199,6 +199,7 @@ export class WorkerMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
+                this.close('reloadMainGrid')
                 this.tableData = []
               }
             });
@@ -344,7 +345,7 @@ export class WorkerMasterComponent implements OnInit {
         // if (value.isChecked == true) {
           this.selectedProcessArr.push({
             "UNIQUEID": 0,
-            "SRNO": item.SrNo,
+            "SRNO": item.SRNO,
             "WORKER_CODE": this.workerMasterForm.value.WorkerCode,
             "PROCESS_CODE": item.PROCESS_CODE
           })
@@ -369,11 +370,10 @@ export class WorkerMasterComponent implements OnInit {
         if (result.response) {
           this.tableData = result.response;
           this.tableData.forEach((item: any, i: any) => {
-            item.SrNo = i + 1;
+            item.SRNO = i + 1;
           });
           this.selectedKey = []
-          this.selectProcessClickNo += 1
-          if (this.content.FLAG == 'EDIT' && this.selectProcessClickNo == 1) {
+          if ((this.content.FLAG == 'EDIT' || 'VIEW')) {
             this.getWorkerMaster(this.content.MID)
           }
         }
