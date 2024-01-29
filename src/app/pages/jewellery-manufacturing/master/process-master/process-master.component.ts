@@ -73,33 +73,9 @@ export class ProcessMasterComponent implements OnInit {
   accountStartData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 81,
+    LOOKUPID: 152,
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'LOSS ACCOUNT CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  accountMiddleData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 81,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'RECOVERY ACCOUNT CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  accountEndData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 81,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'ALLOW GAIN ACCOUNT CODE',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
     VIEW_INPUT: true,
@@ -376,35 +352,39 @@ export class ProcessMasterComponent implements OnInit {
   StockProcesSelected(e: any) {
     this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
   }
-
+  /** checking for same account code selection */
+  private isSameAccountCodeSelected(accountCode: any): boolean {
+    return (
+      this.processMasterForm.value.accountStart === accountCode ||
+      this.processMasterForm.value.accountMiddle === accountCode ||
+      this.processMasterForm.value.accountEnd === accountCode ||
+      this.processMasterForm.value.WIPaccount === accountCode
+    );
+  }
+  
   accountStartSelected(e: any) {
-    if (this.processMasterForm.value.accountMiddle == e.ACCODE ||
-      this.processMasterForm.value.accountEnd == e.ACCODE) {
-        this.commonService.toastErrorByMsgId('cannot select same account code')
-        return
+    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return;
     }
     this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
   }
-
+  
   accountMiddleSelected(e: any) {
-    if (this.processMasterForm.value.accountStart == e.ACCODE ||
-      this.processMasterForm.value.accountEnd == e.ACCODE) {
-        this.commonService.toastErrorByMsgId('cannot select same account code')
-        return
+    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return;
     }
     this.processMasterForm.controls.accountMiddle.setValue(e.ACCODE);
   }
-
+  
   accountEndSelected(e: any) {
-    if (this.processMasterForm.value.accountMiddle == e.ACCODE ||
-      this.processMasterForm.value.accountStart == e.ACCODE) {
-        this.commonService.toastErrorByMsgId('cannot select same account code')
-        return
+    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return;
     }
     this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
   }
-
-
 
   updateProcessMaster() {
     console.log(this.processMasterForm.value);
