@@ -22,6 +22,7 @@ export class ApprovalMasterComponent implements OnInit {
   allMode: string;
   checkBoxesMode: string;
   isdiabled: boolean = true
+  diabled: boolean = true
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -87,6 +88,11 @@ export class ApprovalMasterComponent implements OnInit {
   }
   emailcheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].EMAIL = data.target.checked;
+    if (data.target.checked == true) {
+      this.diabled = !this.diabled
+    } else {
+      this.diabled = true
+    }
   }
   systemcheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].SYS_MESSAGE = data.target.checked;
