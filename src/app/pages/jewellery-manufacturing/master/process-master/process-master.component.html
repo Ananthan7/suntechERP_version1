@@ -23,7 +23,7 @@
                                 <div class="col-sm-3">
                                     <mat-form-field
                                         style="width: 85%; margin-left: 7px;">
-                                        <input type="text" matInput FocusOnLoad
+                                        <input type="text" matInput 
                                             #code
                                             placeholder="CODE"
                                             (input)="code.value = code.value.toUpperCase()"
@@ -72,7 +72,7 @@
                                             formControlName="stand_Day" >
                                     </mat-form-field>
                                     <mat-form-field style="width: 70%; margin-left: 6px;">
-                                        <input type="time"
+                                        <input type="time" step="1"
                                             formControlName="stand_time"
                                             matInput>
                                     </mat-form-field>
@@ -322,7 +322,7 @@
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="accountMiddleData"
+                                        [MasterSearchData]="accountStartData"
                                         *ngIf="viewMode == false"
                                         (newRowClick)="accountMiddleSelected($event)">
                                     </master-search>
@@ -334,7 +334,7 @@
                                             [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="accountEndData"
+                                        [MasterSearchData]="accountStartData"
                                         *ngIf="viewMode == false"
                                         (newRowClick)="accountEndSelected($event)">
                                     </master-search>

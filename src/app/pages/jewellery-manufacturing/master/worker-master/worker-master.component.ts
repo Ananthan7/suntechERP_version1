@@ -19,13 +19,14 @@ export class WorkerMasterComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
   currentFilter: any;
   showFilterRow!: boolean;
-  viewOnlyFlag: boolean = false;
   buttonField: boolean = true;
   viewMode: boolean = false;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Process Code', 'Description'];
   selectedProcessArr: any[] = [];
+  selectProcessClickNo: number = 0
+  selectedKey: number[] = []
   private subscriptions: Subscription[] = [];
 
   accountMasterData: MasterSearchModel = {
@@ -59,30 +60,6 @@ export class WorkerMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-  constructor(
-    private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
-    private toastr: ToastrService,
-    private commonService: CommonServiceService,
-    // private ChangeDetector: ChangeDetectorRef,
-  ) {
-    this.setInitialValues()
-  }
-
-  ngOnInit(): void {
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-      this.setFormValues();
-      this.workerMasterForm.disable();
-    } else if (this.content.FLAG == 'EDIT') {
-      this.setFormValues();
-      this.selectProcessMasterList()
-      
-    }
-  }
-
   workerMasterForm = this.formBuilder.group({
     WorkerCode: ['', [Validators.required]],
     WorkerDESCRIPTION: ['', [Validators.required]],
@@ -102,6 +79,32 @@ export class WorkerMasterComponent implements OnInit {
     Active: [true]
   })
 
+  constructor(
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+    private commonService: CommonServiceService,
+    // private ChangeDetector: ChangeDetectorRef,
+  ) {
+    this.setInitialValues()
+  }
+
+  ngOnInit(): void {
+    if(!this.content){
+      
+    }
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setFormValues();
+    } else if (this.content.FLAG == 'EDIT') {
+      this.viewMode = false;
+      this.setFormValues();
+      this.selectProcessMasterList()
+    }
+  }
+
+ 
   setInitialValues() {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -132,8 +135,9 @@ export class WorkerMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           let data = result.response;
-          const set2 = new Set(data.workerDetails.map((obj:any) => obj.SRNO));
-          this.tableData = this.tableData.filter(obj => set2.has(obj.SrNo));
+          const set2 = new Set(data.workerDetails.map((obj: any) => obj.SRNO));
+          let dataSet = this.tableData.filter(obj => set2.has(obj.SrNo));
+          this.selectedKey = dataSet.map(item => item.SrNo );
         }
       }, err => {
         this.commonService.closeSnackBarMsg()
@@ -331,61 +335,27 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   /**use: checkbox change */
-  changedCheckbox(cellInfo: any) {
-    let value = cellInfo.data
-    console.log(value);
-
-    this.tableData.forEach((item: any) => {
-      if (value.SrNo == item.SrNo) {
-        value.isChecked = !value.isChecked
-        if (value.isChecked == true) {
+  changedCheckbox(data: any) {
+    let value = data.selectedRowsData
+    this.selectedProcessArr = []
+    value.forEach((item: any) => {
+      // if (value.SrNo == item.SrNo) {
+        // value.isChecked = !value.isChecked
+        // if (value.isChecked == true) {
           this.selectedProcessArr.push({
             "UNIQUEID": 0,
-            "SRNO": value.SrNo,
+            "SRNO": item.SrNo,
             "WORKER_CODE": this.workerMasterForm.value.WorkerCode,
-            "PROCESS_CODE": value.PROCESS_CODE
+            "PROCESS_CODE": item.PROCESS_CODE
           })
-        } else if (value.isChecked == false) {
-          this.selectedProcessArr = this.selectedProcessArr.filter((element) => element.SRNO != value.SrNo)
-        }
-      }
+        // } else if (value.isChecked == false) {
+        //   this.selectedProcessArr = this.selectedProcessArr.filter((element) => element.SRNO != value.SrNo)
+        // }
+        
+      // }
     })
   }
   /**select process API call */
-  // selectProcess() {
-  //   let params = {
-  //     "BranchCode": this.commonService.branchCode || '',
-  //     "UserName": this.commonService.userName || '',
-  //     "ProcessCode": this.workerMasterForm.value.DefaultProcess || '',
-  //     "SubJobNo": ""
-  //   }
-  //   let API = 'ProcessMasterDj/GetProcessMasterDJList'
-
-  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, params)
-  //     .subscribe((result) => {
-  //       if (result.response) {
-  //         result.response.forEach((item: any, i: any) => {
-  //           item.SrNo = i + 1;
-  //           item.isChecked = false;
-  //         });
-  //         this.tableData = result.response;
-  //       } else {
-  //         Swal.fire({
-  //           title: '',
-  //           text: 'Data not available!',
-  //           icon: 'warning',
-  //           confirmButtonColor: '#336699',
-  //           confirmButtonText: 'Ok'
-  //         }).then((result: any) => {
-  //           if (result.value) {
-  //             this.workerMasterForm.reset()
-  //           }
-  //         });
-  //       }
-  //     }, err => alert(err))
-  //   this.subscriptions.push(Sub)
-  // }
-  selectProcessClickNo:number = 0
   selectProcessMasterList() {
     if (this.workerMasterForm.value.WorkerCode == '') {
       this.commonService.toastErrorByMsgId('Worker Code Required');
@@ -401,8 +371,9 @@ export class WorkerMasterComponent implements OnInit {
           this.tableData.forEach((item: any, i: any) => {
             item.SrNo = i + 1;
           });
+          this.selectedKey = []
           this.selectProcessClickNo += 1
-          if(this.content.FLAG == 'EDIT' && this.selectProcessClickNo == 1){
+          if (this.content.FLAG == 'EDIT' && this.selectProcessClickNo == 1) {
             this.getWorkerMaster(this.content.MID)
           }
         }
@@ -417,25 +388,27 @@ export class WorkerMasterComponent implements OnInit {
 
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
-    //   if (event.target.value == '' || this.viewOnlyFlag == true) return
-    //   let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
-    //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    //     .subscribe((result) => {
-    //       if (result.response) {
-    //         Swal.fire({
-    //           title: '',
-    //           text: 'Worker Already Exists!',
-    //           icon: 'warning',
-    //           confirmButtonColor: '#336699',
-    //           confirmButtonText: 'Ok'
-    //         }).then((result: any) => {
-    //           if (result.value) {
-    //             this.workerMasterForm.reset()
-    //           }
-    //         });
-    //       }
-    //     }, err => alert(err))
-    //   this.subscriptions.push(Sub)
+    if (event.target.value == '' || this.viewMode == true) return
+    let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          Swal.fire({
+            title: '',
+            text: 'Worker Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.workerMasterForm.reset()
+            }
+          });
+        }
+      }, err => {
+        this.workerMasterForm.reset()
+      })
+    this.subscriptions.push(Sub)
   }
   //selected field value setting
   WorkerAcCodeSelected(data: any) {

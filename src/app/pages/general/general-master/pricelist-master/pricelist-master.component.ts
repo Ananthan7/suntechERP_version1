@@ -18,6 +18,7 @@ export class PricelistMasterComponent implements OnInit {
   @Input() content!: any;
   subscriptions: any;
   currentDate: any = new Date();
+  viewMode: boolean = false;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -58,7 +59,13 @@ export class PricelistMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.setAllInitialValues();
+    if(this.content.FLAG == 'VIEW'){
+      this.viewMode = true;
+      this.setAllInitialValues();
+    }
+    if(this.content.FLAG == 'EDIT'){
+      this.setAllInitialValues();
+    }
   }
 
   formSubmit() {
@@ -171,8 +178,8 @@ export class PricelistMasterComponent implements OnInit {
   }
   createPostData() {
     return {
-      "PRICE_CODE": this.priceListMasterForm.value.priceCode,
-      "DESCRIPTION": this.priceListMasterForm.value.description,
+      "PRICE_CODE": this.priceListMasterForm.value.priceCode.toUpperCase(),
+      "DESCRIPTION": this.priceListMasterForm.value.description.toUpperCase(),
       "PRICE_METHOD": this.priceListMasterForm.value.priceMethod,
       "PRICE_SIGN": this.priceListMasterForm.value.priceMethod == 1 ? '0' : this.priceListMasterForm.value.priceSign,
       "PRICE_VALUE": this.priceListMasterForm.value.priceValue,
@@ -299,6 +306,10 @@ export class PricelistMasterComponent implements OnInit {
       if (selectedPriceType && selectedPriceType.type === 'Fixed') {
         this.priceListMasterForm.controls.priceSign.disable();
         this.priceListMasterForm.controls.priceSign.setValue('');
+        this.priceListMasterForm.controls.priceValue.disable();
+        this.priceListMasterForm.controls.finalPriceSign.disable();
+        this.priceListMasterForm.controls.finalPriceValue.disable();
+
         this.isDisabled = true;
       } else {
         this.priceListMasterForm.controls.priceSign.enable();
