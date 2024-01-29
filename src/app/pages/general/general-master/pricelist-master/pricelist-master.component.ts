@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./pricelist-master.component.scss']
 })
 export class PricelistMasterComponent implements OnInit {
-  priceListMasterForm!: FormGroup;
+
   @Input() content!: any;
   subscriptions: any;
   currentDate: any = new Date();
@@ -49,6 +49,21 @@ export class PricelistMasterComponent implements OnInit {
     { type: 'Fixed', value: 1 },
   ];
   isDisabled = false;
+
+  priceListMasterForm: FormGroup = this.formBuilder.group({
+    priceCode: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    priceMethod: ['', [Validators.required]],
+    priceSign: ['', [Validators.required]],
+    priceValue: [''],
+    finalPriceSign: ['', [Validators.required]],
+    finalPriceValue: ['', [Validators.required]],
+    addlValueSign: ['', [Validators.required]],
+    addlValue: ['', [Validators.required]],
+    priceRoundoff: [false],
+    dontCalculate: [false],
+    roundoff_digit: ['', [Validators.required]],
+  });
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -59,11 +74,11 @@ export class PricelistMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
-    if(this.content.FLAG == 'VIEW'){
+    if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setAllInitialValues();
     }
-    if(this.content.FLAG == 'EDIT'){
+    if (this.content.FLAG == 'EDIT') {
       this.setAllInitialValues();
     }
   }
@@ -119,20 +134,9 @@ export class PricelistMasterComponent implements OnInit {
 
   private initializeForm() {
     try {
-      this.priceListMasterForm = this.formBuilder.group({
-        priceCode: ['', [Validators.required]],
-        description: ['', [Validators.required]],
-        priceMethod: ['', [Validators.required]],
-        priceSign: ['', [Validators.required]],
-        priceValue: [''],
-        finalPriceSign: ['', [Validators.required]],
-        finalPriceValue: ['', [Validators.required]],
-        addlValueSign: ['', [Validators.required]],
-        addlValue: ['', [Validators.required]],
-        priceRoundoff: [false],
-        dontCalculate: [false],
-        roundoff_digit: ['', [Validators.required]],
-      });
+      this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+      this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+      this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     } catch (error) {
       console.error('Error in initializeForm:', error);
     }
@@ -309,10 +313,17 @@ export class PricelistMasterComponent implements OnInit {
         this.priceListMasterForm.controls.priceValue.disable();
         this.priceListMasterForm.controls.finalPriceSign.disable();
         this.priceListMasterForm.controls.finalPriceValue.disable();
+        this.priceListMasterForm.controls.addlValueSign.disable();
+        this.priceListMasterForm.controls.addlValue.disable();
 
         this.isDisabled = true;
       } else {
         this.priceListMasterForm.controls.priceSign.enable();
+        this.priceListMasterForm.controls.priceValue.enable();
+        this.priceListMasterForm.controls.finalPriceSign.enable();
+        this.priceListMasterForm.controls.finalPriceValue.enable();
+        this.priceListMasterForm.controls.addlValueSign.enable();
+        this.priceListMasterForm.controls.addlValue.enable();
         this.isDisabled = false;
       }
     }
