@@ -97,7 +97,7 @@
             </mat-form-field>
           </div>
           <div class="col-md-6">
-            <mat-form-field style="width: 100%">  
+            <mat-form-field style="width: 80%">  
               <mat-label>Reason</mat-label>
               <input
                 type="text"
@@ -109,6 +109,8 @@
                 Reason is <strong>required</strong>
               </mat-error>
             </mat-form-field>
+          <master-search [MasterSearchData]="reasonLookup" (newRowClick)="reasonSelected($event)"></master-search>
+
           </div>
         </div>
         <div class="row">

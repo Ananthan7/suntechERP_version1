@@ -17,6 +17,7 @@ import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sale
 import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-direct.component';
 import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -33,6 +34,19 @@ export class RetailTransactionComponent implements OnInit {
   componentSelected: any;
   private componentDbList: any = {}
   componentName: any;
+
+  reasonLookup: MasterSearchModel =
+  {
+   PAGENO: 1,
+   RECORDS: 10,
+   LOOKUPID: 10,
+   SEARCH_FIELD: "DESCRIPTION",
+   SEARCH_HEADING: "Reason",
+   SEARCH_VALUE: "",
+   WHERECONDITION: "DESCRIPTION<> ''",
+   VIEW_INPUT: true,
+   VIEW_TABLE: true,
+ };
 
   @ViewChild('userAuthModal')
   public userAuthModal!: NgbModal;
@@ -179,6 +193,13 @@ export class RetailTransactionComponent implements OnInit {
     });
 
 
+  }
+
+  reasonSelected(e: any) {
+    console.log(e);
+    // this.authForm.controls.reason.setValue(e.CODE);
+    this.authForm.controls.reason.setValue(e.DESCRIPTION);
+    this.authForm.controls.description.setValue(e.DESCRIPTION);
   }
 
   submitAuth() {
