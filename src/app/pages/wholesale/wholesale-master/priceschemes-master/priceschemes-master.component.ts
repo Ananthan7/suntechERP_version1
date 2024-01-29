@@ -40,7 +40,28 @@ export class PriceschemesMasterComponent implements OnInit {
     this.initializeForm();
     this.setAllInitialValues();
   }
+ /** checking for same account code selection */
+ private isSameAccountCodeSelected(accountCode: any): boolean {
+  return (
+    this.priceSchemaMasterForm.value.price1 === accountCode ||
+    this.priceSchemaMasterForm.value.price2 === accountCode ||
+    this.priceSchemaMasterForm.value.price3 === accountCode ||
+    this.priceSchemaMasterForm.value.price4 === accountCode ||
+    this.priceSchemaMasterForm.value.price5 === accountCode
+  );
+}
 
+priceCodeSelected(e: any, controlName: string) {
+  if (this.isSameAccountCodeSelected(e.PRICE_CODE)) {
+    this.commonService.toastErrorByMsgId('cannot select the same account code');
+    return;
+  }
+  try {
+    this.priceSchemaMasterForm.controls[controlName].setValue(e.PRICE_CODE);
+  } catch (error) {
+    console.error('Error in priceCodeSelected:', error);
+  }
+}
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update();
@@ -116,7 +137,7 @@ export class PriceschemesMasterComponent implements OnInit {
             let data = result.response
 
             this.priceSchemaMasterForm.controls.priceCode.setValue(data.PRICE_CODE)
-            this.priceSchemaMasterForm.controls.priceDescription.setValue(data.PRICE_DESCRIPTION)
+            this.priceSchemaMasterForm.controls.priceDescription.setValue((data.PRICE_DESCRIPTION).toUpperCase())
             this.priceSchemaMasterForm.controls.price1.setValue(data.PRICE1)
             this.priceSchemaMasterForm.controls.price2.setValue(data.PRICE2)
             this.priceSchemaMasterForm.controls.price3.setValue(data.PRICE3)
@@ -137,13 +158,7 @@ export class PriceschemesMasterComponent implements OnInit {
     }
   }
 
-  priceCodeSelected(e: any, controlName: string) {
-    try {
-      this.priceSchemaMasterForm.controls[controlName].setValue(e.PRICE_CODE);
-    } catch (error) {
-      console.error('Error in priceCodeSelected:', error);
-    }
-  }
+ 
 
   private initializeForm() {
     try {
@@ -164,8 +179,8 @@ export class PriceschemesMasterComponent implements OnInit {
 
   createPostData() {
     return {
-      "PRICE_CODE": this.priceSchemaMasterForm.value.priceCode,
-      "PRICE_DESCRIPTION": this.priceSchemaMasterForm.value.priceDescription,
+      "PRICE_CODE": this.priceSchemaMasterForm.value.priceCode.toUpperCase(),
+      "PRICE_DESCRIPTION": this.priceSchemaMasterForm.value.priceDescription.toUpperCase(),
       "PRICE1": this.priceSchemaMasterForm.value.price1,
       "PRICE2": this.priceSchemaMasterForm.value.price2,
       "PRICE3": this.priceSchemaMasterForm.value.price3,
