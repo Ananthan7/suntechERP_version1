@@ -14,10 +14,11 @@ import Swal from 'sweetalert2';
   styleUrls: ['./pricelist-master.component.scss']
 })
 export class PricelistMasterComponent implements OnInit {
-  priceListMasterForm!: FormGroup;
+
   @Input() content!: any;
   subscriptions: any;
   currentDate: any = new Date();
+  viewMode: boolean = false;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -48,6 +49,21 @@ export class PricelistMasterComponent implements OnInit {
     { type: 'Fixed', value: 1 },
   ];
   isDisabled = false;
+
+  priceListMasterForm: FormGroup = this.formBuilder.group({
+    priceCode: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    priceMethod: ['', [Validators.required]],
+    priceSign: ['', [Validators.required]],
+    priceValue: [''],
+    finalPriceSign: ['', [Validators.required]],
+    finalPriceValue: ['', [Validators.required]],
+    addlValueSign: ['', [Validators.required]],
+    addlValue: ['', [Validators.required]],
+    priceRoundoff: [false],
+    dontCalculate: [false],
+    roundoff_digit: ['', [Validators.required]],
+  });
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -58,7 +74,13 @@ export class PricelistMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.setAllInitialValues();
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setAllInitialValues();
+    }
+    if (this.content.FLAG == 'EDIT') {
+      this.setAllInitialValues();
+    }
   }
 
   formSubmit() {
@@ -112,20 +134,9 @@ export class PricelistMasterComponent implements OnInit {
 
   private initializeForm() {
     try {
-      this.priceListMasterForm = this.formBuilder.group({
-        priceCode: ['', [Validators.required]],
-        description: ['', [Validators.required]],
-        priceMethod: ['', [Validators.required]],
-        priceSign: ['', [Validators.required]],
-        priceValue: [''],
-        finalPriceSign: ['', [Validators.required]],
-        finalPriceValue: ['', [Validators.required]],
-        addlValueSign: ['', [Validators.required]],
-        addlValue: ['', [Validators.required]],
-        priceRoundoff: [false],
-        dontCalculate: [false],
-        roundoff_digit: ['', [Validators.required]],
-      });
+      this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+      this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+      this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     } catch (error) {
       console.error('Error in initializeForm:', error);
     }
@@ -171,8 +182,8 @@ export class PricelistMasterComponent implements OnInit {
   }
   createPostData() {
     return {
-      "PRICE_CODE": this.priceListMasterForm.value.priceCode,
-      "DESCRIPTION": this.priceListMasterForm.value.description,
+      "PRICE_CODE": this.priceListMasterForm.value.priceCode.toUpperCase(),
+      "DESCRIPTION": this.priceListMasterForm.value.description.toUpperCase(),
       "PRICE_METHOD": this.priceListMasterForm.value.priceMethod,
       "PRICE_SIGN": this.priceListMasterForm.value.priceMethod == 1 ? '0' : this.priceListMasterForm.value.priceSign,
       "PRICE_VALUE": this.priceListMasterForm.value.priceValue,
@@ -299,9 +310,20 @@ export class PricelistMasterComponent implements OnInit {
       if (selectedPriceType && selectedPriceType.type === 'Fixed') {
         this.priceListMasterForm.controls.priceSign.disable();
         this.priceListMasterForm.controls.priceSign.setValue('');
+        this.priceListMasterForm.controls.priceValue.disable();
+        this.priceListMasterForm.controls.finalPriceSign.disable();
+        this.priceListMasterForm.controls.finalPriceValue.disable();
+        this.priceListMasterForm.controls.addlValueSign.disable();
+        this.priceListMasterForm.controls.addlValue.disable();
+
         this.isDisabled = true;
       } else {
         this.priceListMasterForm.controls.priceSign.enable();
+        this.priceListMasterForm.controls.priceValue.enable();
+        this.priceListMasterForm.controls.finalPriceSign.enable();
+        this.priceListMasterForm.controls.finalPriceValue.enable();
+        this.priceListMasterForm.controls.addlValueSign.enable();
+        this.priceListMasterForm.controls.addlValue.enable();
         this.isDisabled = false;
       }
     }

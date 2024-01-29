@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ComponentFactory, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -47,7 +47,7 @@ export class CADProcessingComponent implements OnInit {
     if (this.content) {
       // this.setFormValues()  
       this.setAllInitialValues()
-      this.setAllInitialValues1()
+  
     }
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
@@ -69,65 +69,53 @@ export class CADProcessingComponent implements OnInit {
           console.log(data)
           data.Details.forEach((element:any) => {
             this.tableData.push({
-              voctype: element.VOCTYPE,
               Srno: element.SRNO,
-              Division:element.Division,
-              StoneType:element.StoneType,
-              Karat:element.Karat,
+              Division:element.DIVCODE,
+              StoneType:element.METALSTONE,
+              Karat:element.KARAT_CODE,
               Sieve:element.SIEVE,
               Color:element.COLOR,
               Shape:element.SHAPE,
               Size:element.SIZE,
               Pcs:element.PCS,
-              Remarks:element.REMARKS,
+              Remarks:element.D_REMARKS,
               PointerWt:element.POINTER_WT,
-              StockCode:element.STOCK_CODE
-
-            })
-          });
-          this.cadProcessingForm.controls.voctype.setValue(data.VOCTYPE)
-          this.cadProcessingForm.controls.Srno.setValue(data.SRNO)
-          this.cadProcessingForm.controls.Division.setValue(data.Division)
-          this.cadProcessingForm.controls.StoneType.setValue(data.StoneType)
-          this.cadProcessingForm.controls.Karat.setValue(data.KARAT_CODE)
-          this.cadProcessingForm.controls.Sieve.setValue(data.SIEVE)
-          this.cadProcessingForm.controls.Color.setValue(data.COLOR)
-          this.cadProcessingForm.controls.Shape.setValue(data.SHAPE)
-          this.cadProcessingForm.controls.Size.setValue(data.SIZE)
-          this.cadProcessingForm.controls.Pcs.setValue(data.PCS)
-          this.cadProcessingForm.controls.Remarks.setValue(data.REMARKS)
-          this.cadProcessingForm.controls.PointerWt.setValue(data.POINTER_WT)
-          this.cadProcessingForm.controls.StockCode.setValue(data.STOCK_CODE)
-
-        } else {
-          this.comService.toastErrorByMsgId('MSG1531')
-        }
-      }, err => {
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
-  setAllInitialValues1() {
-    console.log(this.content)
-    if (!this.content) return
-    let API = `JobCadProcessDJ/GetJobCadProcessDJWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
-          console.log(data)
-          data.Details.forEach((element:any) => {
-            this.tableDatas.push({
-              Srno: element.SRNO,
               
              
-            
 
             })
           });
-          this.cadProcessingForm.controls.Srno.setValue(data.SRNO)
-          
+          console.log(this.tableDatas)
+          data.Components.forEach((element:any) => {
+            this.tableDatas.push({
+              Srno:element.SRNO,
+              CompCode:element.COMP_CODE,
+              Description:element.COMP_DESCRIPTION,
+              Pcs:element.PCS,
+              SizeSet:element.COMPSIZE_CODE,
+              SizeCode:element.COMPSET_CODE,
+              Type:element.TYPE_CODE,
+              Category:element.CATEGORY_CODE,
+              Shape:element.COMP_SHAPE,
+              Height:element.HEIGHT,
+              Width:element.WIDTH,
+              Length:element.LENGTH,
+              Radius:element.RADIUS,
+              Remarks:element.REMARKS
 
+            
+            })
+          }); 
+          
+          this.cadProcessingForm.controls.voctype.setValue(data.VOCTYPE)
+          this.cadProcessingForm.controls.design.setValue(data.DESIGN_CODE)
+          this.cadProcessingForm.controls.job.setValue(data.JOB_NUMBER)
+          this.cadProcessingForm.controls.toWorker.setValue(data.TO_WORKER_CODE)
+          this.cadProcessingForm.controls.toProcess.setValue(data.TO_PROCESS_CODE)
+          this.cadProcessingForm.controls.soNumber.setValue(data.JOB_SO_NUMBER)
+          this.cadProcessingForm.controls.subJobId.setValue(data.JOB_SO_MID)
+         
+          
         } else {
           this.comService.toastErrorByMsgId('MSG1531')
         }
@@ -136,6 +124,7 @@ export class CADProcessingComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  
 
   close(data?: any) {
     //TODO reset forms and data before closing

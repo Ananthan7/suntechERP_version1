@@ -43,8 +43,9 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     console.log(e);    
     this.retailAdvanceReceiptRegisterForm.controls.salesman.setValue(e.SALESPERSON_CODE);
     this.retailAdvanceReceiptRegisterForm.controls.salesmanCode.setValue(e.DESCRIPTION);
-
   }
+
+  
 
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   // private cssFilePath = 'assets/scheme_register_pdf.scss';

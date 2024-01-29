@@ -36,6 +36,11 @@ export class ApprovalMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  approvalMasterForm: FormGroup = this.formBuilder.group({
+    code: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+
+  });
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -49,8 +54,23 @@ export class ApprovalMasterComponent implements OnInit {
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
-
-
+  ngOnInit(): void {
+    console.log(this.content);
+    if (this.content) {
+      this.setFormValues()
+    }
+  }
+  setFormValues() {
+    if (!this.content) return
+    this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
+    this.approvalMasterForm.controls.description.setValue(this.content.APPR_DESCRIPTION)
+    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/' + this.content.APPR_CODE)
+    .subscribe((data) => {
+      if (data.status == 'Success') {
+        this.tableData = data.response.approvalDetails;
+      }
+    });
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -66,7 +86,7 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   typedataselected(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].APPR_TYPE = data.target.value;
+    this.tableData[value.data.SRNO - 1].APPR_TYPE = this.commonService.emptyToZero(data.target.value);
   }
 
   Mandatorycheckevent(data: any, value: any) {
@@ -80,10 +100,10 @@ export class ApprovalMasterComponent implements OnInit {
   }
   messagecheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].ORG_MESSAGE = data.target.checked;
-    if (data.target.checked == true) {
-      this.isdiabled = !this.isdiabled
-    } else {
-      this.isdiabled = true
+    if(data.target.checked){
+      this.tableData[value.data.SRNO - 1].MOBILE_NO = ' ';
+    }else{
+      this.tableData[value.data.SRNO - 1].MOBILE_NO = '';
     }
   }
   emailcheckevent(data: any, value: any) {
@@ -92,6 +112,11 @@ export class ApprovalMasterComponent implements OnInit {
       this.diabled = !this.diabled
     } else {
       this.diabled = true
+    }
+    if(data.target.checked){
+      this.tableData[value.data.SRNO - 1].EMAIL_ID = ' ';
+    }else{
+      this.tableData[value.data.SRNO - 1].EMAIL_ID = '';
     }
   }
   systemcheckevent(data: any, value: any) {
@@ -111,37 +136,19 @@ export class ApprovalMasterComponent implements OnInit {
     this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
   }
 
-
-
-  ngOnInit(): void {
-    console.log(this.content);
-    if (this.content) {
-      this.setFormValues()
-    }
-  }
-
-  setFormValues() {
-    if (!this.content) return
-    this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
-    this.approvalMasterForm.controls.description.setValue(this.content.APPR_DESCRIPTION)
-
-
-    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/' + this.content.APPR_CODE).subscribe((data) => {
+  approvalCodeValidate(event:any){
+    if (event.target.value == '') return
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/' + event.target.value)
+    .subscribe((data) => {
+      this.commonService.closeSnackBarMsg()
       if (data.status == 'Success') {
-
-        this.tableData = data.response.approvalDetails;
-
-
+        this.commonService.toastErrorByMsgId('Code Already Exists')
+        this.approvalMasterForm.controls.code.setValue('')
+        this.approvalMasterForm.controls.description.setValue('')
       }
     });
-
   }
-
-  approvalMasterForm: FormGroup = this.formBuilder.group({
-    code: ['', [Validators.required]],
-    description: ['', [Validators.required]],
-
-  });
 
   adddata() {
     if (this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "") {
@@ -153,7 +160,7 @@ export class ApprovalMasterComponent implements OnInit {
         "APPR_CODE": "test",
         "SRNO": srno,
         "USER_CODE": "",
-        "APPR_TYPE": "",
+        "APPR_TYPE": 0,
         "APPRREQUIRED": false,
         "ATTACH_REQ": false,
         "ORG_MESSAGE": false,
@@ -164,8 +171,9 @@ export class ApprovalMasterComponent implements OnInit {
       };
       this.tableData.push(data);
       this.tableData.filter((data, i) => data.SRNO = i + 1)
-      // this.approvalMasterForm.controls.code.setValue("");
-      // this.approvalMasterForm.controls.description.setValue("");
+      this.tableData.forEach((item)=>{
+        item.isDisabled = true
+      })
     }
     else {
       this.toastr.error('Please Fill all Mandatory Fields')

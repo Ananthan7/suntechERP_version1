@@ -22,8 +22,9 @@
                                 <div class="col-md-6">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput
-                                            formControlName="code"
-                                            oninput="this.value = this.value.toUpperCase()" />
+                                            formControlName="code" maxlength="6"
+                                            oninput="this.value = this.value.toUpperCase()" 
+                                            (focusout)="approvalCodeValidate($event)"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -204,7 +205,28 @@
                                                 style="text-align: right;"
                                                 [value]="data.value"
                                                 style="width: 100%;"
-                                                [disabled]="isdiabled" />
+                                                [disabled]="data.value == ''" />
+                                        </div>
+                                        <div
+                                            *dxTemplate="let data of 'emailtemp'">
+                                            <input type="checkbox"
+                                                (change)="emailcheckevent($event,data)"
+                                                [checked]="data.value" />
+                                        </div>
+                                        <div
+                                            *dxTemplate="let data of 'emailid'">
+                                            <input type="email"
+                                                (change)="emailid($event,data)"
+                                                [value]="data.value"
+                                                [disabled]="data.value == ''"
+                                                style="width: 100%;" required />
+                                        </div>
+
+                                        <div
+                                            *dxTemplate="let data of 'systemtemp'">
+                                            <input type="checkbox"
+                                                (change)="systemcheckevent($event,data)"
+                                                [checked]="data.value" />
                                         </div>
 
                                     </dx-data-grid>
