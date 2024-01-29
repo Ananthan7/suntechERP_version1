@@ -79,14 +79,11 @@ export class ApprovalMasterComponent implements OnInit {
   }
   messagecheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].ORG_MESSAGE = data.target.checked;
-    if (data.target.checked == true) {
-      this.isdiabled = !this.isdiabled
-    } else {
-      this.isdiabled = true
-    }
+    this.tableData[value.data.SRNO - 1].MOBILE_NO = ' ';
   }
   emailcheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].EMAIL = data.target.checked;
+    this.tableData[value.data.SRNO - 1].EMAIL_ID = ' ';
   }
   systemcheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].SYS_MESSAGE = data.target.checked;
@@ -158,8 +155,9 @@ export class ApprovalMasterComponent implements OnInit {
       };
       this.tableData.push(data);
       this.tableData.filter((data, i) => data.SRNO = i + 1)
-      // this.approvalMasterForm.controls.code.setValue("");
-      // this.approvalMasterForm.controls.description.setValue("");
+      this.tableData.forEach((item)=>{
+        item.isDisabled = true
+      })
     }
     else {
       this.toastr.error('Please Fill all Mandatory Fields')
