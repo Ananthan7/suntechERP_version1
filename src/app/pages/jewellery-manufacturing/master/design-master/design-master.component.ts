@@ -521,6 +521,7 @@ removedatas(){
   }
 
  updateMeltingType() {
+
   let API = 'MeltingType/UpdateMeltingType/'+ this.designmasterForm.value.mid;
     let postData=
       {
@@ -1132,14 +1133,21 @@ removedatas(){
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+
   update(){
+
     if (this.designmasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  console.log(this.designmasterForm,'working')
-    let API = 'DesignMaster/UpdateDesignMaster/'+this.content.DESIGN_CODE
+
+  console.log(this.designmasterForm,'working');
+  
+    let API = 'DesignMaster/UpdateDesignMaster/'+ this.designmasterForm.value.code
+
     let postData = {
+
       "DESIGN_CODE": this.designmasterForm.value.code || "",
       "DESIGN_DESCRIPTION":  this.designmasterForm.value.designdesc || "",
       "CURRENCY_CODE": "",
@@ -1622,6 +1630,8 @@ removedatas(){
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+
   deleteRecord() {
     if (!this.content.MID) {
       Swal.fire({

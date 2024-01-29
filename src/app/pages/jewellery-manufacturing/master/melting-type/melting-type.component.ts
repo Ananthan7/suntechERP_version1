@@ -29,6 +29,7 @@ export class MeltingTypeComponent implements OnInit {
   alloy:any;
   slNo = 0;
   selectedIndexes: any = [];
+  
 
 
   constructor(
@@ -119,7 +120,15 @@ export class MeltingTypeComponent implements OnInit {
     }, err => alert(err))
   this.subscriptions.push(Sub)
   }
-  
+  onInput(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    // Trim the input to 3 letters
+    const limitedValue = inputValue.slice(0, 3);
+
+    // Update the input value
+    (event.target as HTMLInputElement).value = limitedValue;
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);

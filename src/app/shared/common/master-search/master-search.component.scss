@@ -14,7 +14,10 @@
   font-size: 24px;
   transition: transform 0.3s ease; /* Animation transition */
 }
-
+.search-btn:hover{
+  background-color: grey;
+  color: red;
+}
 .arrow-icon.rotate-up {
   transform: rotate(180deg);
 }

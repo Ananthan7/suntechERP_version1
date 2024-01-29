@@ -229,17 +229,17 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price1per" />
+                                        <input type="number" matInput formControlName="price1per" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price1Fc" />
+                                        <input type="number" matInput formControlName="price1Fc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price1Lc" />
+                                        <input type="number" matInput formControlName="price1Lc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -256,17 +256,17 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price2per" />
+                                        <input type="number" matInput formControlName="price2per" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price2Fc" />
+                                        <input type="number" matInput formControlName="price2Fc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price2Lc" />
+                                        <input type="number" matInput formControlName="price2Lc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -283,17 +283,17 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price3per" />
+                                        <input type="number" matInput formControlName="price3per" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price3Fc" />
+                                        <input type="number" matInput formControlName="price3Fc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price3Lc" />
+                                        <input type="number" matInput formControlName="price3Lc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -310,17 +310,17 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price4per" />
+                                        <input type="number" matInput formControlName="price4per" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price4Fc" />
+                                        <input type="number" matInput formControlName="price4Fc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price4Lc" />
+                                        <input type="number" matInput formControlName="price4Lc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -337,17 +337,17 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price5per" />
+                                        <input type="number" matInput formControlName="price5per" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price5Fc" />
+                                        <input type="number" matInput formControlName="price5Fc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price5Lc" />
+                                        <input type="number" matInput formControlName="price5Lc" [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -367,10 +367,12 @@
                         <div class="col-md-2">
                             <div class="upload-btn-wrapper">
                                 <button class="btn btnnew">Item Image</button>
-                                <input type="file" name="uploadproduct" class="uploadproduct">
+                                <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" (change)="onFileChanged($event)">
                             </div>
+                            
                             <div class="image_box">
                                 <div class="img_box">
+                                    <img src={{urls}} style="width:209px;height:163px">
                                 </div>
                             </div>
                         </div>

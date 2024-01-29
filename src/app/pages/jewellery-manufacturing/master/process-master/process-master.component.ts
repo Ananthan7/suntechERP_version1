@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class ProcessMasterComponent implements OnInit {
   @Input() content!: any;
-  viewMode:boolean = false;
+  viewMode: boolean = false;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   processTypeList: any[] = [];
@@ -59,7 +59,7 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  StockProcessData:MasterSearchModel = {
+  StockProcessData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 23,
@@ -70,53 +70,29 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  accountStartData:MasterSearchModel = {
+  accountStartData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 81,
+    LOOKUPID: 152,
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'LOSS ACCOUNT CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION:  "ACCODE<>'' AND account_mode not in ('B','P','R')",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  accountMiddleData:MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 81,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'RECOVERY ACCOUNT CODE',
-    SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  accountEndData:MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 81,
-    SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'ALLOW GAIN ACCOUNT CODE',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  
   maxInputLength: number = 2
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
-    processCode: ['',[Validators.required]],
-    processDesc: ['',[Validators.required]],
+    processCode: ['', [Validators.required]],
+    processDesc: ['', [Validators.required]],
     processType: [null],
-    stand_Day: ['',[Validators.required]],
-    stand_time: ['',[Validators.required]],
-    WIPaccount: ['',[Validators.required]],
-    max_Day: ['',[Validators.maxLength(2)]],
-    max_time: ['',[Validators.required]],
+    stand_Day: ['', [Validators.required]],
+    stand_time: ['', [Validators.required]],
+    WIPaccount: ['', [Validators.required]],
+    max_Day: ['', [Validators.maxLength(2)]],
+    max_time: ['', [Validators.required]],
     Position: [''],
     trayWeight: [''],
     approvalCode: [''],
@@ -136,11 +112,11 @@ export class ProcessMasterComponent implements OnInit {
     max: [''],
     accode_start: [''],
     accode_end: [''],
-    accode_middle : [''],
+    accode_middle: [''],
     loss_on_gross: [false],
     FinalProcess: [false],
     Setting: [false],
-    LabProcess: [false ],
+    LabProcess: [false],
     WaxProcess: [false],
     Stone: [false],
     MergePices: [false],
@@ -161,17 +137,17 @@ export class ProcessMasterComponent implements OnInit {
     ApplySetting: [false],
     loss_standard: [''],
     loss_min: [''],
-    loss_max: [''],    
+    loss_max: [''],
 
   })
-  
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-  ) { 
+  ) {
     this.setInitialValues()
   }
 
@@ -181,25 +157,25 @@ export class ProcessMasterComponent implements OnInit {
       this.viewMode = true;
       this.setFormValues();
       this.processMasterForm.disable();
-    }else if(this.content.FLAG == 'EDIT'){
+    } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
     }
   }
   // USE: get select options Process TypeMaster
-  private getProcessTypeOptions():void {
+  private getProcessTypeOptions(): void {
     let API = 'ComboFilter/PROCESS TYPE MASTER';
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
-      if(result.response){
+      if (result.response) {
         this.processTypeList = result.response;
-        this.processTypeList.sort((a:any,b:any)=> a.SRNO - b.SRNO)
+        this.processTypeList.sort((a: any, b: any) => a.SRNO - b.SRNO)
       }
     });
     this.subscriptions.push(Sub)
   }
 
   private setInitialValues() {
-    this.processMasterForm.controls.trayWeight.setValue(this.commonService.decimalQuantityFormat(0,'METAL'))
-    this.processMasterForm.controls.labour_charge.setValue(this.commonService.decimalQuantityFormat(0,'AMOUNT'))
+    this.processMasterForm.controls.trayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.processMasterForm.controls.labour_charge.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
   }
   private setFormValues() {
@@ -247,18 +223,18 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
     this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
   }
-  onchangeCheckBox(e: any){
-    if(e == true){    
-     return 1;
-    }else{ 
-     return 0;
-    }     
-   }
+  onchangeCheckBox(e: any) {
+    if (e == true) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
   // final save
   formSubmit() {
-    console.log(this.processMasterForm.value.stand_time,'this.processMasterForm.value.stand_time');
-    
+    console.log(this.processMasterForm.value.stand_time, 'this.processMasterForm.value.stand_time');
+
     let time = this.commonService.timeToMinutes(this.processMasterForm.value.stand_time)
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateProcessMaster()
@@ -313,21 +289,21 @@ export class ProcessMasterComponent implements OnInit {
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,
       "ALLOW_LOSS": this.processMasterForm.value.loss,
-      "STD_LOSS": this.processMasterForm.value. loss_standard || 0,
-      "MIN_LOSS": this.processMasterForm.value.loss_min  || 0,
+      "STD_LOSS": this.processMasterForm.value.loss_standard || 0,
+      "MIN_LOSS": this.processMasterForm.value.loss_min || 0,
       "MAX_LOSS": this.processMasterForm.value.loss_max || 0,
       "LOSS_ON_GROSS": this.processMasterForm.value.loss_on_gross,
       "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": this.processMasterForm.value.labour_charge || 0,
       "APPLY_SETTING": this.processMasterForm.value.ApplySetting,
       "TIMEON_PROCESS": this.processMasterForm.value.TimeCalculateonProcess,
-      "STONE_INCLUDED":  this.processMasterForm.value.StoneIncluded,
-      "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess ,
+      "STONE_INCLUDED": this.processMasterForm.value.StoneIncluded,
+      "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess,
       "ALLOW_METAL": this.processMasterForm.value.Metal,
-      "ALLOW_STONE": this.processMasterForm.value.Stone ,
+      "ALLOW_STONE": this.processMasterForm.value.Stone,
       "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable,
       "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired,
-      "NON_QUANTITY": this.processMasterForm.value.NonQuantity ,
+      "NON_QUANTITY": this.processMasterForm.value.NonQuantity,
       "DF_REFINERY": this.processMasterForm.value.RefineryAutoProcess,
       "AUTO_LOSS": this.processMasterForm.value.ApplyAutoLossToRefinery,
       "ISACCUPDT": true,
@@ -373,27 +349,46 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
   }
 
-  StockProcesSelected(e: any){
+  StockProcesSelected(e: any) {
     this.processMasterForm.controls.recStockCode.setValue(e.STOCK_CODE);
   }
-
-  accountStartSelected(e: any){
+  /** checking for same account code selection */
+  private isSameAccountCodeSelected(accountCode: any): boolean {
+    return (
+      this.processMasterForm.value.accountStart === accountCode ||
+      this.processMasterForm.value.accountMiddle === accountCode ||
+      this.processMasterForm.value.accountEnd === accountCode ||
+      this.processMasterForm.value.WIPaccount === accountCode
+    );
+  }
+  
+  accountStartSelected(e: any) {
+    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return;
+    }
     this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
   }
-
-  accountMiddleSelected(e: any){
+  
+  accountMiddleSelected(e: any) {
+    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return;
+    }
     this.processMasterForm.controls.accountMiddle.setValue(e.ACCODE);
   }
-
-  accountEndSelected(e: any){
+  
+  accountEndSelected(e: any) {
+    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return;
+    }
     this.processMasterForm.controls.accountEnd.setValue(e.ACCODE);
   }
 
-  
-
   updateProcessMaster() {
     console.log(this.processMasterForm.value);
-    if ( this.processMasterForm.invalid) {
+    if (this.processMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
@@ -403,7 +398,7 @@ export class ProcessMasterComponent implements OnInit {
       "PROCESS_CODE": this.processMasterForm.value.processCode,
       "DESCRIPTION": this.processMasterForm.value.processDesc,
       "STD_TIME": this.processMasterForm.value.stand_time || 0,
-      "MAX_TIME":this.processMasterForm.value.max_time || 0,
+      "MAX_TIME": this.processMasterForm.value.max_time || 0,
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -440,21 +435,21 @@ export class ProcessMasterComponent implements OnInit {
       "MIN_GAIN": 0,
       "MAX_GAIN": 0,
       "ALLOW_LOSS": this.processMasterForm.value.loss,
-      "STD_LOSS": this.processMasterForm.value. loss_standard || 0,
-      "MIN_LOSS": this.processMasterForm.value.loss_min  || 0,
+      "STD_LOSS": this.processMasterForm.value.loss_standard || 0,
+      "MIN_LOSS": this.processMasterForm.value.loss_min || 0,
       "MAX_LOSS": this.processMasterForm.value.loss_max || 0,
       "LOSS_ON_GROSS": this.processMasterForm.value.loss_on_gross,
       "JOB_NUMBER": "",
       "LABCHRG_PERHOUR": this.processMasterForm.value.labour_charge || 0,
       "APPLY_SETTING": this.processMasterForm.value.ApplySetting,
       "TIMEON_PROCESS": this.processMasterForm.value.TimeCalculateonProcess,
-      "STONE_INCLUDED":  this.processMasterForm.value.StoneIncluded,
-      "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess ,
+      "STONE_INCLUDED": this.processMasterForm.value.StoneIncluded,
+      "RECOVERY_PROCESS": this.processMasterForm.value.RecoveryProcess,
       "ALLOW_METAL": this.processMasterForm.value.Metal,
-      "ALLOW_STONE": this.processMasterForm.value.Stone ,
+      "ALLOW_STONE": this.processMasterForm.value.Stone,
       "ALLOW_CONSUMABLE": this.processMasterForm.value.Consumable,
       "APPROVAL_REQUIRED": this.processMasterForm.value.ApprovalRequired,
-      "NON_QUANTITY": this.processMasterForm.value.NonQuantity ,
+      "NON_QUANTITY": this.processMasterForm.value.NonQuantity,
       "DF_REFINERY": this.processMasterForm.value.RefineryAutoProcess,
       "AUTO_LOSS": this.processMasterForm.value.ApplyAutoLossToRefinery,
       "ISACCUPDT": true,
@@ -552,7 +547,7 @@ export class ProcessMasterComponent implements OnInit {
     });
   }
 
-  onlossChange(event:any){  
+  onlossChange(event: any) {
     this.islossReadOnly = !this.islossReadOnly;
     console.log(event);
     // if(event.checked === true){
@@ -573,9 +568,9 @@ export class ProcessMasterComponent implements OnInit {
     // }
   }
 
-  onRecovery(event:any){ 
-    this.isRecovReadOnly = !this.isRecovReadOnly; 
-    
+  onRecovery(event: any) {
+    this.isRecovReadOnly = !this.isRecovReadOnly;
+
     console.log(event);
     // if(event.checked === true){
     //   this.processMasterForm.controls['standard_end'].enable();
@@ -592,17 +587,17 @@ export class ProcessMasterComponent implements OnInit {
     // }
   }
 
-  onAllowGain(event:any){
-    this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly; 
-    
+  onAllowGain(event: any) {
+    this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
+
     console.log(event);
     // if(event.checked == true){
     //   this.processMasterForm.controls['accountEnd'].enable();
     //  }
-     //else{
+    //else{
     //   this.processMasterForm.controls['accountEnd'].disable();
     //   this.processMasterForm.controls['accountEnd'].disable();
     // }
   }
-  
+
 }

@@ -6,6 +6,7 @@ import { RetailMasterComponent } from './retail-master.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-customer-master-main.component';
 import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
+import { CommonRetailModule } from '../common-retail/common-retail.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
   imports: [
     CommonModule,
     RetailMasterRoutingModule,
-    SharedModule
+    SharedModule,
+    CommonRetailModule
   ]
 })
 export class RetailMasterModule { }

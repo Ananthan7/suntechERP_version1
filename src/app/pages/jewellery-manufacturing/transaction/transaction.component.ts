@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
-import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 
 import { DiamondSalesorderComponent } from './diamond-salesorder/diamond-salesorder.component';
 import { DiamondQuotationComponent } from './diamond-quotation/diamond-quotation.component';
@@ -31,6 +30,7 @@ import { DiamondJobBoqReceiptComponent } from './diamond-job-boq-receipt/diamond
 import { JobAllocationComponent } from './job-allocation/job-allocation.component';
 import { JobTransactionsComponent } from './job-transactions/job-transactions.component';
 import { ProcessTransferNewComponent } from './process-transfer-new/process-transfer-new.component';
+import { MfgGridComponent } from '../common-mfg/mfg-grid/mfg-grid.component';
 
 @Component({
   selector: 'app-transaction',
@@ -38,7 +38,7 @@ import { ProcessTransferNewComponent } from './process-transfer-new/process-tran
   styleUrls: ['./transaction.component.scss']
 })
 export class TransactionComponent implements OnInit {
-  @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
+  @ViewChild(MfgGridComponent) mfgGridComponent?: MfgGridComponent;
   //variables
   menuTitle: any;
   componentName: any;
@@ -142,7 +142,7 @@ export class TransactionComponent implements OnInit {
       }
       this.PERMISSIONS = data.PERMISSION;
     }
-    this.masterGridComponent?.getMasterGridData(data)
+    this.mfgGridComponent?.getMasterGridData(data)
   }
 
 }

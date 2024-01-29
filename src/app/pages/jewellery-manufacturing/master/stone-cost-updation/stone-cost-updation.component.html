@@ -46,15 +46,18 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="stockcode" />
                                 </mat-form-field>
+                                
+                               
                             </div>
                             <div class="col-sm-3 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  />
+                                    <input type="text" matInput />
                                 </mat-form-field>
+                                
                             </div>
                             <div class="col-sm-3 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput  />
+                                    <input type="text" matInput />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -115,25 +118,37 @@
                     <div class="col-md-6">
                         <div class="row mb-1 ">
                             <div class="col-sm-2 ">
-                                <div class="form-check form-switch ms-4">
+                                <!-- <div class="form-check form-switch ms-4">
                                     <input class="form-check-input" type="checkbox" id="add">
                                     <label class="form-check-label" for="add">Add </label>
-                                </div>
+                                </div> -->
+                                <div class="row align-items-center mb-1 form-switch st-1">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" formControlName="text"  (click)="change($event)">
+                                    <label class="col-md-3 form-check-label" for="flexSwitchCheckChecked">{{text}}</label>
+                                    <div class="col-md-9">
+                                      
+                                    </div>
+                                  </div>
                             </div>
                             <div class="col-sm-4 ">
                                 <div class="d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput  />
+                                        <input type="text" matInput />
                                     </mat-form-field>
+
                                     <div class="form-check ">
-                                        <mat-radio-button value="1">By Value</mat-radio-button>
+                                        <mat-radio-group aria-label="Select an option" formControlName="valueTarget">
+                                            <mat-radio-button value="1" class="mx-2">By Value</mat-radio-button>
+                                        </mat-radio-group>
+
                                     </div>
                                     <div class="form-check ">
-                                        <mat-radio-button value="1">By % </mat-radio-button>
+                                        <mat-radio-button value="2" class="mx-2">By %</mat-radio-button>
                                     </div>
                                     <div class="form-check ">
-                                        <mat-radio-button value="1">Fixed</mat-radio-button>
+                                        <mat-radio-button value="3" class="mx-2">Fixed</mat-radio-button>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -254,43 +269,41 @@
                 <!-- <div class="row mt-3">
 
                     <div class="col-md-12"> -->
-                        <!-- <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+                <!-- <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                             <mat-tab label="Pending Job Details"> -->
-                                <div class="row mb-2">
-                                    <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                            [allowColumnReordering]="true" [allowColumnResizing]="true"
-                                            [columnAutoWidth]="true">
-                                            <dxo-paging [enabled]="false"></dxo-paging>
-                                            <dxo-editing mode="cell" [allowUpdating]="true">
-                                            </dxo-editing>
-                                            <dxo-selection mode="multiple"></dxo-selection>
-                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                            [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+                            <dxo-paging [enabled]="false"></dxo-paging>
+                            <dxo-editing mode="cell" [allowUpdating]="true">
+                            </dxo-editing>
+                            <dxo-selection mode="multiple"></dxo-selection>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                            <dxi-column *ngFor="let data of columnhead"
-                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                alignment="center" backgroundcolor="#000">
-                                            </dxi-column>
-                                        </dx-data-grid>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center pt-1">
-                                    <div class="col-md-6">
-                                        <div class="row my-2">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">Remarks:</label>
-                                            <div class="col-md-8">
-                                                <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName="remarks" />
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <!-- </mat-tab>
+                            <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                            </dxi-column>
+                        </dx-data-grid>
+                    </div>
+                </div>
+                <div class="row align-items-center pt-1">
+                    <div class="col-md-6">
+                        <div class="row my-2">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Remarks:</label>
+                            <div class="col-md-8">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="remarks" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- </mat-tab>
                             <mat-tab label="Component Details"></mat-tab>
                             <mat-tab label="Component Summary"></mat-tab>
                         </mat-tab-group> -->
-                    <!-- </div>
+                <!-- </div>
                 </div> -->
             </div>
         </form>

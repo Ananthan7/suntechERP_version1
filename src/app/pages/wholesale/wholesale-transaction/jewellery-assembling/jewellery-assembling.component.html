@@ -113,10 +113,15 @@
                                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
                                             (addClick)="openJewelleryAssembilingDetails()"
                                             (deleteClick)="deleteTableData()">
+                                          
 
                                         </menu-buttons>
+                                        <!-- <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                                            Excel Import
+                                          </button> -->
                 
                                     </div>
+                                  
                                 </div>
                                 <div class="mt-2">
                                     <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
@@ -158,7 +163,7 @@
 
                                         <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}"
                                             caption="{{ data }}" [allowEditing]="true" alignment="center"
-                                            backgroundcolor="#000">
+                                            backgroundcolor="#000" [width]="100">
                                         </dxi-column>
                                     </dx-data-grid>
                                 </div>

@@ -18,9 +18,11 @@ export class StoneCostUpdationComponent implements OnInit {
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Customer', 'So Number', 'Job Number', 'Job Ref#', 'Pcs', 'Weight', 'Rate', 'Amount', 'New Rate LC', 'New Amount LC', 'New Rate FC', 'New Amount FC',];
   divisionMS: any = 'ID';
-
+  selectedOption: string = 'byvalue';
+  isChecked: boolean = true;
   branchCode?: String;
   yearMonth?: String;
+  text: string="Deduct";
   userName = this.commonService.userName;
   @Input() content!: any;
 
@@ -52,6 +54,16 @@ export class StoneCostUpdationComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  change(event:any){
+    console.log(event);
+    this.text = event.target.value;
+    if(event.target.checked == true){
+      this.text="Add";
+     
+    }else{
+      this.text="Deduct";
+    }
+  }
 
   stonecostupdationFrom: FormGroup = this.formBuilder.group({
     voctype: ['', [Validators.required]],
@@ -73,6 +85,8 @@ export class StoneCostUpdationComponent implements OnInit {
     clarity: ['', [Validators.required]],
     sieve_set: ['', [Validators.required]],
     remarks: ['', [Validators.required]],
+    valueTarget:['1'],
+    text:[false],
   });
 
   formSubmit() {

@@ -31,13 +31,13 @@
 
                         <mat-form-field class="example-full-width">
                             <mat-label>Password</mat-label>
-                            <input type="password" matInput
+                            <input id="password"  type="password" matInput
                                 placeholder="Password"
                                 value (focusout)="checkUserNamePassword($event)">
                         </mat-form-field>
                         <mat-form-field class="example-full-width">
                             <mat-label>Branch</mat-label>
-                            <input type="text" autocomplete="new-password"
+                            <input id="branch" type="text" autocomplete="new-password"
                                 matInput
                                 formControlName="branch"
                                 [matAutocomplete]="branch"
@@ -54,7 +54,7 @@
                         </mat-form-field>
                         <mat-form-field class="example-full-width">
                             <mat-label>Year</mat-label>
-                            <input matInput type="text" formControlName="year"
+                            <input id="year"  matInput type="text" formControlName="year"
                                 [matAutocomplete]="year" (focusout)="validateYear($event)">
                             <mat-autocomplete #year="matAutocomplete"
                                 autoActiveFirstOption>
