@@ -55,11 +55,17 @@ export class SequenceMasterComponent implements OnInit {
   }
   ngOnInit(): void {
     // this.sequenceMasterForm.controls['calculatetime'].disable();
-    if (this.content) {
-      this.setFormValues()
+    console.log(this.content.FLAG);
+    if (this.content.FLAG == 'VIEW') {
+      this.viewFormValues();
+    }
+    else(this.content.FLAG == 'EDIT')
+    {
+      this.setFormValues();
     }
     
   }
+
   checkAll() {
     console.log(this.dataSource);
     this.dataSource.forEach((item:any)=>item.isChecked = this.selectAll )
@@ -68,6 +74,7 @@ export class SequenceMasterComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
   }
+  
   /**USE: get table data on initial load */
   private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
@@ -95,6 +102,15 @@ export class SequenceMasterComponent implements OnInit {
     this.sequenceMasterForm.controls.sequenceDESCRIPTION.setValue(this.content.DESCRIPTION)
     this.sequenceMasterForm.controls.sequencePrefixCode.setValue(this.content.PREFIX_CODE)
   }
+
+  viewFormValues() {
+    if (!this.content) return
+    this.sequenceMasterForm.controls.mid.setValue(this.content.MID)
+    this.sequenceMasterForm.controls.sequenceCode.setValue(this.content.SEQ_CODE)
+    this.sequenceMasterForm.controls.sequenceDESCRIPTION.setValue(this.content.DESCRIPTION)
+    this.sequenceMasterForm.controls.sequencePrefixCode.setValue(this.content.PREFIX_CODE)
+  }
+
   /**USE:  final save API call*/
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -363,6 +379,11 @@ export class SequenceMasterComponent implements OnInit {
   defaultProcessSelected(data: any) {
     this.sequenceMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
   }
+
+  gainAccSelected(data: any) {
+    this.sequenceMasterForm.controls.gainAcc.setValue(data.GAIN_ACCODE)
+  }
+
   PrefixCodeChange(event: any) {
     this.sequenceMasterData.SEARCH_VALUE = event.target.value
   }

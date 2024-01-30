@@ -145,7 +145,7 @@ export class MeltingTypeComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR MASTER'",
+    WHERECONDITION: "TYPES = 'COLOR SET'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

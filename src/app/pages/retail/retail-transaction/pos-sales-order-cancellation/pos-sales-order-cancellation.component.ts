@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
@@ -13,7 +14,9 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   orderMaxDate = new Date();
-
+  companyName = this.comService.allbranchMaster['BRANCH_NAME'];
+  branchCode?: String;
+  yearMonth?: String;
 
   
   enteredByCode: MasterSearchModel = {
@@ -69,12 +72,12 @@ export class PosSalesOrderCancellationComponent implements OnInit {
 
   posSalesOrderCancellationForm: FormGroup = this.formBuilder.group({
     vocType: [''],
-    vocNo:[''],
-    vocDate: [''],
+    vocNo:[1],
+    vocDate: [new Date()],
     enteredBy:[''],
     customer: [''],
     order:[''],
-    orderDate: [''],
+    orderDate: [new Date()],
     orderAmount:[''],
     advReceived: [''],
     ac:[''],
@@ -84,7 +87,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
     orderAge:[''],
     noItem: [''],
     cheqNo:[''],
-    cheqDate: [''],
+    cheqDate: [new Date()],
     cheqBank:[''],
     depBank: [''],
     cancellationCharge:[''],
@@ -97,9 +100,17 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private comService: CommonServiceService,
+
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+    this.posSalesOrderCancellationForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
+    this.posSalesOrderCancellationForm.controls.currency.setValue(this.comService.compCurrency);
+    this.posSalesOrderCancellationForm.controls.currencyRate.setValue(this.comService.getCurrRate(this.comService.compCurrency));
+
   }
 
 
@@ -111,7 +122,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
 
   customerCodeSelected(e: any) {
     console.log(e);
-    this.posSalesOrderCancellationForm.controls.customer.setValue(e.NAME); 
+    this.posSalesOrderCancellationForm.controls.customer.setValue(e.CODE); 
     
   }
 

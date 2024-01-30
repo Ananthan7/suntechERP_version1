@@ -433,6 +433,11 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
 
+  divisionCodeSelected(e: any) {
+    console.log(e);
+    this.diamondlabourMasterForm.controls.division.setValue(e.DIVISION_CODE);
+  }
+
 
   categorySelected(e: any) {
     console.log(e);
@@ -456,11 +461,6 @@ export class LabourChargeMasterComponent implements OnInit {
 
   colorDataSelected(data: any) {
     this.metallabourMasterForm.controls.color.setValue(data.CODE)
-  }
-
-  divisionCodeSelected(e: any) {
-    console.log(e);
-    this.diamondlabourMasterForm.controls.division.setValue(e.DIVISION_CODE);
   }
 
   metaldivisionCodeSelected(e: any) {

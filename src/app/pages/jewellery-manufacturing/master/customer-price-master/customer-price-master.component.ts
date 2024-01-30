@@ -58,6 +58,15 @@ export class CustomerPriceMasterComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+
+    console.log(this.content.FLAG);
+    if (this.content.FLAG == 'VIEW') {
+      this.viewFormValues();
+    }
+    else (this.content.FLAG == 'EDIT')
+    {
+      this.setFormValues();
+    }
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
   }
@@ -102,6 +111,38 @@ export class CustomerPriceMasterComponent implements OnInit {
     this.customerpricemasterForm.controls.customercode.setValue(e.CUSTOMER_CODE);
     this.customerpricemasterForm.controls.desc.setValue(e.DESCRIPTION);
   }
+
+  setFormValues(){
+    
+    if (!this.content) return
+    this.customerpricemasterForm.controls.customercode.setValue(this.content.CUSTOMER_CODE)
+    this.customerpricemasterForm.controls.desc.setValue(this.content.DESCRIPTION)
+    this.customerpricemasterForm.controls.metal_loss.setValue(this.content.GOLD_LOSS_PER)
+    this.customerpricemasterForm.controls.pricecode.setValue(this.content.PRICECODE)
+    this.customerpricemasterForm.controls.margin.setValue(this.content.MARGIN_PER)
+    this.customerpricemasterForm.controls.labourtype.setValue(this.content.LAB_TYPE)
+    this.customerpricemasterForm.controls.markup.setValue(this.content.MARKUP_PER)
+    this.customerpricemasterForm.controls.text.setValue(this.content.CUSTOMER_NAME)
+    this.customerpricemasterForm.controls.date.setValue(this.content.VALID_FROM)
+    this.customerpricemasterForm.controls.addonrate.setValue(this.content.ADD_ON_RATE)
+  }
+
+  viewFormValues() {
+  
+    if (!this.content) return
+    this.customerpricemasterForm.controls.customercode.setValue(this.content.CUSTOMER_CODE)
+    this.customerpricemasterForm.controls.desc.setValue(this.content.DESCRIPTION)
+    this.customerpricemasterForm.controls.metal_loss.setValue(this.content.GOLD_LOSS_PER)
+    this.customerpricemasterForm.controls.pricecode.setValue(this.content.PRICECODE)
+    this.customerpricemasterForm.controls.margin.setValue(this.content.MARGIN_PER)
+    this.customerpricemasterForm.controls.labourtype.setValue(this.content.LAB_TYPE)
+    this.customerpricemasterForm.controls.markup.setValue(this.content.MARKUP_PER)
+    this.customerpricemasterForm.controls.text.setValue(this.content.CUSTOMER_NAME)
+    this.customerpricemasterForm.controls.date.setValue(this.content.VALID_FROM)
+    this.customerpricemasterForm.controls.addonrate.setValue(this.content.ADD_ON_RATE)
+
+  }
+
   formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
