@@ -16,12 +16,12 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./approval-master.component.scss']
 })
 export class ApprovalMasterComponent implements OnInit {
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   selectedIndexes: any = [];
   allMode: string;
   checkBoxesMode: string;
-  isdiabled :boolean=true
+  isdiabled: boolean = true
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -35,7 +35,12 @@ export class ApprovalMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  
+  approvalMasterForm: FormGroup = this.formBuilder.group({
+    code: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+
+  });
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -43,156 +48,164 @@ export class ApprovalMasterComponent implements OnInit {
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
-  ) { 
+  ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
-  
-  
 
+  ngOnInit(): void {
+    console.log(this.content);
+    if (this.content) {
+      this.setFormValues()
+    }
+  }
+  setFormValues() {
+    if (!this.content) return
+    this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
+    this.approvalMasterForm.controls.description.setValue(this.content.APPR_DESCRIPTION)
+    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/' + this.content.APPR_CODE)
+    .subscribe((data) => {
+      if (data.status == 'Success') {
+        this.tableData = data.response.approvalDetails;
+      }
+    });
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
-  userDataSelected(data: any,value: any) {
+  userDataSelected(data: any, value: any) {
     console.log(value);
     console.log(data);
-   
+
     this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
     //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
   }
 
-  typedataselected(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].APPR_TYPE = data.target.value;
+  typedataselected(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].APPR_TYPE = this.commonService.emptyToZero(data.target.value);
   }
 
-  Mandatorycheckevent(data:any,value: any){
-      // console.log(value);
+  Mandatorycheckevent(data: any, value: any) {
+    // console.log(value);
     // console.log(data.target.checked);
-    this.tableData[value.data.SRNO - 1].APPRREQUIRED = data.target.checked; 
+    this.tableData[value.data.SRNO - 1].APPRREQUIRED = data.target.checked;
   }
 
-  attachcheckevent(data:any,value: any){
+  attachcheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].ATTACH_REQ = data.target.checked;
   }
-  messagecheckevent(data:any,value: any){
+  messagecheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].ORG_MESSAGE = data.target.checked;
-    if(data.target.checked == true){
-      this.isdiabled = !this.isdiabled
+    if(data.target.checked){
+      this.tableData[value.data.SRNO - 1].MOBILE_NO = ' ';
     }else{
-      this.isdiabled = true
+      this.tableData[value.data.SRNO - 1].MOBILE_NO = '';
     }
   }
-  emailcheckevent(data:any,value: any){ 
-  this.tableData[value.data.SRNO - 1].EMAIL = data.target.checked;
+  emailcheckevent(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].EMAIL = data.target.checked;
+    if(data.target.checked){
+      this.tableData[value.data.SRNO - 1].EMAIL_ID = ' ';
+    }else{
+      this.tableData[value.data.SRNO - 1].EMAIL_ID = '';
+    }
   }
-  systemcheckevent(data:any,value: any){
+  systemcheckevent(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].SYS_MESSAGE = data.target.checked;
   }
 
-  emailid(data:any,value: any){
+  emailid(data: any, value: any) {
+    if (!this.commonService.validateEmail(data.target.value)) {
+      this.commonService.toastErrorByMsgId('Invalid Email Address')
+      this.tableData[value.data.SRNO - 1].EMAIL_ID = ''
+      return
+    }
+
     this.tableData[value.data.SRNO - 1].EMAIL_ID = data.target.value;
   }
-  mobilenumber(data:any,value: any){
+  mobilenumber(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
   }
 
-  
-
-  ngOnInit(): void {
-    console.log(this.content);
-    if(this.content){
-      this.setFormValues()
-    }
-  }
-
-  setFormValues() {
-    if(!this.content) return
-    this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
-    this.approvalMasterForm.controls.description.setValue(this.content.APPR_DESCRIPTION)
-
-
-    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/'+this.content.APPR_CODE).subscribe((data) => {
+  approvalCodeValidate(event:any){
+    if (event.target.value == '') return
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/' + event.target.value)
+    .subscribe((data) => {
+      this.commonService.closeSnackBarMsg()
       if (data.status == 'Success') {
-
-        this.tableData = data.response.approvalDetails;
-       
-
+        this.commonService.toastErrorByMsgId('Code Already Exists')
+        this.approvalMasterForm.controls.code.setValue('')
+        this.approvalMasterForm.controls.description.setValue('')
       }
     });
-   
   }
-  
-  approvalMasterForm: FormGroup = this.formBuilder.group({
-    code: ['',[Validators.required]],
-    description: ['',[Validators.required]],
-   
-  });
-  
+
   adddata() {
-    if(this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "")
-    {
+    if (this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "") {
       let length = this.tableData.length;
-     
+
       let srno = length + 1;
-      let data =  {
+      let data = {
         "UNIQUEID": 12345,
         "APPR_CODE": "test",
         "SRNO": srno,
         "USER_CODE": "",
-        "APPR_TYPE": "",
+        "APPR_TYPE": 0,
         "APPRREQUIRED": false,
         "ATTACH_REQ": false,
         "ORG_MESSAGE": false,
         "EMAIL": false,
         "SYS_MESSAGE": false,
-        "EMAIL_ID": "" ,
+        "EMAIL_ID": "",
         "MOBILE_NO": "",
       };
       this.tableData.push(data);
-     this.tableData.filter((data,i)=>data.SRNO = i+1)
-      // this.approvalMasterForm.controls.code.setValue("");
-      // this.approvalMasterForm.controls.description.setValue("");
-  }
-  else {
-    this.toastr.error('Please Fill all Mandatory Fields')
-  }
-}
-
-
-
-onSelectionChanged(event: any) {
-  const values = event.selectedRowKeys;
-  console.log(values);
-  let indexes: Number[] = [];
-  this.tableData.reduce((acc, value, index) => {
-    if (values.includes(parseFloat(value.SRNO))) {
-      acc.push(index);
-      console.log(acc);
-      
+      this.tableData.filter((data, i) => data.SRNO = i + 1)
+      this.tableData.forEach((item)=>{
+        item.isDisabled = true
+      })
     }
-    return acc;
-  }, indexes);
-  this.selectedIndexes = indexes;
-  console.log(this.selectedIndexes);
-}
-
-removedata(){
-  console.log(this.selectedIndexes);
-  if (this.selectedIndexes.length > 0) {
-    this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-  } else {
-    this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
-  }  
-   
-}
+    else {
+      this.toastr.error('Please Fill all Mandatory Fields')
+    }
+  }
 
 
-  formSubmit(){
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+  onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        console.log(acc);
+
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
+  }
+
+  removedata() {
+    console.log(this.selectedIndexes);
+    if (this.selectedIndexes.length > 0) {
+      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+    }
+
+  }
+
+
+  formSubmit() {
+
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -206,13 +219,13 @@ removedata(){
       "APPR_CODE": this.approvalMasterForm.value.code || "",
       "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
       "approvalDetails": this.tableData,
-      
+
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -234,24 +247,24 @@ removedata(){
     this.subscriptions.push(Sub)
   }
 
-  update(){
+  update() {
     if (this.approvalMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
 
-    let API = 'ApprovalMaster/UpdateApprovalMaster/'+this.content.APPR_CODE
+    let API = 'ApprovalMaster/UpdateApprovalMaster/' + this.content.APPR_CODE
     let postData = {
       "APPR_CODE": this.approvalMasterForm.value.code || "",
       "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
       "MID": this.content.MID,
-      "approvalDetails": this.tableData,  
+      "approvalDetails": this.tableData,
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',

@@ -5,7 +5,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
-  selector: 'app-mfg-grid',
+  selector: 'mfg-grid',
   templateUrl: './mfg-grid.component.html',
   styleUrls: ['./mfg-grid.component.scss']
 })
@@ -103,9 +103,9 @@ export class MfgGridComponent implements OnInit {
       this.orderedItemsHead = [];
       this.vocType = data.VOCTYPE;
       this.mainVocType = data.MAIN_VOCTYPE;
-      // this.tableName = data.HEADER_TABLE;
+      this.tableName = data.HEADER_TABLE;
     } else {
-      // this.tableName = this.CommonService.getqueryParamTable()
+      this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
     }
     if(this.orderedItems.length == 0){

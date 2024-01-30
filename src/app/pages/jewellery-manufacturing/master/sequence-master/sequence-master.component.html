@@ -20,11 +20,11 @@
                                 Code * :</label>
                             <mat-form-field style="width: 20%">
                                 <input type="text" matInput placeholder="Code" maxlength="6"
-                                    formControlName="sequenceCode" (focusout)="checkSequenceExists($event)" />
+                                    formControlName="sequenceCode" oninput="this.value = this.value.toUpperCase()" (focusout)="checkSequenceExists($event)" />
                             </mat-form-field>
                             <mat-form-field style="width: 40%; margin-left: 7px;">
                                 <input type="text" matInput placeholder="Description"
-                                    formControlName="sequenceDESCRIPTION" />
+                                    formControlName="sequenceDESCRIPTION" oninput="this.value = this.value.toUpperCase()" />
                             </mat-form-field>
                         </span>
                     </div>
@@ -83,10 +83,10 @@
                                         (change)="changedCheckbox(data)" /></td>
                                 <td>{{i+1}}</td>
                                 <td>
-                                    <input  type="text"  style="width: 100%;" [value]="data['PROCESS_CODE']"  />
+                                    <input  type="text"  style="width: 100%;" [value]="data['PROCESS_CODE']" [attr.readonly]= "isReadOnly"  />
                                 </td>
                                 <td>
-                                    <input  type="text"  style="width: 100%;" [value]="data['DESCRIPTION']"  />
+                                    <input  type="text"  style="width: 100%;" [value]="data['DESCRIPTION']" [attr.readonly]= "isReadOnly" />
                                 </td>
                                 <td>
                                     <input  type="text"  style="width: 100%;" [value]="data['WIP_ACCODE']"  />
@@ -101,10 +101,10 @@
                                     <input  type="text"  style="width: 100%;" [value]="data['LOSS_ACCODE']"  />
                                 </td>
                                 <td>
-                                    <input  type="text"  style="width: 100%;" [value]="data['STD_LOSS']"  />
+                                    <input  type="number"  style="width: 100%;" [value]="data['STD_LOSS']" pattern="\d{3}\.\d{2}\.\d{3}" [dir]="'rtl'" style="text-align: right;" />
                                 </td>
-                                <td>
-                                    <input  type="text"  style="width: 100%;" [value]="data['MAX_LOSS']"  />
+                                <td> 
+                                    <input  type="number"  style="width: 100%;" [value]="data['MAX_LOSS']" pattern="\d{3}\.\d{2}\.\d{3}" [dir]="'rtl'" style="text-align: right;"   />
                                 </td>
                                 <td>
                                     <input  type="time"  style="width: 100%;" [value]="data['STDTIME']"  step="2" />
@@ -113,7 +113,7 @@
                                     <input  type="time"  style="width: 100%;" [value]="data['MAXTIME']" step="2" />
                                 </td>
                                 <td>
-                                    <input  type="checkbox"  [value]="data['TIMEON_PROCESS']"  />
+                                    <input  type="checkbox"  [value]="data['TIMEON_PROCESS']" [disabled]="isdisabled" />
                                 </td>
                                 <!-- Preview -->
                                 <div *cdkDragPreview matchSize="true" class="container dragdrop-placeholder">

@@ -23,7 +23,7 @@
                                 <div class="col-sm-3">
                                     <mat-form-field
                                         style="width: 85%; margin-left: 7px;">
-                                        <input type="text" matInput FocusOnLoad
+                                        <input type="text" matInput 
                                             #code
                                             placeholder="CODE"
                                             (input)="code.value = code.value.toUpperCase()"
@@ -72,7 +72,7 @@
                                             formControlName="stand_Day" >
                                     </mat-form-field>
                                     <mat-form-field style="width: 70%; margin-left: 6px;">
-                                        <input type="time"
+                                        <input type="time" step="1"
                                             formControlName="stand_time"
                                             matInput>
                                     </mat-form-field>
@@ -243,6 +243,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3"
+                                            style="text-align: right;"
                                             formControlName="loss_standard"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
@@ -250,6 +251,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3"
+                                            style="text-align: right;"
                                             formControlName="standard_end"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
@@ -265,6 +267,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3"
                                             step="0.01" min="0" maxlength="4"
+                                            style="text-align: right;"
                                             formControlName="loss_min"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
@@ -273,6 +276,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3"
                                             step="0.01" min="0" maxlength="4"
+                                            style="text-align: right;"
                                             formControlName="min_end"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
@@ -288,6 +292,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3"
                                             formControlName="loss_max"
+                                            style="text-align: right;"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                 </div>
@@ -317,7 +322,7 @@
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="accountMiddleData"
+                                        [MasterSearchData]="accountStartData"
                                         *ngIf="viewMode == false"
                                         (newRowClick)="accountMiddleSelected($event)">
                                     </master-search>
@@ -329,7 +334,7 @@
                                             [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>
                                     <master-search
-                                        [MasterSearchData]="accountEndData"
+                                        [MasterSearchData]="accountStartData"
                                         *ngIf="viewMode == false"
                                         (newRowClick)="accountEndSelected($event)">
                                     </master-search>

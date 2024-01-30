@@ -49,7 +49,7 @@ export class ComponentMasterComponent implements OnInit {
     height : [""],
     length  : [""],
     width  : [""],
-    radious  : [""],
+    radius  : [""],
     processSeq : [""],
     costCenter  : [""],
   });
@@ -208,8 +208,30 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   addTableData(){
+    let length = this.tableData.length;
 
+      let srno = length + 1;
+      let data = {
+        "SRNO": srno,
+        "DIVCODE": "",
+        "STOCK_CODE": "",
+        "CARAT": "",
+        "STOCK_FCCOST": "",
+        "PCS": "",
+        "GROSS_WT": "",
+        "COLOR": "",
+        "CLARITY": "",
+        "SHAPE": "",
+        "SIEVE": "",
+        "DESCRIPTION": "",
+        "DSIZE": "",
+        "PROCESS_TYPE": "",
+        "D_REMARKS": "",
+      };
+      this.tableData.push(data);
+      this.tableData.filter((data, i) => data.SRNO = i + 1)
   }
+  
 
   deleteTableData(){
 

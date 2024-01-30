@@ -283,6 +283,8 @@ export class AddPosComponent implements OnInit {
       "SEARCH_FIELD": "CODE",
       "SEARCH_VALUE": ""
     }
+
+
   // {
   //   PAGENO: 1,
   //   RECORDS: 10,
@@ -1057,8 +1059,7 @@ export class AddPosComponent implements OnInit {
     // need to enable
     // this.vocType = this.comFunc.getqueryParamVocType()
 
-
-    if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
+    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
 
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
       this.strBranchcode = this.content.BRANCH_CODE;
@@ -1071,6 +1072,9 @@ export class AddPosComponent implements OnInit {
       if (this.content.FLAG == 'VIEW') {
         this.viewOnly = true;
       }
+
+    }else{
+    this.generateVocNo();
 
     }
 
@@ -1629,7 +1633,6 @@ export class AddPosComponent implements OnInit {
     this.getMaritalStatus();
     this.getAccountLookup();
 
-    this.generateVocNo();
 
     // this.getComboFilters();
 
@@ -7418,11 +7421,11 @@ export class AddPosComponent implements OnInit {
             "VOCTYPE": this.vocType,
             "REFMID": this.vocDataForm.value.fcn_voc_no,
             "USERNAME": this.strUser,
-            "MODE": "",
+            "MODE": "", // ADD   EDIT  DELETE
             "DATETIME": this.comFunc.cDateFormat(new Date()),
-            "REMARKS": "",
+            "REMARKS": "", // reason
             "SYSTEMNAME": "",
-            "VOCNO": 0,
+            "VOCNO": this.vocDataForm.value.fcn_voc_no || 0,
             "VOCDATE": this.comFunc.cDateFormat(this.vocDataForm.value.vocdate),
             "BRANCH_CODE": this.strBranchcode,
             "MODECHECKED": false,
@@ -7498,8 +7501,9 @@ export class AddPosComponent implements OnInit {
                   // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
 
                   // this.close('reloadMainGrid');
-
+                  if(this.posPlanetIssuing)
                   this.posPlanetFileInsert();
+
                   this.submitAttachment();
 
                 } else {
@@ -7526,8 +7530,10 @@ export class AddPosComponent implements OnInit {
                 // this.close('reloadMainGrid');
 
                 // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
-
+              
+                if(this.posPlanetIssuing)
                 this.posPlanetFileInsert();
+
                 this.submitAttachment();
 
                 this.snackBar.open('POS Saved', 'OK');

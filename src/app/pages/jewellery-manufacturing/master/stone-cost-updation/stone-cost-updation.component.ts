@@ -18,9 +18,12 @@ export class StoneCostUpdationComponent implements OnInit {
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Customer', 'So Number', 'Job Number', 'Job Ref#', 'Pcs', 'Weight', 'Rate', 'Amount', 'New Rate LC', 'New Amount LC', 'New Rate FC', 'New Amount FC',];
   divisionMS: any = 'ID';
-
+  selectedOption: string = 'byvalue';
+  isChecked: boolean = true;
   branchCode?: String;
   yearMonth?: String;
+  currentDate = new Date();
+  text: string="Deduct";
   userName = this.commonService.userName;
   @Input() content!: any;
 
@@ -52,16 +55,26 @@ export class StoneCostUpdationComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  change(event:any){
+    console.log(event);
+    this.text = event.target.value;
+    if(event.target.checked == true){
+      this.text="Add";
+     
+    }else{
+      this.text="Deduct";
+    }
+  }
 
   stonecostupdationFrom: FormGroup = this.formBuilder.group({
-    voctype: ['', [Validators.required]],
-    vocdate: ['', [Validators.required]],
-    vocno: ['', [Validators.required]],
+    voctype: ['CST', [Validators.required]],
+    vocdate: [new Date(), [Validators.required]],
+    vocno: ['1', [Validators.required]],
     stockcode: ['', [Validators.required]],
-    itemcurrency: ['', [Validators.required]],
-    itemcurrency_rate: ['', [Validators.required]],
-    basecurrency: ['', [Validators.required]],
-    basecurrency_rate: ['', [Validators.required]],
+    itemcurrency: ['AED', [Validators.required]],
+    itemcurrency_rate: ['1.000000', [Validators.required]],
+    basecurrency: ['AED', [Validators.required]],
+    basecurrency_rate: ['1.000000', [Validators.required]],
     currentrate_FC: ['', [Validators.required]],
     currentrate_LC: ['', [Validators.required]],
     newrate_FC: ['', [Validators.required]],
@@ -73,7 +86,139 @@ export class StoneCostUpdationComponent implements OnInit {
     clarity: ['', [Validators.required]],
     sieve_set: ['', [Validators.required]],
     remarks: ['', [Validators.required]],
+    valueTarget:['1'],
+    text:[false],
   });
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: "STOCK_CODE",
+    SEARCH_HEADING: "Stock Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  stockcodeSelected(value: any) {
+    console.log(value);
+    this.stonecostupdationFrom.controls.stockcode.setValue(value.STOCK_CODE);
+  }
+
+  itemcurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: "CURRENCY_CODE",
+    SEARCH_HEADING: "Currency Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  itemcurrencySelected(value: any) {
+    console.log(value);
+    this.stonecostupdationFrom.controls.itemcurrency.setValue(value.CURRENCY_CODE);
+  }
+
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 33,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Shape Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  shapeSelected(value: any) {
+    console.log(value);
+    this.stonecostupdationFrom.controls.shape.setValue(value.CODE);
+  }
+
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Size Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  sizeSelected(value: any) {
+    console.log(value);
+    this.stonecostupdationFrom.controls.size.setValue(value.CODE);
+  }
+
+  sieveCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Sieve Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  sieveSelected(value: any) {
+    console.log(value);
+    this.stonecostupdationFrom.controls.sieve.setValue(value.CODE);
+  }
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Color Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  colorSelected(value: any) {
+    console.log(value);
+    this.stonecostupdationFrom.controls.color.setValue(value.CODE);
+  }
+
+  clarityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 37,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Clarity Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  claritySelected(value: any) {
+    console.log(value);
+    this.stonecostupdationFrom.controls.clarity.setValue(value.CODE);
+  }
+
+  sievesetCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 86,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Sieve Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  sievesetSelected(value: any) {
+    console.log(value);
+    this.stonecostupdationFrom.controls.sieve_set.setValue(value.CODE);
+  }
+
+
 
   formSubmit() {
     if(this.content && this.content.FLAG == 'EDIT'){

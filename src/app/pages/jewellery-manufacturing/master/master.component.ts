@@ -17,11 +17,11 @@ import { AlloyMasterComponent } from './alloy-master/alloy-master.component';
 import { PictureTypeMasterComponent } from './picture-type-master/picture-type-master.component';
 import { ApprovalMasterComponent } from './approval-master/approval-master.component';
 import { DesignMasterComponent } from './design-master/design-master.component';
-import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { OtpMasterComponent } from './otp-master/otp-master.component';
 import { CustomerPriceMasterComponent } from './customer-price-master/customer-price-master.component';
 import { ComponentMasterComponent } from './component-master/component-master.component';
 import { StoneCostUpdationComponent } from './stone-cost-updation/stone-cost-updation.component';
+import { MfgGridComponent } from '../common-mfg/mfg-grid/mfg-grid.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -29,7 +29,7 @@ import { StoneCostUpdationComponent } from './stone-cost-updation/stone-cost-upd
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MasterComponent implements OnInit {
-  @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
+  @ViewChild(MfgGridComponent) mfgGridComponent?: MfgGridComponent;
 
   //variables
   menuTitle: any
@@ -135,7 +135,7 @@ export class MasterComponent implements OnInit {
       // this.PERMISSIONS = data.PERMISSION;
       // this.componentName = data.ANG_WEB_FORM_NAME;
     }
-    this.masterGridComponent?.getMasterGridData(data)
+    this.mfgGridComponent?.getMasterGridData(data)
   }
   // const endTime = performance.now();
   // const duration = endTime - startTime;

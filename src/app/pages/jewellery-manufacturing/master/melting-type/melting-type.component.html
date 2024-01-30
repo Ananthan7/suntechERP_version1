@@ -19,7 +19,7 @@
                                 <label for="input" class="col-sm-1 col-form-label">Code * :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="code" />
+                                        <input type="text" maxlength="15" matInput formControlName="code" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -28,15 +28,15 @@
                                 <div class="col-sm-2">
 
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" matInput formControlName="description" />
+                                        <input type="text" maxlength="85" matInput formControlName="description" />
                                     </mat-form-field>
 
                                 </div>
                                 <label for="input" class="col-sm-1 col-form-label">Metal % :</label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;margin-left: 7px;">
-                                        <input type="number" matInput step="0.001" min="0" maxlength="4"
-                                            formControlName="metal" />
+                                        <input type="number"  matInput step="0.001" min="0" 
+                                            formControlName="metal" (input)="onInput($event)"/>
                                     </mat-form-field>
                                 </div>
                                 <label for="input" class="col-sm-1 col-form-label">Color * :</label>
@@ -86,7 +86,7 @@
                                             <label for="input" class="col-sm-4 col-form-label">Alloy % :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" matInput formControlName="alloy" />
+                                                    <input type="number"  matInput formControlName="alloy"  (input)="onInput($event)" />
                                                 </mat-form-field>
                                                
                                             </div>
