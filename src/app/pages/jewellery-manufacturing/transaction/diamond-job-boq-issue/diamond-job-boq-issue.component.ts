@@ -81,8 +81,8 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   }
   diamondJobBoqIssue: FormGroup = this.formBuilder.group({
 
-    vocType: ['JBI',[Validators.required]],
-    vocNo : ['1',[Validators.required]],
+    vocType: ['',[Validators.required]],
+    vocNo : ['',[Validators.required]],
     vocDate : ['',[Validators.required]],
     // vocTime : [new Date().toTimeString().slice(0, 5),[Validators.required]],
     enteredBy : [''],
@@ -112,6 +112,13 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.setInitialValues()
+    this.setvalues()
+  }
+
+  setvalues(){
+    this.diamondJobBoqIssue.controls.vocType.setValue('JBI')
+    this.diamondJobBoqIssue.controls.vocNo.setValue('1')
+    
   }
 
   setInitialValues() {
