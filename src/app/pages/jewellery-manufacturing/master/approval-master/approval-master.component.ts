@@ -204,15 +204,24 @@ export class ApprovalMasterComponent implements OnInit {
 
 
   formSubmit() {
-
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
+    let final = []
+    final = this.tableData.filter((item:any)=> item.APPR_TYPE == '3')
+    console.log(final,'final');
+    
+    if(!final || final.length == 0){
+      this.toastr.error('select final')
       return
     }
+    return
     if (this.approvalMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.update()
+      return
+    }
+    
 
     let API = 'ApprovalMaster/InsertApprovalMaster'
     let postData = {
