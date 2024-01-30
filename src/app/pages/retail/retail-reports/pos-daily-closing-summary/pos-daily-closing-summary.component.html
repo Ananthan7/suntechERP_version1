@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> Pos Daily Closing Summary</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Daily Closing Summary</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -9,7 +9,7 @@
 <modal-header (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
-    <form>
+    <form [formGroup]="posDailyClosingSummaryForm">
         <div class="row">
             <div class="col-md-7">
                 <div class="row">
@@ -19,8 +19,10 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Transaction</label>
                             <div class="col-md-8">
                                 <mat-form-field>
-                                    <mat-select>
-                                        <mat-option></mat-option>
+                                    <mat-select >
+                                        <mat-option *ngFor="let option of transactionOptions" [value]="option.value">{{
+                                            option.label
+                                            }}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -31,8 +33,11 @@
                             <div class="col-md-8">
                                 <mat-form-field>
                                     <mat-select>
-                                        <mat-option></mat-option>
+                                        <mat-option *ngFor="let option of metalOptions" [value]="option.value">{{
+                                            option.label
+                                            }}</mat-option>
                                     </mat-select>
+
                                 </mat-form-field>
                             </div>
                         </div>
@@ -41,7 +46,9 @@
                             <div class="col-md-8">
                                 <mat-form-field>
                                     <mat-select>
-                                        <mat-option></mat-option>
+                                        <mat-option *ngFor="let option of metalOptions" [value]="option.value">{{
+                                            option.label
+                                            }}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -55,7 +62,7 @@
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
                                             <input matInput [matDatepicker]="fromDate" [max]="toDate" name="fromDate"
-                                                placeholder="DD/MM/YYYY" DateValidation />
+                                                placeholder="DD/MM/YYYY" DateValidation formControlName="fromDate" />
                                             <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
                                             <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
                                         </mat-form-field>
@@ -66,7 +73,7 @@
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
                                             <input matInput [matDatepicker]="toDate" [max]="toDate" name="toDate"
-                                                placeholder="DD/MM/YYYY" DateValidation />
+                                                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" />
                                             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
                                             <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
                                         </mat-form-field>
@@ -254,7 +261,7 @@
             </div>
             <div class="col-md-6">
                 <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
-                    <mat-tab label="Pos Sman Details">
+                    <mat-tab label="POS Salesman Details">
 
                     </mat-tab>
                     <mat-tab label="Salesman wise summary">
