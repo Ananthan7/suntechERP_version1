@@ -22,8 +22,8 @@ export class SequenceMasterComponent implements OnInit {
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
   selectAll = false
-  isReadOnly:boolean=true
-  isdisabled:boolean=true
+  isReadOnly: boolean = true
+  isdisabled: boolean = true
 
   private subscriptions: Subscription[] = [];
 
@@ -39,7 +39,7 @@ export class SequenceMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   sequenceMasterForm: FormGroup = this.formBuilder.group({
-    mid:[''],
+    mid: [''],
     sequenceCode: ['', [Validators.required]],
     sequenceDESCRIPTION: ['', [Validators.required]],
     sequencePrefixCode: [''],
@@ -54,27 +54,63 @@ export class SequenceMasterComponent implements OnInit {
     this.getTableData()
   }
   ngOnInit(): void {
-    // this.sequenceMasterForm.controls['calculatetime'].disable();
-    console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
       this.viewFormValues();
-    }
-    else(this.content.FLAG == 'EDIT')
-    {
+    } else if (this.content.FLAG == 'EDIT') {
+      console.log('fired');
       this.setFormValues();
     }
-    
   }
-
+  /**use: to check worker exists in db */
+  checkSequenceExists() {
+    if (this.sequenceMasterForm.value.sequenceCode == '') return
+    let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/' + this.sequenceMasterForm.value.sequenceCode
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          if (this.content && this.content.FLAG == 'EDIT') {
+            let data = result.response
+            const set2 = data.sequenceDetails.map((obj: any) => obj.PROCESS_CODE);
+            let itemNum = 0;
+            set2.forEach((item: any) => {
+              this.dataSource.forEach((obj: any) => {
+                if (item == obj.PROCESS_CODE) {
+                  obj.isChecked = true
+                  itemNum += 1
+                  obj.SRNO = itemNum
+                }else{
+                  obj.SRNO = 100
+                }
+              });
+            })
+            this.dataSource.sort((a:any,b:any)=> a.SRNO - b.SRNO)
+            console.log(this.dataSource,'this.dataSource');
+          } else {
+            Swal.fire({
+              title: '',
+              text: 'Sequence Already Exists!',
+              icon: 'warning',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.sequenceMasterForm.reset()
+              }
+            });
+          }
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
   checkAll() {
     console.log(this.dataSource);
-    this.dataSource.forEach((item:any)=>item.isChecked = this.selectAll )
-}
+    this.dataSource.forEach((item: any) => item.isChecked = this.selectAll)
+  }
   /**USE: drag and drop event */
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
   }
-  
+
   /**USE: get table data on initial load */
   private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
@@ -88,7 +124,9 @@ export class SequenceMasterComponent implements OnInit {
             item.isChecked = false
             item.orderId = this.dataSource.length
           })
-          // this.displayedColumns = Object.keys(this.dataSource[0]);
+          if (this.content.FLAG == 'EDIT') {
+            this.checkSequenceExists()
+          }
         } else {
           this.toastr.error('No Data Found')
         }
@@ -267,13 +305,13 @@ export class SequenceMasterComponent implements OnInit {
 
   /**use: checkbox change */
   changedCheckbox(value: any) {
-    if(value.isChecked == true){
-     this.isdisabled = !this.isdisabled
+    if (value.isChecked == true) {
+      this.isdisabled = !this.isdisabled
     }
 
     if (this.sequenceMasterForm.value.sequenceCode == "") {
       this.isdisabled = false
-      if(value.isChecked == false){this.isdisabled = true}
+      if (value.isChecked == false) { this.isdisabled = true }
 
       Swal.fire({
         title: '',
@@ -295,7 +333,7 @@ export class SequenceMasterComponent implements OnInit {
       if (value.MID == item.MID) {
         item.UNIQUEID = index + 1
         item.isChecked = value.isChecked
-        item.orderId = index+1
+        item.orderId = index + 1
       }
     })
     if (value.isChecked) {
@@ -341,34 +379,12 @@ export class SequenceMasterComponent implements OnInit {
       this.dataSource.sort((a, b) => a.orderId - b.orderId);
     }
     this.selectedSequence.forEach((item: any, index: number) => {
-        item.SEQ_NO = index+1
+      item.SEQ_NO = index + 1
     })
 
-    console.log(this.selectedSequence, 'selectedSequence');
   }
-  /**use: to check worker exists in db */
-  checkSequenceExists(event: any) {
-    if (event.target.value == '') return
 
-    let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/' + event.target.value
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          Swal.fire({
-            title: '',
-            text: 'Sequence Already Exists!',
-            icon: 'warning',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.sequenceMasterForm.reset()
-            }
-          });
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
+
   //selected field value setting
   sequencePrefixCodeSelected(data: any) {
     this.sequenceMasterForm.controls.sequencePrefixCode.setValue(data.PREFIX_CODE)
@@ -400,16 +416,16 @@ export class SequenceMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  oncalculateChange(event:any) {
+  oncalculateChange(event: any) {
     console.log(event);
-    if(event.checked==true){
+    if (event.checked == true) {
       this.sequenceMasterForm.controls['calculatetime'].enable();
-   
-     
+
+
     }
-  //   else{
-  //     this.sequenceMasterForm.controls['calculatetime'].disable();
-  //      
-  //   }
-}
+    //   else{
+    //     this.sequenceMasterForm.controls['calculatetime'].disable();
+    //      
+    //   }
+  }
 }
