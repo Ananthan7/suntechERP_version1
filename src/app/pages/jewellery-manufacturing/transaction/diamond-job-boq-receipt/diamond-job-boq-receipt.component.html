@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%">
-                                    <input type="text" matInput formControlName="vocno" />
+                                    <input type="text" [dir]="'rtl'" style="text-align: right;" matInput formControlName="vocno" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="currencyDesc" />
+                                    <input type="text" matInput [dir]="'rtl'" style="text-align: right;" formControlName="currencyDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput formControlName="baseCurrencyDesc" />
+                                    <input type="text" matInput [dir]="'rtl'" style="text-align: right;" formControlName="baseCurrencyDesc" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -163,7 +163,7 @@
                                                     Wt</label>
                                                 <div class="col-md-6">
                                                     <mat-form-field style="width: 70%">
-                                                        <input type="number" matInput formControlName="grossWt" />
+                                                        <input type="number" [dir]="'rtl'" style="text-align: right;" matInput formControlName="grossWt" />
                                                     </mat-form-field>
                                                     <master-search>
                                                     </master-search>
@@ -222,7 +222,7 @@
                                                     class="col-sm-6 col-form-label pt-4">Labour Chrg</label>
                                                 <div class="col-md-6">
                                                     <mat-form-field style="width: 70%">
-                                                        <input type="number" matInput formControlName="labourchrg" />
+                                                        <input type="number" [dir]="'rtl'" style="text-align: right;" matInput formControlName="labourchrg" />
                                                     </mat-form-field>
                                                     <master-search>
                                                     </master-search>
@@ -263,7 +263,7 @@
                                                     <img src={{urls}} style="width:130px;height:185px">
                                                     
                                                 </button>
-                                                <input type="file" formControlName="picture_name" class="uploadproduct" (change)="onFileChanged($event)">
+                                                <input type="file"  accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" (change)="onFileChanged($event)">
                                             </div>
                                         </div>
                                     </div>

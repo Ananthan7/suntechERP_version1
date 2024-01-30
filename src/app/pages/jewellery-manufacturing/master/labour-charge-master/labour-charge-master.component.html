@@ -21,7 +21,7 @@
               <label for="input" class="col-sm-2 col-form-label">Division * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput maxlength="6" formControlName="division" />
+                  <input type="text" matInput maxlength="6" formControlName="divisions" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="divisionCodeData"
                   (newRowClick)="divisionCodeSelected($event)"></master-search>
@@ -134,7 +134,7 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6" formControlName="cost_rate" />
+                  <input type="number" matInput maxlength="6" [dir]="'rtl'" style="text-align: right;" formControlName="cost_rate" />
                 </mat-form-field>
               </div>
             </div>
@@ -149,7 +149,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6" formControlName="selling_rate" />
+                  <input type="number" matInput maxlength="6" [dir]="'rtl'" style="text-align: right;" formControlName="selling_rate" />
                 </mat-form-field>
               </div>
             </div>
@@ -163,7 +163,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6" formControlName="selling" />
+                  <input type="number" matInput maxlength="6" [dir]="'rtl'" style="text-align: right;" formControlName="selling" />
                 </mat-form-field>
               </div>
             </div>
@@ -171,7 +171,7 @@
               <label for="input" class="col-sm-2 col-form-label">Ct Wt From * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6" formControlName="ctWtFrom" />
+                  <input type="number" matInput maxlength="6" [dir]="'rtl'" style="text-align: right;" formControlName="ctWtFrom" />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Setting Type :</label>
@@ -190,7 +190,7 @@
               <label for="input" class="col-sm-2 col-form-label">Ct Wt to * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6" formControlName="ctWtTo" />
+                  <input type="number" matInput maxlength="6" [dir]="'rtl'" style="text-align: right;" formControlName="ctWtTo" />
                 </mat-form-field>
               </div>
               <div class="col-sm-6">
@@ -257,7 +257,7 @@
                   <input type="text" matInput maxlength="6" formControlName="metalcurrency" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="currencyCodeData"
-                  (newRowClick)="currencyCodeSelected($event)"></master-search>
+                  (newRowClick)="metalcurrencyCodeSelected($event)"></master-search>
               </div>
             </div>
             <div class="row mb-2">
@@ -289,7 +289,7 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" formControlName="costRate" />
+                  <input matInput type="number" formControlName="metalcost_rate" [dir]="'rtl'" style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -305,7 +305,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="text" formControlName="metalselling_rate" />
+                  <input matInput type="number" formControlName="metalselling_rate" [dir]="'rtl'" style="text-align: right;"  />
                 </mat-form-field>
               </div>
             </div>
@@ -321,7 +321,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="number" matInput formControlName="metalSelling" />
+                  <input type="number" matInput formControlName="metalSelling" [dir]="'rtl'" style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -337,7 +337,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wastage % * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" formControlName="wastage" />
+                  <input matInput type="number" formControlName="wastage" [dir]="'rtl'" style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -365,7 +365,7 @@
               <label for="input" class="col-sm-2 col-form-label">Purity :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" formControlName="purity">
+                  <input matInput type="number" formControlName="purity"  [dir]="'rtl'" style="text-align: right;">
                 </mat-form-field>
               </div>
             </div>
@@ -373,10 +373,10 @@
               <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 60%">
-                  <input matInput type="number"  formControlName="wtFrom"  />
+                  <input matInput type="number"  formControlName="wtFrom"  [dir]="'rtl'" style="text-align: right;" />
                 </mat-form-field>
                 <mat-form-field style="width: 20%">
-                  <input matInput type="number"  formControlName="wtFromdeci"/>
+                  <input matInput type="number"  formControlName="wtFromdeci"  [dir]="'rtl'" style="text-align: right;"/>
                 </mat-form-field>
               </div>
             </div>
@@ -384,10 +384,10 @@
               <label for="input" class="col-sm-2 col-form-label">Wt To :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 60%">
-                  <input matInput type="number"  formControlName="wtTo" />
+                  <input matInput type="number"   formControlName="wtTo"  [dir]="'rtl'" style="text-align: right;" />
                 </mat-form-field>
                 <mat-form-field style="width: 20%">
-                  <input matInput type="number"  formControlName="wtToDeci" />
+                  <input matInput type="number"  formControlName="wtToDeci"  [dir]="'rtl'" style="text-align: right;" />
                 </mat-form-field>
               </div>
               <div class="col-sm-3 mb-2">

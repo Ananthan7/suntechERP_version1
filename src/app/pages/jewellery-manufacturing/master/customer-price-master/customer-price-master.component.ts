@@ -69,6 +69,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    
   }
 
 
@@ -95,14 +96,9 @@ export class CustomerPriceMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  change(event:any){
+  change(event: any) {
     console.log(event);
-    this.text = event.target.value;
-    if(event.target.checked == true){
-       this.text="Add";
-    }else{
-      this.text="Deduct";
-    }
+    this.text = event.target.checked ? "Add" : "Deduct";
   }
 
 

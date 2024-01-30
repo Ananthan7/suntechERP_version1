@@ -249,8 +249,8 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/InsertProcessMasterDJ'
     let postData = {
       "MID": 0,
-      "PROCESS_CODE": this.processMasterForm.value.processCode,
-      "DESCRIPTION": this.processMasterForm.value.processDesc,
+      "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
+      "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
       "STD_TIME": this.commonService.emptyToZero(this.processMasterForm.value.stand_time),
       "MAX_TIME": this.commonService.emptyToZero(this.processMasterForm.value.max_time),
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
@@ -346,6 +346,10 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.approvalProcess.setValue(e.Process_Code);
   }
   ACCODESelected(e: any) {
+    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return;
+    }
     this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
   }
 
@@ -395,8 +399,8 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.processCode
     let postData = {
       "MID": 0,
-      "PROCESS_CODE": this.processMasterForm.value.processCode,
-      "DESCRIPTION": this.processMasterForm.value.processDesc,
+      "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
+      "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
       "STD_TIME": this.processMasterForm.value.stand_time || 0,
       "MAX_TIME": this.processMasterForm.value.max_time || 0,
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,

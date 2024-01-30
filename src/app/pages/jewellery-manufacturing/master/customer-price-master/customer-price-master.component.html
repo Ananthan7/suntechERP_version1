@@ -71,7 +71,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">Metal Loss%:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="number"  matInput formControlName="metal_loss" onKeyDown="if(this.value.length==3) return false;"  />
+                          <input type="number"  matInput formControlName="metal_loss" onKeyDown="if(this.value.length==3) return false;" [dir]="'rtl'" style="text-align: right;" />
                         </mat-form-field>
                       </div>
                     </div>
@@ -81,7 +81,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">MarkUp %:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="markup" onKeyDown="if(this.value.length==3) return false;" />
+                          <input type="number" matInput formControlName="markup" onKeyDown="if(this.value.length==3) return false;" [dir]="'rtl'" style="text-align: right;" />
                         </mat-form-field>
                       </div>
                     </div>
@@ -105,7 +105,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">Add On Rate:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="addonrate" onKeyDown="if(this.value.length==5) return false;" />
+                          <input type="number" matInput formControlName="addonrate" onKeyDown="if(this.value.length==5) return false;" [dir]="'rtl'" style="text-align: right;" />
                         </mat-form-field>
                       </div>
                     </div>
@@ -115,7 +115,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">Margin %:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="margin" onKeyDown="if(this.value.length==3) return false;" />
+                          <input type="number" matInput formControlName="margin" onKeyDown="if(this.value.length==3) return false;" [dir]="'rtl'" style="text-align: right;" />
                         </mat-form-field>
                       </div>
                     </div>
@@ -171,7 +171,7 @@
                     </div>
                   </div>
                   <div class="row align-items-center mb-1 form-switch st-1">
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" formControlName="text" [(ngModel)]="text" (click)="change($event)">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" formControlName="text" (change)="change($event)">
                     <label class="col-md-3 form-check-label" for="flexSwitchCheckChecked">{{text}}</label>
                     <div class="col-md-9">
                       <mat-form-field style="width: 100%;">
