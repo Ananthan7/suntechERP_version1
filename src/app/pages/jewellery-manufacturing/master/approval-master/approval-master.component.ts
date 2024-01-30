@@ -202,17 +202,16 @@ export class ApprovalMasterComponent implements OnInit {
 
   }
 
-
-  formSubmit() {
+  checkFinalApproval(){
     let final = []
     final = this.tableData.filter((item:any)=> item.APPR_TYPE == '3')
-    console.log(final,'final');
-    
-    if(!final || final.length == 0){
-      this.toastr.error('select final')
+    return final.length == 0
+  }
+  formSubmit() {
+    if(this.checkFinalApproval()){
+      this.toastr.error('Final Approval Type Not Selected')
       return
     }
-    return
     if (this.approvalMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -222,7 +221,6 @@ export class ApprovalMasterComponent implements OnInit {
       return
     }
     
-
     let API = 'ApprovalMaster/InsertApprovalMaster'
     let postData = {
       "APPR_CODE": this.approvalMasterForm.value.code || "",
