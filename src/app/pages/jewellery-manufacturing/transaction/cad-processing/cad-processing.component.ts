@@ -178,19 +178,19 @@ export class CADProcessingComponent implements OnInit {
     let srno = length + 1;
     let data =  {
       "Srno": srno,
-      "Division": "string",
-      "StoneType": "string",
-      "StockCode": "string",
-      "Karat": "string",
-      "Color": "string",
-      "Shape": "string",
-      "Sieve": "string",
+      "Division": "",
+      "StoneType": "",
+      "StockCode": "",
+      "Karat": "",
+      "Color": "",
+      "Shape": "",
+      "Sieve": "",
       "Size": 0,
       "Pcs": 0,
       "WtCt": 0,
       "SettingType": 0,
       "PointerWt": 0,
-      "Remarks": "string",
+      "Remarks": "",
     };
   
     this.tableData.push(data);
@@ -254,19 +254,19 @@ adddatas() {
   let srno = length + 1;
   let data2=  {
     "Srno": srno,
-    "CompCode": "string",
-    "Description": "string",
-    "Pcs": "string",
-    "SizeSet": "string",
-    "SizeCode": "string",
-    "Type": "string",
-    "Category": "string",
+    "CompCode": "",
+    "Description": "",
+    "Pcs": "",
+    "SizeSet": "",
+    "SizeCode": "",
+    "Type": "",
+    "Category": "",
     "Shape": 0,
     "Height": 0,
     "Width": 0,
     "Length": 0,
     "Radius": 0,
-    "Remarks": "string",
+    "Remarks": "",
   };
   this.tableDatas.push(data2);
  
