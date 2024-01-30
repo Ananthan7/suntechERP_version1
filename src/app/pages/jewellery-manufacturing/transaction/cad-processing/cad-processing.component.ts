@@ -43,6 +43,7 @@ export class CADProcessingComponent implements OnInit {
     private comService: CommonServiceService,
   ) { }
 
+
   ngOnInit(): void {
     if (this.content) {
       // this.setFormValues()  
@@ -178,19 +179,19 @@ export class CADProcessingComponent implements OnInit {
     let srno = length + 1;
     let data =  {
       "Srno": srno,
-      "Division": "string",
-      "StoneType": "string",
-      "StockCode": "string",
-      "Karat": "string",
-      "Color": "string",
-      "Shape": "string",
-      "Sieve": "string",
+      "Division": "",
+      "StoneType": "",
+      "StockCode": "",
+      "Karat": "",
+      "Color": "",
+      "Shape": "",
+      "Sieve": "",
       "Size": 0,
       "Pcs": 0,
       "WtCt": 0,
       "SettingType": 0,
       "PointerWt": 0,
-      "Remarks": "string",
+      "Remarks": "",
     };
   
     this.tableData.push(data);
@@ -248,25 +249,31 @@ pointerwttemp(data:any,value: any){
 remarkstemp(data:any,value: any){
   this.tableData[value.data.SRNO - 1].Remarks = data.target.value;
 }
+stoneTypeSelected(event: any, value: any) {
+  this.tableData[value.data.SRNO - 1].STONE_TYPE = event.CODE;
+}
+onHoverstoneType({ data }: any) {
+  this.generalMaster.WHERECONDITION = `TYPES = 'STONE TYPE MASTER' AND DIV_${data.DIVCODE}=1`
+}
 
 adddatas() {
   let length = this.tableDatas.length;
   let srno = length + 1;
   let data2=  {
     "Srno": srno,
-    "CompCode": "string",
-    "Description": "string",
-    "Pcs": "string",
-    "SizeSet": "string",
-    "SizeCode": "string",
-    "Type": "string",
-    "Category": "string",
+    "CompCode": "",
+    "Description": "",
+    "Pcs": "",
+    "SizeSet": "",
+    "SizeCode": "",
+    "Type": "",
+    "Category": "",
     "Shape": 0,
     "Height": 0,
     "Width": 0,
     "Length": 0,
     "Radius": 0,
-    "Remarks": "string",
+    "Remarks": "",
   };
   this.tableDatas.push(data2);
  
@@ -279,7 +286,6 @@ compcodetemp(data:any,value: any){
 descriptiontemp(data:any,value: any){
   this.tableDatas[value.data.SRNO - 1].Description = data.target.value;
 }
-
 Pcs2temp(data:any,value: any){
   this.tableDatas[value.data.SRNO - 1].Pcs = data.target.value;
 }
@@ -404,7 +410,7 @@ componentSet(){
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      // this.updateMeltingType()
+      this.updateMeltingType()
       return
     }
 
@@ -483,72 +489,49 @@ componentSet(){
 
   updateMeltingType() {
     console.log(this.branchCode,'working')
-    let API = '/JobCadProcessDJ/UpdateJobCadProcessDJ'+ this.cadProcessingForm.value.brnachCode + this.cadProcessingForm.value.voctype + this.cadProcessingForm.value.vocNo + this.cadProcessingForm.value.yearMoth ;
+    let API = `JobCadProcessDJ/UpdateJobCadProcessDJ/${this.branchCode}/${this.cadProcessingForm.value.voctype}/${this.cadProcessingForm.value.vocNo}/${this.comService.yearSelected}` ;
       let postData ={
-        "MID": 0,
-        "BRANCH_CODE":this.branchCode,
-        "VOCTYPE": this.cadProcessingForm.value.voctype,
-        "vocNo": this.cadProcessingForm.value.vocNo,
-        "YEARMONTH": "stri",
-        "SALESPERSON_CODE": "string",
-        "SYSTEM_DATE": this.cadProcessingForm.value.date,
-        "MACHINEID": "string",
-        "DOC_REF": "string",
-        "REMARKS": this.cadProcessingForm.value.remarks,
-        "VOCDATE": this.cadProcessingForm.value.VocDate,
-        "NAVSEQNO": 0,
-        "PROCESS_CODE": this.cadProcessingForm.value.process,
-        "WORKER_CODE": this.cadProcessingForm.value.worker,
-        "JOB_NUMBER": this.cadProcessingForm.value.job,
-        "UNQ_JOB_ID": "string",
-        "JOB_SO_NUMBER": this.cadProcessingForm.value.subJobId,
-        "DESIGN_CODE": this.cadProcessingForm.value.design,
-        "UNQ_DESIGN_ID": "string",
-        "PART_CODE": "string",
-        "PCS": 0,
-        "TIME_TAKEN": this.comService.emptyToZero(this.cadProcessingForm.value.TIME_TAKEN),
-        "JOB_SO_MID": 0,
-        "CAD_STATUS": "string",
-        "APPR_CODE": "string",
-        "APPR_TYPE": this.cadProcessingForm.value.type,
-        "TRANS_REF": "string",
-        "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
-        "TO_PROCESS_CODE": this.cadProcessingForm.value.toProcess,
-        "TO_WORKER_CODE": this.cadProcessingForm.value.toWorker,
-        "SO_DELIVERY_TYPE": this.cadProcessingForm.value.deliveryOn,
-        "SO_DELIVERY_DAYS": this.cadProcessingForm.value.deliveryOnDays,
-        "SO_DELIVERY_DATE": this.cadProcessingForm.value.deliveryOnDate,
-        "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
-        "SO_CR_DAYS": 0,
-        "Details": [
-          {
-            "UNIQUEID": 0,
-            "DT_BRANCH_CODE": "string",
-            "DT_VOCTYPE": "string",
-            "DT_vocNo": 0,
-            "DT_YEARMONTH": "string",
-            "SRNO": 0,
-            "METALSTONE": "string",
-            "DIVCODE": "string",
-            "STONE_TYPE": "string",
-            "KARAT_CODE": "string",
-            "SIEVE_SET": "string",
-            "SIEVE": "string",
-            "COLOR": "string",
-            "CLARITY": "string",
-            "SHAPE": "string",
-            "SIZE": "string",
-            "PCS": 0,
-            "GROSS_WT": 0,
-            "D_REMARKS": "string",
-            "PROCESS_TYPE": "string",
-            "POINTER_WT": 0,
-            "STOCK_CODE": "string",
-            "COMP_CODE": "string"
-          }
-        ]
+          "MID": 0,
+          "BRANCH_CODE": this.branchCode,
+          "VOCTYPE": this.cadProcessingForm.value.voctype,
+          "vocNo": this.cadProcessingForm.value.vocNo,
+          "YEARMONTH": this.yearMonth,
+          "SALESPERSON_CODE": "string",
+          "SYSTEM_DATE": this.cadProcessingForm.value.date,
+          "MACHINEID": "",
+          "DOC_REF": "",
+          "REMARKS": this.cadProcessingForm.value.remarks,
+          "VOCDATE": this.cadProcessingForm.value.vocDate,
+          "NAVSEQNO": 0,
+          "PROCESS_CODE": this.cadProcessingForm.value.process,
+          "WORKER_CODE": this.cadProcessingForm.value.worker,
+          "JOB_NUMBER": this.cadProcessingForm.value.job,
+          "UNQ_JOB_ID": "",
+          "JOB_SO_NUMBER": this.cadProcessingForm.value.subJobId,
+          "DESIGN_CODE": this.cadProcessingForm.value.design,
+          "UNQ_DESIGN_ID": "",
+          "PART_CODE": "",
+          "PCS": 0,
+          "TIME_TAKEN": this.comService.emptyToZero(this.cadProcessingForm.value.TIME_TAKEN),
+          "JOB_SO_MID": 0,
+          "CAD_STATUS": "",
+          "APPR_CODE": "",
+          "APPR_TYPE": this.comService.emptyToZero(this.cadProcessingForm.value.type),
+          "TRANS_REF": "",
+          "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
+          "TO_PROCESS_CODE": this.comService.nullToString(this.cadProcessingForm.value.toProcess),
+          "TO_WORKER_CODE": this.comService.nullToString(this.cadProcessingForm.value.toWorker),
+          "SO_DELIVERY_TYPE": this.cadProcessingForm.value.deliveryOn,
+          "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.cadProcessingForm.value.deliveryOnDays),
+          "SO_DELIVERY_DATE": this.cadProcessingForm.value.deliveryOnDate,
+          "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
+          "SO_CR_DAYS": 0,
+          "Details":this.setDetaills(),
+    
+          "Components":this.componentSet(),
+        }
        
-      }
+      
   
       let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
         .subscribe((result) => {
@@ -640,7 +623,18 @@ componentSet(){
       }
     });
   }
-  
+  generalMaster: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'GENERAL MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
