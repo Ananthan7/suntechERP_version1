@@ -21,9 +21,9 @@ export class SequenceMasterComponent implements OnInit {
   currentFilter: any;
   showFilterRow!: boolean;
   showHeaderFilter!: boolean;
-  selectAll = false
-  isReadOnly: boolean = true
-  isdisabled: boolean = true
+  selectAll: boolean = false;
+  viewMode: boolean = false;
+  isdisabled: boolean = true;
 
   private subscriptions: Subscription[] = [];
 
@@ -66,9 +66,10 @@ export class SequenceMasterComponent implements OnInit {
     this.getTableData()
   }
   ngOnInit(): void {
-    if (this.content.FLAG == 'VIEW') {
-      this.viewFormValues();
-    } else if (this.content.FLAG == 'EDIT') {
+    if (this.content.FLAG == 'EDIT') {
+      this.setFormValues();
+    }else if(this.content.FLAG == 'VIEW'){
+      this.viewMode = true;
       this.setFormValues();
     }
   }
@@ -91,22 +92,22 @@ export class SequenceMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
-          if (this.content && this.content.FLAG == 'EDIT') {
+          if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
             let data = result.response
             const set2 = data.sequenceDetails.map((obj: any) => obj.PROCESS_CODE);
             let itemNum = 0;
+            this.reCalculateSRNO()
             set2.forEach((item: any) => {
               this.dataSource.forEach((obj: any) => {
                 if (item == obj.PROCESS_CODE) {
                   obj.isChecked = true
                   itemNum += 1
                   obj.SRNO = itemNum
-                }else{
-                  obj.SRNO = 100
                 }
               });
             })
-            this.dataSource.sort((a:any,b:any)=> a.SRNO - b.SRNO)
+            this.dataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
+            this.selectedSequence = this.dataSource.filter((item: any) => item.isChecked == true)
           } else {
             Swal.fire({
               title: '',
@@ -125,13 +126,15 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   checkAll() {
-    console.log(this.dataSource);
     this.dataSource.forEach((item: any) => item.isChecked = this.selectAll)
   }
   /**USE: drag and drop event */
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
-    this.dataSource.forEach((item: any,index:any) => item.SRNO = index+1)
+    this.reCalculateSRNO()
+  }
+  reCalculateSRNO(){
+    this.dataSource.forEach((item: any, index: any) => item.SRNO = index + 1)
   }
 
   /**USE: get table data on initial load */
@@ -142,7 +145,7 @@ export class SequenceMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           this.dataSource = result.response
-          this.dataSource.forEach((item: any,index:any) => {
+          this.dataSource.forEach((item: any, index: any) => {
             item.UNIQUEID = 0
             item.SRNO = index + 1
             item.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL')
@@ -167,17 +170,10 @@ export class SequenceMasterComponent implements OnInit {
     this.sequenceMasterForm.controls.sequencePrefixCode.setValue(this.content.PREFIX_CODE)
   }
 
-  viewFormValues() {
-    if (!this.content) return
-    this.sequenceMasterForm.controls.mid.setValue(this.content.MID)
-    this.sequenceMasterForm.controls.sequenceCode.setValue(this.content.SEQ_CODE)
-    this.sequenceMasterForm.controls.sequenceDESCRIPTION.setValue(this.content.DESCRIPTION)
-    this.sequenceMasterForm.controls.sequencePrefixCode.setValue(this.content.PREFIX_CODE)
-  }
-
   /**USE:  final save API call*/
   formSubmit() {
-    if (this.content && this.content.FLAG == 'EDIT') {
+    if (this.content?.FLAG == 'VIEW') return
+    if (this.content?.FLAG == 'EDIT') {
       this.updateWorkerMaster()
       return
     }
@@ -193,7 +189,7 @@ export class SequenceMasterComponent implements OnInit {
       "PRINT_COUNT": 0,
       "PREFIX_CODE": this.sequenceMasterForm.value.sequencePrefixCode.toUpperCase() || "",
       "MID": 0,
-      "sequenceDetails": this.selectedSequence || []
+      "sequenceDetails": this.setSelectedSequence() || []
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -227,12 +223,12 @@ export class SequenceMasterComponent implements OnInit {
 
     let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
     let postData = {
-      "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode || "",
-      "DESCRIPTION": this.sequenceMasterForm.value.sequenceDESCRIPTION || "",
+      "SEQ_CODE": this.commonService.nullToString(this.sequenceMasterForm.value.sequenceCode),
+      "DESCRIPTION": this.commonService.nullToString(this.sequenceMasterForm.value.sequenceDESCRIPTION),
       "PRINT_COUNT": 0,
-      "PREFIX_CODE": this.sequenceMasterForm.value.sequencePrefixCode || "",
+      "PREFIX_CODE": this.commonService.nullToString(this.sequenceMasterForm.value.sequencePrefixCode),
       "MID": this.sequenceMasterForm.value.mid || 0,
-      "sequenceDetails": this.selectedSequence || []
+      "sequenceDetails": this.setSelectedSequence() || []
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -327,7 +323,6 @@ export class SequenceMasterComponent implements OnInit {
       item.isChecked = event.target.checked
     })
   }
-  seqIndex: number = 0;
 
   /**use: checkbox change */
   changedCheckbox(value: any) {
@@ -354,7 +349,7 @@ export class SequenceMasterComponent implements OnInit {
       });
       return
     }
-    let dataSet: any
+
     this.dataSource.forEach((item: any, index: number) => {
       if (value.MID == item.MID) {
         item.UNIQUEID = index + 1
@@ -363,37 +358,9 @@ export class SequenceMasterComponent implements OnInit {
       }
     })
     if (value.isChecked) {
-      dataSet = {
-        "UNIQUEID": 0,
-        "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode || "",
-        "SEQ_NO": this.seqIndex || 0,
-        "PROCESS_CODE": value.PROCESS_CODE || "",
-        "PROCESS_DESCRIPTION": value.DESCRIPTION || "",
-        "PROCESS_TYPE": value.PROCESS_TYPE || "",
-        "CURRENCY_CODE": value.CURRENCY_CODE || "",
-        "UNIT_RATE": value.UNIT_RATE || 0,
-        "UNIT": value.UNIT || "",
-        "NO_OF_UNITS": value.NO_OF_UNITS || 0,
-        "STD_TIME": value.STD_TIME || 0,
-        "MAX_TIME": value.MAX_TIME || 0,
-        "STD_LOSS": value.STD_LOSS || 0,
-        "MIN_LOSS": value.MIN_LOSS || 0,
-        "MAX_LOSS": value.MAX_LOSS || 0,
-        "LOSS_ACCODE": value.LOSS_ACCODE || "",
-        "WIP_ACCODE": value.WIP_ACCODE || "",
-        "LAB_ACCODE": value.LAB_ACCODE || "",
-        "POINTS": value.POINTS || 0,
-        "GAIN_ACCODE": value.GAIN_ACCODE || "",
-        "GAIN_AC": "",
-        "TRAY_WT": value.TRAY_WT || 0,
-        "PACKET_CODE": "",
-        "LOSS_ON_GROSS": value.LOSS_ON_GROSS || true,
-        "TIMEON_PROCESS": value.TIMEON_PROCESS || true,
-        "LABCHRG_PERHOUR": value.LABCHRG_PERHOUR || 0
-      }
-      this.selectedSequence.push(dataSet)
       // Reorder the data array based on the order of clicks
       this.dataSource.sort((a, b) => a.orderId - b.orderId);
+      return
     } else {
       const index = this.selectedSequence.indexOf(value);
       this.selectedSequence.splice(index, 1); // Remove the item from its current position
@@ -404,12 +371,45 @@ export class SequenceMasterComponent implements OnInit {
       })
       this.dataSource.sort((a, b) => a.orderId - b.orderId);
     }
-    this.selectedSequence.forEach((item: any, index: number) => {
-      item.SEQ_NO = index + 1
-    })
-
+   
   }
-
+  /**USE: set Selected Sequence data */
+  setSelectedSequence() {
+    this.selectedSequence = []
+    this.dataSource.forEach((item: any) => {
+      if (item.isChecked == true) {
+        this.selectedSequence.push({
+          "UNIQUEID": 0,
+          "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode,
+          "SEQ_NO": this.commonService.emptyToZero(item.SRNO),
+          "PROCESS_CODE": this.commonService.nullToString(item.PROCESS_CODE),
+          "PROCESS_DESCRIPTION": this.commonService.nullToString(item.DESCRIPTION),
+          "PROCESS_TYPE": this.commonService.nullToString(item.PROCESS_TYPE),
+          "CURRENCY_CODE": this.commonService.nullToString(item.CURRENCY_CODE),
+          "UNIT_RATE": item.UNIT_RATE || 0,
+          "UNIT": this.commonService.nullToString(item.UNIT),
+          "NO_OF_UNITS": item.NO_OF_UNITS || 0,
+          "STD_TIME": item.STD_TIME || 0,
+          "MAX_TIME": item.MAX_TIME || 0,
+          "STD_LOSS": item.STD_LOSS || 0,
+          "MIN_LOSS": item.MIN_LOSS || 0,
+          "MAX_LOSS": item.MAX_LOSS || 0,
+          "LOSS_ACCODE": this.commonService.nullToString(item.LOSS_ACCODE),
+          "WIP_ACCODE": this.commonService.nullToString(item.WIP_ACCODE),
+          "LAB_ACCODE": this.commonService.nullToString(item.LAB_ACCODE),
+          "POINTS": item.POINTS || 0,
+          "GAIN_ACCODE": this.commonService.nullToString(item.GAIN_ACCODE),
+          "GAIN_AC": "",
+          "TRAY_WT": item.TRAY_WT || 0,
+          "PACKET_CODE": "",
+          "LOSS_ON_GROSS": item.LOSS_ON_GROSS || true,
+          "TIMEON_PROCESS": item.TIMEON_PROCESS || true,
+          "LABCHRG_PERHOUR": item.LABCHRG_PERHOUR || 0
+        })
+      }
+    })
+    return this.selectedSequence
+  }
 
   //selected field value setting
   sequencePrefixCodeSelected(data: any) {
@@ -431,7 +431,7 @@ export class SequenceMasterComponent implements OnInit {
   }
 
   /**USE: close modal window */
-  close(data?:any) {
+  close(data?: any) {
     this.sequenceMasterForm.reset()
     this.activeModal.close(data);
   }
