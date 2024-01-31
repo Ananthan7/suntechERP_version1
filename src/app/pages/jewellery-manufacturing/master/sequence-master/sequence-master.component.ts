@@ -38,6 +38,18 @@ export class SequenceMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  accountMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 152,
+    SEARCH_FIELD: 'ACCOUNT_HEAD',
+    SEARCH_HEADING: 'Code Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
   sequenceMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
     sequenceCode: ['', [Validators.required]],
@@ -57,11 +69,22 @@ export class SequenceMasterComponent implements OnInit {
     if (this.content.FLAG == 'VIEW') {
       this.viewFormValues();
     } else if (this.content.FLAG == 'EDIT') {
-      console.log('fired');
       this.setFormValues();
     }
   }
-  /**use: to check worker exists in db */
+  /**use:  */
+  wipAccodeSelected(event: any, data: any) {
+    this.dataSource[data.SRNO - 1].WIP_ACCODE = event.ACCODE;
+  }
+  gainAccodeSelected(event: any, data: any) {
+    this.dataSource[data.SRNO - 1].GAIN_ACCODE = event.ACCODE;
+  }
+  labAccodeSelected(event: any, data: any) {
+    this.dataSource[data.SRNO - 1].LAB_ACCODE = event.ACCODE;
+  }
+  lossAccodeSelected(event: any, data: any) {
+    this.dataSource[data.SRNO - 1].LOSS_ACCODE = event.ACCODE;
+  }
   checkSequenceExists() {
     if (this.sequenceMasterForm.value.sequenceCode == '') return
     let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/' + this.sequenceMasterForm.value.sequenceCode
@@ -84,7 +107,6 @@ export class SequenceMasterComponent implements OnInit {
               });
             })
             this.dataSource.sort((a:any,b:any)=> a.SRNO - b.SRNO)
-            console.log(this.dataSource,'this.dataSource');
           } else {
             Swal.fire({
               title: '',
@@ -109,18 +131,22 @@ export class SequenceMasterComponent implements OnInit {
   /**USE: drag and drop event */
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.dataSource, event.previousIndex, event.currentIndex);
+    this.dataSource.forEach((item: any,index:any) => item.SRNO = index+1)
   }
 
   /**USE: get table data on initial load */
   private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
-
+    this.commonService.toastInfoByMsgId('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           this.dataSource = result.response
-          this.dataSource.forEach((item: any) => {
+          this.dataSource.forEach((item: any,index:any) => {
             item.UNIQUEID = 0
+            item.SRNO = index + 1
+            item.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL')
+            item.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL')
             item.isChecked = false
             item.orderId = this.dataSource.length
           })
@@ -162,10 +188,10 @@ export class SequenceMasterComponent implements OnInit {
 
     let API = 'SequenceMasterDJ/InsertSequenceMasterDJ'
     let postData = {
-      "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode || "",
-      "DESCRIPTION": this.sequenceMasterForm.value.sequenceDESCRIPTION || "",
+      "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode.toUpperCase() || "",
+      "DESCRIPTION": this.sequenceMasterForm.value.sequenceDESCRIPTION.toUpperCase() || "",
       "PRINT_COUNT": 0,
-      "PREFIX_CODE": this.sequenceMasterForm.value.sequencePrefixCode || "",
+      "PREFIX_CODE": this.sequenceMasterForm.value.sequencePrefixCode.toUpperCase() || "",
       "MID": 0,
       "sequenceDetails": this.selectedSequence || []
     }
@@ -183,7 +209,7 @@ export class SequenceMasterComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.sequenceMasterForm.reset()
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -222,7 +248,7 @@ export class SequenceMasterComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.sequenceMasterForm.reset()
-                this.close()
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -271,7 +297,7 @@ export class SequenceMasterComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.sequenceMasterForm.reset()
-                    this.close()
+                    this.close('reloadMainGrid')
                   }
                 });
               } else {
@@ -284,7 +310,7 @@ export class SequenceMasterComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.sequenceMasterForm.reset()
-                    this.close()
+                    this.close('reloadMainGrid')
                   }
                 });
               }
@@ -405,9 +431,9 @@ export class SequenceMasterComponent implements OnInit {
   }
 
   /**USE: close modal window */
-  close() {
+  close(data?:any) {
     this.sequenceMasterForm.reset()
-    this.activeModal.close();
+    this.activeModal.close(data);
   }
 
   ngOnDestroy() {

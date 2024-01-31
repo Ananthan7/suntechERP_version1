@@ -171,10 +171,12 @@ export class MfgGridComponent implements OnInit {
               this.nextPage()
             }
           }
+          
           let headers = Object.keys(this.orderedItems[0]);
           this.orderedItemsHead = headers.filter((item:any)=> item != 'MID')
           // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
           // this.ChangeDetector.detectChanges()
+          // this.orderedItems = this.orderedItems.sort((a, b) => b.MID - a.MID);
         } else {
           this.snackBar.open('Data not available!', 'Close', {
             duration: 3000,

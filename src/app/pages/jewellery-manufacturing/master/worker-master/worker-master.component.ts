@@ -366,7 +366,6 @@ export class WorkerMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
         if (result.response) {
           this.tableData = result.response;
           this.tableData.forEach((item: any, i: any) => {
@@ -378,7 +377,6 @@ export class WorkerMasterComponent implements OnInit {
           }
         }
       }, err => {
-        this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
