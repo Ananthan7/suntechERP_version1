@@ -146,10 +146,7 @@
                                                 minlength="1"
                                                 maxlength="20"
                                                 pattern="[0-9]+"/>
-                                        <div *dxTemplate="let data of 'mobilenumber'">
-                                            <input type="number" (change)="mobilenumber($event,data)" [dir]="'rtl'"
-                                                style="text-align: right;" [value]="data.value" style="width: 100%;"
-                                                [disabled]="data.value == ''" />
+                                        
                                         </div>
                                         <div *dxTemplate="let data of 'emailtemp'">
                                             <input type="checkbox" (change)="emailcheckevent($event,data)"
