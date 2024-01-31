@@ -19,7 +19,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Transaction</label>
                             <div class="col-md-8">
                                 <mat-form-field>
-                                    <mat-select >
+                                    <mat-select formControlName="transactionType">
                                         <mat-option *ngFor="let option of transactionOptions" [value]="option.value">{{
                                             option.label
                                             }}</mat-option>
@@ -32,7 +32,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Metal</label>
                             <div class="col-md-8">
                                 <mat-form-field>
-                                    <mat-select>
+                                    <mat-select formControlName="metalType">
                                         <mat-option *ngFor="let option of metalOptions" [value]="option.value">{{
                                             option.label
                                             }}</mat-option>
@@ -45,7 +45,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Diamond</label>
                             <div class="col-md-8">
                                 <mat-form-field>
-                                    <mat-select>
+                                    <mat-select formControlName="diamondType">
                                         <mat-option *ngFor="let option of metalOptions" [value]="option.value">{{
                                             option.label
                                             }}</mat-option>
@@ -129,7 +129,7 @@
             </div>
             <div class="col-md-5">
                 <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
-                    <mat-tab label="Transaction wise                    Summary">
+                    <mat-tab label="Transaction wise Summary">
                         <div class="row my-2">
                             <!-- <label for="inputPassword" class="col-sm-12 text-center col-form-label"></label> -->
                             <div class="col-md-12">
@@ -168,10 +168,39 @@
                                                 <dxo-selection mode="multiple"></dxo-selection>
                                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                                <dxi-column *ngFor="let data of columnheadMetal" dataField="{{ data }}"
+                                                <!-- <dxi-column *ngFor="let data of columnheadMetal" dataField="{{ data }}"
                                                     caption="{{ data }}" [allowEditing]="true" alignment="center"
                                                     backgroundcolor="#000">
-                                                </dxi-column>
+                                                </dxi-column> -->
+                                                <dxi-column [width]="100" dataField="Division"
+                                                    dataType="Division"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Type" dataType="Type"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Pcs" dataType="Pcs"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Gms" dataType="Gms"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Pure Wt"
+                                                    dataType="Pure_Wt"></dxi-column>
+                                                <dxi-column [width]="100" dataField="St.Qty"
+                                                    dataType="St_Qty"></dxi-column>
+                                                <dxi-column [width]="100" dataField="St.Amt"
+                                                    dataType="St_Amt"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Mkg.Rate"
+                                                    dataType="Mkg_Rate"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Mkg.Value"
+                                                    dataType="Mkg_Value"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Metal Value"
+                                                    dataType="Metal_Value"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Total Amount"
+                                                    dataType="Total_Amount"></dxi-column>
+                                                <dxo-summary>
+                                                    <dxi-total-item column="Pcs"> </dxi-total-item>
+                                                    <dxi-total-item column="Gms"> </dxi-total-item>
+                                                    <dxi-total-item column="Pure Wt"> </dxi-total-item>
+                                                    <dxi-total-item column="St.Qty"> </dxi-total-item>
+                                                    <dxi-total-item column="St.Amt"> </dxi-total-item>
+                                                    <dxi-total-item column="Mkg.Value"> </dxi-total-item>
+                                                    <dxi-total-item column="Metal Value"> </dxi-total-item>
+                                                    <dxi-total-item column="Total Amount"> </dxi-total-item>
+                                                </dxo-summary>
                                             </dx-data-grid>
                                         </div>
                                     </div>
@@ -186,7 +215,7 @@
                                     <div class="row my-2">
                                         <!-- <label for="inputPassword" class="col-sm-12 text-center col-form-label"></label> -->
                                         <div class="col-md-12">
-                                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                                            <!-- <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
                                                 [showBorders]="true">
                                                 <dxo-paging [enabled]="false"></dxo-paging>
                                                 <dxo-editing mode="cell" [allowUpdating]="true">
@@ -198,6 +227,27 @@
                                                     dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
                                                     alignment="center" backgroundcolor="#000">
                                                 </dxi-column>
+                                            </dx-data-grid> -->
+                                            <dx-data-grid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                                <!-- <dxo-selection mode="single"></dxo-selection> -->
+                                                <dxo-paging [enabled]="false"></dxo-paging>
+                                                <dxo-editing mode="cell" [allowUpdating]="true">
+                                                </dxo-editing>
+                                                <dxo-selection mode="multiple"></dxo-selection>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxi-column dataField="Division" dataType="Division"></dxi-column>
+                                                <dxi-column dataField="Type" caption="Type"></dxi-column>
+                                                <dxi-column dataField="Pcs" caption="Pcs"></dxi-column>
+                                                <dxi-column dataField="Weight" caption="Weight"></dxi-column>
+                                                <dxi-column dataField="Amount" caption="Amount"></dxi-column>
+                                                <dxo-summary>
+                                                    <dxi-total-item column="Pcs">
+                                                    </dxi-total-item>
+                                                    <dxi-total-item column="Weight">
+                                                    </dxi-total-item>
+                                                    <dxi-total-item column="Amount">
+                                                    </dxi-total-item>
+                                                </dxo-summary>
                                             </dx-data-grid>
                                         </div>
                                     </div>
@@ -237,7 +287,7 @@
             </div>
             <div class="col-md-4">
                 <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
-                    <mat-tab label="Scrap Purchase                    Summary">
+                    <mat-tab label="Scrap Purchase Summary">
                         <div class="row my-3">
                             <!-- <label for="inputPassword" class="col-sm-12 text-center col-form-label"></label> -->
                             <div class="col-md-12">
@@ -262,7 +312,39 @@
             <div class="col-md-6">
                 <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
                     <mat-tab label="POS Salesman Details">
-
+                        <div class="row my-3">
+                            <div class="col-md-12">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <!-- <dxo-column-chooser [enabled]="true"></dxo-column-chooser> -->
+                                    <dxi-column  [width]="100" dataField="Salesman">
+                                     </dxi-column>
+                                    <dxi-column  [width]="100" dataField="#Dos"> </dxi-column>
+                                    <dxi-column  [width]="100" caption="Metal">
+                                        <dxi-column [width]="100" caption="Qty" dataField="Metal_Qty">
+                                        </dxi-column>
+                                        <dxi-column [width]="100" caption="Mkg Amount" dataField="Metal_Mkg_Amount">
+                                        </dxi-column>
+                                        <dxi-column [width]="100" caption="Metal Amount" dataField="Metal_Amount">
+                                        </dxi-column>
+                                        <dxi-column [width]="100" caption="Total" dataField="Metal_Total">
+                                        </dxi-column>
+                                        <dxi-column [width]="100" caption="Making" dataField="Metal_Making">
+                                        </dxi-column>
+                                        <dxi-column [width]="100" caption="Metal" dataField="Metal_Metal">
+                                        </dxi-column>
+                                    </dxi-column>
+                                    <dxi-column  [width]="100" caption="Diamond & Others">
+                                        <dxi-column [width]="100" caption="Qty/Pcs" dataField="Metal_Qty_pcs">
+                                        </dxi-column>
+                                        <dxi-column [width]="100" caption="Amount" dataField="Amount">
+                                        </dxi-column>
+                                        <dxi-column [width]="100" caption="Cost" dataField="Cost">
+                                        </dxi-column>
+                                    </dxi-column>
+                                    <dxi-column  [width]="100" dataField="Profit"> </dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </div>
                     </mat-tab>
                     <mat-tab label="Salesman wise summary">
                         <div class="row my-3">

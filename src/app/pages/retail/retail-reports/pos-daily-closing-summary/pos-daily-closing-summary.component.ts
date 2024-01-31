@@ -19,6 +19,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   columnheadReceipt:any[] = ['Rcvd.In',' Amount'];
   columnheadScrap:any[] = ['Item Code','Gross Wt',' Amount'];
   columnheadSales:any[] = ['Salesman','#Docs','Tot Amount','Gold','Dia & Others','Mkg.Value'];
+  columnheadSalesManDetails:any[] = ['Sales Man','#Dos',]
  
   divisionMS: any = 'ID';
   metalOptions = [
@@ -42,10 +43,12 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     { value: 'Sales', label: 'Sales' },
     { value: 'Sales Returns', label: 'Sales Returns' },
     { value: 'Net Sales', label: 'Net Sales' },
-
   ]
 
   posDailyClosingSummaryForm: FormGroup = this.formBuilder.group({
+    transactionType:[''],
+    metalType:[''],
+    diamondType:[''],
     fromDate:[new Date()],
     toDate:[new Date()],
   })

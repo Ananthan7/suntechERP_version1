@@ -1,9 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
@@ -18,19 +18,20 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   branchOptions:any[] =[];
-  salesManPdf : string = '';
-  fromDatePdf : string = '';
-  toDatePdf : string = '';
-
-
+  branchCode?: String;
+  // selected = 'all';
+  selectedBranchCode = this.branchCode
+  selected: string = 'all'; 
+  selectedReport:string ='preview'
+  public modeselect = this.branchCode;
   retailAdvanceReceiptRegisterForm: FormGroup = this.formBuilder.group({
     branch : [''],
-    show : [''],
-    fromDate : [''],
-    toDate : [''],
+    show : ['all'],
+    fromDate : [new Date()],
+    toDate : [new Date()],
     salesman : [''],
     salesmanCode : [''],
-    reportTo : ['']
+    reportTo : ['preview']
   })
 
   salesmanCodeData: MasterSearchModel = {
@@ -59,11 +60,14 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
-    private http: HttpClient,
     private dataService: SuntechAPIService,
+    private datePipe: DatePipe,
+    private comService: CommonServiceService,
+
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
     
     const apiUrl = '/UseBranchNetMaster/ADMIN';
   
@@ -77,11 +81,8 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   }
 
   savePdf() {
-    
-    this.salesManPdf =this.retailAdvanceReceiptRegisterForm.value.salesman;
-    this.fromDatePdf =this.retailAdvanceReceiptRegisterForm.value.fromDate;
-    this.toDatePdf =this.retailAdvanceReceiptRegisterForm.value.toDate;
-    console.log(this.salesManPdf);
+       
+    console.log(this.retailAdvanceReceiptRegisterForm.value.branch);
     
     const printContent: any = document.getElementById('pdf_container');
     var WindowPrt: any = window.open(
