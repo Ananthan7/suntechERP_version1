@@ -23,6 +23,9 @@ export class ApprovalMasterComponent implements OnInit {
   checkBoxesMode: string;
   isdiabled: boolean = true
   private subscriptions: Subscription[] = [];
+  viewMode: boolean = false;
+
+
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -54,10 +57,14 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.content);
-    if (this.content) {
-      this.setFormValues()
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setFormValues();
+      // this.processMasterForm();
+    } else if (this.content.FLAG == 'EDIT') {
+      this.setFormValues();
     }
+    console.log(this.content);
   }
   setFormValues() {
     if (!this.content) return
@@ -145,6 +152,7 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   adddata() {
+    
     if (this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "") {
       let length = this.tableData.length;
 
