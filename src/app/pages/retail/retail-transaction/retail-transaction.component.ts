@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { NewPosEntryComponent } from './new-pos-entry/new-pos-entry.component';
@@ -16,8 +16,9 @@ import { SalesEstimationComponent } from './sales-estimation/sales-estimation.co
 import { PointOfSalesOrderComponent } from './point-of-sales-order/point-of-sales-order.component';
 import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-direct.component';
 import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { map, pairwise, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -35,18 +36,18 @@ export class RetailTransactionComponent implements OnInit {
   private componentDbList: any = {}
   componentName: any;
 
-  reasonLookup: MasterSearchModel =
-  {
-   PAGENO: 1,
-   RECORDS: 10,
-   LOOKUPID: 10,
-   SEARCH_FIELD: "DESCRIPTION",
-   SEARCH_HEADING: "Reason",
-   SEARCH_VALUE: "",
-   WHERECONDITION: "DESCRIPTION<> ''",
-   VIEW_INPUT: true,
-   VIEW_TABLE: true,
- };
+  //   reasonLookup: MasterSearchModel =
+  //   {
+  //    PAGENO: 1,
+  //    RECORDS: 10,
+  //    LOOKUPID: 10,
+  //    SEARCH_FIELD: "DESCRIPTION",
+  //    SEARCH_HEADING: "Reason",
+  //    SEARCH_VALUE: "",
+  //    WHERECONDITION: "DESCRIPTION<> ''",
+  //    VIEW_INPUT: true,
+  //    VIEW_TABLE: true,
+  //  };
 
   @ViewChild('userAuthModal')
   public userAuthModal!: NgbModal;
@@ -55,9 +56,13 @@ export class RetailTransactionComponent implements OnInit {
   authForm: FormGroup = this.formBuilder.group({
     // username: [localStorage.getItem('username'), Validators.required],
     password: ['', Validators.required],
-    reason: ['', Validators.required],
+    // reason: ['', Validators.required],
+    reason: ['', [ this.autoCompleteValidator(() => this.reasonMaster, 'CODE')]],
     description: ['', Validators.required],
   });
+
+  reasonMaster: any = [];
+  reasonMasterOptions!: Observable<any[]>;
 
   constructor(
     private CommonService: CommonServiceService,
@@ -78,6 +83,9 @@ export class RetailTransactionComponent implements OnInit {
       this.openModalView()
       localStorage.removeItem('AddNewFlag')
     }
+
+        this.getReasonMasters();
+
   }
 
 
@@ -176,6 +184,10 @@ export class RetailTransactionComponent implements OnInit {
         }
       );
 
+      // if (this.modalService.hasOpenModals()) {
+      //     this.getReasonMasters();
+      // }
+
       this.modalReferenceUserAuth.result.then((result) => {
         if (result) {
           console.log("Result :", result);
@@ -202,6 +214,29 @@ export class RetailTransactionComponent implements OnInit {
     this.authForm.controls.description.setValue(e.DESCRIPTION);
   }
 
+
+  getReasonMasters() {
+    let API = `GeneralMaster/GetGeneralMasterList/reason%20master`
+    this.dataService.getDynamicAPI(API).
+      subscribe(data => {
+
+        if (data.status == "Success") {
+          this.reasonMaster = data.response;
+          this.reasonMasterOptions = this.authForm.controls.reason.valueChanges.pipe(
+            startWith(''),
+            map((value) =>
+            this._filterMasters(this.reasonMaster, value, 'CODE', 'DESCRIPTION')
+            )
+            );
+            console.log(this.reasonMasterOptions);
+        } else {
+          this.reasonMaster = [];
+        }
+
+      });
+
+  }
+
   submitAuth() {
     if (!this.authForm.invalid) {
       let API = 'ValidatePassword/ValidateEditDelete';
@@ -215,7 +250,7 @@ export class RetailTransactionComponent implements OnInit {
           this.modalReferenceUserAuth.close(true);
           this.authForm.controls.password.setValue(null);
         } else {
-          this.snackBar.open(resp.message, 'OK', {duration: 2000})
+          this.snackBar.open(resp.message, 'OK', { duration: 2000 })
         }
       });
 
@@ -225,4 +260,49 @@ export class RetailTransactionComponent implements OnInit {
     }
 
   }
+
+  changeReason(e: any){
+    console.log(e);
+    
+
+  }
+
+  private _filterMasters(
+    arrName: any,
+    value: string,
+    optVal1: any,
+    optVal2: any = null
+  ): any[] {
+    console.log(arrName, value);
+    
+    const filterValue = (value || '').toLowerCase();
+    return arrName.filter(
+      (option: any) =>
+        option[optVal1].toLowerCase().includes(filterValue) ||
+        option[optVal2].toLowerCase().includes(filterValue)
+    );
+  }
+
+
+  autoCompleteValidator(optionsProvider: any, field: any = null) {
+    return (control: AbstractControl) => {
+      const options = optionsProvider();
+      const inputValue = control.value;
+      if (!options || !Array.isArray(options)) {
+        return null;
+      }
+      if (field == null) {
+        if (control.value && options.length > 0 && !options.includes(control.value)) {
+          return { notInOptions: true };
+        }
+      } else {
+        if (inputValue && options.length > 0 && !options.some(option => option[field] === inputValue)) {
+          return { notInOptions: true };
+        }
+      }
+      return null;
+    };
+  }
+
+
 }

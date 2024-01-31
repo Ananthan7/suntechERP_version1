@@ -167,9 +167,9 @@ priceCodeSelected(e: any, controlName: string) {
         priceDescription: ['', [Validators.required]],
         price1: ['', [Validators.required]],
         price2: ['', [Validators.required]],
-        price3: ['', [Validators.required]],
-        price4: ['', [Validators.required]],
-        price5: ['', [Validators.required]]
+        price3: [''],
+        price4: [''],
+        price5: ['']
       })
     } catch (error) {
       console.error('Error in initializeForm:', error);

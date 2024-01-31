@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-sm-4 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="vocNo" />
+                                    <input type="text" matInput formControlName="vocNo" [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -182,8 +182,8 @@
                     <div class="row mt-3">
                         <div class="col-md-10">
                             <div class="row align-items-center">
-                                <label for="inputPassword" class="col-sm-2 col-form-label">Remarks:</label>
-                                <div class="col-md-2">
+                                <label for="inputPassword" class="col-sm-1 col-form-label">Remarks:</label>
+                                <div class="col-md-4">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput formControlName="remarks" />
                                     </mat-form-field>
