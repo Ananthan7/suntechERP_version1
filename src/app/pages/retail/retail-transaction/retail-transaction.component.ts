@@ -18,7 +18,7 @@ import { PosPurchaseDirectComponent } from './pos-purchase-direct/pos-purchase-d
 import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.component';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { map, pairwise, startWith } from 'rxjs/operators';
+import { map, pairwise, startWith, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -57,7 +57,7 @@ export class RetailTransactionComponent implements OnInit {
     // username: [localStorage.getItem('username'), Validators.required],
     password: ['', Validators.required],
     // reason: ['', Validators.required],
-    reason: ['', [ this.autoCompleteValidator(() => this.reasonMaster, 'CODE')]],
+    reason: ['', [this.autoCompleteValidator(() => this.reasonMaster, 'CODE')]],
     description: ['', Validators.required],
   });
 
@@ -84,7 +84,7 @@ export class RetailTransactionComponent implements OnInit {
       localStorage.removeItem('AddNewFlag')
     }
 
-        this.getReasonMasters();
+    this.getReasonMasters();
 
   }
 
@@ -225,10 +225,10 @@ export class RetailTransactionComponent implements OnInit {
           this.reasonMasterOptions = this.authForm.controls.reason.valueChanges.pipe(
             startWith(''),
             map((value) =>
-            this._filterMasters(this.reasonMaster, value, 'CODE', 'DESCRIPTION')
+              this._filterMasters(this.reasonMaster, value, 'CODE', 'DESCRIPTION')
             )
-            );
-            console.log(this.reasonMasterOptions);
+          );
+          console.log(this.reasonMasterOptions);
         } else {
           this.reasonMaster = [];
         }
@@ -261,9 +261,12 @@ export class RetailTransactionComponent implements OnInit {
 
   }
 
-  changeReason(e: any){
+  changeReason(e: any) {
     console.log(e);
-    
+    const res = this.reasonMaster.filter((data: any) => data.CODE == e.value)
+    let description = res.length > 0 ? res[0]['DESCRIPTION'] : '';
+    this.authForm.controls.description.setValue(description);
+
 
   }
 
@@ -273,8 +276,6 @@ export class RetailTransactionComponent implements OnInit {
     optVal1: any,
     optVal2: any = null
   ): any[] {
-    console.log(arrName, value);
-    
     const filterValue = (value || '').toLowerCase();
     return arrName.filter(
       (option: any) =>
