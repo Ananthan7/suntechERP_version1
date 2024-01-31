@@ -19,6 +19,7 @@ export class PricelistMasterComponent implements OnInit {
   subscriptions: any;
   currentDate: any = new Date();
   viewMode: boolean = false;
+  priceListMasterForm!: FormGroup;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -50,20 +51,8 @@ export class PricelistMasterComponent implements OnInit {
   ];
   isDisabled = false;
 
-  priceListMasterForm: FormGroup = this.formBuilder.group({
-    priceCode: ['', [Validators.required]],
-    description: ['', [Validators.required]],
-    priceMethod: ['', [Validators.required]],
-    priceSign: ['', [Validators.required]],
-    priceValue: [''],
-    finalPriceSign: ['', [Validators.required]],
-    finalPriceValue: ['', [Validators.required]],
-    addlValueSign: ['', [Validators.required]],
-    addlValue: ['', [Validators.required]],
-    priceRoundoff: [false],
-    dontCalculate: [false],
-    roundoff_digit: ['', [Validators.required]],
-  });
+ 
+ 
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -73,6 +62,21 @@ export class PricelistMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.priceListMasterForm = this.formBuilder.group({
+      priceCode: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      priceMethod: [0, [Validators.required]],
+      priceSign: ['', [Validators.required]],
+      priceValue: [''],
+      finalPriceSign: ['', [Validators.required]],
+      finalPriceValue: ['', [Validators.required]],
+      addlValueSign: ['', [Validators.required]],
+      addlValue: ['', [Validators.required]],
+      priceRoundoff: [false],
+      dontCalculate: [false],
+      roundoff_digit: [''],
+    });
     this.initializeForm();
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -195,7 +199,7 @@ export class PricelistMasterComponent implements OnInit {
       "ADDLVALUE": this.priceListMasterForm.value.addlValue,
       "ADDLVALUE_SIGN": this.priceListMasterForm.value.addlValueSign,
       "PRICE_ROUDOFF": this.priceListMasterForm.value.priceRoundoff,
-      "ROUNDOFF_DIGIT": this.priceListMasterForm.value.roundoff_digit,
+      "ROUNDOFF_DIGIT": this.priceListMasterForm.value.roundoff_digit || 0,
       "PRICE_FORMULA": "",
     };
   }
