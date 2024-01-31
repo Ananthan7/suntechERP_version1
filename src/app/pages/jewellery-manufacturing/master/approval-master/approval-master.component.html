@@ -183,7 +183,10 @@
                                                 style="text-align: right;"
                                                 [value]="data.value"
                                                 style="width: 100%;"
-                                                [disabled]="data.value == ''" />
+                                                [disabled]="data.value == ''" 
+                                                minlength="1"
+                                                maxlength="20"
+                                                pattern="[0-9]+"/>
                                         </div>
                                         <div
                                             *dxTemplate="let data of 'emailtemp'">

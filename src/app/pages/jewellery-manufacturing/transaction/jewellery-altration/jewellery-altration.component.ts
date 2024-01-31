@@ -65,6 +65,8 @@ export class JewelleryAltrationComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
+    this.setvalues()
   }
 
   costCodeSelected(e:any){
@@ -85,18 +87,27 @@ export class JewelleryAltrationComponent implements OnInit {
 
 
   jewelleryaltrationFrom: FormGroup = this.formBuilder.group({
-    voctype:['DJA',[Validators.required]],
-    vocno:['1',[Validators.required]],
+    voctype:['',[Validators.required]],
+    vocno:['',[Validators.required]],
    vocdate:[''],
-   metalrate:['18k'],
-   metalratetype:['177.000000'],
+   metalrate:[''],
+   metalratetype:[''],
    costcode:[''],
    lossaccount:[''],
    enteredby:[''],
-   itemcurrency:['AED'],
-   itemcurrencycc:['1.000000'],
+   itemcurrency:[''],
+   itemcurrencycc:[''],
    narration:[''],
   });
+
+  setvalues(){
+    this.jewelleryaltrationFrom.controls.voctype.setValue('DJA')
+    this.jewelleryaltrationFrom.controls.vocno.setValue('1')
+    this.jewelleryaltrationFrom.controls.metalrate.setValue('18k')
+    this.jewelleryaltrationFrom.controls.metalratetype.setValue('177.000000')
+    this.jewelleryaltrationFrom.controls.itemcurrency.setValue('AED')
+    this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue('1.000000')
+  }
 
 
   openjewelleryaltrationdetails() {

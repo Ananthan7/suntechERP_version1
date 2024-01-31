@@ -43,6 +43,8 @@ export class StoneCostUpdationComponent implements OnInit {
   ngOnInit(): void {
    this.branchCode = this.commonService.branchCode;
    this.yearMonth = this.commonService.yearSelected;
+
+   this.setvalues()
   }
 
 
@@ -67,14 +69,16 @@ export class StoneCostUpdationComponent implements OnInit {
   }
 
   stonecostupdationFrom: FormGroup = this.formBuilder.group({
-    voctype: ['CST', [Validators.required]],
-    vocdate: [new Date(), [Validators.required]],
-    vocno: ['1', [Validators.required]],
+    voctype: ['', [Validators.required]],
+    vocdate: [ [Validators.required]],
+    vocno: ['', [Validators.required]],
+    stockcodediv: ['', [Validators.required]],
     stockcode: ['', [Validators.required]],
-    itemcurrency: ['AED', [Validators.required]],
-    itemcurrency_rate: ['1.000000', [Validators.required]],
-    basecurrency: ['AED', [Validators.required]],
-    basecurrency_rate: ['1.000000', [Validators.required]],
+    stockcodedes: ['', [Validators.required]],
+    itemcurrency: ['', [Validators.required]],
+    itemcurrency_rate: ['', [Validators.required]],
+    basecurrency: ['', [Validators.required]],
+    basecurrency_rate: ['', [Validators.required]],
     currentrate_FC: ['', [Validators.required]],
     currentrate_LC: ['', [Validators.required]],
     newrate_FC: ['', [Validators.required]],
@@ -86,9 +90,20 @@ export class StoneCostUpdationComponent implements OnInit {
     clarity: ['', [Validators.required]],
     sieve_set: ['', [Validators.required]],
     remarks: ['', [Validators.required]],
-    valueTarget:['1'],
+    valueTarget:[''],
     text:[false],
   });
+
+  setvalues(){
+    this.stonecostupdationFrom.controls.voctype.setValue('CST')
+    this.stonecostupdationFrom.controls.vocno.setValue('1')
+    this.stonecostupdationFrom.controls.vocdate.setValue(new Date())
+    this.stonecostupdationFrom.controls.itemcurrency.setValue('AED')
+    this.stonecostupdationFrom.controls.itemcurrency_rate.setValue('1.000000')
+    this.stonecostupdationFrom.controls.basecurrency.setValue('AED')
+    this.stonecostupdationFrom.controls.basecurrency_rate.setValue('1.000000')
+    this.stonecostupdationFrom.controls.valueTarget.setValue('1')
+  }
 
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -103,7 +118,9 @@ export class StoneCostUpdationComponent implements OnInit {
   };
   stockcodeSelected(value: any) {
     console.log(value);
+    this.stonecostupdationFrom.controls.stockcodediv.setValue(value.DIVISION_CODE);
     this.stonecostupdationFrom.controls.stockcode.setValue(value.STOCK_CODE);
+    this.stonecostupdationFrom.controls.stockcodedes.setValue(value.DESCRIPTION);
   }
 
   itemcurrencyCodeData: MasterSearchModel = {

@@ -44,7 +44,7 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Voc Number * :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput step="0.001" min="0" maxlength="4" formControlName="vocno" />
+                  <input type="number" matInput step="0.001" min="0" maxlength="4" formControlName="vocno" [dir]="'rtl'" style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -129,7 +129,7 @@
                     <dxi-column dataField="SRNO" caption="SI No"> </dxi-column>
                     <dxi-column dataField="job_number" caption="Job Number" cellTemplate="jobNumbertemp">
                     </dxi-column>
-                    <dxi-column dataField="job_description" caption="Design" cellTemplate="designtemp">
+                    <dxi-column dataField="design" caption="Design" cellTemplate="designtemp">
                     </dxi-column>
                     <dxi-column dataField="Party" caption="Party" cellTemplate="partytemp"> </dxi-column>
                     <dxi-column dataField="So" caption="S.O " cellTemplate="Sotemp">
@@ -157,7 +157,7 @@
 
                   <div *dxTemplate="let data of 'designtemp'">
 
-                    <input type="text" (change)="designtextevent($event,data)"  />
+                    <input type="text" [value]="data.value" (change)="designtextevent($event,data)" [attr.readonly]= "isReadOnly"  />
                   </div>
 
                   <div *dxTemplate="let data of 'partytemp'">
@@ -175,19 +175,19 @@
                     <input type="date" (change)="DelDatetextevent($event,data)"  />
                   </div>
                   <div *dxTemplate="let data of 'GrossWttemp'">
-                    <input type="text" (change)="GrossWttextevent($event,data)" />
+                    <input type="number" (change)="GrossWttextevent($event,data)" [dir]="'rtl'" style="text-align: right;" />
                   </div>
                   <div *dxTemplate="let data of 'MetalWttemp'">
-                    <input type="text" (change)="MetalWttextevent($event,data)"/>
+                    <input type="number" (change)="MetalWttextevent($event,data)" [dir]="'rtl'" style="text-align: right;" />
                   </div>
                   <div *dxTemplate="let data of 'StoneWttemp'">
-                    <input type="text" (change)="StoneWttextevent($event,data)"  />
+                    <input type="number" (change)="StoneWttextevent($event,data)" [dir]="'rtl'" style="text-align: right;"  />
                   </div>
                   <div *dxTemplate="let data of 'OrdPcstemp'">
-                    <input type="text" (change)="OrderPcstextevent($event,data)"  />
+                    <input type="number" (change)="OrderPcstextevent($event,data)" [dir]="'rtl'" style="text-align: right;" />
                   </div>
                   <div *dxTemplate="let data of 'IssuePcstemp'">
-                    <input type="text" (change)="IssuePcstextevent($event,data)" />
+                    <input type="number" (change)="IssuePcstextevent($event,data)" [dir]="'rtl'" style="text-align: right;" />
                   </div>
                 </dx-data-grid>
 
