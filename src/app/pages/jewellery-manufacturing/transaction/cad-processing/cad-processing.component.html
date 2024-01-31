@@ -191,7 +191,26 @@
                                         </dxo-editing>
                                         <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
                                         <dxi-column dataField="Division" caption="Division"></dxi-column>
-                                        <dxi-column dataField="StoneType" caption="Stone Type"></dxi-column>
+                                        <dxi-column dataField="StoneType" caption="Stone Type" cellTemplate="stonetypetemp"></dxi-column>
+                                       <!-- stonetype search starts -->
+                                       <div
+                                       *dxTemplate="let data of 'stoneType'">
+                                       <div
+                                           (mouseenter)="onHoverstoneType(data)"
+                                           class="d-flex justify-content-between">
+                                           <div>
+                                               <a
+                                                   href="javascript:void(0)"
+                                                   class="mx-1"
+                                                   [innerHTML]="data.value"></a>
+                                           </div>
+                                           <master-search
+                                               *ngIf="data.data.DIVCODE != 'G'"
+                                               [MasterSearchData]="generalMaster"
+                                               (newRowClick)="stoneTypeSelected($event,data)">
+                                           </master-search>
+                                       </div>
+                                   </div>
                                         <dxi-column dataField="StockCode" caption="Stock Code"></dxi-column>
                                         <dxi-column dataField="Karat" caption="Karat"></dxi-column>
                                         <dxi-column dataField="Color" caption="Color"></dxi-column>
