@@ -155,7 +155,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
-      this.processMasterForm.disable();
+      // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
     }
@@ -255,8 +255,10 @@ export class ProcessMasterComponent implements OnInit {
       // "MAX_TIME": this.commonService.timeToMinutes(this.processMasterForm.value.max_time),
       "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
       "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
-      "STD_TIME": this.commonService.emptyToZero(this.processMasterForm.value.stand_time),
-      "MAX_TIME": this.commonService.emptyToZero(this.processMasterForm.value.max_time),
+      // "STD_TIME": this.commonService.timeToMinutes(this.processMasterForm.value.stand_time),
+      // "MAX_TIME": this.commonService.timeToMinutes(this.processMasterForm.value.max_time),
+      "STD_TIME": this.processMasterForm.value.stand_time || 0,
+      "MAX_TIME": this.processMasterForm.value.max_time || 0,
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -405,12 +407,12 @@ export class ProcessMasterComponent implements OnInit {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.toUpperCase(),
       "DESCRIPTION": this.processMasterForm.value.toUpperCase(),
-      "STD_TIME": this.commonService.emptyToZero(this.processMasterForm.value.stand_time),
-      "MAX_TIME": this.commonService.emptyToZero(this.processMasterForm.value.max_time),
+      // "STD_TIME": this.commonService.emptyToZero(this.processMasterForm.value.stand_time),
+      // "MAX_TIME": this.commonService.emptyToZero(this.processMasterForm.value.max_time),
       // "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
       // "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
-      // "STD_TIME": this.processMasterForm.value.stand_time || 0,
-      // "MAX_TIME": this.processMasterForm.value.max_time || 0,
+      "STD_TIME": this.processMasterForm.value.stand_time || "",
+      "MAX_TIME": this.processMasterForm.value.max_time || "",
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
