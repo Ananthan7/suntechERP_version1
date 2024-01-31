@@ -61,7 +61,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Category type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "types = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -93,7 +93,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type',
+    SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -139,11 +139,11 @@ export class ComponentMasterComponent implements OnInit {
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 33,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SHAPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -159,7 +159,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Setting Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SETTING MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
