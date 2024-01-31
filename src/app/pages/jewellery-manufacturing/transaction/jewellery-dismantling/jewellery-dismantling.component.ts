@@ -63,6 +63,8 @@ export class JewelleryDismantlingComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
+    this.setvalues()
   }
 
   userDataSelected(value: any) {
@@ -93,9 +95,9 @@ export class JewelleryDismantlingComponent implements OnInit {
   }
 
  jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
-   voctype:['MDM',[Validators.required]],
-   vocno:['1',[Validators.required]],
-   vocdate:[new Date(),[Validators.required]],
+   voctype:['',[Validators.required]],
+   vocno:['',[Validators.required]],
+   vocdate:[,[Validators.required]],
    enteredby:[''],
    lossaccount:[''],
    itemcurrency:[''],
@@ -119,6 +121,12 @@ export class JewelleryDismantlingComponent implements OnInit {
    miscCode : [''],
    labTotal : [''],
   });
+
+  setvalues(){
+    this.jewellerydismantlingFrom.controls.voctype.setValue('MDM')
+    this.jewellerydismantlingFrom.controls.vocno.setValue('1')
+    this.jewellerydismantlingFrom.controls.vocdate.setValue(new Date())
+  }
 
 
   formSubmit(){

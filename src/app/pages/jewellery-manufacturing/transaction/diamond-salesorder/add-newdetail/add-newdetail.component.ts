@@ -565,7 +565,7 @@ export class AddNewdetailComponent implements OnInit {
     // 'GetDesignStnmtlDetailNet'
     if (event.target.value == '') return
     this.reset() //reset all data
-    this.snackBar.open('Loading...')
+    //this.snackBar.open('Loading...')
     
     let postData = {
       "SPID": "003",

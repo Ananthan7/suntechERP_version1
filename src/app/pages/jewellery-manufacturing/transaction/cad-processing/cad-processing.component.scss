@@ -37,3 +37,32 @@
     z-index: 1070 !important;
   }
 }
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  // display: inline-block;
+  // text-align: center;
+  padding-left: 77px;
+}
+
+.upload-btn-wrapper 
+.btnnew {
+  color: white;
+  border-radius: 5px;
+  font-size: 14px;
+  background: #34a4dc;
+  border-color: transparent;
+  padding: 2px 15px;
+  margin-left: 45px;
+}
+
+.upload-btn-wrapper 
+.uploadproduct {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  font-size: 100px;
+  cursor: pointer;
+}

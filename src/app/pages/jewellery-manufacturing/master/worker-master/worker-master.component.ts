@@ -21,13 +21,15 @@ export class WorkerMasterComponent implements OnInit {
   showFilterRow!: boolean;
   buttonField: boolean = true;
   viewMode: boolean = false;
+  isViewMode: boolean = false;
   showHeaderFilter!: boolean;
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Process Code', 'Description'];
   selectedProcessArr: any[] = [];
   selectedKey: number[] = []
   private subscriptions: Subscription[] = [];
-
+  readonlyMode: boolean = false;
+  
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -95,14 +97,16 @@ export class WorkerMasterComponent implements OnInit {
     }
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
+      this.isViewMode = true;
       this.setFormValues();
-      this.selectProcessMasterList()
+      this.selectProcessMasterList();
     } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
       this.setFormValues();
-      this.selectProcessMasterList()
+       this.selectProcessMasterList()
     }
   }
+
 
  
   setInitialValues() {
