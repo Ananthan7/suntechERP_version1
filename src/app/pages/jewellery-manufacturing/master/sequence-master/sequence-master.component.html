@@ -22,15 +22,16 @@
                                 Code * :</label>
                             <mat-form-field style="width: 20%">
                                 <input type="text" matInput placeholder="Code"
-                                    maxlength="6"
+                                    maxlength="6" FocusOnLoad
                                     formControlName="sequenceCode"
+                                    [readonly]="viewMode"
                                     oninput="this.value = this.value.toUpperCase()"
                                     (focusout)="checkSequenceExists()" />
                             </mat-form-field>
                             <mat-form-field
                                 style="width: 40%; margin-left: 7px;">
                                 <input type="text" matInput
-                                    placeholder="Description"
+                                    placeholder="Description" [readonly]="viewMode"
                                     formControlName="sequenceDESCRIPTION"
                                     oninput="this.value = this.value.toUpperCase()" />
                             </mat-form-field>
@@ -44,7 +45,8 @@
                                 class="col-sm-4 col-form-label">
                                 Prefix :</label>
                             <mat-form-field style="width: 150px">
-                                <input type="text" matInput
+                                <input type="text" matInput readonly
+                                    [readonly]="viewMode"
                                     placeholder="Prefix Code" maxlength="6"
                                     (change)="PrefixCodeChange($event)"
                                     formControlName="sequencePrefixCode" />
@@ -85,7 +87,8 @@
                                         (change)="oncalculateChange($event)" /></th>
                                 <th scope="col">No</th>
                                 <th scope="col">Process</th>
-                                <th scope="col">Description</th>
+                                <th scope="col"
+                                    style="width: 300px;">Description</th>
                                 <th scope="col">WIP AC</th>
                                 <th scope="col">Gain A/c</th>
                                 <th scope="col">Lab A/c</th>
@@ -100,60 +103,109 @@
                         <tbody>
                             <tr cdkDrag class="drag-item"
                                 *ngFor="let data of dataSource;let i=index">
-                                <td><input type="checkbox" class="inputSec"
+                                <td>
+                                    <mat-checkbox class="inputSec" [disabled]="viewMode"
                                         [(ngModel)]="data['isChecked']"
-                                        (change)="changedCheckbox(data)" /></td>
-                                <td>{{i+1}}</td>
+                                        (change)="changedCheckbox(data)">
+                                    </mat-checkbox>
+                                </td>
+                                <td>{{data.SRNO}}</td>
                                 <td>
-                                    <input type="text" style="width: 100%;"
+                                    {{data['PROCESS_CODE']}}
+                                    <!-- <input type="text" style="width: 100%;"
                                         [value]="data['PROCESS_CODE']"
-                                        [attr.readonly]="isReadOnly" />
+                                        [attr.readonly]="isReadOnly" /> -->
+                                </td>
+                                <td style="width: 300px;">
+                                    {{data['DESCRIPTION']}}
                                 </td>
                                 <td>
-                                    <input type="text" style="width: 100%;"
-                                        [value]="data['DESCRIPTION']"
-                                        [attr.readonly]="isReadOnly" />
+                                    <div
+                                        class="d-flex justify-content-between">
+                                        <div>
+                                            <a
+                                                href="javascript:void(0)"
+                                                class="mx-1"
+                                                [innerHTML]="data.WIP_ACCODE"></a>
+                                        </div>
+                                        <master-search *ngIf="!viewMode"
+                                            [MasterSearchData]="accountMasterData"
+                                            (newRowClick)="wipAccodeSelected($event,data)">
+                                        </master-search>
+                                    </div>
                                 </td>
                                 <td>
-                                    <input type="text" style="width: 100%;"
-                                        [value]="data['WIP_ACCODE']" />
+                                    <!-- <input type="text" style="width: 100%;"
+                                        [value]="data['GAIN_ACCODE']" /> -->
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <a
+                                                href="javascript:void(0)"
+                                                class="mx-1"
+                                                [innerHTML]="data.GAIN_ACCODE"></a>
+                                        </div>
+                                        <master-search *ngIf="!viewMode"
+                                            [MasterSearchData]="accountMasterData"
+                                            (newRowClick)="gainAccodeSelected($event,data)">
+                                        </master-search>
+                                    </div>
                                 </td>
                                 <td>
-                                    <input type="text" style="width: 100%;"
-                                        [value]="data['GAIN_ACCODE']" />
+                                    <!-- <input type="text" style="width: 100%;"
+                                        [value]="data['LAB_ACCODE']" /> -->
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <a
+                                                href="javascript:void(0)"
+                                                class="mx-1"
+                                                [innerHTML]="data.LAB_ACCODE"></a>
+                                        </div>
+                                        <master-search *ngIf="!viewMode"
+                                            [MasterSearchData]="accountMasterData"
+                                            (newRowClick)="labAccodeSelected($event,data)">
+                                        </master-search>
+                                    </div>
                                 </td>
                                 <td>
-                                    <input type="text" style="width: 100%;"
-                                        [value]="data['LAB_ACCODE']" />
+                                    <!-- <input type="text" style="width: 100%;"
+                                        [value]="data['LOSS_ACCODE']" /> -->
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <a
+                                                href="javascript:void(0)"
+                                                class="mx-1"
+                                                [innerHTML]="data.LOSS_ACCODE"></a>
+                                        </div>
+                                        <master-search *ngIf="!viewMode"
+                                            [MasterSearchData]="accountMasterData"
+                                            (newRowClick)="lossAccodeSelected($event,data)">
+                                        </master-search>
+                                    </div>
                                 </td>
                                 <td>
-                                    <input type="text" style="width: 100%;"
-                                        [value]="data['LOSS_ACCODE']" />
-                                </td>
-                                <td>
-                                    <input type="number" style="width: 100%;"
+                                    <input type="number"
                                         [value]="data['STD_LOSS']"
-                                        pattern="\d{3}\.\d{2}\.\d{3}"
-                                        [dir]="'rtl'"
-                                        style="text-align: right;" />
+                                        MetalDecimalInput [readonly]="viewMode"
+                                        style="text-align: right; width: 86px;" />
                                 </td>
                                 <td>
-                                    <input type="number" style="width: 100%;"
+                                    <input type="number"
                                         [value]="data['MAX_LOSS']"
-                                        pattern="\d{3}\.\d{2}\.\d{3}"
-                                        [dir]="'rtl'"
-                                        style="text-align: right;" />
+                                        MetalDecimalInput [readonly]="viewMode"
+                                        style="text-align: right;width: 86px;" />
                                 </td>
                                 <td>
                                     <input type="time" style="width: 100%;"
-                                        [value]="data['STDTIME']" step="2" />
+                                        [readonly]="viewMode"
+                                        [value]="data['STD_TIME']" step="2" />
                                 </td>
                                 <td>
-                                    <input type="time" style="width: 100%;"
-                                        [value]="data['MAXTIME']" step="2" />
+                                    <input type="time" [readonly]="viewMode"
+                                        style="width: 100%;"
+                                        [value]="data['MAX_TIME']" step="2" />
                                 </td>
                                 <td>
-                                    <input type="checkbox"
+                                    <input type="checkbox" [readonly]="viewMode"
                                         [value]="data['TIMEON_PROCESS']"
                                         [disabled]="isdisabled" />
                                 </td>

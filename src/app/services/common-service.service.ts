@@ -245,6 +245,11 @@ export class CommonServiceService {
       timeOut: 3000,
     })
   }
+  toastInfoByMsgId(MsgId: string, Description?: string) {
+    this.toastr.info(this.getMsgByID(MsgId), Description ? Description : '', {
+      timeOut: 3000,
+    })
+  }
   validateNotEmpty(value: string, errorMessageId: string): boolean {
     if (!value || value == '') {
       this.toastErrorByMsgId(errorMessageId);

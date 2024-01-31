@@ -182,6 +182,7 @@ export class AlloyMasterComponent implements OnInit {
     WHERECONDITION: "types = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
   subcategoryCodeData: MasterSearchModel = {
@@ -275,38 +276,38 @@ export class AlloyMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   priceCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price.setValue(e.PREFIX_CODE);
   }
 
   subcategoryCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.subCategory.setValue(e.CODE);
   }
 
   brandCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.brand.setValue(e.CODE);
   }
 
   colorDataSelected(data: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.color.setValue(data.CODE)
   }
 
 
   vendorCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.vendor.setValue(e.COUNT);
   }
 
   typeCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.type.setValue(e.CODE);
   }
 
   categoryCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.category.setValue(e.CODE);
   }
 
@@ -338,7 +339,7 @@ export class AlloyMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  checkStockCode(): boolean{
+  checkStockCode(): boolean {
     if (this.alloyMastereForm.value.code == '') {
       this.commonService.toastErrorByMsgId('please enter stockcode')
       return true
@@ -346,7 +347,7 @@ export class AlloyMasterComponent implements OnInit {
     return false
   }
   priceSchemeValidate(e: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)
     let API = 'PriceSchemeMaster/GetPriceSchemeMasterList/' + this.alloyMastereForm.value.priceScheme
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -367,34 +368,63 @@ export class AlloyMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   costCenterSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.costCenter.setValue(e.COST_CODE);
 
   }
-
+  /** checking for same account code selection */
+  private isSamepriceCodeSelected(PRICE_CODE: any): boolean {
+    return (
+      this.alloyMastereForm.value.price1code === PRICE_CODE ||
+      this.alloyMastereForm.value.price2code === PRICE_CODE ||
+      this.alloyMastereForm.value.price3code === PRICE_CODE ||
+      this.alloyMastereForm.value.price4code === PRICE_CODE ||
+      this.alloyMastereForm.value.price5code === PRICE_CODE
+    );
+  }
   priceOneCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.checkStockCode()) return
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
     this.alloyMastereForm.controls.price1code.setValue(e.PRICE_CODE);
 
   }
 
   priceTwoCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price2code.setValue(e.PRICE_CODE);
   }
 
   priceThreeCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price3code.setValue(e.PRICE_CODE);
   }
 
   priceFourCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price4code.setValue(e.PRICE_CODE);
 
   }
   priceFiveCodeSelected(e: any) {
-    if(this.checkStockCode()) return
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+    if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price5code.setValue(e.PRICE_CODE);
   }
 
@@ -408,7 +438,7 @@ export class AlloyMasterComponent implements OnInit {
     console.log(this.content);
 
   }
-  setPostData(){
+  setPostData() {
     let postData = {
       ITEM: this.alloyMastereForm.value.itemcode || "",
       STOCK_CODE: "md3",
@@ -832,7 +862,7 @@ export class AlloyMasterComponent implements OnInit {
     }
 
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, this.setPostData())
       .subscribe((result) => {
         if (result.response) {
@@ -859,7 +889,7 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   updateMeltingType() {
-    let API = 'DiamondStockMaster/UpdateDiamondStockMaster/'+ this.alloyMastereForm.value.code;
+    let API = 'DiamondStockMaster/UpdateDiamondStockMaster/' + this.alloyMastereForm.value.code;
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, this.setPostData())
       .subscribe((result) => {
