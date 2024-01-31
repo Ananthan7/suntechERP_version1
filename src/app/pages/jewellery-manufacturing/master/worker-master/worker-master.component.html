@@ -218,9 +218,10 @@
                             height="400px" [dataSource]="tableData"
                             [showRowLines]="true"
                             keyExpr="SRNO"
+                       
                             [selectedRowKeys]="selectedKey"
                             (onSelectionChanged)="changedCheckbox($event)"
-                            [showBorders]="true">
+                            [showBorders]="true" >
                             <!-- <dxo-filter-row [visible]="showFilterRow"
                                 [applyFilter]="currentFilter"></dxo-filter-row>
                             <dxo-header-filter
@@ -229,7 +230,7 @@
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing> -->
-                            <dxo-selection mode="multiple"></dxo-selection>
+                            <dxo-selection mode="multiple" [showCheckBoxesMode]="isViewMode ? 'never' : 'always'"></dxo-selection>
                             <!-- <dxi-column width="auto"
                                 cellTemplate="limitTemplate"
                                 alignment="right"></dxi-column>
@@ -239,7 +240,7 @@
                             </div> -->
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
                             <dxi-column dataField="SRNO" width="auto"
-                                caption="Sr No" [allowEditing]="true"
+                                caption="Sr No" 
                                 alignment="center">
                             </dxi-column>
                             <dxi-column dataField="PROCESS_CODE" width="auto"

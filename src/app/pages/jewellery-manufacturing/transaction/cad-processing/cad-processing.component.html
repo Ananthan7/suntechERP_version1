@@ -34,7 +34,7 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="vocNo" />
+                                        <input type="number" matInput formControlName="vocNo"  [dir]="'rtl'" style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -142,7 +142,7 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Sub Job Id : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="subJobId" />
+                                    <input type="number" matInput formControlName="subJobId"  [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -157,7 +157,9 @@
                     </div>
                     <div class="col-md-3">
                         <div class="icons">
-                            <div class="image_box"></div>
+                            <div class="image_box">
+                                <img src={{urls}} style="width:324px;height:151px">
+                            </div>
                             <div class="icons_footer">
                                 <i class="fas fa-step-backward icon-common"></i>
                                 <i class="fas fa-caret-right icon-common"></i>
@@ -167,10 +169,11 @@
                                 <i class="fas fa-plus icon-common"></i>
                             </div>
                         </div>
-                        <div class="p-2 bd-highlight text-right">
-                            <button type="button" class="btn btn-primary suntech-btn-primary ">
-                                Image
-                            </button>
+                        <div class="p-2 bd-highlight">
+                            <div class="upload-btn-wrapper">
+                                <button class="btn btnnew"> Image</button>
+                                <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" (change)="onFileChanged($event)">
+                            </div>
                         </div>
                     </div>
                 </div>

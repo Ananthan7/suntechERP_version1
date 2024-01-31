@@ -13,7 +13,7 @@
             <div class="container-fluid pt-3">
                 <div class="row mb-2">
                     <h6>{{branchCode}} - {{companyName}}</h6>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="row mb-1 ">
                             <label for="inputPassword" class="col-sm-5">Voc Type * :</label>
                             <div class="col-sm-4">
@@ -39,30 +39,30 @@
                             <label for="inputPassword" class="col-sm-5">Voc Number : </label>
                             <div class="col-sm-4 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="vocno" />
+                                    <input type="number" matInput formControlName="vocno"  [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <label for="inputPassword" class="col-sm-3">Stock Code : </label>
-                            <div class="col-sm-2 ">
-                                <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="stockcode" />
+                            <div class="col-sm-3 ">
+                                <mat-form-field style="width: 60%;">
+                                    <input type="text" matInput formControlName="stockcodediv" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockcodeSelected($event)">
                                 </master-search>
 
 
                             </div>
-                            <div class="col-sm-3 ">
+                            <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="stockcode" />
                                 </mat-form-field>
 
                             </div>
-                            <div class="col-sm-3 ">
+                            <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput formControlName="stockcodedes" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="number" matInput formControlName="itemcurrency_rate" />
+                                    <input type="number" matInput formControlName="itemcurrency_rate"  [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="number" matInput formControlName="basecurrency_rate" />
+                                    <input type="number" matInput formControlName="basecurrency_rate"  [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                         <div class="statusbox">
                         </div>
                     </div> -->
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="row mb-1 ">
                             <div class="col-sm-2 ">
                                 <!-- <div class="form-check form-switch ms-4">
@@ -145,7 +145,7 @@
                                         <input type="text" matInput />
                                     </mat-form-field>
 
-                                    <div class="form-check ">
+                                    <div class="form-check offset-6">
                                         <mat-radio-group aria-label="Select an option" formControlName="valueTarget">
                                             <mat-radio-button value="1" class="mx-2">By Value</mat-radio-button>
                                         </mat-radio-group>
@@ -171,7 +171,7 @@
                             <label for="inputPassword" class="col-sm-5">Current Rate FC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="currentrate_FC" />
+                                    <input type="number" matInput formControlName="currentrate_FC"  [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -179,7 +179,7 @@
                             <label for="inputPassword" class="col-sm-5">Current Rate LC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="currentrate_LC" />
+                                    <input type="number" matInput formControlName="currentrate_LC"  [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -190,7 +190,7 @@
                             <label for="inputPassword" class="col-sm-5">New Rate FC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="newrate_FC" />
+                                    <input type="number" matInput formControlName="newrate_FC"  [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -198,7 +198,7 @@
                             <label for="inputPassword" class="col-sm-5">New Rate LC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="newrate_LC" />
+                                    <input type="number" matInput formControlName="newrate_LC"  [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>

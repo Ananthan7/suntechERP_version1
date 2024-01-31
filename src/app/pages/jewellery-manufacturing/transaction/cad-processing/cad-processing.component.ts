@@ -34,6 +34,8 @@ export class CADProcessingComponent implements OnInit {
   table: any;
   status: boolean= true;
   selectedTabIndex = 0;
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
   // setAllInitialValues: any;
   constructor(
     private activeModal: NgbActiveModal,
@@ -132,6 +134,20 @@ export class CADProcessingComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
+  }
+
   setFormValues() {
     if (!this.content) return
     this.cadProcessingForm.controls.job_number.setValue(this.content.APPR_CODE)

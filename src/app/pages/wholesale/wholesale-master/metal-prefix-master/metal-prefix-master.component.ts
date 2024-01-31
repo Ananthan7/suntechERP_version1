@@ -16,7 +16,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class MetalPrefixMasterComponent implements OnInit {
   divisionMS: any = 'ID';
   subscriptions: any;
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
 
   constructor(
@@ -27,39 +27,50 @@ export class MetalPrefixMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) { }
- 
- 
-  ngOnInit(): void {
-  }
 
+
+  ngOnInit(): void {
+    this.setCompanyCurrency()
+  }
+  /**USE: to set currency from company parameter */
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.metalprefixForm.controls.currency.setValue(CURRENCY_CODE);
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
+    this.metalprefixForm.controls.currencyRate.setValue(
+      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+    );
+  }
   metalprefixForm: FormGroup = this.formBuilder.group({
-    prefixcode:[''],
-    prefixcodedes:[''],
-    lastno :['00000',''],
-    tagWt :[''],
-    branch:[''],
-    suffixcode:[''],
-    hsn:[''],
-    jobcardprefix:[''],
-    setrefprefix:[''],
-    schemeprefix:[''],
-    refinervprefix:[''],
-    designprefix:[''],
-    userdefined_1:[''],
-    userdefined_2:[''],
-    userdefined_3:[''],
-    userdefined_4:[''],
-    userdefined_5:[''],
-    userdefined_6:[''],
-    userdefined_7:[''],
-    userdefined_8:[''],
-    userdefined_9:[''],
-    userdefined_10:[''],
-    userdefined_11:[''],
-    userdefined_12:[''],
-    userdefined_13:[''],
-    userdefined_14:[''],
-    userdefined_15:[''],
+    prefixcode: [''],
+    prefixcodedes: [''],
+    currencyRate: [''],
+    currency: [''],
+    lastno: ['00000', ''],
+    tagWt: [''],
+    branch: [''],
+    suffixcode: [''],
+    hsn: [''],
+    jobcardprefix: [''],
+    setrefprefix: [''],
+    schemeprefix: [''],
+    refinervprefix: [''],
+    designprefix: [''],
+    userdefined_1: [''],
+    userdefined_2: [''],
+    userdefined_3: [''],
+    userdefined_4: [''],
+    userdefined_5: [''],
+    userdefined_6: [''],
+    userdefined_7: [''],
+    userdefined_8: [''],
+    userdefined_9: [''],
+    userdefined_10: [''],
+    userdefined_11: [''],
+    userdefined_12: [''],
+    userdefined_13: [''],
+    userdefined_14: [''],
+    userdefined_15: [''],
   })
 
   BranchCodeData: MasterSearchModel = {
@@ -73,7 +84,7 @@ export class MetalPrefixMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  branchCodeSelected(e:any){
+  branchCodeSelected(e: any) {
     console.log(e);
     this.metalprefixForm.controls.branch.setValue(e.BRANCH_CODE);
   }
@@ -89,7 +100,7 @@ export class MetalPrefixMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  HSNCenterSelected(e:any){
+  HSNCenterSelected(e: any) {
     console.log(e);
     this.metalprefixForm.controls.hsn.setValue(e.CODE);
   }
@@ -99,9 +110,9 @@ export class MetalPrefixMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -109,101 +120,24 @@ export class MetalPrefixMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'PrefixMaster/InsertPrefixMaster'
     let postData = {
-  "PREFIX_CODE": this.metalprefixForm.value.prefixcode || "",
-  "DESCRIPTION": this.metalprefixForm.value.prefixcodedes || "",
-  "LAST_NO": this.metalprefixForm.value.lastno || "",
-  "CURRENCY_CODE": "stri",
-  "CONV_RATE": 0,
-  "COST_CODE": "string",
-  "CATEGORY_CODE": "string",
-  "SUBCATEGORY_CODE": "string",
-  "BRAND_CODE": "string",
-  "TYPE_CODE": "string",
-  "COUNTRY_CODE": "string",
-  "MID": 0,
-  "DIVISION": "s",
-  "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
-  "PM_BRANCHCODE": "string",
-  "JOB_PREFIX": this.metalprefixForm.value.jobcardprefix || "",
-  "SETREF_PREFIX": this.metalprefixForm.value.setrefprefix || "",
-  "BRANCH_CODE": this.metalprefixForm.value.branch || "",
-  "BOIL_PREFIX": true,
-  "SCHEME_PREFIX": this.metalprefixForm.value.schemeprefix || "",
-  "UDF1": this.metalprefixForm.value.userdefined_1 || "",
-  "UDF2": this.metalprefixForm.value.userdefined_2 || "",
-  "UDF3": this.metalprefixForm.value.userdefined_3 || "",
-  "UDF4": this.metalprefixForm.value.userdefined_4 || "",
-  "UDF5": this.metalprefixForm.value.userdefined_5 || "",
-  "UDF6": this.metalprefixForm.value.userdefined_6 || "",
-  "UDF7": this.metalprefixForm.value.userdefined_7 || "",
-  "UDF8": this.metalprefixForm.value.userdefined_8 || "",
-  "UDF9": this.metalprefixForm.value.userdefined_9 || "",
-  "UDF10": this.metalprefixForm.value.userdefined_10 || "",
-  "UDF11": this.metalprefixForm.value.userdefined_11 || "",
-  "UDF12": this.metalprefixForm.value.userdefined_12 || "",
-  "UDF13": this.metalprefixForm.value.userdefined_13 || "",
-  "UDF14": this.metalprefixForm.value.userdefined_14 || "",
-  "UDF15": this.metalprefixForm.value.userdefined_15 || "",
-  "TAG_WT": this.metalprefixForm.value.tagWt || "",
-  "COMP_PREFIX": true,
-  "DESIGN_PREFIX": this.metalprefixForm.value.designprefix || "",
-  "REFINE_PREFIX":this.metalprefixForm.value.refinervprefix || "",
-  "SUBLEDGER_PREFIX": true,
-  "SUFFIX_CODE": this.metalprefixForm.value.suffixcode || "",
-  "HSN_CODE": this.metalprefixForm.value.hsn || "",
-    }
-  
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if(result.status == "Success"){
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.metalprefixForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
-  update(){
-    if (this.metalprefixForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-  
-    let API = 'PrefixMaster/UpdatePrefixMaster/'+ this.metalprefixForm.value.prefixcode
-    let postData = 
-    {
       "PREFIX_CODE": this.metalprefixForm.value.prefixcode || "",
       "DESCRIPTION": this.metalprefixForm.value.prefixcodedes || "",
       "LAST_NO": this.metalprefixForm.value.lastno || "",
-      "CURRENCY_CODE": "stri",
-      "CONV_RATE": 0,
-      "COST_CODE": "string",
-      "CATEGORY_CODE": "string",
-      "SUBCATEGORY_CODE": "string",
-      "BRAND_CODE": "string",
-      "TYPE_CODE": "string",
-      "COUNTRY_CODE": "string",
+      "CURRENCY_CODE": this.commonService.nullToString(this.metalprefixForm.value.currency),
+      "CONV_RATE": this.commonService.emptyToZero(this.metalprefixForm.value.currencyRate),
+      "COST_CODE": " ",
+      "CATEGORY_CODE": " ",
+      "SUBCATEGORY_CODE": " ",
+      "BRAND_CODE": " ",
+      "TYPE_CODE": " ",
+      "COUNTRY_CODE": " ",
       "MID": 0,
       "DIVISION": "s",
       "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
-      "PM_BRANCHCODE": "string",
+      "PM_BRANCHCODE": "",
       "JOB_PREFIX": this.metalprefixForm.value.jobcardprefix || "",
       "SETREF_PREFIX": this.metalprefixForm.value.setrefprefix || "",
       "BRANCH_CODE": this.metalprefixForm.value.branch || "",
@@ -227,18 +161,95 @@ export class MetalPrefixMasterComponent implements OnInit {
       "TAG_WT": this.metalprefixForm.value.tagWt || "",
       "COMP_PREFIX": true,
       "DESIGN_PREFIX": this.metalprefixForm.value.designprefix || "",
-      "REFINE_PREFIX":this.metalprefixForm.value.refinervprefix || "",
+      "REFINE_PREFIX": this.metalprefixForm.value.refinervprefix || "",
       "SUBLEDGER_PREFIX": true,
       "SUFFIX_CODE": this.metalprefixForm.value.suffixcode || "",
       "HSN_CODE": this.metalprefixForm.value.hsn || "",
-     
     }
-    
-  
+
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.metalprefixForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  update() {
+    if (this.metalprefixForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'PrefixMaster/UpdatePrefixMaster/' + this.metalprefixForm.value.prefixcode
+    let postData =
+    {
+      "PREFIX_CODE": this.metalprefixForm.value.prefixcode || "",
+      "DESCRIPTION": this.metalprefixForm.value.prefixcodedes || "",
+      "LAST_NO": this.metalprefixForm.value.lastno || "",
+      "CURRENCY_CODE": "",
+      "CONV_RATE": 0,
+      "COST_CODE": " ",
+      "CATEGORY_CODE": " ",
+      "SUBCATEGORY_CODE": " ",
+      "BRAND_CODE": " ",
+      "TYPE_CODE": " ",
+      "COUNTRY_CODE": " ",
+      "MID": 0,
+      "DIVISION": "s",
+      "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
+      "PM_BRANCHCODE": " ",
+      "JOB_PREFIX": this.metalprefixForm.value.jobcardprefix || "",
+      "SETREF_PREFIX": this.metalprefixForm.value.setrefprefix || "",
+      "BRANCH_CODE": this.metalprefixForm.value.branch || "",
+      "BOIL_PREFIX": true,
+      "SCHEME_PREFIX": this.metalprefixForm.value.schemeprefix || "",
+      "UDF1": this.metalprefixForm.value.userdefined_1 || "",
+      "UDF2": this.metalprefixForm.value.userdefined_2 || "",
+      "UDF3": this.metalprefixForm.value.userdefined_3 || "",
+      "UDF4": this.metalprefixForm.value.userdefined_4 || "",
+      "UDF5": this.metalprefixForm.value.userdefined_5 || "",
+      "UDF6": this.metalprefixForm.value.userdefined_6 || "",
+      "UDF7": this.metalprefixForm.value.userdefined_7 || "",
+      "UDF8": this.metalprefixForm.value.userdefined_8 || "",
+      "UDF9": this.metalprefixForm.value.userdefined_9 || "",
+      "UDF10": this.metalprefixForm.value.userdefined_10 || "",
+      "UDF11": this.metalprefixForm.value.userdefined_11 || "",
+      "UDF12": this.metalprefixForm.value.userdefined_12 || "",
+      "UDF13": this.metalprefixForm.value.userdefined_13 || "",
+      "UDF14": this.metalprefixForm.value.userdefined_14 || "",
+      "UDF15": this.metalprefixForm.value.userdefined_15 || "",
+      "TAG_WT": this.metalprefixForm.value.tagWt || "",
+      "COMP_PREFIX": true,
+      "DESIGN_PREFIX": this.metalprefixForm.value.designprefix || "",
+      "REFINE_PREFIX": this.metalprefixForm.value.refinervprefix || "",
+      "SUBLEDGER_PREFIX": true,
+      "SUFFIX_CODE": this.metalprefixForm.value.suffixcode || "",
+      "HSN_CODE": this.metalprefixForm.value.hsn || "",
+
+    }
+
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',

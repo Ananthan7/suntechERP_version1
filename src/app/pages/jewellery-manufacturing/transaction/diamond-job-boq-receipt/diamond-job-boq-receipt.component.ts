@@ -70,17 +70,17 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   ) { }
 
   diamondJobBoqReceipt: FormGroup = this.formBuilder.group({
-    vocDate:[new Date(),''],
-    voctype:['JBR'],
-    vocno:[1],
+    vocDate:[,''],
+    voctype:[''],
+    vocno:[''],
     enteredBy:[''],
     time:[''],
-    karigger:['ST0007'],
-    kariggerDesc:['Sertan, Turkey'],
-    currency:['AED'],
-    currencyDesc:['1.000000'],
-    baseCurrency:['AED'],
-    baseCurrencyDesc:['1.000000'],
+    karigger:[''],
+    kariggerDesc:[''],
+    currency:[''],
+    currencyDesc:[''],
+    baseCurrency:[''],
+    baseCurrencyDesc:[''],
     grossWt:[''],
     jobNumber:[''],
     designId:[''],
@@ -100,7 +100,22 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     }else if (this.content.FLAG == 'EDIT'){
       this.setFormValues();
     }
+    this.setvalue()
   }
+
+  setvalue(){
+    this.diamondJobBoqReceipt.controls.voctype.setValue('JBR')
+    this.diamondJobBoqReceipt.controls.vocno.setValue('1')
+    this.diamondJobBoqReceipt.controls.vocDate.setValue(new Date())
+    this.diamondJobBoqReceipt.controls.karigger.setValue('ST0007')
+    this.diamondJobBoqReceipt.controls.kariggerDesc.setValue('Sertan, Turkey')
+    this.diamondJobBoqReceipt.controls.currency.setValue('AED')
+    this.diamondJobBoqReceipt.controls.currencyDesc.setValue('1')
+    this.diamondJobBoqReceipt.controls.baseCurrency.setValue('AED')
+    this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue('1')
+  }
+
+
 
   close(data?: any) {
     //TODO reset forms and data before closing

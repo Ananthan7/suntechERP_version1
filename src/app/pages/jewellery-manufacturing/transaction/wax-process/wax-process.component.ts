@@ -21,6 +21,7 @@ export class WaxProcessComponent implements OnInit {
   @Input() content!: any;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
+  isReadOnly:boolean=true;
   vocMaxDate = new Date();
   currentDate = new Date();
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
@@ -132,39 +133,40 @@ export class WaxProcessComponent implements OnInit {
     console.log(value);
     console.log(data);
     this.tableData[value.data.SRNO - 1].job_number = data.job_number;
+    this.tableData[value.data.SRNO - 1].design = data.job_description;
   //   this.tableData[value.data.SRNO - 1].job_number = data.jobNumber;
    }
 
   designtextevent(data: any, value: any) {
-    // this.tableData[value.data.SRNO - 1].job_description = data.design;
+   this.tableData[value.data.SRNO - 1].design = data.job_description;
   }
 
   partytextevent(data: any, value: any) {
-  //   this.tableData[value.data.SRNO - 1].party = data.party;
+     this.tableData[value.data.SRNO - 1].party = data.party;
    }
 
   Sotextevent(data: any, value: any) {
-    // this.tableData[value.data.SRNO - 1].So = data.So;
+    this.tableData[value.data.SRNO - 1].So = data.So;
   }
 
   SoDatetextevent(data: any, value: any) {
-    // this.tableData[value.data.SRNO - 1].SoDate = data.SoDate;
+     this.tableData[value.data.SRNO - 1].SoDate = data.SoDate;
   }
 
   DelDatetextevent(data: any, value: any) {
-    // this.tableData[value.data.SRNO - 1].DelDate = data.DelDate;
+     this.tableData[value.data.SRNO - 1].DelDate = data.DelDate;
   }
 
   GrossWttextevent(data: any, value: any) {
-  //   this.tableData[value.data.SRNO - 1].GrossWt = data.GrossWt;
+   this.tableData[value.data.SRNO - 1].GrossWt = data.GrossWt;
    }
 
   MetalWttextevent(data: any, value: any) {
-    // this.tableData[value.data.SRNO - 1].MetalWt = data.MetalWt;
+     this.tableData[value.data.SRNO - 1].MetalWt = data.MetalWt;
   }
 
   StoneWttextevent(data: any, value: any) {
-    // this.tableData[value.data.SRNO - 1].StoneWt = data.StoneWt;
+     this.tableData[value.data.SRNO - 1].StoneWt = data.StoneWt;
   }
 
   OrderPcstextevent(data: any, value: any) {

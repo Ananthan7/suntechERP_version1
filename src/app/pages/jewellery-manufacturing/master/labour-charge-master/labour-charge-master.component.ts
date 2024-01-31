@@ -32,7 +32,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   diamondlabourMasterForm: FormGroup = this.formBuilder.group({
     mid: [],
-    division: ['', [Validators.required]],
+    divisions: ['', [Validators.required]],
     labour_code: ['', [Validators.required]],
     labour_description: ['', [Validators.required]],
     shape: ['', [Validators.required]],
@@ -68,7 +68,7 @@ export class LabourChargeMasterComponent implements OnInit {
     karat: [''],
     labourAc: ['', [Validators.required]],
     color: [''],
-    costRate: [''],
+    metalcost_rate: [''],
     typecode: [''],
     metalselling_rate: [''],
     category: [''],
@@ -80,8 +80,8 @@ export class LabourChargeMasterComponent implements OnInit {
     purity: [''],
     wtFrom: [''],
     wtTo: [''],
-    wtFromdeci: ['.000'],
-    wtToDeci: ['.000'],
+    wtFromdeci: [''],
+    wtToDeci: [''],
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
   });
@@ -294,13 +294,15 @@ export class LabourChargeMasterComponent implements OnInit {
     if (this.content) {
       this.setFormValues()
     }
+    this.metallabourMasterForm.controls.wtFromdeci.setValue('.000')
+    this.metallabourMasterForm.controls.wtToDeci.setValue('.000')
 
-    this.diamondlabourMasterForm = this.formBuilder.group({
-      labourType: new FormControl(''),
-      settingType: new FormControl({ value: '', disabled: true }),
-      method: new FormControl({ value: '', disabled: true }),
+    // this.diamondlabourMasterForm = this.formBuilder.group({
+    //   labourType: new FormControl(''),
+    //   settingType: new FormControl({ value: '', disabled: true }),
+    //   method: new FormControl({ value: '', disabled: true }),
 
-    });
+    // });
 
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
@@ -435,7 +437,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   divisionCodeSelected(e: any) {
     console.log(e);
-    this.diamondlabourMasterForm.controls.division.setValue(e.DIVISION_CODE);
+    this.diamondlabourMasterForm.controls.divisions.setValue(e.DIVISION_CODE);
   }
 
 
@@ -484,6 +486,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   stockCodeSelected(e: any) {
     console.log(e);
+    this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
@@ -491,8 +494,14 @@ export class LabourChargeMasterComponent implements OnInit {
 
   currencyCodeSelected(e: any) {
     console.log(e);
+    this.diamondlabourMasterForm.controls.currency.setValue(e.CURRENCY_CODE);
+
+  }
+
+  metalcurrencyCodeSelected(e: any) {
+    console.log(e);
     this.metallabourMasterForm.controls.metalcurrency.setValue(e.CURRENCY_CODE);
-    this.metallabourMasterForm.controls.currency.setValue(e.CURRENCY_CODE);
+
 
   }
 
@@ -521,9 +530,6 @@ export class LabourChargeMasterComponent implements OnInit {
     console.log(e);
     this.diamondlabourMasterForm.controls.size_from.setValue(e.CODE);
   }
-
-
-
 
 
   // USE: get select options Process TypeMaster
@@ -572,6 +578,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.forDesignOnly.setValue(this.content.FOR_DESIGN);
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
     this.metallabourMasterForm.controls.onGrossWt.setValue(this.content.ON_GROSSWT);
+    this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
   }
 
 
@@ -609,8 +616,8 @@ export class LabourChargeMasterComponent implements OnInit {
       "UNITCODE": this.diamondlabourMasterForm.value.unitList || "",
       "COST_RATE": this.diamondlabourMasterForm.value.cost_rate,
       "SELLING_RATE": this.diamondlabourMasterForm.value.selling_rate,
-      "LAST_COST_RATE": 0,
-      "LAST_SELLING_RATE": 0,
+      "LAST_COST_RATE": this.metallabourMasterForm.value.metalcost_rate,
+      "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
       "DIVISION_CODE": this.metallabourMasterForm.value.division || "S",
@@ -628,7 +635,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "BRAND_CODE": this.metallabourMasterForm.value.brand,
       "PROCESS_TYPE": this.diamondlabourMasterForm.value.process || "",
       "KARAT_CODE": this.metallabourMasterForm.value.karat,
-      "METALSTONE": "s",
+      "METALSTONE": "",
       "STOCK_CODE": this.metallabourMasterForm.value.stock_code,
       "PURITY": this.metallabourMasterForm.value.purity,
       "COLOR": this.metallabourMasterForm.value.color,

@@ -171,7 +171,8 @@ export class MfgGridComponent implements OnInit {
               this.nextPage()
             }
           }
-          this.orderedItemsHead = Object.keys(this.orderedItems[0]);
+          let headers = Object.keys(this.orderedItems[0]);
+          this.orderedItemsHead = headers.filter((item:any)=> item != 'MID')
           // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
           // this.ChangeDetector.detectChanges()
         } else {

@@ -37,7 +37,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 2,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'POS Customer Master',
+    SEARCH_HEADING: 'POS customerCode Master',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -49,7 +49,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 60,
     SEARCH_FIELD: 'OrderCancellation',
-    SEARCH_HEADING: '',
+    SEARCH_HEADING: 'Order #',
     SEARCH_VALUE: '',
     WHERECONDITION: "OrderCancellation<> ''",
     VIEW_INPUT: true,
@@ -60,9 +60,9 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   orderCancelCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
+    LOOKUPID: 95,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: '',
+    SEARCH_HEADING: 'Order Cancel A/c',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE<> ''",
     VIEW_INPUT: true,
@@ -70,12 +70,27 @@ export class PosSalesOrderCancellationComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
+  acCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 95,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'A/c',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+
   posSalesOrderCancellationForm: FormGroup = this.formBuilder.group({
     vocType: [''],
     vocNo:[1],
     vocDate: [new Date()],
     enteredBy:[''],
-    customer: [''],
+    customerCode: [''],
+    customerName:[''],
     order:[''],
     orderDate: [new Date()],
     orderAmount:[''],
@@ -122,20 +137,27 @@ export class PosSalesOrderCancellationComponent implements OnInit {
 
   customerCodeSelected(e: any) {
     console.log(e);
-    this.posSalesOrderCancellationForm.controls.customer.setValue(e.CODE); 
+    this.posSalesOrderCancellationForm.controls.customerCode.setValue(e.CODE); 
+    this.posSalesOrderCancellationForm.controls.customerName.setValue(e.NAME)
     
   }
 
   orderCodeSelected(e: any) {
     console.log(e);
-    // this.posSalesOrderCancellationForm.controls.customer.setValue(e.NAME); 
+    // this.posSalesOrderCancellationForm.controls.customerCode.setValue(e.NAME); 
     
   }
 
   orderCancelSelected(e: any) {
     console.log(e);
-    // this.posSalesOrderCancellationForm.controls.customer.setValue(e.NAME); 
-    
+    this.posSalesOrderCancellationForm.controls.orderCancel.setValue(e.ACCODE); 
+  }
+
+  acCodeSelected(e:any){
+      console.log(e);
+      this.posSalesOrderCancellationForm.controls.ac.setValue(e.ACCOUNT_MODE);
+      this.posSalesOrderCancellationForm.controls.acCode.setValue(e['ACCOUNT HEAD']);
+
   }
 
   close(data?: any) {
