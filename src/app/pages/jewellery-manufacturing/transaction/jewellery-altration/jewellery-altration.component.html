@@ -28,7 +28,7 @@
               <div class="col-md-3">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="vocno" />
+                    <input type="number" matInput formControlName="vocno" [dir]="'rtl'" style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>
@@ -64,7 +64,7 @@
               </div>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="itemcurrencycc" />
+                  <input type="number" matInput formControlName="itemcurrencycc" [dir]="'rtl'" style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -75,12 +75,12 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Metal Rate :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="metalrate" />
+                  <input type="text" matInput formControlName="metalrate"  />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="metalratetype" />
+                  <input type="number" matInput formControlName="metalratetype" [dir]="'rtl'" style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>

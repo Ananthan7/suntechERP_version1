@@ -125,7 +125,7 @@ export class MeltingProcessComponent implements OnInit {
     // this.setAllInitialValues = this.dataToParent;
     this.setAllInitialValues()
     this.setCompanyCurrency()
-    
+    this.setvalues()
    
   }
   
@@ -249,9 +249,9 @@ export class MeltingProcessComponent implements OnInit {
 
 
   meltingProcessFrom: FormGroup = this.formBuilder.group({
-    vocType : ['MLP',[Validators.required]],
+    vocType : ['',[Validators.required]],
     vocNo : ['1',[Validators.required]],
-    vocDate : [new Date(),''],
+    vocDate : [new Date()],
     meltingType : [''],
     process : [''],
     processDesc : [''],
@@ -283,6 +283,12 @@ export class MeltingProcessComponent implements OnInit {
     currencyRate: [''],
     
   });
+
+  setvalues(){
+    this.meltingProcessFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
+    this.meltingProcessFrom.controls.vocNo.setValue(this.comService.popMetalValueOnNet)
+    this.meltingProcessFrom.controls.vocDate.setValue(this.comService.currentDate)
+  }
 
 
 

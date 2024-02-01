@@ -124,7 +124,6 @@ export class JewelleryDismantlingComponent implements OnInit {
 
   setvalues(){
     console.log(this.comService);
-    
     this.jewellerydismantlingFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
     this.jewellerydismantlingFrom.controls.vocdate.setValue(this.comService.currentDate)
   }

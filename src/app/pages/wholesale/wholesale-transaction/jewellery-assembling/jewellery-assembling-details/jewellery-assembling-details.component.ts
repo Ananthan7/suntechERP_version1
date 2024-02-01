@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { JewelleryAssemblingMetalDetailsComponent } from '../jewellery-assembling-metal-details/jewellery-assembling-metal-details.component';
+import { JewelleryAssemblingStonesDetailsComponent } from '../jewellery-assembling-stones-details/jewellery-assembling-stones-details.component';
 
 @Component({
   selector: 'app-jewellery-assembling-details',
@@ -19,6 +21,11 @@ export class JewelleryAssemblingDetailsComponent implements OnInit  {
   currentDate = new Date();
   currentDate1 = new Date();
   currentDate2 = new Date()
+
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+  imageurl: any;
+  image: string | ArrayBuffer | null | undefined;
   
   
   column1:any[] = ['Stock Code','Purity','PCS','Gross WT','Rate Type','Metal Type','Making Rate','Amount-FC','Amount-LC','MAKING_AMTFC','MAKING_AMTLC'];
@@ -40,7 +47,20 @@ export class JewelleryAssemblingDetailsComponent implements OnInit  {
 
   ngOnInit(): void {
   }
-  
+
+  onFileChangedimage(event:any) {
+    this.imageurl = event.target.files[0]
+    console.log(this.imageurl)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.image = reader.result; 
+      };
+    }
+  }
+
   jewelleryAssemblingDetailsForm: FormGroup = this.formBuilder.group({
 
     branch:['HO'],
@@ -55,383 +75,7 @@ export class JewelleryAssemblingDetailsComponent implements OnInit  {
     itemCurrencyDesc:[''],
     enteredBy:[''],
     enteredByDesc:[''],
-    stock:[''],
-    location:[''],
-    type:[''],
-    CC:[''],
-    design:[''],
-    brand:[''],
-    setRef:[''],
-    category:[''],
-    country:[''],
-    subCategory:[''],
-    color:[''],
-    pieces:[''],
-    clarity:[''],
-    vender:[''],
-    grade:[''],
-    venderRef:[''],
-    shape:[''],
-    size:[''],
-    range:[''],
-    style:[''],
-    time:[''],
-    fluoresce:[''],
   });
-
-
-  stockCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  stockSelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.stock.setValue(e.STOCK_CODE);
-  }
-
-  locationCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 155,
-    SEARCH_FIELD: 'Location',
-    SEARCH_HEADING: 'location Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "Location<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  locationSelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.location.setValue(e.Location);
-  }
-
-  typeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  typeSelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.type.setValue(e.CODE);
-  }
-
-  CCCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'CC Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  CCSelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.CC.setValue(e.CODE);
-  }
-
-  designCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 56,
-    SEARCH_FIELD: 'DESIGN_CODE',
-    SEARCH_HEADING: 'Design Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "DESIGN_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  designSelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.design.setValue(e.DESIGN_CODE);
-  }
-
-  brandCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 32,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Stock Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  brandSelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.brand.setValue(e.CODE);
-  }
-
-  setRefCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Stock Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  setRefSelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.setRef.setValue(e.CODE);
-  }
-
-  categoryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 30,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  categorySelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.category.setValue(e.Code);
-  }
-
-  countryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 26,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  countrySelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.country.setValue(e.CODE);
-  }
-
-  subCategoryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Stock Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  subCategorySelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.subCategory.setValue(e.CODE);
-  }
-
-  colorCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 35,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Stock Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  colorSelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.color.setValue(e.CODE);
-  }
-
-  piecesCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Stock Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  piecesSelected(e:any){
-    this.jewelleryAssemblingDetailsForm.controls.piece.setValue(e.CODE);
-  }
-//////////////////////////////////////
-
-clarityCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 37,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'Stock Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-claritySelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.clarity.setValue(e.CODE);
-}
-
-venderCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 81,
-  SEARCH_FIELD: 'ACCODE',
-  SEARCH_HEADING: 'location Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "ACCODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-venderSelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.vendor.setValue(e.ACCODE);
-}
-
-gradeCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 3,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'Type Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-gradeSelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.grade.setValue(e.CODE);
-}
-
-venderRefCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 3,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'CC Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-venderRefSelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.venderRef.setValue(e.CODE);
-}
-
-shapeCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 33,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'CC Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-shapeSelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.shape.setValue(e.CODE);
-}
-
-sizeCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 36,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'Stock Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-sizeSelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.size.setValue(e.CODE);
-}
-
-rangeCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 3,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'Stock Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-rangeSelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.range.setValue(e.CODE);
-}
-
-styleCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 3,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'Stock Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-styleSelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.style.setValue(e.Code);
-}
-
-timeCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 3,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'Stock Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-timeSelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.time.setValue(e.CODE);
-}
-
-fluoresceCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 3,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'Stock Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
-
-fluoresceSelected(e:any){
-  this.jewelleryAssemblingDetailsForm.controls.fluoresce.setValue(e.CODE);
-}
 
   setInitialDatas() {
 
@@ -443,5 +87,26 @@ fluoresceSelected(e:any){
     this.activeModal.close(data);
   }
 
+  openJewelleryAssembilingMetalDetails(){
+    const modalRef: NgbModalRef = this.modalService.open(JewelleryAssemblingMetalDetailsComponent,{
+      size: "xl",
+      backdrop: true, //'static'
+      keyboard: false,
+      windowClass: "modal-full-width",
+    });
+  }
+
+  openJewelleryAssembilingStoneDetails(){
+    const modalRef: NgbModalRef = this.modalService.open(JewelleryAssemblingStonesDetailsComponent,{
+      size: "xl",
+      backdrop: true, //'static'
+      keyboard: false,
+      windowClass: "modal-full-width",
+    });
+  }
+
+  deleteTableData(){
+
+  }
 
 }

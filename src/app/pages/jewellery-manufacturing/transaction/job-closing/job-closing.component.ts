@@ -33,6 +33,8 @@ export class JobClosingComponent implements OnInit {
 
     
   ngOnInit(): void {
+
+    this.setvalues()
   }
 
   close(data?: any) {
@@ -164,9 +166,9 @@ export class JobClosingComponent implements OnInit {
   }
 
   jobCloseingFrom: FormGroup = this.formBuilder.group({
-      vocType: ['JBC', [Validators.required]],
-      vocNum: ['1', [Validators.required]],
-      vocdate: [new Date(),],
+      vocType: ['', [Validators.required]],
+      vocNo: ['', [Validators.required]],
+      vocdate: [''],
       user_name: ['',],
       party_code: ['',],
       job_no: ['',],
@@ -177,6 +179,13 @@ export class JobClosingComponent implements OnInit {
       doc_ref: ['',], 
       remarks: ['',], 
   });
+
+  setvalues(){
+    this.jobCloseingFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
+    this.jobCloseingFrom.controls.vocNo.setValue(this.commonService.popMetalValueOnNet)
+    this.jobCloseingFrom.controls.vocdate.setValue(this.commonService.currentDate)
+   
+  }
 
 
 

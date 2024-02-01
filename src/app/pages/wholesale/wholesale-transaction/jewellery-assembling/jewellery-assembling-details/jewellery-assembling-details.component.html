@@ -35,10 +35,9 @@
                         <label for="inputPassword" class="col-sm-3">Stock : </label>
                         <div class="col-sm-5">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput formControlName="stock"/>
+                                <input type="text" matInput />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="stockCodeData"
-                            (newRowClick)="stockSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
@@ -54,190 +53,169 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Location :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="location" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="locationCodeData"
-                            (newRowClick)="locationSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Type :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="type" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="typeCodeData"
-                            (newRowClick)="typeSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">CC :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="CC" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="CCCodeData"
-                            (newRowClick)="CCSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Design :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="design" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="designCodeData"
-                            (newRowClick)="designSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Brand :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="brand" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="brandCodeData"
-                            (newRowClick)="brandSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Set Ref :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="setRef" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="setRefCodeData"
-                            (newRowClick)="setRefSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Category :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="category" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="categoryCodeData"
-                            (newRowClick)="categorySelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Country :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="country" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="countryCodeData"
-                            (newRowClick)="countrySelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Sub Category :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="subCategory" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="subCategoryCodeData"
-                            (newRowClick)="subCategorySelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Color :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="color" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="colorCodeData"
-                            (newRowClick)="colorSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Pieces :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="pieces" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="piecesCodeData"
-                            (newRowClick)="piecesSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Clarity :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="clarity" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="clarityCodeData"
-                            (newRowClick)="claritySelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Vender :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="vender" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="venderCodeData"
-                            (newRowClick)="venderSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Grade :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="grade" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="gradeCodeData"
-                            (newRowClick)="gradeSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Vender Ref :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="venderRef" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="venderRefCodeData"
-                            (newRowClick)="venderRefSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Shape :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="shape" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="shapeCodeData"
-                            (newRowClick)="shapeSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Size :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="size" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="sizeCodeData"
-                            (newRowClick)="sizeSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Range :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="range" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="rangeCodeData"
-                            (newRowClick)="rangeSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Style :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="style" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="styleCodeData"
-                            (newRowClick)="styleSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Time :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="time" />
+                                <input type="text" matInput formControlName="toworker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="timeCodeData"
-                            (newRowClick)="timeSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Fluoresce :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="fluoresce" />
+                                <input type="text" matInput formControlName="worker" />
                             </mat-form-field>
-                            <master-search [MasterSearchData]="fluoresceCodeData"
-                            (newRowClick)="fluoresceSelected($event)"></master-search>
+                            <master-search></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Gross Wt:</label>
                         <div class="col-md-3">
@@ -439,58 +417,44 @@
                 </div>
 
                 <div class="col-md-2 pt-5">
-                    <div class="icons">
-                        <div class="image_box"></div>
-                        <div class="icons_footer">
-                            <i class="fas fa-step-backward icon-common"></i>
-                            <i class="fas fa-caret-right icon-common"></i>
-                            <span>0/10</span>
-                            <i class="fas fa-caret-right icon-common"></i>
-                            <i class="fas fa-step-forward"></i>
-                            <i class="fas fa-plus icon-common"></i>
-                        </div>
-                    </div>
                     <div class="row">
-                        <div class="p-2 bd-highlight t-a2">
-                            <button type="button" class="btn btn-primary metal-issue-add-btn">
-                                Tag Details
-                            </button>
+                        <div class="col-md-6">
+                            <div class="upload-btn-wrapper">
+                                <button class="btn btnnew border-dark">
+                                    <img src={{image}} style="width:126px;height:124px">
+                                    
+                                </button>
+                                <input type="file"  class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)">
+                            </div>
                         </div>
                     </div>
                     <div>
                         <div>
+                            <div class="p-2 bd-highlight t-a2">
+                                <button type="button" class="btn btn-primary metal-issue-add-btn">
+                                    Tag Details
+                                </button>
+                            </div>
                             <div class="text-area">
                                 <textarea
                                 style="width: 100%;height: 140px;">
                             </textarea>
                             </div>
-
+                             </div>
                         </div>
                     </div>
                 </div>
-
-
             </div>
-        </div>
         <div class="col-md-12">
             <div class="row">
                 <mat-tab-group>
                     <mat-tab label="Metals">
                         <div class="row d-flex">
-                            <div class="col-12 d-flex">
-                                <div class="p-2 bd-highlight">
-                                    <button type="button" class="btn btn-primary metal-issue-add-btn">
-                                        Add
-                                    </button>
-                                </div>
-                                <div class="p-2 bd-highlight">
-                                    <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                                        Delete
-                                    </button>
-                                </div>
-
-
-                            </div>
+                            <div class="col-4 d-flex">
+                                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                                    (addClick)="openJewelleryAssembilingMetalDetails()"
+                                    (deleteClick)="deleteTableData()">
+                                </menu-buttons>
                         </div>
 
                         <div class="row m-2">
@@ -510,25 +474,38 @@
                                 </dx-data-grid>
                             </div>
                         </div>
+                        </div>
                     </mat-tab>
+
                     <mat-tab label="Stones">
                         <div class="row d-flex">
-                            <div class="col-12 d-flex">
-                                <div class="p-2 bd-highlight">
-                                    <button type="button" class="btn btn-primary metal-issue-add-btn">
-                                        Add
-                                    </button>
-                                </div>
-                                <div class="p-2 bd-highlight">
-                                    <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                                        Delete
-                                    </button>
-                                </div>
+                            <div class="col-4 d-flex">
+                                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                                    (addClick)="openJewelleryAssembilingStoneDetails()"
+                                    (deleteClick)="deleteTableData()">
+                                </menu-buttons>
+                        </div>
 
+                        <div class="row m-2">
+                            <div class="col">
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                [columnAutoWidth]="true">
+                                <dxo-paging [enabled]="false"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true">
+                                </dxo-editing>
+                                <dxo-selection mode="multiple"></dxo-selection>
+                                <dxo-scrolling mode="virtual"></dxo-scrolling>
 
+                                <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}"
+                                    caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                    backgroundcolor="#000">
+                                </dxi-column>
+                            </dx-data-grid>
                             </div>
                         </div>
-                        <div class="row m-2">
+                        </div>
+                        <!-- <div class="row m-2">
                             <div class="col">
                                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
                                     [allowColumnReordering]="true" [allowColumnResizing]="true"
@@ -545,7 +522,7 @@
                                     </dxi-column>
                                 </dx-data-grid>
                             </div>
-                        </div>
+                        </div> -->
                     </mat-tab>
                     <mat-tab label="Other/Info">
                         <div class="row">

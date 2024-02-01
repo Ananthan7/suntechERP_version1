@@ -116,8 +116,8 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   }
 
   setvalues(){
-    this.diamondJobBoqIssue.controls.vocType.setValue('JBI')
-    this.diamondJobBoqIssue.controls.vocNo.setValue('1')
+    this.diamondJobBoqIssue.controls.vocType.setValue(this.commonService.getqueryParamVocType())
+    this.diamondJobBoqIssue.controls.vocNo.setValue(this.commonService.popMetalValueOnNet)
     
   }
 

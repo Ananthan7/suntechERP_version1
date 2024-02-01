@@ -24,6 +24,7 @@ export class StoneCostUpdationComponent implements OnInit {
   yearMonth?: String;
   currentDate = new Date();
   text: string="Deduct";
+  selection!: number;
   userName = this.commonService.userName;
   @Input() content!: any;
 
@@ -95,14 +96,16 @@ export class StoneCostUpdationComponent implements OnInit {
   });
 
   setvalues(){
-    this.stonecostupdationFrom.controls.voctype.setValue('CST')
-    this.stonecostupdationFrom.controls.vocno.setValue('1')
-    this.stonecostupdationFrom.controls.vocdate.setValue(new Date())
-    this.stonecostupdationFrom.controls.itemcurrency.setValue('AED')
-    this.stonecostupdationFrom.controls.itemcurrency_rate.setValue('1.000000')
-    this.stonecostupdationFrom.controls.basecurrency.setValue('AED')
-    this.stonecostupdationFrom.controls.basecurrency_rate.setValue('1.000000')
-    this.stonecostupdationFrom.controls.valueTarget.setValue('1')
+    console.log(this.commonService);
+    
+    this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+    this.stonecostupdationFrom.controls.vocno.setValue(this.commonService.popMetalValueOnNet)
+    this.stonecostupdationFrom.controls.vocdate.setValue(this.commonService.currentDate)
+    this.stonecostupdationFrom.controls.itemcurrency.setValue(this.commonService.compCurrency)
+    this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.stonecostupdationFrom.controls.basecurrency.setValue(this.commonService.compCurrency)
+    this.stonecostupdationFrom.controls.basecurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  
   }
 
   stockCodeData: MasterSearchModel = {

@@ -101,12 +101,13 @@ export class JewelleryAltrationComponent implements OnInit {
   });
 
   setvalues(){
-    this.jewelleryaltrationFrom.controls.voctype.setValue('DJA')
-    this.jewelleryaltrationFrom.controls.vocno.setValue('1')
-    this.jewelleryaltrationFrom.controls.metalrate.setValue('18k')
-    this.jewelleryaltrationFrom.controls.metalratetype.setValue('177.000000')
-    this.jewelleryaltrationFrom.controls.itemcurrency.setValue('AED')
-    this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue('1.000000')
+    console.log(this.comService);
+    this.jewelleryaltrationFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.jewelleryaltrationFrom.controls.vocno.setValue(this.comService.popMetalValueOnNet)
+    this.jewelleryaltrationFrom.controls.vocdate.setValue(this.comService.currentDate)
+    this.jewelleryaltrationFrom.controls.metalratetype.setValue(this.comService.decimalQuantityFormat(0, 'METAL'))
+    this.jewelleryaltrationFrom.controls.itemcurrency.setValue(this.comService.compCurrency)
+    this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue(this.comService.popMetalValueOnNet)
   }
 
 

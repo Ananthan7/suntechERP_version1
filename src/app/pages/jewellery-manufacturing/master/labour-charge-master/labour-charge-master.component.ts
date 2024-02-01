@@ -295,8 +295,8 @@ export class LabourChargeMasterComponent implements OnInit {
       this.setFormValues()
     }
     console.log(this.commonService.amtFormat)
-    this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
     // this.diamondlabourMasterForm = this.formBuilder.group({
     //   labourType: new FormControl(''),

@@ -31,7 +31,7 @@ export class JewelleryAssemblingComponent implements OnInit {
   jewelleryAssemblingForm: FormGroup = this.formBuilder.group({
 
     branch:[''],
-    vocType:['UFM'],
+    vocType:[''],
     vocNo:['1'],
     vocDate:[''],
     unFixMetal:[false],
@@ -56,10 +56,13 @@ export class JewelleryAssemblingComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.setInitialDatas()
+  
   }
   setInitialDatas() {
 
     this.jewelleryAssemblingForm.controls.vocDate.setValue(this.comService.currentDate)
+    this.jewelleryAssemblingForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
 
   }
   close(data?: any) {

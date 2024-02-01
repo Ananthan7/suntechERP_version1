@@ -144,21 +144,15 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput />
                                     </mat-form-field>
-
-                                    <div class="form-check offset-6">
-                                        <mat-radio-group aria-label="Select an option" formControlName="valueTarget">
-                                            <mat-radio-button value="1" class="mx-2">By Value</mat-radio-button>
-                                        </mat-radio-group>
-
-                                    </div>
-                                    <div class="form-check ">
-                                        <mat-radio-button value="2" class="mx-2">By %</mat-radio-button>
-                                    </div>
-                                    <div class="form-check ">
-                                        <mat-radio-button value="3" class="mx-2">Fixed</mat-radio-button>
-                                    </div>
-
                                 </div>
+                            </div>
+                            <div class="col-5  d-flex pt-3 offset-1">
+                                <mat-radio-group aria-label="Select an option" formControlName="valueTarget">
+                                    <mat-radio-button value="1" class="mx-2" [checked]='true'>By Value</mat-radio-button>
+                                    <mat-radio-button value="2" class="mx-2">By %</mat-radio-button>
+                                    <mat-radio-button value="3" class="mx-2">Fixed</mat-radio-button>
+                                </mat-radio-group>
+
                             </div>
 
                         </div>

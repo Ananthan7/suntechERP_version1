@@ -10,11 +10,11 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-jewellery-assembling-stones-details',
-  templateUrl: './jewellery-assembling-stones-details.component.html',
-  styleUrls: ['./jewellery-assembling-stones-details.component.scss']
+  selector: 'app-jewellery-assembling-metal-details',
+  templateUrl: './jewellery-assembling-metal-details.component.html',
+  styleUrls: ['./jewellery-assembling-metal-details.component.scss']
 })
-export class JewelleryAssemblingStonesDetailsComponent implements OnInit {
+export class JewelleryAssemblingMetalDetailsComponent implements OnInit {
 
   @Input() content!: any; 
   tableData: any[] = [];
@@ -35,32 +35,31 @@ export class JewelleryAssemblingStonesDetailsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  JewelleryAssemblingStoneDetailsForm: FormGroup = this.formBuilder.group({
+  JewelleryAssemblingMetalDetailsForm: FormGroup = this.formBuilder.group({
     stockCode: [""],
     stockCodedes: [""],
     description : [""],
-    shape: [""],
-    sieveSet : [""],
-    clarity: [""],
-    sieve: [""],
-    Pieces: [""],
-    unitRate : [""],
-    quantity : [""],
-    amount  : [""],
-    stoneType  : [""],
-    color  : [""],
-    labAcCode : [""],
-    labourCode  : [""],
-    currencyDes: [""],
-    issueNo  : [""],
+    karat: [""],
+    rateType : [""],
+    purity: [""],
+    metalRate: [""],
+    pcs: [""],
+    mlRate : [""],
+    grossWt : [""],
+    mkgRateLc  : [""],
+    pureWt  : [""],
+    supplier  : [""],
+    issueNo : [""],
     location  : [""],
-    size  : [""],
-    currency : [""],
-    coat  : [""],
-   
+    mkgAmountLC  : [""],
+    mkgAmountFC  : [""],
+    amountLC  : [""],
+    amountFC : [""],
     
   });
   
+ 
+
   StockcodeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -75,59 +74,40 @@ export class JewelleryAssemblingStonesDetailsComponent implements OnInit {
   }
   StockcodeCodeSelected(e:any){
     console.log(e);
-    this.JewelleryAssemblingStoneDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
-    this.JewelleryAssemblingStoneDetailsForm.controls.stockCodedes.setValue(e.DESCRIPTION); 
+    this.JewelleryAssemblingMetalDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
+    this.JewelleryAssemblingMetalDetailsForm.controls.stockCodedes.setValue(e.DESCRIPTION); 
   }
 
-
-  shapeCodeData: MasterSearchModel = {
+  rateTypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 33,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Stock Code Type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SHAPE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,    
-    LOAD_ONCLICK: true,
-  }
-  shapeCodeSelected(e:any){
-    console.log(e);
-    this.JewelleryAssemblingStoneDetailsForm.controls.shape.setValue(e.CODE);
-    
-  }
-
-  sieveSetCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 22,
+    SEARCH_FIELD: 'RATE_TYPE',
     SEARCH_HEADING: 'Rate type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "RATE_TYPE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  sieveSetCodeSelected(e:any){
+  rateTypeCodeSelected(e:any){
     console.log(e);
-    this.JewelleryAssemblingStoneDetailsForm.controls.sieveSet.setValue(e.CODE);
+    this.JewelleryAssemblingMetalDetailsForm.controls.rateType.setValue(e.RATE_TYPE);
   }
 
-  clarityCodeData: MasterSearchModel = {
+  supplierCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 37,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Supplier type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'CLARITY MASTER'",
+    WHERECONDITION: "ACCODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  clarityCodeSelected(e:any){
+  supplierCodeSelected(e:any){
     console.log(e);
-    this.JewelleryAssemblingStoneDetailsForm.controls.clarity.setValue(e.CODE);
+    this.JewelleryAssemblingMetalDetailsForm.controls.supplier.setValue(e.ACCODE);
   }
 
   locationCodeData: MasterSearchModel = {
@@ -143,41 +123,8 @@ export class JewelleryAssemblingStonesDetailsComponent implements OnInit {
   }
   locationCodeSelected(e:any){
     console.log(e);
-    this.JewelleryAssemblingStoneDetailsForm.controls.location.setValue(e.Location);
+    this.JewelleryAssemblingMetalDetailsForm.controls.location.setValue(e.Location);
   }
-
-  sieveCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Sieve type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  sieveCodeSelected(e:any){
-    console.log(e);
-    this.JewelleryAssemblingStoneDetailsForm.controls.sieve.setValue(e.CODE);
-  }
-
-  sizeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 36,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Sieve type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SIZE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  sizeCodeSelected(e:any){
-    console.log(e);
-    this.JewelleryAssemblingStoneDetailsForm.controls.size.setValue(e.CODE);
-  }
-
   
 
 
