@@ -67,13 +67,13 @@ export class QuotationProcessComponent implements OnInit {
 
   quotationProcessFrom: FormGroup = this.formBuilder.group({
     voctype:['OOT',[Validators.required]],
-    vocdate : ['',[Validators.required]],
+    vocdate : [''],
     vocno:['',[Validators.required]],
     documentype:[''],
     salesman:['',[Validators.required]],
     ason:[''],
-    docref :['',[Validators.required]],
-    narration :['',[Validators.required]],
+    docref :[''],
+    narration :[''],
   });
 
   formSubmit(){
