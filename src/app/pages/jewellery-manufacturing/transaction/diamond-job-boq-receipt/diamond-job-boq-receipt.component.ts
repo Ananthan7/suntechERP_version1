@@ -53,10 +53,10 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
   }
 
   columnhead:any[] = ['SI.No','Design ID','Job Id','Order No','Pcs'];
-  columnheadSummary:any[] = ['SI.No','Job No','Design ID','Div','Stock Id','Pcs','Gross.Wt','Color','Clarity','Shape','size','Slieve','Karat','So No','Job ID','unq Job Id','St.Wt','Net Wt','RateFc','RateLC','AmountFC','AmountLC','MetalStone','Purity','Pure.Wt','Broken Stone','Broken Stone','Broken Stock'];
+  columnheadSummary:any[] = ['SI.No','Job No','Design ID','Div','Stock Id','Pcs','Gross.Wt','Color','Clarity','Shape','size','Slieve','Karat','So No','Job ID','unq Job Id','St.Wt','Net Wt','RateFc','RateLC','AmountFC','AmountLC','MetalStone','Purity','Pure.Wt','Broken Stone','Broken Stock'];
   columnheadSummaryLabour:any[] = ['SI.No','Job ID','Process','Worker','Lab']
-  columnheadJobDetails:any[] = ['SI.No','Job No','Design ID','Div','Stock Id','Pcs','Gross.Wt','Color','Clarity','Shape','size','Slieve','Karat','Broken Stone','Broken Stone','Broken Stock']
-  columnheadSummaryLabourCharges:any[] = ['Select','SINo','Labour Code','Lab Accode','Division','Unit','Gross Wt','Pcs','Rate','Amount','GST Code','CGST %','CGST Amt','SGST %','SGST Amt','Total %','Total GST','Amount','Currency ']
+  columnheadJobDetails:any[] = ['SI.No','Job No','Design ID','Div','Stock Id','Pcs','Gross.Wt','Color','Clarity','Shape','size','Slieve','Karat','Broken Stone','Broken Stock']
+  columnheadSummaryLabourCharges:any[] = ['Select','SINo','Labour Code','Lab Accode','Division','Unit','Gross Wt','Pcs','Rate','GST Code','CGST %','CGST Amt','SGST %','SGST Amt','Total %','Total GST','Amount','Currency ']
 
  
 
@@ -101,18 +101,20 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
       this.setFormValues();
     }
     this.setvalue()
+    console.log(this.comService );
+    
   }
 
   setvalue(){
-    this.diamondJobBoqReceipt.controls.voctype.setValue('JBR')
-    this.diamondJobBoqReceipt.controls.vocno.setValue('1')
-    this.diamondJobBoqReceipt.controls.vocDate.setValue(new Date())
-    this.diamondJobBoqReceipt.controls.karigger.setValue('ST0007')
+    this.diamondJobBoqReceipt.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.diamondJobBoqReceipt.controls.vocno.setValue(this.comService.popMetalValueOnNet)
+    this.diamondJobBoqReceipt.controls.vocDate.setValue(this.comService.currentDate)
+  
     this.diamondJobBoqReceipt.controls.kariggerDesc.setValue('Sertan, Turkey')
-    this.diamondJobBoqReceipt.controls.currency.setValue('AED')
-    this.diamondJobBoqReceipt.controls.currencyDesc.setValue('1')
-    this.diamondJobBoqReceipt.controls.baseCurrency.setValue('AED')
-    this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue('1')
+    this.diamondJobBoqReceipt.controls.currency.setValue(this.comService.compCurrency)
+    this.diamondJobBoqReceipt.controls.currencyDesc.setValue(this.comService.popMetalValueOnNet)
+    this.diamondJobBoqReceipt.controls.baseCurrency.setValue(this.comService.compCurrency)
+    this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue(this.comService.popMetalValueOnNet)
   }
 
 

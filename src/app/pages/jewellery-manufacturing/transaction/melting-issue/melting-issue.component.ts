@@ -124,7 +124,7 @@ export class MeltingIssueComponent implements OnInit {
     processdes: [''],
     worker: [''],
     workerdes: [''],
-    subjobno: [''], // Not in table
+    subjobno: ['',[Validators.required]],
     color: [''],
     time: [''],  // Not in table
     remarks: [''],
@@ -134,7 +134,7 @@ export class MeltingIssueComponent implements OnInit {
     balance: [''],
     TotalgrossWt: [''],
     TotalpureWt: [''],
-    subJobDescription: [''],
+    subJobDescription: ['',[Validators.required]],
     process: [''],
     currency: [''],
     currencyrate: [''],

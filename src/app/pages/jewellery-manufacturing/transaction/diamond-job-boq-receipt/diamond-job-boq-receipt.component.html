@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Voucher No</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Voucher No * </label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
                                     <input type="text" matInput formControlName="voctype" />
@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 70%">
-                                    <input type="text" [dir]="'rtl'" style="text-align: right;" matInput formControlName="vocno" />
+                                    <input type="text"  matInput formControlName="vocno" [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput [dir]="'rtl'" style="text-align: right;" formControlName="currencyDesc" />
+                                    <input type="text" matInput  formControlName="currencyDesc" [dir]="'rtl'" style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput [dir]="'rtl'" style="text-align: right;" formControlName="baseCurrencyDesc" />
+                                    <input type="text" matInput formControlName="baseCurrencyDesc" [dir]="'rtl'" style="text-align: right;"  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -163,7 +163,7 @@
                                                     Wt</label>
                                                 <div class="col-md-6">
                                                     <mat-form-field style="width: 70%">
-                                                        <input type="number" [dir]="'rtl'" style="text-align: right;" matInput formControlName="grossWt" />
+                                                        <input type="number"  matInput formControlName="grossWt" [dir]="'rtl'" style="text-align: right;" />
                                                     </mat-form-field>
                                                     <master-search>
                                                     </master-search>
@@ -222,7 +222,7 @@
                                                     class="col-sm-6 col-form-label pt-4">Labour Chrg</label>
                                                 <div class="col-md-6">
                                                     <mat-form-field style="width: 70%">
-                                                        <input type="number" [dir]="'rtl'" style="text-align: right;" matInput formControlName="labourchrg" />
+                                                        <input type="number"  matInput formControlName="labourchrg" [dir]="'rtl'" style="text-align: right;" />
                                                     </mat-form-field>
                                                     <master-search>
                                                     </master-search>

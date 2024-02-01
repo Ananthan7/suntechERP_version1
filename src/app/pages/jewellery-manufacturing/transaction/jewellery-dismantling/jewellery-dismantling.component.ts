@@ -123,9 +123,10 @@ export class JewelleryDismantlingComponent implements OnInit {
   });
 
   setvalues(){
-    this.jewellerydismantlingFrom.controls.voctype.setValue('MDM')
-    this.jewellerydismantlingFrom.controls.vocno.setValue('1')
-    this.jewellerydismantlingFrom.controls.vocdate.setValue(new Date())
+    console.log(this.comService);
+    
+    this.jewellerydismantlingFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.jewellerydismantlingFrom.controls.vocdate.setValue(this.comService.currentDate)
   }
 
 
