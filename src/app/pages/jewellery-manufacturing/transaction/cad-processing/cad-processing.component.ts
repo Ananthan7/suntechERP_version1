@@ -59,7 +59,46 @@ export class CADProcessingComponent implements OnInit {
       this.setFormValues()
     }
     this.cadProcessingForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
-    
+    this.setvaluesdata()
+  }
+
+  cadProcessingForm: FormGroup = this.formBuilder.group({
+    voctype: [,''],
+    vocNo: [''],
+    vocDate: [''],
+    process: ['',''],
+    worker: ['PARIMA',''],
+    narration: [''],
+    soNumber: [''],    //no
+    design:['', [Validators.required]],
+    completed:[''], //no
+    toWorker:['', [Validators.required]],
+    toProcess:['', [Validators.required]],
+    job:[''],
+    subJobId:[''],
+    timeTaken:[''],
+    userId:[''], // No
+    date:[''],
+    copy:[''], // no
+    type:[''],
+    reason:[''], //no
+    remarks:[''],
+    attachments:[''], //no
+    deliveryOn:[''],
+    deliveryOnDays:[''],
+    deliveryOnDate:[{disabled: true,value:''}],
+    salesPersonCode:[''],
+    StockCode: ['', [Validators.required]],
+  });
+
+  setvaluesdata(){
+    console.log(this.comService);
+    this.cadProcessingForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.cadProcessingForm.controls.vocNo.setValue(this.comService.popMetalValueOnNet)
+    this.cadProcessingForm.controls.vocDate.setValue(this.comService.currentDate)
+    this.cadProcessingForm.controls.completed.setValue(this.comService.currentDate)
+    this.cadProcessingForm.controls.date.setValue(this.comService.currentDate)
+    this.cadProcessingForm.controls.deliveryOnDate.setValue(this.comService.currentDate)
   }
   
   setAllInitialValues() {
@@ -161,35 +200,7 @@ export class CADProcessingComponent implements OnInit {
   }
  
   
-  cadProcessingForm: FormGroup = this.formBuilder.group({
-    voctype: ['CAD',''],
-    vocNo: ['1',''],
-    vocDate: [new Date(),''],
-    process: ['CAD',''],
-    worker: ['PARIMA',''],
-    narration: [''],
-    soNumber: [''],    //no
-    design:['', [Validators.required]],
-    completed:[new Date(),''], //no
-    toWorker:['', [Validators.required]],
-    toProcess:['', [Validators.required]],
-    job:[''],
-    subJobId:[''],
-    timeTaken:['12:00:00',''],
-    userId:[''], // No
-    date:[new Date(),''],
-    copy:[''], // no
-    type:[''],
-    reason:[''], //no
-    remarks:[''],
-    attachments:[''], //no
-    deliveryOn:[''],
-    deliveryOnDays:[''],
-    deliveryOnDate:[new Date(),{disabled: true,value:''}],
-    salesPersonCode:[''],
-    StockCode: ['', [Validators.required]],
-  });
-
+ 
  
 
   adddata() {

@@ -58,6 +58,8 @@ export class MetalIssueComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
+    this.setvalues()
   }
 
   
@@ -161,15 +163,20 @@ export class MetalIssueComponent implements OnInit {
   }
 
   metalIssueForm: FormGroup = this.formBuilder.group({
-    voctype: ['DMI',[Validators.required]],
+    voctype: ['',[Validators.required]],
     time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
-    vocdate: [new Date(),[Validators.required]],
+    vocdate: ['',[Validators.required]],
     enteredBy: [''],
     vocno: [''],
     worker: [''],
     workerDes: [''],
     remarks: [''],   
   });
+
+  setvalues(){
+    this.metalIssueForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
+  }
 
   removedata(){
     this.tableData.pop();

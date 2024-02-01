@@ -24,13 +24,10 @@ export class TreeDownComponent implements OnInit {
   currentFilter: any;
   columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Wt.','Metal Wt','Stone Wt','RCVD Gross Weight','RCVD Metal Weight','Process code','Worker Code',];
   columnheader : any[] = ['type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
-
    @Input() content!: any;
-
    tableData: any[] = [];
-
+   currentDate = new Date();
    userName = localStorage.getItem('username');
-
    private subscriptions: Subscription[] = [];
 
    user: MasterSearchModel = {
@@ -111,6 +108,28 @@ export class TreeDownComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+  treeDownFrom: FormGroup = this.formBuilder.group({
+    vocType:[''],
+    vocNo:[1],
+    vocDate:[''],
+    processCode:['',[Validators.required]],
+    cylinder:[''],
+    tree:[''],
+    stoneWt:[''],
+    treeNo:[''],
+    worker:['',[Validators.required]],
+    convFact:['',[Validators.required]],
+    waxWt:['',[Validators.required]],
+    reqMetal:['',[Validators.required]],
+    toProcess : ['',[Validators.required]],
+    enteredBy : [''],
+    karatCode : ['',[Validators.required]],
+    base : [''],
+    recMetal :[''],
+    toWorker : ['',[Validators.required]],
+    color : ['',[Validators.required]],
+   });
  
 
    constructor(
@@ -125,6 +144,8 @@ export class TreeDownComponent implements OnInit {
    ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    this.treeDownFrom.controls.vocDate.setValue(this.currentDate);
+    this.treeDownFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType());
    }
  
    close(data?: any) {
@@ -145,27 +166,7 @@ export class TreeDownComponent implements OnInit {
   }
  
  
-   treeDownFrom: FormGroup = this.formBuilder.group({
-    vocType:[''],
-    vocNo:[''],
-    vocDate:[''],
-    processCode:['',[Validators.required]],
-    cylinder:[''],
-    tree:[''],
-    stoneWt:[''],
-    treeNo:[''],
-    worker:['',[Validators.required]],
-    convFact:['',[Validators.required]],
-    waxWt:['',[Validators.required]],
-    reqMetal:['',[Validators.required]],
-    toProcess : ['',[Validators.required]],
-    enteredBy : [''],
-    karatCode : ['',[Validators.required]],
-    base : [''],
-    recMetal :[''],
-    toWorker : ['',[Validators.required]],
-    color : ['',[Validators.required]],
-   });
+  
  
    adddata() {
      let length = this.tableData.length;

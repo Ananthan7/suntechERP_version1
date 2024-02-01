@@ -28,17 +28,20 @@
                         </div>
                         <div class="row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Voc Date * :</label>
-                            <div class="col-md-4">
+                            <div class="col-md-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput formControlName="vocdate" />
+                                    <input matInput [matDatepicker]="vocdate" [max]="vocdate" formControlName="vocdate"
+                                        placeholder="DD/MM/YYYY" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="time" matInput formControlName="voctime" />
                                 </mat-form-field>
 
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Melting Type:</label>
@@ -100,7 +103,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Sub Job No :</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Sub Job No * :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="subjobno" />
@@ -154,7 +157,7 @@
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                                     <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
-                                        caption="{{ data }}" [allowEditing]="true" alignment="left"
+                                        caption="{{ data }}" [allowEditing]="true" alignment="left" [width]="100"
                                         backgroundcolor="#000">
                                     </dxi-column>
                                 </dx-data-grid>

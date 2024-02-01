@@ -30,8 +30,8 @@ export class JewelleryAssemblingComponent implements OnInit {
 
   jewelleryAssemblingForm: FormGroup = this.formBuilder.group({
 
-    branch:['HO'],
-    vocType:['UFM'],
+    branch:[''],
+    vocType:[''],
     vocNo:['1'],
     vocDate:[''],
     unFixMetal:[false],
@@ -56,16 +56,52 @@ export class JewelleryAssemblingComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.setInitialDatas()
+  
   }
   setInitialDatas() {
 
     this.jewelleryAssemblingForm.controls.vocDate.setValue(this.comService.currentDate)
+    this.jewelleryAssemblingForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
 
   }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  partyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'PARTYCODE',
+    SEARCH_HEADING: 'Party Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PARTYCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  partyCodeSelected(e:any){
+    this.jewelleryAssemblingForm.controls.partyCode.setValue(e.PARTYCODE);
+  }
+
+  enteredByCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Entry Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  enteredBySelected(e:any){
+    this.jewelleryAssemblingForm.controls.enteredBy.setValue(e.SALESPERSON_CODE);
+  }
+
 
   openJewelleryAssembilingDetails(){
     const modalRef: NgbModalRef = this.modalService.open(JewelleryAssemblingDetailsComponent,{
@@ -82,6 +118,7 @@ export class JewelleryAssemblingComponent implements OnInit {
   formSubmit(){
 
   }
+
 
 
 }

@@ -17,7 +17,7 @@ import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-is
 })
 export class MeltingIssueComponent implements OnInit {
 
-  columnhead: any[] = ['SRNO', 'DIV', 'jobno', 'stockcode', 'Main Stock', 'process', 'worker', 'pcs', 'grossweight', 'purity', 'pureweight', 'Rate', 'Amount']
+  columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
   columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure', 'Job Pcs']
   columnhead1: any[] = ['Sr#', 'Ingredients', 'Qty']
   db1: any[] = ['Sr#','Division','Stock Code', 'Description','Alloy','Alloy Qty','Rate','Amount']
@@ -114,7 +114,7 @@ export class MeltingIssueComponent implements OnInit {
 
   meltingIssueFrom: FormGroup = this.formBuilder.group({
     voctype: [''],
-    vocno: [''],
+    vocno: [1],
     vocdate: [''],
     voctime: [''],
     meltingtype: [''],
@@ -124,7 +124,7 @@ export class MeltingIssueComponent implements OnInit {
     processdes: [''],
     worker: [''],
     workerdes: [''],
-    subjobno: [''], // Not in table
+    subjobno: ['',[Validators.required]],
     color: [''],
     time: [''],  // Not in table
     remarks: [''],
@@ -134,7 +134,7 @@ export class MeltingIssueComponent implements OnInit {
     balance: [''],
     TotalgrossWt: [''],
     TotalpureWt: [''],
-    subJobDescription: [''],
+    subJobDescription: ['',[Validators.required]],
     process: [''],
     currency: [''],
     currencyrate: [''],
@@ -155,7 +155,9 @@ export class MeltingIssueComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    // this.voctype = this.commonService.getqueryParamMainVocType()
+    // this.voctype = this.commonService.getqueryParamMainVocType();
+    // this.jobalocationFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType());
+
     this.meltingIssueFrom.controls.vocdate.setValue(this.currentDate)
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     // this.setAllInitialValues()

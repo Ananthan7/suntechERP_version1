@@ -8,6 +8,7 @@ import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling/jewe
 import { SharedModule } from 'src/app/shared/shared.module';
 import { JewelleryAssemblingMetalsDetailsComponent } from './jewellery-assembling/jewellery-assembling-metals-details/jewellery-assembling-metals-details.component';
 import { JewelleryAssemblingStonesDetailsComponent } from './jewellery-assembling/jewellery-assembling-stones-details/jewellery-assembling-stones-details.component';
+import { JewelleryAssemblingMetalDetailsComponent } from './jewellery-assembling/jewellery-assembling-metal-details/jewellery-assembling-metal-details.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { JewelleryAssemblingStonesDetailsComponent } from './jewellery-assemblin
     JewelleryAssemblingDetailsComponent,
     JewelleryAssemblingMetalsDetailsComponent,
     JewelleryAssemblingStonesDetailsComponent,
+    JewelleryAssemblingMetalDetailsComponent
   ],
   imports: [
     CommonModule,

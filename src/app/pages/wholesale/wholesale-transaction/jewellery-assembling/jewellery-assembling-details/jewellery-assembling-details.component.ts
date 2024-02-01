@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { JewelleryAssemblingMetalDetailsComponent } from '../jewellery-assembling-metal-details/jewellery-assembling-metal-details.component';
+import { JewelleryAssemblingStonesDetailsComponent } from '../jewellery-assembling-stones-details/jewellery-assembling-stones-details.component';
 
 @Component({
   selector: 'app-jewellery-assembling-details',
@@ -19,6 +21,11 @@ export class JewelleryAssemblingDetailsComponent implements OnInit  {
   currentDate = new Date();
   currentDate1 = new Date();
   currentDate2 = new Date()
+
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+  imageurl: any;
+  image: string | ArrayBuffer | null | undefined;
   
   
   column1:any[] = ['Stock Code','Purity','PCS','Gross WT','Rate Type','Metal Type','Making Rate','Amount-FC','Amount-LC','MAKING_AMTFC','MAKING_AMTLC'];
@@ -40,7 +47,20 @@ export class JewelleryAssemblingDetailsComponent implements OnInit  {
 
   ngOnInit(): void {
   }
-  
+
+  onFileChangedimage(event:any) {
+    this.imageurl = event.target.files[0]
+    console.log(this.imageurl)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.image = reader.result; 
+      };
+    }
+  }
+
   jewelleryAssemblingDetailsForm: FormGroup = this.formBuilder.group({
 
     branch:['HO'],
@@ -67,5 +87,26 @@ export class JewelleryAssemblingDetailsComponent implements OnInit  {
     this.activeModal.close(data);
   }
 
+  openJewelleryAssembilingMetalDetails(){
+    const modalRef: NgbModalRef = this.modalService.open(JewelleryAssemblingMetalDetailsComponent,{
+      size: "xl",
+      backdrop: true, //'static'
+      keyboard: false,
+      windowClass: "modal-full-width",
+    });
+  }
+
+  openJewelleryAssembilingStoneDetails(){
+    const modalRef: NgbModalRef = this.modalService.open(JewelleryAssemblingStonesDetailsComponent,{
+      size: "xl",
+      backdrop: true, //'static'
+      keyboard: false,
+      windowClass: "modal-full-width",
+    });
+  }
+
+  deleteTableData(){
+
+  }
 
 }
