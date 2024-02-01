@@ -26,7 +26,7 @@ export class ProcessMasterComponent implements OnInit {
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 152,
+    LOOKUPID: 252,
     SEARCH_FIELD: 'ACCOUNT_HEAD',
     SEARCH_HEADING: 'Worker A/c Code',
     SEARCH_VALUE: '',
@@ -88,9 +88,11 @@ export class ProcessMasterComponent implements OnInit {
     processCode: ['', [Validators.required]],
     processDesc: ['', [Validators.required]],
     processType: [null],
-    stand_time: ['', [Validators.required]],
+    stand_time: ['',],
+    stand_Days: [0,],
     WIPaccount: ['', [Validators.required]],
-    max_time: ['', [Validators.required]],
+    max_time: ['',],
+    max_Days: ['',],
     Position: [''],
     trayWeight: [''],
     approvalCode: [''],
@@ -234,8 +236,10 @@ export class ProcessMasterComponent implements OnInit {
   // final save
   formSubmit() {
     console.log(this.processMasterForm.value.stand_time, 'this.processMasterForm.value.stand_time');
-
-      // let time = this.commonService.timeToMinutes(this.processMasterForm.value.stand_time)
+    let form = this.processMasterForm.value
+      let time = this.commonService.timeToMinutes(form.stand_time,form.stand_Days)
+      console.log(time,this.processMasterForm.value.stand_Day);
+      return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateProcessMaster()
       return
