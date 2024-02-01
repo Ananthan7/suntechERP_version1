@@ -11274,35 +11274,42 @@ export class AddPosComponent implements OnInit {
   }
 
   posPlanetFileInsert() {
-    const items = this.currentLineItems.map((data: any) => {
+    const res = this.nationalityMaster.filter((data: any)=> data.CODE ==  this.customerDetailForm.value.fcn_cust_detail_nationality)
+const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
+    const items = this.currentLineItems.map((data: any, i: any) => {
       return {
         "Description": data.STOCK_DOCDESC,
-        "Quantity": data.PCS || '', //doubt
-        "GrossAmount": data.GROSS_AMT, //doubt
+        "Quantity": data.PCS || '', //doubt -c 
+        "GrossAmount": data.TOTALWITHVATFC,// total amount with vat
+        // "GrossAmount": data.GROSS_AMT, //doubt
         "Code": data.STOCK_CODE, //doubt
-        "UnitPrice": 0, //doubt
-        "NetAmount": data.NETTOTAL,
-        "VatRate": data.VAT_PER, //doubt
+        "UnitPrice": data.TOTALWITHVATFC, //doubt - c -total amount with vat
+        "NetAmount": data.TOTALWITHVATFC, //  total amount with vat
+        "VatRate": data.VAT_PER, //doubt -c
         "VatCode": data.VATCODE,
         "VatAmount": data.VAT_AMOUNTFC,
-        "MerchandiseGroup": 0, //doubt
-        "TaxRefundEligible": false, //doubt
-        "SerialNumber": "" //doubt
+        "MerchandiseGroup": 0, //doubt - branchmaster merchandise
+        "TaxRefundEligible": true, //doubt -c
+        "SerialNumber": i + 1 //doubt - srno  - c
       }
     });
     let postData = {
-      "Version": environment.app_version,
+      // "Version": environment.app_version,
+      "Version": '2.0',
       "ReceiptNumber": this.vocDataForm.value.fcn_voc_no.toString(),
       "Date": this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()) || '',
-      "Terminal": "",
-      "Type": "",
+      "Terminal": this.comFunc.allbranchMaster.PLANETTERMINALID, // branchmaster terminal ID
+      "Type": "RECEIPT", // c 
       "Order": {
-        "Total": this.order_items_total_gross_amount,
+        "Total": this.order_items_total_gross_amount, //doubt
         "TotalBeforeVAT": this.comFunc.transformDecimalVB(
           this.comFunc.amtDecimals,
-          this.order_items_total_tax
+          this.prnt_inv_total_gross_amt
         ),
-        "VatIncl": 0, //doubt
+        "VatIncl": this.comFunc.transformDecimalVB(
+          this.comFunc.amtDecimals,
+          this.order_items_total_tax
+        ), //doubt - total vat amount 
         "Items": items,
 
       },
@@ -11310,9 +11317,9 @@ export class AddPosComponent implements OnInit {
         "FirstName": this.customerDetailForm.value.fcn_customer_detail_fname || '',
         "LastName": this.customerDetailForm.value.fcn_customer_detail_lname || '',
         "Gender": this.customerDetailForm.value.fcn_cust_detail_gender || '',
-        "Nationality": this.customerDetailForm.value.fcn_cust_detail_nationality || '',
-        "CountryOfResidence": '',
-        "PhoneNumber": this.customerDetailForm.value.fcn_cust_detail_phone || '',
+        "Nationality": natinality || '',
+        "CountryOfResidence":  this.customerDetailForm.value.fcn_cust_detail_nationality || '', // doubt - c
+        "PhoneNumber": (this.customerDetailForm.value.fcn_mob_code || '' ) + this.customerDetailForm.value.fcn_cust_detail_phone || '', // with mobile code infornt
         "Email": this.customerDetailForm.value.fcn_cust_detail_email || '',
         "Birth": {
           "Date": this.customerDetailForm.value.fcn_cust_detail_dob || ''
@@ -11321,8 +11328,10 @@ export class AddPosComponent implements OnInit {
           "Number": this.customerDataForm.value.fcn_customer_id_number,
           "ExpirationDate": this.convertDateToYMD(this.customerDataForm.value.fcn_customer_exp_date),
           "IssuedBy": "",
-          "Type": this.customerDataForm.value.fcn_customer_id_type
+          // passport , idcard
+          "Type": this.customerDataForm.value.fcn_customer_id_type == 'ID_CARD' ? 'ID_CARD' : 'PASSPORT'
         }
+
       }
     };
 
