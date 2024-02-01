@@ -558,6 +558,29 @@ export class CommonServiceService {
     return totalMinutes;
   }
 
+  timeToHHMMSS(timeString: string): string {
+    if (this.nullToString(timeString) === '') {
+      return '';
+    }
+  
+    // Split the time string into hours and minutes
+    const timeComponents = timeString.split(':');
+  
+    // Parse hours, minutes, and seconds from the split components
+    const hours = parseInt(timeComponents[0], 10);
+    const minutes = parseInt(timeComponents[1], 10);
+    const seconds = parseInt(timeComponents[2], 10) || 0; // Assume 0 seconds if not provided
+  
+    // Format hours, minutes, and seconds into "hh:mm:ss"
+    const formattedTime = `${this.padZero(hours)}:${this.padZero(minutes)}:${this.padZero(seconds)}`;
+    return formattedTime;
+  }
+  
+  padZero(value: number): string {
+    return value < 10 ? `0${value}` : `${value}`;
+  }
+  
+
 
 
   // Get Messages by id
