@@ -172,7 +172,7 @@ export class SchemeMasterComponent implements OnInit {
           "SCHEME_PERIOD": 0,
           "SCHEME_REMARKS": this.comService.nullToString(this.schemeMasterForm.value.remarks),
           "SCHEME_AMOUNT": this.comService.emptyToZero(this.schemeMasterForm.value.installmentAmount),
-          "SCHEME_METALCURRENCY": 0,
+          "SCHEME_METALCURRENCY": '',
           "CANCEL_CHARGE": this.comService.emptyToZero(this.schemeMasterForm.value.cancelCharges),
           "SCHEME_FREQUENCY": this.comService.nullToString(this.schemeMasterForm.value.frequency),
           "STATUS": true,

@@ -544,17 +544,24 @@ export class CommonServiceService {
     return value
   }
 
-  timeToMinutes(timeString: string) {
+  timeToMinutes(timeString: string,days?: any) {
     if (this.nullToString(timeString) == '') return ''
     // Split the time string into hours and minutes
-    var timeComponents = timeString.split(':');
+    let timeComponents = timeString.split(':');
 
     // Parse hours and minutes from the split components
-    var hours = parseInt(timeComponents[0], 10);
-    var minutes = parseInt(timeComponents[1], 10);
+    let hours = parseInt(timeComponents[0], 10);
+    let minutes = parseInt(timeComponents[1], 10);
 
     // Convert hours and minutes to total minutes
-    var totalMinutes = hours * 60 + minutes;
+    let totalMinutes = hours * 60 + minutes;
+
+    if(Number(days)){
+      let totalDaysToMinutes = Number(days)*24
+      totalDaysToMinutes = totalDaysToMinutes*60
+
+      totalMinutes = totalMinutes + totalDaysToMinutes
+    }
     return totalMinutes;
   }
 
