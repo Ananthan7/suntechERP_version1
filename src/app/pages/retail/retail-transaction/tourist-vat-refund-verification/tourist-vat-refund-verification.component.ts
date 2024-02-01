@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
   selector: 'app-tourist-vat-refund-verification',
@@ -12,7 +13,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
 
   vocMaxDate = new Date();
   currentDate = new Date();
-  columnhead:any[] = ['Sr.No','VOCDATE','TRD NO','VOCT_','VOC','Sales Amt','Planent Amt','VAT Amt','Planet Vat Amt'];
+  columnhead:any[] = ['Sr.No','VOCDATE',' TRS No',' VOC TYPE','VOC NO','Sales Amt','Planet Amt','VAT Amt','Planet Vat Amt'];
 
 
   enteredByCode: MasterSearchModel = {
@@ -31,7 +32,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
   partyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 6,
+    LOOKUPID: 7,
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Party Code',
     SEARCH_VALUE: '',
@@ -57,7 +58,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
 
   touristVatRefundVerificationForm: FormGroup = this.formBuilder.group({
     vocType: [''],
-    vocTypeDescription:[''],
+    vocTypeNo:[''],
     vocDate: [''],
     partyCode:[''],
     partyCurrency: [''],
@@ -69,16 +70,20 @@ export class TouristVatRefundVerificationComponent implements OnInit {
     partyAddress: [''],
     narration:[''],
     totalSale: [''],
-    totalVat:[''],
-    
+    totalVat:[''],    
   })
 
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.touristVatRefundVerificationForm.controls.vocDate.setValue(this.currentDate);
+    this.touristVatRefundVerificationForm.controls.fromDate.setValue(this.currentDate);
+    this.touristVatRefundVerificationForm.controls.toDate.setValue(this.currentDate);
+    this.touristVatRefundVerificationForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
   }
 
   enteredBySelected(e: any) {
