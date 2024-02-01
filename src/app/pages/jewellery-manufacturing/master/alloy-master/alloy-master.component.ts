@@ -23,6 +23,7 @@ export class AlloyMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   urls: string | ArrayBuffer | null | undefined;
   url: any;
+  numericValue!: number;
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,

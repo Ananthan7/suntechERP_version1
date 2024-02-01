@@ -30,7 +30,7 @@ export class JewelleryAssemblingComponent implements OnInit {
 
   jewelleryAssemblingForm: FormGroup = this.formBuilder.group({
 
-    branch:['HO'],
+    branch:[''],
     vocType:['UFM'],
     vocNo:['1'],
     vocDate:[''],
@@ -67,6 +67,39 @@ export class JewelleryAssemblingComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  partyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'PARTYCODE',
+    SEARCH_HEADING: 'Party Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PARTYCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  partyCodeSelected(e:any){
+    this.jewelleryAssemblingForm.controls.partyCode.setValue(e.PARTYCODE);
+  }
+
+  enteredByCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Entry Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  enteredBySelected(e:any){
+    this.jewelleryAssemblingForm.controls.enteredBy.setValue(e.SALESPERSON_CODE);
+  }
+
+
   openJewelleryAssembilingDetails(){
     const modalRef: NgbModalRef = this.modalService.open(JewelleryAssemblingDetailsComponent,{
       size: "xl",
@@ -82,6 +115,7 @@ export class JewelleryAssemblingComponent implements OnInit {
   formSubmit(){
 
   }
+
 
 
 }
