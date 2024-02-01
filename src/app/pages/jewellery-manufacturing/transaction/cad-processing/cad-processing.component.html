@@ -191,10 +191,10 @@
                                         </dxo-editing>
                                         <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
                                         <dxi-column dataField="Division" caption="Division"></dxi-column>
-                                        <dxi-column dataField="StoneType" caption="Stone Type" cellTemplate="stonetypetemp"></dxi-column>
+                                        <dxi-column dataField="StoneType" caption="Stone Type" cellTemplate="stonetypetemp"  [allowEditing]="false" alignment="left"></dxi-column>
                                        <!-- stonetype search starts -->
                                        <div
-                                       *dxTemplate="let data of 'stoneType'">
+                                       *dxTemplate="let data of 'stonetypetemp'">
                                        <div
                                            (mouseenter)="onHoverstoneType(data)"
                                            class="d-flex justify-content-between">
@@ -211,11 +211,102 @@
                                            </master-search>
                                        </div>
                                    </div>
-                                        <dxi-column dataField="StockCode" caption="Stock Code"></dxi-column>
-                                        <dxi-column dataField="Karat" caption="Karat"></dxi-column>
-                                        <dxi-column dataField="Color" caption="Color"></dxi-column>
-                                        <dxi-column dataField="Shape" caption="Shape"></dxi-column>
-                                        <dxi-column dataField="Sieve" caption="Sieve"></dxi-column>
+                                        <dxi-column dataField="StockCode" caption="Stock Code" cellTemplate="stockcodetemp" [allowEditing]="false" alignment="left"></dxi-column>
+                                        <!-- stock code Select search starts -->
+                                        <div
+                                                *dxTemplate="let data of 'stockcodetemp'">
+                                                <div
+                                                    (mouseenter)="onHoverStockCode(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search
+                                                        [MasterSearchData]="stockCode"
+                                                        (newRowClick)="stockCodeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                        <dxi-column dataField="Karat" caption="Karat" cellTemplate="karattemp" [allowEditing]="false" alignment="left"></dxi-column>
+                                         <!-- stock code Select search starts -->
+                                         <div
+                                         *dxTemplate="let data of 'karattemp'">
+                                         <div
+                                             (mouseenter)="onHoverKaratCode(data)"
+                                             class="d-flex justify-content-between">
+                                             <div>
+                                                 <a
+                                                     href="javascript:void(0)"
+                                                     class="mx-1"
+                                                     [innerHTML]="data.value"></a>
+                                             </div>
+                                             <master-search
+                                                 [MasterSearchData]="karatCodeData"
+                                                 (newRowClick)="karatCodeSelected($event,data)">
+                                             </master-search>
+                                         </div>
+                                     </div>
+                                        <dxi-column dataField="Color" caption="Color" cellTemplate="colortemp"  [allowEditing]="false" alignment="left"></dxi-column>
+                                        <!-- color Select search starts -->
+                                        <div
+                                        *dxTemplate="let data of 'colortemp'">
+                                        <div
+                                            (mouseenter)="onHoverColorCode(data)"
+                                            class="d-flex justify-content-between">
+                                            <div>
+                                                <a href="javascript:void(0)"
+                                                    class="mx-1"
+                                                    [innerHTML]="data.value"></a>
+                                            </div>
+                                            <master-search
+                                                [MasterSearchData]="generalMaster"
+                                                (newRowClick)="colorCodeSelected($event,data)">
+                                            </master-search>
+                                        </div>
+                                    </div>
+                                        <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp" [allowEditing]="false" alignment="left"></dxi-column>
+                                         <!-- shape Select search starts -->
+                                         <div
+                                         *dxTemplate="let data of 'shapetemp'">
+                                         <div
+                                             (mouseenter)="onHoverShape(data)"
+                                             class="d-flex justify-content-between">
+                                             <div>
+                                                 <a
+                                                     href="javascript:void(0)"
+                                                     class="mx-1"
+                                                     [innerHTML]="data.value"></a>
+                                             </div>
+                                             <master-search
+                                                 *ngIf="data.data.DIVCODE != 'G'"
+                                                 [MasterSearchData]="generalMaster"
+                                                 (newRowClick)="shapeSelected($event,data)">
+                                             </master-search>
+                                         </div>
+                                     </div>
+                                        <dxi-column dataField="Sieve" caption="Sieve" cellTemplate="sievetemp" [allowEditing]="false" alignment="left"></dxi-column>
+                                        <!-- sieve Select search starts -->
+                                        <div
+                                        *dxTemplate="let data of 'sievetemp'">
+                                        <div
+                                            (mouseenter)="onHoverSieve(data)"
+                                            class="d-flex justify-content-between">
+                                            <div>
+                                                <a
+                                                    href="javascript:void(0)"
+                                                    class="mx-1"
+                                                    [innerHTML]="data.value"></a>
+                                            </div>
+                                            <master-search
+                                                *ngIf="data.data.DIVCODE != 'G'"
+                                                [MasterSearchData]="generalMaster"
+                                                (newRowClick)="sieveSelected($event,data)">
+                                            </master-search>
+                                        </div>
+                                    </div>
                                         <dxi-column dataField="Size" caption="Size"></dxi-column>
                                         <dxi-column dataField="Pcs" caption="Pcs"></dxi-column>
                                         <dxi-column dataField="WtCt" caption="Wt/Ct"></dxi-column>
@@ -307,8 +398,45 @@
                                           <dxi-column dataField="SizeSet" caption="Size Set"></dxi-column>
                                           <dxi-column dataField="SizeCode" caption="Size Code"></dxi-column>
                                           <dxi-column dataField="Type" caption="Type"></dxi-column>
-                                          <dxi-column dataField="Category" caption="Category"></dxi-column>
-                                          <dxi-column dataField="Shape" caption="Shape"></dxi-column>
+                                          <dxi-column dataField="Category" caption="Category" cellTemplate="categorytemp" [allowEditing]="false" alignment="left"></dxi-column>
+                                           <!-- Category Select search starts -->
+                                        <div
+                                        *dxTemplate="let data of 'categorytemp'" >
+                                        <div
+                                            (mouseenter)="onHoverCategory(data)"
+                                            class="d-flex justify-content-between">
+                                            <div>
+                                                <a
+                                                    href="javascript:void(0)"
+                                                    class="mx-1"
+                                                    [innerHTML]="data.value"></a>
+                                            </div>
+                                            <master-search
+                                                *ngIf="data.data.DIVCODE != 'G'"
+                                                [MasterSearchData]="generalMaster"
+                                                (newRowClick)="categortySelected($event,data)">
+                                            </master-search>
+                                        </div>
+                                    </div>
+                                          <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp" [allowEditing]="false" alignment="left"></dxi-column>
+                                          <div
+                                          *dxTemplate="let data of 'shapetemp'">
+                                          <div
+                                              (mouseenter)="onHoverShape(data)"
+                                              class="d-flex justify-content-between">
+                                              <div>
+                                                  <a
+                                                      href="javascript:void(0)"
+                                                      class="mx-1"
+                                                      [innerHTML]="data.value"></a>
+                                              </div>
+                                              <master-search
+                                                  *ngIf="data.data.DIVCODE != 'G'"
+                                                  [MasterSearchData]="generalMaster"
+                                                  (newRowClick)="shapeSelected1($event,data)">
+                                              </master-search>
+                                          </div>
+                                      </div>
                                           <dxi-column dataField="Height" caption="Height"></dxi-column>
                                           <dxi-column dataField="Width" caption="Width"></dxi-column>
                                           <dxi-column dataField="Length" caption="Length"></dxi-column>

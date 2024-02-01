@@ -8,6 +8,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { AlloyAllocationComponent } from './alloy-allocation/alloy-allocation.component';
+import { Code } from 'angular-feather/icons';
 
 @Component({
   selector: 'app-cad-processing',
@@ -169,7 +170,8 @@ export class CADProcessingComponent implements OnInit {
     deliveryOn:[''],
     deliveryOnDays:[''],
     deliveryOnDate:[new Date(),{disabled: true,value:''}],
-    salesPersonCode:['']
+    salesPersonCode:[''],
+    StockCode: ['', [Validators.required]],
   });
 
  
@@ -250,11 +252,54 @@ remarkstemp(data:any,value: any){
   this.tableData[value.data.SRNO - 1].Remarks = data.target.value;
 }
 stoneTypeSelected(event: any, value: any) {
-  this.tableData[value.data.SRNO - 1].STONE_TYPE = event.CODE;
+  this.tableData[value.data.Srno - 1].StoneType = event.CODE;
 }
 onHoverstoneType({ data }: any) {
   this.generalMaster.WHERECONDITION = `TYPES = 'STONE TYPE MASTER' AND DIV_${data.DIVCODE}=1`
 }
+stockCodeSelected(event: any, value: any) {
+  console.log(event)
+  this.tableData[value.data.Srno - 1].StockCode = event.STOCK_CODE;
+}
+colorCodeSelected(event: any, value: any) {
+  this.tableData[value.data.Srno - 1].Color = event.CODE;
+}
+shapeSelected(event: any, value: any) {
+  this.tableData[value.data.Srno - 1].Shape = event.CODE;
+}
+sieveSelected(event: any, value: any) {
+  this.tableData[value.data.Srno - 1].Sieve = event.CODE;
+}
+categortySelected(event: any, value: any) {
+  this.tableDatas[value.data.Srno - 1].Category = event.CODE;
+}
+shapeSelected1(event: any, value: any) {
+  this.tableDatas[value.data.Srno - 1].Shape = event.CODE;
+}
+karatCodeSelected(event: any, value: any ) {
+  console.log(event)
+    this.tableData[value.data.Srno - 1].Karat = event['Karat Code'];
+}
+onHoverStockCode({ data }: any) {
+  this.stockCode.LOOKUPID = 23
+ }
+
+ onHoverColorCode({ data }: any) {
+  this.generalMaster.WHERECONDITION = `TYPES = 'COLOR MASTER' AND DIV_${data.DIVCODE}=1`
+}
+onHoverShape({ data }: any) {
+  this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
+}
+onHoverSieve({data}:any){
+  this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
+}
+onHoverCategory({data}:any){
+  this.generalMaster.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
+}
+onHoverKaratCode({data}:any){
+  this.karatCodeData.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
+}
+
 
 adddatas() {
   let length = this.tableDatas.length;
@@ -634,6 +679,29 @@ componentSet(){
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+  }
+  stockCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 4,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'STOCK CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 84,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
