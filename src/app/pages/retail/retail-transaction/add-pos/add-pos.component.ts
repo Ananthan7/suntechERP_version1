@@ -11301,6 +11301,7 @@ export class AddPosComponent implements OnInit {
 
       }
     });
+    // skip Divison - X
     let postData = {
       // "Version": environment.app_version,
       "Version": '2.0',
@@ -11309,10 +11310,10 @@ export class AddPosComponent implements OnInit {
       "Terminal": this.comFunc.allbranchMaster.PLANETTERMINALID, // branchmaster terminal ID
       "Type": "RECEIPT", // c 
       "Order": {
-        "Total": this.order_items_total_gross_amount, // doubt
+        "Total": this.order_items_total_gross_amount, // doubt total + vat // net amont - lineitem
         "TotalBeforeVAT": this.comFunc.transformDecimalVB(
           this.comFunc.amtDecimals,
-          this.prnt_inv_total_gross_amt
+          this.prnt_inv_total_gross_amt //  total without vat
         ),
         "VatIncl": this.comFunc.transformDecimalVB(
           this.comFunc.amtDecimals,
