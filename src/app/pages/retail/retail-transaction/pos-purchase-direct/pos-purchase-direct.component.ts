@@ -4,6 +4,8 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { PosPurchaseDirectDetailComponent } from './pos-purchase-direct-detail/pos-purchase-direct-detail.component';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
+import { PosCustomerMasterMainComponent } from '../../retail-master/pos-customer-master-main/pos-customer-master-main.component';
 
 
 @Component({
@@ -37,6 +39,18 @@ export class PosPurchaseDirectComponent implements OnInit {
     SEARCH_HEADING: "Party Currency",
     SEARCH_VALUE: "",
     WHERECONDITION: "Currency <>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Customer",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -99,7 +113,15 @@ export class PosPurchaseDirectComponent implements OnInit {
 
   partyCurrencyCodeSelected(e:any){
     console.log(e);
-    
+  }
+
+  customerCodeSelected(e:any){
+    console.log(e);
+    this.posPurchaseForm.controls.customer.setValue(e.CODE);
+    this.posPurchaseForm.controls.custId.setValue(e.CODE);
+    this.posPurchaseForm.controls.custName.setValue(e.NAME);
+    this.posPurchaseForm.controls.email.setValue(e.EMAIL);
+    this.posPurchaseForm.controls.moblie.setValue(e.MOBILE);
   }
 
   close(data?: any) {
@@ -109,6 +131,15 @@ export class PosPurchaseDirectComponent implements OnInit {
 
   openaddposdirectdetail() {
     const modalRef: NgbModalRef = this.modalService.open(PosPurchaseDirectDetailComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openaddCustomerMaster() {
+    const modalRef: NgbModalRef = this.modalService.open(PosCustomerMasterMainComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
