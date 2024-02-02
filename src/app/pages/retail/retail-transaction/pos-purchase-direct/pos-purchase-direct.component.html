@@ -58,22 +58,22 @@
                             <input type="text" matInput formControlName="partyCurrCodeDesc" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="partyCurrencyCodeData"
-                        (newRowClick)="partyCurrencyCodeSelected($event)"></master-search>
+                            (newRowClick)="partyCurrencyCodeSelected($event)"></master-search>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row align-items-baseline">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Customer</label>
-                    <div class="col-md-4">
-                        <mat-form-field style="width: 100%;">
+                    <div class="col-md-5">
+                        <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="customer" />
                         </mat-form-field>
+                        <master-search [MasterSearchData]="customerCodeData"
+                            (newRowClick)="customerCodeSelected($event)"></master-search>
                     </div>
-                    <div class="col-md-4">
-                        <div class="p-2">
-                            <button type="button" class="btn btn-primary add-btn w-100">
-                                New
-                            </button>
-                        </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-primary add-btn w-100" (click)="openaddCustomerMaster()"> 
+                            New
+                        </button>
                     </div>
                 </div>
                 <div class="row">
@@ -90,12 +90,12 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Item Curr</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="itemCurr" readonly/>
+                            <input type="text" matInput formControlName="itemCurr" readonly />
                         </mat-form-field>
                     </div>
                     <div class="col-md-5">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="itemCurrCode" readonly/>
+                            <input type="text" matInput formControlName="itemCurrCode" readonly />
                         </mat-form-field>
                     </div>
                 </div>
