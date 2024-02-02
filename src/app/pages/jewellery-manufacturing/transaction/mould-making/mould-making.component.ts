@@ -132,7 +132,7 @@ stockCodeData: MasterSearchModel = {
     this.mouldMakingForm.controls.vocher.setValue(this.comService.getqueryParamVocType())
     this.mouldMakingForm.controls.vocDate.setValue(this.comService.currentDate)
     this.mouldMakingForm.controls.itemCurrency.setValue(this.comService.compCurrency)
-    this.mouldMakingForm.controls.itemCurrencyRate.setValue(this.comService.popMetalValueOnNet)
+    this.mouldMakingForm.controls.itemCurrencyRate.setValue('1.000')
   }
 
   userDataSelected(value: any) {

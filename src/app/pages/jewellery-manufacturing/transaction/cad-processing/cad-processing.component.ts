@@ -97,7 +97,7 @@ export class CADProcessingComponent implements OnInit {
   setvaluesdata(){
     console.log(this.comService);
     this.cadProcessingForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.cadProcessingForm.controls.vocNo.setValue('0')
+    this.cadProcessingForm.controls.vocNo.setValue('1')
     this.cadProcessingForm.controls.vocDate.setValue(this.comService.currentDate)
     this.cadProcessingForm.controls.completed.setValue(this.comService.currentDate)
     this.cadProcessingForm.controls.date.setValue(this.comService.currentDate)
