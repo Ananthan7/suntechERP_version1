@@ -322,7 +322,8 @@
             <mat-label>{{ date_lbl }}</mat-label>
             <!-- [matDatepicker]="vocDate" -->
             <input matInput type="text" name="vocdate" [matDatepicker]="vocDate" formControlName="vocdate"
-              value="{{ currentDate }}" placeholder="DD/MM/YYYY" [max]="currentDate" [readonly]="viewOnly" />
+              value="{{ currentDate }}" placeholder="DD/MM/YYYY" [max]="currentDate" [readonly]="viewOnly"
+              (dateChange)="getFinancialYear()" />
             <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
             <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
             <mat-error *ngIf="vocDataForm.controls.vocdate.hasError('required')">
