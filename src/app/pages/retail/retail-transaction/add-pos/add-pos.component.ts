@@ -71,6 +71,8 @@ export class AddPosComponent implements OnInit {
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
 
+  posMode: string = 'ADD';
+
   // baseImgUrl = baseImgUrl;
   maskVocDate: any = new Date();
   amlNameValidation;
@@ -1058,6 +1060,8 @@ export class AddPosComponent implements OnInit {
 
     // need to enable
     // this.vocType = this.comFunc.getqueryParamVocType()
+    if (this.content != undefined)
+      this.posMode = this.content?.FLAG;
 
     if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
 
@@ -1073,8 +1077,8 @@ export class AddPosComponent implements OnInit {
         this.viewOnly = true;
       }
 
-    }else{
-    this.generateVocNo();
+    } else {
+      this.generateVocNo();
 
     }
 
@@ -7421,7 +7425,7 @@ export class AddPosComponent implements OnInit {
             "VOCTYPE": this.vocType,
             "REFMID": this.vocDataForm.value.fcn_voc_no,
             "USERNAME": this.strUser,
-            "MODE": "", // ADD   EDIT  DELETE
+            "MODE": this.posMode, // ADD,EDIT,DELETE
             "DATETIME": this.comFunc.cDateFormat(new Date()),
             "REMARKS": "", // reason
             "SYSTEMNAME": "",
@@ -7501,8 +7505,8 @@ export class AddPosComponent implements OnInit {
                   // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
 
                   // this.close('reloadMainGrid');
-                  if(this.posPlanetIssuing)
-                  this.posPlanetFileInsert();
+                  if (this.posPlanetIssuing)
+                    this.posPlanetFileInsert();
 
                   this.submitAttachment();
 
@@ -7530,9 +7534,9 @@ export class AddPosComponent implements OnInit {
                 // this.close('reloadMainGrid');
 
                 // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
-              
-                if(this.posPlanetIssuing)
-                this.posPlanetFileInsert();
+
+                if (this.posPlanetIssuing)
+                  this.posPlanetFileInsert();
 
                 this.submitAttachment();
 
@@ -8251,8 +8255,8 @@ export class AddPosComponent implements OnInit {
         let dblStockFcCost: any;
         let karatCode = this.newLineItem.KARAT_CODE;
 
-        if (this.comFunc.compCurrency == 'AED') { 
-          
+        if (this.comFunc.compCurrency == 'AED') {
+
           if ((dblStockCost <= 5) && (this.comFunc.compAcCode == "JHO001") && (karatComp22 == false)) {
             if (karatCode.toString() == "24") {
               dblStockFcCost = dblStockCost + 1;
@@ -11270,20 +11274,20 @@ export class AddPosComponent implements OnInit {
   }
 
   posPlanetFileInsert() {
-    const items = this.currentLineItems.map((data: any)=> {
+    const items = this.currentLineItems.map((data: any) => {
       return {
-              "Description": data.STOCK_DOCDESC,
-              "Quantity": data.PCS || '', //doubt
-              "GrossAmount": data.GROSS_AMT, //doubt
-              "Code": data.STOCK_CODE, //doubt
-              "UnitPrice": 0, //doubt
-              "NetAmount": data.NETTOTAL, 
-              "VatRate": data.VAT_PER, //doubt
-              "VatCode": data.VATCODE,
-              "VatAmount": data.VAT_AMOUNTFC, 
-              "MerchandiseGroup": 0, //doubt
-              "TaxRefundEligible": false, //doubt
-              "SerialNumber": "" //doubt
+        "Description": data.STOCK_DOCDESC,
+        "Quantity": data.PCS || '', //doubt
+        "GrossAmount": data.GROSS_AMT, //doubt
+        "Code": data.STOCK_CODE, //doubt
+        "UnitPrice": 0, //doubt
+        "NetAmount": data.NETTOTAL,
+        "VatRate": data.VAT_PER, //doubt
+        "VatCode": data.VATCODE,
+        "VatAmount": data.VAT_AMOUNTFC,
+        "MerchandiseGroup": 0, //doubt
+        "TaxRefundEligible": false, //doubt
+        "SerialNumber": "" //doubt
       }
     });
     let postData = {
@@ -11292,9 +11296,9 @@ export class AddPosComponent implements OnInit {
       "Date": this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()) || '',
       "Terminal": "",
       "Type": "",
-      "Order": { 
+      "Order": {
         "Total": this.order_items_total_gross_amount,
-        "TotalBeforeVAT":  this.comFunc.transformDecimalVB(
+        "TotalBeforeVAT": this.comFunc.transformDecimalVB(
           this.comFunc.amtDecimals,
           this.order_items_total_tax
         ),
@@ -11313,7 +11317,7 @@ export class AddPosComponent implements OnInit {
         "Birth": {
           "Date": this.customerDetailForm.value.fcn_cust_detail_dob || ''
         },
-        "ShopperIdentityDocument": { 
+        "ShopperIdentityDocument": {
           "Number": this.customerDataForm.value.fcn_customer_id_number,
           "ExpirationDate": this.convertDateToYMD(this.customerDataForm.value.fcn_customer_exp_date),
           "IssuedBy": "",

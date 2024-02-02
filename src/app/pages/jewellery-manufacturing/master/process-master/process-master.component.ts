@@ -88,10 +88,8 @@ export class ProcessMasterComponent implements OnInit {
     processCode: ['', [Validators.required]],
     processDesc: ['', [Validators.required]],
     processType: [null],
-    stand_Day: ['', [Validators.required]],
     stand_time: ['', [Validators.required]],
     WIPaccount: ['', [Validators.required]],
-    max_Day: ['', [Validators.maxLength(2)]],
     max_time: ['', [Validators.required]],
     Position: [''],
     trayWeight: [''],
@@ -152,11 +150,12 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log()
     this.getProcessTypeOptions()
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
-      this.processMasterForm.disable();
+      // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
     }
@@ -203,8 +202,7 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.RefineryAutoProcess.setValue(this.content.DF_REFINERY);
     this.processMasterForm.controls.ApplyAutoLossToRefinery.setValue(this.content.AUTO_LOSS);
     this.processMasterForm.controls.HaveTreeNo.setValue(this.content.TREE_NO);
-    this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
-    this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
+
     this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
     this.processMasterForm.controls.processType.setValue(this.content.PROCESS_TYPE);
     this.processMasterForm.controls.Position.setValue(this.content.POSITION);
@@ -222,6 +220,8 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.accountMiddle.setValue(this.content.RECOV_ACCODE);
     this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
     this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
+    this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
+    this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
   }
   onchangeCheckBox(e: any) {
     if (e == true) {
@@ -235,7 +235,7 @@ export class ProcessMasterComponent implements OnInit {
   formSubmit() {
     console.log(this.processMasterForm.value.stand_time, 'this.processMasterForm.value.stand_time');
 
-    let time = this.commonService.timeToMinutes(this.processMasterForm.value.stand_time)
+      // let time = this.commonService.timeToMinutes(this.processMasterForm.value.stand_time)
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateProcessMaster()
       return
@@ -249,10 +249,16 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/InsertProcessMasterDJ'
     let postData = {
       "MID": 0,
-      "PROCESS_CODE": this.processMasterForm.value.processCode,
-      "DESCRIPTION": this.processMasterForm.value.processDesc,
-      "STD_TIME": this.commonService.emptyToZero(this.processMasterForm.value.stand_time),
-      "MAX_TIME": this.commonService.emptyToZero(this.processMasterForm.value.max_time),
+      // "PROCESS_CODE": this.processMasterForm.value.processCode,
+      // "DESCRIPTION": this.processMasterForm.value.processDesc,
+      // "STD_TIME": this.commonService.timeToMinutes(this.processMasterForm.value.stand_time),
+      // "MAX_TIME": this.commonService.timeToMinutes(this.processMasterForm.value.max_time),
+      "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
+      "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
+      // "STD_TIME": this.commonService.timeToMinutes(this.processMasterForm.value.stand_time),
+      // "MAX_TIME": this.commonService.timeToMinutes(this.processMasterForm.value.max_time),
+      "STD_TIME": this.processMasterForm.value.stand_time || 0,
+      "MAX_TIME": this.processMasterForm.value.max_time || 0,
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -278,7 +284,7 @@ export class ProcessMasterComponent implements OnInit {
       "POSITION": this.processMasterForm.value.Position || 0,
       "RECOV_MIN": this.processMasterForm.value.standard_end || 0,
       "RECOV_ACCODE": this.processMasterForm.value.accountMiddle,
-      "RECOV_STOCK_CODE": this.processMasterForm.value.recStockCode || 0,
+      "RECOV_STOCK_CODE": this.processMasterForm.value.recStockCode || "",
       "RECOV_VAR1": this.processMasterForm.value.min_end || 0,
       "RECOV_VAR2": 0,
       "DEDUCT_PURE_WT": this.onchangeCheckBox(this.processMasterForm.value.DeductPureWeight),
@@ -346,6 +352,10 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.approvalProcess.setValue(e.Process_Code);
   }
   ACCODESelected(e: any) {
+    if (this.isSameAccountCodeSelected(e.ACCODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same account code');
+      return;
+    }
     this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
   }
 
@@ -395,10 +405,14 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.processCode
     let postData = {
       "MID": 0,
-      "PROCESS_CODE": this.processMasterForm.value.processCode,
-      "DESCRIPTION": this.processMasterForm.value.processDesc,
-      "STD_TIME": this.processMasterForm.value.stand_time || 0,
-      "MAX_TIME": this.processMasterForm.value.max_time || 0,
+      "PROCESS_CODE": this.processMasterForm.value.toUpperCase(),
+      "DESCRIPTION": this.processMasterForm.value.toUpperCase(),
+      // "STD_TIME": this.commonService.emptyToZero(this.processMasterForm.value.stand_time),
+      // "MAX_TIME": this.commonService.emptyToZero(this.processMasterForm.value.max_time),
+      // "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
+      // "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
+      "STD_TIME": this.processMasterForm.value.stand_time || "",
+      "MAX_TIME": this.processMasterForm.value.max_time || "",
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -424,7 +438,7 @@ export class ProcessMasterComponent implements OnInit {
       "POSITION": this.processMasterForm.value.Position || 0,
       "RECOV_MIN": this.processMasterForm.value.standard_end || 0,
       "RECOV_ACCODE": this.processMasterForm.value.accountMiddle,
-      "RECOV_STOCK_CODE": this.processMasterForm.value.recStockCode || 0,
+      "RECOV_STOCK_CODE": this.processMasterForm.value.recStockCode || "",
       "RECOV_VAR1": this.processMasterForm.value.min_end || 0,
       "RECOV_VAR2": 0,
       "DEDUCT_PURE_WT": this.onchangeCheckBox(this.processMasterForm.value.DeductPureWeight),

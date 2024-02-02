@@ -4,3 +4,26 @@
         z-index: 1070 !important;
     }
 }
+
+
+.bg-color{
+    background-color: #eaeaea;
+    border: 1px solid #ddd;
+}
+
+fieldset {
+    padding: 10px;
+    border: solid 1px #c1c1c1;
+    position: relative;
+    legend {
+        color: #333;
+        position: absolute;
+        top: -15px;
+        background-color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        width: 105px;
+        padding: 4px;
+        margin-bottom: 2px;
+    }  
+  }

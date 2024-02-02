@@ -97,19 +97,31 @@
             </mat-form-field>
           </div>
           <div class="col-md-6">
-            <mat-form-field style="width: 80%">  
+            <mat-form-field style="width: 100%">  
               <mat-label>Reason</mat-label>
               <input
                 type="text"
                 matInput
+                [matAutocomplete]="reason"
                 formControlName="reason"
                  appNoEmptySpace
               />
+
+              
+              <mat-autocomplete #reason="matAutocomplete" autoActiveFirstOption (optionSelected)="changeReason($event.option)">
+                <mat-option *ngFor="let option of reasonMasterOptions | async" [value]="option.CODE">
+                  {{ option.CODE }}
+                </mat-option>
+              </mat-autocomplete>
+              
               <mat-error *ngIf="authForm.controls.reason.hasError('required')">
                 Reason is <strong>required</strong>
               </mat-error>
+              <mat-error *ngIf="authForm.controls.reason.hasError('notInOptions')">
+                Invalid value
+              </mat-error>
             </mat-form-field>
-          <master-search [MasterSearchData]="reasonLookup" (newRowClick)="reasonSelected($event)"></master-search>
+          <!-- <master-search [MasterSearchData]="reasonLookup" (newRowClick)="reasonSelected($event)"></master-search> -->
 
           </div>
         </div>
@@ -122,6 +134,7 @@
                 matInput
                 formControlName="description"
                  appNoEmptySpace
+                 rows="1"
                  ></textarea>
               <mat-error *ngIf="authForm.controls.description.hasError('required')">
                 Description is <strong>required</strong>

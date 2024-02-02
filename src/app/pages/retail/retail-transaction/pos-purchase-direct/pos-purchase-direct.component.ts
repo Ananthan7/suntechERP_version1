@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PosPurchaseDirectDetailComponent } from './pos-purchase-direct-detail/pos-purchase-direct-detail.component';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
   selector: 'app-pos-purchase-direct',
@@ -15,8 +16,8 @@ export class PosPurchaseDirectComponent implements OnInit {
   columnheadDetails:any[] = ['Stock Code','Pcs','Gr.Wt','Purity','Pure Wt','Mkg.RATE','Mkg.Amount','Metal Amt','St.Amt','Wastage','Wastage','Total','']
   posPurchaseForm: FormGroup = this.formBuilder.group({
     vocType:[''],
-    vocTypeNo:[''],
-    vocDate:[''],
+    vocTypeNo:[1],
+    vocDate:[new Date()],
     partyCode:[''],
     partyCurrCode:[''],
     partyCurrCodeDesc:[''],
@@ -52,9 +53,12 @@ export class PosPurchaseDirectComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+    this.posPurchaseForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
+
   }
 
   close(data?: any) {
@@ -69,7 +73,6 @@ export class PosPurchaseDirectComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-
   }
 
 }

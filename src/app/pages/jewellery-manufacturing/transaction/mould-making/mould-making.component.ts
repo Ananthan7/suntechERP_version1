@@ -124,6 +124,13 @@ stockCodeData: MasterSearchModel = {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
+    this.mouldMakingForm.controls.vocher.setValue('MLM')
+    this.mouldMakingForm.controls.vocherNo.setValue(1)
+    this.mouldMakingForm.controls.vocDate.setValue(new Date())
+    this.mouldMakingForm.controls.itemCurrency.setValue('AED')
+    this.mouldMakingForm.controls.itemCurrencyRate.setValue(1.000000)
+
   }
 
   userDataSelected(value: any) {
@@ -242,9 +249,9 @@ stockCodeData: MasterSearchModel = {
     uniq : [''],
     uniqNo : [''],
     job : [''],
-    vocher :['MLM',[Validators.required]],
-    vocherNo:[1],
-    vocDate : [new Date()],
+    vocher :['',[Validators.required]],
+    vocherNo:[''],
+    vocDate : [''],
     enteredBy : [''],
     fromProcess : ['',[Validators.required]],
     fromWorker : ['',[Validators.required]],

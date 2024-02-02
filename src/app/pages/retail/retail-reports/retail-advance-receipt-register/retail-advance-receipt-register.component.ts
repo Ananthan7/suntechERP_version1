@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+
 
 @Component({
   selector: 'app-retail-advance-receipt-register',
@@ -16,15 +18,20 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   branchOptions:any[] =[];
-
+  branchCode?: String;
+  // selected = 'all';
+  selectedBranchCode = this.branchCode
+  selected: string = 'all'; 
+  selectedReport:string ='preview'
+  public modeselect = this.branchCode;
   retailAdvanceReceiptRegisterForm: FormGroup = this.formBuilder.group({
     branch : [''],
-    show : [''],
-    fromDate : [''],
-    toDate : [''],
+    show : ['all'],
+    fromDate : [new Date()],
+    toDate : [new Date()],
     salesman : [''],
     salesmanCode : [''],
-    reportTo : ['']
+    reportTo : ['preview']
   })
 
   salesmanCodeData: MasterSearchModel = {
@@ -53,26 +60,30 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
-    private http: HttpClient,
     private dataService: SuntechAPIService,
+    private datePipe: DatePipe,
+    private comService: CommonServiceService,
 
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
     
     const apiUrl = '/UseBranchNetMaster/ADMIN';
   
       let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
         if (resp.status == 'Success') {
           this.branchOptions = resp.response;
-          console.log(this.branchOptions);
+          // console.log(this.branchOptions);
         }
        
       });
   }
 
   savePdf() {
-
+       
+    console.log(this.retailAdvanceReceiptRegisterForm.value.branch);
+    
     const printContent: any = document.getElementById('pdf_container');
     var WindowPrt: any = window.open(
       '',

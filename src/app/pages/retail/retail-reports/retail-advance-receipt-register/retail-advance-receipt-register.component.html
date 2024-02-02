@@ -7,7 +7,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="false" [isViewMore]="false" [editSaveBtnText]="'Go'"  (saveClick)="savePdf()" (cancelClick)="close()"></modal-header>
+<modal-header [isViewDelete]="false" [isViewMore]="false" [editSaveBtnText]="'Go'" (saveClick)="savePdf()"
+    (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="retailAdvanceReceiptRegisterForm">
@@ -17,30 +18,38 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Branch</label>
                     <div class="col-md-2">
                         <mat-form-field>
-                            <mat-select formControlName="branch">
-                                <!-- <mat-option  value="HO">HO</mat-option>
-                                <mat-option></mat-option> -->
-                                <mat-option
-                                *ngFor="let branchCode of branchOptions"
-                                [value]="branchCode.BRANCH_CODE"
-                                >{{ branchCode.BRANCH_CODE }}</mat-option
-                              >
+                            <mat-select formControlName="branch" [(ngModel)]="modeselect"
+                                placeholder="{{ branchCode }}">
+                                <mat-option *ngFor="let branchCode of branchOptions" [value]="branchCode.BRANCH_CODE">{{
+                                    branchCode.BRANCH_CODE }}</mat-option>
                             </mat-select>
+                            <!-- <mat-select  [(value)]="selectedBranchCode" formControlName="branch" >
+                                <mat-option *ngFor="let branchCode of branchOptions" [value]="branchCode.BRANCH_CODE">{{
+                                    branchCode.BRANCH_CODE }}</mat-option>
+                            </mat-select> -->
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row mb-1 ">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Filter</label>
-                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">From</label>
-                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">To</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">From</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">To</label>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Show</label>
                     <div class="col-md-2">
+                        <!-- <mat-form-field>
+                            <mat-select formControlName="show" [(value)]="selected">
+                                <mat-option value="all">ALL</mat-option>
+                                <mat-option value="pending">Pending</mat-option>
+                                <mat-option value="finished">Finished</mat-option>
+                                <mat-option value="cancelled">Cancelled</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
                         <mat-form-field>
-                            <mat-select formControlName="show">
-                                <mat-option value="0">ALL</mat-option>
-                                <mat-option value="1">Pending</mat-option>
-                                <mat-option value="2">Finished</mat-option>
-                                <mat-option value="3">Cancelled</mat-option>
+                            <mat-select [(value)]="selected" formControlName="show">
+                                <mat-option value="all">ALL</mat-option>
+                                <mat-option value="pending">Pending</mat-option>
+                                <mat-option value="finished">Finished</mat-option>
+                                <mat-option value="cancelled">Cancelled</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -50,7 +59,7 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
                             <input matInput [matDatepicker]="fromDate" [max]="vocMaxDate" name="fromDate"
-                                placeholder="DD/MM/YYYY" DateValidation  formControlName="fromDate"/>
+                                placeholder="DD/MM/YYYY" DateValidation formControlName="fromDate" />
                             <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
                         </mat-form-field>
@@ -67,27 +76,27 @@
                 <div class="row mb-1">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Salesman :</label>
                     <div class="col-md-2">
-                        <mat-form-field  style="width: 70%;">
-                            <input matInput ="text"  formControlName="salesman"/>
+                        <mat-form-field style="width: 70%;">
+                            <input matInput="text" formControlName="salesman" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="salesmanCodeData"
                             (newRowClick)="salesmanSelected($event)"></master-search>
                     </div>
                     <div class="col-md-2">
-                        <mat-form-field  style="width: 70%;">
-                            <input matInput ="text"  formControlName="salesmanCode"/>
+                        <mat-form-field style="width: 70%;">
+                            <input matInput="text" formControlName="salesmanCode" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Report To</label>
                     <div class="col-md-2">
                         <mat-form-field>
-                            <mat-select formControlName="reportTo">
-                                <mat-option value="0">PREVIEW</mat-option>
-                                <mat-option value="1">PRINT</mat-option>
-                                <mat-option value="2">CATALOGUE</mat-option>
-                                <mat-option value="3">EXCEL</mat-option>
-                                <mat-option value="4">PDF</mat-option>
-                                <mat-option value="5">EMAIL</mat-option>
+                            <mat-select [(value)]="selectedReport" formControlName="reportTo">
+                                <mat-option value="preview">PREVIEW</mat-option>
+                                <mat-option value="print">PRINT</mat-option>
+                                <mat-option value="catalogue">CATALOGUE</mat-option>
+                                <mat-option value="excel">EXCEL</mat-option>
+                                <mat-option value="pdf">PDF</mat-option>
+                                <mat-option value="email">EMAIL</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -103,8 +112,10 @@
                 <div class="col-md-6">
                     <div class="left_content">
                         <h4>POS ADVANCE RECEIPT REGISTER</h4>
-                        <P>From 01/01/2023 To 20/11/2023</P>
-                        <p>Salesman Range : </p>
+                        <P>From : {{ this.retailAdvanceReceiptRegisterForm.value.fromDate | date:'MMM dd, yyyy' }} To :
+                            {{ this.retailAdvanceReceiptRegisterForm.value.toDate | date:'MMM dd, yyyy' }}</P>
+                        <!-- <P>From : {{ fromDateOnePdf }} To : {{ toDateOnePdf }}</P> -->
+                        <p>Salesman Range : {{ this.retailAdvanceReceiptRegisterForm.value.salesman }}</p>
                     </div>
                 </div>
                 <div class="col-md-6">

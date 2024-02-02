@@ -250,7 +250,6 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
     this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
-    this.stonePrizeMasterForm.disable()
 
   }
   formSubmit() {
