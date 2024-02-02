@@ -103,7 +103,7 @@ export class WorkerMasterComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
       this.setFormValues();
-       this.selectProcessMasterList()
+      this.selectProcessMasterList()
     }
   }
 
@@ -132,16 +132,27 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_METAL_WT, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_WEIGHT, 'METAL'))
   }
-  getWorkerMaster(MID: any) {
-    let API = 'WorkerMaster/GetWorkerMasterMIDLookup/' + MID
+  getWorkerMaster() {
+    let API = 'WorkerMaster/GetWorkerMasterMIDLookup/' + this.content.MID
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           let data = result.response;
-          const set2 = new Set(data.workerDetails.map((obj: any) => obj.SRNO));
-          let dataSet = this.tableData.filter(obj => set2.has(obj.SRNO));
-          this.selectedKey = dataSet.map(item => item.SRNO );
+          this.selectedKey = data.workerDetails.map((obj: any) => obj.SRNO);
+          this.selectedKey.forEach((element:any) => {
+            this.tableData.forEach((item:any,index:number) => {
+              if(element == item.SRNO){
+                item.SORTID = index+1
+              }else{
+                item.SORTID = this.tableData.length
+              }
+            });
+          });
+          this.tableData = this.tableData.sort((a:any,b:any)=> a.SORTID - b.SORTID)
+          this.tableData.forEach((item:any,index:number) => {
+            item.SRNO = index+1
+        });
         }
       }, err => {
         this.commonService.closeSnackBarMsg()
@@ -377,7 +388,7 @@ export class WorkerMasterComponent implements OnInit {
           });
           this.selectedKey = []
           if ((this.content.FLAG == 'EDIT' || 'VIEW')) {
-            this.getWorkerMaster(this.content.MID)
+            this.getWorkerMaster()
           }
         }
       }, err => {
