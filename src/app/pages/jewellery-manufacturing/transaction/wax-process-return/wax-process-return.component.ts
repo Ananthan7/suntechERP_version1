@@ -106,8 +106,8 @@ export class WaxProcessReturnComponent implements OnInit {
 
   waxprocessFrom: FormGroup = this.formBuilder.group({
     voctype:['',[Validators.required]],
-    vocDate : [''],
-    vocno: ['',[Validators.required]],
+    vocDate : [new Date()],
+    vocno: [1,[Validators.required]],
     enteredBy : [''],
     process:['',[Validators.required]],
     worker:['',[Validators.required]],
@@ -130,6 +130,8 @@ export class WaxProcessReturnComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.waxprocessFrom.controls.voctype.setValue(this.comService.getqueryParamVocType());
+
   }
 
   userDataSelected(value: any) {

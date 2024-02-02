@@ -107,12 +107,12 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
 
   setvalue(){
     this.diamondJobBoqReceipt.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.diamondJobBoqReceipt.controls.vocno.setValue(this.comService.popMetalValueOnNet)
+    this.diamondJobBoqReceipt.controls.vocno.setValue('1')
     this.diamondJobBoqReceipt.controls.vocDate.setValue(this.comService.currentDate)
   
     this.diamondJobBoqReceipt.controls.kariggerDesc.setValue('Sertan, Turkey')
     this.diamondJobBoqReceipt.controls.currency.setValue(this.comService.compCurrency)
-    this.diamondJobBoqReceipt.controls.currencyDesc.setValue(this.comService.popMetalValueOnNet)
+    this.diamondJobBoqReceipt.controls.currencyDesc.setValue('1.000')
     this.diamondJobBoqReceipt.controls.baseCurrency.setValue(this.comService.compCurrency)
     this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue(this.comService.popMetalValueOnNet)
   }
