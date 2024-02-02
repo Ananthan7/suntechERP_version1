@@ -48,6 +48,7 @@ export class CADProcessingComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.setvaluesdata()
     if (this.content) {
       // this.setFormValues()  
       this.setAllInitialValues()
@@ -59,8 +60,10 @@ export class CADProcessingComponent implements OnInit {
       this.setFormValues()
     }
     this.cadProcessingForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
-    this.setvaluesdata()
+  
   }
+
+  
 
   cadProcessingForm: FormGroup = this.formBuilder.group({
     voctype: [,''],
@@ -94,12 +97,14 @@ export class CADProcessingComponent implements OnInit {
   setvaluesdata(){
     console.log(this.comService);
     this.cadProcessingForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.cadProcessingForm.controls.vocNo.setValue(this.comService.popMetalValueOnNet)
+    this.cadProcessingForm.controls.vocNo.setValue('0')
     this.cadProcessingForm.controls.vocDate.setValue(this.comService.currentDate)
     this.cadProcessingForm.controls.completed.setValue(this.comService.currentDate)
     this.cadProcessingForm.controls.date.setValue(this.comService.currentDate)
     this.cadProcessingForm.controls.deliveryOnDate.setValue(this.comService.currentDate)
   }
+
+  
   
   setAllInitialValues() {
     console.log(this.content)
