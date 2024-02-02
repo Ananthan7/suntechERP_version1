@@ -33,6 +33,7 @@ export class CADProcessingComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   table: any;
   status: boolean= true;
+  viewMode: boolean = false;
   selectedTabIndex = 0;
   // setAllInitialValues: any;
   constructor(
@@ -49,8 +50,11 @@ export class CADProcessingComponent implements OnInit {
     if (this.content) {
       // this.setFormValues()  
       this.setAllInitialValues()
-  
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      }
     }
+    
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     if (this.content) {
@@ -68,7 +72,7 @@ export class CADProcessingComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          console.log(data)
+          console.log(this.content.REMARKS,'working')
           data.Details.forEach((element:any) => {
             this.tableData.push({
               Srno: element.SRNO,
@@ -82,6 +86,7 @@ export class CADProcessingComponent implements OnInit {
               Pcs:element.PCS,
               Remarks:element.D_REMARKS,
               PointerWt:element.POINTER_WT,
+              StockCode: element.STOCK_CODE
               
              
 
@@ -408,7 +413,7 @@ setDetaills(){
         "D_REMARKS": Element.Remarks,
         "PROCESS_TYPE": "",
         "POINTER_WT": Element.PointerWt,
-        "STOCK_CODE": Element.StockCode,
+        "STOCK_CODE": this.comService.nullToString(Element.StockCode),
         "COMP_CODE": ""
       }
     )
