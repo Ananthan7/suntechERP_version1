@@ -33,6 +33,7 @@ export class CADProcessingComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   table: any;
   status: boolean= true;
+  viewMode: boolean = false;
   selectedTabIndex = 0;
   urls: string | ArrayBuffer | null | undefined;
   url: any;
@@ -48,19 +49,25 @@ export class CADProcessingComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.setvaluesdata()
     if (this.content) {
       // this.setFormValues()  
       this.setAllInitialValues()
-  
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      }
     }
+    
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     if (this.content) {
       this.setFormValues()
     }
     this.cadProcessingForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
-    this.setvaluesdata()
+  
   }
+
+  
 
   cadProcessingForm: FormGroup = this.formBuilder.group({
     voctype: [,''],
@@ -94,12 +101,14 @@ export class CADProcessingComponent implements OnInit {
   setvaluesdata(){
     console.log(this.comService);
     this.cadProcessingForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.cadProcessingForm.controls.vocNo.setValue(this.comService.popMetalValueOnNet)
+    this.cadProcessingForm.controls.vocNo.setValue('1')
     this.cadProcessingForm.controls.vocDate.setValue(this.comService.currentDate)
     this.cadProcessingForm.controls.completed.setValue(this.comService.currentDate)
     this.cadProcessingForm.controls.date.setValue(this.comService.currentDate)
     this.cadProcessingForm.controls.deliveryOnDate.setValue(this.comService.currentDate)
   }
+
+  
   
   setAllInitialValues() {
     console.log(this.content)
@@ -109,7 +118,7 @@ export class CADProcessingComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          console.log(data)
+          console.log(this.content.REMARKS,'working')
           data.Details.forEach((element:any) => {
             this.tableData.push({
               Srno: element.SRNO,
@@ -123,6 +132,7 @@ export class CADProcessingComponent implements OnInit {
               Pcs:element.PCS,
               Remarks:element.D_REMARKS,
               PointerWt:element.POINTER_WT,
+              StockCode: element.STOCK_CODE
               
              
 
@@ -149,7 +159,7 @@ export class CADProcessingComponent implements OnInit {
             
             })
           }); 
-          
+          this.cadProcessingForm.controls.vocNo.setValue(data.VOCNO)
           this.cadProcessingForm.controls.voctype.setValue(data.VOCTYPE)
           this.cadProcessingForm.controls.design.setValue(data.DESIGN_CODE)
           this.cadProcessingForm.controls.job.setValue(data.JOB_NUMBER)
@@ -157,6 +167,7 @@ export class CADProcessingComponent implements OnInit {
           this.cadProcessingForm.controls.toProcess.setValue(data.TO_PROCESS_CODE)
           this.cadProcessingForm.controls.soNumber.setValue(data.JOB_SO_NUMBER)
           this.cadProcessingForm.controls.subJobId.setValue(data.JOB_SO_MID)
+          this.cadProcessingForm.controls.narration.setValue(data.REMARKS)
          
           
         } else {
@@ -189,8 +200,8 @@ export class CADProcessingComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    this.cadProcessingForm.controls.job_number.setValue(this.content.APPR_CODE)
-    this.cadProcessingForm.controls.design.setValue(this.content.job_description)
+    this.cadProcessingForm.controls.job_number.setValue(this.content.JOB_NUMBER)
+    this.cadProcessingForm.controls.design.setValue(this.content.DESIGN_CODE)
     this.dataService.getDynamicAPI('/JobCadProcessDJ/GetJobCadProcessDJ/' + this.content.job_number).subscribe((data) => {
       if (data.status == 'Success') {
         this.tableData = data.response.WaxProcessDetails;
@@ -435,7 +446,7 @@ setDetaills(){
         "D_REMARKS": Element.Remarks,
         "PROCESS_TYPE": "",
         "POINTER_WT": Element.PointerWt,
-        "STOCK_CODE": Element.StockCode,
+        "STOCK_CODE": this.comService.nullToString(Element.StockCode),
         "COMP_CODE": ""
       }
     )
@@ -572,7 +583,7 @@ componentSet(){
           "SYSTEM_DATE": this.cadProcessingForm.value.date,
           "MACHINEID": "",
           "DOC_REF": "",
-          "REMARKS": this.cadProcessingForm.value.remarks,
+          "REMARKS": this.cadProcessingForm.value.narration,
           "VOCDATE": this.cadProcessingForm.value.vocDate,
           "NAVSEQNO": 0,
           "PROCESS_CODE": this.cadProcessingForm.value.process,

@@ -132,6 +132,7 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_METAL_WT, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_WEIGHT, 'METAL'))
   }
+  loadFlag: number = 0
   getWorkerMaster() {
     let API = 'WorkerMaster/GetWorkerMasterMIDLookup/' + this.content.MID
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -140,19 +141,23 @@ export class WorkerMasterComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           this.selectedKey = data.workerDetails.map((obj: any) => obj.SRNO);
-          this.selectedKey.forEach((element:any) => {
-            this.tableData.forEach((item:any,index:number) => {
-              if(element == item.SRNO){
-                item.SORTID = index+1
-              }else{
-                item.SORTID = this.tableData.length
-              }
-            });
-          });
-          this.tableData = this.tableData.sort((a:any,b:any)=> a.SORTID - b.SORTID)
-          this.tableData.forEach((item:any,index:number) => {
-            item.SRNO = index+1
-        });
+          if(this.loadFlag == 0){
+            this.loadFlag+=1
+            this.tableData = data.workerDetails
+          }
+          // this.selectedKey.forEach((element:any) => {
+          //   this.tableData.forEach((item:any,index:number) => {
+          //     if(element == item.SRNO){
+          //       item.SORTID = index+1
+          //     }else{
+          //       item.SORTID = this.tableData.length
+          //     }
+          //   });
+          // });
+          // this.tableData = this.tableData.sort((a:any,b:any)=> a.SORTID - b.SORTID)
+          // this.tableData.forEach((item:any,index:number) => {
+          //   item.SRNO = index+1
+        // });
         }
       }, err => {
         this.commonService.closeSnackBarMsg()

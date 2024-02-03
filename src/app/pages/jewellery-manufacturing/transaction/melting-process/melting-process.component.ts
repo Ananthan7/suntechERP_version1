@@ -286,7 +286,7 @@ export class MeltingProcessComponent implements OnInit {
 
   setvalues(){
     this.meltingProcessFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
-    this.meltingProcessFrom.controls.vocNo.setValue(this.comService.popMetalValueOnNet)
+    this.meltingProcessFrom.controls.vocNo.setValue('1')
     this.meltingProcessFrom.controls.vocDate.setValue(this.comService.currentDate)
   }
 

@@ -44,7 +44,7 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Voc Number * :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput step="0.001" min="0" maxlength="4" formControlName="vocno" [dir]="'rtl'" style="text-align: right;" />
+                  <input type="number" matInput step="0.001" min="0" maxlength="4" formControlName="vocno"  style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -175,19 +175,19 @@
                     <input type="date" (change)="DelDatetextevent($event,data)"  />
                   </div>
                   <div *dxTemplate="let data of 'GrossWttemp'">
-                    <input type="number" (change)="GrossWttextevent($event,data)" [dir]="'rtl'" style="text-align: right;" />
+                    <input type="number" (change)="GrossWttextevent($event,data)"  style="text-align: right;" />
                   </div>
                   <div *dxTemplate="let data of 'MetalWttemp'">
-                    <input type="number" (change)="MetalWttextevent($event,data)" [dir]="'rtl'" style="text-align: right;" />
+                    <input type="number" (change)="MetalWttextevent($event,data)"  style="text-align: right;" />
                   </div>
                   <div *dxTemplate="let data of 'StoneWttemp'">
-                    <input type="number" (change)="StoneWttextevent($event,data)" [dir]="'rtl'" style="text-align: right;"  />
+                    <input type="number" (change)="StoneWttextevent($event,data)"  style="text-align: right;"  />
                   </div>
                   <div *dxTemplate="let data of 'OrdPcstemp'">
-                    <input type="number" (change)="OrderPcstextevent($event,data)" [dir]="'rtl'" style="text-align: right;" />
+                    <input type="number" (change)="OrderPcstextevent($event,data)"  style="text-align: right;" />
                   </div>
                   <div *dxTemplate="let data of 'IssuePcstemp'">
-                    <input type="number" (change)="IssuePcstextevent($event,data)" [dir]="'rtl'" style="text-align: right;" />
+                    <input type="number" (change)="IssuePcstextevent($event,data)"  style="text-align: right;" />
                   </div>
                 </dx-data-grid>
 
