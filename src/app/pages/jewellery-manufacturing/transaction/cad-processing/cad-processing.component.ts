@@ -115,7 +115,7 @@ export class CADProcessingComponent implements OnInit {
             
             })
           }); 
-          
+          this.cadProcessingForm.controls.vocNo.setValue(data.VOCNO)
           this.cadProcessingForm.controls.voctype.setValue(data.VOCTYPE)
           this.cadProcessingForm.controls.design.setValue(data.DESIGN_CODE)
           this.cadProcessingForm.controls.job.setValue(data.JOB_NUMBER)
@@ -123,6 +123,7 @@ export class CADProcessingComponent implements OnInit {
           this.cadProcessingForm.controls.toProcess.setValue(data.TO_PROCESS_CODE)
           this.cadProcessingForm.controls.soNumber.setValue(data.JOB_SO_NUMBER)
           this.cadProcessingForm.controls.subJobId.setValue(data.JOB_SO_MID)
+          this.cadProcessingForm.controls.narration.setValue(data.REMARKS)
          
           
         } else {
@@ -155,8 +156,8 @@ export class CADProcessingComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    this.cadProcessingForm.controls.job_number.setValue(this.content.APPR_CODE)
-    this.cadProcessingForm.controls.design.setValue(this.content.job_description)
+    this.cadProcessingForm.controls.job_number.setValue(this.content.JOB_NUMBER)
+    this.cadProcessingForm.controls.design.setValue(this.content.DESIGN_CODE)
     this.dataService.getDynamicAPI('/JobCadProcessDJ/GetJobCadProcessDJ/' + this.content.job_number).subscribe((data) => {
       if (data.status == 'Success') {
         this.tableData = data.response.WaxProcessDetails;
@@ -566,7 +567,7 @@ componentSet(){
           "SYSTEM_DATE": this.cadProcessingForm.value.date,
           "MACHINEID": "",
           "DOC_REF": "",
-          "REMARKS": this.cadProcessingForm.value.remarks,
+          "REMARKS": this.cadProcessingForm.value.narration,
           "VOCDATE": this.cadProcessingForm.value.vocDate,
           "NAVSEQNO": 0,
           "PROCESS_CODE": this.cadProcessingForm.value.process,

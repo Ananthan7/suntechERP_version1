@@ -34,8 +34,7 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="vocNo"  [dir]="'rtl'" style="text-align: right;" />
-                                        <input type="number" matInput formControlName="vocNo" [readonly]="viewMode"/>
+                                        <input class="text-right" type="number" matInput formControlName="vocNo" [readonly]="viewMode"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -156,7 +155,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3"> 
                         <div class="icons">
                             <div class="image_box">
                                 <img src={{urls}} style="width:324px;height:151px">
