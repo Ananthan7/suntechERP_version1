@@ -85,6 +85,7 @@ export class PricelistMasterComponent implements OnInit {
     if (this.content.FLAG == 'EDIT') {
       this.setAllInitialValues();
     }
+
   }
 
   formSubmit() {
@@ -171,7 +172,6 @@ export class PricelistMasterComponent implements OnInit {
             this.priceListMasterForm.controls.priceRoundoff.setValue(data.PRICE_ROUDOFF)
             this.priceListMasterForm.controls.dontCalculate.setValue(data.DONTCALCULATE)
             this.priceListMasterForm.controls.roundoff_digit.setValue(data.ROUNDOFF_DIGIT)
-
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
           }
@@ -310,6 +310,14 @@ export class PricelistMasterComponent implements OnInit {
   }
   onPriceTypeChange() {
     try {
+      const selectedValue = this.priceListMasterForm.controls.priceMethod.value;
+      if (selectedValue === 1) { // Assuming 1 corresponds to 'Fixed'
+        // Reset the values for the specified form controls
+        this.priceListMasterForm.controls.finalPriceValue.setValue(null);
+        this.priceListMasterForm.controls.addlValue.setValue(null);
+        this.priceListMasterForm.controls.priceValue.setValue(null);
+      }
+
       const selectedPriceType = this.priceTypeList.find(pt => pt.value === this.priceListMasterForm.value.priceMethod);
       if (selectedPriceType && selectedPriceType.type === 'Fixed') {
         this.priceListMasterForm.controls.priceSign.disable();
