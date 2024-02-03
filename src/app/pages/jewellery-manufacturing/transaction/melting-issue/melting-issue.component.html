@@ -261,9 +261,35 @@
                             <dxo-selection mode="multiple"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
+                            <!-- <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
                                 [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
+                            </dxi-column> -->
+                            <dxi-column dataField="SRNO" caption="SRNO"></dxi-column>
+                            <dxi-column dataField="DIV" caption="DIV"></dxi-column>
+                            <dxi-column dataField="Job No" caption="Job No"></dxi-column>
+                            <dxi-column dataField="Stock Code" caption="Stock Code"></dxi-column>
+                            <dxi-column dataField="Main Stock" caption="Main Stock"></dxi-column>
+                            <dxi-column dataField="Process" caption="Process"></dxi-column>
+                            <dxi-column dataField="Worker" caption="Worker"></dxi-column>
+                            <dxi-column dataField="Pcs" caption="Pcs"></dxi-column>
+                            <dxi-column dataField="Gross Weight" caption="Gross Weight"></dxi-column>
+                            <dxi-column dataField="Purity" caption="Purity"></dxi-column>
+                            <dxi-column dataField="Pure Weight" caption="Pure Weight"></dxi-column>
+                            <dxi-column dataField="Rate" caption="Rate"></dxi-column>
+                            <dxi-column dataField="Amount" caption="Amount"></dxi-column>
+
+                            <dxo-summary>
+                                <dxi-total-item column="SRNO">
+                                </dxi-total-item>
+                                <dxi-total-item column="Pcs">
+                                </dxi-total-item>
+                                <dxi-total-item column="Gross Weight">
+                                </dxi-total-item>  
+                                <dxi-total-item column="Pure Weight">
+                                </dxi-total-item>                
+                                <dxi-total-item column="Amount">
+                                </dxi-total-item>                
+                            </dxo-summary>
                         </dx-data-grid>
                     </div>
                     <div class="col-md-12">
