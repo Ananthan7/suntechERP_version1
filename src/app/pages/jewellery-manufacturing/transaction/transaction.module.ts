@@ -51,6 +51,7 @@ import { JobTransactionsComponent } from './job-transactions/job-transactions.co
 import { ProcessTransferNewComponent } from './process-transfer-new/process-transfer-new.component';
 import { ProcessTransferNewDetailComponent } from './process-transfer-new/process-transfer-new-detail/process-transfer-new-detail.component';
 import { CommonMfgModule } from '../common-mfg/common-mfg.module';
+import { JobAllocationMeltingComponent } from './melting-process/job-allocation-melting/job-allocation-melting.component';
 
 
 
@@ -103,6 +104,7 @@ import { CommonMfgModule } from '../common-mfg/common-mfg.module';
     JobTransactionsComponent,
     ProcessTransferNewComponent,
     ProcessTransferNewDetailComponent,
+    JobAllocationMeltingComponent,
 
   ],
   imports: [

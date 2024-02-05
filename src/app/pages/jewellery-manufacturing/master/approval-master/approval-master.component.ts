@@ -38,6 +38,9 @@ export class ApprovalMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+
+
+
   approvalMasterForm: FormGroup = this.formBuilder.group({
     code: ['', [Validators.required]],
     description: ['', [Validators.required]],
@@ -65,6 +68,8 @@ export class ApprovalMasterComponent implements OnInit {
       this.setFormValues();
     }
     console.log(this.content);
+
+    
   }
   setFormValues() {
     if (!this.content) return
@@ -92,7 +97,7 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   typedataselected(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].APPR_TYPE = this.commonService.emptyToZero(data.target.value);
+    this.tableData[value.data.SRNO - 1].APPR_TYPE = data.target.value;
   }
 
   Mandatorycheckevent(data: any, value: any) {
@@ -151,8 +156,21 @@ export class ApprovalMasterComponent implements OnInit {
     });
   }
 
+  dataGridConfig = {
+    columns: [
+      {
+        dataField: 'USER_CODE',
+        caption: 'User Id',
+        cellTemplate: 'usertemp',
+        validationRules: [{ type: 'required', message: 'User Id is required' }]
+      },
+      // Other columns in your DataGrid
+    ],
+    // Other DataGrid configuration options
+  };
+
   adddata() {
-    
+    const userCodeValue = this.approvalMasterForm.value.USER_CODE;
     if (this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "") {
       let length = this.tableData.length;
 
@@ -161,7 +179,7 @@ export class ApprovalMasterComponent implements OnInit {
         "UNIQUEID": 12345,
         "APPR_CODE": "test",
         "SRNO": srno,
-        "USER_CODE": "",
+        "USER_CODE": userCodeValue,
         "APPR_TYPE": 0,
         "APPRREQUIRED": false,
         "ATTACH_REQ": false,
@@ -216,10 +234,10 @@ export class ApprovalMasterComponent implements OnInit {
     return final.length == 0
   }
   formSubmit() {
-    if(this.checkFinalApproval()){
-      this.toastr.error('Final Approval Type Not Selected')
-      return
-    }
+    // if(this.checkFinalApproval()){
+    //   this.toastr.error('Final Approval Type Not Selected')
+    //   return
+    // }
     if (this.approvalMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -228,6 +246,7 @@ export class ApprovalMasterComponent implements OnInit {
       this.update()
       return
     }
+
     
     let API = 'ApprovalMaster/InsertApprovalMaster'
     let postData = {
@@ -236,6 +255,7 @@ export class ApprovalMasterComponent implements OnInit {
       "approvalDetails": this.tableData,
 
     }
+console.log(this.tableData);
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
