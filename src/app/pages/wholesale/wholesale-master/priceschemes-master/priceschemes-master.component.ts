@@ -39,7 +39,35 @@ export class PriceschemesMasterComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     this.setAllInitialValues();
+
+    this.priceSchemaMasterForm = this.formBuilder.group({
+      priceCode: ['', [Validators.required]],
+      priceDescription: ['', [Validators.required]],
+      price1: ['', [Validators.required]],
+      price2: [{ value: '', disabled: true }, Validators.required],
+      price3: [{ value: '', disabled: true }, Validators.required],
+      price4: [{ value: '', disabled: true }, Validators.required],
+      price5: [{ value: '', disabled: true }, Validators.required],
+    })
+
   }
+
+  enableNextField(currentField: string, nextField: string) {
+    const currentControl = this.priceSchemaMasterForm.get(currentField);
+    const nextControl = this.priceSchemaMasterForm.get(nextField);
+  
+    if (currentControl && nextControl) {
+      if (currentControl.valid) {
+        nextControl.enable({ emitEvent: false });
+        nextControl.markAsUntouched();
+      } else {
+        nextControl.disable();
+        nextControl.setValue(null);
+      }
+    }
+  }
+  
+  
  /** checking for same account code selection */
  private isSameAccountCodeSelected(accountCode: any): boolean {
   return (
@@ -50,6 +78,7 @@ export class PriceschemesMasterComponent implements OnInit {
     this.priceSchemaMasterForm.value.price5 === accountCode
   );
 }
+
 
 priceCodeSelected(e: any, controlName: string) {
   if (this.isSameAccountCodeSelected(e.PRICE_CODE)) {

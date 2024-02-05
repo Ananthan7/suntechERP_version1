@@ -112,7 +112,7 @@ export class WorkerMasterComponent implements OnInit {
   setInitialValues() {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    this.workerMasterForm.controls.TargetPcs.setValue(0)
+    this.workerMasterForm.controls.TargetPcs.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -127,7 +127,7 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(this.content.LOSS_ALLOWED, 'AMOUNT'))
     this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE)
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TRAY_WEIGHT, 'METAL'))
-    this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS)
+    this.workerMasterForm.controls.TargetPcs.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_PCS, 'METAL'))
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_CARAT_WT, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_METAL_WT, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_WEIGHT, 'METAL'))
