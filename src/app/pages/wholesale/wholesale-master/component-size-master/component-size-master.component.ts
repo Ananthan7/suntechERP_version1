@@ -45,6 +45,7 @@ export class ComponentSizeMasterComponent implements OnInit {
   private subscribeToFormChanges() {
     this.componentsizemasterForm.valueChanges.subscribe(() => {
       this.calculateRadius();
+      this.getvaluies()
     });
   }
 
@@ -64,6 +65,18 @@ export class ComponentSizeMasterComponent implements OnInit {
     }
   }
   
+  getvaluies(){
+    const height = this.componentsizemasterForm.value.height || 0;
+    const width = this.componentsizemasterForm.value.width || 0;
+    const length = this.componentsizemasterForm.value.length || 0;
+    const radius = this.componentsizemasterForm.value.radius || 0;
+
+    const formattedDesc = `H ${height}#, W ${width}#, L ${length}#,R ${radius}#`;
+
+    this.componentsizemasterForm.patchValue({
+      desc:formattedDesc
+    }, { emitEvent: false });
+  }
   
   close(data?: any) {
     //TODO reset forms and data before closing

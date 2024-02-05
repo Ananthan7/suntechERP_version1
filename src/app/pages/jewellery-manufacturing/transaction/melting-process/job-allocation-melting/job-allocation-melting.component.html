@@ -1,0 +1,96 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Job Allocation To  Melting</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component --><modal-header  (cancelClick)="close()"
+></modal-header>
+
+    <div class="col-md-12">
+        <form  >
+            <div class="container-fluid pt-3">
+                <div class="row">
+                    <div class="col-md-9">
+                      <div class="row">
+                        <div class="col-md-10">
+                          <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Sales Order as On :</label>
+                            <div class="col-md-3">
+                                <mat-form-field style="width: 80%">
+                                    <input matInput [matDatepicker]="vocDate" 
+                                    placeholder="DD-MM-YYYY"  DateValidation />
+                                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                                  </mat-form-field>
+                             
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+      
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <mat-form-field style="width: 80%;">
+                                <mat-select [(value)]="selectedValue">
+                                  <mat-option value="1">Design Code</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </div>
+
+                        <div class="col-md-3 d-flex offset-7">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text"  matInput />
+                              </mat-form-field>
+                              <div class="b-1 pt-3">
+                                <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                                    Find
+                                  </button>
+                              </div>
+                             
+                        </div>
+
+                    </div>
+
+                  </div>
+
+                  <div class="col-md-12">
+                    <dx-data-grid #dataGrid id="gridContainer"
+                    [showBorders]="true"
+                    >
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+    
+                      <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="">
+                        <div class="col-md-3 d-flex offset-11">
+                            <div class="b-1 pt-3">
+                                <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                                    Apply
+                                  </button>
+                              </div>
+                              <div class="b-1 pt-3">
+                                <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                                    Cancel
+                                  </button>
+                              </div>   
+                        </div>
+
+                    </div>
+                  </div>
+
+            </div>
+        </form>
+    </div>

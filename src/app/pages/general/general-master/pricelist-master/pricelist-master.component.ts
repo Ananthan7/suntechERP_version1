@@ -19,6 +19,8 @@ export class PricelistMasterComponent implements OnInit {
   subscriptions: any;
   currentDate: any = new Date();
   viewMode: boolean = false;
+  required : boolean = false;
+
   priceListMasterForm!: FormGroup;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -67,12 +69,12 @@ export class PricelistMasterComponent implements OnInit {
       priceCode: ['', [Validators.required]],
       description: ['', [Validators.required]],
       priceMethod: [0, [Validators.required]],
-      priceSign: ['', [Validators.required]],
+      priceSign: [''],
       priceValue: [''],
-      finalPriceSign: ['', [Validators.required]],
-      finalPriceValue: ['', [Validators.required]],
-      addlValueSign: ['', [Validators.required]],
-      addlValue: ['', [Validators.required]],
+      finalPriceSign: [''],
+      finalPriceValue: [''],
+      addlValueSign: [''],
+      addlValue: [''],
       priceRoundoff: [false],
       dontCalculate: [false],
       roundoff_digit: [''],
@@ -142,6 +144,7 @@ export class PricelistMasterComponent implements OnInit {
       this.priceListMasterForm.controls.finalPriceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
       this.priceListMasterForm.controls.addlValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
       this.priceListMasterForm.controls.priceValue.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+      this.priceListMasterForm.controls.roundoff_digit.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     } catch (error) {
       console.error('Error in initializeForm:', error);
     }
@@ -320,23 +323,27 @@ export class PricelistMasterComponent implements OnInit {
 
       const selectedPriceType = this.priceTypeList.find(pt => pt.value === this.priceListMasterForm.value.priceMethod);
       if (selectedPriceType && selectedPriceType.type === 'Fixed') {
-        this.priceListMasterForm.controls.priceSign.disable();
-        this.priceListMasterForm.controls.priceSign.setValue('');
-        this.priceListMasterForm.controls.priceValue.disable();
-        this.priceListMasterForm.controls.finalPriceSign.disable();
-        this.priceListMasterForm.controls.finalPriceValue.disable();
-        this.priceListMasterForm.controls.addlValueSign.disable();
-        this.priceListMasterForm.controls.addlValue.disable();
+        this.required = false;
+         this.viewMode = true;
 
-        this.isDisabled = true;
+        this.priceListMasterForm.controls.priceSign.setValue('');
+        this.priceListMasterForm.controls.priceSign.setValue('');
+         this.priceListMasterForm.controls.priceValue.setValue('');
+        this.priceListMasterForm.controls.finalPriceSign.setValue('');
+        this.priceListMasterForm.controls.finalPriceValue.setValue('');
+        this.priceListMasterForm.controls.addlValueSign.setValue('');
+        this.priceListMasterForm.controls.addlValue.setValue('');
+
+        // this.isDisabled = true;
       } else {
+        this.required = true;
         this.priceListMasterForm.controls.priceSign.enable();
         this.priceListMasterForm.controls.priceValue.enable();
         this.priceListMasterForm.controls.finalPriceSign.enable();
         this.priceListMasterForm.controls.finalPriceValue.enable();
         this.priceListMasterForm.controls.addlValueSign.enable();
         this.priceListMasterForm.controls.addlValue.enable();
-        this.isDisabled = false;
+        // this.isDisabled = false;
       }
     }
     catch (error) {

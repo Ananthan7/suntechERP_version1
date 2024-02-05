@@ -58,9 +58,10 @@ export class TouristVatRefundVerificationComponent implements OnInit {
 
   touristVatRefundVerificationForm: FormGroup = this.formBuilder.group({
     vocType: [''],
-    vocTypeNo:[''],
+    vocTypeNo:[1],
     vocDate: [''],
     partyCode:[''],
+    partycodeName:[''],
     partyCurrency: [''],
     partyCurrencyRate: [''],
     enteredBy:[''],
@@ -96,7 +97,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.touristVatRefundVerificationForm.controls.partyCode.setValue(e.ACCODE);
-    
+    this.touristVatRefundVerificationForm.controls.partycodeName.setValue(e);
   }
 
   partyCurrencyCodeSelected(e: any) {

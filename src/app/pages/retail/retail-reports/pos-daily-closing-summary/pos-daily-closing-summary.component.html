@@ -173,24 +173,24 @@
                                                     backgroundcolor="#000">
                                                 </dxi-column> -->
                                                 <dxi-column [width]="100" dataField="Division"
-                                                    dataType="Division"></dxi-column>
-                                                <dxi-column [width]="100" dataField="Type" dataType="Type"></dxi-column>
-                                                <dxi-column [width]="100" dataField="Pcs" dataType="Pcs"></dxi-column>
-                                                <dxi-column [width]="100" dataField="Gms" dataType="Gms"></dxi-column>
+                                                    caption="Division"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Type" caption="Type"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Pcs" caption="Pcs"></dxi-column>
+                                                <dxi-column [width]="100" dataField="Gms" caption="Gms"></dxi-column>
                                                 <dxi-column [width]="100" dataField="Pure Wt"
-                                                    dataType="Pure_Wt"></dxi-column>
+                                                    caption="Pure_Wt"></dxi-column>
                                                 <dxi-column [width]="100" dataField="St.Qty"
-                                                    dataType="St_Qty"></dxi-column>
+                                                    caption="St_Qty"></dxi-column>
                                                 <dxi-column [width]="100" dataField="St.Amt"
-                                                    dataType="St_Amt"></dxi-column>
+                                                    caption="St_Amt"></dxi-column>
                                                 <dxi-column [width]="100" dataField="Mkg.Rate"
-                                                    dataType="Mkg_Rate"></dxi-column>
+                                                    caption="Mkg_Rate"></dxi-column>
                                                 <dxi-column [width]="100" dataField="Mkg.Value"
-                                                    dataType="Mkg_Value"></dxi-column>
+                                                    caption="Mkg_Value"></dxi-column>
                                                 <dxi-column [width]="100" dataField="Metal Value"
-                                                    dataType="Metal_Value"></dxi-column>
+                                                    caption="Metal_Value"></dxi-column>
                                                 <dxi-column [width]="100" dataField="Total Amount"
-                                                    dataType="Total_Amount"></dxi-column>
+                                                    caption="Total_Amount"></dxi-column>
                                                 <dxo-summary>
                                                     <dxi-total-item column="Pcs"> </dxi-total-item>
                                                     <dxi-total-item column="Gms"> </dxi-total-item>
@@ -206,30 +206,13 @@
                                     </div>
                                 </mat-tab>
                             </mat-tab-group>
-
-
                         </div>
                         <div class="col-md-4">
                             <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
                                 <mat-tab label="Diamond Division">
                                     <div class="row my-2">
-                                        <!-- <label for="inputPassword" class="col-sm-12 text-center col-form-label"></label> -->
-                                        <div class="col-md-12">
-                                            <!-- <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
-                                                [showBorders]="true">
-                                                <dxo-paging [enabled]="false"></dxo-paging>
-                                                <dxo-editing mode="cell" [allowUpdating]="true">
-                                                </dxo-editing>
-                                                <dxo-selection mode="multiple"></dxo-selection>
-                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                                <dxi-column *ngFor="let data of columnheadDiamond"
-                                                    dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                                    alignment="center" backgroundcolor="#000">
-                                                </dxi-column>
-                                            </dx-data-grid> -->
+                                        <div class="col-md-12">                                          
                                             <dx-data-grid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                                                <!-- <dxo-selection mode="single"></dxo-selection> -->
                                                 <dxo-paging [enabled]="false"></dxo-paging>
                                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                                 </dxo-editing>
@@ -254,17 +237,14 @@
                                 </mat-tab>
                             </mat-tab-group>
                         </div>
-
                     </div>
                 </mat-tab>
             </mat-tab-group>
-            <!-- <label for="inputPassword" class="col-sm-12 text-center col-form-label"></label> -->
 
             <div class="col-md-2">
                 <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
                     <mat-tab label="Receipt Summary">
                         <div class="row my-2">
-                            <!-- <label for="inputPassword" class="col-sm-12 text-center col-form-label"></label> -->
                             <div class="col-md-12">
                                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
@@ -282,14 +262,11 @@
                         </div>
                     </mat-tab>
                 </mat-tab-group>
-
-
             </div>
             <div class="col-md-4">
                 <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
                     <mat-tab label="Scrap Purchase Summary">
                         <div class="row my-3">
-                            <!-- <label for="inputPassword" class="col-sm-12 text-center col-form-label"></label> -->
                             <div class="col-md-12">
                                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
@@ -315,7 +292,6 @@
                         <div class="row my-3">
                             <div class="col-md-12">
                                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                                    <!-- <dxo-column-chooser [enabled]="true"></dxo-column-chooser> -->
                                     <dxi-column  [width]="100" dataField="Salesman">
                                      </dxi-column>
                                     <dxi-column  [width]="100" dataField="#Dos"> </dxi-column>

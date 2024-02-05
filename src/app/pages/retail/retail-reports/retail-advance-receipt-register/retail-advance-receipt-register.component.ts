@@ -15,7 +15,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 })
 export class RetailAdvanceReceiptRegisterComponent implements OnInit {
 
-  vocMaxDate = new Date();
+  toDateMaxDate = new Date();
   currentDate = new Date();
   branchOptions:any[] =[];
   branchCode?: String;
@@ -78,6 +78,12 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
         }
        
       });
+  }
+
+  toDateValitation(){
+    if (this.retailAdvanceReceiptRegisterForm.value.fromDate > this.retailAdvanceReceiptRegisterForm.value.toDate) {
+      alert('To Date cannot be less than From Date');
+    }
   }
 
   savePdf() {
