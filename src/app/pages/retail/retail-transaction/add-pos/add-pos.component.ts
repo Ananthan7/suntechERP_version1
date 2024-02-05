@@ -1661,7 +1661,6 @@ export class AddPosComponent implements OnInit {
         .getDynamicAPI('BranchKaratRate/' + this.strBranchcode)
         .subscribe((resp) => {
           if (resp.status == 'Success') {
-
             let temp_karatrate: any = resp.response;
             for (var i = 0; i < temp_karatrate.length; i++) {
               // let karat_codes = ['14', '18', '20', '21', '22', '24'];
@@ -1681,7 +1680,6 @@ export class AddPosComponent implements OnInit {
           } else {
             this.karatRateDetails = [];
           }
-
         });
     }
   }

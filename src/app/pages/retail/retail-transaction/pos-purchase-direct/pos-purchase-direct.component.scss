@@ -16,6 +16,11 @@
   background-color: #fff;
 }
 
+.border-bottom-10 {
+  border-bottom: 1px solid #8f8e8e !important;
+  width: 100%;
+}
+
 ::ng-deep {
   .cdk-overlay-container {
     position: fixed;

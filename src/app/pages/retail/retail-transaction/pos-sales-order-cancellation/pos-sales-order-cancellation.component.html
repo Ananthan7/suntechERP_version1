@@ -120,9 +120,9 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Mode of Refund</label>
                     <div class="col-md-6">
                         <mat-form-field>
-                            <mat-select formControlName="modeOfRefundSelect">
+                            <mat-select formControlName="modeOfRefundSelect" (selectionChange)="changeitem()">
                                 <mat-option value="Cash">Cash</mat-option>
-                                <mat-option value="cheque">Cheque</mat-option>
+                                <mat-option value="Cheque">Cheque</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -130,7 +130,7 @@
                 <div class="row mb-1">
                     <label for="inputPassword" class="col-sm-1 col-form-label">A/C</label>
                     <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
+                        <mat-form-field style="width: 70%;" >
                             <input type="text" matInput formControlName="ac" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="acCode" (newRowClick)="acCodeSelected($event)"></master-search>
@@ -173,11 +173,11 @@
             <fieldset class="col-md-3 mt-3">
                 <legend>Cheque Details</legend>
                 <!-- <h6 class="pt-2 bg-gray">Cheque Details</h6> -->
-                <div class="row mb-1">
+                <div class="row mb-1" >
                     <label for="inputPassword" class="col-sm-4 col-form-label">Cheq No</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput name="voctype" formControlName="cheqNo" />
+                            <input type="text" matInput  formControlName="cheqNo"  [readonly]="cashTrue" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -185,8 +185,8 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Cheq Date</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput [matDatepicker]="cheqDate" [max]="vocMaxDate" name="cheqDate"
-                                formControlName="cheqDate" placeholder="DD/MM/YYYY" DateValidation />
+                            <input type="text" matInput [matDatepicker]="cheqDate" name="cheqDate"
+                                formControlName="cheqDate" placeholder="DD/MM/YYYY"   [readonly]="cashTrue" DateValidation />
                             <mat-datepicker-toggle matSuffix [for]="cheqDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #cheqDate></mat-datepicker>
                         </mat-form-field>
@@ -196,7 +196,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Cheq Bank</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="cheqBank" />
+                            <input type="text" matInput formControlName="cheqBank"   [readonly]="cashTrue" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -204,7 +204,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Dep Bank</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="depBank" />
+                            <input type="text" matInput formControlName="depBank"   [readonly]="cashTrue" />
                         </mat-form-field>
                     </div>
                 </div>

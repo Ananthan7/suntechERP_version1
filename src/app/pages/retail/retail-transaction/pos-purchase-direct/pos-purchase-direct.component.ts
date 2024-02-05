@@ -6,6 +6,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
 import { PosCustomerMasterMainComponent } from '../../retail-master/pos-customer-master-main/pos-customer-master-main.component';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 
 @Component({
@@ -16,13 +17,20 @@ import { PosCustomerMasterMainComponent } from '../../retail-master/pos-customer
 export class PosPurchaseDirectComponent implements OnInit {
 
   currentDate = new Date();
+  tableData: any[] = [];
+  strBranchcode:any= '';
+  // columnhead:any[] = [
+  //   { title: 'Karat', field: 'KARAT_CODE' },
+  //   { title: 'Sale Rate', field: 'KARAT_RATE' },
+  //   { title: 'Purchase Rate', field: 'POPKARAT_RATE' }];
+
   columnhead:any[] = ['Karat','Sale Rate','Purchase Rate'];
   columnheadDetails:any[] = ['Stock Code','Pcs','Gr.Wt','Purity','Pure Wt','Mkg.RATE','Mkg.Amount','Metal Amt','St.Amt','Wastage','Total','']
   
   partyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 6,
+    LOOKUPID: 7,
     SEARCH_FIELD: "ACCODE",
     SEARCH_HEADING: "Party Code",
     SEARCH_VALUE: "",
@@ -60,6 +68,7 @@ export class PosPurchaseDirectComponent implements OnInit {
     vocTypeNo:[1],
     vocDate:[new Date()],
     partyCode:[''],
+    partyCodeName:[''],
     partyCurrCode:[''],
     partyCurrCodeDesc:[''],
     customer:[''],
@@ -96,7 +105,10 @@ export class PosPurchaseDirectComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private comService: CommonServiceService,
-  ) { }
+    private suntechApi: SuntechAPIService,
+  ) {
+    this.strBranchcode = localStorage.getItem('userbranch');
+   }
 
   ngOnInit(): void {
     this.posPurchaseForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
@@ -104,11 +116,22 @@ export class PosPurchaseDirectComponent implements OnInit {
     this.posPurchaseForm.controls.partyCurrCodeDesc.setValue(this.comService.getCurrRate(this.comService.compCurrency));
     this.posPurchaseForm.controls.itemCurr.setValue(this.comService.compCurrency);
     this.posPurchaseForm.controls.itemCurrCode.setValue(this.comService.getCurrRate(this.comService.compCurrency));
+    this.getKaratDetails();
   }
+
+  getKaratDetails() {
+      this.suntechApi.getDynamicAPI('BranchKaratRate/' + this.strBranchcode).subscribe((result) => {
+        if (result.response) {
+          this.tableData = result.response;
+          console.log(this.tableData);
+        }
+      });
+    }
 
   partyCodeSelected(e:any){
     console.log(e);
     this.posPurchaseForm.controls.partyCode.setValue(e.ACCODE);
+    this.posPurchaseForm.controls.partyCodeName.setValue(e)
   }
 
   partyCurrencyCodeSelected(e:any){
