@@ -137,8 +137,10 @@
       </div>
       <div class="col-md-4">
         <div class="upload-btn-wrapper mt-2">
-          <button class="btn btnnew border-dark"></button>
-          <input type="file" name="uploadproduct" class="uploadproduct">
+          <button class="btn btnnew border-dark">
+            <img src={{urls}} style="width:200px;height:185px">
+          </button>
+          <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" (change)="onFileChanged($event)">
         </div>
       </div>
     </div>

@@ -468,6 +468,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   metaldivisionCodeSelected(e: any) {
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
+    
   }
 
   labouracSelected(e: any) {
