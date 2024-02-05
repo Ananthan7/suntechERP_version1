@@ -5811,6 +5811,11 @@ export class AddPosComponent implements OnInit {
       "LESSTHANCOST_USER": "",
       "NEWUNIQUEID": 0,
       "STOCKCHECKOTHERBRANCH": false,
+
+      // new fields added - 03-02-2024 for posplanet save calculation
+      "GSTVATONMAKING" : data.GSTVATONMAKING,
+      "EXCLUDEGSTVAT" : data.EXCLUDEGSTVAT,
+
     };
     console.log(data);
 
@@ -11281,9 +11286,18 @@ export class AddPosComponent implements OnInit {
   }
 
   posPlanetFileInsert() {
-    const res = this.nationalityMaster.filter((data: any) => data.CODE == this.customerDetailForm.value.fcn_cust_detail_nationality)
+    let netAmt: number = 0;
+    let totalBeforeVat: number = 0;
+    let totalVat: number = 0;
+
+    const res = this.nationalityMaster.filter((data: any) => data.CODE == this.customerDetailForm.value.fcn_cust_detail_nationality  )
     const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
-    const items = this.currentLineItems.map((data: any, i: any) => {
+    const items = this.currentLineItems.filter((data: any) => data.DIVISION != 'X' && data.EXCLUDEGSTVAT == false && data.GSTVATONMAKING == false).map((data: any, i: any) => {
+
+      totalBeforeVat += parseFloat(data.GROSS_AMT);
+      netAmt += parseFloat(data.TOTALWITHVATFC);
+      totalVat += parseFloat(data.VAT_AMOUNTFC);
+
       return {
         "Description": data.STOCK_DOCDESC,
         "Quantity": data.PCS || '', //doubt -c 
@@ -11300,7 +11314,13 @@ export class AddPosComponent implements OnInit {
         "SerialNumber": i + 1 //doubt - srno  - c
 
       }
+
     });
+    console.log('items', items);
+    console.log('summary ', netAmt, totalBeforeVat, totalVat);
+
+
+
     // skip Divison - X
     let postData = {
       // "Version": environment.app_version,
@@ -11310,15 +11330,27 @@ export class AddPosComponent implements OnInit {
       "Terminal": this.comFunc.allbranchMaster.PLANETTERMINALID, // branchmaster terminal ID
       "Type": "RECEIPT", // c 
       "Order": {
-        "Total": this.order_items_total_gross_amount, // doubt total + vat // net amont - lineitem
+        // "Total": this.order_items_total_gross_amount, // doubt total + vat // net amont - lineitem
+        // "TotalBeforeVAT": this.comFunc.transformDecimalVB(
+        //   this.comFunc.amtDecimals,
+        //   this.prnt_inv_total_gross_amt //  total without vat
+        // ),
+        // "VatIncl": this.comFunc.transformDecimalVB(
+        //   this.comFunc.amtDecimals,
+        //   this.order_items_total_tax
+        // ), //doubt - total vat amount - c
+        "Total": this.comFunc.transformDecimalVB(
+          this.comFunc.amtDecimals,
+          netAmt
+        ),
         "TotalBeforeVAT": this.comFunc.transformDecimalVB(
           this.comFunc.amtDecimals,
-          this.prnt_inv_total_gross_amt //  total without vat
+          totalBeforeVat
         ),
         "VatIncl": this.comFunc.transformDecimalVB(
           this.comFunc.amtDecimals,
-          this.order_items_total_tax
-        ), //doubt - total vat amount - c
+          totalVat
+        ),
         "Items": items,
 
       },
@@ -11356,13 +11388,13 @@ export class AddPosComponent implements OnInit {
 
   async getFinancialYear() {
     const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
-   const res = await this.suntechApi.getDynamicAPI(API).toPromise()
-      // .subscribe((resp) => {
-        console.log(res);
-        if (res.status == "Success") {
-          this.baseYear = res.BaseFinancialyear;
-        }
-      // });
+    const res = await this.suntechApi.getDynamicAPI(API).toPromise()
+    // .subscribe((resp) => {
+    console.log(res);
+    if (res.status == "Success") {
+      this.baseYear = res.BaseFinancialyear;
+    }
+    // });
 
   }
 }
