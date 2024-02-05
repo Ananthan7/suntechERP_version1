@@ -180,7 +180,7 @@
                             <mat-tab label="Pending Job Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [dataSource]="tableData"
                                         [allowColumnReordering]="true"
                                         [allowColumnResizing]="true"
                                         [columnAutoWidth]="true">
@@ -220,7 +220,7 @@
                             <mat-tab label="Component Details">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [dataSource]="tableDatas"
                                         [allowColumnReordering]="true"
                                         [allowColumnResizing]="true"
                                         [columnAutoWidth]="true">
