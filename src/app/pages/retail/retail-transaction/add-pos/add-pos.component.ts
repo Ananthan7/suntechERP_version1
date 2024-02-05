@@ -7501,7 +7501,7 @@ export class AddPosComponent implements OnInit {
 
 
       // this.submitAttachment(); // added here for testing purpose
-      this.posPlanetFileInsert(); // added here for testing purpose
+      // this.posPlanetFileInsert(); // added here for testing purpose
 
 
       if (this.editOnly) {
@@ -7515,7 +7515,7 @@ export class AddPosComponent implements OnInit {
                 if (res.status == 'SUCCESS') {
                   this.snackBar.open('POS Updated Successfully', 'OK');
 
-                  // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+                  this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
                   // this.close('reloadMainGrid');
                   if (this.posPlanetIssuing)
@@ -7546,7 +7546,7 @@ export class AddPosComponent implements OnInit {
               if (res.status == 'SUCCESS') {
                 // this.close('reloadMainGrid');
 
-                // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+                this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
                 if (this.posPlanetIssuing)
                   this.posPlanetFileInsert();
@@ -11311,7 +11311,7 @@ export class AddPosComponent implements OnInit {
         "VatAmount": data.VAT_AMOUNTFC,
         "MerchandiseGroup": this.comFunc.allbranchMaster.PLANETMERCHANTGROUP, //doubt - branchmaster merchandise
         "TaxRefundEligible": true, //doubt -c
-        "SerialNumber": i + 1 //doubt - srno  - c
+        "SerialNumber": (i + 1).toString() //doubt - srno  - c
 
       }
 
