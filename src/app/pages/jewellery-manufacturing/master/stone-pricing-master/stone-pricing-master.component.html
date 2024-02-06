@@ -27,7 +27,7 @@
                                         <mat-form-field style="width: 90%">
                                             <input type="text" matInput
                                                 maxlength="15"
-                                                formControlName="price_code" />
+                                                formControlName="price_code"  oninput="this.value = this.value.toUpperCase()"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -213,7 +213,7 @@
                                             style="width: 100%; margin-left: 7px;">
                                             <input type="text" matInput
                                                 formControlName="sieve_to_desc"
-                                                [disabled]="true" />
+                                                [disabled]="true" oninput="this.value = this.value.toUpperCase()" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@
                                     <div class="col-sm-8">
                                         <mat-form-field
                                             style="width: 100%; margin-left: 7px;">
-                                            <input type="text" matInput
+                                            <input type="number" matInput
                                                 maxlength="15"
                                                 class="text-right"
                                                 formControlName="wt_from" />
@@ -238,7 +238,7 @@
                                     <div class="col-sm-8">
                                         <mat-form-field
                                             style="width: 100%; margin-left: 7px;">
-                                            <input type="text" matInput
+                                            <input type="number" matInput
                                                 maxlength="15"
                                                 class="text-right"
                                                 formControlName="wt_to"
@@ -253,7 +253,7 @@
                                     <div class="col-sm-8">
                                         <mat-form-field
                                             style="width: 100%; margin-left: 7px;">
-                                            <input type="text" matInput
+                                            <input type="number" matInput
                                                 maxlength="15"
                                                 class="text-right"
                                                 formControlName="issue_rate" />
@@ -267,7 +267,7 @@
                                     <div class="col-sm-8">
                                         <mat-form-field
                                             style="width: 100%; margin-left: 7px;">
-                                            <input type="text" matInput
+                                            <input type="number" matInput
                                                 maxlength="15"
                                                 class="text-right"
                                                 formControlName="selling" />
@@ -281,7 +281,7 @@
                                     <div class="col-sm-8">
                                         <mat-form-field
                                             style="width: 100%; margin-left: 7px;">
-                                            <input type="text" matInput
+                                            <input type="number" matInput
                                                 maxlength="15"
                                                 class="text-right"
                                                 formControlName="selling_rate" />
