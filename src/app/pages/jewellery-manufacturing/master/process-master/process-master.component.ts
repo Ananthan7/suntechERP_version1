@@ -73,7 +73,7 @@ export class ProcessMasterComponent implements OnInit {
   accountStartData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 152,
+    LOOKUPID: 252,
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'LOSS ACCOUNT CODE',
     SEARCH_VALUE: '',
