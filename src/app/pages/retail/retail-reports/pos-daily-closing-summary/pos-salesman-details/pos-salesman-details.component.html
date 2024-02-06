@@ -1,0 +1,42 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Daily Closing Summary</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+
+<!-- content section -->
+<div class="container-fluid pt-3">
+    <div class="row my-3">
+        <div class="col-md-12">
+            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dxi-column [width]="100" dataField="Salesman">
+                </dxi-column>
+                <dxi-column [width]="100" dataField="#Dos"> </dxi-column>
+                <dxi-column [width]="100" caption="Metal">
+                    <dxi-column [width]="100" caption="Qty" dataField="Metal_Qty">
+                    </dxi-column>
+                    <dxi-column [width]="100" caption="Mkg Amount" dataField="Metal_Mkg_Amount">
+                    </dxi-column>
+                    <dxi-column [width]="100" caption="Metal Amount" dataField="Metal_Amount">
+                    </dxi-column>
+                    <dxi-column [width]="100" caption="Total" dataField="Metal_Total">
+                    </dxi-column>
+                    <dxi-column [width]="100" caption="Making" dataField="Metal_Making">
+                    </dxi-column>
+                    <dxi-column [width]="100" caption="Metal" dataField="Metal_Metal">
+                    </dxi-column>
+                </dxi-column>
+                <dxi-column [width]="100" caption="Diamond & Others">
+                    <dxi-column [width]="100" caption="Qty/Pcs" dataField="Metal_Qty_pcs">
+                    </dxi-column>
+                    <dxi-column [width]="100" caption="Amount" dataField="Amount">
+                    </dxi-column>
+                    <dxi-column [width]="100" caption="Cost" dataField="Cost">
+                    </dxi-column>
+                </dxi-column>
+                <dxi-column [width]="100" dataField="Profit"> </dxi-column>
+            </dx-data-grid>
+        </div>
+    </div>
+</div>

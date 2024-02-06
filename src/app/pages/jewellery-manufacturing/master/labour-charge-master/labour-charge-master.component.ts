@@ -468,7 +468,6 @@ export class LabourChargeMasterComponent implements OnInit {
 
   metaldivisionCodeSelected(e: any) {
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
-    
   }
 
   labouracSelected(e: any) {
@@ -488,7 +487,6 @@ export class LabourChargeMasterComponent implements OnInit {
 
   stockCodeSelected(e: any) {
     console.log(e);
-    this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);

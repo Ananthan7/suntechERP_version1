@@ -28,62 +28,27 @@
                           </mat-form-field>
                         </div>
                         <div class="col-md-3">
-                          <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
+                          <button type="button" class="btn btn-outline-primary metal-issue-del-btn" (click)="allBranchCode()">
                             All Branches
                           </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">GST </label>
-                      </div>
-                      <div class="row align-items-center mb-1">
-                        <label for="inputPassword" class="col-sm-5 col-form-label">Purchase :</label>
-                        <div class="col-md-7">
-                          <mat-form-field style="width: 80%;">
-                            <input type="text" matInput formControlName="purchase" />
-                          </mat-form-field>
-                          <master-search [MasterSearchData]="purchaseCodeData"
-                          (newRowClick)="purchaseCodeSelected($event)">
-                      </master-search>
-                        </div>
-                      </div>
-                      <div class="row align-items-center mb-1">
-                        <label for="inputPassword" class="col-sm-5 col-form-label">Sales :</label>
-                        <div class="col-md-7">
-                          <mat-form-field style="width: 80%;">
-                            <input type="text" matInput formControlName="sales" />
-                          </mat-form-field>
-                          <master-search [MasterSearchData]="salesCodeData"
-                        (newRowClick)="salesCodeSelected($event)">
-                    </master-search>
-                        </div>
-                      </div>
-                      <div class="row align-items-center mb-1">
-                        <label for="inputPassword" class="col-sm-5 col-form-label">Branch Transfer :</label>
-                        <div class="col-md-7">
-                          <mat-form-field style="width: 80%;">
-                            <input type="text" matInput formControlName="branchtransfer" />
-                          </mat-form-field>
-                          <master-search [MasterSearchData]="branchtransferCodeData"
-                (newRowClick)="branchtransferDataSelected($event)">
-            </master-search>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dx-data-grid #dataGrid id="gridContainer" [dataSource]="branchOptions" [showBorders]="true" [height]="200">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
           
-                        <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" 
+                        <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" 
                           caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        </dxi-column> -->
+                        <dxi-column *ngFor="let data of columnhead" dataField="{{ data.field }}" caption="{{ data.title }}"
+                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
                         </dxi-column>
                       </dx-data-grid>
                     </div>

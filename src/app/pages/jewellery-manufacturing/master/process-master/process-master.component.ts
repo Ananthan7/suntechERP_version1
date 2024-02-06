@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { DurationPickerComponent } from 'src/app/shared/common/duration-picker/duration-picker.component';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -19,14 +21,55 @@ export class ProcessMasterComponent implements OnInit {
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   processTypeList: any[] = [];
+  formattedTime: any;
+  formattedMaxTime: any;
   islossReadOnly = true;
   isRecovReadOnly = true;
   isAlloWGainReadOnly = true;
 
+  yourContent = {
+    standardTime: {
+      totalDays: 0,
+      totalHours: 0,
+      totalMinutes: 0,
+    }
+  }
+
+  maxContent = {
+    maximumTime: {
+      totalDays: 0,
+      totalHours: 0,
+      totalMinutes: 0,
+    }
+  }
+
+
+  updateStandardTime(duration: any) {
+    // this.yourContent.standardTime.totalDays = duration[0] || 0;
+    // this.yourContent.standardTime.totalHours = duration[1] || 0;
+    // this.yourContent.standardTime.totalMinutes = duration[2] || 0;
+
+    this.formattedTime = duration;
+
+    // console.log(this.formattedTime);
+
+    console.log(duration)
+  }
+
+  updateMaximumTime(duration: any[]) {
+    // this.maxContent.maximumTime.totalDays = duration[0] || 0;
+    // this.maxContent.maximumTime.totalHours = duration[1] || 0;
+    // this.maxContent.maximumTime.totalMinutes = duration[2] || 0;
+
+    // this.formattedMaxTime = `${this.maxContent.maximumTime.totalDays}:${this.maxContent.maximumTime.totalHours}:${this.maxContent.maximumTime.totalMinutes}`;
+    this.formattedMaxTime = duration;
+    console.log(this.formattedMaxTime);
+  }
+
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 252,
+    LOOKUPID: 152,
     SEARCH_FIELD: 'ACCOUNT_HEAD',
     SEARCH_HEADING: 'Worker A/c Code',
     SEARCH_VALUE: '',
@@ -73,7 +116,7 @@ export class ProcessMasterComponent implements OnInit {
   accountStartData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 152,
+    LOOKUPID: 252,
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'LOSS ACCOUNT CODE',
     SEARCH_VALUE: '',
@@ -89,10 +132,8 @@ export class ProcessMasterComponent implements OnInit {
     processDesc: ['', [Validators.required]],
     processType: [null],
     stand_time: [''],
-    stand_Days: [''],
     WIPaccount: ['', [Validators.required]],
     max_time: [''],
-    max_Days: [''],
     Position: [''],
     trayWeight: [''],
     approvalCode: [''],
@@ -139,68 +180,7 @@ export class ProcessMasterComponent implements OnInit {
     loss_min: [''],
     loss_max: [''],
 
-  }, {
-    
-    validators: [
-      this.standardValidation('loss_standard', 'standard_end'),
-      this.rangeValidation('loss_min', 'min_end', 'loss_max'),
-      this.maxTimeValidation('stand_time', 'max_time', 'stand_Days', 'max_Days')
-    ]
-  });
-
-  maxTimeValidation(standTimeControl: string, maxTimeControl: string, standDaysControl: string, maxDaysControl: string) {
-    return (group: FormGroup) => {
-      const standTime = group.get(standTimeControl)?.value;
-      const maxTime = group.get(maxTimeControl)?.value;
-      const standDays = group.get(standDaysControl)?.value;
-      const maxDays = group.get(maxDaysControl)?.value;
-
-      const standTotalMinutes = standDays * 24 * 60 + this.getMinutesFromTime(standTime);
-      const maxTotalMinutes = maxDays * 24 * 60 + this.getMinutesFromTime(maxTime);
-
-      if (maxTotalMinutes < standTotalMinutes) {
-        group.get(maxTimeControl)?.setErrors({ maxTimeLessThanStandard: true });
-      } else {
-        group.get(maxTimeControl)?.setErrors(null);
-      }
-    };
-  }
-
-  private getMinutesFromTime(time: string): number {
-    const [hours, minutes] = time.split(':').map(Number);
-    return hours * 60 + minutes;
-  }
-
-
-   // Custom validator for standard percentage
-   standardValidation(startControlName: string, endControlName: string) {
-    return (formGroup: FormGroup) => {
-      const start = formGroup.controls[startControlName];
-      const end = formGroup.controls[endControlName];
-
-      if (start.value >= end.value) {
-        end.setErrors({ standardError: true });
-      } else {
-        end.setErrors(null);
-      }
-    };
-  }
-
-  // Custom validator for minimum and maximum range
-  rangeValidation(minControlName: string, maxControlName: string, compareControlName: string) {
-    return (formGroup: FormGroup) => {
-      const min = formGroup.controls[minControlName];
-      const max = formGroup.controls[maxControlName];
-      const compare = formGroup.controls[compareControlName];
-
-      if (min.value >= max.value || max.value <= compare.value) {
-        max.setErrors({ rangeError: true });
-      } else {
-        max.setErrors(null);
-      }
-    };
-  }
-
+  })
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -297,10 +277,8 @@ export class ProcessMasterComponent implements OnInit {
   // final save
   formSubmit() {
     console.log(this.processMasterForm.value.stand_time, 'this.processMasterForm.value.stand_time');
-    let form = this.processMasterForm.value
-      let time = this.commonService.timeToMinutes(form.stand_time,form.stand_Days)
-      console.log(time,this.processMasterForm.value.stand_Day);
-      return
+
+    // let time = this.commonService.timeToMinutes(this.processMasterForm.value.stand_time)
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateProcessMaster()
       return
@@ -316,12 +294,10 @@ export class ProcessMasterComponent implements OnInit {
       "MID": 0,
       "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
       "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
-      "STD_TIME": this.commonService.timeToMinutes(this.processMasterForm.value.stand_time) || "",
-      "MAX_TIME": this.commonService.timeToMinutes(this.processMasterForm.value.max_time) || "",
-      // "STD_TIME": this.commonService.timeToHHMMSS(this.processMasterForm.value.stand_time) || '00:00:00',
-      // "MAX_TIME": this.commonService.timeToHHMMSS(this.processMasterForm.value.max_time) || '00:00:00',
-      // "STD_TIME": this.processMasterForm.value.stand_time || 0,
-      // "MAX_TIME": this.processMasterForm.value.max_time || 0,
+      // "STD_TIME": this.commonService.timeToMinutes(this.formattedTime)  || "",
+      // "MAX_TIME": this.commonService.timeToMinutes(this.formattedMaxTime)  || "",
+       "STD_TIME": this.formattedTime  || "",
+       "MAX_TIME": this.formattedMaxTime  || "",
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -402,6 +378,8 @@ export class ProcessMasterComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
+
+    console.log(this.processMasterForm.value.stand_time);
   }
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -434,7 +412,7 @@ export class ProcessMasterComponent implements OnInit {
       this.processMasterForm.value.WIPaccount === accountCode
     );
   }
-  
+
   accountStartSelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE)) {
       this.commonService.toastErrorByMsgId('cannot select the same account code');
@@ -442,7 +420,7 @@ export class ProcessMasterComponent implements OnInit {
     }
     this.processMasterForm.controls.accountStart.setValue(e.ACCODE);
   }
-  
+
   accountMiddleSelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE)) {
       this.commonService.toastErrorByMsgId('cannot select the same account code');
@@ -450,7 +428,7 @@ export class ProcessMasterComponent implements OnInit {
     }
     this.processMasterForm.controls.accountMiddle.setValue(e.ACCODE);
   }
-  
+
   accountEndSelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE)) {
       this.commonService.toastErrorByMsgId('cannot select the same account code');
@@ -559,7 +537,7 @@ export class ProcessMasterComponent implements OnInit {
   }
   /**USE: delete worker master from row */
   deleteProcessMaster() {
-    if (!this.content.PROCESS_CODE) {
+    if (!this.content.WORKER_CODE) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',

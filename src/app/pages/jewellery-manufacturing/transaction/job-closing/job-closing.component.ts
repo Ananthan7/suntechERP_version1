@@ -29,7 +29,7 @@ export class JobClosingComponent implements OnInit {
   userName: any;
   branchCode: any;
   yearMonth: any;
-  subscriptions: any;
+  subscriptions: any []=[];
 
   
 
@@ -458,6 +458,7 @@ let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+    
   }
   
   jobNumberValidate(event: any) {

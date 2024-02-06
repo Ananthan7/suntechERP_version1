@@ -33,7 +33,7 @@ export class WorkerMasterComponent implements OnInit {
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 152,
+    LOOKUPID: 252,
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Worker A/c Code',
     SEARCH_VALUE: '',

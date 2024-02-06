@@ -41,7 +41,7 @@ export class SequenceMasterComponent implements OnInit {
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 152,
+    LOOKUPID: 252,
     SEARCH_FIELD: 'ACCOUNT_HEAD',
     SEARCH_HEADING: 'Code Search',
     SEARCH_VALUE: '',
@@ -97,17 +97,32 @@ export class SequenceMasterComponent implements OnInit {
             const set2 = data.sequenceDetails.map((obj: any) => obj.PROCESS_CODE);
             let itemNum = 0;
             this.reCalculateSRNO()
-            set2.forEach((item: any) => {
+            data.sequenceDetails.forEach((item: any) => {
               this.dataSource.forEach((obj: any) => {
-                if (item == obj.PROCESS_CODE) {
+                if (item.PROCESS_CODE == obj.PROCESS_CODE) {
                   obj.isChecked = true
                   itemNum += 1
                   obj.SRNO = itemNum
+                  obj.WIP_ACCODE = item.WIP_ACCODE
+                  obj.STD_TIME = this.commonService.MinutesToHours(item.STD_TIME) || 0,
+                  obj.MAX_TIME = this.commonService.MinutesToHours(item.MAX_TIME)  || 0,
+                  // obj.MAX_TIME = item.MAX_TIME || 0,
+                  obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS,'METAL'),
+                  obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS,'METAL'),
+                  obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS,'METAL'),
+                  obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
+                  obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
+                  obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
+                  obj.POINTS = item.POINTS || 0,
+                  obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
+                  obj.GAIN_AC = "",
+                  obj.TIMEON_PROCESS = item.TIMEON_PROCESS
                 }
               });
             })
             this.dataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
             this.selectedSequence = this.dataSource.filter((item: any) => item.isChecked == true)
+            
           } else {
             Swal.fire({
               title: '',
@@ -230,13 +245,13 @@ export class SequenceMasterComponent implements OnInit {
       "MID": this.sequenceMasterForm.value.mid || 0,
       "sequenceDetails": this.setSelectedSequence() || []
     }
-
+    
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2186') || result.message,
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -389,8 +404,8 @@ export class SequenceMasterComponent implements OnInit {
           "UNIT_RATE": item.UNIT_RATE || 0,
           "UNIT": this.commonService.nullToString(item.UNIT),
           "NO_OF_UNITS": item.NO_OF_UNITS || 0,
-          "STD_TIME": item.STD_TIME || 0,
-          "MAX_TIME": item.MAX_TIME || 0,
+          "STD_TIME": this.commonService.timeToMinutes(item.STD_TIME) || 0,
+          "MAX_TIME": this.commonService.timeToMinutes(item.MAX_TIME) || 0,
           "STD_LOSS": item.STD_LOSS || 0,
           "MIN_LOSS": item.MIN_LOSS || 0,
           "MAX_LOSS": item.MAX_LOSS || 0,

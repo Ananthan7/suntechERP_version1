@@ -43,10 +43,9 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Height :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 100%; text-align: left;">
                       <input type="number" matInput class="text-left" formControlName="height" id="height" (key)="getvaluies()" />
                     </mat-form-field>
-
                   </div>
                 </div>
               </div>
@@ -54,10 +53,9 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Length :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 100%; text-align: left;">
                       <input type="number" matInput class="text-left" formControlName="length" id="length" />
                     </mat-form-field>
-
                   </div>
                 </div>
               </div>
@@ -68,7 +66,7 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Width :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field style="width: 100%; text-align: left;">
                       <input type="number" matInput class="text-left" formControlName="width"  id="width" />
                     </mat-form-field>
                   </div>
@@ -78,19 +76,15 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Radius :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%;">
-                      <input type="number" matInput class="text-left" formControlName="radius" [value]="radius" readonly >
+                    <mat-form-field style="width: 100%; text-align: left;">
+                      <input type="number" matInput class="text-left" formControlName="radius" [value]="radius"  >
                     </mat-form-field>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
-
-
         </div>
-
       </div>
     </div>
   </form>

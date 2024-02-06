@@ -16,7 +16,8 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 export class ComponentSizeMasterComponent implements OnInit {
 
   componentsizemasterForm!: FormGroup;
-  subscriptions: any;
+  // subscriptions: any;
+  private subscriptions: Subscription[] = [];
   @Input() content!: any; 
   tableData: any[] = [];
   radius!:number;
@@ -44,7 +45,7 @@ export class ComponentSizeMasterComponent implements OnInit {
   
   private subscribeToFormChanges() {
     this.componentsizemasterForm.valueChanges.subscribe(() => {
-      this.calculateRadius();
+      // this.calculateRadius();
       this.getvaluies()
     });
   }
@@ -70,9 +71,8 @@ export class ComponentSizeMasterComponent implements OnInit {
     const width = this.componentsizemasterForm.value.width || 0;
     const length = this.componentsizemasterForm.value.length || 0;
     const radius = this.componentsizemasterForm.value.radius || 0;
-
     const formattedDesc = `H ${height}#, W ${width}#, L ${length}#,R ${radius}#`;
-
+    // console.log(formattedDesc);    
     this.componentsizemasterForm.patchValue({
       desc:formattedDesc
     }, { emitEvent: false });
@@ -127,8 +127,9 @@ export class ComponentSizeMasterComponent implements OnInit {
           this.toastr.error('Not saved')
         }
       }, err => alert(err))
-    this.subscriptions.push(Sub)
+    this.subscriptions.push(Sub);
   }
+  
   update(){
     if (this.componentsizemasterForm.invalid) {
       this.toastr.error('select all required fields')
