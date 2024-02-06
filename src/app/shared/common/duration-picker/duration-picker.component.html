@@ -1,52 +1,44 @@
-<div>
-    <!-- header section starts -->
-    <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Duration Picker</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="close()">
-            <i class="feather icon-x close-icon"></i>
-        </button>
-    </div>
 
+  
 
-
-    <div class="card pt-1">
+    <div class="">
         <form [formGroup]="durationPickerForm">
 
             <div class="row">
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <div class="row mb-1">
-                        <label for="input" class="col-sm-12 col-form-label"> Days :</label>
+                        <label for="input" class="col-sm-12 col-form-label">Days</label>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 mb-3">
-                            <ng-select [items]="days" bindLabel="name" bindValue="value" formControlName="days"
-                                (change)="getDays($event)">
+                        <div class="col-sm-8 mb-3">
+                            <ng-select [items]="days" bindLabel="name" bindValue="value"
+                                formControlName="days" (change)="getDays($event)"></ng-select>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="row mb-1">
+                        <label for="input" class="col-sm-12 col-form-label">Hours</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8 mb-3">
+                            <ng-select [items]="minutes" bindLabel="name" bindValue="value"
+                                formControlName="hours" (change)="getHours($event)">
                             </ng-select>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <div class="row mb-1">
-                        <label for="input" class="col-sm-12 col-form-label"> Hours :</label>
+                        <label for="input" class="col-sm-12 col-form-label">Mins</label>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 mb-3">
-                            <ng-select [items]="minutes" bindLabel="name" bindValue="value" formControlName="hours"
-                                (change)="getHours($event)">
-                            </ng-select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-1">
-                    <div class="row mb-1">
-                        <label for="input" class="col-sm-12 col-form-label"> Mins :</label>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 mb-3">
-                            <ng-select [items]="seconds" bindLabel="name" bindValue="value" formControlName="minutes"
-                                (change)="getMinutes($event)">
+                        <div class="col-sm-8 mb-3">
+                            <ng-select [items]="seconds" bindLabel="name" bindValue="value"
+                                formControlName="minutes" (change)="getMinutes($event)">
                             </ng-select>
                         </div>
                     </div>
@@ -54,4 +46,3 @@
             </div>
         </form>
     </div>
-</div>
