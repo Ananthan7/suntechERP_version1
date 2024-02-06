@@ -33,8 +33,8 @@ export class OtpMasterComponent implements OnInit {
   }
   otpForm: FormGroup = this.formBuilder.group({
   
-    branch:[],
-    branchdesc:[''],
+    branch:['',[Validators.required]],
+    branchdesc:['', [Validators.required]],
 
   })
   branchCodeData:MasterSearchModel = {

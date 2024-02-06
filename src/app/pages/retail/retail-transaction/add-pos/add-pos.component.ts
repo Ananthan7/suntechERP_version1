@@ -1066,9 +1066,12 @@ export class AddPosComponent implements OnInit {
     if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
 
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
+      this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
+      this.getFinancialYear();
+
       this.strBranchcode = this.content.BRANCH_CODE;
       this.vocType = this.content.VOCTYPE;
-      this.baseYear = this.content.YEARMONTH;
+      // this.baseYear = this.content.YEARMONTH;
       this.getRetailSalesMaster(this.content);
       if (this.content.FLAG == "EDIT") {
         this.editOnly = true
@@ -1078,9 +1081,14 @@ export class AddPosComponent implements OnInit {
       }
 
     } else {
+      this.getFinancialYear();
       this.generateVocNo();
 
     }
+
+    // this.vocDataForm.get('vocdate')?.valueChanges.subscribe((val) => {
+    //   this.getFinancialYear();
+    // });
 
     // this.acRoute.queryParams.subscribe((params) => {
     //   if (params.vocNo) {
@@ -1653,7 +1661,6 @@ export class AddPosComponent implements OnInit {
         .getDynamicAPI('BranchKaratRate/' + this.strBranchcode)
         .subscribe((resp) => {
           if (resp.status == 'Success') {
-
             let temp_karatrate: any = resp.response;
             for (var i = 0; i < temp_karatrate.length; i++) {
               // let karat_codes = ['14', '18', '20', '21', '22', '24'];
@@ -1673,7 +1680,6 @@ export class AddPosComponent implements OnInit {
           } else {
             this.karatRateDetails = [];
           }
-
         });
     }
   }
@@ -5803,6 +5809,11 @@ export class AddPosComponent implements OnInit {
       "LESSTHANCOST_USER": "",
       "NEWUNIQUEID": 0,
       "STOCKCHECKOTHERBRANCH": false,
+
+      // new fields added - 03-02-2024 for posplanet save calculation
+      "GSTVATONMAKING" : data.GSTVATONMAKING,
+      "EXCLUDEGSTVAT" : data.EXCLUDEGSTVAT,
+
     };
     console.log(data);
 
@@ -7488,7 +7499,7 @@ export class AddPosComponent implements OnInit {
 
 
       // this.submitAttachment(); // added here for testing purpose
-      this.posPlanetFileInsert(); // added here for testing purpose
+      // this.posPlanetFileInsert(); // added here for testing purpose
 
 
       if (this.editOnly) {
@@ -7502,7 +7513,7 @@ export class AddPosComponent implements OnInit {
                 if (res.status == 'SUCCESS') {
                   this.snackBar.open('POS Updated Successfully', 'OK');
 
-                  // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+                  this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
                   // this.close('reloadMainGrid');
                   if (this.posPlanetIssuing)
@@ -7533,7 +7544,7 @@ export class AddPosComponent implements OnInit {
               if (res.status == 'SUCCESS') {
                 // this.close('reloadMainGrid');
 
-                // this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+                this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
                 if (this.posPlanetIssuing)
                   this.posPlanetFileInsert();
@@ -8311,7 +8322,6 @@ export class AddPosComponent implements OnInit {
             }
           }
         }
-        // value = dblStockFcCost; // like this?
 
         // if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
 
@@ -11274,9 +11284,18 @@ export class AddPosComponent implements OnInit {
   }
 
   posPlanetFileInsert() {
-    const res = this.nationalityMaster.filter((data: any)=> data.CODE ==  this.customerDetailForm.value.fcn_cust_detail_nationality)
-const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
-    const items = this.currentLineItems.map((data: any, i: any) => {
+    let netAmt: number = 0;
+    let totalBeforeVat: number = 0;
+    let totalVat: number = 0;
+
+    const res = this.nationalityMaster.filter((data: any) => data.CODE == this.customerDetailForm.value.fcn_cust_detail_nationality  )
+    const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
+    const items = this.currentLineItems.filter((data: any) => data.DIVISION != 'X' && data.EXCLUDEGSTVAT == false && data.GSTVATONMAKING == false).map((data: any, i: any) => {
+
+      totalBeforeVat += parseFloat(data.GROSS_AMT);
+      netAmt += parseFloat(data.TOTALWITHVATFC);
+      totalVat += parseFloat(data.VAT_AMOUNTFC);
+
       return {
         "Description": data.STOCK_DOCDESC,
         "Quantity": data.PCS || '', //doubt -c 
@@ -11288,11 +11307,19 @@ const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
         "VatRate": data.VAT_PER, //doubt -c
         "VatCode": data.VATCODE,
         "VatAmount": data.VAT_AMOUNTFC,
-        "MerchandiseGroup": 0, //doubt - branchmaster merchandise
+        "MerchandiseGroup": this.comFunc.allbranchMaster.PLANETMERCHANTGROUP, //doubt - branchmaster merchandise
         "TaxRefundEligible": true, //doubt -c
-        "SerialNumber": i + 1 //doubt - srno  - c
+        "SerialNumber": (i + 1).toString() //doubt - srno  - c
+
       }
+
     });
+    console.log('items', items);
+    console.log('summary ', netAmt, totalBeforeVat, totalVat);
+
+
+
+    // skip Divison - X
     let postData = {
       // "Version": environment.app_version,
       "Version": '2.0',
@@ -11301,15 +11328,27 @@ const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
       "Terminal": this.comFunc.allbranchMaster.PLANETTERMINALID, // branchmaster terminal ID
       "Type": "RECEIPT", // c 
       "Order": {
-        "Total": this.order_items_total_gross_amount, //doubt
+        // "Total": this.order_items_total_gross_amount, // doubt total + vat // net amont - lineitem
+        // "TotalBeforeVAT": this.comFunc.transformDecimalVB(
+        //   this.comFunc.amtDecimals,
+        //   this.prnt_inv_total_gross_amt //  total without vat
+        // ),
+        // "VatIncl": this.comFunc.transformDecimalVB(
+        //   this.comFunc.amtDecimals,
+        //   this.order_items_total_tax
+        // ), //doubt - total vat amount - c
+        "Total": this.comFunc.transformDecimalVB(
+          this.comFunc.amtDecimals,
+          netAmt
+        ),
         "TotalBeforeVAT": this.comFunc.transformDecimalVB(
           this.comFunc.amtDecimals,
-          this.prnt_inv_total_gross_amt
+          totalBeforeVat
         ),
         "VatIncl": this.comFunc.transformDecimalVB(
           this.comFunc.amtDecimals,
-          this.order_items_total_tax
-        ), //doubt - total vat amount 
+          totalVat
+        ),
         "Items": items,
 
       },
@@ -11318,8 +11357,8 @@ const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
         "LastName": this.customerDetailForm.value.fcn_customer_detail_lname || '',
         "Gender": this.customerDetailForm.value.fcn_cust_detail_gender || '',
         "Nationality": natinality || '',
-        "CountryOfResidence":  this.customerDetailForm.value.fcn_cust_detail_nationality || '', // doubt - c
-        "PhoneNumber": (this.customerDetailForm.value.fcn_mob_code || '' ) + this.customerDetailForm.value.fcn_cust_detail_phone || '', // with mobile code infornt
+        "CountryOfResidence": this.customerDetailForm.value.fcn_cust_detail_nationality || '', // doubt - c
+        "PhoneNumber": (this.customerDetailForm.value.fcn_mob_code || '') + this.customerDetailForm.value.fcn_cust_detail_phone || '', // with mobile code infornt
         "Email": this.customerDetailForm.value.fcn_cust_detail_email || '',
         "Birth": {
           "Date": this.customerDetailForm.value.fcn_cust_detail_dob || ''
@@ -11343,5 +11382,17 @@ const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
 
         }
       });
+  }
+
+  async getFinancialYear() {
+    const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
+    const res = await this.suntechApi.getDynamicAPI(API).toPromise()
+    // .subscribe((resp) => {
+    console.log(res);
+    if (res.status == "Success") {
+      this.baseYear = res.BaseFinancialyear;
+    }
+    // });
+
   }
 }

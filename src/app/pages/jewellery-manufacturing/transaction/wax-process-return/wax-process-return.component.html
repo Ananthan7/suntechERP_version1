@@ -124,6 +124,31 @@
               <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                 [allowEditing]="true" alignment="center" backgroundcolor="#000">
               </dxi-column>
+              <dxi-column [width]="100" dataField="Sr No" caption="Sr No"></dxi-column>
+              <dxi-column [width]="100" dataField="Job No" caption="Job No"></dxi-column>
+              <dxi-column [width]="100" dataField="Design" caption="Design"></dxi-column>
+              <dxi-column [width]="100" dataField="Party" caption="Party"></dxi-column>
+              <dxi-column [width]="100" dataField="S.O" caption="S.O"></dxi-column>
+              <dxi-column [width]="100" dataField="S.O Date" caption="S.O Date"></dxi-column>
+              <dxi-column [width]="100" dataField="Del Date" caption="Del Date"></dxi-column>
+              <dxi-column [width]="100" dataField="Gross Weight" caption="Gross Weight"></dxi-column>
+              <dxi-column [width]="100" dataField="Metal Weight" caption="Metal Weight"></dxi-column>
+              <dxi-column [width]="100" dataField="Stone Weight" caption="Stone Weight"></dxi-column>
+              <dxi-column [width]="100" dataField="Wax Weight" caption="Wax Weight"></dxi-column>
+              <dxi-column [width]="100" dataField="Issue Pcs" caption="Issue Pcs"></dxi-column>
+              <dxi-column [width]="100" dataField="Return Pcs" caption="Return Pcs"></dxi-column>
+              <dxi-column [width]="100" dataField="Karat" caption="Karat"></dxi-column>
+
+              <dxo-summary>
+                <dxi-total-item column="Gross Weight">
+                </dxi-total-item>
+                <dxi-total-item column="Metal Weight">
+                </dxi-total-item>
+                <dxi-total-item column="Wax Weight">
+                </dxi-total-item>                 
+                <dxi-total-item column="Issue Pcs">
+                </dxi-total-item>
+              </dxo-summary>
             </dx-data-grid>
           </div>
         </div>

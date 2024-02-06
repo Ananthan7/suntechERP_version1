@@ -96,6 +96,16 @@ export class CustomerPriceMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  onInput(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    // Trim the input to 3 letters
+    const limitedValue = inputValue.slice(0, 3);
+
+    // Update the input value
+    (event.target as HTMLInputElement).value = limitedValue;
+  }
+
   change(event: any) {
     console.log(event);
     this.text = event.target.checked ? "Add" : "Deduct";

@@ -58,7 +58,7 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Date</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input matInput [matDatepicker]="fromDate" [max]="vocMaxDate" name="fromDate"
+                            <input matInput [matDatepicker]="fromDate" name="fromDate" [max]="currentDate"
                                 placeholder="DD/MM/YYYY" DateValidation formControlName="fromDate" />
                             <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
@@ -66,8 +66,8 @@
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input matInput [matDatepicker]="toDate" [max]="vocMaxDate" name="toDate"
-                                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" />
+                            <input matInput [matDatepicker]="toDate" [min]="retailAdvanceReceiptRegisterForm.value.fromDate"  name="toDate"
+                                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" (dateChange)="toDateValitation()" />
                             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
                         </mat-form-field>

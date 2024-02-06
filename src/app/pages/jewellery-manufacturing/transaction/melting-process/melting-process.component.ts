@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MeltingProcessDetailsComponent } from './melting-process-details/melting-process-details.component';
+import { JobAllocationComponent } from '../job-allocation/job-allocation.component';
+import { JobAllocationMeltingComponent } from './job-allocation-melting/job-allocation-melting.component';
 
 
 
@@ -286,7 +288,7 @@ export class MeltingProcessComponent implements OnInit {
 
   setvalues(){
     this.meltingProcessFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
-    this.meltingProcessFrom.controls.vocNo.setValue(this.comService.popMetalValueOnNet)
+    this.meltingProcessFrom.controls.vocNo.setValue('1')
     this.meltingProcessFrom.controls.vocDate.setValue(this.comService.currentDate)
   }
 
@@ -298,7 +300,7 @@ export class MeltingProcessComponent implements OnInit {
     } else {
       data = [{ HEADERDETAILS: this.meltingProcessFrom.value }]
     }
-    const modalRef: NgbModalRef = this.modalService.open(MeltingProcessDetailsComponent, {
+    const modalRef: NgbModalRef = this.modalService.open(JobAllocationMeltingComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,

@@ -34,8 +34,7 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="vocNo"  [dir]="'rtl'" style="text-align: right;" />
-                                        <input type="number" matInput formControlName="vocNo" [readonly]="viewMode"/>
+                                        <input class="text-right" type="number" matInput formControlName="vocNo" [readonly]="viewMode"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -143,7 +142,7 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Sub Job Id : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="subJobId" />
+                                    <input type="number" matInput formControlName="subJobId"   style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -151,12 +150,12 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Time Taken : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input  type="time" matInput formControlName="timeTaken" step="2" [readonly]="viewMode" />
+                                    <input  type="time" matInput formControlName="timeTaken"   [readonly]="viewMode"  step="2" />
                                 </mat-form-field>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3"> 
                         <div class="icons">
                             <div class="image_box">
                                 <img src={{urls}} style="width:324px;height:151px">
@@ -406,7 +405,7 @@
                                           <dxi-column dataField="SizeCode" caption="Size Code"></dxi-column>
                                           <dxi-column dataField="Type" caption="Type"></dxi-column>
                                           <dxi-column dataField="Category" caption="Category" cellTemplate="categorytemp" [allowEditing]="false" alignment="left"></dxi-column>
-                                           <!-- Category Select search starts -->
+                                           <!-- Category Select search starts --> 
                                         <div
                                         *dxTemplate="let data of 'categorytemp'" >
                                         <div
@@ -556,7 +555,7 @@
                                                             class="col-sm-4 col-form-label ">Type : </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="number" matInput formControlName="type" />
+                                                                <input type="number" matInput formControlName="type" style="text-align: right;" />
                                                             </mat-form-field>
                                                         </div>
                                                     </div>
@@ -610,7 +609,7 @@
                                                         <div class="col-sm-2">
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="number" matInput
-                                                                    formControlName="deliveryOnDays" />
+                                                                    formControlName="deliveryOnDays" style="text-align: right;" />
                                                             </mat-form-field>
                                                         </div>
                                                         <div class="col-sm-3">

@@ -79,6 +79,8 @@ export class StoneReturnComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.userName = this.comService.userName;
+
+    this.setvalues()
   }
 
   close(data?: any) {
@@ -124,9 +126,9 @@ export class StoneReturnComponent implements OnInit {
   }
 
   stonereturnFrom: FormGroup = this.formBuilder.group({
-    voctype:['STR'],
-    vocno:['1'],
-    vocdate:[new Date(),''],
+    voctype:[''],
+    vocno:[''],
+    vocdate:[''],
     basecurrency:[''],
     basecurrencyrate:[''],
     currency:['', [Validators.required]],
@@ -137,6 +139,12 @@ export class StoneReturnComponent implements OnInit {
     enterdBy : [''],
     enteredByName :[''],
   });
+
+  setvalues(){
+    this.stonereturnFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.stonereturnFrom.controls.vocdate.setValue(this.comService.currentDate)
+    this.stonereturnFrom.controls.vocno.setValue('1')
+  }
 
 
 
