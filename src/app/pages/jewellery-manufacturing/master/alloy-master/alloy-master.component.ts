@@ -24,6 +24,54 @@ export class AlloyMasterComponent implements OnInit {
   urls: string | ArrayBuffer | null | undefined;
   url: any;
   numericValue!: number;
+
+  
+  alloyMastereForm: FormGroup = this.formBuilder.group({
+    mid: [],
+    code: ['', [Validators.required]],
+    costCenter: ['', [Validators.required]],
+    type: [''],
+    category: [''],
+    subCategory: [''],
+    brand: [''],
+    vendor: [''],
+    currency: ['', [Validators.required]],
+    currencyRate: [''],
+    createdOn: [new Date(), ''],
+    createdBy: ['SUNTECH', ''],
+    priceScheme: [''],
+    price1code: [''],
+    price1per: ['0'],
+    price1Fc: [''],
+    price1Lc: [''],
+    price2code: [''],
+    price2per: ['0'],
+    price2Fc: [''],
+    price2Lc: [''],
+    price3code: [''],
+    price3per: ['0'],
+    price3Fc: [''],
+    price3Lc: [''],
+    price4code: [''],
+    price4per: ['0'],
+    price4Fc: [''],
+    price4Lc: [''],
+    price5code: [''],
+    price5per: ['0'],
+    price5Fc: [''],
+    price5Lc: [''],
+    description: ['', [Validators.required]],
+    metal: [''],
+    color: [''],
+    karat: [''],
+    purity: [''],
+    alloy: [''],
+    stockCode: [''],
+    stockCodeDes: [''],
+    divCode: [''],
+    hsncode: [''],
+  });
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -43,7 +91,7 @@ export class AlloyMasterComponent implements OnInit {
     this.setCompanyCurrency()
   }
   setInitialValues(){
-    console.log(this.content.MID , 'content');
+    console.log(this.content , 'content');
     
   }
   /**USE: to set currency from company parameter */
@@ -67,66 +115,6 @@ export class AlloyMasterComponent implements OnInit {
       };
     }
   }
-
-  formatNumber(input: any) {
-    // Get the input value and remove non-digit characters
-    let inputValue = input.value.replace(/\D/g, '');
-
-    // Check if the input value is not empty
-    if (inputValue) {
-      // Format the input value as "00.00.000"
-      const formattedValue = inputValue.replace(/(\d{2})(\d{2})(\d{3})/, '$1.$2.$3');
-
-      // Update the input value with the formatted value
-      input.value = formattedValue;
-    }
-  }
-
-  alloyMastereForm: FormGroup = this.formBuilder.group({
-    mid: [],
-    code: ['', [Validators.required]],
-    costCenter: ['', [Validators.required]],
-    type: [''],
-    category: [''],
-    subCategory: [''],
-    brand: [''],
-    vendor: [''],
-    currency: ['', [Validators.required]],
-    currencyRate: [''],
-    createdOn: [new Date(), ''],
-    createdBy: ['SUNTECH', ''],
-    priceScheme: [''],
-    price1code: [''],
-    price1per: [''],
-    price1Fc: [''],
-    price1Lc: [''],
-    price2code: [''],
-    price2per: [''],
-    price2Fc: [''],
-    price2Lc: [''],
-    price3code: [''],
-    price3per: [''],
-    price3Fc: [''],
-    price3Lc: [''],
-    price4code: [''],
-    price4per: [''],
-    price4Fc: [''],
-    price4Lc: [''],
-    price5code: [''],
-    price5per: [''],
-    price5Fc: [''],
-    price5Lc: [''],
-    description: ['', [Validators.required]],
-    metal: [''],
-    color: [''],
-    karat: [''],
-    purity: [''],
-    alloy: [''],
-    stockCode: [''],
-    stockCodeDes: [''],
-    divCode: [''],
-    hsncode: [''],
-  });
 
   costCenterData: MasterSearchModel = {
     PAGENO: 1,
@@ -152,8 +140,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
 
   }
-
-
 
   masterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -883,7 +869,7 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           Swal.fire({
-            title: result.message || 'Success',
+            title: this.commonService.getMsgByID('MSG2239') || 'Saved Successfully',
             text: '',
             icon: 'success',
             confirmButtonColor: '#336699',
@@ -910,7 +896,7 @@ export class AlloyMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2186') || 'Updated Successfully',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',

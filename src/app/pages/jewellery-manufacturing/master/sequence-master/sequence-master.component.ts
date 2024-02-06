@@ -41,7 +41,7 @@ export class SequenceMasterComponent implements OnInit {
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 152,
+    LOOKUPID: 252,
     SEARCH_FIELD: 'ACCOUNT_HEAD',
     SEARCH_HEADING: 'Code Search',
     SEARCH_VALUE: '',
@@ -245,13 +245,13 @@ export class SequenceMasterComponent implements OnInit {
       "MID": this.sequenceMasterForm.value.mid || 0,
       "sequenceDetails": this.setSelectedSequence() || []
     }
-
+    
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2186') || result.message,
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
