@@ -252,7 +252,7 @@ stockCodeData: MasterSearchModel = {
     uniqNo : [''],
     job : [''],
     vocher :['',[Validators.required]],
-    vocherNo:[''],
+    vocherNo:[1],
     vocDate : [''],
     enteredBy : [''],
     fromProcess : ['',[Validators.required]],
