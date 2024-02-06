@@ -95,7 +95,7 @@ export class ProcessTransferNewComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.processTransferFrom.controls.vocdate.setValue(this.currentDate)
-    this.processTransferFrom.controls.voctype.setValue('PTF')
+    this.processTransferFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     //this.commonService.getqueryParamVocType()
   }
   formatDate(event: any) {

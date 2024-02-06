@@ -23,9 +23,24 @@ export class JobAllocationComponent implements OnInit {
   yearMonth?: String;
   @Input() content!: any; 
   tableData: any[] = [];  
-  columnheadItemDetails:any[] = [];
+  columnheadItemDetails:any[] = ['Design','Order. No','Process','Worker','Doc. Attatchment','Std. Time','Pirority','Customer','Job Number','Unq. Job. Id','Pcs'];
   divisionMS: any = 'ID';
+  currentDate = new Date();
   private subscriptions: Subscription[] = [];
+
+  userNameCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User Name',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,    
+    LOAD_ONCLICK: true,
+  }
+
   constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
@@ -37,9 +52,21 @@ export class JobAllocationComponent implements OnInit {
 
      }
 
+     jobalocationFrom: FormGroup = this.formBuilder.group({
+      vocType: ['', [Validators.required]],
+      vocNum: [1, [Validators.required]],
+      vocDate:[new Date()],
+      userName:[''],
+      date:[new Date()],
+      remarks:[''],
+      job:['']
+  });
+
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    this.jobalocationFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType());
+
 
     console.log(this.content);
     console.log(Object.keys(this.content));
@@ -68,32 +95,13 @@ export class JobAllocationComponent implements OnInit {
     console.log(this.content);
   }
 
-  userNameCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'User Name',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,    
-    LOAD_ONCLICK: true,
-  }
+
   userNameCodeSelected(e:any){
     console.log(e);
     this.jobalocationFrom.controls.userName.setValue(e.UsersName);
   }
 
-  jobalocationFrom: FormGroup = this.formBuilder.group({
-      vocType: ['', [Validators.required]],
-      vocNum: ['', [Validators.required]],
-      vocDate:[''],
-      userName:[''],
-      date:[''],
-      remarks:[''],
-      job:['']
-  });
+ 
 
   formSubmit(){
 

@@ -188,7 +188,7 @@
                 </div>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="itemCurrencyRate" />
+                    <input type="number" matInput formControlName="itemCurrencyRate"  style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>
@@ -266,17 +266,17 @@
                 </div>
 
                 <div *dxTemplate="let data of 'Psctemp'">
-                  <input type="text" (change)="Psctemp($event,data)" style="width: 100%;" [value]="data.value" />
+                  <input type="number" (change)="Psctemp($event,data)" style="width: 100%; text-align: right;"  [value]="data.value" />
                 </div>
                 <div *dxTemplate="let data of 'gross_weighttemp'">
-                  <input type="text" (change)="gross_weighttemp($event,data)" style="width: 100%;"
+                  <input type="number" (change)="gross_weighttemp($event,data)" style="width: 100%;  text-align: right;"
                     [value]="data.value" />
                 </div>
                 <div *dxTemplate="let data of 'ratetemp'">
-                  <input type="text" (change)="ratetemp($event,data)" style="width: 100%;" [value]="data.value" />
+                  <input type="number" (change)="ratetemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" />
                 </div>
                 <div *dxTemplate="let data of 'amounttemp'">
-                  <input type="text" (change)="amounttemp($event,data)" style="width: 100%;" [value]="data.value" />
+                  <input type="number" (change)="amounttemp($event,data)" style="width: 100%;  text-align: right;" [value]="data.value" />
                 </div>
                 <div *dxTemplate="let data of 'locationtemp'">
                   <input type="text" (change)="locationtemp($event,data)" style="width: 100%;" [value]="data.value" />

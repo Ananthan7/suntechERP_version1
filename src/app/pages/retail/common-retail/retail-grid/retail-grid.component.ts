@@ -101,6 +101,8 @@ export class RetailGridComponent implements OnInit {
   }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
+    console.log('getMasterGridData', data);
+    
     if (data) {
       this.pageIndex = 1;
       this.orderedItems = [];

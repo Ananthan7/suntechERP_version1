@@ -26,7 +26,7 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="vocTypeDescription"/>
+                            <input type="text" matInput formControlName="vocTypeNo" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input matInput [matDatepicker]="vocDate" [max]="vocDate"  formControlName="vocDate"
+                            <input matInput [matDatepicker]="vocDate" [max]="vocDate" formControlName="vocDate"
                                 placeholder="DD/MM/YYYY" DateValidation />
                             <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
@@ -45,44 +45,47 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Code</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="partyCode"/>
+                            <input type="text" matInput formControlName="partyCode" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="partyCodeData" (newRowClick)="partyCodeSelected($event)"></master-search>
+                        <master-search [MasterSearchData]="partyCodeData"
+                            (newRowClick)="partyCodeSelected($event)"></master-search>
                     </div>
                 </div>
                 <div class="row mb-1 ">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Currency</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="partyCurrency"/>
+                            <input type="text" matInput formControlName="partyCurrency" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="partyCurrencyRate"/>
+                            <input type="text" matInput formControlName="partyCurrencyRate" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="partyCurrencyCodeData" (newRowClick)="partyCurrencyCodeSelected($event)"></master-search>
+                        <master-search [MasterSearchData]="partyCurrencyCodeData"
+                            (newRowClick)="partyCurrencyCodeSelected($event)"></master-search>
                     </div>
                 </div>
                 <div class="row mb-1 ">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Entered By</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="enteredBy"/>
+                            <input type="text" matInput formControlName="enteredBy" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="enteredByCode" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="enteredByCode" (newRowClick)="enteredBySelected($event)"></master-search>
+                        <master-search [MasterSearchData]="enteredByCode"
+                            (newRowClick)="enteredBySelected($event)"></master-search>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-5">
                 <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">From Date</label>
-                    <div class="col-md-3">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">From Date</label>
+                    <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
                             <input matInput [matDatepicker]="fromDate" [max]="fromDate" formControlName="fromDate"
                                 placeholder="DD/MM/YYYY" DateValidation />
@@ -90,16 +93,16 @@
                             <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
                         </mat-form-field>
                     </div>
-                    <div class="col-md-3 text-center">
+                    <div class="col-md-4 text-center">
                         <div class="p-1 bd-highlight">
                             <button type="button" class="btn btn-primary add-btn">
                                 Pull Invoices
                             </button>
                         </div>
                     </div>
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Journal Ref</label>
-                    <label for="inputPassword" class="col-sm-3 col-form-label">To Date</label>
-                    <div class="col-md-3">
+
+                    <label for="inputPassword" class="col-sm-4 col-form-label">To Date</label>
+                    <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
                             <input matInput [matDatepicker]="toDate" [max]="toDate" formControlName="toDate"
                                 placeholder="DD/MM/YYYY" DateValidation />
@@ -109,7 +112,14 @@
                     </div>
                 </div>
                 <div class="row mb-1 align-items-center">
-                    <label for="inputPassword" class="col-sm-12 col-form-label">AL MIGNAS JEWELLERS L.L.C</label>
+                    <div class="col-md-6">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="partycodeName" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-6 col-form-label">Journal Ref</label>
+                </div>
+                <div class="row mb-1 align-items-center">
                     <label for="inputPassword" class="col-sm-3 col-form-label">Party Address</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
@@ -148,13 +158,13 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Total Sale</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="totalSale"/>
+                            <input type="text" matInput formControlName="totalSale" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-3 col-form-label">Total Vat</label>
                     <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="totalVat"/>
+                            <input type="text" matInput formControlName="totalVat" />
                         </mat-form-field>
                     </div>
                 </div>

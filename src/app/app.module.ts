@@ -41,6 +41,7 @@ import { allIcons } from 'angular-feather/icons';
 import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
 import { DatePipe, DecimalPipe } from '@angular/common';
 
+
 const dbConfig: DBConfig = {
   name: 'suntechPos',
   version: 1,

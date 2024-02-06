@@ -57,7 +57,7 @@ export class RetailTransactionComponent implements OnInit {
     // username: [localStorage.getItem('username'), Validators.required],
     password: ['', Validators.required],
     // reason: ['', Validators.required],
-    reason: ['', [this.autoCompleteValidator(() => this.reasonMaster, 'CODE')]],
+    reason: ['', [Validators.required, this.autoCompleteValidator(() => this.reasonMaster, 'CODE')]],
     description: ['', Validators.required],
   });
 
@@ -248,7 +248,10 @@ export class RetailTransactionComponent implements OnInit {
       let sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe((resp: any) => {
         if (resp.status == 'Success') {
           this.modalReferenceUserAuth.close(true);
-          this.authForm.controls.password.setValue(null);
+          this.authForm.reset();
+          // this.authForm.controls.password.setValue(null);
+          // this.authForm.controls.reason.setValue('');
+          // this.authForm.controls.description.setValue('');
         } else {
           this.snackBar.open(resp.message, 'OK', { duration: 2000 })
         }

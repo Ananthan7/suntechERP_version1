@@ -88,6 +88,8 @@ export class StoneIssueComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.setCompanyCurrency()
+    this.setvalues()
   }
 
   close(data?: any) {
@@ -155,12 +157,12 @@ export class StoneIssueComponent implements OnInit {
  
 
   stoneissueFrom: FormGroup = this.formBuilder.group({
-    voctype:['STI',[Validators.required]],
-    vocno:[1,[Validators.required]],
-    vocDate:[new Date()],
+    voctype:['',[Validators.required]],
+    vocno:['0',[Validators.required]],
+    vocDate:[],
     enteredBy:[''],
-    currency:["AED",''],
-    currencyrate:[1,''],
+    currency:[''],
+    currencyrate:[''],
     worker:['',],
     workername:[''],
     narration:[''],
@@ -169,6 +171,29 @@ export class StoneIssueComponent implements OnInit {
     total:[''],
   });
 
+  setvalues(){
+    this.stoneissueFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.stoneissueFrom.controls.vocDate.setValue(this.comService.currentDate)
+
+  }
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.comService.getCompanyParamValue('COMPANYCURRENCY')
+    this.stoneissueFrom.controls.currency.setValue(CURRENCY_CODE);
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  setCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.comService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stoneissueFrom.value.currency);
+    if (CURRENCY_RATE.length > 0) {
+      this.stoneissueFrom.controls.currencyrate.setValue(
+        this.comService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.stoneissueFrom.controls.currency.setValue('')
+      this.stoneissueFrom.controls.currencyrate.setValue('')
+      this.comService.toastErrorByMsgId('MSG1531')
+    }
+  }
   // addRow(): void {
   //   const newRow = this.formBuilder.group({
   //     serialNo: this.tableData.length + 1,

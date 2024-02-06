@@ -294,8 +294,9 @@ export class LabourChargeMasterComponent implements OnInit {
     if (this.content) {
       this.setFormValues()
     }
-    this.metallabourMasterForm.controls.wtFromdeci.setValue('.000')
-    this.metallabourMasterForm.controls.wtToDeci.setValue('.000')
+    console.log(this.commonService.amtFormat)
+    this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
 
     // this.diamondlabourMasterForm = this.formBuilder.group({
     //   labourType: new FormControl(''),
@@ -467,6 +468,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   metaldivisionCodeSelected(e: any) {
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
+    
   }
 
   labouracSelected(e: any) {

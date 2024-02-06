@@ -103,7 +103,7 @@ export class WorkerMasterComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
       this.setFormValues();
-       this.selectProcessMasterList()
+      this.selectProcessMasterList()
     }
   }
 
@@ -112,7 +112,7 @@ export class WorkerMasterComponent implements OnInit {
   setInitialValues() {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    this.workerMasterForm.controls.TargetPcs.setValue(0)
+    this.workerMasterForm.controls.TargetPcs.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -127,21 +127,37 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(this.content.LOSS_ALLOWED, 'AMOUNT'))
     this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE)
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TRAY_WEIGHT, 'METAL'))
-    this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS)
+    this.workerMasterForm.controls.TargetPcs.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_PCS, 'METAL'))
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_CARAT_WT, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_METAL_WT, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_WEIGHT, 'METAL'))
   }
-  getWorkerMaster(MID: any) {
-    let API = 'WorkerMaster/GetWorkerMasterMIDLookup/' + MID
+  loadFlag: number = 0
+  getWorkerMaster() {
+    let API = 'WorkerMaster/GetWorkerMasterMIDLookup/' + this.content.MID
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           let data = result.response;
-          const set2 = new Set(data.workerDetails.map((obj: any) => obj.SRNO));
-          let dataSet = this.tableData.filter(obj => set2.has(obj.SRNO));
-          this.selectedKey = dataSet.map(item => item.SRNO );
+          this.selectedKey = data.workerDetails.map((obj: any) => obj.SRNO);
+          if(this.loadFlag == 0){
+            this.loadFlag+=1
+            this.tableData = data.workerDetails
+          }
+          // this.selectedKey.forEach((element:any) => {
+          //   this.tableData.forEach((item:any,index:number) => {
+          //     if(element == item.SRNO){
+          //       item.SORTID = index+1
+          //     }else{
+          //       item.SORTID = this.tableData.length
+          //     }
+          //   });
+          // });
+          // this.tableData = this.tableData.sort((a:any,b:any)=> a.SORTID - b.SORTID)
+          // this.tableData.forEach((item:any,index:number) => {
+          //   item.SRNO = index+1
+        // });
         }
       }, err => {
         this.commonService.closeSnackBarMsg()
@@ -370,7 +386,6 @@ export class WorkerMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
         if (result.response) {
           this.tableData = result.response;
           this.tableData.forEach((item: any, i: any) => {
@@ -378,11 +393,10 @@ export class WorkerMasterComponent implements OnInit {
           });
           this.selectedKey = []
           if ((this.content.FLAG == 'EDIT' || 'VIEW')) {
-            this.getWorkerMaster(this.content.MID)
+            this.getWorkerMaster()
           }
         }
       }, err => {
-        this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)

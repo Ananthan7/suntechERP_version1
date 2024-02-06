@@ -36,10 +36,10 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5">Voc Number : </label>
+                            <label for="inputPassword" class="col-sm-5">Voc Number * : </label>
                             <div class="col-sm-4 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="vocno"  [dir]="'rtl'" style="text-align: right;" />
+                                    <input type="number" matInput formControlName="vocno"   style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="number" matInput formControlName="itemcurrency_rate"  [dir]="'rtl'" style="text-align: right;" />
+                                    <input type="number" matInput formControlName="itemcurrency_rate"   style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="number" matInput formControlName="basecurrency_rate"  [dir]="'rtl'" style="text-align: right;" />
+                                    <input type="number" matInput formControlName="basecurrency_rate"   style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -144,21 +144,15 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput />
                                     </mat-form-field>
-
-                                    <div class="form-check offset-6">
-                                        <mat-radio-group aria-label="Select an option" formControlName="valueTarget">
-                                            <mat-radio-button value="1" class="mx-2">By Value</mat-radio-button>
-                                        </mat-radio-group>
-
-                                    </div>
-                                    <div class="form-check ">
-                                        <mat-radio-button value="2" class="mx-2">By %</mat-radio-button>
-                                    </div>
-                                    <div class="form-check ">
-                                        <mat-radio-button value="3" class="mx-2">Fixed</mat-radio-button>
-                                    </div>
-
                                 </div>
+                            </div>
+                            <div class="col-5  d-flex pt-3 offset-1">
+                                <mat-radio-group aria-label="Select an option" formControlName="valueTarget">
+                                    <mat-radio-button value="1" class="mx-2" [checked]='true'>By Value</mat-radio-button>
+                                    <mat-radio-button value="2" class="mx-2">By %</mat-radio-button>
+                                    <mat-radio-button value="3" class="mx-2">Fixed</mat-radio-button>
+                                </mat-radio-group>
+
                             </div>
 
                         </div>
@@ -171,7 +165,7 @@
                             <label for="inputPassword" class="col-sm-5">Current Rate FC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="currentrate_FC"  [dir]="'rtl'" style="text-align: right;" />
+                                    <input type="number" matInput formControlName="currentrate_FC"   style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -179,7 +173,7 @@
                             <label for="inputPassword" class="col-sm-5">Current Rate LC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="currentrate_LC"  [dir]="'rtl'" style="text-align: right;" />
+                                    <input type="number" matInput formControlName="currentrate_LC"   style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -190,7 +184,7 @@
                             <label for="inputPassword" class="col-sm-5">New Rate FC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="newrate_FC"  [dir]="'rtl'" style="text-align: right;" />
+                                    <input type="number" matInput formControlName="newrate_FC"   style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -198,7 +192,7 @@
                             <label for="inputPassword" class="col-sm-5">New Rate LC:</label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="newrate_LC"  [dir]="'rtl'" style="text-align: right;" />
+                                    <input type="number" matInput formControlName="newrate_LC"   style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>

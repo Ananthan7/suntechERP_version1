@@ -17,6 +17,8 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
   yearMonth?: String;
+  cashTrue: boolean = true;
+  chequeFalse: boolean = false;
 
   
   enteredByCode: MasterSearchModel = {
@@ -125,9 +127,20 @@ export class PosSalesOrderCancellationComponent implements OnInit {
     this.posSalesOrderCancellationForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
     this.posSalesOrderCancellationForm.controls.currency.setValue(this.comService.compCurrency);
     this.posSalesOrderCancellationForm.controls.currencyRate.setValue(this.comService.getCurrRate(this.comService.compCurrency));
-
+    
   }
 
+
+  changeitem() {
+    const selectedMode = this.posSalesOrderCancellationForm.value.modeOfRefundSelect;
+    if (selectedMode === 'Cash') {
+        this.cashTrue= true;
+        this.chequeFalse=false;
+    } else {
+      this.cashTrue= false;
+      this.chequeFalse=true;
+    }
+}
 
   enteredBySelected(e: any) {
     console.log(e);

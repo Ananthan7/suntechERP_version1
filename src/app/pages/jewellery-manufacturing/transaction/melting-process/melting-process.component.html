@@ -45,7 +45,7 @@
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
                   <input matInput [matDatepicker]="vocDate"  formControlName="vocDate"
-                  placeholder="YYYY/MM/DD"  DateValidation />
+                  placeholder="DD-MM-YYYY"  DateValidation />
                 <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
@@ -112,12 +112,12 @@
         </div>
         <div class="row mt-2">
           <div class="col-md-3 d-flex">
-            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" 
+            <!-- <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" 
             [viewImportBtn]="false"
             (addClick)="openaddmeltingprocess()"
             (deleteClick)="deleteTableData()"
             >
-        </menu-buttons>
+        </menu-buttons> -->
           </div>
           <div class="row">
             <div class="col-md-12">
@@ -261,7 +261,7 @@
                 <label for="inputPassword" class="col-sm-4"> Gross Wt * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="TotalgrossWt" />
+                    <input type="number" matInput formControlName="TotalgrossWt" style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>
@@ -269,7 +269,7 @@
                 <label for="inputPassword" class="col-sm-4"> Purity : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="purity" />
+                    <input type="number" matInput formControlName="purity" style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>
@@ -277,7 +277,7 @@
                 <label for="inputPassword" class="col-sm-4">Pure Wt * : </label>
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="TotalpureWt" />
+                    <input type="number" matInput formControlName="TotalpureWt" style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>
@@ -305,7 +305,7 @@
                 <label for="inputPassword" class="col-sm-3">Loss * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="loss" />
+                    <input type="number" matInput formControlName="loss" style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>
@@ -313,13 +313,13 @@
                 <label for="inputPassword" class="col-sm-3"> Gross Wt * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="RETgrossWt" />
+                    <input type="number" matInput formControlName="RETgrossWt" style="text-align: right;" />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Pure Wt * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="RETpureWt" />
+                    <input type="number" matInput formControlName="RETpureWt" style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>
@@ -327,13 +327,13 @@
                 <label for="inputPassword" class="col-sm-3"> Purity * :</label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="purityRET" />
+                    <input type="number" matInput formControlName="purityRET" style="text-align: right;" />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Bal Gross * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="balGross" />
+                    <input type="number" matInput formControlName="balGross" style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>
@@ -341,13 +341,13 @@
                 <label for="inputPassword" class="col-sm-3">Pure Wt : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="RETpureWt" />
+                    <input type="number" matInput formControlName="RETpureWt" style="text-align: right;" />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Bal Pure * : </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="balPure" />
+                    <input type="number" matInput formControlName="balPure" style="text-align: right;" />
                   </mat-form-field>
                 </div>
               </div>

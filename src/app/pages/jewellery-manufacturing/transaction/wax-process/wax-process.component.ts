@@ -86,15 +86,7 @@ export class WaxProcessComponent implements OnInit {
   }
   description: any;
 
-  waxprocessFrom: FormGroup = this.formBuilder.group({
-    voctype: ['WXI',[Validators.required]],
-    vocdate: [new Date(),[Validators.required]],
-    vocno: ['1',[Validators.required]],
-    processcode: ['',[Validators.required]],
-    workercode: ['',[Validators.required]],
-    enteredBy: [''],
-    remarks: ['',[Validators.required]],
-  });
+ 
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -105,7 +97,24 @@ export class WaxProcessComponent implements OnInit {
     private commonService: CommonServiceService,
   ) { }
 
+  ngOnInit(): void {
+    this.waxprocessFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+    this.waxprocessFrom.controls.vocdate.setValue(this.commonService.currentDate)
+    console.log(this.branchParmeter);
+    let data = this.branchParmeter.split(',');
+    this.description = data[4].substring(15);
+  
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
 
+    // console.log(this.content);
+    if (this.content) {
+      this.setFormValues()
+    }
+    
+    
+
+  }
 
   userDataSelected(value: any) {
     console.log(value);
@@ -177,28 +186,17 @@ export class WaxProcessComponent implements OnInit {
     // this.tableData[value.data.SRNO - 1].IssuePcs = data.IssuePcs;
   }
 
-  ngOnInit(): void {
+ 
 
-
-    console.log(this.branchParmeter);
-
-    let data = this.branchParmeter.split(',');
-
-    this.description = data[4].substring(15);
-    
-
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
-
-    // console.log(this.content);
-    if (this.content) {
-      this.setFormValues()
-    }
-
-    
-   
-  }
-
+  waxprocessFrom: FormGroup = this.formBuilder.group({
+    voctype: ['',[Validators.required]],
+    vocdate: ['',[Validators.required]],
+    vocno: ['',[Validators.required]],
+    processcode: ['',[Validators.required]],
+    workercode: ['',[Validators.required]],
+    enteredBy: [''],
+    remarks: ['',[Validators.required]],
+  });
 
 
   setFormValues() {

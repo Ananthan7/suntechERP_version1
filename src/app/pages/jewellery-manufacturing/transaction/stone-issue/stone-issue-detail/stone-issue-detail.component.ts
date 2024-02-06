@@ -20,6 +20,8 @@ export class StoneIssueDetailComponent implements OnInit {
   subJobNo: any;
   @Input() content!: any;
   tableData: any[] = [];
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
@@ -151,6 +153,19 @@ export class StoneIssueDetailComponent implements OnInit {
     
   }
 
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
+  }
+
   locationCodeSelected(e: any) {
     console.log(e);
     this.stoneissuedetailsFrom.controls.location.setValue(e.LOCATION_CODE);
@@ -196,6 +211,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.activeModal.close(data);
     data.reopen=true;
   }
+
 
   jobchange(){  
     this.formSubmit();

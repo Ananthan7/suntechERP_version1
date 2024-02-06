@@ -86,8 +86,8 @@ export class MetalReturnComponent implements OnInit {
   }
   metalReturnForm: FormGroup = this.formBuilder.group({
 
-    vocType: ['DMR',[Validators.required]],
-    vocNo : ['1',[Validators.required]],
+    vocType: ['',[Validators.required]],
+    vocNo : ['',[Validators.required]],
     vocDate : [''],
     vocTime : [new Date().toTimeString().slice(0, 5),[Validators.required]],
     enteredBy : [''],
@@ -121,7 +121,7 @@ export class MetalReturnComponent implements OnInit {
     // this.companyName = this.commonService.companyName;
     this.yearMonth = this.commonService.yearSelected;
     this.metalReturnForm.controls.vocDate.setValue(this.currentDate)
-    this.metalReturnForm.controls.vocType.setValue('DMR')
+    this.metalReturnForm.controls.vocType.setValue(this.commonService.getqueryParamVocType())
     //this.commonService.getqueryParamVocType()
   }
   formatDate(event: any) {

@@ -11,7 +11,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteCurrencyReceipt()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteCurrencyReceipt()"  [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
 </div>
 
 <!-- content section -->
@@ -224,6 +224,14 @@
                   <dxi-column *ngFor="let data of columnsList" dataField="{{ data.field }}" caption="{{ data.title }}"
                     [allowEditing]="true" alignment="center" backgroundcolor="#000">
                   </dxi-column>
+                  <!-- <dxi-column dataField="SRNO" dataType="SR_NO"></dxi-column> -->
+
+                  <dxo-summary>
+                    <dxi-total-item column="Sr #">
+                    </dxi-total-item>
+                    <dxi-total-item column="Amount">
+                    </dxi-total-item>              
+                  </dxo-summary>
                 </dx-data-grid>
               </div>
             </div>

@@ -45,7 +45,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price1" />
+                                                formControlName="price1" (input)="enableNextField('price1', 'price2')"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -58,7 +58,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price3" />
+                                                formControlName="price3" [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -71,7 +71,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price5" />
+                                                formControlName="price5" [disabled]="priceSchemaMasterForm.get('price5')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -86,7 +86,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price2" />
+                                                formControlName="price2" [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
@@ -99,7 +99,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
-                                                formControlName="price4" />
+                                                formControlName="price4" [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"

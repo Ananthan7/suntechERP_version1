@@ -58,7 +58,7 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Date</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input matInput [matDatepicker]="fromDate" [max]="vocMaxDate" name="fromDate"
+                            <input matInput [matDatepicker]="fromDate" name="fromDate" [max]="currentDate"
                                 placeholder="DD/MM/YYYY" DateValidation formControlName="fromDate" />
                             <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
@@ -66,8 +66,8 @@
                     </div>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input matInput [matDatepicker]="toDate" [max]="vocMaxDate" name="toDate"
-                                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" />
+                            <input matInput [matDatepicker]="toDate" [min]="retailAdvanceReceiptRegisterForm.value.fromDate"  name="toDate"
+                                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" (dateChange)="toDateValitation()" />
                             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
                         </mat-form-field>
@@ -115,7 +115,7 @@
                         <P>From : {{ this.retailAdvanceReceiptRegisterForm.value.fromDate | date:'MMM dd, yyyy' }} To :
                             {{ this.retailAdvanceReceiptRegisterForm.value.toDate | date:'MMM dd, yyyy' }}</P>
                         <!-- <P>From : {{ fromDateOnePdf }} To : {{ toDateOnePdf }}</P> -->
-                        <p>Salesman Range : {{ this.retailAdvanceReceiptRegisterForm.value.salesman }}</p>
+                        <p>Salesman Range : To {{ this.retailAdvanceReceiptRegisterForm.value.salesman }}</p>
                     </div>
                 </div>
                 <div class="col-md-6">

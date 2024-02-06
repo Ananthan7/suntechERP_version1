@@ -83,7 +83,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
 
     vocType: ['',[Validators.required]],
     vocNo : ['',[Validators.required]],
-    vocDate : ['',[Validators.required]],
+    vocDate : [''],
     // vocTime : [new Date().toTimeString().slice(0, 5),[Validators.required]],
     enteredBy : [''],
     kariggerType: [''],
@@ -94,7 +94,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     baseCurrencyNo: [''],
     metalRateType: [''],
     metalRateNo: [''],
-    location : [''],
+    location : ['',[Validators.required]],
     remarks : [''],
   });
 
@@ -116,8 +116,8 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   }
 
   setvalues(){
-    this.diamondJobBoqIssue.controls.vocType.setValue('JBI')
-    this.diamondJobBoqIssue.controls.vocNo.setValue('1')
+    this.diamondJobBoqIssue.controls.vocType.setValue(this.commonService.getqueryParamVocType())
+  
     
   }
 

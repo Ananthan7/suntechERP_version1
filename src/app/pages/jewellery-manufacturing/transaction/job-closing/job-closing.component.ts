@@ -47,9 +47,7 @@ export class JobClosingComponent implements OnInit {
   this.branchCode = this.commonService.branchCode;
   this.yearMonth = this.commonService.yearSelected;
   // this.voctype = this.commonService.getqueryParamMainVocType()
-  this.jobCloseingFrom.controls.vocdate.setValue(this.currentDate)
-  // this.jobCloseingFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
-  // this.setAllInitialValues()
+    this.setvalues()
   }
   setAllInitialValues() {
     console.log(this.content)
@@ -240,9 +238,9 @@ export class JobClosingComponent implements OnInit {
   }
 
   jobCloseingFrom: FormGroup = this.formBuilder.group({
-      vocType: ['JBC', [Validators.required]],
-      vocNum: ['1', [Validators.required]],
-      vocdate: [new Date(),],
+      vocType: ['', [Validators.required]],
+      vocNo: ['', [Validators.required]],
+      vocdate: [''],
       user_name: ['',],
       party_code: ['',],
       job_no: ['',],
@@ -332,6 +330,14 @@ export class JobClosingComponent implements OnInit {
     )
     return Components
   }
+  setvalues(){
+    this.jobCloseingFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
+    this.jobCloseingFrom.controls.vocNo.setValue(this.commonService.popMetalValueOnNet)
+    this.jobCloseingFrom.controls.vocdate.setValue(this.commonService.currentDate)
+   
+  }
+
+
 
   formSubmit(){
     if (this.content && this.content.FLAG == 'EDIT') {

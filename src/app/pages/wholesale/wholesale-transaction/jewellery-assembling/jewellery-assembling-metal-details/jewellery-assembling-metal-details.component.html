@@ -1,0 +1,186 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Jewellery Assembiling Metal Details </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<div class="container-fluid pt-3">
+    <form [formGroup]="JewelleryAssemblingMetalDetailsForm">
+        <div class="col-md-12">
+            <div class="sales-card-body p-2">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-3 col-form-label">Stock code :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="stockCode" />
+                                </mat-form-field>
+                            </div>
+
+
+                            
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="stockCodedes" />
+                                </mat-form-field>
+                                <master-search [MasterSearchData]="StockcodeCodeData"
+                                    (newRowClick)="StockcodeCodeSelected($event)">
+                                </master-search>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-3 col-form-label">Description :</label>
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 150%;">
+                                    <input type="text" matInput formControlName="description" />
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Karat :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="karat" />
+                                </mat-form-field>
+                            </div>
+                            <label for="input" class="col-sm-2 col-form-label">Rate Type :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="rateType" />
+                                </mat-form-field>
+                                <master-search [MasterSearchData]="rateTypeCodeData"
+                                    (newRowClick)="rateTypeCodeSelected($event)"></master-search>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Purity :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="purity" />
+                                </mat-form-field>
+                            </div>
+                            <label for="input" class="col-sm-2 col-form-label">Metal Rate:</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="metalRate" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Pcs :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="pcs" />
+                                </mat-form-field>
+                            </div>
+                            <label for="input" class="col-sm-2 col-form-label">MLRate/GMS:</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="mlRate" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Gross Wt :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="grossWt" />
+                                </mat-form-field>
+                            </div>
+                            <label for="input" class="col-sm-2 col-form-label">Mkg.RateLC :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="mkgRateLc" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Pure Wt :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="pureWt" />
+                                </mat-form-field>
+                            </div>
+                            <label for="input" class="col-sm-2 col-form-label">Supplier :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="supplier" />
+                                </mat-form-field>
+                                <master-search [MasterSearchData]="supplierCodeData"
+                                    (newRowClick)="supplierCodeSelected($event)">
+                                </master-search>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Issue No :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="issueNo" />
+                                </mat-form-field>
+
+                            </div>
+                            </div>
+                            <div class="row mb-2">
+                            <label for="input" class="col-sm-2 col-form-label">Location :</label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="location" />
+                                </mat-form-field>
+                                <master-search [MasterSearchData]="locationCodeData"
+                                    (newRowClick)="locationCodeSelected($event)">
+                                </master-search>
+                            </div>
+                            </div>
+                            <div class="row mb-2">
+                            <label for="input" class="col-sm-3 col-form-label">Mkg Amount LC :</label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="mkgAmountLC" />
+                                </mat-form-field>
+                            </div>
+                            </div>
+                            <div class="row mb-2">
+                            <label for="input" class="col-sm-3 col-form-label">Mkg Amount FC :</label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="mkgAmountFC" />
+                                </mat-form-field>
+
+                            </div>
+                            </div>
+                            <div class="row mb-2">
+                            <label for="input" class="col-sm-3 col-form-label">Amount LC :</label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="amountLC" />
+                                </mat-form-field>
+                            </div>
+                            </div>
+                            <div class="row mb-2">
+                            <label for="input" class="col-sm-3 col-form-label">Amount FC :</label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 80%;">
+                                    <input type="text" matInput formControlName="amountFC" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (cancelClick)="close()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="posPurchaseForm">
@@ -42,7 +42,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="partyCode" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="partyCodeData"
+                            (newRowClick)="partyCodeSelected($event)"></master-search>
                     </div>
                 </div>
                 <div class="row">
@@ -56,22 +57,23 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="partyCurrCodeDesc" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="partyCurrencyCodeData"
+                            (newRowClick)="partyCurrencyCodeSelected($event)"></master-search>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row align-items-baseline">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Customer</label>
-                    <div class="col-md-4">
-                        <mat-form-field style="width: 100%;">
+                    <div class="col-md-5">
+                        <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="customer" />
                         </mat-form-field>
+                        <master-search [MasterSearchData]="customerCodeData"
+                            (newRowClick)="customerCodeSelected($event)"></master-search>
                     </div>
-                    <div class="col-md-4">
-                        <div class="p-2">
-                            <button type="button" class="btn btn-primary add-btn w-100">
-                                New
-                            </button>
-                        </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-primary add-btn w-100" (click)="openaddCustomerMaster()"> 
+                            New
+                        </button>
                     </div>
                 </div>
                 <div class="row">
@@ -88,12 +90,12 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Item Curr</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="itemCurr" />
+                            <input type="text" matInput formControlName="itemCurr" readonly />
                         </mat-form-field>
                     </div>
                     <div class="col-md-5">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="itemCurrCode" />
+                            <input type="text" matInput formControlName="itemCurrCode" readonly />
                         </mat-form-field>
                     </div>
                 </div>
@@ -164,20 +166,28 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="tableData" [height]="250">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true">
                     </dxo-editing>
                     <dxo-selection mode="multiple"></dxo-selection>
                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                     <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                    </dxi-column>
+                    </dxi-column>                   -->
+                  <dxi-column dataField="KARAT_CODE" caption="Karat" [width]="70"></dxi-column>
+                  <dxi-column dataField="KARAT_RATE" caption="Sale Rate" [width]="100"></dxi-column>
+                  <dxi-column dataField="POPKARAT_RATE" caption="Purchase Rate" [width]="100"></dxi-column>
+                  
                 </dx-data-grid>
             </div>
             <div class="col-md-2">
-                <label for="inputPassword" class="col-form-label">Point Of Sales Control</label>
+                <label for="inputPassword" class="col-form-label border-bottom-10 ">Point Of Sales Control</label>
+                <!-- <h6 class="bank_option"></h6> -->
+                <mat-form-field style="width: 100%;">
+                    <input type="text" matInput formControlName="partyCodeName" readonly/>
+                </mat-form-field>
                 <div class="box_wrap">
 
                 </div>
@@ -186,7 +196,8 @@
         <div class="row mt-2">
             <label for="inputPassword" class="col-sm-12 col-form-label">Line Items</label>
             <div class="col-md-3 d-flex mb-2">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" (addClick)="openaddposdirectdetail()">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                    (addClick)="openaddposdirectdetail()">
                 </menu-buttons>
             </div>
             <div class="col-md-12">
