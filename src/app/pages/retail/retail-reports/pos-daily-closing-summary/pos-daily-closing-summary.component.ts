@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { PosSalesmanDetailsComponent } from './pos-salesman-details/pos-salesman-details.component';
 
 @Component({
   selector: 'app-pos-daily-closing-summary',
   templateUrl: './pos-daily-closing-summary.component.html',
   styleUrls: ['./pos-daily-closing-summary.component.scss']
 })
+
 export class PosDailyClosingSummaryComponent implements OnInit {
 
   vocMaxDate = new Date();
   currentDate = new Date();
+  tableData: any[] = [];
   columnhead:any[] = ['No.Inv','Amt.Rcvd','Gold','Dia & Other'];
   columnheadTransaction:any[] = ['Voucher','No.Inv','Amount'];
   columnheadMetal:any[] = ['Division','Type','Pcs','Gms','Pure Wt','St.Qty','St.Amt','Mkg.Rate','Mkg.Value','Metal Value','Total Amount'];
@@ -55,6 +58,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
 
   constructor(
     private activeModal: NgbActiveModal,
+    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private comService: CommonServiceService,
   ) { }
@@ -66,7 +70,15 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
+  
+  openaddstonereturndetails() {
+    const modalRef: NgbModalRef = this.modalService.open(PosSalesmanDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
 
 
 }

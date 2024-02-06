@@ -83,7 +83,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   partyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 6,
+    LOOKUPID: 7,
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Party Code',
     SEARCH_VALUE: '',

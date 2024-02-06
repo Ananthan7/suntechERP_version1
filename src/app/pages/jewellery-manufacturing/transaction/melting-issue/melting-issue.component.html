@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"  [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewAuditTrail]="true"
+    [isViewPost]="true"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="meltingIssueFrom">
@@ -156,10 +157,36 @@
                                     <dxo-selection mode="multiple"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
+                                    <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
                                         caption="{{ data }}" [allowEditing]="true" alignment="left" [width]="100"
                                         backgroundcolor="#000">
-                                    </dxi-column>
+                                    </dxi-column> -->
+                                    <dxi-column [width]="100" dataField="SRNO" caption="SRNO"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="DIV" caption="DIV"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Job No" caption="Job No"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Stock Code" caption="Stock Code"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Main Stock" caption="Main Stock"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Process" caption="Process"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Worker" caption="Worker"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Pcs" caption="Pcs"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Gross Weight" caption="Gross Weight"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Purity" caption="Purity"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Pure Weight" caption="Pure Weight"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Rate" caption="Rate"></dxi-column>
+                                    <dxi-column [width]="100"  dataField="Amount" caption="Amount"></dxi-column>
+
+                                    <dxo-summary>
+                                        <dxi-total-item column="SRNO">
+                                        </dxi-total-item>
+                                        <dxi-total-item column="Pcs">
+                                        </dxi-total-item>
+                                        <dxi-total-item column="Gross Weight">
+                                        </dxi-total-item>
+                                        <dxi-total-item column="Pure Weight">
+                                        </dxi-total-item>
+                                        <dxi-total-item column="Amount">
+                                        </dxi-total-item>
+                                    </dxo-summary>
                                 </dx-data-grid>
                             </div>
 
@@ -181,74 +208,57 @@
                                     </dxi-column>
                                 </dx-data-grid>
                                 <button class="btn btn-sm btn-outline-primary" (click)="open(mymodal)">Add Alloy
-                                    </button>
-                                    
+                                </button>
+
                                 <div class="col-md-8">
-                                    
                                     <ng-template #mymodal let-modal modal-sm>
-                                        
                                         <div class="" style="padding: 10px 20px">
                                             <div class="modal-header d-flex justify-content-end">
-                               
-                                                    <h5 class="meltingissueheading" id="modal-dia-metal"style="text-righ t">Melting Issue </h5>
-                                                
-                                                    
-                                            
-                                            <button
-                                            style="border: none"
-                                            type="button"
-                                            class="close "
-                                            aria-label="Close"
-                                            (click)="modal.dismiss('close1')">
-                                            
-                                            <span aria-hidden="true" >x</span>
-                                    
-                                          </button>
-                                            
-                                               
-                                            
+                                                <h5 class="meltingissueheading" id="modal-dia-metal"
+                                                    style="text-align:right;">Melting Issue </h5>
+                                                <button style="border: none" type="button" class="close "
+                                                    aria-label="Close" (click)="modal.dismiss('close1')">
+                                                    <span aria-hidden="true">x</span>
+                                                </button>
                                             </div>
                                             <br>
-                                        <div class="col-md-12">
-                                            <div class="modal-content">
-                                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                                [allowColumnReordering]="true" [allowColumnResizing]="true"
-                                                [columnAutoWidth]="true">
-                                                <dxo-paging [enabled]="false"></dxo-paging>
-                                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                                <dxo-selection mode="multiple"></dxo-selection>
-                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                                <dxi-column *ngFor="let data of db1" dataField="{{ data }}"
-                                                    caption="{{ data }}" [allowEditing]="true" alignment="left"
-                                                    backgroundcolor="#000">
+                                            <div class="col-md-12">
+                                                <div class="modal-content">
+                                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                                                        [showBorders]="true" [allowColumnReordering]="true"
+                                                        [allowColumnResizing]="true" [columnAutoWidth]="true">
+                                                        <dxo-paging [enabled]="false"></dxo-paging>
+                                                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                                        <dxo-selection mode="multiple"></dxo-selection>
+                                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                        <dxi-column *ngFor="let data of db1" dataField="{{ data }}"
+                                                            caption="{{ data }}" [allowEditing]="true" alignment="left"
+                                                            backgroundcolor="#000">
 
-                                                </dxi-column>
-                                            </dx-data-grid>
-                                            <div class="row my-2">
-                                                <label for="inputPassword" class="col-sm-3 col-form-label">Required Alloy Qty:</label>
-                                                <div class="col-md-6">
-                                                    <mat-form-field style="width: 70%;">
-                                                        <input type="text" matInput formControlName="remarks" />
-                                                    </mat-form-field>
-                                                </div>
-                                            </div>
-                                           
-                                              <div class="modal-footer">
+                                                        </dxi-column>
+                                                    </dx-data-grid>
+                                                    <div class="row my-2">
+                                                        <label for="inputPassword"
+                                                            class="col-sm-3 col-form-label">Required Alloy Qty:</label>
+                                                        <div class="col-md-6">
+                                                            <mat-form-field style="width: 70%;">
+                                                                <input type="text" matInput formControlName="remarks" />
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
                                                         <button type="button" class="btn btn-primary">Apply</button>
                                                         <button type="button" class="btn btn-primary">Cancel</button>
-                                                        
                                                     </div>
-                                            </div>
                                                 </div>
-
                                             </div>
-                                       
+                                        </div>
                                     </ng-template>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="row py-2 border-top">
@@ -261,35 +271,10 @@
                             <dxo-selection mode="multiple"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <!-- <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
+                            <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
                                 [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column> -->
-                            <dxi-column dataField="SRNO" caption="SRNO"></dxi-column>
-                            <dxi-column dataField="DIV" caption="DIV"></dxi-column>
-                            <dxi-column dataField="Job No" caption="Job No"></dxi-column>
-                            <dxi-column dataField="Stock Code" caption="Stock Code"></dxi-column>
-                            <dxi-column dataField="Main Stock" caption="Main Stock"></dxi-column>
-                            <dxi-column dataField="Process" caption="Process"></dxi-column>
-                            <dxi-column dataField="Worker" caption="Worker"></dxi-column>
-                            <dxi-column dataField="Pcs" caption="Pcs"></dxi-column>
-                            <dxi-column dataField="Gross Weight" caption="Gross Weight"></dxi-column>
-                            <dxi-column dataField="Purity" caption="Purity"></dxi-column>
-                            <dxi-column dataField="Pure Weight" caption="Pure Weight"></dxi-column>
-                            <dxi-column dataField="Rate" caption="Rate"></dxi-column>
-                            <dxi-column dataField="Amount" caption="Amount"></dxi-column>
+                            </dxi-column>
 
-                            <dxo-summary>
-                                <dxi-total-item column="SRNO">
-                                </dxi-total-item>
-                                <dxi-total-item column="Pcs">
-                                </dxi-total-item>
-                                <dxi-total-item column="Gross Weight">
-                                </dxi-total-item>  
-                                <dxi-total-item column="Pure Weight">
-                                </dxi-total-item>                
-                                <dxi-total-item column="Amount">
-                                </dxi-total-item>                
-                            </dxo-summary>
                         </dx-data-grid>
                     </div>
                     <div class="col-md-12">
