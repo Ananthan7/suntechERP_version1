@@ -26,7 +26,7 @@ export class DurationPickerComponent implements OnInit {
   durationPickerForm!: FormGroup;
 
   duration: any[] = [];
-
+  totalMinutes: any;
 
 
   constructor(
@@ -795,6 +795,150 @@ export class DurationPickerComponent implements OnInit {
     {
       "name": 23,
       "value": 23
+    },
+    {
+      "name": 24,
+      "value": 24
+    },
+    {
+      "name": 25,
+      "value": 25
+    },
+    {
+      "name": 26,
+      "value": 26
+    },
+    {
+      "name": 27,
+      "value": 27
+    },
+    {
+      "name": 28,
+      "value": 28
+    },
+    {
+      "name": 29,
+      "value": 29
+    },
+    {
+      "name": 30,
+      "value": 30
+    },
+    {
+      "name": 31,
+      "value": 31
+    },
+    {
+      "name": 32,
+      "value": 32
+    },
+    {
+      "name": 33,
+      "value": 33
+    },
+    {
+      "name": 34,
+      "value": 34
+    },
+    {
+      "name": 35,
+      "value": 35
+    },
+    {
+      "name": 36,
+      "value": 36
+    },
+    {
+      "name": 37,
+      "value": 37
+    },
+    {
+      "name": 38,
+      "value": 38
+    },
+    {
+      "name": 39,
+      "value": 39
+    },
+    {
+      "name": 40,
+      "value": 40
+    },
+    {
+      "name": 41,
+      "value": 41
+    },
+    {
+      "name": 42,
+      "value": 42
+    },
+    {
+      "name": 43,
+      "value": 43
+    },
+    {
+      "name": 44,
+      "value": 44
+    },
+    {
+      "name": 45,
+      "value": 45
+    },
+    {
+      "name": 46,
+      "value": 46
+    },
+    {
+      "name": 47,
+      "value": 47
+    },
+    {
+      "name": 48,
+      "value": 48
+    },
+    {
+      "name": 49,
+      "value": 49
+    },
+    {
+      "name": 50,
+      "value": 50
+    },
+    {
+      "name": 51,
+      "value": 51
+    },
+    {
+      "name": 52,
+      "value": 52
+    },
+    {
+      "name": 53,
+      "value": 53
+    },
+    {
+      "name": 54,
+      "value": 54
+    },
+    {
+      "name": 55,
+      "value": 55
+    },
+    {
+      "name": 56,
+      "value": 56
+    },
+    {
+      "name": 57,
+      "value": 57
+    },
+    {
+      "name": 58,
+      "value": 58
+    },
+    {
+      "name": 59,
+      "value": 59
     }
   ];
   // durationPickerForm: FormGroup = this.formBuilder.group({
@@ -803,39 +947,63 @@ export class DurationPickerComponent implements OnInit {
   //   minutes: [''],
   // });
 
+  // getDays(e: any) {
+  //   console.log(e);
+
+  //   this.duration.push(e.name);
+  //   this.duration[0] = e.name;
+  //   this.emitUpdatedDuration();
+  // }
+
+  // getHours(e: any) {
+  //   console.log(e);
+
+  //   this.duration.push(e.name);
+  //   this.duration[1] = e.name;
+  //   this.emitUpdatedDuration();
+  // }
+
+  // getMinutes(e: any) {
+
+  //   console.log(e);
+
+  //   this.duration.push(e.name);
+
+  //   console.log(this.duration);
+  //   const resultString = this.duration.join(' : ');
+
+  //   console.log(resultString);
+
+  //   this.duration[2] = e.name;
+  //   this.emitUpdatedDuration();
+  // }
+
   getDays(e: any) {
+    this.handleDurationUpdate(e, 0, 24 * 60);
+}
+
+getHours(e: any) {
+    this.handleDurationUpdate(e, 1, 60);
+}
+
+getMinutes(e: any) {
+    this.handleDurationUpdate(e, 2, 1);
+}
+
+private handleDurationUpdate(e: any, index: number, multiplier: number) {
     console.log(e);
+    this.duration[index] = e.name;
 
-    this.duration.push(e.name);
-    this.duration[0] = e.name;
+     this.totalMinutes = this.duration.reduce((acc, val, i) => acc + (parseInt(val) * (i === 0 ? 24 * 60 : i === 1 ? 60 : 1)), 0);
+
+    console.log(`Total Minutes: ${this.totalMinutes}`);
     this.emitUpdatedDuration();
-  }
+}
 
-  getHours(e: any) {
-    console.log(e);
 
-    this.duration.push(e.name);
-    this.duration[1] = e.name;
-    this.emitUpdatedDuration();
-  }
-
-  getMinutes(e: any) {
-
-    console.log(e);
-
-    this.duration.push(e.name);
-
-    console.log(this.duration);
-    const resultString = this.duration.join(' : ');
-
-    console.log(resultString);
-
-    this.duration[2] = e.name;
-    this.emitUpdatedDuration();
-  }
 
   private emitUpdatedDuration() {
-    this.updateDuration.emit(this.duration);
+    this.updateDuration.emit(this.totalMinutes);
   }
 
   close(data?: any) {

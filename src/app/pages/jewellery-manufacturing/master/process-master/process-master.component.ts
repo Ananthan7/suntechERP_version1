@@ -44,23 +44,25 @@ export class ProcessMasterComponent implements OnInit {
   }
 
 
-  updateStandardTime(duration: any[]) {
-    this.yourContent.standardTime.totalDays = duration[0] || 0;
-    this.yourContent.standardTime.totalHours = duration[1] || 0;
-    this.yourContent.standardTime.totalMinutes = duration[2] || 0;
+  updateStandardTime(duration: any) {
+    // this.yourContent.standardTime.totalDays = duration[0] || 0;
+    // this.yourContent.standardTime.totalHours = duration[1] || 0;
+    // this.yourContent.standardTime.totalMinutes = duration[2] || 0;
 
-    this.formattedTime = `${this.yourContent.standardTime.totalDays}:${this.yourContent.standardTime.totalHours}:${this.yourContent.standardTime.totalMinutes}`;
+    this.formattedTime = duration;
 
-    console.log(this.formattedTime);
+    // console.log(this.formattedTime);
+
+    console.log(duration)
   }
 
   updateMaximumTime(duration: any[]) {
-    this.maxContent.maximumTime.totalDays = duration[0] || 0;
-    this.maxContent.maximumTime.totalHours = duration[1] || 0;
-    this.maxContent.maximumTime.totalMinutes = duration[2] || 0;
+    // this.maxContent.maximumTime.totalDays = duration[0] || 0;
+    // this.maxContent.maximumTime.totalHours = duration[1] || 0;
+    // this.maxContent.maximumTime.totalMinutes = duration[2] || 0;
 
-    this.formattedMaxTime = `${this.maxContent.maximumTime.totalDays}:${this.maxContent.maximumTime.totalHours}:${this.maxContent.maximumTime.totalMinutes}`;
-
+    // this.formattedMaxTime = `${this.maxContent.maximumTime.totalDays}:${this.maxContent.maximumTime.totalHours}:${this.maxContent.maximumTime.totalMinutes}`;
+    this.formattedMaxTime = duration;
     console.log(this.formattedMaxTime);
   }
 
