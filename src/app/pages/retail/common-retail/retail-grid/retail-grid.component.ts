@@ -101,17 +101,21 @@ export class RetailGridComponent implements OnInit {
   }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
-    console.log('getMasterGridData', data);
-    
-    if (data) {
+    if (data?.refresh) {
       this.pageIndex = 1;
       this.orderedItems = [];
       this.orderedItemsHead = [];
-      this.vocType = data.VOCTYPE;
-      this.mainVocType = data.MAIN_VOCTYPE;
-      // this.tableName = data.HEADER_TABLE;
-    } else {
-      // this.tableName = this.CommonService.getqueryParamTable()
+    }
+    // if (data) {
+    //   this.pageIndex = 1;
+    //   this.orderedItems = [];
+    //   this.orderedItemsHead = [];
+    //   this.vocType = data.VOCTYPE;
+    //   this.mainVocType = data.MAIN_VOCTYPE;
+    //   this.tableName = data.HEADER_TABLE;
+    // }
+    else {
+      this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
     }
     if (this.orderedItems.length == 0) {
@@ -197,16 +201,16 @@ export class RetailGridComponent implements OnInit {
             if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') {
               data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
             }
-          
+
             if (data.DATA_TYPE == 'datetime') {
               data.FORMAT = 'dd-MM-yyyy';
               data.DATATYPE = 'date';
             }
-          
+
             const isSpecialField = ['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME);
             const isVisible = data.VISIBLE == true;
-          
-            return isSpecialField || (isVisible && this.orderedItemsHead.some(val => data.FIELD_NAME.toString().toLowerCase() === val.FIELD_NAME.toString().toLowerCase() ));
+
+            return isSpecialField || (isVisible && this.orderedItemsHead.some(val => data.FIELD_NAME.toString().toLowerCase() === val.FIELD_NAME.toString().toLowerCase()));
           });
 
           // this.orderedItemsHead = this.visibleFields.filter((data: any, i) => {
