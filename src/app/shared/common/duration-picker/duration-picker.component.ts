@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -15,6 +15,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 export class DurationPickerComponent implements OnInit {
 
   @Input() content!: any;
+  @Output() updateDuration = new EventEmitter<any>();
   viewMode: boolean = false;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -46,43 +47,51 @@ export class DurationPickerComponent implements OnInit {
 
   }
 
+  // formatNumber(value: number): string {
+  //   return value < 10 ? `0${value}` : value.toString();
+  // }
+
+  // // Method to get the formatted number
+  // getFormattedNumber(value: number): string {
+  //   return this.formatNumber(value);
+  // }
 
 
   days: any[] = [
     {
-      "name": 1,
+      "name": '01',
       "value": 1
     },
     {
-      "name": 2,
+      "name": '02',
       "value": 2
     },
     {
-      "name": 3,
+      "name": '03',
       "value": 3
     },
     {
-      "name": 4,
+      "name": '04',
       "value": 4
     },
     {
-      "name": 5,
+      "name": '05',
       "value": 5
     },
     {
-      "name": 6,
+      "name": '06',
       "value": 6
     },
     {
-      "name": 7,
+      "name": '07',
       "value": 7
     },
     {
-      "name": 8,
+      "name": '08',
       "value": 8
     },
     {
-      "name": 9,
+      "name": '09',
       "value": 9
     },
     {
@@ -453,39 +462,39 @@ export class DurationPickerComponent implements OnInit {
       "value": 0
     },
     {
-      "name": 1,
+      "name": '01',
       "value": 1
     },
     {
-      "name": 2,
+      "name": '02',
       "value": 2
     },
     {
-      "name": 3,
+      "name": '03',
       "value": 3
     },
     {
-      "name": 4,
+      "name": '04',
       "value": 4
     },
     {
-      "name": 5,
+      "name": '05',
       "value": 5
     },
     {
-      "name": 6,
+      "name": '06',
       "value": 6
     },
     {
-      "name": 7,
+      "name": '07',
       "value": 7
     },
     {
-      "name": 8,
+      "name": '08',
       "value": 8
     },
     {
-      "name": 9,
+      "name": '09',
       "value": 9
     },
     {
@@ -696,39 +705,39 @@ export class DurationPickerComponent implements OnInit {
       "value": 0
     },
     {
-      "name": 1,
+      "name": '01',
       "value": 1
     },
     {
-      "name": 2,
+      "name": '02',
       "value": 2
     },
     {
-      "name": 3,
+      "name": '03',
       "value": 3
     },
     {
-      "name": 4,
+      "name": '04',
       "value": 4
     },
     {
-      "name": 5,
+      "name": '05',
       "value": 5
     },
     {
-      "name": 6,
+      "name": '06',
       "value": 6
     },
     {
-      "name": 7,
+      "name": '07',
       "value": 7
     },
     {
-      "name": 8,
+      "name": '08',
       "value": 8
     },
     {
-      "name": 9,
+      "name": '09',
       "value": 9
     },
     {
@@ -798,12 +807,16 @@ export class DurationPickerComponent implements OnInit {
     console.log(e);
 
     this.duration.push(e.name);
+    this.duration[0] = e.name;
+    this.emitUpdatedDuration();
   }
 
   getHours(e: any) {
     console.log(e);
 
     this.duration.push(e.name);
+    this.duration[1] = e.name;
+    this.emitUpdatedDuration();
   }
 
   getMinutes(e: any) {
@@ -816,6 +829,13 @@ export class DurationPickerComponent implements OnInit {
     const resultString = this.duration.join(' : ');
 
     console.log(resultString);
+
+    this.duration[2] = e.name;
+    this.emitUpdatedDuration();
+  }
+
+  private emitUpdatedDuration() {
+    this.updateDuration.emit(this.duration);
   }
 
   close(data?: any) {
