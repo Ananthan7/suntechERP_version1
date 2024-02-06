@@ -564,7 +564,23 @@ export class CommonServiceService {
     }
     return totalMinutes;
   }
+  MinutesToHours(minutes:number){
+      // Get the input element value
+      var minutes = Number(minutes);
 
+      // Calculate hours, minutes, and seconds
+      var hours = Math.floor(minutes / 60);
+      var remainingMinutes = minutes % 60;
+      var seconds = 0; // Assuming seconds are always zero for simplicity
+
+      // Format hours, minutes, and seconds
+      var formattedTime = (hours < 10 ? '0' : '') + hours + ':' +
+                          (remainingMinutes < 10 ? '0' : '') + remainingMinutes + ':' +
+                          (seconds < 10 ? '0' : '') + seconds;
+
+      // Display the result in the time input
+      return formattedTime;
+  }
   timeToHHMMSS(timeString: string): string {
     if (this.nullToString(timeString) === '') {
       return '';
