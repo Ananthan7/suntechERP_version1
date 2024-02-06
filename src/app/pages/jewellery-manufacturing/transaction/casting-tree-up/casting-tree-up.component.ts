@@ -330,11 +330,11 @@ deleteTableData(){
      let API = 'JobTreeMasterDJ/InsertJobTreeMasterDJ'
      let postData = {
       "MID": 0,
-      "VOCTYPE": this.castingTreeUpFrom.value.vocType,
+      "VOCTYPE": this.castingTreeUpFrom.value.VOCTYPE,
       "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.castingTreeUpFrom.value.vocNo,
+      "VOCNO": this.castingTreeUpFrom.value.VOCNO,
       "YEARMONTH": this.yearMonth,
-      "VOCDATE": this.castingTreeUpFrom.value.vocDate,
+      "VOCDATE": this.castingTreeUpFrom.value.VOCDATE,
       "DOCTIME": "2023-10-21T07:22:12.302Z",
       "SMAN": this.castingTreeUpFrom.value.enteredBy,
       "REMARKS": "",
