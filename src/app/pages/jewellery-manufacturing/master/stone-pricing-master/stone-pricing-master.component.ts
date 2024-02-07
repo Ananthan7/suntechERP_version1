@@ -58,11 +58,11 @@ export class StonePricingMasterComponent implements OnInit {
   sleve_setData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 86,
+    LOOKUPID: 38,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'sieve Set',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES = 'SIEVE SET MASTER' ",
+    WHERECONDITION: "WHERE TYPES = 'SIEVE SET MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -70,11 +70,11 @@ export class StonePricingMasterComponent implements OnInit {
   sievefromData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 86,
+    LOOKUPID: 38,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve From',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES ='SIEVE SET MASTER'",
+    WHERECONDITION: "WHERE TYPES='SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -82,11 +82,11 @@ export class StonePricingMasterComponent implements OnInit {
   sievetoData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 86,
+    LOOKUPID: 38,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve To',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES ='SIEVE SET MASTER'",
+    WHERECONDITION: "WHERE TYPES='SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -94,11 +94,11 @@ export class StonePricingMasterComponent implements OnInit {
   sizefromData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size From',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES='SIEVE MASTER'",
+    WHERECONDITION: "WHERE TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -106,11 +106,11 @@ export class StonePricingMasterComponent implements OnInit {
   sizetoData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size To',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES='SIEVE MASTER'",
+    WHERECONDITION: "WHERE TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -146,7 +146,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
+    WHERECONDITION: "CMBRANCH_CODE = this.commonservice.branchCode''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
