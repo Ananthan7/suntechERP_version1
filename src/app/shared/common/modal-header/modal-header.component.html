@@ -1,7 +1,7 @@
 <div class="items border-bottom">
     <div class="col-md-8">
         <div class="d-flex justify-content-start text-start">
-            <div class="p-1">
+            <div class="p-1" *ngIf="isViewSave">
                 <button type="button" class="btn btn-primary text-center"
                     *ngIf="editSaveBtnText && editSaveBtnText != ''; else elseBlock"
                     (click)="saveClicked()">
