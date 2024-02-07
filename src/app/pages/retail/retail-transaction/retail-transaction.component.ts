@@ -7,7 +7,6 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { NewPosEntryComponent } from './new-pos-entry/new-pos-entry.component';
 import { AddPosComponent } from './add-pos/add-pos.component';
 import { PosCurrencyReceiptComponent } from './pos-currency-receipt/pos-currency-receipt.component';
-import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
@@ -19,6 +18,8 @@ import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.componen
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { map, pairwise, startWith, filter } from 'rxjs/operators';
+import { SchemeMaturedComponent } from './scheme-matured/scheme-matured.component';
+import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -27,7 +28,7 @@ import { map, pairwise, startWith, filter } from 'rxjs/operators';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RetailTransactionComponent implements OnInit {
-  @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
+  @ViewChild(RetailGridComponent) retailGridComponent?: RetailGridComponent;
   //variables
   menuTitle: string = '';
   tableName: any;
@@ -117,6 +118,7 @@ export class RetailTransactionComponent implements OnInit {
       'PointOfSalesOrderComponent': PointOfSalesOrderComponent,
       'PosPurchaseDirectComponent': PosPurchaseDirectComponent,
       'SchemeReceiptComponent': SchemeReceiptComponent,
+      'SchemeMaturedComponent': SchemeMaturedComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     }
@@ -165,7 +167,7 @@ export class RetailTransactionComponent implements OnInit {
       }
       this.PERMISSIONS = data.PERMISSION;
     }
-    this.masterGridComponent?.getMasterGridData(data)
+    this.retailGridComponent?.getMasterGridData(data)
   }
 
 

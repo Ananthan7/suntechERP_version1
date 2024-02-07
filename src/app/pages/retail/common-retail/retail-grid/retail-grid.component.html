@@ -13,7 +13,7 @@
                     <img src="../../../assets/images/menu/xls.png" 
                         alt="excel" width="24px" height="23px" />
                 </a>
-                <div (click)="getMasterGridData({refresh: true})">
+                <div (click)="getMasterGridData()">
                     <i-feather class="icon-sm" name="refresh-ccw"></i-feather>
                 </div>
             </div>
@@ -36,14 +36,8 @@
             <dxi-button [onClick]="viewRowDetails" icon="fa fa-eye"></dxi-button>
         </dxi-column>
 
-        <dxi-column *ngFor="let data of orderedItemsHead" dataField="{{data.FIELD_NAME}}"
-        caption="{{data.DISPLAY_NAME}}" [allowEditing]="true" alignment="center"
-        [visible]="data.FIELD_NAME != 'Id' && data.VISIBLE ? true : false" [dataType]="data.DATATYPE"
-        [format]="data.FORMAT" [alignment]="data.ALLIGNMENT">
-      </dxi-column>
-      
-        <!-- <dxi-column *ngFor="let data of orderedItemsHead" 
+        <dxi-column *ngFor="let data of orderedItemsHead" 
             dataField="{{data}}" caption="{{data}}">
-        </dxi-column> -->
+        </dxi-column>
     </dx-data-grid>
 </ng-container>

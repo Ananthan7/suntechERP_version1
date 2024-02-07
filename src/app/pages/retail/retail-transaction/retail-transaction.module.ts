@@ -35,6 +35,7 @@ import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.componen
 import { AddReceiptComponent } from './scheme-receipt/add-receipt/add-receipt.component';
 import { AddSchemeComponent } from './scheme-register/add-scheme/add-scheme.component';
 import { CommonRetailModule } from '../common-retail/common-retail.module';
+import { SchemeMaturedComponent } from './scheme-matured/scheme-matured.component';
 
 
 
@@ -66,7 +67,8 @@ import { CommonRetailModule } from '../common-retail/common-retail.module';
     PosPurchaseDirectDetailComponent,
     SchemeReceiptComponent,
     AddReceiptComponent,
-    AddSchemeComponent
+    AddSchemeComponent,
+    SchemeMaturedComponent
     ],
   imports: [
     CommonModule,
