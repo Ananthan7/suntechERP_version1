@@ -9,39 +9,165 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="row">
-    <div class="col-md-9 col-sm-12">
+    <div class="col-md-12 col-sm-12">
         <div class="card p-3">
-
             <form [formGroup]="schemeRegistrationForm">
-                <!-- scheme header -->
-                <div class="row ">
-                    <div class="col-lg-5 col-md-5 d-flex pt-2">
-                        <h5>Scheme Registration</h5>
+                <!-- search section -->
+                <div class="row">
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">Voc Date* :
+                        </label>
+                        <mat-form-field>
+                            <input matInput readonly
+                                DateValidation
+                                name="VocDate"
+                                [matDatepicker]="VocDate"
+                                formControlName="VOCDATE"
+                                placeholder="DD/MM/YYYY" />
+                            <mat-datepicker-toggle
+                                matSuffix
+                                [for]="VocDate"></mat-datepicker-toggle>
+                            <mat-datepicker disabled="true"
+                                #VocDate></mat-datepicker>
+                            <!-- <mat-error
+                                        *ngIf="receiptDetailsForm.controls.VocDate.touched 
+                                                    && receiptDetailsForm.controls.VocDate.hasError('pattern')">
+                                        Invalid date format
+                                        (dd/mm/yyyy)
+                                    </mat-error> -->
+                        </mat-form-field>
                     </div>
-                    <div class="col-lg-5 col-md-5 col-sm-12">
-                        <div class="d-flex">
-                            <span class="matlabels pt-3">Scheme Unique Id:
-                            </span>
-                            <mat-form-field style="width: 65%">
-                                <input type="text" matInput
-                                    (keyup.enter)="schemeIDChange($event)"
-                                    (focusout)="schemeIDChange($event)"
-                                    formControlName="SchemeId"
-                                    [readonly]="viewOnly" />
-                            </mat-form-field>
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">No of units:
+                        </label>
+                        <mat-form-field style="width: 60%;">
+                            <input type="text" matInput
+                                formControlName="Code"
+                                class="text-right"
+                                (focusout)="searchValueChange($event,'Code')" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <div class="d-flex align-items-center">
+                            <label class="matlabels">Customer Name:
+                            </label>
+                            <span class="matlabels">Customer</span>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-2 pt-2">
-                        <!-- <button mat-flat-button color="primary" style="font-size: 11px;padding: 0px 8px;">
-                            Unlock Scheme</button> -->
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">Branch:
+                        </label>
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="Code"
+                                (focusout)="searchValueChange($event,'Code')" />
+                        </mat-form-field>
+                        <master-search [MasterSearchData]="customerMasterData"
+                            (newRowClick)="selectedCustomer($event)">
+                        </master-search>
                     </div>
                 </div>
-                <!-- search section -->
-                <div class="row border-top">
+                <div class="row">
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">Date Of Joining :
+                        </label>
+                        <mat-form-field>
+                            <input matInput readonly
+                                DateValidation
+                                name="VocDate"
+                                [matDatepicker]="VocDate"
+                                formControlName="VOCDATE"
+                                placeholder="DD/MM/YYYY" />
+                            <mat-datepicker-toggle
+                                matSuffix
+                                [for]="VocDate"></mat-datepicker-toggle>
+                            <mat-datepicker disabled="true"
+                                #VocDate></mat-datepicker>
+                            <!-- <mat-error
+                                        *ngIf="receiptDetailsForm.controls.VocDate.touched 
+                                                    && receiptDetailsForm.controls.VocDate.hasError('pattern')">
+                                        Invalid date format
+                                        (dd/mm/yyyy)
+                                    </mat-error> -->
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">Installment Amount:
+                        </label>
+                        <mat-form-field style="width: 60%;">
+                            <input type="text" matInput
+                                formControlName="Code"
+                                class="text-right"
+                                (focusout)="searchValueChange($event,'Code')" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">Email Id:
+                        </label>
+                        <mat-form-field style="width: 60%;">
+                            <input type="text" matInput
+                                formControlName="Code"
+                                class="text-right"
+                                (focusout)="searchValueChange($event,'Code')" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">Pan No:
+                        </label>
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="Code"
+                                (focusout)="searchValueChange($event,'Code')" />
+                        </mat-form-field>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">Customer Code:
+                        </label>
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="Code"
+                                (focusout)="searchValueChange($event,'Code')" />
+                        </mat-form-field>
+                        <master-search [MasterSearchData]="customerMasterData"
+                            (newRowClick)="selectedCustomer($event)">
+                        </master-search>
+                    </div>
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">Alert Before (Days):
+                        </label>
+                        <mat-form-field style="width: 60%;">
+                            <input type="text" matInput
+                                formControlName="Code"
+                                class="text-right"
+                                (focusout)="searchValueChange($event,'Code')" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <label class="matlabels">Mobile Number:
+                        </label>
+                        <mat-form-field style="width: 60%;">
+                            <input type="text" matInput
+                                formControlName="Code"
+                                (focusout)="searchValueChange($event,'Code')" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <div class="d-flex align-items-center">
+                            <label class="matlabels">Alert:
+                            </label>
+                            <span class="matlabels">
+                                <input type="checkbox">Send Alert
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- old form starts -->
+                <!-- <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12">
-                        <span class="matlabels">Code:
-                        </span>
-                        <mat-form-field style="width: 65%">
+                        <label class="matlabels">Code:
+                        </label>
+                        <mat-form-field>
                             <input type="text" matInput formControlName="Code"
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
@@ -50,8 +176,8 @@
                         </master-search>
                     </div>
                     <div class="col-lg-5 col-md-5 col-sm-12">
-                        <span class="matlabels">Mobile No*:
-                        </span>
+                        <label class="matlabels">Mobile No*:
+                        </label>
                         <mat-form-field style="width: 65%">
                             <input type="text" matInput
                                 (keypress)="isNumeric($event)"
@@ -71,8 +197,8 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12">
-                        <span class="matlabels">Name:
-                        </span>
+                        <label class="matlabels">Name:
+                        </label>
                         <mat-form-field style="width: 65%">
                             <input type="text" matInput
                                 formControlName="Name" />
@@ -123,26 +249,14 @@
                                 formControlName="GovIdNumber">
                         </mat-form-field>
                     </div>
-                </div>
+                </div> -->
             </form>
 
         </div>
 
     </div>
 
-    <div class="col-md-3 col-sm-12">
-        <div class="card p-3">
-            <div class="card_wrap">
-                <h5 class="border-bottom">Address</h5>
-                <p>&nbsp;</p>
-                <p>&nbsp;</p>
-                <p>&nbsp;</p>
-                <p>&nbsp;</p>
-                <p>&nbsp;</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
+    <!-- <div class="row">
         <div class="card p-3 col-md-12">
             <div class="row">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
@@ -150,9 +264,6 @@
                     (addClick)="openNewSchemeDetails()"
                     (deleteClick)="deleteTableData()">
                 </menu-buttons>
-                <!-- <div class="m-2">
-                    <button mat-flat-button color="primary" (click)="openMadalView()">Add New</button>
-                </div> -->
             </div>
             <div class="row">
                 <dx-data-grid width="100%" #gridContainer
@@ -165,10 +276,6 @@
                     (onCellClick)="openAttchments($event)">
                     <dxo-paging></dxo-paging>
                     <dxo-selection mode="single"></dxo-selection>
-                    <!-- <dxi-column type="buttons" caption="" [visible]="disableDelete" [fixed]="true"
-                        fixedPosition="right">
-                        <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button>
-                    </dxi-column> -->
                     <dxi-column dataField="SCHEME_UNIQUEID" caption="Unique ID"
                         [allowEditing]="true"
                         alignment="center">
@@ -205,15 +312,10 @@
                         cellTemplate="attachmentTemp" caption="Attachment"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <!-- <dxi-column dataField="BlockScheme"
-                        caption="Block Scheme"
-                        [allowEditing]="true" alignment="center">
-                    </dxi-column> -->
                     <dxi-column type="buttons" [fixed]="true"
                         fixedPosition="right">
                         <dxi-button [onClick]="editRowDetails"
                             icon="fa fa-eye"></dxi-button>
-                        <!-- <dxi-button [onClick]="deleteRow" icon="fa fa-edit"></dxi-button> -->
                     </dxi-column>
                     <div *dxTemplate="let data of 'attachmentTemp'">
                         <a href="javascript:void(0)"
@@ -225,12 +327,6 @@
                 </dx-data-grid>
             </div>
         </div>
-    </div>
+    </div> -->
 
 </div>
-
-<!-- modal template -->
-<!-- <ng-template #add_scheme let-modal>
-    <app-add-scheme [dataToEdit]="dataToEditrow" (closebtnClick)="closeModal()"
-        (newRowSaveClick)="addNewRow($event)"></app-add-scheme>
-</ng-template> -->
