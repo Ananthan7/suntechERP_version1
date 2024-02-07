@@ -23,6 +23,7 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewChangeJob: boolean = false;
   @Input() isViewStock: boolean = false;
   @Input() isViewCancel: boolean = true;
+  @Input() isViewSave: boolean = true;
   @Input() isViewAuditTrail: boolean = false;
   @Input() isViewPost: boolean = false;
   @Input() editSaveBtnText?: string = '';
