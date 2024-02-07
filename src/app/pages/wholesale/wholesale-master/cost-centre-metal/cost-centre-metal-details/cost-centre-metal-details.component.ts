@@ -18,6 +18,7 @@ export class CostCentreMetalDetailsComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
+  branchCode?: String;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -29,6 +30,7 @@ export class CostCentreMetalDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.commonService.branchCode;
   }
 
   close(data?: any) {
@@ -40,62 +42,50 @@ export class CostCentreMetalDetailsComponent implements OnInit {
 
   costcenterdiamonddetailsForm: FormGroup = this.formBuilder.group({
     branch:[''],
-    purchase1:[''],
-    purchase2:[''],
-    purchase3:[''],
-    purchasereturn1:[''],
-    purchasereturn2:[''],
-    purchasereturn3:[''],
-    sales1:[''],
-    sales2:[''],
-    sales3:[''],
-    sales4:[''],
-    sales5:[''],
-    salesreturn1:[''],
-    salesreturn2:[''],
-    salesreturn3:[''],
-    salesreturn4:[''],
-    salesreturn5:[''],
-    other1:[''],
-    other2:[''],
-    opening:[''],
-    ownstock:[''],
-    closingstock:[''],
-    stonediff:[''],
-    costadjustment:[''],
+    purchase:[''],
+    purchaseReturn:[''],
+    importPurchase:[''],
+    importPurchaseReturn:[''],
+
+    repairPurchase:[''],
+    repairPurchaseReturn:[''],
+    Wholesales:[''],
+    wholesalesReturn:[''],
+    exportSales:[''],
+    exportSalesReturn:[''],
+    repairSale:[''],
+    retailSales:[''],
+    retailSalesReturn:[''],
+    exhibitionSales:[''],
+    exhibitionSalesReturn:[''],
+    repairSalesReturn:[''],
+    ownStockOpening:[''],
+    ownStock:[''],
+    physicalStock:[''],
+    ownStockClosing:[''],
+    stkRevalue:[''],
+    branchTransferIn:[''],
+    branchTransferOUT:[''],
     manufacture:[''],
-    SOHmetalmanufacturing:[''],
+    dismatling:[''],
+    adjustments:[''],
+    refiningCharges:[''],
+    metalDiscount:[''],
+    SOHManufacturing:[''],
+    dismantlingLoss:[''],
+    diapurchaseAccountUnFix:[''],
+    diaSaleAccountUnFix:[''],
     wastage:[''],
-    dismantling:[''],
-    dismantlingloss:[''],
-    repairunfixpurchase:[''],
-    lotmixaccount:[''],
-    certificationcharges:[''],
-    platecharges:[''],
-    Stkrevalue:[''],
-    customaccount:[''],
-    in:[''],
-    out:[''],
-    puregoldindiamondjewellery1:[''],
-    puregoldindiamondjewellery2:[''],
-    puregoldindiamondjewellery3:[''],
-    puregoldindiamondjewellery4:[''],
-    puregoldindiamondjewelleryFixed1:[''],
-    puregoldindiamondjewelleryFixed2:[''],
-    puregoldindiamondjewelleryFixed3:[''],
-    puregoldindiamondjewelleryFixed4:[''],
-    loosestonevalueindiamondjewellery1:[''],
-    loosestonevalueindiamondjewellery2:[''],
-    loosestonevalueindiamondjewellery3:[''],
-    loosestonevalueindiamondjewellery4:[''],
-    colorstonevalueindiamondjeweller1:[''],
-    colorstonevalueindiamondjeweller2:[''],
-    colorstonevalueindiamondjeweller3:[''],
-    colorstonevalueindiamondjeweller4:[''],
-    pearlvalueindiamondjewellery1:[''],
-    pearlvalueindiamondjewellery2:[''],
-    pearlvalueindiamondjewellery3:[''],
-    pearlvalueindiamondjewellery4:[''],
+    repairUnfixPurchase:[''],
+    refineCharges:[''],
+    unFixPurCtrlAc:[''],
+    unFixSupCtrlAc:[''],
+    unFixSalCtrlAc:[''],
+    unFixCustCtrlAc:[''],
+    purchaseAc:[''],
+    reciptAc:[''],
+    salesAc:[''],
+    paymentAc:[''],
   })
 
   branchCodeData: MasterSearchModel = {
@@ -103,15 +93,33 @@ export class CostCentreMetalDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 13,
     SEARCH_FIELD: 'BRANCH_CODE',
-    SEARCH_HEADING: 'GENERAL MASTER',
+    SEARCH_HEADING: 'BRANCH CODE',
     SEARCH_VALUE: '',
     WHERECONDITION: "BRANCH_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+
+  purchaseCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: '',
+    SEARCH_HEADING: 'Purchase',
+    SEARCH_VALUE: '',
+    WHERECONDITION: " WHERE BRANCH_CODE = '" + this.commonService.branchCode + "'ACCOUNT_MODE in('G','L')",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
   branchCodeSelected(data: any) {
     this.costcenterdiamonddetailsForm.controls.branch.setValue(data.BRANCH_CODE)
+  }
+
+  purchaseCodeSelected(e:any){
+
   }
 
   formSubmit(){

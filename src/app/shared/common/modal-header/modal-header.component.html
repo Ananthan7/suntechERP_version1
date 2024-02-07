@@ -62,6 +62,18 @@
                     Post
                 </button>
             </div>
+            <div class="p-1" *ngIf="isViewPreview">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="PreviewClicked()">
+                    Preview
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isViewExport">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="ExportClicked()">
+                    Export
+                </button>
+            </div>
             <div class="p-1 dropdown text-right" *ngIf="isViewMore">
                 <div class="d-inline-block" ngbDropdown
                     #myDrop="ngbDropdown">
