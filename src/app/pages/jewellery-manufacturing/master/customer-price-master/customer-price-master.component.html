@@ -29,7 +29,7 @@
                   <label for="inputPassword" class="col-sm-5 col-form-label">Price Code * :</label>
                   <div class="col-md-7">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="pricecode" maxlength="15" />
+                      <input type="text" matInput formControlName="pricecode" maxlength="15" oninput="this.value = this.value.toUpperCase()" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -175,7 +175,7 @@
                     <label class="col-md-3 form-check-label" for="flexSwitchCheckChecked">{{text}}</label>
                     <div class="col-md-9">
                       <mat-form-field style="width: 100%;">
-                        <input type="text" matInput formControlName="changePrice"/>
+                        <input type="number" matInput formControlName="changePrice" style="text-align: right;"/>
                       </mat-form-field>
                     </div>
                   </div>
