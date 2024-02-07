@@ -21,29 +21,48 @@ export class CustomerPriceMasterComponent implements OnInit {
 
   divisionMS: any = 'ID';
   columnheader:any[] = ['PRICE_CODE','SIEVE','SIEVE_TO','SIEVE_SET','SHAPE','COLOR','CLARITY','SIZE_FROM','SIZE_TO','CARAT_WT','CURRANCY','ISSUE_RATE','SELLING_RATE','SELLING_PER','WEIGHT_FROM','WEIGHT_TO','CUSTOMER','PRICE_TYPE','CUSTOMER_CODE','DT_VALID_FROM'];
-  columnheader1:any[] = ['LABOUR_CODE','DIVISION_CODE','SHAPE','DIVISION','METHOD','UNITCODE','CURRENCY_CODE','CRACCODE','COST_RATE','SELLING_RATE','CARATWT_FROM','CARATWT_TO','CUSTOMER_CODE','REFMID','DT_VALID_FROM'];
+  columnheader1:any[] = [{ title:'LABOUR_CODE' , field: 'LABOUR_CODE'},
+   { title:'DIVISION_CODE', field: 'DIVISION_CODE'},
+   { title:'SHAPE', field: 'SHAPE'},
+   { title:'DIVISION', field: 'DIVISION'},
+   { title:'METHOD', field: 'METHOD'},
+   { title:'UNITCODE', field: 'UNITCODE'},
+   { title:'CURRENCY_CODE', field: 'CURRENCYCODE'},
+   { title:'CRACCODE', field: 'CRACCODE'},
+   { title:'COST_RATE', field: 'COST_RATE'},
+   { title:'SELLING_RATE', field: 'SELLING_RATE'},
+   { title:'CARATWT_FROM', field: 'CARATWT_FROM'},
+   { title:'CARATWT_TO', field: 'CARATWT_TO'},
+   { title:'CUSTOMER_CODE', field: 'CUSTOMER_CODE'},
+   { title:'REFMID', field: 'REFMID'},
+   { title:'DT_VALID_FROM', field: 'DT_VALID_FROM'},];
   columnheader2:any[] = ['DESIGN_CODE','LABOUR_CODE','LABTYPE','METHOD','DIVISION','CURRENCY_CODE','UNITCODE','COST_RATE','SELLING_PER','CRACCODE','DIVISION_CODE','SELLING_RATE','CUSTOMER_CODE','REFMID','DT_VALID_FROM'];
   subscriptions: any;
   @Input() content!: any; 
   tableData: any[] = [];
+  tableDatalabour: any[] = [];
+  tableDatastone: any[] = [];
   currentDate: any = this.commonService.currentDate;
   branchCode?: String;
   yearMonth?: String;
   value: any;
   rateInput: any; 
   text="Deduct";
+  myNumber: any;
+
 
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 6,
     SEARCH_FIELD: 'CUSTOMER_CODE',
     SEARCH_HEADING: 'Customer Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CUSTOMER_CODE<> ''",
+    WHERECONDITION: "where account_mode in ('B','R','P')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
   
 
 
@@ -58,6 +77,34 @@ export class CustomerPriceMasterComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+
+    const apiUrl = 'CustomerPriceMaster/GetCustomerStonePricingMasterGrid';  
+    let postData = {
+      "strCode": "TBG-5.4-5.7",
+      "strType": "LABO",
+      "strVocDate": "2024-02-07"
+    }
+    let getdata = {
+      "strCode": "TBG-5.4-5.7",
+      "strType": "STON",
+      "strVocDate": "2024-02-07"
+    }
+    let sub: Subscription = this.dataService.postDynamicAPI(apiUrl,getdata).subscribe((result) => {
+      if (result.status == 'Success' ) {
+             // console.log(result.dynamicData[0]);
+              this.tableDatalabour = result.dynamicData[0]
+              console.log(this.tableDatalabour);
+      } 
+    });
+
+   
+    // let subu: Subscription = this.dataService.postDynamicAPI(apiUrl,getdata).subscribe((result) => {
+    //   if (result.status == 'Success' ) {
+    //          // console.log(result.dynamicData[0]);
+    //           this.tableDatastone = result.dynamicData[0]
+    //           console.log(this.tableDatastone);
+    //   } 
+    // });
 
     console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
@@ -106,6 +153,11 @@ export class CustomerPriceMasterComponent implements OnInit {
     (event.target as HTMLInputElement).value = limitedValue;
   }
 
+formatNumber(): void {
+  let formattedValue = parseFloat(this.myNumber.toString().replace(/,/g, '')).toLocaleString();
+  this.myNumber = formattedValue;
+}
+
   change(event: any) {
     console.log(event);
     this.text = event.target.checked ? "Add" : "Deduct";
@@ -114,8 +166,8 @@ export class CustomerPriceMasterComponent implements OnInit {
 
   customerCodeScpSelected(e:any){
     console.log(e); 
-    this.customerpricemasterForm.controls.customercode.setValue(e.CUSTOMER_CODE);
-    this.customerpricemasterForm.controls.desc.setValue(e.DESCRIPTION);
+    this.customerpricemasterForm.controls.customercode.setValue(e.ACCODE);
+    this.customerpricemasterForm.controls.desc.setValue(e['ACCOUNT HEAD']);
   }
 
   setFormValues(){

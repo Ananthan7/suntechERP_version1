@@ -81,7 +81,7 @@
                       <label for="inputPassword" class="col-sm-6 col-form-label">MarkUp %:</label>
                       <div class="col-md-6">
                         <mat-form-field style="width: 100%;">
-                          <input type="number" matInput formControlName="markup" (input)="onInput($event)"  style="text-align: right;" />
+                          <input type="number" matInput formControlName="markup" (input)="onInput($event)" AmountDecimalInput  style="text-align: right;" />
                         </mat-form-field>
                       </div>
                     </div>
@@ -175,7 +175,7 @@
                     <label class="col-md-3 form-check-label" for="flexSwitchCheckChecked">{{text}}</label>
                     <div class="col-md-9">
                       <mat-form-field style="width: 100%;">
-                        <input type="number" matInput formControlName="changePrice" style="text-align: right;"/>
+                        <input type="text" maxlength="12" matInput [(ngModel)]="myNumber" (input)="formatNumber()" formControlName="changePrice" min="0"  style="text-align: right;"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -208,13 +208,13 @@
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Labour Charges">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+              <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [dataSource]="tableDatalabour" [height]="200">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
-                <dxi-column *ngFor="let data of columnheader1" dataField="{{ data }}" caption="{{ data }}"
+                <dxi-column *ngFor="let data of columnheader1" dataField="{{ data.field }}" caption="{{ data.title }}"
                   [allowEditing]="true" alignment="center" backgroundcolor="#000">
                 </dxi-column>
               </dx-data-grid>
