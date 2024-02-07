@@ -109,24 +109,44 @@
                                         </dx-data-grid>
                                     </div>
                                 </div>
-                                <div class="row align-items-center pt-1">
-                                    <div class="col-md-6">
-                                        <div class="row my-2">
-                                            <label for="inputPassword"
-                                                class="col-sm-2 col-form-label">Narration:</label>
-                                            <div class="col-md-10">
-                                                <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName="remarks" />
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                    </div>
+                                
+                            </mat-tab>
+                            <mat-tab label="Others">
+                                <div class="row pt-2">
+                                    <div class="col-md-12">
+                                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                            [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                            [columnAutoWidth]="true">
+                                            <dxo-paging [enabled]="false"></dxo-paging>
+                                            <dxo-editing mode="cell" [allowUpdating]="true">
+                                            </dxo-editing>
+                                            <dxo-selection mode="multiple"></dxo-selection>
+                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
 
+                                            <dxi-column *ngFor="let data of columnheadOthers"
+                                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+                                                alignment="center" backgroundcolor="#000">
+                                            </dxi-column>
+                                        </dx-data-grid>
+                                    </div>
                                 </div>
                             </mat-tab>
-                            <mat-tab label="Others"></mat-tab>
                         </mat-tab-group>
                     </div>
+                </div>
+                <div class="row align-items-center pt-2">
+                    <div class="col-md-6">
+                        <div class="row my-2">
+                            <label for="inputPassword"
+                                class="col-sm-2 col-form-label">Narration:</label>
+                            <div class="col-md-10">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="remarks" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </form>
         </div>

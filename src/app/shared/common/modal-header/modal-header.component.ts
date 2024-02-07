@@ -26,6 +26,8 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewSave: boolean = true;
   @Input() isViewAuditTrail: boolean = false;
   @Input() isViewPost: boolean = false;
+  @Input() isViewPreview: boolean = false;
+  @Input() isViewExport: boolean = false;
   @Input() editSaveBtnText?: string = '';
 
   branchCode: any = localStorage.getItem('userbranch')
@@ -62,5 +64,11 @@ export class ModalHeaderComponent implements OnInit {
   PostClicked() {
     this.PostClick.emit();
   }
+  ExportClicked(){
+    this.PostClick.emit();
+  }
+  PreviewClicked(){
+    this.PostClick.emit();
 
+  }
 }
