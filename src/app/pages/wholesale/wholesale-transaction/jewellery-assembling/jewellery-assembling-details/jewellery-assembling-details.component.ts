@@ -62,20 +62,449 @@ export class JewelleryAssemblingDetailsComponent implements OnInit  {
   }
 
   jewelleryAssemblingDetailsForm: FormGroup = this.formBuilder.group({
-
-    branch:['HO'],
-    vocType:['UFM'],
-    vocNo:['1'],
-    vocDate:[''],
-    unFixMetal:[false],
-    partyCode:[''],
-    rateCode:[''],
-    rateDescription:[''],
-    itemCurrencyCode:[''],
-    itemCurrencyDesc:[''],
-    enteredBy:[''],
-    enteredByDesc:[''],
+    rateType:[''],
+    rateTypeDesc:[''],
+    unFixMetal:[''],
+    stock:[''],
+    location:[''],
+    type:[''],
+    CC:[''],
+    design:[''],
+    brand:[''],
+    setRef:[''],
+    category:[''],
+    country:[''],
+    subCategory:[''],
+    color:[''],
+    pieces:[''],
+    clarity:[''],
+    vender:[''],
+    grade:[''],
+    venderRef:[''],
+    shape:[''],
+    size:[''],
+    range:[''],
+    style:[''],
+    time:[''],
+    grossWt:[''],
+    fluoresce:[''],
+    priceSheme:[''],
+    priceShemeDesc:[''],
+    price1:[''],
+    price1Desc:[''],
+    price1Detail:[''],
+    price2:[''],
+    price2Desc:[''],
+    price2Detail:[''],
+    price3:[''],
+    price3Desc:[''],
+    price3Detail:[''],
+    price4:[''],
+    price4Desc:[''],
+    price4Detail:[''],
+    price5:[''],
+    price5Desc:[''],
+    price5Detail:[''],
+    metalTotal:[''],
+    metalTotalDesc:[''],
+    metalTotalDetail:[''],
+    stoneTotal:[''],
+    stoneTotalDesc:[''],
+    stoneTotalDetail:[''],
+    otherTotal:[''],
+    otherTotalDesc:[''],
+    remarks:[''],
+    tagdetails:[''],
+    settingOfCharges1:[''],
+    settingOfCharges2:[''],
+    settingOfCharges3:[''],
+    polishingCharges1:[''],
+    polishingCharges2:[''],
+    polishingCharges3:[''],
+    rhodiumCharges1:[''],
+    rhodiumCharges2:[''],
+    rhodiumCharges3:[''],
+    labourCharges1:[''],
+    labourCharges2:[''],
+    labourCharges3:[''],
+    MISCCharges1:[''],
+    MISCCharges2:[''],
+    MISCCharges3:[''],
+    total:[''],
+    total1:[''],
+    total2:[''],
+    startDate:[''],
+    finishDate:[''],
+    goldSmith:[''],
+    goldSmith1:[''],
+    goldSmith2:[''],
+    stoneSetter:[''],
+    stoneSetter1:[''],
+    stoneSetter2:[''],
+    createdBy:[''],
+    On:[''],
+    cost1:[''],
+    cost2:[''],
+    marginac:[''],
+    marginac1:[''],
+    margin1:[''],
+    margin2:[''],
+    margin3:[''],
+    description:[''],
   });
+
+  
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  stockSelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.stock.setValue(e.STOCK_CODE);
+  }
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 155,
+    SEARCH_FIELD: 'Location',
+    SEARCH_HEADING: 'location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Location<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  locationSelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.location.setValue(e.Location);
+  }
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  typeSelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.type.setValue(e.CODE);
+  }
+
+  CCCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'CC Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  CCSelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.CC.setValue(e.CODE);
+  }
+
+  designCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Design Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DESIGN_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  designSelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.design.setValue(e.DESIGN_CODE);
+  }
+
+  brandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 32,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  brandSelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.brand.setValue(e.CODE);
+  }
+
+  setRefCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  setRefSelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.setRef.setValue(e.CODE);
+  }
+
+  categoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 30,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Category Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  categorySelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.category.setValue(e.CODE);
+  }
+
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  countrySelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.country.setValue(e.CODE);
+  }
+
+  subCategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Sub Category Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  subCategorySelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.subCategory.setValue(e.CODE);
+  }
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  colorSelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.color.setValue(e.CODE);
+  }
+
+  piecesCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Pieces Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  piecesSelected(e:any){
+    this.jewelleryAssemblingDetailsForm.controls.pieces.setValue(e.CODE);
+  }
+
+clarityCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 37,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'Clarity Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+claritySelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.clarity.setValue(e.CODE);
+}
+
+venderCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 81,
+  SEARCH_FIELD: 'ACCODE',
+  SEARCH_HEADING: 'Vender Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "ACCODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+venderSelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.vendor.setValue(e.ACCODE);
+}
+
+gradeCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 3,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'Grade Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+gradeSelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.grade.setValue(e.CODE);
+}
+
+venderRefCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 3,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'CC Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+venderRefSelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.venderRef.setValue(e.CODE);
+}
+
+shapeCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 33,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'CC Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+shapeSelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.shape.setValue(e.CODE);
+}
+
+sizeCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 36,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'Stock Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+sizeSelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.size.setValue(e.CODE);
+}
+
+rangeCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 3,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'Stock Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+rangeSelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.range.setValue(e.CODE);
+}
+
+styleCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 3,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'Stock Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+styleSelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.style.setValue(e.Code);
+}
+
+timeCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 3,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'Stock Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+timeSelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.time.setValue(e.CODE);
+}
+
+fluoresceCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 3,
+  SEARCH_FIELD: 'CODE',
+  SEARCH_HEADING: 'Stock Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+fluoresceSelected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.fluoresce.setValue(e.CODE);
+}
 
   setInitialDatas() {
 

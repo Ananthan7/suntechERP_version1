@@ -74,8 +74,9 @@ export class JewelleryAssemblingMetalDetailsComponent implements OnInit {
   }
   StockcodeCodeSelected(e:any){
     console.log(e);
-    this.JewelleryAssemblingMetalDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
-    this.JewelleryAssemblingMetalDetailsForm.controls.stockCodedes.setValue(e.DESCRIPTION); 
+    this.JewelleryAssemblingMetalDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
+    this.JewelleryAssemblingMetalDetailsForm.controls.stockCodedes.setValue(e.STOCK_CODE); 
+    this.JewelleryAssemblingMetalDetailsForm.controls.description.setValue(e.DESCRIPTION); 
   }
 
   rateTypeCodeData: MasterSearchModel = {

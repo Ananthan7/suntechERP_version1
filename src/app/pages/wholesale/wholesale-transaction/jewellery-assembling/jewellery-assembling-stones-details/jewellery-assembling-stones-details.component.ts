@@ -75,8 +75,9 @@ export class JewelleryAssemblingStonesDetailsComponent implements OnInit {
   }
   StockcodeCodeSelected(e:any){
     console.log(e);
-    this.JewelleryAssemblingStoneDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
-    this.JewelleryAssemblingStoneDetailsForm.controls.stockCodedes.setValue(e.DESCRIPTION); 
+    this.JewelleryAssemblingStoneDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
+    this.JewelleryAssemblingStoneDetailsForm.controls.stockCodedes.setValue(e.STOCK_CODE); 
+    this.JewelleryAssemblingStoneDetailsForm.controls.description.setValue(e.DESCRIPTION); 
   }
 
 
