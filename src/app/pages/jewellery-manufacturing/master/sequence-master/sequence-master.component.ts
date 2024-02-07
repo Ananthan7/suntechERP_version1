@@ -23,7 +23,6 @@ export class SequenceMasterComponent implements OnInit {
   showHeaderFilter!: boolean;
   selectAll: boolean = false;
   viewMode: boolean = false;
-  isdisabled: boolean = true;
 
   private subscriptions: Subscription[] = [];
 
@@ -73,7 +72,7 @@ export class SequenceMasterComponent implements OnInit {
       this.setFormValues();
     }
   }
-  /**use:  */
+  /**use:  search component selection changes*/
   wipAccodeSelected(event: any, data: any) {
     this.dataSource[data.SRNO - 1].WIP_ACCODE = event.ACCODE;
   }
@@ -86,6 +85,32 @@ export class SequenceMasterComponent implements OnInit {
   lossAccodeSelected(event: any, data: any) {
     this.dataSource[data.SRNO - 1].LOSS_ACCODE = event.ACCODE;
   }
+  /**USE: get table data on initial load */
+  private getTableData(): void {
+    let API = 'ProcessMasterDj/GetProcessMasterDJList'
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          this.dataSource = result.response
+          this.sortWithMID()
+          this.dataSource.forEach((item: any, index: any) => {
+            item.SRNO = index + 1
+            item.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL')
+            item.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL')
+            item.isChecked = false
+            item.orderId = this.dataSource.length
+          })
+          if (this.content.FLAG == 'EDIT') {
+            this.checkSequenceExists()
+          }
+        } else {
+          this.toastr.error('No Data Found')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  // check sequence exists and fill grid
   checkSequenceExists() {
     if (this.sequenceMasterForm.value.sequenceCode == '') return
     let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/' + this.sequenceMasterForm.value.sequenceCode
@@ -94,15 +119,15 @@ export class SequenceMasterComponent implements OnInit {
         if (result.response) {
           if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
             let data = result.response
-            const set2 = data.sequenceDetails.map((obj: any) => obj.PROCESS_CODE);
             let itemNum = 0;
-            this.reCalculateSRNO()
+            
             data.sequenceDetails.forEach((item: any) => {
               this.dataSource.forEach((obj: any) => {
                 if (item.PROCESS_CODE == obj.PROCESS_CODE) {
                   obj.isChecked = true
                   itemNum += 1
                   obj.SRNO = itemNum
+                  obj.orderId = item.SEQ_NO
                   obj.WIP_ACCODE = item.WIP_ACCODE
                   obj.STD_TIME = this.commonService.MinutesToHours(item.STD_TIME) || 0,
                   obj.MAX_TIME = this.commonService.MinutesToHours(item.MAX_TIME)  || 0,
@@ -120,9 +145,9 @@ export class SequenceMasterComponent implements OnInit {
                 }
               });
             })
-            this.dataSource.sort((a: any, b: any) => a.SRNO - b.SRNO)
+            this.dataSource.sort((a: any, b: any) => a.orderId - b.orderId)
             this.selectedSequence = this.dataSource.filter((item: any) => item.isChecked == true)
-            
+            this.reCalculateSRNO()
           } else {
             Swal.fire({
               title: '',
@@ -136,6 +161,8 @@ export class SequenceMasterComponent implements OnInit {
               }
             });
           }
+        }else{
+          this.commonService.toastErrorByMsgId('No response found')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -151,32 +178,10 @@ export class SequenceMasterComponent implements OnInit {
   reCalculateSRNO(){
     this.dataSource.forEach((item: any, index: any) => item.SRNO = index + 1)
   }
-
-  /**USE: get table data on initial load */
-  private getTableData(): void {
-    let API = 'ProcessMasterDj/GetProcessMasterDJList'
-    this.commonService.toastInfoByMsgId('MSG81447');
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          this.dataSource = result.response
-          this.dataSource.forEach((item: any, index: any) => {
-            item.UNIQUEID = 0
-            item.SRNO = index + 1
-            item.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL')
-            item.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL')
-            item.isChecked = false
-            item.orderId = this.dataSource.length
-          })
-          if (this.content.FLAG == 'EDIT') {
-            this.checkSequenceExists()
-          }
-        } else {
-          this.toastr.error('No Data Found')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+  sortWithMID(){
+    this.dataSource.sort((a:any,b:any)=> a.MID - b.MID)
   }
+  
   setFormValues() {
     if (!this.content) return
     this.sequenceMasterForm.controls.mid.setValue(this.content.MID)
@@ -341,17 +346,10 @@ export class SequenceMasterComponent implements OnInit {
 
   /**use: checkbox change */
   changedCheckbox(value: any) {
-    if (value.isChecked == true) {
-      this.isdisabled = !this.isdisabled
-    }
-
     if (this.sequenceMasterForm.value.sequenceCode == "") {
-      this.isdisabled = false
-      if (value.isChecked == false) { this.isdisabled = true }
-
       Swal.fire({
         title: '',
-        text: 'Code cannot be empty!',
+        text: this.commonService.getMsgByID('MSG1124'),
         icon: 'warning',
         confirmButtonColor: '#336699',
         confirmButtonText: 'Ok'
@@ -364,19 +362,13 @@ export class SequenceMasterComponent implements OnInit {
       });
       return
     }
-
     this.dataSource.forEach((item: any, index: number) => {
       if (value.MID == item.MID) {
-        item.UNIQUEID = index + 1
         item.isChecked = value.isChecked
         item.orderId = index + 1
       }
     })
-    if (value.isChecked) {
-      // Reorder the data array based on the order of clicks
-      this.dataSource.sort((a, b) => a.orderId - b.orderId);
-      return
-    } else {
+    if (value.isChecked == false)  {
       const index = this.selectedSequence.indexOf(value);
       this.selectedSequence.splice(index, 1); // Remove the item from its current position
       this.dataSource.forEach((item: any, index: number) => {
@@ -384,9 +376,9 @@ export class SequenceMasterComponent implements OnInit {
           item.orderId = this.dataSource.length
         }
       })
-      this.dataSource.sort((a, b) => a.orderId - b.orderId);
     }
-   
+    this.dataSource.sort((a, b) => a.orderId - b.orderId);
+    this.reCalculateSRNO()
   }
   /**USE: set Selected Sequence data */
   setSelectedSequence() {
@@ -417,8 +409,8 @@ export class SequenceMasterComponent implements OnInit {
           "GAIN_AC": "",
           "TRAY_WT": item.TRAY_WT || 0,
           "PACKET_CODE": "",
-          "LOSS_ON_GROSS": item.LOSS_ON_GROSS || true,
-          "TIMEON_PROCESS": item.TIMEON_PROCESS || true,
+          "LOSS_ON_GROSS": item.LOSS_ON_GROSS || false,
+          "TIMEON_PROCESS": item.TIMEON_PROCESS || false,
           "LABCHRG_PERHOUR": item.LABCHRG_PERHOUR || 0
         })
       }
