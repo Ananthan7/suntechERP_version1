@@ -42,12 +42,12 @@ export class SchemeMasterComponent implements OnInit {
 
   schemeMasterForm: FormGroup = this.formBuilder.group({
     mid: [""],
-    code: [""],
-    branch: [""],
+    code: ["",Validators.required],
+    branch: ["",Validators.required],
     prefix: [""],
     description: [""],
-    frequency: [""],
-    tenurePeriod: [""],
+    frequency: ["",Validators.required],
+    tenurePeriod: ["",Validators.required],
     installmentAmount: [""],
     bonusInstallment: [""],
     receiptModeone: [""],

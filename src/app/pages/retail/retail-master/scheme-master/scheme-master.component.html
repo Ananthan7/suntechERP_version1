@@ -17,7 +17,7 @@
             <div class="col-md-8">
                 <div class="row align-items-center">
                     <label for="inputPassword"
-                        class="col-sm-2 col-form-label">Code</label>
+                        class="col-sm-2 col-form-label">Code*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text"
@@ -25,9 +25,8 @@
                                 matInput formControlName="code" />
                         </mat-form-field>
                     </div>
-                    <label for="inputPassword"
-                        class="col-sm-2 col-form-label">Prefix</label>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
+                        <label class="col-form-label m-2">Prefix</label>
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput
                                 formControlName="prefix" />
@@ -35,18 +34,16 @@
                         <master-search [MasterSearchData]="prefixCodeData"
                             (newRowClick)="prefixSelected($event)"></master-search>
                     </div>
-                    <label for="inputPassword"
-                        class="col-sm-1 col-form-label">Status</label>
-                    <div class="col-md-3">
-                        <mat-checkbox
-                            formControlName="schemeStatus">Active</mat-checkbox>
+                    <div class="col-md-4">
+                        <label class="col-form-label me-2">Status</label>
+                        <mat-checkbox class="mt-2" formControlName="schemeStatus">Active</mat-checkbox>
                     </div>
                 </div>
                 <div class="row align-items-center">
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Description</label>
-                    <div class="col-md-10">
-                        <mat-form-field style="width: 100%;">
+                    <div class="col-md-8">
+                        <mat-form-field style="width: 70%;">
                             <input type="text" matInput
                                 formControlName="description" />
                         </mat-form-field>
@@ -54,7 +51,7 @@
                 </div>
                 <div class="row align-items-center">
                     <label for="inputPassword"
-                        class="col-sm-2 col-form-label">Frequency</label>
+                        class="col-sm-2 col-form-label">Frequency*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <mat-select formControlName="frequency">
@@ -68,10 +65,10 @@
                 </div>
                 <div class="row align-items-center">
                     <label for="inputPassword"
-                        class="col-sm-2 col-form-label">Tenure/Period</label>
+                        class="col-sm-2 col-form-label">Tenure/Period*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput
+                            <input type="number" matInput
                                 class="text-right"
                                 formControlName="tenurePeriod" />
                         </mat-form-field>
@@ -83,7 +80,7 @@
                         Amount</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" style="text-align: right;"
+                            <input type="number" style="text-align: right;"
                                 matInput formControlName="installmentAmount" />
                         </mat-form-field>
                     </div>
@@ -106,7 +103,7 @@
                     </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" style="text-align: right;"
+                            <input type="number" style="text-align: right;"
                                 matInput formControlName="bonusInstallment" />
                         </mat-form-field>
                     </div>
@@ -128,7 +125,7 @@
                         class="col-sm-2 col-form-label">Cancel Charges </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" style="text-align: right;"
+                            <input type="number" style="text-align: right;"
                                 matInput formControlName="cancelCharges" />
                         </mat-form-field>
                     </div>

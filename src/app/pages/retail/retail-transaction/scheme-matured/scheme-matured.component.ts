@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-scheme-matured',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./scheme-matured.component.scss']
 })
 export class SchemeMaturedComponent implements OnInit {
-
-  constructor() { }
+  SchemeMasterDetails: any[] = []
+  constructor(
+    private ActiveModal: NgbActiveModal
+  ) { }
 
   ngOnInit(): void {
   }
-
+  close(){
+    this.ActiveModal.close()
+  }
 }

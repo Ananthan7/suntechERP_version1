@@ -153,7 +153,7 @@
                         <label class="matlabels">Mobile Number:
                         </label>
                         <mat-form-field style="width: 60%;">
-                            <input type="number" max="15" matInput
+                            <input type="number" matInput
                                 formControlName="MobileNo" />
                         </mat-form-field>
                     </div>
@@ -291,10 +291,12 @@
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
                         <div class="d-flex align-items-center">
-                            <label class="matlabels">Process
-                            </label>
-                            <label class="matlabels">Cancel Scheme
-                            </label>
+                            <button mat-raised-button (click)="addRowsToGrid()">
+                                Process
+                            </button>
+                            <button mat-raised-button (click)="cancelScheme()">
+                                Cancel Scheme
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -401,31 +403,33 @@
             </form>
 
             <div class="row">
-                <dx-data-grid width="100%" #gridContainer
-                    (onRowClick)="onRowClickHandler($event)"
-                    [loadPanel]="{ enabled: true, text: 'Loading...' }"
-                    id="gridContainer" [dataSource]="SchemeMasterDetails"
-                    [showColumnLines]="true" [showRowLines]="true"
-                    [showBorders]="true" [remoteOperations]="true"
-                    [columnAutoWidth]="true" >
-                    <dxo-editing mode="coloumn" [allowUpdating]="true"
-                        fixed="true">
+                <dx-data-grid id="gridContainer"
+                    [dataSource]="SchemeMasterDetails"
+                    [showRowLines]="true"
+                    height="auto" [columnAutoWidth]="true"
+                    [showBorders]="true"
+                    [allowColumnResizing]="true">
+                    <dxo-editing mode="cell" [allowUpdating]="true">
                     </dxo-editing>
+                    <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-selection mode="single"></dxo-selection>
                     <dxi-column dataField="SRNO" caption="Sr No"
-                        [allowEditing]="true"
+                        [allowEditing]="false"
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="PAY_DATE" caption="Pay Date"
-                        [allowEditing]="true" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="PAY_AMOUNT_CC"
-                        caption="Pay Amout" [allowEditing]="true"
+                        [allowEditing]="true"
+                        [customizeText]="customizeDate"
                         alignment="center">
                     </dxi-column>
+                    <dxi-column dataField="PAY_AMOUNT_CC"
+                        displayFormat="{0}"
+                        caption="Pay Amout" [allowEditing]="true"
+                        alignment="right">
+                    </dxi-column>
                     <dxi-column dataField="PAY_STATUS"
-                        cellTemplate="PayStatus" caption="Pay Status"
-                        [allowEditing]="true" alignment="center">
+                        cellTemplate="PayStatus" caption="Pay Status" 
+                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_DATE"
                         caption="Reminder Date"
@@ -435,9 +439,10 @@
                     <dxi-column dataField="REMAINDER_SEND"
                         caption="Reminder Send"
                         cellTemplate="ReminderSend"
-                        [allowEditing]="true" alignment="center">
+                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_DATE" caption="Receipt Date"
+                        [customizeText]="customizeDate"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_BRANCH_CODE"
@@ -451,20 +456,23 @@
                     <dxi-column dataField="RCVD_VOCNO" caption="Receipt No"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="RCVD_AMOUNTCC" caption="Receipt Amount"
+                    <dxi-column dataField="RCVD_AMOUNTCC"
+                        caption="Receipt Amount"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <!-- <dxi-column type="buttons" [fixed]="true"
-                        fixedPosition="right">
-                        <dxi-button [onClick]="editRowDetails"
-                            icon="fa fa-eye"></dxi-button>
-                    </dxi-column>-->
+                    <dxi-column 
+                        caption="Attachment"
+                        cellTemplate="files"  alignment="center">
+                    </dxi-column>
                     <div *dxTemplate="let data of 'PayStatus'">
                         <mat-checkbox></mat-checkbox>
-                    </div> 
+                    </div>
                     <div *dxTemplate="let data of 'ReminderSend'">
                         <mat-checkbox></mat-checkbox>
-                    </div> 
+                    </div>
+                    <div *dxTemplate="let data of 'files'">
+                        <input class="form-control" type="file" (change)="onFileChange($event)"/>
+                    </div>
                 </dx-data-grid>
             </div>
         </div>
