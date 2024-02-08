@@ -2,7 +2,6 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -73,6 +72,28 @@ export class SchemeRegisterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  SCHEMEMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 59,
+    SEARCH_FIELD: 'SCHEME_CODE',
+    SEARCH_HEADING: 'Scheme Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SCHEME_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  SalesmanData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'Salesman',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   schemeRegistrationForm: FormGroup = this.formBuilder.group({
     SchemeId: [''],
@@ -80,8 +101,18 @@ export class SchemeRegisterComponent implements OnInit {
     Name: ['', Validators.required],
     MobileNo: ['', Validators.required],
     Email: ['',[Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
-    GovIdType: [''],
-    GovIdNumber: [''],
+    PanNo: [''],
+    AlertBeforeDays: [''],
+    CancellationCharge: [''],
+    TenurePeriod: [''],
+    MaturingDate: [''],
+    BonusInstallment: [''],
+    Frequency: [''],
+    TotalAmountToPay: [''],
+    SchemeType: [''],
+    Salesman: [''],
+    SumAssured: [''],
+    Remarks: [''],
     VOCTYPE: [''],
     VOCDATE: [''],
     SCH_REMINDER_MODE: [0],
@@ -102,8 +133,6 @@ export class SchemeRegisterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
     private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
-    private toastr: ToastrService,
     private snackBar: MatSnackBar,
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
@@ -121,7 +150,9 @@ export class SchemeRegisterComponent implements OnInit {
   ngAfterViewInit(): void {
     this.getIDtypes() //ID master list
   }
-
+  SalesmanSelected(event: any) {
+    this.schemeRegistrationForm.controls.Salesman.setValue(event.SALESPERSON_CODE)
+  }
   setInitialValues() {
     if (!this.content) return;
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.content.PAY_VOCTYPE)
@@ -229,7 +260,6 @@ export class SchemeRegisterComponent implements OnInit {
   onRowClickHandler(event: any) {
     this.VIEWEDITFLAG = 'EDIT'
     this.dataIndex = event.dataIndex
-    this.openNewSchemeDetails(event.data)
   }
   customizeDate(data: any) {
     if (!data.value) return
@@ -255,9 +285,7 @@ export class SchemeRegisterComponent implements OnInit {
               );
             }
           } else {
-            this.toastr.error(result.message, '', {
-              timeOut: 1000
-            });
+            this.commonService.toastErrorByMsgId(result.message)
           }
         })
     }
@@ -346,6 +374,11 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.GovIdNumber.setValue(data.POSCustIDNo)
     if (data.CODE && !schemeFlag) this.fetchSchemeWithCustCode(data.CODE)
   }
+  selectedScheme(data: any, schemeFlag?: boolean) {
+    this.schemeRegistrationForm.controls.SchemeId.setValue(data.SCHEME_CODE)
+    
+    if (data.CODE && !schemeFlag) this.fetchSchemeWithCustCode(data.CODE)
+  }
   reset() {
     this.schemeRegistrationForm.controls.Code.setValue('')
     this.schemeRegistrationForm.controls.MobileNo.setValue('')
@@ -372,55 +405,6 @@ export class SchemeRegisterComponent implements OnInit {
     return this.commonService.isNumeric(event);
   }
 
-  openMainGridMadalView(data?: any) {
-    if (data) {
-      this.dataToEditrow = []
-      this.dataToEditrow.push(data)
-    } else {
-      this.dataToEditrow = []
-    }
-    this.modalService.open(this.add_scheme, {
-      size: 'lg',
-      backdrop: true,
-      keyboard: false,
-      windowClass: 'modal-full-width'
-    });
-  }
-  /**use: open new scheme details */
-  openNewSchemeDetails(data?: any) {
-    if (data) {
-      this.dataToEditrow = []
-      this.dataToEditrow.push(data)
-    } else {
-      this.dataToEditrow = []
-    }
-    if (this.schemeRegistrationForm.invalid) {
-      this.toastr.error('', 'select all details!', {
-        timeOut: 1000
-      });
-      return
-    }
-    const modalRef: NgbModalRef = this.modalService.open(AddSchemeComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
-    modalRef.componentInstance.content = data;
-    modalRef.result.then((result) => {
-      if (result) {
-        this.addNewRow(result) //USE: set Values To Detail table
-      }
-    }, (reason) => {
-      // Handle modal dismissal (if needed)
-    });
-  }
-
-  closeModal() {
-    // this.activeModal.close();
-    this.modalService.dismissAll()
-  }
-  // new rows added 
 
   addNewRow(data: any) {
     let params = {
@@ -468,7 +452,6 @@ export class SchemeRegisterComponent implements OnInit {
       "Images": data.Attachedfile || []
     }
     this.detailArray.push(datas)
-    // this.closeModal()
   }
 
   replaceObject(updatedObject: any): void {
@@ -488,9 +471,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
     }
     if (this.schemeRegistrationForm.invalid) {
-      this.toastr.error('select all required details!', '', {
-        timeOut: 1000
-      });
+      this.commonService.toastErrorByMsgId('select all required details!')
       return
     }
 
@@ -711,7 +692,7 @@ export class SchemeRegisterComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, params)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.closeModal()
+          this.close()
           this.fetchSchemeWithCustCode(this.schemeRegistrationForm.value.Code)
           Swal.fire({
             title: result.status || 'updated',
@@ -747,12 +728,10 @@ export class SchemeRegisterComponent implements OnInit {
   editRowDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
-    this.openNewSchemeDetails(str)
   }
   editMainGridDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
-    this.openNewSchemeDetails(str)
   }
   //USE delete row
   deleteRow(e: any) {
