@@ -18,7 +18,7 @@ export class ComponentMasterComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
 
-  columnhead: any[] = ['Srno','Div.','Stock Code','Karat','Stock Type','Pcs','Wt/Ct','Color','Clarity','Shape','Sieve Std.','Description','Size','Process Transaction','Remarks',]
+  columnhead: any[] = ['Srno','Div.','Stock Code','Karat','Stock Type','Pcs','Wt/Ct','Color','Clarity','Shape','Sieve Std.','Description','Size','Process Type','Remarks','Pointer Wt','Ext.Clarity','Sieve From','Description','Sieve To','Description']
   columnhead2: any[] = ['',]
   selectedTabIndex = 0;
   constructor(
