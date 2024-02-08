@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="posPurchaseForm">
