@@ -16,6 +16,7 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./approval-master.component.scss']
 })
 export class ApprovalMasterComponent implements OnInit {
+
   @Input() content!: any;
   tableData: any[] = [];
   selectedIndexes: any = [];
@@ -24,7 +25,7 @@ export class ApprovalMasterComponent implements OnInit {
   isdiabled: boolean = true
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
-
+  isDisabled: boolean = false;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -61,6 +62,7 @@ export class ApprovalMasterComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.content.FLAG == 'VIEW') {
+      this.isDisabled = true;
       this.viewMode = true;
       this.setFormValues();
       // this.processMasterForm();
@@ -170,6 +172,7 @@ export class ApprovalMasterComponent implements OnInit {
   };
 
   adddata() {
+  
     const userCodeValue = this.approvalMasterForm.value.USER_CODE;
   
     if (this.approvalMasterForm.value.code !== "" && this.approvalMasterForm.value.description !== "") {
@@ -239,10 +242,10 @@ export class ApprovalMasterComponent implements OnInit {
     return final.length == 0
   }
   formSubmit() {
-    // if(this.checkFinalApproval()){
-    //   this.toastr.error('Final Approval Type Not Selected')
-    //   return
-    // }
+    if(this.checkFinalApproval()){
+      this.toastr.error('Final Approval Type Not Selected')
+      return
+    }
     if (this.approvalMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return

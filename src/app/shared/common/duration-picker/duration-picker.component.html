@@ -10,10 +10,9 @@
                         <label for="input" class="col-sm-12 col-form-label">Days</label>
                     </div>
                     <div class="row">
-                        <div class="col-sm-8 mb-3">
+                        <div class="col-sm-8 mb-1">
                             <ng-select [items]="days" bindLabel="name" bindValue="value"
                                 formControlName="days" (change)="getDays($event)"></ng-select>
-
                         </div>
                     </div>
                 </div>

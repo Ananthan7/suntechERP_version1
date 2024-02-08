@@ -15,6 +15,8 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 export class DurationPickerComponent implements OnInit {
 
   @Input() content!: any;
+  @Input() duration1!: any;
+  @Input() duration2!: any;
   @Output() updateDuration = new EventEmitter<any>();
   viewMode: boolean = false;
   tableData: any[] = [];
@@ -27,6 +29,12 @@ export class DurationPickerComponent implements OnInit {
 
   duration: any[] = [];
   totalMinutes: any;
+  daystime: any;
+  hoursTime: any;
+  minutesTime: any;
+  daystime2: any;
+  hoursTime2: any;
+  minutesTime2: any;
 
 
   constructor(
@@ -38,14 +46,78 @@ export class DurationPickerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    // if (this.content.FLAG == 'VIEW') {
+    //   this.setFormValues();
+    // }
+    console.log(this.duration1)
+    
     this.durationPickerForm = this.formBuilder.group({
       days: [''],
       hours: [''],
       minutes: [''],
     });
 
+    if(this.duration2 != ""){
+
+      if(this.duration2.STD_TIME != ""){
+        
+          this.timeConvert1(this.duration2.STD_TIME);
+      
+        this.durationPickerForm.controls.days.setValue(this.daystime2);
+        this.durationPickerForm.controls.hours.setValue(this.hoursTime2);
+        this.durationPickerForm.controls.minutes.setValue(this.minutesTime2);
+      }
+          
+    }
+
+     
+
+   
+
   }
+
+  private setFormValues() {
+    console.log(this.content);
+    if (!this.content) return
+    this.durationPickerForm.controls.days.setValue(this.content.daysTime);
+    this.durationPickerForm.controls.hours.setValue(this.content.hoursTime);
+    this.durationPickerForm.controls.minutes.setValue(this.content.minutesTime);
+   }
+
+//    timeConvert(time: number) { 
+//     return time/24/60 + ":" + time/60%24 + ':' + time%60;
+//   }
+
+  timeConvert(time: any) {
+    const daysTime = Math.floor( time/24/60);
+    const hoursTime = Math.floor(time/60%24);
+    const minutesTime = Math.floor(time%60);
+
+    this.daystime = daysTime
+    this.hoursTime = hoursTime
+    this.minutesTime = minutesTime
+
+    console.log(daysTime);
+    console.log(hoursTime);
+    console.log(minutesTime);
+    return daysTime + ":" + hoursTime + ':' + minutesTime;
+}
+
+timeConvert1(time: any) {
+  const daysTime = Math.floor( time/24/60);
+  const hoursTime = Math.floor(time/60%24);
+  const minutesTime = Math.floor(time%60);
+
+  this.daystime2 = daysTime
+  this.hoursTime2 = hoursTime
+  this.minutesTime2 = minutesTime
+
+  console.log(daysTime);
+  console.log(hoursTime);
+  console.log(minutesTime);
+  return daysTime + ":" + hoursTime + ':' + minutesTime;
+}
+
 
   // formatNumber(value: number): string {
   //   return value < 10 ? `0${value}` : value.toString();
@@ -941,64 +1013,28 @@ export class DurationPickerComponent implements OnInit {
       "value": 59
     }
   ];
-  // durationPickerForm: FormGroup = this.formBuilder.group({
-  //   days: [''],
-  //   hours: [''],
-  //   minutes: [''],
-  // });
-
-  // getDays(e: any) {
-  //   console.log(e);
-
-  //   this.duration.push(e.name);
-  //   this.duration[0] = e.name;
-  //   this.emitUpdatedDuration();
-  // }
-
-  // getHours(e: any) {
-  //   console.log(e);
-
-  //   this.duration.push(e.name);
-  //   this.duration[1] = e.name;
-  //   this.emitUpdatedDuration();
-  // }
-
-  // getMinutes(e: any) {
-
-  //   console.log(e);
-
-  //   this.duration.push(e.name);
-
-  //   console.log(this.duration);
-  //   const resultString = this.duration.join(' : ');
-
-  //   console.log(resultString);
-
-  //   this.duration[2] = e.name;
-  //   this.emitUpdatedDuration();
-  // }
 
   getDays(e: any) {
     this.handleDurationUpdate(e, 0, 24 * 60);
-}
+  }
 
-getHours(e: any) {
+  getHours(e: any) {
     this.handleDurationUpdate(e, 1, 60);
-}
+  }
 
-getMinutes(e: any) {
+  getMinutes(e: any) {
     this.handleDurationUpdate(e, 2, 1);
-}
+  }
 
-private handleDurationUpdate(e: any, index: number, multiplier: number) {
+  private handleDurationUpdate(e: any, index: number, multiplier: number) {
     console.log(e);
     this.duration[index] = e.name;
 
-     this.totalMinutes = this.duration.reduce((acc, val, i) => acc + (parseInt(val) * (i === 0 ? 24 * 60 : i === 1 ? 60 : 1)), 0);
+    this.totalMinutes = this.duration.reduce((acc, val, i) => acc + (parseInt(val) * (i === 0 ? 24 * 60 : i === 1 ? 60 : 1)), 0);
 
     console.log(`Total Minutes: ${this.totalMinutes}`);
     this.emitUpdatedDuration();
-}
+  }
 
 
 

@@ -27,6 +27,9 @@ export class ProcessMasterComponent implements OnInit {
   isRecovReadOnly = true;
   isAlloWGainReadOnly = true;
 
+  maxTime:any;
+  standTime:any;
+
   yourContent = {
     standardTime: {
       totalDays: 0,
@@ -126,6 +129,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   maxInputLength: number = 2
+
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
     processCode: ['', [Validators.required]],
@@ -193,16 +197,23 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.islossReadOnly = true;
+    this.isRecovReadOnly = true;
+    this.isAlloWGainReadOnly = true;
+
     console.log()
-    this.getProcessTypeOptions()
+     this.getProcessTypeOptions()
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
       // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
+      
     }
   }
+
   // USE: get select options Process TypeMaster
   private getProcessTypeOptions(): void {
     let API = 'ComboFilter/PROCESS TYPE MASTER';
@@ -221,6 +232,7 @@ export class ProcessMasterComponent implements OnInit {
 
   }
   private setFormValues() {
+    console.log(this.content);
     if (!this.content) return
     this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
     this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
@@ -263,9 +275,19 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.accountMiddle.setValue(this.content.RECOV_ACCODE);
     this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
     this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
-    this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
-    this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
-  }
+    // this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
+   // this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
+    // this.formattedMaxTime.controls.setValue(this.content.STD_TIME);
+    // this.formattedMaxTime.controls.setValue(this.content.MAX_TIME);
+
+    //this.maxTime = this.content.MAX_TIME;
+    this.standTime = this.content
+
+    this.maxTime = this.content
+
+
+
+   }
   onchangeCheckBox(e: any) {
     if (e == true) {
       return 1;
@@ -292,8 +314,8 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/InsertProcessMasterDJ'
     let postData = {
       "MID": 0,
-      "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
-      "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
+      "PROCESS_CODE": this.processMasterForm.value.processCode || "",
+      "DESCRIPTION": this.processMasterForm.value.processDesc || "",
       // "STD_TIME": this.commonService.timeToMinutes(this.formattedTime)  || "",
       // "MAX_TIME": this.commonService.timeToMinutes(this.formattedMaxTime)  || "",
        "STD_TIME": this.formattedTime  || "",
@@ -446,14 +468,12 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.processCode
     let postData = {
       "MID": 0,
-      "PROCESS_CODE": this.processMasterForm.value.toUpperCase(),
-      "DESCRIPTION": this.processMasterForm.value.toUpperCase(),
-      // "STD_TIME": this.commonService.emptyToZero(this.processMasterForm.value.stand_time),
-      // "MAX_TIME": this.commonService.emptyToZero(this.processMasterForm.value.max_time),
-      // "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
-      // "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
-      "STD_TIME": this.processMasterForm.value.stand_time || "",
-      "MAX_TIME": this.processMasterForm.value.max_time || "",
+      "PROCESS_CODE": this.processMasterForm.value.processCode || "",
+      "DESCRIPTION": this.processMasterForm.value.processDesc || "",
+      // "STD_TIME": this.commonService.timeToMinutes(this.formattedTime)  || "",
+      // "MAX_TIME": this.commonService.timeToMinutes(this.formattedMaxTime)  || "",
+       "STD_TIME": this.formattedTime  || "",
+       "MAX_TIME": this.formattedMaxTime  || "",
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -535,21 +555,23 @@ export class ProcessMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+
   /**USE: delete worker master from row */
   deleteProcessMaster() {
-    if (!this.content.WORKER_CODE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
+    // if (!this.content.WORKER_CODE) {
+    //   Swal.fire({
+    //     title: '',
+    //     text: 'Please Select data to delete!',
+    //     icon: 'error',
+    //     confirmButtonColor: '#336699',
+    //     confirmButtonText: 'Ok'
+    //   }).then((result: any) => {
+    //     if (result.value) {
+    //     }
+    //   });
+    //   return
+    // }
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",

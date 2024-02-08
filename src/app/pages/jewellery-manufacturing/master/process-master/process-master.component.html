@@ -7,7 +7,8 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+        (deleteClick)=" deleteProcessMaster()"></modal-header>
     <!-- content section -->
     <div class="card pt-1">
         <form [formGroup]="processMasterForm">
@@ -16,7 +17,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row mb-2">
-                                <label for="input" class="col-sm-2 col-form-label"  style="width: 10%;">Process
+                                <label for="input" class="col-sm-2 col-form-label" style="width: 10%;">Process
                                     Code* :</label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 85%; margin-left: 7px;">
@@ -62,7 +63,8 @@
                                     </mat-form-field> -->
 
                                     <app-duration-picker [content]="yourContent"
-                                        (updateDuration)="updateStandardTime($event)" formControlName="stand_time" [disabled]="viewMode"></app-duration-picker>
+                                        (updateDuration)="updateStandardTime($event)" [duration2]="standTime"
+                                        formControlName="stand_time" [disabled]="viewMode"></app-duration-picker>
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -86,8 +88,9 @@
                                     <!-- <mat-form-field style="width: 70%; margin-left: 6px;">
                                         <input type="time" step="1" formControlName="max_time" matInput [readonly]="viewMode">
                                     </mat-form-field> -->
-                                    <app-duration-picker [content]="maxContent"
-                                        (updateDuration)="updateMaximumTime($event)" formControlName="max_time"  [disabled]="viewMode"></app-duration-picker>
+                                    <app-duration-picker [content]="maxContent" [duration1]="maxTime"
+                                        (updateDuration)="updateMaximumTime($event)" formControlName="max_time"
+                                        [disabled]="viewMode"></app-duration-picker>
 
                                 </div>
                             </div>
@@ -201,15 +204,13 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3" style="text-align: right;"
-                                            formControlName="loss_standard" [readonly]="islossReadOnly"
-                                            [readonly]="viewMode" />
+                                            formControlName="loss_standard" [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3" style="text-align: right;"
-                                            formControlName="standard_end" [readonly]="isRecovReadOnly"
-                                            [readonly]="viewMode" />
+                                            formControlName="standard_end" [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -222,14 +223,14 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3" step="0.01" min="0" maxlength="4"
                                             style="text-align: right;" formControlName="loss_min"
-                                            [readonly]="islossReadOnly" [readonly]="viewMode" />
+                                            [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3" step="0.01" min="0" maxlength="4"
                                             style="text-align: right;" formControlName="min_end"
-                                            [readonly]="isRecovReadOnly" [readonly]="viewMode" />
+                                            [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -241,8 +242,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput maxlength="3" formControlName="loss_max"
-                                            style="text-align: right;" [readonly]="islossReadOnly"
-                                            [readonly]="viewMode" />
+                                            style="text-align: right;" [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -254,7 +254,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput formControlName="accountStart"
-                                            [readonly]="islossReadOnly" [readonly]="viewMode" />
+                                            [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="accountStartData" *ngIf="viewMode == false"
                                         (newRowClick)="accountStartSelected($event)">
@@ -263,7 +263,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput formControlName="accountMiddle"
-                                            [readonly]="isRecovReadOnly" [readonly]="viewMode" />
+                                            [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="accountStartData" *ngIf="viewMode == false"
                                         (newRowClick)="accountMiddleSelected($event)">
@@ -272,7 +272,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
                                         <input type="text" matInput formControlName="accountEnd"
-                                            [readonly]="isAlloWGainReadOnly" [readonly]="viewMode" />
+                                            [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="accountStartData" *ngIf="viewMode == false"
                                         (newRowClick)="accountEndSelected($event)">

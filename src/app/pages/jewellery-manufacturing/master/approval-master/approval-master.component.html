@@ -53,11 +53,13 @@
                                         </button>
                                     </div>
                                 </div> -->
-                                <div class="col-md-3 d-flex mb-2">
-                                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" 
-                                        (addClick)="adddata()" (deleteClick)="removedata()">
+
+                                <div class="col-md-3 d-flex mb-2" >
+                                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                                        (addClick)="adddata()" (deleteClick)="removedata()" [isDisabled]="isDisabled">
                                     </menu-buttons>
                                 </div>
+
                             </div>
                             <div class="row">
                                 <div class="col">
@@ -134,18 +136,12 @@
                                             <input type="checkbox" (change)="messagecheckevent($event,data)"
                                                 [checked]="data.value" />
                                         </div>
-                                        <div
-                                            *dxTemplate="let data of 'mobilenumber'">
-                                            <input type="number"
-                                                (change)="mobilenumber($event,data)"
-                                                style="text-align: right;"
-                                                [value]="data.value"
-                                                style="width: 100%;"
-                                                [disabled]="data.value == ''" 
-                                                minlength="1"
-                                                maxlength="20"
-                                                pattern="[0-9]+"/>
-                                        
+                                        <div *dxTemplate="let data of 'mobilenumber'">
+                                            <input type="number" (change)="mobilenumber($event,data)"
+                                                style="text-align: right;" [value]="data.value" style="width: 100%;"
+                                                [disabled]="data.value == ''" minlength="1" maxlength="20"
+                                                pattern="[0-9]+" />
+
                                         </div>
                                         <div *dxTemplate="let data of 'emailtemp'">
                                             <input type="checkbox" (change)="emailcheckevent($event,data)"
@@ -153,7 +149,7 @@
                                         </div>
                                         <div *dxTemplate="let data of 'emailid'">
                                             <input type="email" (change)="emailid($event,data)" [value]="data.value"
-                                             style="width: 100%;" required />
+                                                style="width: 100%;" required />
                                         </div>
 
                                         <div *dxTemplate="let data of 'systemtemp'">

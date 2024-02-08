@@ -12,6 +12,8 @@ export class MenuButtonsComponent implements OnInit {
   @Input() viewAddBtn: boolean = true;
   @Input() viewDeleteBtn: boolean = true;
   @Input() viewImportBtn: boolean = true;
+  @Input() isDisabled: boolean = false;
+  
   constructor() { }
 
   ngOnInit(): void {
