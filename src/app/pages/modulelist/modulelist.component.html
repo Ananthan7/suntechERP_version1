@@ -3,18 +3,50 @@
     <div class="landing_page">
         <div class="container">
             <div class="row">
-                <div class="col-md-3 my-2" *ngFor="let data of menuList; let i = index">
-                    <!-- Assuming you want to navigate to the route /target-route with query parameters -->
-                    <!-- <a [routerLink]="['/module-container']" [queryParams]="{ modulename :data.MODULE_NAME, id: i }"> -->
-                    <a class="w-100" routerLink="/{{ data.ANG_CMB_PATH_NAME || 'module-container' }}"
-                        [queryParams]="{ modulename: data.MODULE_NAME, id: i }">
-                        <div class="card_btn">
-                            <img [src]="data.imageUrl" loading="lazy"
-                                alt="{{ data.MODULE_NAME }}" />
-                            <h6>{{ data.MODULE_NAME }}</h6>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-3 my-2" *ngFor="let data of menuList; let i = index">
+                            <!-- Assuming you want to navigate to the route /target-route with query parameters -->
+                            <!-- <a [routerLink]="['/module-container']" [queryParams]="{ modulename :data.MODULE_NAME, id: i }"> -->
+                            <a class="w-100" routerLink="/{{ data.ANG_CMB_PATH_NAME || 'module-container' }}"
+                                [queryParams]="{ modulename: data.MODULE_NAME, id: i }">
+                                <div class="card_btn">
+                                    <div class="card_item">
+                                    <div hre="#" class="card_item_link">
+                                        <div class="card_item_bg"></div>
+                                        <div class="card-item_title">
+                                            <img class="image" [src]="data.imageUrl" loading="lazy"
+                                            alt="{{ data.MODULE_NAME }}"  />
+                                            <img class="image_hover" [src]="data.imageUrl_2" loading="lazy"
+                                            alt="{{ data.MODULE_NAME }}"  />
+                                        <h6 class="pt-3 h_1">{{ data.MODULE_NAME }}</h6>
+                                        </div>
+                                       
+                                    </div>
+                                
+                                  </div>
+                                </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
+
+                <div class="col-md-2">
+                    <div class="row offset-8">
+                        <div class="pt-3"><button type="button" class="btn btn-light p-3 rounded-circle btn-lg"><img src="../../assets/images/lp-icons/star_3.png" style="width: 28px;"></button></div>
+                        <div class="bt_1"><button class="btn  btn-light p-3 rounded-circle btn-lg "><img src="../../assets/images/lp-icons/management.png" style="width: 28px;"></button></div>
+                        <div class="bt_1"> <button class="btn  btn-light p-3 rounded-circle btn-lg" ><img src="../../assets/images/lp-icons/Operational.png" style="width: 28px;"></button></div>
+                        <div class="bt_1"><button class="btn  btn-light p-3 rounded-circle btn-lg" ><img src="../../assets/images/lp-icons/sales.png" style="width: 28px;"></button></div>
+                        <div class="bt_1"> <button class="btn  btn-light p-3 rounded-circle btn-lg"><img src="../../assets/images/lp-icons/icons.png" style="width: 28px;"></button></div>
+                        
+                       
+                        
+                       
+                    </div>
+                </div>
+
             </div>
+           
         </div>
     </div>
+    
