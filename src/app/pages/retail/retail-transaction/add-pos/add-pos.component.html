@@ -579,11 +579,13 @@
                       <div class="container" style="padding: 0px">
                         <dx-data-grid id="gridContainer" [dataSource]="ordered_items" keyExpr="ID" [showBorders]="true"
                           (onRowRemoved)="removeLineItemsGrid($event)" (onEditingStart)="editTable($event)">
+                          
                           <dxo-editing [allowUpdating]="true" [allowDeleting]="!viewOnly">
                             <dxo-texts caption="Action" alignment="right" [editRow]="viewOnly ? 'View' : 'Edit'"
                               deleteRow="Remove">
                             </dxo-texts>
                           </dxo-editing>
+
                           <dxo-selection mode="single"></dxo-selection>
                           <dxi-column dataField="sn_no" [width]="100" caption="SL No." [allowEditing]="false"
                             alignment="center">
