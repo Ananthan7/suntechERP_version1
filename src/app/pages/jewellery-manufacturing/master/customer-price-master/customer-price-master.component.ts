@@ -84,12 +84,8 @@ export class CustomerPriceMasterComponent implements OnInit {
       "strType": "LABO",
       "strVocDate": "2024-02-07"
     }
-    let getdata = {
-      "strCode": "TBG-5.4-5.7",
-      "strType": "STON",
-      "strVocDate": "2024-02-07"
-    }
-    let sub: Subscription = this.dataService.postDynamicAPI(apiUrl,getdata).subscribe((result) => {
+   
+    let sub: Subscription = this.dataService.postDynamicAPI(apiUrl,postData).subscribe((result) => {
       if (result.status == 'Success' ) {
              // console.log(result.dynamicData[0]);
               this.tableDatalabour = result.dynamicData[0]
@@ -97,14 +93,18 @@ export class CustomerPriceMasterComponent implements OnInit {
       } 
     });
 
-   
-    // let subu: Subscription = this.dataService.postDynamicAPI(apiUrl,getdata).subscribe((result) => {
-    //   if (result.status == 'Success' ) {
-    //          // console.log(result.dynamicData[0]);
-    //           this.tableDatastone = result.dynamicData[0]
-    //           console.log(this.tableDatastone);
-    //   } 
-    // });
+    let getdata = {
+      "strCode": "BLKRD+11-12",
+      "strType": "STO",
+      "strVocDate": "2024-02-07"
+    }
+    let subu: Subscription = this.dataService.postDynamicAPI(apiUrl,getdata).subscribe((result) => {
+      if (result.status == 'Success' ) {
+             // console.log(result.dynamicData[0]);
+              this.tableDatastone = result.dynamicData[0]
+              console.log(this.tableDatastone);
+      } 
+    });
 
     console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {

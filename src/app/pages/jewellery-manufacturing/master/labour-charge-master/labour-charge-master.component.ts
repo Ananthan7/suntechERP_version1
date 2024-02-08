@@ -482,6 +482,8 @@ export class LabourChargeMasterComponent implements OnInit {
   sieveSelected(e: any) {
     console.log(e);
     this.diamondlabourMasterForm.controls.sieve.setValue(e.CODE);
+    this.diamondlabourMasterForm.controls.sieve_desc.setValue(e.DESCRIPTION);
+    
   }
 
   stockCodeSelected(e: any) {

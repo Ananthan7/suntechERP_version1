@@ -105,25 +105,233 @@ export class CostCentreMetalDetailsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
-    SEARCH_FIELD: '',
-    SEARCH_HEADING: 'Purchase',
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'ACCODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: " WHERE BRANCH_CODE = '" + this.commonService.branchCode + "'ACCOUNT_MODE in('G','L')",
+    WHERECONDITION: "BRANCH_CODE = 'dcc' AND  AC_OnHold = 0 and ACCOUNT_MODE in('G','L')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
 
   branchCodeSelected(data: any) {
+    console.log(data); 
     this.costcenterdiamonddetailsForm.controls.branch.setValue(data.BRANCH_CODE)
   }
 
   purchaseCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.purchase.setValue(e.ACCODE);   
+  }
+
+  purchaseReturnCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.purchaseReturn.setValue(e.ACCODE);
+  }
+
+  purchaseImportCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.importPurchase.setValue(e.ACCODE);
+  }
+
+  importPurchaseReturnCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.importPurchaseReturn.setValue(e.ACCODE);
+  }
+  
+  repairPurchaseCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.repairPurchase.setValue(e.ACCODE);
+  }
+
+  repairPurchaseReturnCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.repairPurchaseReturn.setValue(e.ACCODE);
+  }
+
+  wholesalesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.Wholesales.setValue(e.ACCODE);
+  }
+
+  wholesalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.wholesalesReturn.setValue(e.ACCODE);
+  }
+
+  exportSalesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.exportSales.setValue(e.ACCODE);
+  }
+
+  exportSalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.exportSalesReturn.setValue(e.ACCODE);
+  }
+
+  repairSaleCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.repairSale.setValue(e.ACCODE);
+  }
+
+  retailSalesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.retailSales.setValue(e.ACCODE);
+  }
+
+  retailSalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.retailSalesReturn.setValue(e.ACCODE);
 
   }
 
-  formSubmit(){
+  exhibitionSalesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.exhibitionSales.setValue(e.ACCODE);
 
+  }
+
+  exhibitionSalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.exhibitionSalesReturn.setValue(e.ACCODE);
+  }
+  
+  repairSalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.repairSalesReturn.setValue(e.ACCODE);
+  }
+
+  ownStockOpeningCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.ownStockOpening.setValue(e.ACCODE);
+  }
+
+  ownStockCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.ownStock.setValue(e.ACCODE);
+  }
+
+  physicalStockCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.physicalStock.setValue(e.ACCODE);
+  }
+
+  ownStockClosingCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.ownStockClosing.setValue(e.ACCODE);
+  }
+  
+  stkRevalueCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.stkRevalue.setValue(e.ACCODE);
+  }
+
+  branchTransferInCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.branchTransferIn.setValue(e.ACCODE);
+  }
+
+  branchTransferOUTCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.branchTransferIn.setValue(e.ACCODE);
+  }
+
+  manufactureCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.manufacture.setValue(e.ACCODE);
+  }
+
+  dismatlingCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.dismatling.setValue(e.ACCODE);
+  }
+
+  adjustmentsCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.adjustments.setValue(e.ACCODE);
+  }
+
+  refiningChargesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.refiningCharges.setValue(e.ACCODE);
+  }
+
+  metalDiscountCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.metalDiscount.setValue(e.ACCODE);
+  }
+
+  SOHManufacturingCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.SOHManufacturing.setValue(e.ACCODE);
+  }
+
+  dismantlingLossCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.dismantlingLoss.setValue(e.ACCODE);
+  }
+
+  diapurchaseAccountUnFixCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.diapurchaseAccountUnFix.setValue(e.ACCODE);
+  }
+
+  diaSaleAccountUnFixCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.diaSaleAccountUnFix.setValue(e.ACCODE);
+  }
+
+  wastageCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.wastage.setValue(e.ACCODE);
+  }
+
+  repairUnfixPurchaseCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.repairUnfixPurchase.setValue(e.ACCODE);
+  }
+
+  refineChargesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.refineCharges.setValue(e.ACCODE);
+  }
+
+  unFixPurCtrlAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.unFixPurCtrlAc.setValue(e.ACCODE);
+  }
+
+  unFixSupCtrlAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.unFixSupCtrlAc.setValue(e.ACCODE);
+  }
+
+  unFixSalCtrlAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.unFixSalCtrlAc.setValue(e.ACCODE);
+  }
+
+  purchaseAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.purchaseAc.setValue(e.ACCODE);
+  }
+
+  reciptAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.reciptAc.setValue(e.ACCODE);
+  }
+
+  salesAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.salesAc.setValue(e.ACCODE);
+  }
+
+  paymentAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.paymentAc.setValue(e.ACCODE);
+  }
+
+
+  formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return

@@ -1,10 +1,13 @@
 .footer{
-    background: #3599CC;
+    background: #ffffff;
     padding: 10px 0px;
     margin-top: 13px;
     bottom: 0px;
     position: absolute;
-    width: 100%;
+    width: 94%;
+    height: 50px;
+    border-radius: 50px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   
     p{
       font-size: 14px;
@@ -17,5 +20,8 @@
         margin-left: 5px;
       }
     }
+  }
+  .img_1{
+    padding-right: 10px;
   }
   
