@@ -42,7 +42,7 @@
                         </label>
                         <mat-form-field style="width: 60%;">
                             <input type="text" matInput
-                                formControlName="Code"
+                                formControlName="Units"
                                 class="text-right"
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
@@ -51,15 +51,15 @@
                         <div class="d-flex align-items-center">
                             <label class="matlabels">Customer Name:
                             </label>
-                            <span class="matlabels">Customer</span>
+                            <span class="matlabels">{{schemeRegistrationForm.value.Name}}</span>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
                         <label class="matlabels">Branch:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput formControlName="Code"
-                                (focusout)="searchValueChange($event,'Code')" />
+                            <input type="text" matInput formControlName="Branch"
+                                (focusout)="searchValueChange($event,'Branch')" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="customerMasterData"
                             (newRowClick)="selectedCustomer($event)">
@@ -94,10 +94,9 @@
                         <label class="matlabels">Installment Amount:
                         </label>
                         <mat-form-field style="width: 60%;">
-                            <input type="text" matInput
-                                formControlName="Code"
-                                class="text-right"
-                                (focusout)="searchValueChange($event,'Code')" />
+                            <input type="number" matInput AmountDecimalInput
+                                formControlName="InstallmentAmount"
+                                class="text-right"  />
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
@@ -160,8 +159,8 @@
                         <div class="d-flex align-items-center">
                             <label class="matlabels">Alert:
                             </label>
-                            <span class="matlabels">
-                                <input type="checkbox" >Send Alert
+                            <span>
+                                <input type="checkbox" formControlName="SendAlert">Send Alert
                             </span>
                         </div>
                     </div>
@@ -272,7 +271,7 @@
                             (newRowClick)="SalesmanSelected($event)">
                         </master-search>
                         <mat-form-field style="width: 30%;">
-                            <input type="text" matInput formControlName="Code"
+                            <input type="text" matInput formControlName="SalesmanName"
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
                     </div>

@@ -4,3 +4,13 @@
         z-index: 1070 !important;
     }
 }
+
+::ng-deep {
+    .mat-form-field {
+        font-weight: 600 !important;
+    }
+}
+
+.mat-input-element {
+    font-size: 14px !important;
+}

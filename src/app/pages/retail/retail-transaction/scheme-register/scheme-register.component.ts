@@ -102,17 +102,22 @@ export class SchemeRegisterComponent implements OnInit {
     MobileNo: ['', Validators.required],
     Email: ['',[Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
     PanNo: [''],
+    Branch: [''],
     AlertBeforeDays: [''],
     CancellationCharge: [''],
     TenurePeriod: [''],
     MaturingDate: [''],
+    InstallmentAmount: [''],
     BonusInstallment: [''],
+    Units: [''],
     Frequency: [''],
     TotalAmountToPay: [''],
     SchemeType: [''],
     Salesman: [''],
+    SalesmanName: [''],
     SumAssured: [''],
     Remarks: [''],
+    SendAlert: [false],
     VOCTYPE: [''],
     VOCDATE: [''],
     SCH_REMINDER_MODE: [0],
@@ -142,6 +147,7 @@ export class SchemeRegisterComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
     this.schemeRegistrationForm.controls.VOCDATE.setValue(this.currentDate)
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
     console.log(this.content, 'this.content');
