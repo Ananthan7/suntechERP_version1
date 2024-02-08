@@ -19,6 +19,7 @@ import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.componen
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { map, pairwise, startWith, filter } from 'rxjs/operators';
+import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -27,7 +28,7 @@ import { map, pairwise, startWith, filter } from 'rxjs/operators';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RetailTransactionComponent implements OnInit {
-  @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
+  @ViewChild(RetailGridComponent) masterGridComponent?: RetailGridComponent;
   //variables
   menuTitle: string = '';
   tableName: any;
@@ -165,7 +166,8 @@ export class RetailTransactionComponent implements OnInit {
       }
       this.PERMISSIONS = data.PERMISSION;
     }
-    this.masterGridComponent?.getMasterGridData(data)
+  
+      this.masterGridComponent?.getMasterGridData(data)
   }
 
 
