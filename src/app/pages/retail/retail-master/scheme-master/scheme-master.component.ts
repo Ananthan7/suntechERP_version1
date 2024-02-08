@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from "@angular/core";
 import {
   NgbActiveModal,
   NgbModal,
-  NgbModalRef,
 } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -44,6 +43,7 @@ export class SchemeMasterComponent implements OnInit {
   schemeMasterForm: FormGroup = this.formBuilder.group({
     mid: [""],
     code: [""],
+    branch: [""],
     prefix: [""],
     description: [""],
     frequency: [""],
@@ -184,13 +184,13 @@ export class SchemeMasterComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err => this.toastr.error(err))
     this.subscriptions.push(Sub);
   };
 
   setPostData(){
     return {
-      "MID": 0,
+      "MID": this.content.MID || 0,
       "BRANCH_CODE": this.comService.nullToString(this.branchCode),
       "SCHEME_CODE": this.comService.nullToString(this.schemeMasterForm.value.code),
       "SCHEME_NAME": this.comService.nullToString(this.schemeMasterForm.value.description),
@@ -204,12 +204,12 @@ export class SchemeMasterComponent implements OnInit {
       "SCHEME_FREQUENCY": this.comService.nullToString(this.schemeMasterForm.value.frequency),
       "STATUS": this.schemeMasterForm.value.schemeStatus,
       "START_DATE": this.schemeMasterForm.value.startDate,
-      "SCHEME_CURRENCY_CODE": "stri",
+      "SCHEME_CURRENCY_CODE": '',
       "PREFIX_CODE": this.comService.nullToString(this.schemeMasterForm.value.prefix),
       "BONUS_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeTwo),
       "CANCEL_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeThree),
       "INST_RECTYPE": this.comService.nullToString(this.schemeMasterForm.value.receiptModeone),
-      "SCHEME_FIXEDAMT": this.comService.nullToString(this.schemeMasterForm.value.SCHEMEFIXEDAMT)
+      "SCHEME_FIXEDAMT": this.schemeMasterForm.value.SCHEMEFIXEDAMT
     }
   }
   setFormValues() {
@@ -231,6 +231,8 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.tenurePeriod.setValue(this.content.SCHEME_PERIOD);
     this.schemeMasterForm.controls.schemeStatus.setValue(this.content.STATUS);
     this.schemeMasterForm.controls.SCHEMEFIXEDAMT.setValue(this.content.SCHEME_FIXEDAMT);
+    this.schemeMasterForm.controls.branch.setValue(this.content.BRANCH_CODE);
+    // this.schemeMasterForm.controls.SCHEME_METALCURRENCY.setValue(this.content.depositIn);
   }
 
   update() {
@@ -268,7 +270,7 @@ export class SchemeMasterComponent implements OnInit {
   // SchemeMaster/UpdateSchemeMaster
 
   deleteSchemeMaster() {
-    if (!this.content.WORKER_CODE) {
+    if (!this.content.MID) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -291,7 +293,7 @@ export class SchemeMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = '/SchemeMaster/DeleteSchemeMaster/' + this.schemeMasterForm.value.branchCode + this.schemeMasterForm.value.code;
+        let API = 'SchemeMaster/DeleteSchemeMaster/' + this.schemeMasterForm.value.branch + this.schemeMasterForm.value.code;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

@@ -7,7 +7,6 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
-import { AddSchemeComponent } from './add-scheme/add-scheme.component';
 
 @Component({
   selector: 'app-scheme-register',
@@ -30,6 +29,7 @@ export class SchemeRegisterComponent implements OnInit {
   schemeReceiptList: any[] = [];
   schemeReceiptListHead: any[] = [];
   newSchemeItems: any[] = [];
+  SchemeMasterDetails: any[] = [];
   IdTypesList: any[] = [];
   schemeArray: any[] = []
   dataToEditrow: any[] = [];
@@ -38,7 +38,7 @@ export class SchemeRegisterComponent implements OnInit {
   newSchemeLength: number = 0
   dataIndex: any;
   currentDate: any = new Date();
-  
+
   customerMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -79,7 +79,7 @@ export class SchemeRegisterComponent implements OnInit {
     SEARCH_FIELD: 'SCHEME_CODE',
     SEARCH_HEADING: 'Scheme Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "SCHEME_CODE<>''",
+    WHERECONDITION: "status = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -100,9 +100,10 @@ export class SchemeRegisterComponent implements OnInit {
     Code: ['', Validators.required],
     Name: ['', Validators.required],
     MobileNo: ['', Validators.required],
-    Email: ['',[Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
+    Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
     PanNo: [''],
     Branch: [''],
+    DateOfJoining: [''],
     AlertBeforeDays: [''],
     CancellationCharge: [''],
     TenurePeriod: [''],
@@ -122,12 +123,12 @@ export class SchemeRegisterComponent implements OnInit {
     VOCDATE: [''],
     SCH_REMINDER_MODE: [0],
     SCH_PARTIALLY_PAID: [false],
-    PAY_STATUS: [true],
+    PAY_STATUS: [false],
     REMAINDER_SEND: [true],
     SCH_SEND_ALERT: [true],
     SCH_CANCEL: [false],
     SCH_REDEEM: [false],
-    SCH_STATUS: [0],
+    SCH_STATUS: [''],
     SCH_REMINDER_DAYS: [0],
     UNIQUEID: [0],
     SCH_CUSTOMER_ID: [''],
@@ -144,7 +145,6 @@ export class SchemeRegisterComponent implements OnInit {
     this.editMainGridDetails = this.editMainGridDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
-
   }
   ngOnInit(): void {
     this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
@@ -184,7 +184,7 @@ export class SchemeRegisterComponent implements OnInit {
             "SCHEME_TOTAL_VALUE": this.commonService.emptyToZero(data.PAY_AMOUNTFC),
             "SCHEME_STARTED": this.commonService.nullToString(this.commonService.formatDateTime(data.SCH_JOIN_DATE)),
             "SCHEME_ENDEDON": this.commonService.nullToString(this.commonService.formatDateTime(data.SCH_EXPIRE_DATE)),
-            "SCHEME_STATUS": this.commonService.nullToString(data.SCH_STATUS?.toString() == '1'? 'Active' : 'InActive'),
+            "SCHEME_STATUS": this.commonService.nullToString(data.SCH_STATUS?.toString() == '1' ? 'Active' : 'InActive'),
             "SCHEME_UNITVALUE": this.commonService.emptyToZero(Number(data.SCH_UNITS) * Number(data.PAY_AMOUNTFC)),
             "SCHEME_CUSTCODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Code),
             "BRANCH_CODE": data.Branch || new Date(1 / 1 / 1753).toISOString(),
@@ -279,8 +279,8 @@ export class SchemeRegisterComponent implements OnInit {
     if (columnName === 'IS_ATTACHMENT_PRESENT') {
       // let SCHEME_UNIQUEID = e.row.data.SCHEME_UNIQUEID;
       let API = `SchemeRegistration/GetSchemeAttachments`
-      let param = {SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID}
-      let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+      let param = { SCH_CUSTOMER_ID: this.content.SCH_CUSTOMER_ID }
+      let Sub: Subscription = this.dataService.getDynamicAPIwithParams(API, param)
         .subscribe((result: any) => {
           if (result.fileCount > 0) {
 
@@ -299,26 +299,68 @@ export class SchemeRegisterComponent implements OnInit {
   addScheme() {
     this.isViewSchemeMasterGrid = false
   }
-  fetchSchemeWithCustCode(SCHEME_CUSTCODE: string) {
-    // let API = `Scheme/SchemeMaster?SCHEME_CUSTCODE=${SCHEME_CUSTCODE}`
-    let API = `SchemeMaster/GetSchemeMasterDetails/${this.commonService.branchCode}/${SCHEME_CUSTCODE}`
+  fetchSchemeWithCustCode() {
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API = `SchemeMaster/GetSchemeMasterDetails/${this.schemeRegistrationForm.value.Branch}/${this.schemeRegistrationForm.value.SchemeId}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result: any) => {
-
-        if (result.response && result.response.length > 0) {
-          this.newSchemeItems = result.response
-          this.newSchemeItems.length
+        if (result.response) {
+          let response = result.response
+          this.schemeRegistrationForm.controls.Branch.setValue(response.BRANCH_CODE)
+          this.schemeRegistrationForm.controls.Frequency.setValue(response.SCHEME_FREQUENCY)
+          this.schemeRegistrationForm.controls.Units.setValue(response.SCHEME_UNIT)
+          this.schemeRegistrationForm.controls.TenurePeriod.setValue(
+            this.commonService.decimalQuantityFormat(response.SCHEME_PERIOD, 'THREE')
+          )
+          this.schemeRegistrationForm.controls.BonusInstallment.setValue(
+            this.commonService.decimalQuantityFormat(response.SCHEME_BONUS,'THREE')
+          )
+          this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
+            this.commonService.decimalQuantityFormat(response.SCHEME_AMOUNT,'THREE')
+          )
+          this.schemeRegistrationForm.controls.CancellationCharge.setValue(
+            this.commonService.decimalQuantityFormat(response.CANCEL_CHARGE,'THREE')
+          )
+          this.addRowsToGrid()
+          console.log(this.schemeRegistrationForm.value, 'this.schemeRegistrationForm.controls.');
+          
         } else {
-          this.newSchemeItems = []
+          this.commonService.toastErrorByMsgId('MSG1531')
         }
       })
     this.subscriptions.push(Sub)
+  }
+  addRowsToGrid(){
+    let noOFInstallment = Number(this.schemeRegistrationForm.value.TenurePeriod) || 0 
+    for (let index = 0; index < noOFInstallment; index++) {
+      this.SchemeMasterDetails.push(
+        {
+          SRNO: index+1,
+          PAY_DATE: this.schemeRegistrationForm.value.DateOfJoining,
+          PAY_AMOUNT_FC: this.schemeRegistrationForm.value.installmentAmount,
+          PAY_AMOUNT_CC: this.schemeRegistrationForm.value.installmentAmount,
+          PAY_STATUS: this.schemeRegistrationForm.value.PAY_STATUS,
+          REMAINDER_DATE: this.schemeRegistrationForm.value.DateOfJoining,
+          REMAINDER_SEND: 0,
+          DT_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
+          RCVD_DATE: this.schemeRegistrationForm.value.DateOfJoining,
+          RCVD_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
+          RCVD_VOCTYPE: this.commonService.getqueryParamVocType(),
+          RCVD_VOCNO: 0,
+          RCVD_YEARMONTH: 0,
+          RCVD_AMOUNTFC: 0,
+          RCVD_AMOUNTCC: 0,
+        }
+      )
+      
+    }
+    
   }
   exportToExcel() {
     this.commonService.exportExcel(this.schemeReceiptList, 'Scheme Details')
   }
 
-  
+
   /**USE get Nationalitycode from API */
   getIDtypes() {
     let API = 'GeneralMaster/GetGeneralMasterList/ID MASTER'
@@ -378,12 +420,11 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.Email.setValue(data.EMAIL)
     this.schemeRegistrationForm.controls.GovIdType.setValue(data.Idcategory)
     this.schemeRegistrationForm.controls.GovIdNumber.setValue(data.POSCustIDNo)
-    if (data.CODE && !schemeFlag) this.fetchSchemeWithCustCode(data.CODE)
+    // if (data.CODE && !schemeFlag) this.fetchSchemeWithCustCode()
   }
   selectedScheme(data: any, schemeFlag?: boolean) {
     this.schemeRegistrationForm.controls.SchemeId.setValue(data.SCHEME_CODE)
-    
-    if (data.CODE && !schemeFlag) this.fetchSchemeWithCustCode(data.CODE)
+    if (data.SCHEME_CODE) this.fetchSchemeWithCustCode()
   }
   reset() {
     this.schemeRegistrationForm.controls.Code.setValue('')
@@ -440,13 +481,13 @@ export class SchemeRegisterComponent implements OnInit {
       "SCHEME_BLOCK": data.BlockScheme ? 1 : 0,
       "SCHEME_ControlRedeemDate": this.commonService.formatDateTime(this.currentDate),
     }
-    if(this.VIEWEDITFLAG == 'EDIT'){
+    if (this.VIEWEDITFLAG == 'EDIT') {
       this.newSchemeItems[this.dataIndex] = params;
       this.VIEWEDITFLAG = ''
-    }else{
+    } else {
       this.newSchemeItems.push(params)
     }
-    
+
     let datas = {
       "schemeData": params,
       // "ImageData": {
@@ -461,19 +502,94 @@ export class SchemeRegisterComponent implements OnInit {
   }
 
   replaceObject(updatedObject: any): void {
-    const index = this.newSchemeItems.findIndex((item:any) => item.id === updatedObject.id);
+    const index = this.newSchemeItems.findIndex((item: any) => item.id === updatedObject.id);
 
     if (index !== -1) {
       // Replace the object at the found index
       this.newSchemeItems[index] = updatedObject;
     }
   }
+  setPostData() {
+    return {
+      "MID": this.content.MID || 0,
+      "SCH_CUSTOMER_ID": this.content.SCH_CUSTOMER_ID || "",
+      "SCH_CUSTOMER_CODE": this.schemeRegistrationForm.value.Code,
+      "SCH_CUSTOMER_NAME": this.schemeRegistrationForm.value.Name,
+      "SCH_SCHEME_CODE": this.schemeRegistrationForm.value.SchemeId,
+      "SCH_METALCURRENCY": "",
+      "SCH_JOIN_DATE": this.schemeRegistrationForm.value.DateOfJoining,
+      "SCH_SCHEME_PERIOD": this.commonService.emptyToZero(this.schemeRegistrationForm.value.TenurePeriod),
+      "SCH_FREQUENCY": this.schemeRegistrationForm.value.Frequency,
+      "SCH_INST_AMOUNT_FC": this.commonService.CCToFC(
+        this.commonService.compCurrency,
+        this.commonService.emptyToZero(this.schemeRegistrationForm.value.InstallmentAmount)
+      ),
+      "SCH_INST_AMOUNT_CC": this.commonService.emptyToZero(this.schemeRegistrationForm.value.InstallmentAmount),
+      "SCH_ASSURED_AMT_FC": this.commonService.CCToFC(
+        this.commonService.compCurrency,
+        this.commonService.emptyToZero(this.schemeRegistrationForm.value.SumAssured)
+      ),
+      "SCH_ASSURED_AMT_CC": this.commonService.emptyToZero(this.schemeRegistrationForm.value.SumAssured),
+      "SCH_EXPIRE_DATE": this.commonService.formatDateTime(this.schemeRegistrationForm.value.MaturingDate),
+      "SCH_REMINDER_DAYS": this.commonService.emptyToZero(this.schemeRegistrationForm.value.AlertBeforeDays),
+      "SCH_REMINDER_MODE": this.schemeRegistrationForm.value.Frequency,
+      "SCHEME_BONUS": this.commonService.emptyToZero(this.schemeRegistrationForm.value.BonusInstallment),
+      "REMARKS": this.schemeRegistrationForm.value.Remarks,
+      "SCH_UNITS": this.commonService.emptyToZero(this.schemeRegistrationForm.value.Units),
+      "SCH_CANCEL_AMT": this.commonService.emptyToZero(this.schemeRegistrationForm.value.CancellationCharge),
+      "SCH_STATUS": this.schemeRegistrationForm.value.SCH_STATUS,
+      "PAY_DATE": "2024-02-08T06:54:12.269Z",
+      "PAY_BRANCH_CODE": "string",
+      "PAY_VOCTYPE": "string",
+      "PAY_VOCNO": 0,
+      "PAY_YEARMONTH": "string",
+      "PAY_AMOUNTFC": 0,
+      "PAY_AMOUNTCC": 0,
+      "SCH_ALERT_EMAIL": "string",
+      "SCH_ALERT_MOBILE": "string",
+      "SCH_SEND_ALERT": true,
+      "PAN_NUMBER": "string",
+      "SCH_PAN_NUMBER": "string",
+      "VOCDATE": "2024-02-08T06:54:12.269Z",
+      "SCH_CANCEL": true,
+      "SCH_REDEEM": true,
+      "REDEEM_REFERENCE": "string",
+      "SCHEME_BRANCH": "string",
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "SCH_CUSTOMER_CODE": "string",
+          "SCH_CUSTOMER_ID": "string",
+          "SRNO": 0,
+          "PAY_DATE": "2024-02-08T06:54:12.269Z",
+          "PAY_AMOUNT_FC": 0,
+          "PAY_AMOUNT_CC": 0,
+          "PAY_STATUS": true,
+          "REMAINDER_DATE": "2024-02-08T06:54:12.269Z",
+          "REMAINDER_SEND": true,
+          "DT_BRANCH_CODE": "string",
+          "RCVD_DATE": "2024-02-08T06:54:12.269Z",
+          "RCVD_BRANCH_CODE": "string",
+          "RCVD_VOCTYPE": "string",
+          "RCVD_VOCNO": "string",
+          "RCVD_YEARMONTH": "string",
+          "RCVD_AMOUNTFC": 0,
+          "RCVD_AMOUNTCC": 0,
+          "SCHBAL_AMOUNTFC": 0,
+          "SCHBAL_AMOUNTCC": 0,
+          "SCH_PARTIALLY_PAID": true,
+          "RECEIPT_REF": "string",
+          "RECEIPT_MID": 0
+        }
+      ]
+    }
+  }
   /**USE: save button click */
   formSubmit() {
     let API = 'SchemeRegistration/InsertWithAttachments'
     if (this.content && this.content.FLAG == 'EDIT') {
-      //  this.editSchemeDetail(this.content)
-      API = 'SchemeRegistration/UpdateWithAttachments'
+      this.editSchemeDetail(this.content)
+      // API = 'SchemeRegistration/UpdateWithAttachments'
       this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
     }
     if (this.schemeRegistrationForm.invalid) {
@@ -590,7 +706,6 @@ export class SchemeRegisterComponent implements OnInit {
           this.detailArray = []
           this.indexNumberStart = 0
           this.formdata = new FormData();
-          // this.fetchSchemeWithCustCode(this.schemeRegistrationForm.value.Code)
           Swal.fire({
             title: result.status,
             text: result.message || "",
@@ -627,79 +742,12 @@ export class SchemeRegisterComponent implements OnInit {
   }
   editSchemeDetail(data: any) {
 
-    let API = 'SchemeRegistration/UpdateSchemeRegistration/'+ data.SCH_CUSTOMER_ID
-    let params = {
-      "MID": 0,
-      "SCH_CUSTOMER_ID": this.commonService.nullToString(data.SCH_CUSTOMER_ID),
-      "SCH_CUSTOMER_CODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Code),
-      "SCH_CUSTOMER_NAME": this.commonService.nullToString(this.schemeRegistrationForm.value.Name),
-      "SCH_SCHEME_CODE": this.commonService.nullToString(this.schemeRegistrationForm.value.Name),
-      "SCH_METALCURRENCY": "string",
-      "SCH_JOIN_DATE": "2024-01-02T09:32:15.920Z",
-      "SCH_SCHEME_PERIOD": 0,
-      "SCH_FREQUENCY": "string",
-      "SCH_INST_AMOUNT_FC": 0,
-      "SCH_INST_AMOUNT_CC": 0,
-      "SCH_ASSURED_AMT_FC": 0,
-      "SCH_ASSURED_AMT_CC": 0,
-      "SCH_EXPIRE_DATE": "2024-01-02T09:32:15.920Z",
-      "SCH_REMINDER_DAYS": 0,
-      "SCH_REMINDER_MODE": "string",
-      "SCHEME_BONUS": 0,
-      "REMARKS": "string",
-      "SCH_UNITS": 0,
-      "SCH_CANCEL_AMT": 0,
-      "SCH_STATUS": "string",
-      "PAY_DATE": "2024-01-02T09:32:15.920Z",
-      "PAY_BRANCH_CODE": "string",
-      "PAY_VOCTYPE": "string",
-      "PAY_VOCNO": 0,
-      "PAY_YEARMONTH": "string",
-      "PAY_AMOUNTFC": 0,
-      "PAY_AMOUNTCC": 0,
-      "SCH_ALERT_EMAIL": "string",
-      "SCH_ALERT_MOBILE": "string",
-      "SCH_SEND_ALERT": true,
-      "PAN_NUMBER": "string",
-      "SCH_PAN_NUMBER": "string",
-      "VOCDATE": "2024-01-02T09:32:15.920Z",
-      "SCH_CANCEL": true,
-      "SCH_REDEEM": true,
-      "REDEEM_REFERENCE": "string",
-      "SCHEME_BRANCH": "string",
-      "Details": [
-        {
-          "UNIQUEID": 0,
-          "SCH_CUSTOMER_CODE": "string",
-          "SCH_CUSTOMER_ID": "string",
-          "SRNO": 0,
-          "PAY_DATE": "2024-01-02T09:32:15.920Z",
-          "PAY_AMOUNT_FC": 0,
-          "PAY_AMOUNT_CC": 0,
-          "PAY_STATUS": true,
-          "REMAINDER_DATE": "2024-01-02T09:32:15.920Z",
-          "REMAINDER_SEND": true,
-          "DT_BRANCH_CODE": "string",
-          "RCVD_DATE": "2024-01-02T09:32:15.920Z",
-          "RCVD_BRANCH_CODE": "string",
-          "RCVD_VOCTYPE": "string",
-          "RCVD_VOCNO": 0,
-          "RCVD_YEARMONTH": "string",
-          "RCVD_AMOUNTFC": 0,
-          "RCVD_AMOUNTCC": 0,
-          "SCHBAL_AMOUNTFC": 0,
-          "SCHBAL_AMOUNTCC": 0,
-          "SCH_PARTIALLY_PAID": true,
-          "RECEIPT_REF": "string",
-          "RECEIPT_MID": 0
-        }
-      ]
-    }
+    let API = 'SchemeRegistration/UpdateSchemeRegistration/' + data.SCH_CUSTOMER_ID
+    let params
     let Sub: Subscription = this.dataService.putDynamicAPI(API, params)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.close()
-          this.fetchSchemeWithCustCode(this.schemeRegistrationForm.value.Code)
+          this.close('reloadMainGrid')
           Swal.fire({
             title: result.status || 'updated',
             text: result.message || "",
@@ -765,7 +813,7 @@ export class SchemeRegisterComponent implements OnInit {
     let API = `Scheme/SchemeMaster?SCHEME_UNIQUEID=${SCHEME_UNIQUEID}`
     let Sub: Subscription = this.dataService.deleteDynamicAPI(API).subscribe((result) => {
       if (result.status == "Success") {
-        this.fetchSchemeWithCustCode(this.schemeRegistrationForm.value.Code)
+        this.close()
         Swal.fire({
           title: result.message || 'Scheme Deleted!',
           text: "",

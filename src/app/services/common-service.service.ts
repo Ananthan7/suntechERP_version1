@@ -269,6 +269,7 @@ export class CommonServiceService {
       'STONE': Number(this.allbranchMaster.BSQTYDECIMALS),
       'PURITY': 6,
       'RATE': 6,
+      'THREE': 3,
     };
   }
   /**USE: common fuction to format the Number to limit decimal places from branch master */
