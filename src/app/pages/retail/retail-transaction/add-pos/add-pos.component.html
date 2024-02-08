@@ -975,15 +975,17 @@
           <div class="col-xl-12 col-md-6" style="height: 140px; overflow-y: scroll">
             <table class="tabletd_gray">
               <tr>
-                <th style="width: 50%">Karat</th>
+                <th style="width: 30%">Karat</th>
                 <!-- <th style="width: 50%">Karat </th> -->
-                <th>Selling Price</th>
-                <!-- <th>Buying Price</th> -->
+                <!-- <th>Selling Price</th>
+                <th>Buying Price</th> -->
+                <th style="width: 35%">Sale</th>
+                <th style="width: 35%">Purchase Rate</th>
               </tr>
               <tr *ngFor="let krd of karatRateDetails; let id = index">
                 <td>{{ krd.KARAT_CODE }}</td>
                 <td style="text-align: right; padding-right: 3px">
-                  <input type="number" (change)="changeKaratRate($event, id)" style="text-align: right"
+                  <input type="number"  (change)="changeKaratRate($event, id)" style="text-align: right"
                     onwheel="this.blur()" [value]="krd.KARAT_RATE" class="karat_code" [readOnly]="
                       viewOnly ||
                       this.comFunc?.posKARATRATECHANGE.toString() == '0'
@@ -992,7 +994,7 @@
                     " />
                   <!-- {{ krd.KARAT_RATE }} -->
                 </td>
-                <!-- <td style="text-align:right;padding-right:3px;"> {{krd.POPKARAT_RATE}} </td> -->
+                <td style="text-align:right;padding-right:3px;"> {{krd.POPKARAT_RATE}} </td>
               </tr>
             </table>
           </div>

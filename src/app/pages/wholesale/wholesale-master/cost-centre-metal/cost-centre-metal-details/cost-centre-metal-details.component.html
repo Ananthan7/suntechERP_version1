@@ -34,7 +34,8 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="purchase" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="purchaseCodeData"
+                            (newRowClick)="purchaseCodeSelected($event)"></master-search>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
@@ -326,7 +327,8 @@
                             </div>
                         </div>
                         <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Dia purchase Account (UnFix)</label>
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Dia purchase Account
+                                (UnFix)</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="diapurchaseAccountUnFix" />

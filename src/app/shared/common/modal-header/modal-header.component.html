@@ -1,7 +1,7 @@
 <div class="items border-bottom">
     <div class="col-md-8">
         <div class="d-flex justify-content-start text-start">
-            <div class="p-1">
+            <div class="p-1" *ngIf="isViewSave">
                 <button type="button" class="btn btn-primary text-center"
                     *ngIf="editSaveBtnText && editSaveBtnText != ''; else elseBlock"
                     (click)="saveClicked()">
@@ -60,6 +60,18 @@
                 <button type="button" class="btn btn-danger text-center"
                     (click)="PostClicked()">
                     Post
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isViewPreview">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="PreviewClicked()">
+                    Preview
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isViewExport">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="ExportClicked()">
+                    Export
                 </button>
             </div>
             <div class="p-1 dropdown text-right" *ngIf="isViewMore">

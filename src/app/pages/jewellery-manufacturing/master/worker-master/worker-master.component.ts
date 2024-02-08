@@ -355,6 +355,10 @@ export class WorkerMasterComponent implements OnInit {
     });
   }
 
+  printBarcode(){
+    
+  }
+
   /**use: checkbox change */
   changedCheckbox(data: any) {
     let value = data.selectedRowsData

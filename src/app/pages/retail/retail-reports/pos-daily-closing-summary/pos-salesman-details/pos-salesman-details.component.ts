@@ -9,7 +9,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
   styleUrls: ['./pos-salesman-details.component.scss']
 })
 export class PosSalesmanDetailsComponent implements OnInit {
-
+  tableData: any[] = [];
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,

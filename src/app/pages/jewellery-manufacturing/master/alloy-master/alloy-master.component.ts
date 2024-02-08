@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class AlloyMasterComponent implements OnInit {
   @Input() content!: any;
-
+  viewMode: boolean = false;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   currentDate = new Date();
@@ -25,7 +25,6 @@ export class AlloyMasterComponent implements OnInit {
   url: any;
   numericValue!: number;
 
-  
   alloyMastereForm: FormGroup = this.formBuilder.group({
     mid: [],
     code: ['', [Validators.required]],
@@ -70,6 +69,11 @@ export class AlloyMasterComponent implements OnInit {
     stockCodeDes: [''],
     divCode: [''],
     hsncode: [''],
+    lasttransaction: [''],
+    fristtransaction: [''],
+    vendorRef: [''],
+    weightAvgCost: [''],
+    weightAvgCostDes: [''],
   });
 
   constructor(
@@ -78,8 +82,8 @@ export class AlloyMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-  ) { 
-    this.setInitialValues()
+  ) {
+
   }
 
   close(data?: any) {
@@ -88,11 +92,30 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.content.FLAG == 'EDIT') {
+      this.setInitialValues()
+    } else if (this.content.FLAG == 'VIEW') {
+      this.alloyMastereForm.disable()
+      this.viewMode = true
+      this.setInitialValues()
+    }
+
     this.setCompanyCurrency()
   }
-  setInitialValues(){
-    console.log(this.content , 'content');
-    
+  setInitialValues() {
+    console.log(this.content, 'content');
+    // 'DiamondStockMaster/GetDiamondStockMasterWithMid/2649104'
+    this.alloyMastereForm.controls.code.setValue(this.content.STOCK_CODE)
+    this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)
+    this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)
+    this.alloyMastereForm.controls.brand.setValue(this.content.BRAND_CODE)
+    this.alloyMastereForm.controls.category.setValue(this.content.CATEGORY_CODE)
+    this.alloyMastereForm.controls.costCenter.setValue(this.content.COST_CODE)
+    this.alloyMastereForm.controls.brand.setValue(this.content.DESIGN_CODE)
+    this.alloyMastereForm.controls.color.setValue(this.content.COLOR)
+    this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
+    this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
+    this.alloyMastereForm.controls.vendor.setValue(this.content.SALESCODE)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -432,8 +455,6 @@ export class AlloyMasterComponent implements OnInit {
 
   }
   setPostData() {
-    console.log(this.alloyMastereForm.value, 'fired');
-
     let postData = {
       ITEM: this.commonService.nullToString(this.alloyMastereForm.value.itemcode),
       STOCK_CODE: this.commonService.nullToString(this.alloyMastereForm.value.code),
@@ -512,7 +533,7 @@ export class AlloyMasterComponent implements OnInit {
       OPENED_BY: "",
       FIRST_TRN: this.commonService.nullToString(this.alloyMastereForm.value.fristtransaction),
       LAST_TRN: this.commonService.nullToString(this.alloyMastereForm.value.lasttransaction),
-      MID: 0,
+      MID: this.content.MID || 0,
       PRINTED: true,
       PURVOCTYPE_NO: "",
       PURPARTY: "",
@@ -890,25 +911,23 @@ export class AlloyMasterComponent implements OnInit {
 
   updateMeltingType() {
     let API = 'DiamondStockMaster/UpdateDiamondStockMaster/' + this.alloyMastereForm.value.code;
-
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, this.setPostData())
+    let postdata = this.setPostData()
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postdata)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2186') || 'Updated Successfully',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.alloyMastereForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
+        if (result.status == "Success") {
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2186') || 'Updated Successfully',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.alloyMastereForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
         } else {
           this.toastr.error('Not saved')
         }

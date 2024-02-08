@@ -23,7 +23,8 @@ export class JobAllocationComponent implements OnInit {
   yearMonth?: String;
   @Input() content!: any; 
   tableData: any[] = [];  
-  columnheadItemDetails:any[] = ['Design','Order. No','Process','Worker','Doc. Attatchment','Std. Time','Pirority','Customer','Job Number','Unq. Job. Id','Pcs'];
+  columnheadItemDetails:any[] = ['Design','Order. No','Process','Worker','Doc. Attachment','Std. Time','Pirority','Customer','Job Number','Unq. Job. Id','Pcs'];
+  columnheadOthers:any[]=['Design','Order No','Process','Worker','Doc Attachment','Std Time','Priority','Customer','Job Number','Unq Job Id','Pcs']
   divisionMS: any = 'ID';
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
