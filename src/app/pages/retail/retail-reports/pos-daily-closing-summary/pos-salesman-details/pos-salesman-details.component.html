@@ -1,18 +1,24 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Daily Closing Summary</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Salesman Wise Details</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
+ <!-- modal header component -->
+ <modal-header [isViewSave]="false" [isViewPreview]="true" [isViewExport]="true" [isViewDelete]="false" [isViewMore]="false" (cancelClick)="close()"></modal-header>
 
 <!-- content section -->
 <div class="container-fluid pt-3">
     <div class="row my-3">
         <div class="col-md-12">
-            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+            <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
+                [allowColumnReordering]="true" height="200"  [dataSource]="tableData">
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-selection mode="multiple"></dxo-selection>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
                 <dxi-column [width]="100" dataField="Salesman">
                 </dxi-column>
-                <dxi-column [width]="100" dataField="#Dos"> </dxi-column>
+                <dxi-column [width]="100" dataField="#Docs"> </dxi-column>
                 <dxi-column [width]="100" caption="Metal">
                     <dxi-column [width]="100" caption="Qty" dataField="Metal_Qty">
                     </dxi-column>
@@ -36,6 +42,18 @@
                     </dxi-column>
                 </dxi-column>
                 <dxi-column [width]="100" dataField="Profit"> </dxi-column>
+                <dxo-summary>
+                    <dxi-total-item column="Qty"> </dxi-total-item>
+                    <dxi-total-item column="Mkg Amount"> </dxi-total-item>
+                    <dxi-total-item column="Metal Amount"> </dxi-total-item>
+                    <dxi-total-item column="Total"> </dxi-total-item>
+                    <dxi-total-item column="Making"> </dxi-total-item>
+                    <dxi-total-item column="Metal"> </dxi-total-item>
+                    <dxi-total-item column="Qty/Pcs"> </dxi-total-item>
+                    <dxi-total-item column="Amount"> </dxi-total-item>
+                    <dxi-total-item column="Cost"> </dxi-total-item>
+                    <dxi-total-item column="Profit"> </dxi-total-item>
+                </dxo-summary>
             </dx-data-grid>
         </div>
     </div>

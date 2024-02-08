@@ -72,6 +72,7 @@ import { FormatSixDecimalDirective } from './directives/format-six-decimal.direc
 import { CalendarModule } from 'primeng/calendar';
 import { UppercaseDirective } from './directives/uppercase.directive';
 import { DurationPickerComponent } from './common/duration-picker/duration-picker.component';
+import { FormatThreeDecimalDirective } from './directives/format-three-decimal.directive';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -100,6 +101,7 @@ import { DurationPickerComponent } from './common/duration-picker/duration-picke
     FormatSixDecimalDirective,
     UppercaseDirective,
     DurationPickerComponent,
+    FormatThreeDecimalDirective,
   ],
   imports: [
     CommonModule,
@@ -173,6 +175,7 @@ import { DurationPickerComponent } from './common/duration-picker/duration-picke
     MetalDecimalDirective,
     StoneDecimalDirective,
     FormatSixDecimalDirective,
+    FormatThreeDecimalDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,

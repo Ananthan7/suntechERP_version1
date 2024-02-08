@@ -44,7 +44,7 @@
                                             <mat-select (selectionChange)="onPriceTypeChange()"
                                                 formControlName="priceMethod">
                                                 <mat-option *ngFor="let priceType of priceTypeList"
-                                                    [value]="priceType.value" >
+                                                    [value]="priceType.value" [disabled]="viewMode">
                                                     {{ priceType.type }}
                                                 </mat-option>
                                             </mat-select>
@@ -64,7 +64,7 @@
                                         </mat-form-field>
                                         <mat-form-field style="width: 100px; margin-right: 10px;">
                                             <input type="number" style="text-align: right;"
-                                                matInput AmountDecimalInput formControlName="priceValue" [required]="required" />
+                                                matInput AmountDecimalInput formControlName="priceValue" [required]="required" [readonly]="viewMode"/>
                                         </mat-form-field>
 
                                         <mat-form-field style="width: 80px; margin-right: 10px;">

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./process-master.component.scss']
 })
 export class ProcessMasterComponent implements OnInit {
+  
   @Input() content!: any;
   viewMode: boolean = false;
   tableData: any[] = [];
@@ -26,6 +27,12 @@ export class ProcessMasterComponent implements OnInit {
   islossReadOnly = true;
   isRecovReadOnly = true;
   isAlloWGainReadOnly = true;
+  processMasterForm !: FormGroup;
+
+  lossData: any;
+
+  maxTime:any;
+  standTime:any;
 
   yourContent = {
     standardTime: {
@@ -42,6 +49,7 @@ export class ProcessMasterComponent implements OnInit {
       totalMinutes: 0,
     }
   }
+
 
 
   updateStandardTime(duration: any) {
@@ -126,61 +134,8 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   maxInputLength: number = 2
-  processMasterForm: FormGroup = this.formBuilder.group({
-    mid: [''],
-    processCode: ['', [Validators.required]],
-    processDesc: ['', [Validators.required]],
-    processType: [null],
-    stand_time: [''],
-    WIPaccount: ['', [Validators.required]],
-    max_time: [''],
-    Position: [''],
-    trayWeight: [''],
-    approvalCode: [''],
-    approvalProcess: [''],
-    recStockCode: [''],
-    labour_charge: [''],
-    accountStart: [''],
-    accountMiddle: [''],
-    accountEnd: [''],
-    loss: [false],
-    recovery: [false],
-    allowGain: [false],
-    standard_start: [''],
-    standard_end: [''],
-    min_start: [''],
-    min_end: [''],
-    max: [''],
-    accode_start: [''],
-    accode_end: [''],
-    accode_middle: [''],
-    loss_on_gross: [false],
-    FinalProcess: [false],
-    Setting: [false],
-    LabProcess: [false],
-    WaxProcess: [false],
-    Stone: [false],
-    MergePices: [false],
-    LockWeight: [false],
-    HaveTreeNo: [false],
-    NonQuantity: [false],
-    Consumable: [false],
-    RefineryAutoProcess: [false],
-    ApplyAutoLossToRefinery: [false],
-    RepairProcess: [false],
-    Metal: [false],
-    ApprovalRequired: [false],
-    DeductPureWeight: [false],
-    StoneIncluded: [false],
-    TimeCalculateonProcess: [false],
-    RecoveryProcess: [false],
-    AutoTransfer: [false],
-    ApplySetting: [false],
-    loss_standard: [''],
-    loss_min: [''],
-    loss_max: [''],
 
-  })
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -189,20 +144,101 @@ export class ProcessMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) {
-    this.setInitialValues()
+    // this.setInitialValues()
   }
 
   ngOnInit(): void {
-    console.log()
-    this.getProcessTypeOptions()
+
+    this.processMasterForm = this.formBuilder.group({
+      mid: [''],
+      processCode: ['', [Validators.required]],
+      processDesc: ['', [Validators.required]],
+      processType: [null],
+      stand_time: [''],
+      WIPaccount: ['', [Validators.required]],
+      max_time: [''],
+      Position: [''],
+      trayWeight: [''],
+      approvalCode: [''],
+      approvalProcess: [''],
+      recStockCode: [''],
+      labour_charge: [''],
+      accountStart: [''],
+      accountMiddle: [''],
+      accountEnd: [''],
+      loss: [false],
+      recovery: [false],
+      allowGain: [false],
+      accode_start: [''],
+      accode_end: [''],
+      accode_middle: [''],
+      loss_on_gross: [false],
+      FinalProcess: [false],
+      Setting: [false],
+      LabProcess: [false],
+      WaxProcess: [false],
+      Stone: [false],
+      MergePices: [false],
+      LockWeight: [false],
+      HaveTreeNo: [false],
+      NonQuantity: [false],
+      Consumable: [false],
+      RefineryAutoProcess: [false],
+      ApplyAutoLossToRefinery: [false],
+      RepairProcess: [false],
+      Metal: [false],
+      ApprovalRequired: [false],
+      DeductPureWeight: [false],
+      StoneIncluded: [false],
+      TimeCalculateonProcess: [false],
+      RecoveryProcess: [false],
+      AutoTransfer: [false],
+      ApplySetting: [false],
+      loss_standard: [''],
+      loss_min: ['', [Validators.min(0)]],
+      loss_max: [''],
+      standard_start: [''],
+      standard_end: [''],
+      min_start: [''],
+      min_end: ['', [ Validators.min(0)]],
+      max: [''],
+  
+    })
+
+    this.islossReadOnly = true;
+    this.isRecovReadOnly = true;
+    this.isAlloWGainReadOnly = true;
+
+    this.setInitialValues()
+     this.getProcessTypeOptions()
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
       // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
+      
     }
   }
+
+  validateLossRange() {
+    console.log(this.processMasterForm.value.loss_standard)
+    console.log(this.processMasterForm.value.loss_min)
+    console.log(this.processMasterForm.value.loss_max)
+
+    const stdLoss = this.processMasterForm.value.loss_standard;
+    const minLoss = this.processMasterForm.value.loss_min;
+    const maxLoss = this.processMasterForm.value.loss_max;
+
+    if (minLoss < stdLoss && stdLoss < maxLoss) {
+      this.lossData = true;
+    } else {
+      this.lossData = false;
+    }
+    
+  }
+
+
   // USE: get select options Process TypeMaster
   private getProcessTypeOptions(): void {
     let API = 'ComboFilter/PROCESS TYPE MASTER';
@@ -221,6 +257,7 @@ export class ProcessMasterComponent implements OnInit {
 
   }
   private setFormValues() {
+    console.log(this.content);
     if (!this.content) return
     this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
     this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
@@ -263,9 +300,23 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.accountMiddle.setValue(this.content.RECOV_ACCODE);
     this.processMasterForm.controls.accountStart.setValue(this.content.LOSS_ACCODE);
     this.processMasterForm.controls.accountEnd.setValue(this.content.GAIN_ACCODE);
-    this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
-    this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
-  }
+    // this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
+   // this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
+    // this.formattedMaxTime.controls.setValue(this.content.STD_TIME);
+    // this.formattedMaxTime.controls.setValue(this.content.MAX_TIME);
+
+    //this.maxTime = this.content.MAX_TIME;
+    this.standTime = this.content
+
+    this.maxTime = this.content
+
+    this.formattedTime = this.content.STD_TIME;
+
+    this.formattedMaxTime = this.content.MAX_TIME;
+
+
+
+   }
   onchangeCheckBox(e: any) {
     if (e == true) {
       return 1;
@@ -276,6 +327,14 @@ export class ProcessMasterComponent implements OnInit {
 
   // final save
   formSubmit() {
+    this.validateLossRange();
+    console.log(this.lossData)
+
+    if(this.lossData == false){
+      this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
+    }
+    else{
+
     console.log(this.processMasterForm.value.stand_time, 'this.processMasterForm.value.stand_time');
 
     // let time = this.commonService.timeToMinutes(this.processMasterForm.value.stand_time)
@@ -292,8 +351,8 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/InsertProcessMasterDJ'
     let postData = {
       "MID": 0,
-      "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
-      "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
+      "PROCESS_CODE": this.processMasterForm.value.processCode || "",
+      "DESCRIPTION": this.processMasterForm.value.processDesc || "",
       // "STD_TIME": this.commonService.timeToMinutes(this.formattedTime)  || "",
       // "MAX_TIME": this.commonService.timeToMinutes(this.formattedMaxTime)  || "",
        "STD_TIME": this.formattedTime  || "",
@@ -356,31 +415,39 @@ export class ProcessMasterComponent implements OnInit {
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.processMasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
+    .subscribe((result) => {
+      if (result.response) {
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.processMasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error('Error: ' + result.message || 'An error occurred during the save process');
         }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+      } else {
+        this.toastr.error('Not saved');
+      }
+    }, err => {
+      this.toastr.error('An error occurred: ' + err);
+      console.error(err);
+    });
+  
+  this.subscriptions.push(Sub);
 
     console.log(this.processMasterForm.value.stand_time);
   }
+}
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -446,14 +513,12 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + this.processMasterForm.value.processCode
     let postData = {
       "MID": 0,
-      "PROCESS_CODE": this.processMasterForm.value.toUpperCase(),
-      "DESCRIPTION": this.processMasterForm.value.toUpperCase(),
-      // "STD_TIME": this.commonService.emptyToZero(this.processMasterForm.value.stand_time),
-      // "MAX_TIME": this.commonService.emptyToZero(this.processMasterForm.value.max_time),
-      // "PROCESS_CODE": this.processMasterForm.value.processCode.toUpperCase(),
-      // "DESCRIPTION": this.processMasterForm.value.processDesc.toUpperCase(),
-      "STD_TIME": this.processMasterForm.value.stand_time || "",
-      "MAX_TIME": this.processMasterForm.value.max_time || "",
+      "PROCESS_CODE": this.processMasterForm.value.processCode || "",
+      "DESCRIPTION": this.processMasterForm.value.processDesc || "",
+      // "STD_TIME": this.commonService.timeToMinutes(this.formattedTime)  || "",
+      // "MAX_TIME": this.commonService.timeToMinutes(this.formattedMaxTime)  || "",
+       "STD_TIME": this.formattedTime  || "",
+       "MAX_TIME": this.formattedMaxTime  || "",
       "LOSS_ACCODE": this.processMasterForm.value.accountStart,
       "WIP_ACCODE": this.processMasterForm.value.WIPaccount,
       "CURRENCY_CODE": "",
@@ -535,21 +600,23 @@ export class ProcessMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+
   /**USE: delete worker master from row */
   deleteProcessMaster() {
-    if (!this.content.WORKER_CODE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
+    // if (!this.content.WORKER_CODE) {
+    //   Swal.fire({
+    //     title: '',
+    //     text: 'Please Select data to delete!',
+    //     icon: 'error',
+    //     confirmButtonColor: '#336699',
+    //     confirmButtonText: 'Ok'
+    //   }).then((result: any) => {
+    //     if (result.value) {
+    //     }
+    //   });
+    //   return
+    // }
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",

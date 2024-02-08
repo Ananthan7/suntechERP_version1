@@ -22,6 +22,7 @@ export class CastingTreeUpComponent implements OnInit {
   closeResult:any;
   pageTitle: any;
   currentFilter: any;
+  currentDate = new Date();
   // columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Weight','Metal Weight','Stone Weight','RCVD Gross Weight','Karat Code','Purity','Pure Weight','Metal Color','RCVD Pure Weight','Stock Code','Pieces','Job Pcs','Loss Wt','Loss Pure'];
   // columnheader : any[] = ['Type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
 
@@ -127,15 +128,18 @@ export class CastingTreeUpComponent implements OnInit {
      private dataService: SuntechAPIService,
      private toastr: ToastrService,
      private commonService: CommonServiceService,
+     private comService: CommonServiceService,
    ) { }
  
    ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    this.castingTreeUpFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
 
     console.log(this.content);
     if(this.content){
       this.setFormValues()
+      // this.setAllInitialValues()
     }
    }
  
@@ -155,26 +159,75 @@ export class CastingTreeUpComponent implements OnInit {
       this.castingTreeUpFrom.controls.startdate.setValue(new Date(date));
     }
   }
+  setAllInitialValues() {
+    console.log(this.tableData,'working')
+    if (!this.content) return
+    let API = `JobTreeMasterDJ/GetJobTreeMasterDJWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          data.Details.forEach((element:any) => {
+            this.tableData.push({
+              SRNO: element.SRNO,
+              Job_Code:element.JOB_CODE,
+              Unique_job_ID:element.UNIQUEID,
+              Design_Code:element.DESIGN_CODE,
+              Gross_Weight:element.GROSS_WT,
+              Metal_Weight:element.METAL_WT,
+              Stone_Weight:element.STONE_WT,
+              RCVD_Gross_Weight:element.RCVD_GROSS_WT,
+              Karat_Code:element.KARAT_CODE,
+              Purity:element.PURITY,
+              Pure_Weight:element.PURE_WT,
+              Metal_Color: element.COLOR,
+              RCVD_Pure_Weight:element.RCVD_PURE_WT,
+              Stock_Code:element.STOCK_CODE,
+              Pieces:element.PCS,
+              Job_Pcs:element.JOB_PCS,
+              Loss_Wt:element.LOSSWT,
+              Loss_Pure:element.LOSS_PURE_WT
+
+            })
+          });
+          this.castingTreeUpFrom.controls.vocNo.setValue(data.VOCNO)
+          this.castingTreeUpFrom.controls.vocType.setValue(data.VOCTYPE)
+          this.castingTreeUpFrom.controls.processCode.setValue(data.PROCESS_CODE)
+          this.castingTreeUpFrom.controls.cylinder.setValue(data.CYLINDER_CODE)
+          this.castingTreeUpFrom.controls.worker.setValue(data.WORKER)
+          this.castingTreeUpFrom.controls.toProcess.setValue(data.TO_PROCESS_CODE)
+          this.castingTreeUpFrom.controls.toWorker.setValue(data.TO_WORKER_CODE)
+          this.castingTreeUpFrom.controls.color.setValue(data.COLOR)
+         
+          
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   setFormValues() {
     if(!this.content) return
-    console.log(this.content);
+   
 
-    this.dataService.getDynamicAPI('JobTreeMasterDJ/GetJobTreeMasterDJ'+this.content.APPR_CODE).subscribe((data) => {
-      if (data.status == 'Success') {
+    // this.dataService.getDynamicAPI('JobTreeMasterDJ/GetJobTreeMasterDJ'+this.content.APPR_CODE).subscribe((data) => {
+    //   if (data.status == 'Success') {
 
-        this.tableData = data.response.approvalDetails;
+    //     this.tableData = data.response.approvalDetails;
        
 
       }
-    });
+  //   });
    
-  }
+  // }
  
  
    castingTreeUpFrom: FormGroup = this.formBuilder.group({
     vocType:[''],
-    vocNo:[''],
+    vocNo:['1',[Validators.required]],
     vocDate:[''],
     processCode:[''],
     cylinder:[''],
@@ -201,24 +254,24 @@ export class CastingTreeUpComponent implements OnInit {
       "UNIQUEID": 12345,
       "APPR_CODE": "string",
       "SRNO": srno,
-      "Job_Code": "string",
-      'Unique_job_ID': "string",
-      'Design_Code': "string",
-      'Gross_Weight': "string",
-      'Metal_Weight': "string",
-      'Stone_Weight': "string",
-      'RCVD_Gross_Weight': "string",
-      'Karat_Code': "string",
-      'Purity': "string",
-      'Pure_Weight': "string",
-      'Metal_Color': "string",
-      'RCVD_Pure_Weight': "string",
-      'Stock_Code': "string",
-      'Pieces': "string",
-      'Job_Pcs': "string",
-      'Loss_Wt': "string",
-      'Loss_Pure': "string",
-      "EMAIL_ID": "test",
+      "Job_Code": this.castingTreeUpFrom.value.Job_Code,
+      'Unique_job_ID': this.castingTreeUpFrom.value.Unique_job_ID,
+      'Design_Code': this.castingTreeUpFrom.value.Design_Code,
+      'Gross_Weight': this.castingTreeUpFrom.value.Gross_Weight,
+      'Metal_Weight': this.castingTreeUpFrom.value.Metal_Weight,
+      'Stone_Weight': this.castingTreeUpFrom.value.Stone_Weight,
+      'RCVD_Gross_Weight': this.castingTreeUpFrom.value.RCVD_Gross_Weight,
+      'Karat_Code': this.castingTreeUpFrom.value.Karat_Code,
+      'Purity': this.castingTreeUpFrom.value.Purity,
+      'Pure_Weight': this.castingTreeUpFrom.value.Pure_Weight,
+      'Metal_Color': this.castingTreeUpFrom.value.Metal_Color,
+      'RCVD_Pure_Weight': this.castingTreeUpFrom.value.RCVD_Pure_Weight,
+      'Stock_Code': this.castingTreeUpFrom.value.Stock_Code,
+      'Pieces': this.castingTreeUpFrom.value.Pieces,
+      'Job_Pcs': this.castingTreeUpFrom.value.Job_Pcs,
+      'Loss_Wt': this.castingTreeUpFrom.value.Loss_Wt,
+      'Loss_Pure': this.castingTreeUpFrom.value.Loss_Pure,
+      "EMAIL_ID": this.castingTreeUpFrom.value.EMAIL_ID,
     };
     this.tableData.push(data);
  }
@@ -317,26 +370,26 @@ deleteTableData(){
 }
 
    formSubmit(){
- 
+    console.log(this.update,'working')
      if(this.content && this.content.FLAG == 'EDIT'){
        this.update()
        return
      }
-     if (this.castingTreeUpFrom.invalid) {
-       this.toastr.error('select all required fields')
-       return
-     }
-   
+    //  if (this.castingTreeUpFrom.invalid) {
+    //    this.toastr.error('select all required fields')
+    //    return
+    //  }
+
      let API = 'JobTreeMasterDJ/InsertJobTreeMasterDJ'
      let postData = {
       "MID": 0,
-      "VOCTYPE": this.castingTreeUpFrom.value.VOCTYPE,
+      "VOCTYPE": this.comService.nullToString(this.castingTreeUpFrom.value.vocType),
       "BRANCH_CODE": this.branchCode,
-      "VOCNO": this.castingTreeUpFrom.value.VOCNO,
+      "VOCNO": 0,
       "YEARMONTH": this.yearMonth,
-      "VOCDATE": this.castingTreeUpFrom.value.VOCDATE,
+      "VOCDATE":this.comService.formatDateTime(this.currentDate),
       "DOCTIME": "2023-10-21T07:22:12.302Z",
-      "SMAN": this.castingTreeUpFrom.value.enteredBy,
+      "SMAN": this.comService.nullToString(this.castingTreeUpFrom.value.SMAN),
       "REMARKS": "",
       "NAVSEQNO": 0,
       "KARAT_CODE": this.castingTreeUpFrom.value.karatCode,
@@ -344,13 +397,13 @@ deleteTableData(){
       "METAL_WT": 0,
       "STONE_WT": this.castingTreeUpFrom.value.stoneWt,
       "BASE_WT": 0,
-      "TREE_WT": this.castingTreeUpFrom.value.tree,
-      "WAX_WT": this.castingTreeUpFrom.value.waxWt,
+      "TREE_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.TREE_WT),
+      "WAX_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.WAX_WT),
       "WORKER_CODE": this.castingTreeUpFrom.value.worker,
       "PROCESS_CODE": this.castingTreeUpFrom.value.processCode,
       "CONV_FACT": this.castingTreeUpFrom.value.convFact,
       "STOCK_CODE": "",
-      "RCVD_MET_WT": this.castingTreeUpFrom.value.reqMetal,
+      "RCVD_MET_WT": this.castingTreeUpFrom.value.RCVD_MET_WT,
       "PRINT_COUNT": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",
@@ -364,7 +417,7 @@ deleteTableData(){
       "SYSTEM_DATE": "2023-10-21T07:22:12.302Z",
       "JOB_TREEJOB_DETAIL_DJ": [
         {
-          "DT_VOCTYPE": "str",
+          "DT_VOCTYPE": this.comService.nullToString(this.castingTreeUpFrom.value.vocType),
           "DT_BRANCH_CODE": this.branchCode,
           "DT_VOCNO": 0,
           "DT_YEARMONTH": this.yearMonth,
@@ -374,7 +427,7 @@ deleteTableData(){
           "UNQ_DESIGN_ID": "",
           "GROSS_WT": 0,
           "METAL_WT": 0,
-          "STONE_WT": 0,
+          "STONE_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.stoneWt),
           "KARAT_CODE": "",
           "RCVD_GROSS_WT": 0,
           "RCVD_METAL_WT": 0,
@@ -397,12 +450,16 @@ deleteTableData(){
           "IS_REJECT": true,
           "REASON": "",
           "REJ_REMARKS": "",
-          "ATTACHMENT_FILE": ""
+          "ATTACHMENT_FILE": "",
+          "D_REMARKS": "string",
+          "ENGRAVE_TEXT": "string",
+          "IS_AUTHORISE": true,
+          "JOB_PCS": 0
         }
       ],
       "JOB_TREESTOCK_DETAIL_DJ": [
         {
-          "DT_VOCTYPE": "str",
+          "DT_VOCTYPE":this.commonService.nullToString(this.castingTreeUpFrom.value.vocType),
           "DT_BRANCH_CODE": this.branchCode,
           "DT_VOCNO": 0,
           "DT_YEARMONTH": this.yearMonth,
@@ -459,14 +516,14 @@ deleteTableData(){
        return
      }
    
-     let API = 'JobTreeMasterDJ/UpdateJobTreeMasterDJ/'+ this.castingTreeUpFrom.value.branchCode + this.castingTreeUpFrom.value.voctype + this.castingTreeUpFrom.value.vocno + this.castingTreeUpFrom.value.yearMonth;
+     let API = `JobTreeMasterDJ/UpdateJobTreeMasterDJ//${this.branchCode}/${this.castingTreeUpFrom.value.vocType}/${this.castingTreeUpFrom.value.vocNo}/${this.comService.yearSelected}` ;
      let postData = {
       "MID": 0,
       "VOCTYPE": this.castingTreeUpFrom.value.vocType,
       "BRANCH_CODE": this.branchCode,
       "VOCNO": this.castingTreeUpFrom.value.vocNo,
       "YEARMONTH": this.yearMonth,
-      "VOCDATE": this.castingTreeUpFrom.value.vocDate,
+      "VOCDATE":this.comService.formatDateTime(this.currentDate),
       "DOCTIME": "2023-10-21T07:22:12.302Z",
       "SMAN": this.castingTreeUpFrom.value.enteredBy,
       "REMARKS": "",
@@ -474,7 +531,7 @@ deleteTableData(){
       "KARAT_CODE": this.castingTreeUpFrom.value.karatCode,
       "COLOR": this.castingTreeUpFrom.value.color,
       "METAL_WT": 0,
-      "STONE_WT": this.castingTreeUpFrom.value.stoneWt,
+      "STONE_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.stoneWt),
       "BASE_WT": 0,
       "TREE_WT": this.castingTreeUpFrom.value.tree,
       "WAX_WT": this.castingTreeUpFrom.value.waxWt,
@@ -482,7 +539,7 @@ deleteTableData(){
       "PROCESS_CODE": this.castingTreeUpFrom.value.processCode,
       "CONV_FACT": this.castingTreeUpFrom.value.convFact,
       "STOCK_CODE": "",
-      "RCVD_MET_WT": this.castingTreeUpFrom.value.reqMetal,
+      "RCVD_MET_WT": this.comService.nullToString(this.castingTreeUpFrom.value.reqMetal),
       "PRINT_COUNT": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",

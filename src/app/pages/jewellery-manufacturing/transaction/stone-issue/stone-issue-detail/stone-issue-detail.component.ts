@@ -90,11 +90,11 @@ export class StoneIssueDetailComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
+    LOOKUPID: 41,
+    SEARCH_FIELD: 'Stock_Code',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "Stock_Code<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -196,9 +196,9 @@ export class StoneIssueDetailComponent implements OnInit {
   
   stockCodeSelected(e: any) {
     console.log(e);
-    this.stoneissuedetailsFrom.controls.stock.setValue(e.DIVISION_CODE);
+    this.stoneissuedetailsFrom.controls.stock.setValue(e.Item);
     this.stoneissuedetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
-    this.stoneissuedetailsFrom.controls.stockDes.setValue(e.DESCRIPTION);
+    this.stoneissuedetailsFrom.controls.stockDes.setValue(e.STOCK_DESCRIPTION);
   }
 
   close(data?: any) {

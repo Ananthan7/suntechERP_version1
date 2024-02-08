@@ -101,19 +101,19 @@ export class RetailGridComponent implements OnInit {
   }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
-    if (data?.refresh) {
-      this.pageIndex = 1;
-      this.orderedItems = [];
-      this.orderedItemsHead = [];
-    }
-    // if (data) {
+    // if (data?.refresh) {
     //   this.pageIndex = 1;
     //   this.orderedItems = [];
     //   this.orderedItemsHead = [];
-    //   this.vocType = data.VOCTYPE;
-    //   this.mainVocType = data.MAIN_VOCTYPE;
-    //   this.tableName = data.HEADER_TABLE;
     // }
+    if (data) {
+      this.pageIndex = 1;
+      this.orderedItems = [];
+      this.orderedItemsHead = [];
+      this.vocType = data.VOCTYPE;
+      this.mainVocType = data.MAIN_VOCTYPE;
+      this.tableName = data.HEADER_TABLE;
+    }
     else {
       this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
