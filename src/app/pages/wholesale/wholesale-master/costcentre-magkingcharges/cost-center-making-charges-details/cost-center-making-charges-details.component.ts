@@ -15,13 +15,13 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 })
 export class CostCenterMakingChargesDetailsComponent implements OnInit {
   divisionMS: any = 'ID';
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
 
 
-  constructor( private activeModal: NgbActiveModal,
-    private modalService : NgbModal,
+  constructor(private activeModal: NgbActiveModal,
+    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
@@ -36,44 +36,44 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
   }
 
   costcenterdiamonddetailsForm: FormGroup = this.formBuilder.group({
-    branch:['',[Validators.required]],
-    purchase:['',[Validators.required]],
-    purchaseReturn:['',[Validators.required]],
-    purchaseImport:[''],
-    purchaseImportReturn:[''],
-    stoneValueInPurchase:[''],
-    repairPurchase:[''],
-    kundanValueInPurchase:[''],
-    Wholesales:[''],
-    wholesalesReturn:[''],
-    exportSales:['',[Validators.required]],
-    exportSalesReturn:['',[Validators.required]],
-    stoneValueInSales:['',[Validators.required]],
-    repairPurchaseReturn:[''],
-    kundanValueInSales:[''],
-    retailSales:[''],
-    retailSalesReturn:[''],
-    exhibitionSales:['',[Validators.required]],
-    exhibitionSalesReturn:['',[Validators.required]],
-    repairSales:['',[Validators.required]],
-    repairSalesReturn:['',[Validators.required]],
-    wastageInSales:['',[Validators.required]],
-    openingStock:[''],
-    physicalStock:['',[Validators.required]],
-    closingStock:['',[Validators.required]],
-    stoneValueInOpening:[''],
-    stoneChargePurchase:[''],
-    kundanValueInOpening:[''],
-    branchTransferIn:['',[Validators.required]],
-    branchTransferOUT:['',[Validators.required]],
-    adjustments:['',[Validators.required]],
-    manufacture:['',[Validators.required]],
-    stampChargeSales:[''],
-    stoneDifference:['',[Validators.required]],
-    purityDifference:['',[Validators.required]],
-    wastageInPurchase:['',[Validators.required]],
-    wastageDiscount:[''],
-    repairUnfixPurchase:['',[Validators.required]]
+    branch: ['', [Validators.required]],
+    purchase: ['', [Validators.required]],
+    purchaseReturn: ['', [Validators.required]],
+    purchaseImport: [''],
+    purchaseImportReturn: [''],
+    stoneValueInPurchase: [''],
+    repairPurchase: [''],
+    kundanValueInPurchase: [''],
+    Wholesales: [''],
+    wholesalesReturn: [''],
+    exportSales: ['', [Validators.required]],
+    exportSalesReturn: ['', [Validators.required]],
+    stoneValueInSales: ['', [Validators.required]],
+    repairPurchaseReturn: [''],
+    kundanValueInSales: [''],
+    retailSales: [''],
+    retailSalesReturn: [''],
+    exhibitionSales: ['', [Validators.required]],
+    exhibitionSalesReturn: ['', [Validators.required]],
+    repairSales: ['', [Validators.required]],
+    repairSalesReturn: ['', [Validators.required]],
+    wastageInSales: ['', [Validators.required]],
+    openingStock: [''],
+    physicalStock: ['', [Validators.required]],
+    closingStock: ['', [Validators.required]],
+    stoneValueInOpening: [''],
+    stoneChargePurchase: [''],
+    kundanValueInOpening: [''],
+    branchTransferIn: ['', [Validators.required]],
+    branchTransferOUT: ['', [Validators.required]],
+    adjustments: ['', [Validators.required]],
+    manufacture: ['', [Validators.required]],
+    stampChargeSales: [''],
+    stoneDifference: ['', [Validators.required]],
+    purityDifference: ['', [Validators.required]],
+    wastageInPurchase: ['', [Validators.required]],
+    wastageDiscount: [''],
+    repairUnfixPurchase: ['', [Validators.required]]
   })
 
   branchCodeData: MasterSearchModel = {
@@ -104,13 +104,13 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  purchaseCodeSelected(e: any) {   
-    console.log(e);    
+  purchaseCodeSelected(e: any) {
+    console.log(e);
   }
 
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -118,9 +118,9 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'CostCenterMaster/InsertCostCenterMaster'
-    let postData =  {
+    let postData = {
       "UNIQUE_ID": 0,
       "COST_CODE": "string",
       "TYPE": "string",
@@ -138,7 +138,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "MANUFACTURING": this.costcenterdiamonddetailsForm.value.manufacture,
       "OPENINGBALANCE": "string",
       "CLOSINGSTOCK": this.costcenterdiamonddetailsForm.value.closingStock,
-      "PHYSICALSTOCK":this.costcenterdiamonddetailsForm.value.physicalStock,
+      "PHYSICALSTOCK": this.costcenterdiamonddetailsForm.value.physicalStock,
       "OPENINGOWNSTOCK": "string",
       "CLOSINGOWNSTOCK": "string",
       "OWNSTOCK": "string",
@@ -298,16 +298,16 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "PLATCHGAC": "string",
       "CERTCHGAC": "string"
     }
-  this.close(postData);
+    this.close(postData);
   }
-  
-  update(){
+
+  update() {
     if (this.costcenterdiamonddetailsForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'CostCenterMaster/UpdateCostCenterMaster/'+ this.costcenterdiamonddetailsForm.value.costcode + this.costcenterdiamonddetailsForm.value.type
+
+    let API = 'CostCenterMaster/UpdateCostCenterMaster/' + this.costcenterdiamonddetailsForm.value.costcode + this.costcenterdiamonddetailsForm.value.type
     let postData = {
       "UNIQUE_ID": 0,
       "COST_CODE": "string",
@@ -370,7 +370,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "PTRESR_ACCODE": "string",
       "COSTADJUSTMENT": this.costcenterdiamonddetailsForm.value.costadjustment || "",
       "DISMANTLINGLOSS": this.costcenterdiamonddetailsForm.value.dismantlingloss || "",
-      "DISMANTLING_ACCODE":this.costcenterdiamonddetailsForm.value.dismantling || "",
+      "DISMANTLING_ACCODE": this.costcenterdiamonddetailsForm.value.dismantling || "",
       "STOCK_REVALUATION": "string",
       "LOTMIX_ACCODE": this.costcenterdiamonddetailsForm.value.lotmixaccount || "",
       "SRNO": 0,
@@ -486,10 +486,10 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "PLATCHGAC": "string",
       "CERTCHGAC": "string"
     }
-  
-    this.close({postData});
+
+    this.close({ postData });
   }
-  
+
   deleteRecord() {
     if (!this.content.MID) {
       Swal.fire({
@@ -555,7 +555,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       }
     });
   }
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
