@@ -460,9 +460,12 @@
                         caption="Receipt Amount"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column 
+                    <dxi-column width="200"
                         caption="Attachment"
                         cellTemplate="files"  alignment="center">
+                    </dxi-column>
+                    <dxi-column
+                        caption=""  alignment="center">
                     </dxi-column>
                     <div *dxTemplate="let data of 'PayStatus'">
                         <mat-checkbox></mat-checkbox>

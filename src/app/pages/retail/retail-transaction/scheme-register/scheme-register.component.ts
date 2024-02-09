@@ -624,7 +624,6 @@ export class SchemeRegisterComponent implements OnInit {
 
     // this.detailArray.forEach((item: any, index: any) => {
     // delete item.schemeData['ID'];
-    console.log(this.schemeRegistrationForm.value.SCHEME_CODE);
     
     this.formdata.append(`Model.model[0].schemeData.MID`, this.content ? this.content.MID : '0');
     this.formdata.append(`Model.model[0].schemeData.SCH_CUSTOMER_ID`, this.content ? this.content.SCH_CUSTOMER_ID : '0');
