@@ -15,65 +15,77 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 })
 export class CostCenterMakingChargesDetailsComponent implements OnInit {
   divisionMS: any = 'ID';
-  @Input() content!: any;
+  @Input() content!: any; 
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
+  branchCode?: String;
 
-
-  constructor(private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
+  constructor(
+    private activeModal: NgbActiveModal,
+    private modalService : NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService,) { }
+    private commonService: CommonServiceService,
+  ) { }
 
   ngOnInit(): void {
+    this.branchCode = this.commonService.branchCode;
   }
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  
+  continue(){}
 
   costcenterdiamonddetailsForm: FormGroup = this.formBuilder.group({
-    branch: ['', [Validators.required]],
-    purchase: ['', [Validators.required]],
-    purchaseReturn: ['', [Validators.required]],
-    purchaseImport: [''],
-    purchaseImportReturn: [''],
-    stoneValueInPurchase: [''],
-    repairPurchase: [''],
-    kundanValueInPurchase: [''],
-    Wholesales: [''],
-    wholesalesReturn: [''],
-    exportSales: ['', [Validators.required]],
-    exportSalesReturn: ['', [Validators.required]],
-    stoneValueInSales: ['', [Validators.required]],
-    repairPurchaseReturn: [''],
-    kundanValueInSales: [''],
-    retailSales: [''],
-    retailSalesReturn: [''],
-    exhibitionSales: ['', [Validators.required]],
-    exhibitionSalesReturn: ['', [Validators.required]],
-    repairSales: ['', [Validators.required]],
-    repairSalesReturn: ['', [Validators.required]],
-    wastageInSales: ['', [Validators.required]],
-    openingStock: [''],
-    physicalStock: ['', [Validators.required]],
-    closingStock: ['', [Validators.required]],
-    stoneValueInOpening: [''],
-    stoneChargePurchase: [''],
-    kundanValueInOpening: [''],
-    branchTransferIn: ['', [Validators.required]],
-    branchTransferOUT: ['', [Validators.required]],
-    adjustments: ['', [Validators.required]],
-    manufacture: ['', [Validators.required]],
-    stampChargeSales: [''],
-    stoneDifference: ['', [Validators.required]],
-    purityDifference: ['', [Validators.required]],
-    wastageInPurchase: ['', [Validators.required]],
-    wastageDiscount: [''],
-    repairUnfixPurchase: ['', [Validators.required]]
+    branch:[''],
+    purchase:[''],
+    purchaseReturn:[''],
+    importPurchase:[''],
+    importPurchaseReturn:[''],
+
+    repairPurchase:[''],
+    repairPurchaseReturn:[''],
+    Wholesales:[''],
+    wholesalesReturn:[''],
+    exportSales:[''],
+    exportSalesReturn:[''],
+    repairSale:[''],
+    retailSales:[''],
+    retailSalesReturn:[''],
+    exhibitionSales:[''],
+    exhibitionSalesReturn:[''],
+    repairSalesReturn:[''],
+    ownStockOpening:[''],
+    ownStock:[''],
+    physicalStock:[''],
+    ownStockClosing:[''],
+    stkRevalue:[''],
+    branchTransferIn:[''],
+    branchTransferOUT:[''],
+    manufacture:[''],
+    dismatling:[''],
+    adjustments:[''],
+    refiningCharges:[''],
+    metalDiscount:[''],
+    SOHManufacturing:[''],
+    dismantlingLoss:[''],
+    diapurchaseAccountUnFix:[''],
+    diaSaleAccountUnFix:[''],
+    wastage:[''],
+    repairUnfixPurchase:[''],
+    refineCharges:[''],
+    unFixPurCtrlAc:[''],
+    unFixSupCtrlAc:[''],
+    unFixSalCtrlAc:[''],
+    unFixCustCtrlAc:[''],
+    purchaseAc:[''],
+    reciptAc:[''],
+    salesAc:[''],
+    paymentAc:[''],
   })
 
   branchCodeData: MasterSearchModel = {
@@ -81,15 +93,12 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 13,
     SEARCH_FIELD: 'BRANCH_CODE',
-    SEARCH_HEADING: 'GENERAL MASTER',
+    SEARCH_HEADING: 'BRANCH CODE',
     SEARCH_VALUE: '',
     WHERECONDITION: "BRANCH_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-  }
-  branchCodeSelected(data: any) {
-    this.costcenterdiamonddetailsForm.controls.branch.setValue(data.BRANCH_CODE)
   }
 
   purchaseCodeData: MasterSearchModel = {
@@ -97,20 +106,233 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 7,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Purchase Code',
+    SEARCH_HEADING: 'ACCODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<>''",
+    WHERECONDITION: "BRANCH_CODE = 'dcc' AND  AC_OnHold = 0 and ACCOUNT_MODE in('G','L')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
-  purchaseCodeSelected(e: any) {
+
+  branchCodeSelected(data: any) {
+    console.log(data); 
+    this.costcenterdiamonddetailsForm.controls.branch.setValue(data.BRANCH_CODE)
+  }
+
+  purchaseCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.purchase.setValue(e.ACCODE);   
+  }
+
+  purchaseReturnCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.purchaseReturn.setValue(e.ACCODE);
+  }
+
+  purchaseImportCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.importPurchase.setValue(e.ACCODE);
+  }
+
+  importPurchaseReturnCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.importPurchaseReturn.setValue(e.ACCODE);
+  }
+  
+  repairPurchaseCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.repairPurchase.setValue(e.ACCODE);
+  }
+
+  repairPurchaseReturnCodeSelected(e:any){
+    console.log(e); 
+    this.costcenterdiamonddetailsForm.controls.repairPurchaseReturn.setValue(e.ACCODE);
+  }
+
+  wholesalesCodeSelected(e:any){
     console.log(e);
+    this.costcenterdiamonddetailsForm.controls.Wholesales.setValue(e.ACCODE);
   }
 
-  formSubmit() {
+  wholesalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.wholesalesReturn.setValue(e.ACCODE);
+  }
 
-    if (this.content && this.content.FLAG == 'EDIT') {
+  exportSalesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.exportSales.setValue(e.ACCODE);
+  }
+
+  exportSalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.exportSalesReturn.setValue(e.ACCODE);
+  }
+
+  repairSaleCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.repairSale.setValue(e.ACCODE);
+  }
+
+  retailSalesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.retailSales.setValue(e.ACCODE);
+  }
+
+  retailSalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.retailSalesReturn.setValue(e.ACCODE);
+
+  }
+
+  exhibitionSalesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.exhibitionSales.setValue(e.ACCODE);
+
+  }
+
+  exhibitionSalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.exhibitionSalesReturn.setValue(e.ACCODE);
+  }
+  
+  repairSalesReturnCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.repairSalesReturn.setValue(e.ACCODE);
+  }
+
+  ownStockOpeningCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.ownStockOpening.setValue(e.ACCODE);
+  }
+
+  ownStockCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.ownStock.setValue(e.ACCODE);
+  }
+
+  physicalStockCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.physicalStock.setValue(e.ACCODE);
+  }
+
+  ownStockClosingCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.ownStockClosing.setValue(e.ACCODE);
+  }
+  
+  stkRevalueCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.stkRevalue.setValue(e.ACCODE);
+  }
+
+  branchTransferInCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.branchTransferIn.setValue(e.ACCODE);
+  }
+
+  branchTransferOUTCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.branchTransferIn.setValue(e.ACCODE);
+  }
+
+  manufactureCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.manufacture.setValue(e.ACCODE);
+  }
+
+  dismatlingCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.dismatling.setValue(e.ACCODE);
+  }
+
+  adjustmentsCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.adjustments.setValue(e.ACCODE);
+  }
+
+  refiningChargesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.refiningCharges.setValue(e.ACCODE);
+  }
+
+  metalDiscountCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.metalDiscount.setValue(e.ACCODE);
+  }
+
+  SOHManufacturingCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.SOHManufacturing.setValue(e.ACCODE);
+  }
+
+  dismantlingLossCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.dismantlingLoss.setValue(e.ACCODE);
+  }
+
+  diapurchaseAccountUnFixCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.diapurchaseAccountUnFix.setValue(e.ACCODE);
+  }
+
+  diaSaleAccountUnFixCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.diaSaleAccountUnFix.setValue(e.ACCODE);
+  }
+
+  wastageCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.wastage.setValue(e.ACCODE);
+  }
+
+  repairUnfixPurchaseCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.repairUnfixPurchase.setValue(e.ACCODE);
+  }
+
+  refineChargesCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.refineCharges.setValue(e.ACCODE);
+  }
+
+  unFixPurCtrlAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.unFixPurCtrlAc.setValue(e.ACCODE);
+  }
+
+  unFixSupCtrlAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.unFixSupCtrlAc.setValue(e.ACCODE);
+  }
+
+  unFixSalCtrlAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.unFixSalCtrlAc.setValue(e.ACCODE);
+  }
+
+  purchaseAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.purchaseAc.setValue(e.ACCODE);
+  }
+
+  reciptAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.reciptAc.setValue(e.ACCODE);
+  }
+
+  salesAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.salesAc.setValue(e.ACCODE);
+  }
+
+  paymentAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.paymentAc.setValue(e.ACCODE);
+  }
+
+
+  formSubmit(){
+    if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
     }
@@ -118,46 +340,46 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-
+  
     let API = 'CostCenterMaster/InsertCostCenterMaster'
     let postData = {
       "UNIQUE_ID": 0,
       "COST_CODE": "string",
       "TYPE": "string",
-      "BRANCH_CODE": this.costcenterdiamonddetailsForm.value.branch,
+      "BRANCH_CODE": this.costcenterdiamonddetailsForm.value.branch || "",
       "ADJUSTMENT": "string",
-      "SALES": "string",
-      "SALESRETURN": "string",
-      "PURCHASE": this.costcenterdiamonddetailsForm.value.purchase,
-      "PURCHASERETURN": this.costcenterdiamonddetailsForm.value.purchaseReturn,
-      "STONEVALUE": this.costcenterdiamonddetailsForm.value.stoneValueInPurchase,
-      "STONEDIFF": this.costcenterdiamonddetailsForm.value.stoneDifference,
-      "PURITYDIFF": this.costcenterdiamonddetailsForm.value.purityDifference,
-      "BRANCHTRANSFERIN": this.costcenterdiamonddetailsForm.value.branchTransferIn,
-      "BRANCHTRANSFEROUT": this.costcenterdiamonddetailsForm.value.branchTransferOUT,
-      "MANUFACTURING": this.costcenterdiamonddetailsForm.value.manufacture,
+      "SALES": this.costcenterdiamonddetailsForm.value.sales || "",
+      "SALESRETURN": this.costcenterdiamonddetailsForm.value.salesreturn || "",
+      "PURCHASE": this.costcenterdiamonddetailsForm.value.purchase || "",
+      "PURCHASERETURN": this.costcenterdiamonddetailsForm.value.purchasereturn || "",
+      "STONEVALUE": "string",
+      "STONEDIFF": this.costcenterdiamonddetailsForm.value.stonediff || "",
+      "PURITYDIFF": "string",
+      "BRANCHTRANSFERIN": "string",
+      "BRANCHTRANSFEROUT": "string",
+      "MANUFACTURING": this.costcenterdiamonddetailsForm.value.manufacture || "",
       "OPENINGBALANCE": "string",
-      "CLOSINGSTOCK": this.costcenterdiamonddetailsForm.value.closingStock,
-      "PHYSICALSTOCK": this.costcenterdiamonddetailsForm.value.physicalStock,
-      "OPENINGOWNSTOCK": "string",
-      "CLOSINGOWNSTOCK": "string",
-      "OWNSTOCK": "string",
-      "OPENINGSTONE": this.costcenterdiamonddetailsForm.value.stoneValueInOpening,
+      "CLOSINGSTOCK": "string",
+      "PHYSICALSTOCK": "string",
+      "OPENINGOWNSTOCK": this.costcenterdiamonddetailsForm.value.opening || "",
+      "CLOSINGOWNSTOCK": this.costcenterdiamonddetailsForm.value.closingstock || "",
+      "OWNSTOCK": this.costcenterdiamonddetailsForm.value.ownstock || "",
+      "OPENINGSTONE": "string",
       "POSSALES": "string",
       "POSSRETURN": "string",
-      "EXBSALES": this.costcenterdiamonddetailsForm.value.exhibitionSales,
-      "EXBSRETURN": this.costcenterdiamonddetailsForm.value.exhibitionSalesReturn,
-      "EXPSALES": this.costcenterdiamonddetailsForm.value.exportSales,
-      "EXPSRETURN": this.costcenterdiamonddetailsForm.value.exportSalesReturn,
-      "SOH_GOLD_DMFG": "string",
-      "WASTAGE": "string",
-      "IMPPURCHASE": this.costcenterdiamonddetailsForm.value.exportSalesReturn,
-      "IMPPURCHASERETURN": this.costcenterdiamonddetailsForm.value.purchaseImportReturn,
+      "EXBSALES": "string",
+      "EXBSRETURN": "string",
+      "EXPSALES": "string",
+      "EXPSRETURN": "string",
+      "SOH_GOLD_DMFG": this.costcenterdiamonddetailsForm.value.SOHmetalmanufacturing || "",
+      "WASTAGE": this.costcenterdiamonddetailsForm.value.wastage || "",
+      "IMPPURCHASE": "string",
+      "IMPPURCHASERETURN": "string",
       "OTHERSALES": "string",
       "OTHERSRETURN": "string",
       "REFINING_CHARGEAC": "string",
       "DISCOUNTMETAL": "string",
-      "STONEVALUESALES": this.costcenterdiamonddetailsForm.value.stoneValueInSales,
+      "STONEVALUESALES": "string",
       "SCP_ACCODE": "string",
       "SCPSR_ACCODE": "string",
       "SCS_ACCODE": "string",
@@ -180,11 +402,11 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "PTREPR_ACCODE": "string",
       "PTRES_ACCODE": "string",
       "PTRESR_ACCODE": "string",
-      "COSTADJUSTMENT": "string",
-      "DISMANTLINGLOSS": "string",
-      "DISMANTLING_ACCODE": "string",
+      "COSTADJUSTMENT": this.costcenterdiamonddetailsForm.value.costadjustment || "",
+      "DISMANTLINGLOSS": this.costcenterdiamonddetailsForm.value.dismantlingloss || "",
+      "DISMANTLING_ACCODE":this.costcenterdiamonddetailsForm.value.dismantling || "",
       "STOCK_REVALUATION": "string",
-      "LOTMIX_ACCODE": "string",
+      "LOTMIX_ACCODE": this.costcenterdiamonddetailsForm.value.lotmixaccount || "",
       "SRNO": 0,
       "DIAPUR_UNFIX": "string",
       "DIASAL_UNFIX": "string",
@@ -199,21 +421,21 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "UNFIXSALES": "string",
       "UNFIXSUPPLIERCTRLAC": "string",
       "UNFIXCUSTOMERCTRLAC": "string",
-      "REPAIRPURCHASE": "string",
-      "REPPURCHASERETURN": this.costcenterdiamonddetailsForm.value.repairPurchaseReturn,
-      "REPAIRSALESRETURN": this.costcenterdiamonddetailsForm.value.repairSalesReturn,
-      "REPAIRSALES": this.costcenterdiamonddetailsForm.value.repairSales,
+      "REPAIRPURCHASE": this.costcenterdiamonddetailsForm.value.repairunfixpurchase || "",
+      "REPPURCHASERETURN": "string",
+      "REPAIRSALESRETURN": "string",
+      "REPAIRSALES": "string",
       "REPUNFIXPURCHASE": "string",
-      "KUNDANVALUESALES": this.costcenterdiamonddetailsForm.value.kundanValueInSales,
-      "KUNDANVALUEPURCHASE": this.costcenterdiamonddetailsForm.value.kundanValueInPurchase,
+      "KUNDANVALUESALES": "string",
+      "KUNDANVALUEPURCHASE": "string",
       "PREMIUM_CHARGES": "string",
       "DIAPUR_UNFIX_VALUE": "string",
       "DIASAL_UNFIX_VALUE": "string",
       "OPENING_GOLD_DIAJEW": "string",
       "REFINE_CHARGES": "string",
       "WASTAGEONSALES": "string",
-      "CERT_CHARGES": "string",
-      "PLATE_CHARGES": "string",
+      "CERT_CHARGES": this.costcenterdiamonddetailsForm.value.certificationcharges || "",
+      "PLATE_CHARGES": this.costcenterdiamonddetailsForm.value.platecharges || "",
       "STAMPCHARGE_PURCHASEAC": "string",
       "STAMPCHARGE_SALESAC": "string",
       "KUNDANVALUEOPENING": "string",
@@ -225,7 +447,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "DIASAL_UNFIX_COLOR": "string",
       "DIASAL_UNFIX_PEARL": "string",
       "DIASAL_UNFIX_LABOUR": "string",
-      "CUSTOM_ACCODE": "string",
+      "CUSTOM_ACCODE": this.costcenterdiamonddetailsForm.value.customaccount || "",
       "BRIN_UNFIX_GOLD": "string",
       "BROUT_UNFIX_GOLD": "string",
       "BRIN_FIX_GOLD": "string",
@@ -297,17 +519,40 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "MISCCHGAC": "string",
       "PLATCHGAC": "string",
       "CERTCHGAC": "string"
-    }
-    this.close(postData);
   }
-
-  update() {
+  
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if(result.status == "Success"){
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.costcenterdiamonddetailsForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  
+  update(){
     if (this.costcenterdiamonddetailsForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-
-    let API = 'CostCenterMaster/UpdateCostCenterMaster/' + this.costcenterdiamonddetailsForm.value.costcode + this.costcenterdiamonddetailsForm.value.type
+  
+    let API = 'CostCenterMaster/UpdateCostCenterMaster/'+ this.costcenterdiamonddetailsForm.value.costcode + this.costcenterdiamonddetailsForm.value.type
     let postData = {
       "UNIQUE_ID": 0,
       "COST_CODE": "string",
@@ -370,7 +615,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "PTRESR_ACCODE": "string",
       "COSTADJUSTMENT": this.costcenterdiamonddetailsForm.value.costadjustment || "",
       "DISMANTLINGLOSS": this.costcenterdiamonddetailsForm.value.dismantlingloss || "",
-      "DISMANTLING_ACCODE": this.costcenterdiamonddetailsForm.value.dismantling || "",
+      "DISMANTLING_ACCODE":this.costcenterdiamonddetailsForm.value.dismantling || "",
       "STOCK_REVALUATION": "string",
       "LOTMIX_ACCODE": this.costcenterdiamonddetailsForm.value.lotmixaccount || "",
       "SRNO": 0,
@@ -389,7 +634,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "UNFIXCUSTOMERCTRLAC": "string",
       "REPAIRPURCHASE": this.costcenterdiamonddetailsForm.value.repairunfixpurchase || "",
       "REPPURCHASERETURN": "string",
-      "REPAIRSALESRETURN": this.costcenterdiamonddetailsForm.value.repairSalesReturn,
+      "REPAIRSALESRETURN": "string",
       "REPAIRSALES": "string",
       "REPUNFIXPURCHASE": "string",
       "KUNDANVALUESALES": "string",
@@ -486,10 +731,32 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       "PLATCHGAC": "string",
       "CERTCHGAC": "string"
     }
-
-    this.close({ postData });
+  
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if(result.status == "Success"){
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.costcenterdiamonddetailsForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
-
+  
   deleteRecord() {
     if (!this.content.MID) {
       Swal.fire({
@@ -555,7 +822,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
       }
     });
   }
-
+  
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
