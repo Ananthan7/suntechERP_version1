@@ -368,24 +368,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.email.setValue(e.EMAIL);
   }
 
-  openaddposdetails() {
-    const modalRef: NgbModalRef = this.modalService.open(PosCurrencyReceiptDetailsComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
 
-    modalRef.result.then((postData) => {
-      if (postData) {
-        console.log('Data from modal:', postData);
-        this.posCurrencyDetailsData.push(postData);
-
-        this.posCurrencyDetailsData.forEach((data, index) => data.SRNO = index + 1);
-      }
-    });
-
-  }
 
   deleteDetailRecord() {
     // this.selec
@@ -637,6 +620,31 @@ export class PosCurrencyReceiptComponent implements OnInit {
         console.log(`Dismissed ${reason}`);
       }
     );
+  }
+
+
+  
+  onRowDoubleClicked(e: any){
+    this.openAddPosARdetails(e.data);
+  }
+
+  openAddPosARdetails(data: any = null) {
+    const modalRef: NgbModalRef = this.modalService.open(PosCurrencyReceiptDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+
+    modalRef.result.then((postData) => {
+      if (postData) {
+        
+        console.log('Data from modal:', postData);
+
+        this.posCurrencyDetailsData.push(postData);
+        this.posCurrencyDetailsData.forEach((data, index) => data.SRNO = index + 1);
+      }
+    });
   }
 
 }
