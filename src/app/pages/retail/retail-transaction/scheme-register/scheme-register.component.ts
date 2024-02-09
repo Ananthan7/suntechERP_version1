@@ -336,12 +336,23 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
             this.commonService.decimalQuantityFormat(response.SCHEME_AMOUNT, 'THREE')
           )
-          this.addRowsToGrid(response.SCHEME_PERIOD)
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
       })
     this.subscriptions.push(Sub)
+  }
+  addrows2(){
+    let API = 'SchemeRegistration?BRANCH_CODE=BJN&SCHEME_CODE='+this.schemeRegistrationForm.value.SchemeId+
+    '&joinDate=2023-09-06&alertBeforeDays=0&tenure=12'
+    let sub: Subscription = this.dataService.getDynamicAPI(API)
+    .subscribe((resp: any) => {
+      console.log(resp);
+      
+      if (resp) {
+        this.SchemeMasterDetails = resp.response
+      }
+    });
   }
   addRowsToGrid(period?:any) {
     this.SchemeMasterDetails=[]
