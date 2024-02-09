@@ -4,16 +4,17 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-customer-master-main.component';
 import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
+import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
 @Component({
   selector: 'app-retail-master',
   templateUrl: './retail-master.component.html',
   styleUrls: ['./retail-master.component.scss']
 })
 export class RetailMasterComponent implements OnInit {
-  @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
+  @ViewChild(RetailGridComponent) retailGridComponent?: RetailGridComponent;
+
   //variables
   menuTitle: string = '';
   apiCtrl: any;
@@ -53,7 +54,7 @@ export class RetailMasterComponent implements OnInit {
     } else {
       this.menuTitle = this.CommonService.getModuleName()
     }
-    this.masterGridComponent?.getMasterGridData(data)
+    this.retailGridComponent?.getMasterGridData(data)
   }
 
   viewRowDetails(e: any) {

@@ -338,6 +338,7 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
             this.commonService.decimalQuantityFormat(response.SCHEME_AMOUNT, 'THREE')
           )
+          this.addRowsToGrid()
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -345,6 +346,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   addRowsToGrid() {
+    this.SchemeMasterDetails=[]
     let noOFInstallment = Number(this.schemeRegistrationForm.value.TenurePeriod) || 0
     for (let index = 0; index < noOFInstallment; index++) {
       this.SchemeMasterDetails.push(

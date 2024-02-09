@@ -43,7 +43,7 @@ export class SchemeMasterComponent implements OnInit {
   schemeMasterForm: FormGroup = this.formBuilder.group({
     mid: [""],
     code: ["",Validators.required],
-    branch: ["",Validators.required],
+    branch: [""],
     prefix: [""],
     description: [""],
     frequency: ["",Validators.required],
@@ -190,7 +190,7 @@ export class SchemeMasterComponent implements OnInit {
 
   setPostData(){
     return {
-      "MID": this.content.MID || 0,
+      "MID": this.content?.MID || 0,
       "BRANCH_CODE": this.comService.nullToString(this.branchCode),
       "SCHEME_CODE": this.comService.nullToString(this.schemeMasterForm.value.code),
       "SCHEME_NAME": this.comService.nullToString(this.schemeMasterForm.value.description),
@@ -199,7 +199,7 @@ export class SchemeMasterComponent implements OnInit {
       "SCHEME_PERIOD": this.comService.emptyToZero(this.schemeMasterForm.value.tenurePeriod),
       "SCHEME_REMARKS": this.comService.nullToString(this.schemeMasterForm.value.remarks),
       "SCHEME_AMOUNT": this.comService.emptyToZero(this.schemeMasterForm.value.installmentAmount),
-      "SCHEME_METALCURRENCY": 0,
+      "SCHEME_METALCURRENCY": '',
       "CANCEL_CHARGE": this.comService.emptyToZero(this.schemeMasterForm.value.cancelCharges),
       "SCHEME_FREQUENCY": this.comService.nullToString(this.schemeMasterForm.value.frequency),
       "STATUS": this.schemeMasterForm.value.schemeStatus,

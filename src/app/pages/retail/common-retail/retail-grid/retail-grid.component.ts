@@ -124,9 +124,9 @@ export class RetailGridComponent implements OnInit {
         "TABLE_NAME": this.checkVocTypeTable(this.tableName),
         "CUSTOM_PARAM": {
           "FILTER": {
-            "YEARMONTH": this.checkVocTypeReturnNumber(this.CommonService.yearSelected),
-            "BRANCH_CODE": this.checkVocTypeCondition(this.CommonService.branchCode),
-            "VOCTYPE": this.checkVocTypeCondition(this.vocType)
+            "YEARMONTH": this.CommonService.yearSelected,
+            "BRANCH_CODE": this.CommonService.branchCode,
+            "VOCTYPE": this.vocType
           },
           "TRANSACTION": {
             "VOCTYPE": this.CommonService.nullToString(this.vocType),
