@@ -133,6 +133,31 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  accountMiddleData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 252,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'RECOVERY ACCOUNT CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  accountEndData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 252,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'ALLOW GAIN ACCOUNT CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<>'' AND account_mode not in ('B','P','R')",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
   maxInputLength: number = 2
 
 

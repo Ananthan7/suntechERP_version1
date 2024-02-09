@@ -31,12 +31,12 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput formControlName="labour_code" />
+                  <input type="text" matInput formControlName="labour_code" #code (input)="code.value = code.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
                 <mat-form-field>
-                  <input type="text" matInput formControlName="labour_description" />
+                  <input type="text" matInput formControlName="labour_description" #description (input)="description.value = description.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
             </div>
@@ -230,12 +230,12 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput formControlName="metallabour_code" />
+                  <input type="text" matInput formControlName="metallabour_code" #code1 (input)="code1.value = code1.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
                 <mat-form-field style="width: 90%">
-                  <input type="text" matInput formControlName="metallabour_description" />
+                  <input type="text" matInput formControlName="metallabour_description" #description1 (input)="description1.value = description1.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
             </div>

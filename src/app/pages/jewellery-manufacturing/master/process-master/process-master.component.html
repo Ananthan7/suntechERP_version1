@@ -249,7 +249,7 @@
                                         <input type="text" matInput  formControlName="accountMiddle"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="accountStartData" *ngIf="viewMode == false"
+                                    <master-search [MasterSearchData]="accountMiddleData" *ngIf="viewMode == false"
                                         (newRowClick)="accountMiddleSelected($event)">
                                     </master-search>
                                 </div>
@@ -258,7 +258,7 @@
                                         <input type="text" matInput  formControlName="accountEnd"
                                             [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="accountStartData" *ngIf="viewMode == false"
+                                    <master-search [MasterSearchData]="accountEndData" *ngIf="viewMode == false"
                                         (newRowClick)="accountEndSelected($event)">
                                     </master-search>
                                 </div>

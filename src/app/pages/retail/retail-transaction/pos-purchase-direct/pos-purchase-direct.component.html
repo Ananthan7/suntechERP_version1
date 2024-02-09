@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="posPurchaseForm">
@@ -185,12 +185,11 @@
             <div class="col-md-2">
                 <label for="inputPassword" class="col-form-label border-bottom-10 ">Point Of Sales Control</label>
                 <!-- <h6 class="bank_option"></h6> -->
-                <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="partyCodeName" readonly/>
-                </mat-form-field>
+                
                 <div class="box_wrap">
-
+                    <label for="inputPassword" class="col-form-label border-bottom-10 ">Bank Guarantee</label>
                 </div>
+         
             </div>
         </div>
         <div class="row mt-2">
