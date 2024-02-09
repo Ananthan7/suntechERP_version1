@@ -77,24 +77,49 @@ export class RetailGridComponent implements OnInit {
       this.getMasterGridData();
     }
   }
-  checkVocTypeCondition(value:any){
-    if(!value) return ''
-    if(this.vocType == 'SCR') return '';
-    if(this.vocType == 'SRC') return '';
-    if(this.vocType == 'MASSCH') return '';
+  checkVocTypeCondition(value: any) {
+    if (!value) return ''
+    if (this.vocType == 'SCR') return '';
+    if (this.vocType == 'SRC') return '';
+    if (this.vocType == 'MASSCH') return '';
     return value
   }
-  checkVocTypeReturnNumber(value:any){
-    if(!value) return 0
-    if(this.vocType == 'SCR') return 0;
-    if(this.vocType == 'SRC') return 0;
-    if(this.vocType == 'MASSCH') return 0;
+  checkVocTypeReturnNumber(value: any) {
+    if (!value) return 0
+    if (this.vocType == 'SCR') return 0;
+    if (this.vocType == 'SRC') return 0;
+    if (this.vocType == 'MASSCH') return 0;
     return value
   }
-  checkVocTypeTable(value:any){
-    if(!value) return 0
-    if(this.vocType == 'SRC') return 'CURRENCY_RECEIPT ';
+  checkVocTypeTable(value: any) {
+    if (!value) return 0
+    if (this.vocType == 'SRC') return 'CURRENCY_RECEIPT ';
     return value
+  }
+  getSchemeMaturedAPI() {
+    let API = 'SchemeMatured/' + this.CommonService.branchCode
+    let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+      this.skeltonLoading = false;
+      if (resp.schemeMatureds && resp.schemeMatureds[0].length > 0) {
+        this.totalDataCount = resp.schemeMatureds[0].length
+
+        if (this.orderedItems.length > 0) {
+          this.orderedItems = [...this.orderedItems, ...resp.schemeMatureds[0]];
+        } else {
+          this.orderedItems = resp.schemeMatureds[0];
+          if (this.orderedItems.length == 10) this.nextPage()
+        }
+
+        this.orderedItemsHead = Object.keys(this.orderedItems[0]);
+        // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
+        // this.ChangeDetector.detectChanges()
+        // this.orderedItems = this.orderedItems.sort((a, b) => b.MID - a.MID);
+      } else {
+        this.snackBar.open('Data not available!', 'Close', {
+          duration: 3000,
+        });
+      }
+    });
   }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
@@ -109,15 +134,21 @@ export class RetailGridComponent implements OnInit {
       this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
     }
-    if(this.orderedItems.length == 0){
+    if (this.orderedItems.length == 0) {
       this.skeltonLoading = true
     } else {
       this.snackBar.open('loading...', '', {
         duration: 3000,
       });
     }
+    console.log(this.vocType,'this.vocType');
+    
+    if (this.vocType == 'GEN') {
+      this.getSchemeMaturedAPI()
+      return
+    }
     let params
-    if(data?.MENU_SUB_MODULE == 'Transaction' || this.vocType){
+    if (data?.MENU_SUB_MODULE == 'Transaction' || this.vocType) {
       params = {
         "PAGENO": this.pageIndex,
         "RECORDS": this.pageSize,
@@ -134,7 +165,7 @@ export class RetailGridComponent implements OnInit {
           }
         }
       }
-    }else{
+    } else {
       params = {
         "PAGENO": this.pageIndex,
         "RECORDS": this.pageSize,
@@ -152,7 +183,7 @@ export class RetailGridComponent implements OnInit {
         }
       }
     }
-    
+
 
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
       .subscribe((resp: any) => {
@@ -163,7 +194,7 @@ export class RetailGridComponent implements OnInit {
 
           // Replace empty object with an empty string
           resp.dynamicData[0] = this.CommonService.arrayEmptyObjectToString(resp.dynamicData[0])
-          
+
           if (this.orderedItems.length > 0) {
             this.orderedItems = [...this.orderedItems, ...resp.dynamicData[0]];
           } else {
@@ -172,9 +203,9 @@ export class RetailGridComponent implements OnInit {
               this.nextPage()
             }
           }
-          
+
           let headers = Object.keys(this.orderedItems[0]);
-          this.orderedItemsHead = headers.filter((item:any)=> item != 'MID')
+          this.orderedItemsHead = headers.filter((item: any) => item != 'MID')
           // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
           // this.ChangeDetector.detectChanges()
           // this.orderedItems = this.orderedItems.sort((a, b) => b.MID - a.MID);

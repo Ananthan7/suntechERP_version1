@@ -323,9 +323,7 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.Units.setValue(response.SCHEME_UNIT)
           this.schemeRegistrationForm.controls.DateOfJoining.setValue(response.START_DATE)
           this.schemeRegistrationForm.controls.MaturingDate.setValue(response.START_DATE)
-          this.schemeRegistrationForm.controls.TenurePeriod.setValue(
-            this.commonService.decimalQuantityFormat(response.SCHEME_PERIOD, 'THREE')
-          )
+          this.schemeRegistrationForm.controls.TenurePeriod.setValue(response.SCHEME_PERIOD)
           this.schemeRegistrationForm.controls.BonusInstallment.setValue(
             this.commonService.decimalQuantityFormat(response.SCHEME_BONUS, 'THREE')
           )
@@ -338,16 +336,18 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
             this.commonService.decimalQuantityFormat(response.SCHEME_AMOUNT, 'THREE')
           )
-          this.addRowsToGrid()
+          this.addRowsToGrid(response.SCHEME_PERIOD)
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
       })
     this.subscriptions.push(Sub)
   }
-  addRowsToGrid() {
+  addRowsToGrid(period?:any) {
     this.SchemeMasterDetails=[]
-    let noOFInstallment = Number(this.schemeRegistrationForm.value.TenurePeriod) || 0
+    let noOFInstallment = Number(this.schemeRegistrationForm.value.TenurePeriod) || period
+    console.log(noOFInstallment,this.schemeRegistrationForm.value.TenurePeriod,'1');
+    
     for (let index = 0; index < noOFInstallment; index++) {
       this.SchemeMasterDetails.push(
         {
@@ -364,7 +364,7 @@ export class SchemeRegisterComponent implements OnInit {
           DT_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
           RCVD_DATE: this.schemeRegistrationForm.value.DateOfJoining,
           RCVD_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
-          RCVD_VOCTYPE: this.commonService.getqueryParamVocType(),
+          RCVD_VOCTYPE: this.schemeRegistrationForm.value.VOCTYPE,
           RCVD_VOCNO: 0,
           RCVD_YEARMONTH: 0,
           RCVD_AMOUNTFC: 0,
@@ -379,7 +379,8 @@ export class SchemeRegisterComponent implements OnInit {
       )
 
     }
-
+    console.log('fn ended');
+    
   }
   exportToExcel() {
     this.commonService.exportExcel(this.schemeReceiptList, 'Scheme Details')
@@ -599,7 +600,6 @@ export class SchemeRegisterComponent implements OnInit {
     let API = 'SchemeRegistration/InsertWithAttachments'
     if (this.content && this.content.FLAG == 'EDIT') {
       this.editSchemeDetail(this.content)
-      // API = 'SchemeRegistration/UpdateWithAttachments'
       this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
     }
     if (this.schemeRegistrationForm.invalid) {
