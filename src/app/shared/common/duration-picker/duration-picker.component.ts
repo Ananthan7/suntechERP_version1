@@ -18,13 +18,6 @@ export class DurationPickerComponent implements OnInit {
   @Input() duration1!: any;
   @Input() duration2!: any;
   @Output() updateDuration = new EventEmitter<any>();
-  viewMode: boolean = false;
-  tableData: any[] = [];
-  private subscriptions: Subscription[] = [];
-  processTypeList: any[] = [];
-  islossReadOnly = true;
-  isRecovReadOnly = true;
-  isAlloWGainReadOnly = true;
   durationPickerForm!: FormGroup;
 
   duration: any[] = [];
@@ -46,9 +39,7 @@ export class DurationPickerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // if (this.content.FLAG == 'VIEW') {
-    //   this.setFormValues();
-    // }
+   
     console.log(this.duration1)
     
     this.durationPickerForm = this.formBuilder.group({
@@ -73,19 +64,6 @@ export class DurationPickerComponent implements OnInit {
 
   }
 
- 
-
-  // private setFormValues() {
-  //   console.log(this.content);
-  //   if (!this.content) return
-  //   this.durationPickerForm.controls.days.setValue(this.content.daysTime);
-  //   this.durationPickerForm.controls.hours.setValue(this.content.hoursTime);
-  //   this.durationPickerForm.controls.minutes.setValue(this.content.minutesTime);
-  //  }
-
-//    timeConvert(time: number) { 
-//     return time/24/60 + ":" + time/60%24 + ':' + time%60;
-//   }
 
   timeConvert(time: any) {
     const daysTime = Math.floor( time/24/60);
@@ -116,16 +94,6 @@ timeConvert1(time: any) {
   console.log(minutesTime);
   return daysTime + ":" + hoursTime + ':' + minutesTime;
 }
-
-
-  // formatNumber(value: number): string {
-  //   return value < 10 ? `0${value}` : value.toString();
-  // }
-
-  // // Method to get the formatted number
-  // getFormattedNumber(value: number): string {
-  //   return this.formatNumber(value);
-  // }
 
 
   days: any[] = [

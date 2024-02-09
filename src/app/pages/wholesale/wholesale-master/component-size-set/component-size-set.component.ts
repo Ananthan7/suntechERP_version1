@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -21,10 +21,12 @@ export class ComponentSizeSetComponent implements OnInit {
   allMode: string;
   checkBoxesMode: string;
 
-subscriptions: any;
+  private subscriptions: Subscription[] = [];
   @Input() content!: any; 
   tableData: any[] = [];
   selectedIndexes: any = [];
+  
+  componentSizeType: any[] = [];
   
   constructor(
     private activeModal: NgbActiveModal,
@@ -34,6 +36,7 @@ subscriptions: any;
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
+    private cdRef: ChangeDetectorRef,
   ) { 
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
@@ -41,19 +44,34 @@ subscriptions: any;
 
   codetemp(data:any,value: any){
     console.log(data);
-    this.tableData[value.data.SN - 1].Code = data.target.value;
+    this.tableData[value.data.SRNO - 1].COMPSIZE_CODE = data.target.value;
   }
 
   descriptiontemp(data:any,value: any){
-    this.tableData[value.data.SN - 1].DESCRIPTION = data.target.value;
+    this.tableData[value.data.SRNO - 1].COMPONENT_DESCRIPTION = data.target.value;
   }
  
   ngOnInit(): void {
+    this.getComponentSizeTypeOptions();
     console.log(this.content);
     if(this.content){
       this.setFormValues()
     }
   }
+
+  private getComponentSizeTypeOptions(): void {
+    const API = 'ComponentSizeMaster/GetComponentSizeMasterList';
+    const Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
+      if (result.response) {
+        this.componentSizeType = result.response;
+        this.componentSizeType.sort((a, b) => a.COMPSIZE_CODE - b.COMPSIZE_CODE);
+        console.log(this.componentSizeType); // Log here to check the data
+      }
+    });
+    this.subscriptions.push(Sub);
+    this.cdRef.detectChanges()
+  }
+  
 
   setFormValues() {
     if(!this.content) return
@@ -61,14 +79,14 @@ subscriptions: any;
     this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION)
 
 
-    this.dataService.getDynamicAPI('ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/'+this.content.COMPSET_CODE).subscribe((data) => {
-      if (data.status == 'Success') {
+    // this.dataService.getDynamicAPI('ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/'+this.content.COMPSET_CODE).subscribe((data) => {
+    //   if (data.status == 'Success') {
 
-        this.tableData = data.response.approvalDetails;
+    //     this.tableData = data.response.detail;
        
 
-      }
-    });
+    //   }
+    // });
    
   }
 
@@ -77,13 +95,20 @@ subscriptions: any;
     description  : ['',[Validators.required]],
   
    });
+
    addTableData(){
+    this.getComponentSizeTypeOptions()
+    // const compSizeCode = this.componentsizesetmasterForm.value.COMPSIZE_CODE;
+    // const componentDescription = this.componentsizesetmasterForm.value.COMPONENT_DESCRIPTION;
+
     let length = this.tableData.length;
     let sn = length + 1;
     let data =  {
-      "SN": sn,
-      "Code": "",
-      "DESCRIPTION": "",
+      "UNIQUEID": 0,
+      "SRNO": sn,
+      "COMPSIZE_CODE": "",
+      "COMPONENT_DESCRIPTION": "",
+      "COMPSET_CODE": this.componentsizesetmasterForm.value.code
     };
     this.tableData.push(data);
   }
@@ -96,30 +121,33 @@ subscriptions: any;
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
     console.log(values);
-    let indexes: Number[] = [];
+  
+    let indexes: number[] = [];
     this.tableData.reduce((acc, value, index) => {
-      if (values.includes(parseFloat(value.SN))) {
+      if (values.includes(value.COMPSIZE_CODE)) {
         acc.push(index);
       }
       return acc;
     }, indexes);
+    this.selectedIndexes = event.selectedRowKeys as number[];
     this.selectedIndexes = indexes;
     console.log(this.selectedIndexes);
-    
   }
-
-  deleteTableData(){
-    console.log(this.selectedIndexes);
   
+
+  deleteTableData() {
     if (this.selectedIndexes.length > 0) {
       this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+      this.selectedIndexes = []; // Clear selected indexes after deletion
     } else {
-      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
-    }   
+      // Handle the case when no rows are selected
+      console.error('Please select records to delete.');
+    }
   }
   
+  
   formSubmit(){
-
+    console.log(this.componentSizeType);
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
@@ -134,16 +162,15 @@ subscriptions: any;
       "MID": 0,
       "COMPSET_CODE":  this.componentsizesetmasterForm.value.code || "",
       "DESCRIPTION":  this.componentsizesetmasterForm.value.description || "",
-      "approvalDetails": this.tableData,
-      "detail": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "COMPSIZE_CODE": "string",
-          "COMPONENT_DESCRIPTION": "string",
-          "COMPSET_CODE": "string"
-        }
-      ]
+      "detail": this.tableData
+        // {
+        //   "UNIQUEID": 0,
+        //   "SRNO": 0,
+        //   "COMPSIZE_CODE": compSizeCode,
+        //   "COMPONENT_DESCRIPTION": componentDescription,
+        //   "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
+        // }
+      
     }
     
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -177,20 +204,11 @@ subscriptions: any;
     }
   
     let API = 'ComponentSizeSetMaster/UpdateComponentSizeSetMaster/'+this.content.COMPSET_CODE
-    let postData = 
-    {
+    let postData = {
       "MID": 0,
-      "COMPSET_CODE": "string",
-      "DESCRIPTION": "string",
-      "detail": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "COMPSIZE_CODE": "string",
-          "COMPONENT_DESCRIPTION": "string",
-          "COMPSET_CODE": "string"
-        }
-      ]
+      "COMPSET_CODE":  this.componentsizesetmasterForm.value.code || "",
+      "DESCRIPTION":  this.componentsizesetmasterForm.value.description || "",
+      "detail": this.tableData
     }
     
   
