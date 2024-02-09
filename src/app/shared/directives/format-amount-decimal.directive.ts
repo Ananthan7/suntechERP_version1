@@ -49,7 +49,7 @@ export class AmountDecimalDirective {
     // Split the value into integer and fractional parts
     const parts = value.split('.');
     let integerPart = parts[0];
-    integerPart = Number(integerPart).toLocaleString('en-US', { style: 'decimal' })
+    integerPart = Number(integerPart).toString()
     let fractionalPart = parts[1];
    
     
