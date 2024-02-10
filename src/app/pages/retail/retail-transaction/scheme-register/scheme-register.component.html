@@ -290,18 +290,18 @@
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-3 col-md-12 col-sm-12">
                         <div class="d-flex align-items-center">
-                            <button mat-raised-button (click)="addrows2()">
+                            <button mat-raised-button style="color: #1d5592;" (click)="addrowsWithAPI()">
                                 Process
                             </button>
-                            <button mat-raised-button (click)="cancelScheme()">
+                            <button mat-raised-button style="color: #1d5592;" (click)="cancelScheme()">
                                 Cancel Scheme
                             </button>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12">
                         <label style="width: 20%;">Remarks:
                         </label>
@@ -407,7 +407,7 @@
                 <dx-data-grid id="gridContainer"
                     [dataSource]="SchemeMasterDetails"
                     [showRowLines]="true"
-                    height="auto" [columnAutoWidth]="true"
+                    height="300" [columnAutoWidth]="true"
                     [showBorders]="true"
                     [allowColumnResizing]="true">
                     <dxo-editing mode="cell" [allowUpdating]="true">
@@ -418,7 +418,8 @@
                         [allowEditing]="false"
                         alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="PAY_DATE" caption="Pay Date"
+                    <dxi-column dataField="PAY_DATE" dataType="date"
+                        caption="Pay Date"
                         [allowEditing]="true"
                         alignment="center">
                     </dxi-column>
@@ -428,22 +429,25 @@
                         alignment="right">
                     </dxi-column>
                     <dxi-column dataField="PAY_STATUS"
-                        cellTemplate="PayStatus" caption="Pay Status" 
-                         alignment="center">
+                        [allowEditing]="false"
+                        cellTemplate="PayStatus" caption="Pay Status"
+                        alignment="center">
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_DATE"
-                        caption="Reminder Date"
+                        caption="Reminder Date" dataType="date"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_SEND"
                         caption="Reminder Send"
+                        [allowEditing]="false"
                         cellTemplate="ReminderSend"
-                         alignment="center">
+                        alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="RCVD_DATE" caption="Receipt Date"
+                    <dxi-column dataField="RCVD_DATE" dataType="date"
+                         caption="Receipt Date"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="RCVD_BRANCH_CODE"
+                    <dxi-column dataField="DT_BRANCH_CODE"
                         caption="Receipt Branch"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
@@ -460,10 +464,10 @@
                     </dxi-column>
                     <dxi-column width="200"
                         caption="Attachment"
-                        cellTemplate="files"  alignment="center">
+                        cellTemplate="files" alignment="center">
                     </dxi-column>
                     <dxi-column
-                        caption=""  alignment="center">
+                        caption alignment="center">
                     </dxi-column>
                     <div *dxTemplate="let data of 'PayStatus'">
                         <mat-checkbox></mat-checkbox>
@@ -472,7 +476,8 @@
                         <mat-checkbox></mat-checkbox>
                     </div>
                     <div *dxTemplate="let data of 'files'">
-                        <input class="form-control" type="file" (change)="onFileChange($event)"/>
+                        <input class="form-control fileAttach" type="file" 
+                            (change)="onFileChange($event)" />
                     </div>
                 </dx-data-grid>
             </div>

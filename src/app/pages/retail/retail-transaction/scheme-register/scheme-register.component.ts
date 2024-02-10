@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { retry } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -34,7 +35,6 @@ export class SchemeRegisterComponent implements OnInit {
   schemeArray: any[] = []
   dataToEditrow: any[] = [];
   detailArray: any[] = []
-  indexNumberStart: number = 0
   newSchemeLength: number = 0
   dataIndex: any;
   currentDate: any = new Date();
@@ -153,7 +153,6 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
     this.schemeRegistrationForm.controls.VOCDATE.setValue(this.currentDate)
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
-    console.log(this.content, 'this.content');
     this.setInitialValues()
   }
   ngAfterViewInit(): void {
@@ -181,7 +180,7 @@ export class SchemeRegisterComponent implements OnInit {
         if (result.response) {
           let data = result.response
           let params = {
-            "ID": this.indexNumberStart += 1,
+            "ID": 1,
             "SCHEME_UNIQUEID": this.commonService.nullToString(data.Details[0].UNIQUEID),
             "SCHEME_ID": this.commonService.nullToString(data.SCH_CUSTOMER_CODE),
             "SCHEME_UNITS": this.commonService.emptyToZero(data.SCH_UNITS),
@@ -304,7 +303,7 @@ export class SchemeRegisterComponent implements OnInit {
         })
     }
   }
-  cancelScheme(){
+  cancelScheme() {
     this.SchemeMasterDetails = []
     this.schemeRegistrationForm.controls.code.setValue('')
   }
@@ -312,7 +311,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.isViewSchemeMasterGrid = false
   }
   fetchSchemeWithCustCode() {
-    this.commonService.toastSuccessByMsgId('MSG81447');
+    this.commonService.toastInfoByMsgId('MSG81447');
     let API = `SchemeMaster/GetSchemeMasterDetails/${this.schemeRegistrationForm.value.Branch}/${this.schemeRegistrationForm.value.SchemeId}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result: any) => {
@@ -330,6 +329,9 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
             this.commonService.decimalQuantityFormat(response.SCHEME_AMOUNT * response.SCHEME_PERIOD, 'THREE')
           )
+          this.schemeRegistrationForm.controls.SumAssured.setValue(
+            this.commonService.decimalQuantityFormat(response.SCHEME_AMOUNT * response.SCHEME_PERIOD, 'THREE')
+          )
           this.schemeRegistrationForm.controls.CancellationCharge.setValue(
             this.commonService.decimalQuantityFormat(response.CANCEL_CHARGE, 'THREE')
           )
@@ -342,23 +344,30 @@ export class SchemeRegisterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  addrows2(){
-    let API = 'SchemeRegistration?BRANCH_CODE=BJN&SCHEME_CODE='+this.schemeRegistrationForm.value.SchemeId+
-    '&joinDate=2023-09-06&alertBeforeDays=0&tenure=12'
-    let sub: Subscription = this.dataService.getDynamicAPI(API)
-    .subscribe((resp: any) => {
-      console.log(resp);
-      
-      if (resp) {
-        this.SchemeMasterDetails = resp.response
-      }
-    });
+  addrowsWithAPI() {
+    let formValue = this.schemeRegistrationForm.value
+    let joindate = this.commonService.formatYYMMDD(new Date(formValue.DateOfJoining))
+    let params = {
+      BRANCH_CODE: formValue.Branch || this.commonService.branchCode,
+      SCHEME_CODE: this.commonService.nullToString(formValue.SchemeId),
+      joinDate: this.commonService.nullToString(joindate),
+      alertBeforeDays: this.commonService.emptyToZero(formValue.AlertBeforeDays),
+      tenure: this.commonService.emptyToZero(formValue.TenurePeriod),
+    }
+    let API = `SchemeRegistration`
+    let sub: Subscription = this.dataService.getDynamicAPIwithParams(API,params)
+      .subscribe((resp: any) => {
+        if (resp) {
+          this.SchemeMasterDetails = resp.response
+        }else{
+          this.commonService.toastErrorByMsgId('Server Error')
+        }
+      });
+    this.subscriptions.push(sub)
   }
-  addRowsToGrid(period?:any) {
-    this.SchemeMasterDetails=[]
+  addRowsToGridFrontend(period?: any) {
+    this.SchemeMasterDetails = []
     let noOFInstallment = Number(this.schemeRegistrationForm.value.TenurePeriod) || period
-    console.log(noOFInstallment,this.schemeRegistrationForm.value.TenurePeriod,'1');
-    
     for (let index = 0; index < noOFInstallment; index++) {
       this.SchemeMasterDetails.push(
         {
@@ -391,7 +400,7 @@ export class SchemeRegisterComponent implements OnInit {
 
     }
     console.log('fn ended');
-    
+
   }
   exportToExcel() {
     this.commonService.exportExcel(this.schemeReceiptList, 'Scheme Details')
@@ -474,7 +483,6 @@ export class SchemeRegisterComponent implements OnInit {
   }
 
   cancel() {
-    this.indexNumberStart = 0
     this.reset()
     this.isViewSchemeMasterGrid = true;
     this.detailArray = []
@@ -493,7 +501,7 @@ export class SchemeRegisterComponent implements OnInit {
 
   addNewRow(data: any) {
     let params = {
-      "ID": this.indexNumberStart += 1,
+      "ID": 1,
       "SCHEME_UNIQUEID": '',
       "SCHEME_ID": this.commonService.nullToString(data.SchemeID),
       "SCHEME_UNITS": this.commonService.emptyToZero(data.Units),
@@ -557,87 +565,29 @@ export class SchemeRegisterComponent implements OnInit {
       }
     }
   }
-  setPostData() {
-    return {
-      "MID": this.content.MID || 0,
-      "SCH_CUSTOMER_ID": this.content.SCH_CUSTOMER_ID || "",
-      "SCH_CUSTOMER_CODE": this.schemeRegistrationForm.value.Code,
-      "SCH_CUSTOMER_NAME": this.schemeRegistrationForm.value.Name,
-      "SCH_SCHEME_CODE": this.schemeRegistrationForm.value.SchemeId,
-      "SCH_METALCURRENCY": "",
-      "SCH_JOIN_DATE": this.schemeRegistrationForm.value.DateOfJoining,
-      "SCH_SCHEME_PERIOD": this.commonService.emptyToZero(this.schemeRegistrationForm.value.TenurePeriod),
-      "SCH_FREQUENCY": this.schemeRegistrationForm.value.Frequency,
-      "SCH_INST_AMOUNT_FC": this.commonService.CCToFC(
-        this.commonService.compCurrency,
-        this.commonService.emptyToZero(this.schemeRegistrationForm.value.InstallmentAmount)
-      ) || '0',
-      "SCH_INST_AMOUNT_CC": this.commonService.emptyToZero(this.schemeRegistrationForm.value.InstallmentAmount),
-      "SCH_ASSURED_AMT_FC": this.commonService.CCToFC(
-        this.commonService.compCurrency,
-        this.commonService.emptyToZero(this.schemeRegistrationForm.value.SumAssured)
-      ) || '0',
-      "SCH_ASSURED_AMT_CC": this.schemeRegistrationForm.value.SumAssured  || '0',
-      "SCH_EXPIRE_DATE": this.commonService.formatDateTime(new Date(this.schemeRegistrationForm.value.MaturingDate)),
-      "SCH_REMINDER_DAYS": this.commonService.emptyToZero(this.schemeRegistrationForm.value.AlertBeforeDays),
-      "SCH_REMINDER_MODE": this.schemeRegistrationForm.value.Frequency,
-      "SCHEME_BONUS": this.commonService.emptyToZero(this.schemeRegistrationForm.value.BonusInstallment),
-      "REMARKS": this.schemeRegistrationForm.value.Remarks,
-      "SCH_UNITS": this.commonService.emptyToZero(this.schemeRegistrationForm.value.Units),
-      "SCH_CANCEL_AMT": this.commonService.emptyToZero(this.schemeRegistrationForm.value.CancellationCharge),
-      "SCH_STATUS": this.schemeRegistrationForm.value.SCH_STATUS,
-      "PAY_DATE": "2024-02-08T06:54:12.269Z",
-      "PAY_BRANCH_CODE": "string",
-      "PAY_VOCTYPE": "string",
-      "PAY_VOCNO": 0,
-      "PAY_YEARMONTH": "string",
-      "PAY_AMOUNTFC": 0,
-      "PAY_AMOUNTCC": 0,
-      "SCH_ALERT_EMAIL": this.schemeRegistrationForm.value.Email,
-      "SCH_ALERT_MOBILE": this.schemeRegistrationForm.value.MobileNo,
-      "SCH_SEND_ALERT": this.schemeRegistrationForm.value.SendAlert,
-      "PAN_NUMBER": this.schemeRegistrationForm.value.PanNo,
-      "SCH_PAN_NUMBER": this.schemeRegistrationForm.value.PanNo,
-      "VOCDATE": this.schemeRegistrationForm.value.VOCDATE,
-      "SCH_CANCEL": true,
-      "SCH_REDEEM": true,
-      "REDEEM_REFERENCE": "string",
-      "SCHEME_BRANCH": this.schemeRegistrationForm.value.Branch,
-      "Details": this.SchemeMasterDetails || []
-    }
-  }
+
   /**USE: save button click */
   formSubmit() {
     let API = 'SchemeRegistration/InsertWithAttachments'
     if (this.content && this.content.FLAG == 'EDIT') {
       this.editSchemeDetail(this.content)
       this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
+      return
     }
     if (this.schemeRegistrationForm.invalid) {
       this.commonService.toastErrorByMsgId('select all required details!')
       return
     }
 
-    // if (this.indexNumberStart == 0) {
-    //   Swal.fire({
-    //     title: 'Add New Schemes!',
-    //     text: "",
-    //     icon: 'error',
-    //     showCancelButton: false,
-    //     confirmButtonColor: '#3085d6',
-    //     cancelButtonColor: '#d33',
-    //     confirmButtonText: 'Ok'
-    //   }).then((result) => {
-    //     // if (result.isConfirmed) {
-    //     // }
-    //   })
-    //   return
-    // }
+    if (this.SchemeMasterDetails.length == 0) {
+      this.commonService.toastErrorByMsgId('Process Scheme Before saving')
+      return
+    }
     // this.schemeArray = this.newSchemeItems.filter((item: any) => item.ID > 0)
 
     // this.detailArray.forEach((item: any, index: any) => {
     // delete item.schemeData['ID'];
-    
+
     this.formdata.append(`Model.model[0].schemeData.MID`, this.content ? this.content.MID : '0');
     this.formdata.append(`Model.model[0].schemeData.SCH_CUSTOMER_ID`, this.content ? this.content.SCH_CUSTOMER_ID : '0');
     this.formdata.append(`Model.model[0].schemeData.SCH_CUSTOMER_CODE`, this.schemeRegistrationForm.value.Code);
@@ -652,13 +602,13 @@ export class SchemeRegisterComponent implements OnInit {
     this.formdata.append(`Model.model[0].schemeData.SCH_ASSURED_AMT_FC`, this.schemeRegistrationForm.value.SumAssured || 0);
     this.formdata.append(`Model.model[0].schemeData.SCH_ASSURED_AMT_CC`, this.schemeRegistrationForm.value.SumAssured || 0);
     this.formdata.append(`Model.model[0].schemeData.SCH_EXPIRE_DATE`, this.commonService.formatDate(new Date(this.schemeRegistrationForm.value.MaturingDate)));
-    this.formdata.append(`Model.model[0].schemeData.SCH_REMINDER_DAYS`, this.schemeRegistrationForm.value.AlertBeforeDays ||0);
+    this.formdata.append(`Model.model[0].schemeData.SCH_REMINDER_DAYS`, this.schemeRegistrationForm.value.AlertBeforeDays || 0);
     this.formdata.append(`Model.model[0].schemeData.SCH_REMINDER_MODE`, this.schemeRegistrationForm.value.Frequency);
     this.formdata.append(`Model.model[0].schemeData.SCHEME_BONUS`, this.schemeRegistrationForm.value.BonusInstallment);
     this.formdata.append(`Model.model[0].schemeData.REMARKS`, this.schemeRegistrationForm.value.Remarks);
     this.formdata.append(`Model.model[0].schemeData.SCH_UNITS`, this.schemeRegistrationForm.value.Units);
     this.formdata.append(`Model.model[0].schemeData.SCH_CANCEL_AMT`, this.schemeRegistrationForm.value.CancellationCharge);
-    this.formdata.append(`Model.model[0].schemeData.SCH_STATUS`, this.schemeRegistrationForm.value.SCH_STATUS);
+    this.formdata.append(`Model.model[0].schemeData.SCH_STATUS`, 'true');
     this.formdata.append(`Model.model[0].schemeData.PAY_DATE`, this.commonService.formatDate(new Date(this.schemeRegistrationForm.value.DateOfJoining)));
     this.formdata.append(`Model.model[0].schemeData.PAY_BRANCH_CODE`, this.commonService.nullToString(this.commonService.branchCode));
     this.formdata.append(`Model.model[0].schemeData.PAY_VOCTYPE`, this.schemeRegistrationForm.value.VOCTYPE);
@@ -677,14 +627,14 @@ export class SchemeRegisterComponent implements OnInit {
     this.formdata.append(`Model.model[0].schemeData.REDEEM_REFERENCE`, `''`);
     this.formdata.append(`Model.model[0].schemeData.SCHEME_BRANCH`, this.commonService.branchCode);
     this.SchemeMasterDetails.forEach((item: any, index: any) => {
-      this.formdata.append(`Model.model[0].schemeData.Details[0].UNIQUEID`, '0');
+      this.formdata.append(`Model.model[0].schemeData.Details[${index}].UNIQUEID`, '0');
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_CODE`, this.schemeRegistrationForm.value.Code);
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_ID`, '');
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].SRNO`, item.SRNO || '0');
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_DATE`, this.commonService.formatDate(new Date(item.PAY_DATE)));
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_FC`, item.PAY_AMOUNT_FC || 0);
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_CC`, item.PAY_AMOUNT_CC || 0);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_STATUS`, item.PAY_STATUS);
+      this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_STATUS`, this.schemeRegistrationForm.value.REMAINDER_SEND);
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_DATE`, this.commonService.formatDate(new Date(item.REMAINDER_DATE)));
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_SEND`, this.schemeRegistrationForm.value.REMAINDER_SEND);
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].DT_BRANCH_CODE`, this.commonService.branchCode);
@@ -701,7 +651,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].RECEIPT_REF`, '0');
       this.formdata.append(`Model.model[0].schemeData.Details[${index}].RECEIPT_MID`, '0');
     })
-    if(this.Attachedfile.length>0){
+    if (this.Attachedfile.length > 0) {
       this.formdata.append(`Model.model[0].imageData.VOCNO`, this.schemeRegistrationForm.value.UNIQUEID);
       this.formdata.append(`Model.model[0].imageData.UNIQUEID`, '');
       this.formdata.append(`Model.model[0].imageData.SRNO`, this.schemeRegistrationForm.value.UNIQUEID);
@@ -729,7 +679,6 @@ export class SchemeRegisterComponent implements OnInit {
         this.commonService.closeSnackBarMsg();
         if (result.status == "Success") {
           this.detailArray = []
-          this.indexNumberStart = 0
           this.formdata = new FormData();
           Swal.fire({
             title: result.status,
@@ -744,18 +693,7 @@ export class SchemeRegisterComponent implements OnInit {
           })
         } else {
           this.detailArray = []
-          Swal.fire({
-            title: result.message ? result.message : 'Scheme Not Saved, try again',
-            text: "",
-            icon: 'error',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ok'
-          }).then((result) => {
-            // if (result.isConfirmed) {
-            // }
-          })
+          this.commonService.toastErrorByMsgId('Scheme Not Saved, try again')
         }
       }, err => {
         this.detailArray = []
@@ -766,13 +704,11 @@ export class SchemeRegisterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   editSchemeDetail(data: any) {
-
     let API = 'SchemeRegistration/UpdateSchemeRegistration/' + data.SCH_CUSTOMER_ID
     let params
     let Sub: Subscription = this.dataService.putDynamicAPI(API, params)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.close('reloadMainGrid')
           Swal.fire({
             title: result.status || 'updated',
             text: result.message || "",
@@ -782,22 +718,12 @@ export class SchemeRegisterComponent implements OnInit {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ok'
           }).then((result) => {
-            // if (result.isConfirmed) {
-            // }
+            if (result.isConfirmed) {
+              this.close('reloadMainGrid')
+            }
           })
         } else {
-          Swal.fire({
-            title: 'branch Not Found!',
-            text: "",
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ok'
-          }).then((result) => {
-            // if (result.isConfirmed) {
-            // }
-          })
+          this.commonService.toastErrorByMsgId(result.message || 'No updated')
         }
       }, err => alert(err))
 
@@ -848,27 +774,64 @@ export class SchemeRegisterComponent implements OnInit {
           cancelButtonColor: '#d33',
           confirmButtonText: 'Ok'
         }).then((result) => {
-          // if (result.isConfirmed) {
-          // }
+          if (result.isConfirmed) {
+            this.close('reloadMainGrid')
+          }
         })
       } else {
-        this.reset()
-        // this.changeCode(event,searchFlag)
-        Swal.fire({
-          title: result.message || 'Scheme Not Deleted!',
-          text: "try again",
-          icon: 'warning',
-          showCancelButton: false,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Ok'
-        }).then((result) => {
-          // if (result.isConfirmed) {
-          // }
-        })
+        this.commonService.toastErrorByMsgId(result.message || 'Scheme Not Deleted!')
       }
     }, err => alert(err))
     this.subscriptions.push(Sub)
+  }
+  setPostData() {
+    return {
+      "MID": this.content.MID || 0,
+      "SCH_CUSTOMER_ID": this.content.SCH_CUSTOMER_ID || "",
+      "SCH_CUSTOMER_CODE": this.schemeRegistrationForm.value.Code,
+      "SCH_CUSTOMER_NAME": this.schemeRegistrationForm.value.Name,
+      "SCH_SCHEME_CODE": this.schemeRegistrationForm.value.SchemeId,
+      "SCH_METALCURRENCY": "",
+      "SCH_JOIN_DATE": this.schemeRegistrationForm.value.DateOfJoining,
+      "SCH_SCHEME_PERIOD": this.commonService.emptyToZero(this.schemeRegistrationForm.value.TenurePeriod),
+      "SCH_FREQUENCY": this.schemeRegistrationForm.value.Frequency,
+      "SCH_INST_AMOUNT_FC": this.commonService.CCToFC(
+        this.commonService.compCurrency,
+        this.commonService.emptyToZero(this.schemeRegistrationForm.value.InstallmentAmount)
+      ) || '0',
+      "SCH_INST_AMOUNT_CC": this.commonService.emptyToZero(this.schemeRegistrationForm.value.InstallmentAmount),
+      "SCH_ASSURED_AMT_FC": this.commonService.CCToFC(
+        this.commonService.compCurrency,
+        this.commonService.emptyToZero(this.schemeRegistrationForm.value.SumAssured)
+      ) || '0',
+      "SCH_ASSURED_AMT_CC": this.schemeRegistrationForm.value.SumAssured || '0',
+      "SCH_EXPIRE_DATE": this.commonService.formatDateTime(new Date(this.schemeRegistrationForm.value.MaturingDate)),
+      "SCH_REMINDER_DAYS": this.commonService.emptyToZero(this.schemeRegistrationForm.value.AlertBeforeDays),
+      "SCH_REMINDER_MODE": this.schemeRegistrationForm.value.Frequency,
+      "SCHEME_BONUS": this.commonService.emptyToZero(this.schemeRegistrationForm.value.BonusInstallment),
+      "REMARKS": this.schemeRegistrationForm.value.Remarks,
+      "SCH_UNITS": this.commonService.emptyToZero(this.schemeRegistrationForm.value.Units),
+      "SCH_CANCEL_AMT": this.commonService.emptyToZero(this.schemeRegistrationForm.value.CancellationCharge),
+      "SCH_STATUS": this.schemeRegistrationForm.value.SCH_STATUS,
+      "PAY_DATE": "2024-02-08T06:54:12.269Z",
+      "PAY_BRANCH_CODE": "string",
+      "PAY_VOCTYPE": "string",
+      "PAY_VOCNO": 0,
+      "PAY_YEARMONTH": "string",
+      "PAY_AMOUNTFC": 0,
+      "PAY_AMOUNTCC": 0,
+      "SCH_ALERT_EMAIL": this.schemeRegistrationForm.value.Email,
+      "SCH_ALERT_MOBILE": this.schemeRegistrationForm.value.MobileNo,
+      "SCH_SEND_ALERT": this.schemeRegistrationForm.value.SendAlert,
+      "PAN_NUMBER": this.schemeRegistrationForm.value.PanNo,
+      "SCH_PAN_NUMBER": this.schemeRegistrationForm.value.PanNo,
+      "VOCDATE": this.schemeRegistrationForm.value.VOCDATE,
+      "SCH_CANCEL": true,
+      "SCH_REDEEM": true,
+      "REDEEM_REFERENCE": "string",
+      "SCHEME_BRANCH": this.schemeRegistrationForm.value.Branch,
+      "Details": this.SchemeMasterDetails || []
+    }
   }
 
   close(data?: any) {
