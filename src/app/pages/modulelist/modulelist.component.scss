@@ -193,8 +193,12 @@ ul {
   margin:0;
   padding:0;
   max-width: 75px;
-  padding-top: 63px;
+  padding-top: 23px;
 }
+.list_1{
+padding-top: 63;
+}
+
 ul:after{
   content:"";
   display: block;
@@ -209,13 +213,30 @@ ul:after{
   color: black;
   position: absolute;
   z-index: 20;
+  right: -4px;
+  font-size: 26px !important;
+  text-align: center;
+  line-height: 28px !important;
+  top: 18px;
+  top: -6px;
+
+}
+
+.imges{
+  display: none;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, white 33%, white 33%);
+  box-sizing: border-box;
+  position: relative;
+  text-decoration: none;
+  color: black;
+  position: absolute;
+  z-index: 20;
   right: 9px;
   font-size: 26px !important;
   text-align: center;
   line-height: 28px !important;
   top: 18px;
   top: 7px;
-
 }
 
 ul li {
@@ -288,6 +309,9 @@ ul span {
 
 li:hover {
   cursor: pointer;
+  .imges{
+    display: inline;
+  }
 }
 
 li:hover span {
