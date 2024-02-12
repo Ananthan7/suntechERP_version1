@@ -141,8 +141,8 @@ export class RetailGridComponent implements OnInit {
         duration: 3000,
       });
     }
-    console.log(this.vocType,'this.vocType');
-    
+    console.log(this.vocType, 'this.vocType');
+
     if (this.vocType == 'GEN') {
       this.getSchemeMaturedAPI()
       return
@@ -206,6 +206,14 @@ export class RetailGridComponent implements OnInit {
 
           let headers = Object.keys(this.orderedItems[0]);
           this.orderedItemsHead = headers.filter((item: any) => item != 'MID')
+          if (this.vocType == 'MASSCH') {
+            this.orderedItems = this.changeKeyName(this.orderedItems, 'SCHEME_METALCURRENCY', 'DEPOSIT_IN')
+            headers = Object.keys(this.orderedItems[0]);
+            this.orderedItemsHead = headers.filter((item: any) => item != 'SCHEME_UNIT')
+            this.orderedItemsHead = headers.filter((item: any) => item != 'SCHEME_METALCURRENCY')
+          }
+          console.log(this.orderedItems, 'this.orderedItems');
+
           // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
           // this.ChangeDetector.detectChanges()
           // this.orderedItems = this.orderedItems.sort((a, b) => b.MID - a.MID);
@@ -222,6 +230,29 @@ export class RetailGridComponent implements OnInit {
         });
       });
     this.subscriptions$.push(sub)
+  }
+  changeKeyName(array: any, oldKey: any, newKey: any) {
+    return array.map((obj: any) => {
+      // Create a new object with all properties of the original object
+      const newObj = { ...obj };
+      // If the oldKey exists in the object, delete it and add a new property with the newKey
+      if (newObj.hasOwnProperty(oldKey)) {
+        newObj[newKey] = newObj[oldKey];
+        delete newObj[oldKey];
+      }
+      return newObj;
+    });
+  }
+  changeValuesToYN(array:any) {
+    return array.map((obj:any) => {
+      const newObj = { ...obj };
+      for (let key in newObj) {
+        if (typeof newObj[key] === 'boolean') {
+          newObj[key] = newObj[key] ? 'Y' : 'N';
+        }
+      }
+      return newObj;
+    });
   }
 
   //unsubscriptions of streams

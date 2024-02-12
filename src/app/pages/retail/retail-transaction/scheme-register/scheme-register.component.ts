@@ -366,6 +366,10 @@ export class SchemeRegisterComponent implements OnInit {
         if (resp) {
           this.SchemeMasterDetails = resp.response
           this.SchemeMasterDetails.forEach((item:any)=>{
+            item.RCVD_BRANCH_CODE = this.schemeRegistrationForm.value.Branch
+            item.RCVD_VOCTYPE = this.schemeRegistrationForm.value.VOCTYPE
+            item.RCVD_YEARMONTH = this.commonService.yearSelected
+            item.RCVD_VOCNO = item.RCVD_VOCNO.toString()
             if(item.REMAINDER_SEND.toString() == '0'){
               item.REMAINDER_SEND = false
             }else{
