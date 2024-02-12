@@ -4,6 +4,15 @@
 //   overflow-y: hidden;
 // }
 
+.con_1{
+  max-width: 1392px;
+  width: 100%;
+    padding-right: var(--bs-gutter-x, 10px);
+    padding-left: var(--bs-gutter-x, 131px);
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .landing_page {
   min-height: 68vh !important;
   padding: 20px 0px;
@@ -17,8 +26,8 @@
     width: 75%;
     height: 100% !important;
     img {
-      width: 55px;
-      height: 55px;
+      width: 50px;
+      height: 50px;
     }
     h6 {
       font-size: 14px;
@@ -30,6 +39,9 @@
     
   }
 }
+.m_1{
+  margin-left: 50px;
+}
 
 .image_hover{
   display: none;
@@ -40,8 +52,8 @@
 }
 
 .card_item {
-  width: 177px;
-  height: 160px;
+  width: 170px;
+  height: 170px;
   border: 1px solid #cccaca;
   -ms-flex-preferred-size: calc(33.33333% - 30px);
   flex-basis: calc(33.33333% - 30px);
@@ -50,7 +62,10 @@
 
   overflow: hidden;
 
-  border-radius: 13px;
+  border-radius: 15px;
+  background: #FFF;
+  
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
 }
 .card_item_link {
   display: block;
@@ -109,15 +124,15 @@
   transition: color .5s ease
 } 
 .card_item_bg {
-  height: 73px;
-  width: 53px;
+  height: 64px;
+  width: 63px;
   background-color: #274d90;
   z-index: 1;
   position: absolute;
-  top: -35px;
-  left: 140px;
-  bottom: -99px;
-  right: 90px;
+  top: -18px;
+  left: 133px;
+  bottom: -68px;
+  right: 127px;
   border-radius: 50%;
   transition: all 0.5s ease;
 }
@@ -193,7 +208,7 @@ ul {
   margin:0;
   padding:0;
   max-width: 75px;
-  padding-top: 23px;
+  padding-top: 20px;
 }
 ul:after{
   content:"";
@@ -202,37 +217,20 @@ ul:after{
 }
 
 .imge {
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, white 33%, white 33%);
-  box-sizing: border-box;
-  position: relative;
-  text-decoration: none;
-  color: black;
-  position: absolute;
-  z-index: 20;
-  right: -4px;
-  font-size: 26px !important;
-  text-align: center;
-  line-height: 28px !important;
-  top: 18px;
-  top: -6px;
-
+    height: 69px;
+    position: absolute;
+    right: -7px;
+    top: -7px;
 }
 
 .imges{
   display: none;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, white 33%, white 33%);
-  box-sizing: border-box;
-  position: relative;
-  text-decoration: none;
-  color: black;
+  height: 35px;
   position: absolute;
-  z-index: 20;
-  right: 9px;
-  font-size: 26px !important;
-  text-align: center;
-  line-height: 28px !important;
-  top: 18px;
-  top: 7px;
+  right: 11px;
+  top: 9px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, white 33%, white 33%);
+  
 }
 
 ul li {
@@ -245,17 +243,19 @@ ul li {
   float:right;
   margin-bottom: 10px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
+  transition-duration: 500ms;
+  transition-property: margin-left;
 
 }
-ul li a{
+ul li #bt_1{
   position: relative;
   display: block;
-  min-width: 46px;
+  min-width: 54px;
   padding: 7px;
-  padding-left: 39px;
-  padding-top: 5px;
-  padding-bottom: 4px;
+  padding-left: 31px;
+  padding-top: 6px;
+  padding-bottom: 5px;
+ height: 54px;
 }
 
 ul span {
@@ -305,6 +305,7 @@ ul span {
 
 li:hover {
   cursor: pointer;
+  transform: translateX(0px);
   .imges{
     display: inline;
   }
