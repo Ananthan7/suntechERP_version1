@@ -866,6 +866,9 @@ export class CommonServiceService {
           // Replace empty object with an empty string
           obj[prop] = '';
         }
+        if (typeof obj[prop] === 'boolean') {
+          obj[prop] = obj[prop] ? 'Y' : 'N';
+        }
       }
     });
     return dataArray

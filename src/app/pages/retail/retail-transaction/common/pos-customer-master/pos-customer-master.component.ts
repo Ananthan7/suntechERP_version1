@@ -721,6 +721,14 @@ export class PosCustomerMasterComponent implements OnInit {
 
           "LOOKING_FOR": this.customerDetails?.LOOKING_FOR || '',
 
+          "POSCUSTIDEXP_DATE":  this.customerDetails?.POSCUSTIDEXP_DATE || this.dummyDate,
+
+          // new fields added 12-02-2024
+          "ATTACHMENT_FROM_SCANNER": this.customerDetails?.ATTACHMENT_FROM_SCANNER ||  false,
+          "GOOD_QUALITY_A_K_A": "",
+          "LOW_QUALITY_A_K_A": "",
+          "POSKNOWNABOUT": 0
+
         };
 
         // const apiCtrl =

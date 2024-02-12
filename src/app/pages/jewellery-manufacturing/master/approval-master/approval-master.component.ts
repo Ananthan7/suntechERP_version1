@@ -134,7 +134,7 @@ export class ApprovalMasterComponent implements OnInit {
   emailid(data: any, value: any) {
     if (!this.commonService.validateEmail(data.target.value)) {
       this.commonService.toastErrorByMsgId('Invalid Email Address')
-      this.tableData[value.data.SRNO - 1].EMAIL_ID = ''
+      // this.tableData[value.data.SRNO - 1].EMAIL_ID = ''
       return
     }
 

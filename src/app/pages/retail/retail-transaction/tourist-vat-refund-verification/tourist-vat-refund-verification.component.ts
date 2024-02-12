@@ -97,7 +97,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.touristVatRefundVerificationForm.controls.partyCode.setValue(e.ACCODE);
-    this.touristVatRefundVerificationForm.controls.partycodeName.setValue(e);
+    this.touristVatRefundVerificationForm.controls.partycodeName.setValue(e.ACCOUNT_MODE);
   }
 
   partyCurrencyCodeSelected(e: any) {
