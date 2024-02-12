@@ -281,13 +281,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
           // this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(data.TOTAL_AMOUNTCC);
         }
       });
-    }
+  }
 
-    enteredBySelected(e: any) {
-      console.log(e);
-      this.posCurrencyReceiptForm.controls.enteredby.setValue(e.SALESPERSON_CODE);
-      this.posCurrencyReceiptForm.controls.enteredbyuser.setValue(e.DESCRIPTION);
-    }
+  enteredBySelected(e: any) {
+    console.log(e);
+    this.posCurrencyReceiptForm.controls.enteredby.setValue(e.SALESPERSON_CODE);
+    this.posCurrencyReceiptForm.controls.enteredbyuser.setValue(e.DESCRIPTION);
+  }
 
   // PartyCodeChange(event: any) {
   //   this.PartyCodeData.SEARCH_VALUE = event.target.value
@@ -296,7 +296,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   partyCodeSelected(e: any) {
     console.log(e);
     this.posCurrencyReceiptForm.controls.partyCode.setValue(e.ACCODE);
-    this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e['ACCOUNT HEAD']);
+    this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(e['ACCOUNT_HEAD']);
     this.partyCodeChange({ target: { value: e.ACCODE } })
   }
 
@@ -327,7 +327,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
               this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
               this.posCurrencyReceiptForm.controls.partyCurr.setValue(data[0].CURRENCY_CODE)
 
-          // this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
+              // this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
               // this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data[0].CURRENCY_CODE)
               // this.PartyDetailsOrderForm.controls.BillToAccountHead.setValue(data[0].ACCOUNT_HEAD)
               // this.PartyDetailsOrderForm.controls.BillToAddress.setValue(data[0].ADDRESS)
@@ -623,8 +623,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
 
-  
-  onRowDoubleClicked(e: any){
+
+  onRowDoubleClicked(e: any) {
     this.openAddPosARdetails(e.data);
   }
 
@@ -635,13 +635,25 @@ export class PosCurrencyReceiptComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.receiptData = data;
 
     modalRef.result.then((postData) => {
       if (postData) {
-        
-        console.log('Data from modal:', postData);
 
-        this.posCurrencyDetailsData.push(postData);
+        console.log('Data from modal:', postData);
+        if (postData?.isUpdate) {
+
+          const preItemIndex = this.posCurrencyDetailsData.findIndex((data: any) =>
+            data.SRNO.toString() == postData.SRNO.toString()
+          );
+
+          console.log(preItemIndex);
+
+          this.posCurrencyDetailsData[preItemIndex] = postData;
+
+        } else {
+          this.posCurrencyDetailsData.push(postData);
+        }
         this.posCurrencyDetailsData.forEach((data, index) => data.SRNO = index + 1);
       }
     });
