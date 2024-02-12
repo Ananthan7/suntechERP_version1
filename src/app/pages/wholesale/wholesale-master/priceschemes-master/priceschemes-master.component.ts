@@ -55,15 +55,27 @@ export class PriceschemesMasterComponent implements OnInit {
   enableNextField(currentField: string, nextField: string) {
     const currentControl = this.priceSchemaMasterForm.get(currentField);
     const nextControl = this.priceSchemaMasterForm.get(nextField);
-  
+
     if (currentControl && nextControl) {
-      if (currentControl.valid) {
-        nextControl.enable({ emitEvent: false });
-        nextControl.markAsUntouched();
+      if (currentControl.value && currentControl.value !== nextControl.value) {
+        nextControl.enable();
       } else {
         nextControl.disable();
-        nextControl.setValue(null);
+        // If the current field is cleared, also clear and disable the next fields
+        this.priceSchemaMasterForm.get(nextField)?.setValue('');
+        this.disableNextFields(nextField);
       }
+    }
+  }
+
+  // Helper method to disable and clear next fields
+  private disableNextFields(currentField: string) {
+    const nextFields = ['price2', 'price3', 'price4', 'price5'];
+    const startIndex = nextFields.indexOf(currentField);
+    for (let i = startIndex + 1; i < nextFields.length; i++) {
+      const nextField = nextFields[i];
+      this.priceSchemaMasterForm.get(nextField)?.disable();
+      this.priceSchemaMasterForm.get(nextField)?.setValue('');
     }
   }
   
@@ -85,12 +97,27 @@ priceCodeSelected(e: any, controlName: string) {
     this.commonService.toastErrorByMsgId('cannot select the same account code');
     return;
   }
+
   try {
     this.priceSchemaMasterForm.controls[controlName].setValue(e.PRICE_CODE);
+    const nextFieldName = this.getNextFieldName(controlName);
+    if (nextFieldName !== '') {
+      this.enableNextField(controlName, nextFieldName);
+    }
   } catch (error) {
     console.error('Error in priceCodeSelected:', error);
   }
 }
+
+// Helper method to get the next field name based on the current field
+private getNextFieldName(currentField: string): string {
+  const fieldIndex = ['price1', 'price2', 'price3', 'price4', 'price5'].indexOf(currentField);
+  return fieldIndex !== -1 && fieldIndex < 4 ? `price${fieldIndex + 2}` : '';
+}
+
+
+
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update();

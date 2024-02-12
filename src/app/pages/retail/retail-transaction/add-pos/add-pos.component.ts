@@ -753,6 +753,7 @@ export class AddPosComponent implements OnInit {
       fcn_returns_sales_man: ['',],
       fcn_returns_cust_code: ['',],
       fcn_returns_cust_mobile: ['',],
+      fcn_returns_cust_name: ['',],
     });
 
     this.exchangeForm = this.formBuilder.group({
@@ -6734,6 +6735,10 @@ export class AddPosComponent implements OnInit {
 
               this.salesReturnForm.controls['fcn_returns_cust_mobile'].setValue(
                 _response.MOBILE
+              );
+
+              this.salesReturnForm.controls['fcn_returns_cust_name'].setValue(
+                _response.PARTYNAME
               );
               this.salesReturnForm.controls['fcn_returns_voc_date'].setValue(
                 _vocdate[0]

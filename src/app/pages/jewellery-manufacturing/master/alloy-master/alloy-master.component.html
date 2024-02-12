@@ -16,77 +16,102 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Code * :</label>
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Code *
+                                    :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput (focusout)="prefixCodeValidate()"
+                                        <input type="text" 
+                                            [disabled]="!viewMode" matInput
+                                            (focusout)="prefixCodeValidate()"
                                             formControlName="code" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="codeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="codeData"
                                         (newRowClick)="codeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Cost Center * :</label>
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Cost Center
+                                    * :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="costCenter" />
+                                        <input type="text" matInput
+                                            formControlName="costCenter" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="costCenterData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="costCenterData"
                                         (newRowClick)="costCenterSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Type
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Type
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="type" />
+                                        <input type="text" matInput
+                                            formControlName="type" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="typeCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="typeCodeData"
                                         (newRowClick)="typeCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Category
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Category
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="category" />
+                                        <input type="text" matInput
+                                            formControlName="category" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="categoryCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="categoryCodeData"
                                         (newRowClick)="categoryCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Sub Category
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Sub Category
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="subCategory" />
+                                        <input type="text" matInput
+                                            formControlName="subCategory" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="subcategoryCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="subcategoryCodeData"
                                         (newRowClick)="subcategoryCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Brand
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Brand
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="brand" />
+                                        <input type="text" matInput
+                                            formControlName="brand" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="BrandCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="BrandCodeData"
                                         (newRowClick)="brandCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Color * :</label>
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Color *
+                                    :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="color" />
+                                        <input type="text" matInput
+                                            formControlName="color" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="colorData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="colorData"
                                         (newRowClick)="colorDataSelected($event)">
                                     </master-search>
                                 </div>
@@ -94,15 +119,18 @@
                             <div class="row mb-1">
                                 <div class="col-sm-12">
                                     <section class="example-section">
-                                        <mat-checkbox class="example-margin">Allow
+                                        <mat-checkbox
+                                            class="example-margin">Allow
                                             Pcs</mat-checkbox>
                                     </section>
                                     <section class="example-section">
-                                        <mat-checkbox class="example-margin">Exclude From
+                                        <mat-checkbox
+                                            class="example-margin">Exclude From
                                             Transfer Wt</mat-checkbox>
                                     </section>
                                     <section class="example-section">
-                                        <mat-checkbox class="example-margin">Silver
+                                        <mat-checkbox
+                                            class="example-margin">Silver
                                             Alloy</mat-checkbox>
                                     </section>
                                 </div>
@@ -110,101 +138,130 @@
                         </div>
                         <div class="col-md-3">
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Description * :</label>
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Description
+                                    * :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field>
-                                        <input type="text" matInput formControlName="description" />
+                                        <input type="text" matInput
+                                            formControlName="description" />
                                     </mat-form-field>
 
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Vendor
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Vendor
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="vendor" />
+                                        <input type="text" matInput
+                                            formControlName="vendor" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="vendorCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="vendorCodeData"
                                         (newRowClick)="vendorCodeSelected($event)"></master-search>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Vendor Ref
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Vendor Ref
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field>
-                                        <input type="text" matInput formControlName="vendorRef" />
+                                        <input type="text" matInput
+                                            formControlName="vendorRef" />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Created on
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Created on
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%;">
-                                        <input [disabled]="true" matInput [matDatepicker]="createdOn"
-                                            formControlName="createdOn" placeholder="DD/MM/YYYY" DateValidation />
-                                        <mat-datepicker-toggle matSuffix [for]="createdOn"></mat-datepicker-toggle>
-                                        <mat-datepicker [disabled]="true" [startAt]="currentDate"
+                                        <input  [disabled]="true" matInput
+                                            [matDatepicker]="createdOn"
+                                            formControlName="createdOn"
+                                            placeholder="DD/MM/YYYY"
+                                            DateValidation />
+                                        <mat-datepicker-toggle matSuffix
+                                            [for]="createdOn"></mat-datepicker-toggle>
+                                        <mat-datepicker [disabled]="true"
+                                            [startAt]="currentDate"
                                             #createdOn></mat-datepicker>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Created by
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Created by
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field>
-                                        <input [disabled]="true" type="text" matInput formControlName="createdBy" />
+                                        <input  [disabled]="true" type="text"
+                                            matInput
+                                            formControlName="createdBy" />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">First Trans
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">First Trans
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field>
-                                        <input type="text" matInput formControlName="fristTrans" />
+                                        <input type="text" matInput
+                                            formControlName="fristtransaction" />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-5 col-form-label">Last Trans
+                                <label for="input"
+                                    class="col-sm-5 col-form-label">Last Trans
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field>
-                                        <input type="text" matInput formControlName="lastTrans" />
+                                        <input type="text" matInput
+                                            formControlName="lasttransaction" />
                                     </mat-form-field>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-4 col-form-label">Currency * :</label>
+                                <label for="input"
+                                    class="col-sm-4 col-form-label">Currency *
+                                    :</label>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput readonly formControlName="currency" />
+                                        <input  type="text" matInput readonly
+                                            formControlName="currency" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput SixDecimalInput readonly style="text-align: right;"
+                                        <input type="text" matInput
+                                            SixDecimalInput readonly
+                                            style="text-align: right;"
                                             formControlName="currencyRate" />
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" class="col-sm-4 col-form-label">Weight Avg
+                                <label for="input"
+                                    class="col-sm-4 col-form-label">Weight Avg
                                     Cost :</label>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="weightAvgCost" />
+                                        <input type="text" matInput
+                                            formControlName="weightAvgCost" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="weightAvgCostDes" />
+                                        <input type="text" matInput
+                                            formControlName="weightAvgCostDes" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -212,7 +269,8 @@
                                 <div class="col-md-12">
                                     <div class="price_box">
                                         <a>PriceScheme</a>
-                                        <master-search [MasterSearchData]="priceSchemeData"
+                                        <master-search *ngIf="!viewMode"
+                                            [MasterSearchData]="priceSchemeData"
                                             (newRowClick)="priceSchemeValidate($event)"></master-search>
                                         <a>{{alloyMastereForm.value.priceScheme}}</a>
                                     </div>
@@ -241,15 +299,18 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price1code" />
+                                        <input type="text" matInput
+                                            formControlName="price1code" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="priceCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="priceCodeData"
                                         (newRowClick)="priceOneCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price1per" 
-                                            style="text-align: right;" />
+                                        <input type="number" matInput
+                                            formControlName="price1per"
+                                            class="text-right" max="100" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -257,7 +318,7 @@
                                         <input type="number" matInput
                                             AmountDecimalInput
                                             formControlName="price1Fc"
-                                             class="text-right"/>
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -265,7 +326,7 @@
                                         <input type="number" matInput
                                             AmountDecimalInput
                                             formControlName="price1Lc"
-                                             class="text-right"/>
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -275,9 +336,11 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price2code" />
+                                        <input type="text" matInput
+                                            formControlName="price2code" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="priceCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="priceCodeData"
                                         (newRowClick)="priceTwoCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
@@ -291,14 +354,16 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
                                             formControlName="price2Fc"
-                                            AmountDecimalInput class="text-right" />
+                                            AmountDecimalInput
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
                                             formControlName="price2Lc"
-                                            AmountDecimalInput class="text-right" />
+                                            AmountDecimalInput
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -308,14 +373,17 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price3code" />
+                                        <input type="text" matInput
+                                            formControlName="price3code" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="priceCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="priceCodeData"
                                         (newRowClick)="priceThreeCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price3per"
+                                        <input type="number" matInput
+                                            formControlName="price3per"
                                             style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
@@ -323,14 +391,16 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
                                             formControlName="price3Fc"
-                                            AmountDecimalInput class="text-right"/>
+                                            AmountDecimalInput
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
                                             formControlName="price3Lc"
-                                            AmountDecimalInput class="text-right"/>
+                                            AmountDecimalInput
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -340,30 +410,34 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price4code" />
+                                        <input type="text" matInput
+                                            formControlName="price4code" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="priceCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="priceCodeData"
                                         (newRowClick)="priceFourCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
                                             formControlName="price4per"
-                                             class="text-right" />
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
                                             formControlName="price4Fc"
-                                            AmountDecimalInput class="text-right" />
+                                            AmountDecimalInput
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
                                             formControlName="price4Lc"
-                                            AmountDecimalInput class="text-right" />
+                                            AmountDecimalInput
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -373,14 +447,17 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="price5code" />
+                                        <input type="text" matInput
+                                            formControlName="price5code" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="priceCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="priceCodeData"
                                         (newRowClick)="priceFiveCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput formControlName="price5per"
+                                        <input type="number" matInput
+                                            formControlName="price5per"
                                             style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
@@ -388,15 +465,16 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
                                             formControlName="price5Fc"
-                                            AmountDecimalInput class="text-right"/>
+                                            AmountDecimalInput
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput
                                             formControlName="price5Lc"
-                                            AmountDecimalInput class="text-right"
-                                            oninput="formatNumber(this)" />
+                                            AmountDecimalInput
+                                            class="text-right" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -406,9 +484,11 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="hsncode" />
+                                        <input type="text" matInput
+                                            formControlName="hsncode" />
                                     </mat-form-field>
-                                    <master-search [MasterSearchData]="HSNCodeData"
+                                    <master-search *ngIf="!viewMode"
+                                        [MasterSearchData]="HSNCodeData"
                                         (newRowClick)="HSNCenterSelected($event)"></master-search>
                                 </div>
                             </div>
@@ -416,13 +496,16 @@
                         <div class="col-md-2">
                             <div class="upload-btn-wrapper">
                                 <button class="btn btnnew">Item Image</button>
-                                <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                                    class="uploadproduct" (change)="onFileChanged($event)">
+                                <input type="file" name="uploadproduct"
+                                    accept=".png, .jpg, .jpeg" #fileInput
+                                    class="uploadproduct"
+                                    (change)="onFileChanged($event)">
                             </div>
 
                             <div class="image_box">
                                 <div class="img_box">
-                                    <img src={{urls}} style="width:209px;height:163px">
+                                    <img src={{urls}}
+                                        style="width:209px;height:163px">
                                 </div>
                             </div>
                         </div>

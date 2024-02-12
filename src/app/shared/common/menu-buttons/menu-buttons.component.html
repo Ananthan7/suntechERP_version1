@@ -1,13 +1,13 @@
 <div class="d-flex ps-2">
     <div class="p-1" *ngIf="viewAddBtn">
         <button type="button" mat-flat-button class="flatbutton"
-            (click)="AddBtnClicked()">
+            (click)="AddBtnClicked()" [disabled]="isDisabled">
             <i class="fa fa-plus" style="font-size: 11px;color: #fff;"></i>
         </button>
     </div>
     <div class="p-1" *ngIf="viewDeleteBtn">
         <button type="button" mat-flat-button class="flatbutton"
-            (click)="deleteBtnClicked()">
+            (click)="deleteBtnClicked()"  [disabled]="isDisabled">
             <i class="fa fa-trash" style="font-size: 11px;color: #fff;"></i>
         </button>
     </div>

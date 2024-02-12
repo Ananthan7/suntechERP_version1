@@ -34,14 +34,14 @@
                                     <input type="text" matInput
                                         placeholder="Code"
                                         (focusout)="designCodeValidate($event)"
-                                        [readonly]="codeSearchFlag == 'STOCK'"
+                                        [readonly]="codeSearchFlag == 'DESIGN'"
                                         formControlName="designCode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
-                                        [readonly]="codeSearchFlag == 'STOCK'"
+                                        [readonly]="codeSearchFlag == 'DESIGN'"
                                         formControlName="designDescription" />
                                 </mat-form-field>
                                 <master-search
@@ -64,13 +64,13 @@
                                 <mat-form-field style="width: 90%;">
                                     <input type="text" matInput
                                         formControlName="StockCode"
-                                        [readonly]="codeSearchFlag == 'DESIGN'" />
+                                        [readonly]="codeSearchFlag == 'STOCK'" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 80%;">
                                     <input type="text" matInput
-                                        [readonly]="codeSearchFlag == 'DESIGN'"
+                                        [readonly]="codeSearchFlag == 'STOCK'"
                                         formControlName="StockCodeDesc" />
                                 </mat-form-field>
                                 <master-search

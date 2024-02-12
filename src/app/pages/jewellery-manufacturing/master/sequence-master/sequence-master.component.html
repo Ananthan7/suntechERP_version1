@@ -22,7 +22,7 @@
                                 Code * :</label>
                             <mat-form-field style="width: 20%">
                                 <input type="text" matInput placeholder="Code"
-                                    maxlength="6" FocusOnLoad
+                                    maxlength="6" 
                                     formControlName="sequenceCode"
                                     [readonly]="viewMode"
                                     oninput="this.value = this.value.toUpperCase()"
@@ -51,7 +51,7 @@
                                     (change)="PrefixCodeChange($event)"
                                     formControlName="sequencePrefixCode" />
                             </mat-form-field>
-                            <master-search
+                            <master-search *ngIf="!viewMode"
                                 [MasterSearchData]="sequenceMasterData"
                                 (newRowClick)="sequencePrefixCodeSelected($event)">
                             </master-search>
@@ -128,7 +128,7 @@
                                                 class="mx-1"
                                                 [innerHTML]="data.WIP_ACCODE"></a>
                                         </div>
-                                        <master-search *ngIf="!viewMode"
+                                        <master-search *ngIf="!viewMode && data['isChecked']"
                                             [MasterSearchData]="accountMasterData"
                                             (newRowClick)="wipAccodeSelected($event,data)">
                                         </master-search>
@@ -144,7 +144,7 @@
                                                 class="mx-1"
                                                 [innerHTML]="data.GAIN_ACCODE"></a>
                                         </div>
-                                        <master-search *ngIf="!viewMode"
+                                        <master-search *ngIf="!viewMode && data['isChecked']"
                                             [MasterSearchData]="accountMasterData"
                                             (newRowClick)="gainAccodeSelected($event,data)">
                                         </master-search>
@@ -160,7 +160,7 @@
                                                 class="mx-1"
                                                 [innerHTML]="data.LAB_ACCODE"></a>
                                         </div>
-                                        <master-search *ngIf="!viewMode"
+                                        <master-search *ngIf="!viewMode && data['isChecked']"
                                             [MasterSearchData]="accountMasterData"
                                             (newRowClick)="labAccodeSelected($event,data)">
                                         </master-search>
@@ -176,38 +176,38 @@
                                                 class="mx-1"
                                                 [innerHTML]="data.LOSS_ACCODE"></a>
                                         </div>
-                                        <master-search *ngIf="!viewMode"
+                                        <master-search *ngIf="!viewMode && data['isChecked']"
                                             [MasterSearchData]="accountMasterData"
                                             (newRowClick)="lossAccodeSelected($event,data)">
                                         </master-search>
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="number"
-                                        [value]="data['STD_LOSS']"
+                                    <input type="number" [disabled]="!data['isChecked']"
+                                        [(ngModel)]="data['STD_LOSS']"
                                         MetalDecimalInput [readonly]="viewMode"
                                         style="text-align: right; width: 86px;" />
                                 </td>
                                 <td>
-                                    <input type="number"
-                                        [value]="data['MAX_LOSS']"
+                                    <input type="number" [disabled]="!data['isChecked']"
+                                        [(ngModel)]="data['MAX_LOSS']"
                                         MetalDecimalInput [readonly]="viewMode"
                                         style="text-align: right;width: 86px;" />
                                 </td>
                                 <td>
                                     <input type="time" style="width: 100%;"
-                                        [readonly]="viewMode"
-                                        [value]="data['STD_TIME']" step="2" />
+                                        [readonly]="viewMode" [disabled]="!data['isChecked']"
+                                        [(ngModel)]="data['STD_TIME']" step="2" />
                                 </td>
                                 <td>
                                     <input type="time" [readonly]="viewMode"
-                                        style="width: 100%;"
-                                        [value]="data['MAX_TIME']" step="2" />
+                                        style="width: 100%;" [disabled]="!data['isChecked']"
+                                        [(ngModel)]="data['MAX_TIME']" step="2" />
                                 </td>
                                 <td>
-                                    <input type="checkbox" [readonly]="viewMode"
-                                        [value]="data['TIMEON_PROCESS']"
-                                        [disabled]="isdisabled" />
+                                    <input type="checkbox" 
+                                        [(ngModel)]="data['TIMEON_PROCESS']"
+                                        [disabled]="!data['isChecked'] || viewMode" />
                                 </td>
                                 <!-- Preview -->
                                 <div *cdkDragPreview matchSize="true"

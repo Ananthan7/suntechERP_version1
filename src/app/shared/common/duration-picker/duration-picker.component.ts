@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -15,17 +15,19 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 export class DurationPickerComponent implements OnInit {
 
   @Input() content!: any;
-  viewMode: boolean = false;
-  tableData: any[] = [];
-  private subscriptions: Subscription[] = [];
-  processTypeList: any[] = [];
-  islossReadOnly = true;
-  isRecovReadOnly = true;
-  isAlloWGainReadOnly = true;
+  @Input() duration1!: any;
+  @Input() duration2!: any;
+  @Output() updateDuration = new EventEmitter<any>();
   durationPickerForm!: FormGroup;
 
   duration: any[] = [];
-
+  totalMinutes: any;
+  daystime: any;
+  hoursTime: any;
+  minutesTime: any;
+  daystime2: any;
+  hoursTime2: any;
+  minutesTime2: any;
 
 
   constructor(
@@ -37,52 +39,102 @@ export class DurationPickerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+   
+    console.log(this.duration1)
+    
     this.durationPickerForm = this.formBuilder.group({
       days: [''],
       hours: [''],
       minutes: [''],
     });
 
+    if (this.duration2 && this.duration2.STD_TIME !== "") {
+      this.timeConvert(this.duration2.STD_TIME);
+      this.durationPickerForm.controls.days.setValue(this.daystime);
+      this.durationPickerForm.controls.hours.setValue(this.hoursTime);
+      this.durationPickerForm.controls.minutes.setValue(this.minutesTime);
+    }
+
+    if (this.duration1 && this.duration1.MAX_TIME !== "") {
+      this.timeConvert1(this.duration1.MAX_TIME);
+      this.durationPickerForm.controls.days.setValue(this.daystime2);
+      this.durationPickerForm.controls.hours.setValue(this.hoursTime2);
+      this.durationPickerForm.controls.minutes.setValue(this.minutesTime2);
+    }
+
   }
 
+
+  timeConvert(time: any) {
+    const daysTime = Math.floor( time/24/60);
+    const hoursTime = Math.floor(time/60%24);
+    const minutesTime = Math.floor(time%60);
+
+    this.daystime = daysTime
+    this.hoursTime = hoursTime
+    this.minutesTime = minutesTime
+
+    console.log(daysTime);
+    console.log(hoursTime);
+    console.log(minutesTime);
+    return daysTime + ":" + hoursTime + ':' + minutesTime;
+}
+
+timeConvert1(time: any) {
+  const daysTime = Math.floor( time/24/60);
+  const hoursTime = Math.floor(time/60%24);
+  const minutesTime = Math.floor(time%60);
+
+  this.daystime2 = daysTime
+  this.hoursTime2 = hoursTime
+  this.minutesTime2 = minutesTime
+
+  console.log(daysTime);
+  console.log(hoursTime);
+  console.log(minutesTime);
+  return daysTime + ":" + hoursTime + ':' + minutesTime;
+}
 
 
   days: any[] = [
     {
-      "name": 1,
+      "name": '00',
+      "value": 0
+    },
+    {
+      "name": '01',
       "value": 1
     },
     {
-      "name": 2,
+      "name": '02',
       "value": 2
     },
     {
-      "name": 3,
+      "name": '03',
       "value": 3
     },
     {
-      "name": 4,
+      "name": '04',
       "value": 4
     },
     {
-      "name": 5,
+      "name": '05',
       "value": 5
     },
     {
-      "name": 6,
+      "name": '06',
       "value": 6
     },
     {
-      "name": 7,
+      "name": '07',
       "value": 7
     },
     {
-      "name": 8,
+      "name": '08',
       "value": 8
     },
     {
-      "name": 9,
+      "name": '09',
       "value": 9
     },
     {
@@ -449,43 +501,142 @@ export class DurationPickerComponent implements OnInit {
 
   minutes: any[] = [
     {
-      "name": 0,
+      "name": '00',
       "value": 0
     },
     {
-      "name": 1,
+      "name": '01',
       "value": 1
     },
     {
-      "name": 2,
+      "name": '02',
       "value": 2
     },
     {
-      "name": 3,
+      "name": '03',
       "value": 3
     },
     {
-      "name": 4,
+      "name": '04',
       "value": 4
     },
     {
-      "name": 5,
+      "name": '05',
       "value": 5
     },
     {
-      "name": 6,
+      "name": '06',
       "value": 6
     },
     {
-      "name": 7,
+      "name": '07',
       "value": 7
     },
     {
-      "name": 8,
+      "name": '08',
       "value": 8
     },
     {
-      "name": 9,
+      "name": '09',
+      "value": 9
+    },
+    {
+      "name": 10,
+      "value": 10
+    },
+    {
+      "name": 11,
+      "value": 11
+    },
+    {
+      "name": 12,
+      "value": 12
+    },
+    {
+      "name": 13,
+      "value": 13
+    },
+    {
+      "name": 14,
+      "value": 14
+    },
+    {
+      "name": 15,
+      "value": 15
+    },
+    {
+      "name": 16,
+      "value": 16
+    },
+    {
+      "name": 17,
+      "value": 17
+    },
+    {
+      "name": 18,
+      "value": 18
+    },
+    {
+      "name": 19,
+      "value": 19
+    },
+    {
+      "name": 20,
+      "value": 20
+    },
+    {
+      "name": 21,
+      "value": 21
+    },
+    {
+      "name": 22,
+      "value": 22
+    },
+    {
+      "name": 23,
+      "value": 23
+    }
+  ];
+
+  seconds: any[] = [
+    {
+      "name": '00',
+      "value": 0
+    },
+    {
+      "name": '01',
+      "value": 1
+    },
+    {
+      "name": '02',
+      "value": 2
+    },
+    {
+      "name": '03',
+      "value": 3
+    },
+    {
+      "name": '04',
+      "value": 4
+    },
+    {
+      "name": '05',
+      "value": 5
+    },
+    {
+      "name": '06',
+      "value": 6
+    },
+    {
+      "name": '07',
+      "value": 7
+    },
+    {
+      "name": '08',
+      "value": 8
+    },
+    {
+      "name": '09',
       "value": 9
     },
     {
@@ -690,132 +841,32 @@ export class DurationPickerComponent implements OnInit {
     }
   ];
 
-  seconds: any[] = [
-    {
-      "name": 0,
-      "value": 0
-    },
-    {
-      "name": 1,
-      "value": 1
-    },
-    {
-      "name": 2,
-      "value": 2
-    },
-    {
-      "name": 3,
-      "value": 3
-    },
-    {
-      "name": 4,
-      "value": 4
-    },
-    {
-      "name": 5,
-      "value": 5
-    },
-    {
-      "name": 6,
-      "value": 6
-    },
-    {
-      "name": 7,
-      "value": 7
-    },
-    {
-      "name": 8,
-      "value": 8
-    },
-    {
-      "name": 9,
-      "value": 9
-    },
-    {
-      "name": 10,
-      "value": 10
-    },
-    {
-      "name": 11,
-      "value": 11
-    },
-    {
-      "name": 12,
-      "value": 12
-    },
-    {
-      "name": 13,
-      "value": 13
-    },
-    {
-      "name": 14,
-      "value": 14
-    },
-    {
-      "name": 15,
-      "value": 15
-    },
-    {
-      "name": 16,
-      "value": 16
-    },
-    {
-      "name": 17,
-      "value": 17
-    },
-    {
-      "name": 18,
-      "value": 18
-    },
-    {
-      "name": 19,
-      "value": 19
-    },
-    {
-      "name": 20,
-      "value": 20
-    },
-    {
-      "name": 21,
-      "value": 21
-    },
-    {
-      "name": 22,
-      "value": 22
-    },
-    {
-      "name": 23,
-      "value": 23
-    }
-  ];
-  // durationPickerForm: FormGroup = this.formBuilder.group({
-  //   days: [''],
-  //   hours: [''],
-  //   minutes: [''],
-  // });
-
   getDays(e: any) {
-    console.log(e);
-
-    this.duration.push(e.name);
+    this.handleDurationUpdate(e, 0, 24 * 60);
   }
 
   getHours(e: any) {
-    console.log(e);
-
-    this.duration.push(e.name);
+    this.handleDurationUpdate(e, 1, 60);
   }
 
   getMinutes(e: any) {
+    this.handleDurationUpdate(e, 2, 1);
+  }
 
+  private handleDurationUpdate(e: any, index: number, multiplier: number) {
     console.log(e);
+    this.duration[index] = e.name;
 
-    this.duration.push(e.name);
+    this.totalMinutes = this.duration.reduce((acc, val, i) => acc + (parseInt(val) * (i === 0 ? 24 * 60 : i === 1 ? 60 : 1)), 0);
 
-    console.log(this.duration);
-    const resultString = this.duration.join(' : ');
+    console.log(`Total Minutes: ${this.totalMinutes}`);
+    this.emitUpdatedDuration();
+  }
 
-    console.log(resultString);
+
+
+  private emitUpdatedDuration() {
+    this.updateDuration.emit(this.totalMinutes);
   }
 
   close(data?: any) {

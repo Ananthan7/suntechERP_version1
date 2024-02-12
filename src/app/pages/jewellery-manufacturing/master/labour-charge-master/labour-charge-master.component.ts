@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 export class LabourChargeMasterComponent implements OnInit {
   @Input() content!: any;
   viewMode: boolean = false;
+  forDesignOnlyTrue:boolean = true;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branch = localStorage.getItem('userbranch');
@@ -80,8 +81,6 @@ export class LabourChargeMasterComponent implements OnInit {
     purity: [''],
     wtFrom: [''],
     wtTo: [''],
-    wtFromdeci: [''],
-    wtToDeci: [''],
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
   });
@@ -468,7 +467,6 @@ export class LabourChargeMasterComponent implements OnInit {
 
   metaldivisionCodeSelected(e: any) {
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
-    
   }
 
   labouracSelected(e: any) {
@@ -484,11 +482,12 @@ export class LabourChargeMasterComponent implements OnInit {
   sieveSelected(e: any) {
     console.log(e);
     this.diamondlabourMasterForm.controls.sieve.setValue(e.CODE);
+    this.diamondlabourMasterForm.controls.sieve_desc.setValue(e.DESCRIPTION);
+    
   }
 
   stockCodeSelected(e: any) {
     console.log(e);
-    this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);

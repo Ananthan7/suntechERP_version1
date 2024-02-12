@@ -18,8 +18,28 @@ export class CostCentreMetalComponent implements OnInit {
 
   @Input() content!: any; 
   tableData: any[] = [];
+  branchOptions:any[] =[];
   private subscriptions: Subscription[] = [];
-  columnhead:any[] = ['UNIQUED_ID','COST_CODE' ,'TYPE','BRANCH_CODE','ADJUSTMENT','SALES','SALES RETURN','PURCHASE','PURCHASE RETURN','STONE VALUE','STONE DIFF','PURITY DIFF','BRANCH TRANSFERIN','BRANCH TRANSFERIN OUT','MANUFACTURING','OPEN ST'];
+  // columnhead:any[] = ['UNIQUED_ID','COST_CODE' ,'TYPE','BRANCH_CODE','ADJUSTMENT','SALES','SALES RETURN','PURCHASE','PURCHASE RETURN','STONE VALUE','STONE DIFF','PURITY DIFF','BRANCH TRANSFERIN','BRANCH TRANSFERIN OUT','MANUFACTURING','OPEN ST'];
+  columnhead:any[] = [
+    { title: 'UNIQUED_ID', field: 'uniqueId' },
+    { title: 'COST_CODE', field: 'costCode' },
+    { title: 'TYPE', field: 'type' },
+    { title: 'BRANCH_CODE', field: 'BRANCH_CODE'},
+    { title: 'ADJUSTMENT', field: 'adjustment' },
+    { title: 'SALES', field: 'sales' },
+    { title: 'SALES RETURN', field: 'salesReturn' },
+    { title: 'PURCHASE', field: 'purchase' },
+    { title: 'PURCHASE RETURN', field: 'purchaseReturn' },
+    { title: 'STONE VALUE', field: 'stoneValue' },
+    { title: 'STONE DIFF', field: 'stoneDiff' },
+    { title: 'PURITY DIFF', field: 'purityDiff' },
+    { title: 'BRANCH TRANSFERIN', field: 'branchTransferIn' },
+    { title: 'BRANCH TRANSFERIN OUT', field: 'branchTransferOut' },
+    { title: 'MANUFACTURING', field: 'manufacturing' },
+    { title: 'OPEN ST', field: 'openSt' }
+  ];
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -31,6 +51,19 @@ export class CostCentreMetalComponent implements OnInit {
  
   ngOnInit(): void {
   }
+
+  allBranchCode(){
+    const apiUrl = '/UseBranchNetMaster/ADMIN';
+  
+  let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
+    if (resp.status == 'Success') {
+      this.branchOptions = resp.response;
+      console.log(this.branchOptions);
+    }
+   
+  });
+  }
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);

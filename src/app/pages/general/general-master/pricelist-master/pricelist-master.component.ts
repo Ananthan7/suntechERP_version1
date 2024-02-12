@@ -316,9 +316,10 @@ export class PricelistMasterComponent implements OnInit {
       const selectedValue = this.priceListMasterForm.controls.priceMethod.value;
       if (selectedValue === 1) { // Assuming 1 corresponds to 'Fixed'
         // Reset the values for the specified form controls
-        this.priceListMasterForm.controls.finalPriceValue.setValue(null);
-        this.priceListMasterForm.controls.addlValue.setValue(null);
-        this.priceListMasterForm.controls.priceValue.setValue(null);
+
+        // this.priceListMasterForm.controls.finalPriceValue.setValue(null);
+        // this.priceListMasterForm.controls.addlValue.setValue(null);
+        // this.priceListMasterForm.controls.priceValue.setValue(null);
       }
 
       const selectedPriceType = this.priceTypeList.find(pt => pt.value === this.priceListMasterForm.value.priceMethod);
@@ -326,13 +327,13 @@ export class PricelistMasterComponent implements OnInit {
         this.required = false;
          this.viewMode = true;
 
-        this.priceListMasterForm.controls.priceSign.setValue('');
-        this.priceListMasterForm.controls.priceSign.setValue('');
-         this.priceListMasterForm.controls.priceValue.setValue('');
-        this.priceListMasterForm.controls.finalPriceSign.setValue('');
-        this.priceListMasterForm.controls.finalPriceValue.setValue('');
-        this.priceListMasterForm.controls.addlValueSign.setValue('');
-        this.priceListMasterForm.controls.addlValue.setValue('');
+        this.priceListMasterForm.controls.priceSign.disable();
+        this.priceListMasterForm.controls.priceSign.disable();
+        //  this.priceListMasterForm.controls.priceValue.disable();
+        this.priceListMasterForm.controls.finalPriceSign.disable();
+        this.priceListMasterForm.controls.finalPriceValue.disable();
+        this.priceListMasterForm.controls.addlValueSign.disable();
+        this.priceListMasterForm.controls.addlValue.disable();
 
         // this.isDisabled = true;
       } else {

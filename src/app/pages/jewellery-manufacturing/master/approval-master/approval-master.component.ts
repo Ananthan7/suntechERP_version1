@@ -16,6 +16,7 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./approval-master.component.scss']
 })
 export class ApprovalMasterComponent implements OnInit {
+
   @Input() content!: any;
   tableData: any[] = [];
   selectedIndexes: any = [];
@@ -24,7 +25,7 @@ export class ApprovalMasterComponent implements OnInit {
   isdiabled: boolean = true
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
-
+  isDisabled: boolean = false;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -61,6 +62,7 @@ export class ApprovalMasterComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.content.FLAG == 'VIEW') {
+      this.isDisabled = true;
       this.viewMode = true;
       this.setFormValues();
       // this.processMasterForm();
@@ -170,10 +172,12 @@ export class ApprovalMasterComponent implements OnInit {
   };
 
   adddata() {
+  
     const userCodeValue = this.approvalMasterForm.value.USER_CODE;
-    if (this.approvalMasterForm.value.code != "" && this.approvalMasterForm.value.description != "") {
+  
+    if (this.approvalMasterForm.value.code !== "" && this.approvalMasterForm.value.description !== "") {
       let length = this.tableData.length;
-
+  
       let srno = length + 1;
       let data = {
         "UNIQUEID": 12345,
@@ -189,16 +193,20 @@ export class ApprovalMasterComponent implements OnInit {
         "EMAIL_ID": "",
         "MOBILE_NO": "",
       };
+      
       this.tableData.push(data);
-      this.tableData.filter((data, i) => data.SRNO = i + 1)
-      this.tableData.forEach((item)=>{
-        item.isDisabled = true
-      })
-    }
-    else {
-      this.toastr.error('Please Fill all Mandatory Fields')
+      
+      // Update SRNO and set isDisabled for each item
+      this.tableData.forEach((item, i) => {
+        item.SRNO = i + 1;
+        item.isDisabled = true;
+      });
+  
+    } else {
+      this.toastr.error('Please Fill all Mandatory Fields');
     }
   }
+  
 
 
 
@@ -234,10 +242,10 @@ export class ApprovalMasterComponent implements OnInit {
     return final.length == 0
   }
   formSubmit() {
-    // if(this.checkFinalApproval()){
-    //   this.toastr.error('Final Approval Type Not Selected')
-    //   return
-    // }
+    if(this.checkFinalApproval()){
+      this.toastr.error('Final Approval Type Not Selected')
+      return
+    }
     if (this.approvalMasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -284,42 +292,45 @@ console.log(this.tableData);
 
   update() {
     if (this.approvalMasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
+      this.toastr.error('Please select all required fields');
+      return;
     }
-
-    let API = 'ApprovalMaster/UpdateApprovalMaster/' + this.content.APPR_CODE
-    let postData = {
+  
+    const API = 'ApprovalMaster/UpdateApprovalMaster/' + this.content.APPR_CODE;
+    const postData = {
       "APPR_CODE": this.approvalMasterForm.value.code || "",
       "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
       "MID": this.content.MID,
       "approvalDetails": this.tableData,
-    }
-
+    };
+  
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.approvalMasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
+    .subscribe((result) => {
+      if (result.response) {
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.approvalMasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
         }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
+      } else {
+        this.toastr.error('Not saved')
+      }
+    }, err => alert(err))
+  this.subscriptions.push(Sub)
+}
+  
+ 
+  
 
   deleteRecord() {
     if (!this.content.MID) {

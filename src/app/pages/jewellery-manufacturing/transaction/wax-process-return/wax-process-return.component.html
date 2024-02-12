@@ -92,9 +92,8 @@
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="enteredBy" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="user"
-                (newRowClick)="userDataSelected($event)">
-            </master-search>
+                <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)">
+                </master-search>
               </div>
               <label for="inputPassword" class="col-sm-3 col-form-label">Wax Code :</label>
               <div class="col-md-3">
@@ -111,19 +110,24 @@
 
         <div class="row m-2">
           <div class="col-md-12">
-            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-            [allowColumnReordering]="true"
-            [allowColumnResizing]="true"
-            [columnAutoWidth]="true">
+            <!-- <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [allowColumnReordering]="true"
+              [allowColumnResizing]="true" [columnAutoWidth]="true">
               <dxo-paging [enabled]="false"></dxo-paging>
-              <dxo-editing mode="cell">
-              </dxo-editing>
+              <dxo-editing mode="cell">              </dxo-editing> 
               <dxo-selection mode="multiple"></dxo-selection>
               <dxo-scrolling mode="virtual"></dxo-scrolling>
               <dx-check-box [value]="true" [elementAttr]="{ 'aria-label': 'Checked' }"></dx-check-box>
               <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                 [allowEditing]="true" alignment="center" backgroundcolor="#000">
               </dxi-column>
+            </dx-data-grid> -->
+
+            <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
+              [allowColumnReordering]="true" height="200" [dataSource]="tableData">
+              <dxo-paging [enabled]="false"></dxo-paging>
+              <dxo-selection mode="multiple"></dxo-selection>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              <dx-check-box [value]="true" [elementAttr]="{ 'aria-label': 'Checked' }"></dx-check-box>
               <dxi-column [width]="100" dataField="Sr No" caption="Sr No"></dxi-column>
               <dxi-column [width]="100" dataField="Job No" caption="Job No"></dxi-column>
               <dxi-column [width]="100" dataField="Design" caption="Design"></dxi-column>
@@ -145,7 +149,7 @@
                 <dxi-total-item column="Metal Weight">
                 </dxi-total-item>
                 <dxi-total-item column="Wax Weight">
-                </dxi-total-item>                 
+                </dxi-total-item>
                 <dxi-total-item column="Issue Pcs">
                 </dxi-total-item>
               </dxo-summary>

@@ -2,19 +2,92 @@
     <!-- module list section starts -->
     <div class="landing_page">
         <div class="container">
-            <div class="row">
-                <div class="col-md-3 my-2" *ngFor="let data of menuList; let i = index">
-                    <!-- Assuming you want to navigate to the route /target-route with query parameters -->
-                    <!-- <a [routerLink]="['/module-container']" [queryParams]="{ modulename :data.MODULE_NAME, id: i }"> -->
-                    <a class="w-100" routerLink="/{{ data.ANG_CMB_PATH_NAME || 'module-container' }}"
-                        [queryParams]="{ modulename: data.MODULE_NAME, id: i }">
-                        <div class="card_btn">
-                            <img [src]="data.imageUrl" loading="lazy"
-                                alt="{{ data.MODULE_NAME }}" />
-                            <h6>{{ data.MODULE_NAME }}</h6>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-3 my-2" *ngFor="let data of menuList; let i = index">
+                                <!-- Assuming you want to navigate to the route /target-route with query parameters -->
+                                <!-- <a [routerLink]="['/module-container']" [queryParams]="{ modulename :data.MODULE_NAME, id: i }"> -->
+                                <a class="w-100" routerLink="/{{ data.ANG_CMB_PATH_NAME || 'module-container' }}"
+                                    [queryParams]="{ modulename: data.MODULE_NAME, id: i }">
+                                    <div class="card_btn">
+                                        <div class="card_item">
+                                        <div hre="#" class="card_item_link">
+                                            <div class="card_item_bg"></div>
+                                            <div class="card-item_title">
+                                                <img class="image" [src]="data.imageUrl" loading="lazy"
+                                                alt="{{ data.MODULE_NAME }}"  />
+                                                <img class="image_hover" [src]="data.imageUrl_2" loading="lazy"
+                                                alt="{{ data.MODULE_NAME }}"  />
+                                            <h6 class="pt-3 h_1">{{ data.MODULE_NAME }}</h6>
+                                            </div>
+                                           
+                                        </div>
+                                    
+                                      </div>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-                    </a>
+                    </div>
+    
+                    <div class="col-md-4">
+                        <div class="row offset-8">
+                            <nav class="offset-2">
+                                <ul>
+                                    <li>
+                                      <a href="#">
+                                        <span><div class="tx_1">Favourites</div></span>           
+                                        <img src="../../assets/images/lp-icons/star_3.png" style="width: 28px;" class="imge">
+                                      </a>
+                                    </li>
+                                </ul>
+                                    <ul>
+                                    <li>
+                                      <a href="#">
+                                        <span><div class="tx_2">Management</div></span>           
+                                        <img src="../../assets/images/lp-icons/management.png" style="width: 28px;" class="imge">
+                                      </a>
+                                  </li>
+                                </ul>
+                                  <ul>
+                                  <li>
+                                    <a href="#">
+                                      <span><div class="tx_3">Operational</div></span>           
+                                      <img src="../../assets/images/lp-icons/Operational.png" style="width: 28px;" class="imge">
+                                    </a>
+                                </li>
+                            </ul>
+                                <ul>
+                                <li>
+                                    <a href="#">
+                                      <span><div class="tx_4">Sales</div></span>           
+                                      <img src="../../assets/images/lp-icons/sales.png" style="width: 28px;" class="imge">
+                                    </a>
+                                </li>
+                            </ul>
+                                <ul>
+                                <li>
+                                    <a href="#">
+                                      <span><div class="tx_5">Knowledge Base</div></span>           
+                                      <img src="../../assets/images/lp-icons/icons.png" style="width: 28px;" class="imge">
+                                    </a>
+                                </li>
+                                </ul>
+                              </nav>
+                            
+                            
+                           
+                            
+                           
+                        </div>
+                    </div>
+    
                 </div>
             </div>
+            
+           
         </div>
     </div>
+    

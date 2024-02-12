@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class AlloyMasterComponent implements OnInit {
   @Input() content!: any;
-
+  viewMode: boolean = false;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   currentDate = new Date();
@@ -24,13 +24,67 @@ export class AlloyMasterComponent implements OnInit {
   urls: string | ArrayBuffer | null | undefined;
   url: any;
   numericValue!: number;
+
+  alloyMastereForm: FormGroup = this.formBuilder.group({
+    mid: [],
+    code: ['', [Validators.required]],
+    costCenter: ['', [Validators.required]],
+    type: [''],
+    category: [''],
+    subCategory: [''],
+    brand: [''],
+    vendor: [''],
+    currency: ['', [Validators.required]],
+    currencyRate: [''],
+    createdOn: [new Date(), ''],
+    createdBy: ['SUNTECH', ''],
+    priceScheme: [''],
+    price1code: [''],
+    price1per: ['0'],
+    price1Fc: [''],
+    price1Lc: [''],
+    price2code: [''],
+    price2per: ['0'],
+    price2Fc: [''],
+    price2Lc: [''],
+    price3code: [''],
+    price3per: ['0'],
+    price3Fc: [''],
+    price3Lc: [''],
+    price4code: [''],
+    price4per: ['0'],
+    price4Fc: [''],
+    price4Lc: [''],
+    price5code: [''],
+    price5per: ['0'],
+    price5Fc: [''],
+    price5Lc: [''],
+    description: ['', [Validators.required]],
+    metal: [''],
+    color: [''],
+    karat: [''],
+    purity: [''],
+    alloy: [''],
+    stockCode: [''],
+    stockCodeDes: [''],
+    divCode: [''],
+    hsncode: [''],
+    lasttransaction: [''],
+    fristtransaction: [''],
+    vendorRef: [''],
+    weightAvgCost: [''],
+    weightAvgCostDes: [''],
+  });
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-  ) { }
+  ) {
+
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -38,7 +92,30 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.content.FLAG == 'EDIT') {
+      this.setInitialValues()
+    } else if (this.content.FLAG == 'VIEW') {
+      this.alloyMastereForm.disable()
+      this.viewMode = true
+      this.setInitialValues()
+    }
+
     this.setCompanyCurrency()
+  }
+  setInitialValues() {
+    console.log(this.content, 'content');
+    // 'DiamondStockMaster/GetDiamondStockMasterWithMid/2649104'
+    this.alloyMastereForm.controls.code.setValue(this.content.STOCK_CODE)
+    this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)
+    this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)
+    this.alloyMastereForm.controls.brand.setValue(this.content.BRAND_CODE)
+    this.alloyMastereForm.controls.category.setValue(this.content.CATEGORY_CODE)
+    this.alloyMastereForm.controls.costCenter.setValue(this.content.COST_CODE)
+    this.alloyMastereForm.controls.brand.setValue(this.content.DESIGN_CODE)
+    this.alloyMastereForm.controls.color.setValue(this.content.COLOR)
+    this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
+    this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
+    this.alloyMastereForm.controls.vendor.setValue(this.content.SALESCODE)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -61,66 +138,6 @@ export class AlloyMasterComponent implements OnInit {
       };
     }
   }
-
-  formatNumber(input: any) {
-    // Get the input value and remove non-digit characters
-    let inputValue = input.value.replace(/\D/g, '');
-
-    // Check if the input value is not empty
-    if (inputValue) {
-      // Format the input value as "00.00.000"
-      const formattedValue = inputValue.replace(/(\d{2})(\d{2})(\d{3})/, '$1.$2.$3');
-
-      // Update the input value with the formatted value
-      input.value = formattedValue;
-    }
-  }
-
-  alloyMastereForm: FormGroup = this.formBuilder.group({
-    mid: [],
-    code: ['', [Validators.required]],
-    costCenter: ['', [Validators.required]],
-    type: [''],
-    category: [''],
-    subCategory: [''],
-    brand: [''],
-    vendor: [''],
-    currency: ['', [Validators.required]],
-    currencyRate: [''],
-    createdOn: [new Date(), ''],
-    createdBy: ['SUNTECH', ''],
-    priceScheme: [''],
-    price1code: [''],
-    price1per: [''],
-    price1Fc: [''],
-    price1Lc: [''],
-    price2code: [''],
-    price2per: [''],
-    price2Fc: [''],
-    price2Lc: [''],
-    price3code: [''],
-    price3per: [''],
-    price3Fc: [''],
-    price3Lc: [''],
-    price4code: [''],
-    price4per: [''],
-    price4Fc: [''],
-    price4Lc: [''],
-    price5code: [''],
-    price5per: [''],
-    price5Fc: [''],
-    price5Lc: [''],
-    description: ['', [Validators.required]],
-    metal: [''],
-    color: ['', [Validators.required]],
-    karat: [''],
-    purity: [''],
-    alloy: [''],
-    stockCode: [''],
-    stockCodeDes: [''],
-    divCode: [''],
-    hsncode: [''],
-  });
 
   costCenterData: MasterSearchModel = {
     PAGENO: 1,
@@ -146,8 +163,6 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
 
   }
-
-
 
   masterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -440,15 +455,13 @@ export class AlloyMasterComponent implements OnInit {
 
   }
   setPostData() {
-    console.log('fired');
-    
     let postData = {
       ITEM: this.commonService.nullToString(this.alloyMastereForm.value.itemcode),
       STOCK_CODE: this.commonService.nullToString(this.alloyMastereForm.value.code),
       STOCK_DESCRIPTION: this.commonService.nullToString(this.alloyMastereForm.value.description),
       CURRENCY_CODE: this.commonService.nullToString(this.alloyMastereForm.value.currency),
       CC_RATE: this.commonService.emptyToZero(this.alloyMastereForm.value.currencyRate),
-      COST_CODE: this.commonService.nullToString(this.alloyMastereForm.value.costcenter),
+      COST_CODE: this.commonService.nullToString(this.alloyMastereForm.value.costCenter),
       TYPE_CODE: this.commonService.nullToString(this.alloyMastereForm.value.type),
       CATEGORY_CODE: this.commonService.nullToString(this.alloyMastereForm.value.category),
       SUBCATEGORY_CODE: this.commonService.nullToString(this.alloyMastereForm.value.subcategory),
@@ -462,11 +475,11 @@ export class AlloyMasterComponent implements OnInit {
       PICTURE_NAME1: this.commonService.nullToString(this.alloyMastereForm.value.picturename1),
       STOCK_FCCOST: 0,
       STOCK_LCCOST: 0,
-      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1),
-      PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2),
-      PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3),
-      PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4),
-      PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5),
+      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1per),
+      PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2per),
+      PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3per),
+      PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4per),
+      PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5per),
       PRICE1FC: this.commonService.emptyToZero(this.alloyMastereForm.value.price1FC),
       PRICE1LC: this.commonService.emptyToZero(this.alloyMastereForm.value.price1LC),
       PRICE2FC: this.commonService.emptyToZero(this.alloyMastereForm.value.price2FC),
@@ -520,7 +533,7 @@ export class AlloyMasterComponent implements OnInit {
       OPENED_BY: "",
       FIRST_TRN: this.commonService.nullToString(this.alloyMastereForm.value.fristtransaction),
       LAST_TRN: this.commonService.nullToString(this.alloyMastereForm.value.lasttransaction),
-      MID: 0,
+      MID: this.content.MID || 0,
       PRINTED: true,
       PURVOCTYPE_NO: "",
       PURPARTY: "",
@@ -688,7 +701,7 @@ export class AlloyMasterComponent implements OnInit {
       BATCH_PREFIX: "",
       SIEVE_SET: "",
       MODEL_CODE: this.commonService.nullToString(this.alloyMastereForm.value.modelcode),
-      NOOF_PLAT: this.commonService.nullToString(this.alloyMastereForm.value.noofplat),
+      NOOF_PLAT: this.commonService.emptyToZero(this.alloyMastereForm.value.noofplat),
       PLAT_CHARGESFC: 0,
       PLAT_CHARGESLC: 0,
       CERT_CHARGESLC: 0,
@@ -696,7 +709,7 @@ export class AlloyMasterComponent implements OnInit {
       UNFIX_DIAMOND_ITEM: true,
       ALLOW_WITHOUT_RATE: true,
       RRR_STOCK_REF: "",
-      MARKETCOSTFC: this.commonService.nullToString(this.alloyMastereForm.value.marketcost),
+      MARKETCOSTFC: this.commonService.emptyToZero(this.alloyMastereForm.value.marketcost),
       MARKETCOSTLC: 0,
       RRR_PRICE_UPDATED: true,
       RRR_PRICE_UPDDATE: "2023-11-27T07:30:26.960Z",
@@ -710,7 +723,7 @@ export class AlloyMasterComponent implements OnInit {
       PACKET_WT: 0,
       SALES_TAGLINES: "",
       ALLOW_ZEROPCS: true,
-      NOOF_CERT: this.commonService.nullToString(this.alloyMastereForm.value.noofcert),
+      NOOF_CERT: this.commonService.emptyToZero(this.alloyMastereForm.value.noofcert),
       ADDITIONAL_RATEFC: 0,
       ADDITIONAL_RATELC: 0,
       WBOXWOUTBOX: 0,
@@ -851,12 +864,12 @@ export class AlloyMasterComponent implements OnInit {
         },
       ],
     };
-    console.log(postData,'postData');
-    
+    console.log(postData, 'postData');
+
     return postData
   }
   formSubmit() {
-    if (this.content?.FLAG == 'VIEW') return 
+    if (this.content?.FLAG == 'VIEW') return
     if (this.content?.FLAG == 'EDIT') {
       this.updateMeltingType()
       return
@@ -870,27 +883,25 @@ export class AlloyMasterComponent implements OnInit {
     let postData
     try {
       postData = this.setPostData()
-    } catch (error:any) {
+    } catch (error: any) {
       this.commonService.toastErrorByMsgId(error)
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.alloyMastereForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
+        if (result.status == "Success") {
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2239') || 'Saved Successfully',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.alloyMastereForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
         } else {
           this.toastr.error('Not saved')
         }
@@ -900,25 +911,23 @@ export class AlloyMasterComponent implements OnInit {
 
   updateMeltingType() {
     let API = 'DiamondStockMaster/UpdateDiamondStockMaster/' + this.alloyMastereForm.value.code;
-
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, this.setPostData())
+    let postdata = this.setPostData()
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postdata)
       .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.alloyMastereForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
+        if (result.status == "Success") {
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2186') || 'Updated Successfully',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.alloyMastereForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
         } else {
           this.toastr.error('Not saved')
         }

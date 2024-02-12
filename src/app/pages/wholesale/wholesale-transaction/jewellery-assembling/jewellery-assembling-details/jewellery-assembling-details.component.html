@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput formControlName="rateTypeDesc"/>
+                                <input type="text" matInput formControlName="rateTypeDesc" />
                             </mat-form-field>
                         </div>
                         <div class="col-sm-2">
@@ -35,16 +35,17 @@
                         <label for="inputPassword" class="col-sm-3">Stock : </label>
                         <div class="col-sm-5">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="stock" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="stockCodeData"
+                                (newRowClick)="stockSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3">Desc : </label>
                         <div class="col-sm-9">
                             <mat-form-field style="width: 80%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="description" />
                             </mat-form-field>
 
                         </div>
@@ -53,174 +54,195 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Location :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="location" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="locationCodeData"
+                                (newRowClick)="locationSelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Type :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="type" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="typeCodeData"
+                                (newRowClick)="typeSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">CC :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="CC" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="CCCodeData"
+                                (newRowClick)="CCSelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Design :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="design" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="designCodeData"
+                                (newRowClick)="designSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Brand :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="brand" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="brandCodeData"
+                                (newRowClick)="brandSelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Set Ref :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="setRef" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="setRefCodeData"
+                                (newRowClick)="setRefSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Category :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="category" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="categoryCodeData"
+                                (newRowClick)="categorySelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Country :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="country" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="countryCodeData"
+                                (newRowClick)="countrySelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Sub Category :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="subCategory" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="subCategoryCodeData"
+                                (newRowClick)="subCategorySelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Color :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="color" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="colorCodeData"
+                                (newRowClick)="colorSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Pieces :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="pieces" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="piecesCodeData"
+                                (newRowClick)="piecesSelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Clarity :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="clarity" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="clarityCodeData"
+                                (newRowClick)="claritySelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Vender :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="vender" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="venderCodeData"
+                                (newRowClick)="venderSelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Grade :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="grade" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="gradeCodeData"
+                                (newRowClick)="gradeSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Vender Ref :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="venderRef" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="venderRefCodeData"
+                                (newRowClick)="venderRefSelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Shape :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="shape" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="shapeCodeData"
+                                (newRowClick)="shapeSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Size :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="size" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="sizeCodeData"
+                                (newRowClick)="sizeSelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Range :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="range" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="rangeCodeData"
+                                (newRowClick)="rangeSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Style :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="style" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="styleCodeData"
+                                (newRowClick)="styleSelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Time :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="time" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="timeCodeData"
+                                (newRowClick)="timeSelected($event)"></master-search>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Fluoresce :</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="worker" />
+                                <input type="text" matInput formControlName="fluoresce" />
                             </mat-form-field>
-                            <master-search></master-search>
+                            <master-search [MasterSearchData]="fluoresceCodeData"
+                                (newRowClick)="fluoresceSelected($event)"></master-search>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Gross Wt:</label>
                         <div class="col-md-3">
                             <mat-form-field style="width: 70%;">
-                                <input type="text" matInput formControlName="toworker" />
+                                <input type="text" matInput formControlName="grossWt" />
                             </mat-form-field>
 
                         </div>
@@ -238,12 +260,12 @@
                         <label for="inputPassword" class="col-sm-4 col-form-label">Price Scheme:</label>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="priceSheme" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="priceShemeDesc" />
                             </mat-form-field>
                         </div>
 
@@ -252,17 +274,17 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Price 1 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price1" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price1Desc" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price1Detail" />
                             </mat-form-field>
                         </div>
 
@@ -271,17 +293,17 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Price 2 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price2" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price2Desc" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price2Detail" />
                             </mat-form-field>
                         </div>
 
@@ -290,17 +312,17 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Price 3 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price3" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price3Desc" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price3Detail" />
                             </mat-form-field>
                         </div>
 
@@ -309,17 +331,17 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Price 4 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price4" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price4Desc" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price4Detail" />
                             </mat-form-field>
                         </div>
 
@@ -328,17 +350,17 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Price 5 :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price5" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price5Desc" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="price5Detail" />
                             </mat-form-field>
                         </div>
 
@@ -353,17 +375,17 @@
                         <label for="inputPassword" class="col-sm-4 col-form-label">Metal Total:</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="metalTotal" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="metalTotalDesc" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="metalTotalDetail" />
                             </mat-form-field>
                         </div>
 
@@ -372,17 +394,17 @@
                         <label for="inputPassword" class="col-sm-4 col-form-label">Stone Total :</label>
                         <div class="col-2">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="stoneTotal" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="stoneTotalDesc" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="stoneTotalDetail" />
                             </mat-form-field>
                         </div>
 
@@ -391,12 +413,12 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label">Other Total :</label>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="otherTotal" />
                             </mat-form-field>
                         </div>
                         <div class="col-3">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="otherTotalDesc" />
                             </mat-form-field>
                         </div>
 
@@ -406,9 +428,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Remarks :</label>
                         <div class="col-md-7">
                             <div class="text-area">
-                                <textarea
-                                style="width: 130%;height: 120px;"
-                                >
+                                <textarea style="width: 130%;height: 120px;" formControlName="remarks">
                             </textarea>
                             </div>
                         </div>
@@ -422,9 +442,10 @@
                             <div class="upload-btn-wrapper">
                                 <button class="btn btnnew border-dark">
                                     <img src={{image}} style="width:126px;height:124px">
-                                    
+
                                 </button>
-                                <input type="file"  class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)">
+                                <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                                    (change)="onFileChangedimage($event)">
                             </div>
                         </div>
                     </div>
@@ -436,15 +457,14 @@
                                 </button>
                             </div>
                             <div class="text-area">
-                                <textarea
-                                style="width: 100%;height: 140px;">
+                                <textarea style="width: 100%;height: 140px;" formControlName="tagdetails">
                             </textarea>
                             </div>
-                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         <div class="col-md-12">
             <div class="row">
                 <mat-tab-group>
@@ -455,25 +475,26 @@
                                     (addClick)="openJewelleryAssembilingMetalDetails()"
                                     (deleteClick)="deleteTableData()">
                                 </menu-buttons>
-                        </div>
-
-                        <div class="row m-2">
-                            <div class="col">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                    [allowColumnReordering]="true" [allowColumnResizing]="true"
-                                    [columnAutoWidth]="true">
-                                    <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
-                                    </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                    <dxi-column *ngFor="let data of column1" dataField="{{ data }}" caption="{{ data }}"
-                                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                                    </dxi-column>
-                                </dx-data-grid>
                             </div>
-                        </div>
+
+                            <div class="row m-2">
+                                <div class="col">
+                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                        [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                        [columnAutoWidth]="true">
+                                        <dxo-paging [enabled]="false"></dxo-paging>
+                                        <dxo-editing mode="cell" [allowUpdating]="true">
+                                        </dxo-editing>
+                                        <dxo-selection mode="multiple"></dxo-selection>
+                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                        <dxi-column *ngFor="let data of column1" dataField="{{ data }}"
+                                            caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                            backgroundcolor="#000">
+                                        </dxi-column>
+                                    </dx-data-grid>
+                                </div>
+                            </div>
                         </div>
                     </mat-tab>
 
@@ -484,26 +505,26 @@
                                     (addClick)="openJewelleryAssembilingStoneDetails()"
                                     (deleteClick)="deleteTableData()">
                                 </menu-buttons>
-                        </div>
-
-                        <div class="row m-2">
-                            <div class="col">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                [allowColumnReordering]="true" [allowColumnResizing]="true"
-                                [columnAutoWidth]="true">
-                                <dxo-paging [enabled]="false"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true">
-                                </dxo-editing>
-                                <dxo-selection mode="multiple"></dxo-selection>
-                                <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}"
-                                    caption="{{ data }}" [allowEditing]="true" alignment="center"
-                                    backgroundcolor="#000">
-                                </dxi-column>
-                            </dx-data-grid>
                             </div>
-                        </div>
+
+                            <div class="row m-2">
+                                <div class="col">
+                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                                        [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                        [columnAutoWidth]="true"  [showColumnHeaders]="true">
+                                        <dxo-paging [enabled]="false"></dxo-paging>
+                                        <dxo-editing mode="cell" [allowUpdating]="true">
+                                        </dxo-editing>
+                                        <dxo-selection mode="multiple"></dxo-selection>
+                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                        <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}"
+                                            caption="{{ data }}" [allowEditing]="true" alignment="center" [width]="100"
+                                            backgroundcolor="#000">
+                                        </dxi-column>
+                                    </dx-data-grid>
+                                </div>
+                            </div>
                         </div>
                         <!-- <div class="row m-2">
                             <div class="col">
@@ -549,40 +570,40 @@
                                 </div>
                                 <div class="row">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Setting of Charges
-                                        </label>
+                                    </label>
                                     <div class="col-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="settingOfCharges1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="settingOfCharges2" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="settingOfCharges2" />
                                         </mat-form-field>
                                     </div>
 
                                 </div>
                                 <div class="row">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Polishing charges
-                                        </label>
+                                    </label>
                                     <div class="col-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="polishingCharges1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="polishingCharges2" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="polishingCharges3" />
                                         </mat-form-field>
                                     </div>
 
@@ -591,17 +612,17 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Rhodium Charges</label>
                                     <div class="col-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="rhodiumCharges1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="rhodiumCharges2" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="rhodiumCharges3" />
                                         </mat-form-field>
                                     </div>
 
@@ -610,17 +631,17 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Labour Charges</label>
                                     <div class="col-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="labourCharges1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="labourCharges2" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="labourCharges3" />
                                         </mat-form-field>
                                     </div>
 
@@ -629,17 +650,17 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">MISC Charges</label>
                                     <div class="col-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="MISCCharges1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="MISCCharges2" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="MISCCharges3" />
                                         </mat-form-field>
                                     </div>
 
@@ -649,17 +670,17 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Total</label>
                                     <div class="col-2">
                                         <mat-form-field style="width: 100%; display: none;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="total" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="total1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="total2" />
                                         </mat-form-field>
                                     </div>
 
@@ -676,11 +697,12 @@
                                                 <!-- <input type="date" matInput formControlName="vocdate" />
                                                   </mat-form-field> -->
                                                 <input matInput [matDatepicker]="vocDate" name="vocDate"
-                                                placeholder="DD/MM/YYYY" formControlName="vocDate" [(ngModel)]="currentDate"
-                                                   DateValidation />
-                                                <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                                    placeholder="DD/MM/YYYY" formControlName="startDate"
+                                                    [(ngModel)]="currentDate" DateValidation />
+                                                <mat-datepicker-toggle matSuffix
+                                                    [for]="vocDate"></mat-datepicker-toggle>
                                                 <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-                                              </mat-form-field>
+                                            </mat-form-field>
                                         </div>
                                         <label for="inputPassword" class="col-sm-2 col-form-label">Finish Date</label>
                                         <div class="col-md-3">
@@ -688,11 +710,12 @@
                                                 <!-- <input type="date" matInput formControlName="vocdate" />
                                                   </mat-form-field> -->
                                                 <input matInput [matDatepicker]="vocDate1" name="vocDate1"
-                                                placeholder="DD/MM/YYYY" formControlName="vocDate" [(ngModel)]="currentDate1"
-                                                  DateValidation />
-                                                <mat-datepicker-toggle matSuffix [for]="vocDate1"></mat-datepicker-toggle>
-                                                <mat-datepicker  [startAt]="currentDate" #vocDate1></mat-datepicker>
-                                              </mat-form-field>
+                                                    placeholder="DD/MM/YYYY" formControlName="finishDate"
+                                                    [(ngModel)]="currentDate1" DateValidation />
+                                                <mat-datepicker-toggle matSuffix
+                                                    [for]="vocDate1"></mat-datepicker-toggle>
+                                                <mat-datepicker [startAt]="currentDate" #vocDate1></mat-datepicker>
+                                            </mat-form-field>
                                         </div>
                                     </div>
                                 </div>
@@ -700,17 +723,17 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Gold Smith</label>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="goldSmith" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="goldSmith1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="goldSmith2" />
                                         </mat-form-field>
                                     </div>
 
@@ -719,17 +742,17 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Stone Setter</label>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="stoneSetter" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="stoneSetter1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="stoneSetter2" />
                                         </mat-form-field>
                                     </div>
 
@@ -738,7 +761,7 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Created by</label>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="createdBy" />
                                         </mat-form-field>
                                     </div>
 
@@ -748,11 +771,11 @@
                                             <!-- <input type="date" matInput formControlName="vocdate" />
                                               </mat-form-field> -->
                                             <input matInput [matDatepicker]="vocDate2" name="vocDate2"
-                                            placeholder="DD/MM/YYYY" formControlName="vocDate" [(ngModel)]="currentDate2"
-                                               DateValidation />
+                                                placeholder="DD/MM/YYYY" formControlName="On" [(ngModel)]="currentDate2"
+                                                DateValidation />
                                             <mat-datepicker-toggle matSuffix [for]="vocDate2"></mat-datepicker-toggle>
                                             <mat-datepicker [startAt]="currentDate" #vocDate2></mat-datepicker>
-                                          </mat-form-field>
+                                        </mat-form-field>
                                     </div>
                                 </div>
 
@@ -760,15 +783,15 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Cost</label>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="cost1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="cost2" />
                                         </mat-form-field>
                                     </div>
-                                  
+
 
                                 </div>
 
@@ -776,15 +799,15 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Margin A/C</label>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="marginac" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 200%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="marginac1" />
                                         </mat-form-field>
                                     </div>
-                                   
+
 
                                 </div>
 
@@ -792,17 +815,17 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Margin %</label>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="margin1" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="margin2" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput />
+                                            <input type="text" matInput formControlName="margin3" />
                                         </mat-form-field>
                                     </div>
 
@@ -813,7 +836,5 @@
                 </mat-tab-group>
             </div>
         </div>
-
-
-
     </form>
+</div>

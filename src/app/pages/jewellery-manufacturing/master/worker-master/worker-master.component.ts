@@ -33,7 +33,7 @@ export class WorkerMasterComponent implements OnInit {
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 152,
+    LOOKUPID: 252,
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Worker A/c Code',
     SEARCH_VALUE: '',
@@ -105,12 +105,19 @@ export class WorkerMasterComponent implements OnInit {
       this.setFormValues();
       this.selectProcessMasterList()
     }
+
+    if (this.isViewMode) {
+      this.tableData.forEach((item, index) => {
+        item.SRNO = index + 1;
+      });
+    }
+  
   }
 
 
  
   setInitialValues() {
-    this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METALMETAL'))
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetPcs.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -124,7 +131,7 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.WorkerAcCode.setValue(this.content.ACCODE)
     this.workerMasterForm.controls.NameOfSupervisor.setValue(this.content.SUPERVISOR)
     this.workerMasterForm.controls.DefaultProcess.setValue(this.content.PROCESS_CODE)
-    this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(this.content.LOSS_ALLOWED, 'AMOUNT'))
+    this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(this.content.LOSS_ALLOWED, 'METAL'))
     this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE)
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TRAY_WEIGHT, 'METAL'))
     this.workerMasterForm.controls.TargetPcs.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_PCS, 'METAL'))
@@ -168,6 +175,7 @@ export class WorkerMasterComponent implements OnInit {
 
   /**USE:  final save API call*/
   formSubmit() {
+
     this.buttonField = false;
 
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -178,6 +186,9 @@ export class WorkerMasterComponent implements OnInit {
       this.toastr.error('select all required fields & Process')
       return
     }
+    this.selectedProcessArr.forEach((item: any, i: any) => {
+      item.SRNO = i + 1;
+    });
 
     let API = 'WorkerMaster/InsertWorkerMaster'
     let postData = {
@@ -198,7 +209,7 @@ export class WorkerMasterComponent implements OnInit {
       "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
       "ACTIVE": true,
       "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
-      "TARGET_BY": "",
+      "TARGET_BY": this.workerMasterForm.value.DailyTarget|| "",
       "FINGER_ID": "",
       "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
       "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
@@ -355,6 +366,10 @@ export class WorkerMasterComponent implements OnInit {
     });
   }
 
+  printBarcode(){
+    
+  }
+
   /**use: checkbox change */
   changedCheckbox(data: any) {
     let value = data.selectedRowsData
@@ -382,6 +397,7 @@ export class WorkerMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Worker Code Required');
       return
     }
+
     this.commonService.toastSuccessByMsgId('MSG81447');
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
     let Sub: Subscription = this.dataService.getDynamicAPI(API)

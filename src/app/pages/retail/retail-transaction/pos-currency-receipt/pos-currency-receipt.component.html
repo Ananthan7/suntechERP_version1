@@ -178,12 +178,12 @@
 
                 <menu-buttons *ngIf="!viewOnly" [viewAddBtn]="true" [viewDeleteBtn]="true"
                 [viewImportBtn]="false"
-                (addClick)="openaddposdetails()"
+                (addClick)="openAddPosARdetails()"
                 (deleteClick)="deleteDetailRecord()"
                 >
             </menu-buttons>
                 <!-- <div class="p-2 bd-highlight">
-                  <button type="button" class="btn btn-primary metal-issue-add-btn" (click)="openaddposdetails()">
+                  <button type="button" class="btn btn-primary metal-issue-add-btn" (click)="openAddPosARdetails()">
                     Add
                   </button>
                 </div>
@@ -215,15 +215,22 @@
                 [dataSource]="posCurrencyDetailsData"
                 [showBorders]="true"
                 (onSelectionChanged)="onSelectionChanged($event)"
+                (onRowDblClick)="onRowDoubleClicked($event)"
                 >
                   <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-editing mode="cell" [allowUpdating]="true">
+                  <dxo-editing mode="cell" [allowUpdating]="false">
                   </dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
+
+                  <!-- <dxi-column type="buttons" caption="Edit" [fixed]="true" fixedPosition="left">
+                    <dxi-button [onClick]="editRowDetails" icon="fa fa-edit"></dxi-button>
+                </dxi-column> -->
 
                   <dxi-column *ngFor="let data of columnsList" dataField="{{ data.field }}" caption="{{ data.title }}"
                     [allowEditing]="true" alignment="center" backgroundcolor="#000">
                   </dxi-column>
+
+                  
                   <!-- <dxi-column dataField="SRNO" dataType="SR_NO"></dxi-column> -->
 
                   <dxo-summary>

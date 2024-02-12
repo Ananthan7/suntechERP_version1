@@ -130,6 +130,8 @@ stockCodeData: MasterSearchModel = {
 
   setvalues(){
     this.mouldMakingForm.controls.vocher.setValue(this.comService.getqueryParamVocType())
+    this.mouldMakingForm.controls.fromProcess.setValue(this.comService.getqueryParamVocType())
+    this.mouldMakingForm.controls.fromWorker.setValue(this.comService.getqueryParamVocType())
     this.mouldMakingForm.controls.vocDate.setValue(this.comService.currentDate)
     this.mouldMakingForm.controls.itemCurrency.setValue(this.comService.compCurrency)
     this.mouldMakingForm.controls.itemCurrencyRate.setValue('1.000')
@@ -252,7 +254,7 @@ stockCodeData: MasterSearchModel = {
     uniqNo : [''],
     job : [''],
     vocher :['',[Validators.required]],
-    vocherNo:[''],
+    vocherNo:[1],
     vocDate : [''],
     enteredBy : [''],
     fromProcess : ['',[Validators.required]],
