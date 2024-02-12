@@ -874,6 +874,11 @@ export class CommonServiceService {
     });
     return dataArray
   }
+  addDaysToDate(startDate: any, daysToAdd: any) {
+    const currentDate = new Date(startDate); // Create a Date object from the given date
+    const futureDate = new Date(currentDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000); // Add days in milliseconds
+    return futureDate;
+  }
   commaSeperation(data: any) {
     if (!Number(data)) return data
     return Number(data).toLocaleString('en-US', { style: 'decimal' })

@@ -23,7 +23,8 @@
                                 name="VocDate"
                                 [matDatepicker]="VocDate"
                                 formControlName="VOCDATE"
-                                placeholder="DD/MM/YYYY" />
+                                placeholder="DD/MM/YYYY" 
+                                (dateChange)="formatDate($event)"/>
                             <mat-datepicker-toggle
                                 matSuffix
                                 [for]="VocDate"></mat-datepicker-toggle>
@@ -43,8 +44,7 @@
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput
                                 formControlName="Units"
-                                class="text-right"
-                                (focusout)="searchValueChange($event,'Code')" />
+                                class="text-right"/>
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
@@ -59,8 +59,7 @@
                         <label class="matlabels">Branch:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput formControlName="Branch"
-                                (focusout)="searchValueChange($event,'Branch')" />
+                            <input type="text" matInput formControlName="Branch" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="customerMasterData"
                             (newRowClick)="selectedCustomer($event)">
@@ -74,15 +73,16 @@
                         <mat-form-field style="width: 50%;">
                             <input matInput
                                 DateValidation
-                                name="VocDate"
-                                [matDatepicker]="VocDate"
+                                name="DOJ"
+                                [matDatepicker]="DOJ"
                                 formControlName="DateOfJoining"
-                                placeholder="DD/MM/YYYY" />
+                                placeholder="DD/MM/YYYY" 
+                                (dateChange)="formatDate($event)"/>
                             <mat-datepicker-toggle
                                 matSuffix
-                                [for]="VocDate"></mat-datepicker-toggle>
-                            <mat-datepicker disabled="true"
-                                #VocDate></mat-datepicker>
+                                [for]="DOJ"></mat-datepicker-toggle>
+                            <mat-datepicker
+                                #DOJ></mat-datepicker>
                             <!-- <mat-error
                                         *ngIf="receiptDetailsForm.controls.VocDate.touched 
                                                     && receiptDetailsForm.controls.VocDate.hasError('pattern')">
@@ -203,17 +203,18 @@
                             <label class="matlabels">Maturing Date* :
                             </label>
                             <mat-form-field style="width: 50%;">
-                                <input matInput
+                                <input matInput readonly
                                     DateValidation
-                                    name="VocDate"
-                                    [matDatepicker]="VocDate"
+                                    name="MaturingDate"
+                                    [matDatepicker]="MaturingDate"
                                     formControlName="MaturingDate"
-                                    placeholder="DD/MM/YYYY" />
+                                    placeholder="DD/MM/YYYY" 
+                                    (dateChange)="formatDateMaturingDate($event)"/>
                                 <mat-datepicker-toggle
                                     matSuffix
-                                    [for]="VocDate"></mat-datepicker-toggle>
+                                    [for]="MaturingDate"></mat-datepicker-toggle>
                                 <mat-datepicker disabled="true"
-                                    #VocDate></mat-datepicker>
+                                    #MaturingDate></mat-datepicker>
                                 <!-- <mat-error
                                             *ngIf="receiptDetailsForm.controls.VocDate.touched 
                                                         && receiptDetailsForm.controls.VocDate.hasError('pattern')">
@@ -268,16 +269,14 @@
                         </label>
                         <mat-form-field style="width: 30%;">
                             <input type="text" matInput
-                                formControlName="Salesman"
-                                (focusout)="searchValueChange($event,'Code')" />
+                                formControlName="Salesman"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="SalesmanData"
                             (newRowClick)="SalesmanSelected($event)">
                         </master-search>
                         <mat-form-field style="width: 30%;">
                             <input type="text" matInput
-                                formControlName="SalesmanName"
-                                (focusout)="searchValueChange($event,'Code')" />
+                                formControlName="SalesmanName" />
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
@@ -286,8 +285,7 @@
                         <mat-form-field style="width: 50%;">
                             <input type="number" matInput
                                 formControlName="SumAssured"
-                                class="text-right" ThreeDecimalInput
-                                (focusout)="searchValueChange($event,'Code')" />
+                                class="text-right" ThreeDecimalInput />
                         </mat-form-field>
                     </div>
                 </div>
@@ -307,8 +305,7 @@
                         </label>
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput
-                                formControlName="Remarks"
-                                (focusout)="searchValueChange($event,'Code')" />
+                                formControlName="Remarks" />
                         </mat-form-field>
                     </div>
                 </div>
