@@ -23,6 +23,7 @@ export class CastingTreeUpComponent implements OnInit {
   pageTitle: any;
   currentFilter: any;
   currentDate = new Date();
+  viewMode: boolean = false;
   // columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Weight','Metal Weight','Stone Weight','RCVD Gross Weight','Karat Code','Purity','Pure Weight','Metal Color','RCVD Pure Weight','Stock Code','Pieces','Job Pcs','Loss Wt','Loss Pure'];
   // columnheader : any[] = ['Type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
 
@@ -129,7 +130,9 @@ export class CastingTreeUpComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private comService: CommonServiceService,
-  ) { }
+  ) { 
+   this.setInitialValues()
+  }
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
@@ -141,8 +144,18 @@ export class CastingTreeUpComponent implements OnInit {
       this.setFormValues()
       this.setAllInitialValues()
     }
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+    }
   }
-
+  setInitialValues(){
+  this.castingTreeUpFrom.controls.recMetal.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  this.castingTreeUpFrom.controls.stoneWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  this.castingTreeUpFrom.controls.tree.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  this.castingTreeUpFrom.controls.waxWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  this.castingTreeUpFrom.controls.reqMetal.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  this.castingTreeUpFrom.controls.base.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -220,10 +233,12 @@ export class CastingTreeUpComponent implements OnInit {
           this.castingTreeUpFrom.controls.waxWt.setValue(data.WAX_WT)
           this.castingTreeUpFrom.controls.reqMetal.setValue(data.CONV_FACT)
           this.castingTreeUpFrom.controls.toProcess.setValue(data.PROCESS_CODE)
-          this.castingTreeUpFrom.controls.base.setValue(data.CONV_FACT)
-          this.castingTreeUpFrom.controls.recMetal.setValue(data.CONV_FACT)
+          this.castingTreeUpFrom.controls.base.setValue(data.BASE_WT)
+          this.castingTreeUpFrom.controls.recMetal.setValue(data.RCVD_MET_WT)
           this.castingTreeUpFrom.controls.toWorker.setValue(data.WORKER_CODE)
 
+
+        
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -404,7 +419,7 @@ export class CastingTreeUpComponent implements OnInit {
           "DT_VOCNO": 0,
           "DT_YEARMONTH": this.yearMonth,
           "SRNO": Element.SRNO,
-          "JOB_NUMBER": Element.Job_Code,
+          "JOB_NUMBER": this.comService.nullToString(Element.Job_Code),
           "UNQ_JOB_ID": this.comService.nullToString(Element.Unique_job_ID),
           "UNQ_DESIGN_ID": Element.Design_Code,
           "GROSS_WT": Element.Gross_Weight,
@@ -475,6 +490,9 @@ export class CastingTreeUpComponent implements OnInit {
   }
 
   formSubmit() {
+    if (this.content && this.content.FLAG == 'VIEW') {
+      return
+    }
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
@@ -507,7 +525,7 @@ export class CastingTreeUpComponent implements OnInit {
       "PROCESS_CODE": this.castingTreeUpFrom.value.processCode,
       "CONV_FACT": this.castingTreeUpFrom.value.convFact,
       "STOCK_CODE": "",
-      "RCVD_MET_WT": this.castingTreeUpFrom.value.RCVD_MET_WT,
+      "RCVD_MET_WT": this.castingTreeUpFrom.value.recMetal,
       "PRINT_COUNT": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",
@@ -561,7 +579,7 @@ export class CastingTreeUpComponent implements OnInit {
       return
     }
 
-    let API = `JobTreeMasterDJ/UpdateJobTreeMasterDJ//${this.branchCode}/${this.castingTreeUpFrom.value.vocType}/${this.castingTreeUpFrom.value.vocNo}/${this.comService.yearSelected}`;
+    let API = `JobTreeMasterDJ/UpdateJobTreeMasterDJ/${this.branchCode}/${this.castingTreeUpFrom.value.vocType}/${this.castingTreeUpFrom.value.vocNo}/${this.comService.yearSelected}`;
     let postData = {
       "MID": 0,
       "VOCTYPE": this.castingTreeUpFrom.value.vocType,
@@ -577,8 +595,8 @@ export class CastingTreeUpComponent implements OnInit {
       "COLOR": this.castingTreeUpFrom.value.color,
       "METAL_WT": 0,
       "STONE_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.stoneWt),
-      "BASE_WT": 0,
-      "TREE_WT": this.castingTreeUpFrom.value.tree,
+      "BASE_WT": this.castingTreeUpFrom.value.base,
+      "TREE_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.tree),
       "WAX_WT": this.castingTreeUpFrom.value.waxWt,
       "WORKER_CODE": this.castingTreeUpFrom.value.worker,
       "PROCESS_CODE": this.castingTreeUpFrom.value.processCode,
@@ -596,64 +614,10 @@ export class CastingTreeUpComponent implements OnInit {
       "SALESPERSON_CODE": "",
       "PARTIAL_TREE_REF": "",
       "SYSTEM_DATE": "2023-10-21T07:22:12.302Z",
-      "JOB_TREEJOB_DETAIL_DJ": [
-        {
-          "DT_VOCTYPE": "str",
-          "DT_BRANCH_CODE": this.branchCode,
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": this.yearMonth,
-          "SRNO": 0,
-          "JOB_NUMBER": "",
-          "UNQ_JOB_ID": "",
-          "UNQ_DESIGN_ID": "",
-          "GROSS_WT": 0,
-          "METAL_WT": 0,
-          "STONE_WT": 0,
-          "KARAT_CODE": "",
-          "RCVD_GROSS_WT": 0,
-          "RCVD_METAL_WT": 0,
-          "PURITY": 0,
-          "PURE_WT": 0,
-          "COLOR": "",
-          "PCS": 0,
-          "STOCK_CODE": "",
-          "DESIGN_CODE": "",
-          "RCVD_PURE_WT": 0,
-          "SIZE_CODE": "",
-          "WIDTH_CODE": "",
-          "LOSS_QTY": 0,
-          "LOSS_PURE_WT": 0,
-          "PARTIAL_TREE_REF": "",
-          "PROCESS_CODE": "",
-          "WORKER_CODE": "",
-          "UNIQUEID": 0,
-          "AUTHORIZE_TIME": "2023-10-21T07:22:12.302Z",
-          "IS_REJECT": true,
-          "REASON": "",
-          "REJ_REMARKS": "",
-          "ATTACHMENT_FILE": ""
-        }
-      ],
-      "JOB_TREESTOCK_DETAIL_DJ": [
-        {
-          "DT_VOCTYPE": "str",
-          "DT_BRANCH_CODE": this.branchCode,
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": this.yearMonth,
-          "SRNO": 0,
-          "STOCK_CODE": "",
-          "SUB_STOCK_CODE": "",
-          "DIVCODE": "",
-          "GROSS_WT": 0,
-          "PURITY": 0,
-          "PURE_WT": 0,
-          "TYPE": "",
-          "LOCTYPE_CODE": "",
-          "PCS": 0,
-          "PARTIAL_TREE_REF": "",
-          "UNIQUEID": 0
-        }
-      ]
+      "JOB_TREEJOB_DETAIL_DJ": this.setDetaills(),
+       
+      "JOB_TREESTOCK_DETAIL_DJ":this.componentSet(),
+        
     };
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
