@@ -292,11 +292,9 @@ export class LabourChargeMasterComponent implements OnInit {
   ngOnInit(): void {
     if (this.content) {
       this.setFormValues()
+      this.setInitialValues()
     }
-    console.log(this.commonService.amtFormat)
-    this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-
+  
     // this.diamondlabourMasterForm = this.formBuilder.group({
     //   labourType: new FormControl(''),
     //   settingType: new FormControl({ value: '', disabled: true }),
@@ -434,6 +432,12 @@ export class LabourChargeMasterComponent implements OnInit {
 
   }
 
+  private setInitialValues() {
+    console.log(this.commonService.amtFormat)
+    this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+
+  }
 
   divisionCodeSelected(e: any) {
     console.log(e);
