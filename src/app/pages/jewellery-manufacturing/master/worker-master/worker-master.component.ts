@@ -382,7 +382,8 @@ export class WorkerMasterComponent implements OnInit {
             "UNIQUEID": 0,
             "SRNO": item.SRNO,
             "WORKER_CODE": this.workerMasterForm.value.WorkerCode,
-            "PROCESS_CODE": item.PROCESS_CODE
+            "PROCESS_CODE": item.PROCESS_CODE,
+         
           })
         // } else if (value.isChecked == false) {
         //   this.selectedProcessArr = this.selectedProcessArr.filter((element) => element.SRNO != value.SrNo)

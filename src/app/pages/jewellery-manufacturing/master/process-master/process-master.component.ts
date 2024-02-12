@@ -352,8 +352,13 @@ export class ProcessMasterComponent implements OnInit {
 
   // final save
   formSubmit() {
-    this.validateLossRange();
-    console.log(this.lossData)
+
+ if(this.processMasterForm.value.loss == 1){
+  this.validateLossRange();
+  console.log(this.lossData)
+ }
+ 
+ 
 
     if(this.lossData == false){
       this.toastr.error('Standard % should be Greater than Minimum % and Lesser than Maximum %');
@@ -361,6 +366,11 @@ export class ProcessMasterComponent implements OnInit {
     else{
 
     console.log(this.processMasterForm.value.stand_time, 'this.processMasterForm.value.stand_time');
+
+    if(this.formattedTime > this.formattedMaxTime ){
+      this.toastr.error('Maximum time should not be less than Standard time');
+    }
+    else{
 
     // let time = this.commonService.timeToMinutes(this.processMasterForm.value.stand_time)
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -462,15 +472,17 @@ export class ProcessMasterComponent implements OnInit {
       } else {
         this.toastr.error('Not saved');
       }
+    
     }, err => {
       this.toastr.error('An error occurred: ' + err);
       console.error(err);
     });
   
   this.subscriptions.push(Sub);
-
+  
     console.log(this.processMasterForm.value.stand_time);
-  }
+    }
+}
 }
 
   close(data?: any) {

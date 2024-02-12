@@ -1,11 +1,11 @@
 <app-loader [isLoading]="isLoading"></app-loader>
     <!-- module list section starts -->
     <div class="landing_page">
-        <div class="container">
+        <div class="container con_1">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-9">
-                        <div class="row">
+                        <div class="row m_1">
                             <div class="col-md-3 my-2" *ngFor="let data of menuList; let i = index">
                                 <!-- Assuming you want to navigate to the route /target-route with query parameters -->
                                 <!-- <a [routerLink]="['/module-container']" [queryParams]="{ modulename :data.MODULE_NAME, id: i }"> -->
@@ -37,47 +37,55 @@
                             <nav class="offset-2">
                                 <ul>
                                     <li>
-                                      <a href="#">
-                                        <span><div class="tx_1">Favourites</div></span>           
-                                        <img src="../../assets/images/lp-icons/Frame 7.png" style="width: 55px;" class="imge">
-                                        <img src="../../assets/images/lp-icons/fi_2893811.png" style="width: 28px;" class="imges">
-                                      </a>
+                                        <div class="btn-group">
+                                            <button type="button" id="bt_1" class="btn dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                                    <span><div class="tx_1">Favourites</div></span>           
+                                                    <img src="../../assets/images/lp-icons/Frame 7.png"  class="imge">
+                                                    <img src="../../assets/images/lp-icons/fi_2893811.png"  class="imges">
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-lg-end">
+                                              <li><button class="dropdown-item" type="button">Action</button></li>
+                                              <li><button class="dropdown-item" type="button">Another action</button></li>
+                                              <li><button class="dropdown-item" type="button">Something else here</button></li>
+                                            </ul>
+                                          </div>
+                                     
                                     </li>
                                 </ul>
-                                    <ul style="padding-top: 70px;">
+                                    <ul style="padding-top: 65px;">
                                     <li>
-                                      <a href="#">
+                                        <button type="button" id="bt_1" class="btn dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                         <span><div class="tx_2">Management</div></span>           
-                                        <img src="../../assets/images/lp-icons/Frame 6.png" style="width: 55px;" class="imge">
-                                        <img src="../../assets/images/lp-icons/management_1.png" style="width: 28px;" class="imges">
-                                      </a>
+                                        <img src="../../assets/images/lp-icons/Frame 6.png" class="imge">
+                                        <img src="../../assets/images/lp-icons/management_1.png"  class="imges">
+                                    </button>
                                   </li>
                                 </ul>
-                                  <ul style="padding-top: 70px;">
+                                  <ul style="padding-top: 65px;">
                                   <li>
-                                    <a href="#">
+                                    <button type="button" id="bt_1" class="btn dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                       <span><div class="tx_3">Operational</div></span>           
-                                      <img src="../../assets/images/lp-icons/Frame 10.png" style="width: 55px;" class="imge">
-                                      <img src="../../assets/images/lp-icons/Operational_1.png" style="width: 28px;" class="imges">
-                                    </a>
+                                      <img src="../../assets/images/lp-icons/Frame 10.png"  class="imge">
+                                      <img src="../../assets/images/lp-icons/Operational_1.png"  class="imges">
+                                    </button>
                                 </li>
                             </ul>
-                                <ul style="padding-top: 70px;">
+                                <ul style="padding-top: 65px;">
                                 <li>
-                                    <a href="#">
+                                    <button type="button" id="bt_1" class="btn dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                       <span><div class="tx_4">Sales</div></span>           
-                                      <img src="../../assets/images/lp-icons/Frame 12.png" style="width: 55px;" class="imge">
-                                      <img src="../../assets/images/lp-icons/Sales_1.png" style="width: 28px;" class="imges">
-                                    </a>
+                                      <img src="../../assets/images/lp-icons/Frame 12.png"  class="imge">
+                                      <img src="../../assets/images/lp-icons/Sales_1.png"  class="imges">
+                                    </button>
                                 </li>
                             </ul>
-                                <ul style="padding-top: 70px;">
+                                <ul style="padding-top: 65px;">
                                 <li>
-                                    <a href="#">
+                                    <button type="button" id="bt_1" class="btn dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                       <span><div class="tx_5">Knowledge Base</div></span>           
-                                      <img src="../../assets/images/lp-icons/support.png" style="width: 55px;" class="imge">
-                                      <img src="../../assets/images/lp-icons/fi_9913803.png" style="width: 28px;" class="imges">
-                                    </a>
+                                      <img src="../../assets/images/lp-icons/support.png"  class="imge">
+                                      <img src="../../assets/images/lp-icons/fi_9913803.png"  class="imges">
+                                    </button>
                                 </li>
                                 </ul>
                               </nav>
