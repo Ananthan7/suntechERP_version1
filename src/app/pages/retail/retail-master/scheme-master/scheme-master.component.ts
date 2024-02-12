@@ -89,7 +89,8 @@ export class SchemeMasterComponent implements OnInit {
     let depositinAPI = 'ComboFilter/scheme%20type';
     let subs: Subscription = this.dataService.getDynamicAPI(depositinAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {
-        this.depositinList = resp.response
+        this.depositinList = resp.response.filter((item:any)=> item.ENGLISH == 'AMOUNT')
+        this.schemeMasterForm.controls.depositIn.setValue('AMOUNT')
       }
     });
 
@@ -232,6 +233,7 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.schemeStatus.setValue(this.content.STATUS);
     this.schemeMasterForm.controls.SCHEMEFIXEDAMT.setValue(this.content.SCHEME_FIXEDAMT);
     this.schemeMasterForm.controls.branch.setValue(this.content.BRANCH_CODE);
+    this.schemeMasterForm.controls.depositIn.setValue(this.content.DEPOSIT_IN);
     // this.schemeMasterForm.controls.SCHEME_METALCURRENCY.setValue(this.content.depositIn);
   }
 

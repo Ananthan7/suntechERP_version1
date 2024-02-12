@@ -151,6 +151,7 @@ export class SchemeRegisterComponent implements OnInit {
   }
   ngOnInit(): void {
     this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
+    this.schemeRegistrationForm.controls.DateOfJoining.setValue(this.currentDate)
     this.schemeRegistrationForm.controls.VOCDATE.setValue(this.currentDate)
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
     this.setInitialValues()

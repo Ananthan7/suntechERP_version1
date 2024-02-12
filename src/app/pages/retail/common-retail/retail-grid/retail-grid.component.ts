@@ -127,9 +127,9 @@ export class RetailGridComponent implements OnInit {
       this.pageIndex = 1;
       this.orderedItems = [];
       this.orderedItemsHead = [];
-      this.vocType = data.VOCTYPE;
-      this.mainVocType = data.MAIN_VOCTYPE;
-      this.tableName = data.HEADER_TABLE;
+      this.vocType = data.VOCTYPE || this.CommonService.getqueryParamVocType()
+      this.mainVocType = data.MAIN_VOCTYPE || this.CommonService.getqueryParamMainVocType();
+      this.tableName = data.HEADER_TABLE || this.CommonService.getqueryParamTable()
     } else {
       this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
@@ -204,19 +204,17 @@ export class RetailGridComponent implements OnInit {
             }
           }
 
-          let headers = Object.keys(this.orderedItems[0]);
-          this.orderedItemsHead = headers.filter((item: any) => item != 'MID')
           if (this.vocType == 'MASSCH') {
             this.orderedItems = this.changeKeyName(this.orderedItems, 'SCHEME_METALCURRENCY', 'DEPOSIT_IN')
-            headers = Object.keys(this.orderedItems[0]);
-            this.orderedItemsHead = headers.filter((item: any) => item != 'SCHEME_UNIT')
-            this.orderedItemsHead = headers.filter((item: any) => item != 'SCHEME_METALCURRENCY')
+            let headers = Object.keys(this.orderedItems[0]);
+            this.orderedItemsHead = this.filterArrayValues(headers,'SCHEME_UNIT')
+            this.orderedItemsHead = this.filterArrayValues(headers,'SCHEME_CURRENCY_CODE')
+            this.orderedItemsHead = this.filterArrayValues(headers,'SCHEME_METALCURRENCY')
           }
-          console.log(this.orderedItems, 'this.orderedItems');
+          let headers = Object.keys(this.orderedItems[0]);
+          this.orderedItemsHead =this.filterArrayValues(headers, 'MID')
 
-          // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
           // this.ChangeDetector.detectChanges()
-          // this.orderedItems = this.orderedItems.sort((a, b) => b.MID - a.MID);
         } else {
           this.snackBar.open('Data not available!', 'Close', {
             duration: 3000,
@@ -230,6 +228,9 @@ export class RetailGridComponent implements OnInit {
         });
       });
     this.subscriptions$.push(sub)
+  }
+  filterArrayValues(array:any,keyName:any){
+    return array.filter((item: any) => item != keyName)
   }
   changeKeyName(array: any, oldKey: any, newKey: any) {
     return array.map((obj: any) => {
