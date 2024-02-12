@@ -473,7 +473,8 @@
                         <mat-checkbox></mat-checkbox>
                     </div>
                     <div *dxTemplate="let data of 'ReminderSend'">
-                        <mat-checkbox></mat-checkbox>
+                        <input type="checkbox" (change)="ReminderSendSelected($event,data)"
+                        [checked]="data.value" />
                     </div>
                     <div *dxTemplate="let data of 'files'">
                         <input class="form-control fileAttach" type="file" 
