@@ -59,7 +59,8 @@ export class ComponentSizeSetComponent implements OnInit {
     }
   }
 
-  private getComponentSizeTypeOptions(): void {
+ getComponentSizeTypeOptions(){
+
     const API = 'ComponentSizeMaster/GetComponentSizeMasterList';
     const Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
