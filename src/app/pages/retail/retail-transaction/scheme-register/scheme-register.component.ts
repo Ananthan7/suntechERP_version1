@@ -102,7 +102,7 @@ export class SchemeRegisterComponent implements OnInit {
     Code: ['', Validators.required],
     Name: ['', Validators.required],
     MobileNo: [''],
-    Email: ['', [Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
+    Email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
     PanNo: [''],
     Branch: [''],
     DateOfJoining: [''],
@@ -180,10 +180,10 @@ export class SchemeRegisterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.SchemeMasterDetails = data.Details 
+          this.SchemeMasterDetails = data.Details
           this.schemeRegistrationForm.controls.Branch.setValue(data.PAY_BRANCH_CODE)
           this.schemeRegistrationForm.controls.Salesman.setValue(data.SALESPERSON_CODE)
-          this.schemeRegistrationForm.controls.TotalAmountToPay.setValue((data.SCH_INST_AMOUNT_CC*data.SCH_SCHEME_PERIOD)+data.SCHEME_BONUS)
+          this.schemeRegistrationForm.controls.TotalAmountToPay.setValue((data.SCH_INST_AMOUNT_CC * data.SCH_SCHEME_PERIOD) + data.SCHEME_BONUS)
           this.schemeRegistrationForm.controls.SCHEME_CODE.setValue(data.SCH_SCHEME_CODE)
           this.schemeRegistrationForm.controls.SchemeId.setValue(data.SCH_SCHEME_CODE)
           this.schemeRegistrationForm.controls.Units.setValue(data.SCH_UNITS)
@@ -352,8 +352,9 @@ export class SchemeRegisterComponent implements OnInit {
             this.commonService.decimalQuantityFormat(data.SCHEME_AMOUNT * data.SCHEME_PERIOD, 'THREE')
           )
           this.schemeRegistrationForm.controls.SumAssured.setValue(
-            this.commonService.decimalQuantityFormat(
-              (data.SCHEME_AMOUNT * data.SCHEME_PERIOD) + data.SCHEME_BONUS, 'THREE')
+            (data.SCHEME_AMOUNT * data.SCHEME_PERIOD) + data.SCHEME_BONUS
+            // this.commonService.decimalQuantityFormat(
+            //   (data.SCHEME_AMOUNT * data.SCHEME_PERIOD) + data.SCHEME_BONUS, 'THREE')
           )
           this.schemeRegistrationForm.controls.CancellationCharge.setValue(
             this.commonService.decimalQuantityFormat(data.CANCEL_CHARGE, 'THREE')
@@ -440,13 +441,10 @@ export class SchemeRegisterComponent implements OnInit {
       )
 
     }
-    console.log('fn ended');
-
   }
   exportToExcel() {
     this.commonService.exportExcel(this.schemeReceiptList, 'Scheme Details')
   }
-
 
   /**USE get Nationalitycode from API */
   getIDtypes() {
@@ -675,92 +673,95 @@ export class SchemeRegisterComponent implements OnInit {
       return
     }
     // this.schemeArray = this.newSchemeItems.filter((item: any) => item.ID > 0)
+    this.setPostData(),
+    console.log(this.detailArray,'this.detailArray');
+    
+    this.detailArray.forEach((item: any, i: any) => {
+      // delete item.schemeData['ID'];
 
-    // this.detailArray.forEach((item: any, index: any) => {
-    // delete item.schemeData['ID'];
-
-    this.formdata.append(`Model.model[0].schemeData.MID`, this.content ? this.content.MID : '0');
-    this.formdata.append(`Model.model[0].schemeData.SCH_CUSTOMER_ID`, this.content ? this.content.SCH_CUSTOMER_ID : '0');
-    this.formdata.append(`Model.model[0].schemeData.SCH_CUSTOMER_CODE`, this.schemeRegistrationForm.value.Code);
-    this.formdata.append(`Model.model[0].schemeData.SCH_CUSTOMER_NAME`, this.schemeRegistrationForm.value.Name);
-    this.formdata.append(`Model.model[0].schemeData.SCH_SCHEME_CODE`, this.schemeRegistrationForm.value.SCHEME_CODE || '');
-    this.formdata.append(`Model.model[0].schemeData.SCH_METALCURRENCY`, 'AMOUNT');
-    this.formdata.append(`Model.model[0].schemeData.SCH_JOIN_DATE`, this.commonService.formatDateTime(new Date(this.schemeRegistrationForm.value.DateOfJoining)));
-    this.formdata.append(`Model.model[0].schemeData.SCH_SCHEME_PERIOD`, this.schemeRegistrationForm.value.TenurePeriod || 0);
-    this.formdata.append(`Model.model[0].schemeData.SCH_FREQUENCY`, this.schemeRegistrationForm.value.Frequency);
-    this.formdata.append(`Model.model[0].schemeData.SCH_INST_AMOUNT_FC`, this.schemeRegistrationForm.value.InstallmentAmount);
-    this.formdata.append(`Model.model[0].schemeData.SCH_INST_AMOUNT_CC`, this.schemeRegistrationForm.value.InstallmentAmount);
-    this.formdata.append(`Model.model[0].schemeData.SCH_ASSURED_AMT_FC`, this.schemeRegistrationForm.value.SumAssured || 0);
-    this.formdata.append(`Model.model[0].schemeData.SCH_ASSURED_AMT_CC`, this.schemeRegistrationForm.value.SumAssured || 0);
-    this.formdata.append(`Model.model[0].schemeData.SCH_EXPIRE_DATE`, this.commonService.formatDateTime(new Date(this.schemeRegistrationForm.value.MaturingDate)));
-    this.formdata.append(`Model.model[0].schemeData.SCH_REMINDER_DAYS`, this.schemeRegistrationForm.value.AlertBeforeDays || 0);
-    this.formdata.append(`Model.model[0].schemeData.SCH_REMINDER_MODE`, this.schemeRegistrationForm.value.Frequency);
-    this.formdata.append(`Model.model[0].schemeData.SCHEME_BONUS`, this.schemeRegistrationForm.value.BonusInstallment);
-    this.formdata.append(`Model.model[0].schemeData.REMARKS`, this.schemeRegistrationForm.value.Remarks);
-    this.formdata.append(`Model.model[0].schemeData.SCH_UNITS`, this.schemeRegistrationForm.value.Units);
-    this.formdata.append(`Model.model[0].schemeData.SCH_CANCEL_AMT`, this.schemeRegistrationForm.value.CancellationCharge);
-    this.formdata.append(`Model.model[0].schemeData.SCH_STATUS`, 'true');
-    this.formdata.append(`Model.model[0].schemeData.PAY_DATE`, this.commonService.formatDateTime(new Date(this.schemeRegistrationForm.value.DateOfJoining)));
-    this.formdata.append(`Model.model[0].schemeData.PAY_BRANCH_CODE`, this.commonService.nullToString(this.commonService.branchCode));
-    this.formdata.append(`Model.model[0].schemeData.PAY_VOCTYPE`, this.schemeRegistrationForm.value.VOCTYPE);
-    this.formdata.append(`Model.model[0].schemeData.PAY_VOCNO`, '0');
-    this.formdata.append(`Model.model[0].schemeData.PAY_YEARMONTH`, this.commonService.nullToString(this.commonService.yearSelected));
-    this.formdata.append(`Model.model[0].schemeData.PAY_AMOUNTFC`, this.schemeRegistrationForm.value.InstallmentAmount || 0);
-    this.formdata.append(`Model.model[0].schemeData.PAY_AMOUNTCC`, this.schemeRegistrationForm.value.InstallmentAmount || 0);
-    this.formdata.append(`Model.model[0].schemeData.SCH_ALERT_EMAIL`, this.schemeRegistrationForm.value.Email);
-    this.formdata.append(`Model.model[0].schemeData.SCH_ALERT_MOBILE`, this.schemeRegistrationForm.value.MobileNo);
-    this.formdata.append(`Model.model[0].schemeData.SCH_SEND_ALERT`, this.schemeRegistrationForm.value.SendAlert);
-    this.formdata.append(`Model.model[0].schemeData.PAN_NUMBER`, this.schemeRegistrationForm.value.PanNo);
-    this.formdata.append(`Model.model[0].schemeData.SCH_PAN_NUMBER`, this.schemeRegistrationForm.value.PanNo);
-    this.formdata.append(`Model.model[0].schemeData.VOCDATE`, this.commonService.formatDateTime(this.schemeRegistrationForm.value.VOCDATE));
-    this.formdata.append(`Model.model[0].schemeData.SCH_CANCEL`, this.schemeRegistrationForm.value.SCH_CANCEL);
-    this.formdata.append(`Model.model[0].schemeData.SCH_REDEEM`, this.schemeRegistrationForm.value.SCH_REDEEM);
-    this.formdata.append(`Model.model[0].schemeData.REDEEM_REFERENCE`, `''`);
-    this.formdata.append(`Model.model[0].schemeData.SCHEME_BRANCH`, this.commonService.branchCode);
-    this.SchemeMasterDetails.forEach((item: any, index: any) => {
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].UNIQUEID`, '0');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_CODE`, this.schemeRegistrationForm.value.Code);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_ID`, '');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].SRNO`, item.SRNO || '0');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_DATE`, this.commonService.formatDateTime(new Date(item.PAY_DATE)));
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_FC`, item.PAY_AMOUNT_FC || 0);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_CC`, item.PAY_AMOUNT_CC || 0);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_STATUS`, this.schemeRegistrationForm.value.REMAINDER_SEND);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_DATE`, this.commonService.formatDateTime(new Date(item.REMAINDER_DATE)));
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_SEND`, this.schemeRegistrationForm.value.REMAINDER_SEND);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].DT_BRANCH_CODE`, this.commonService.branchCode);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_DATE`, this.commonService.formatDateTime(new Date(item.RCVD_DATE)));
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_BRANCH_CODE`, item.RCVD_BRANCH_CODE);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCTYPE`, 'SRC');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCNO`, '0');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_YEARMONTH`, this.commonService.yearSelected);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTFC`, '0');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTCC`, '0');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCHBAL_AMOUNTFC`, '0');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCHBAL_AMOUNTCC`, '0');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_PARTIALLY_PAID`, this.schemeRegistrationForm.value.SCH_PARTIALLY_PAID);
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].RECEIPT_REF`, '0');
-      this.formdata.append(`Model.model[0].schemeData.Details[${index}].RECEIPT_MID`, '0');
-    })
-    if (this.Attachedfile.length > 0) {
-      this.formdata.append(`Model.model[0].imageData.VOCNO`, this.schemeRegistrationForm.value.UNIQUEID);
-      this.formdata.append(`Model.model[0].imageData.UNIQUEID`, '');
-      this.formdata.append(`Model.model[0].imageData.SRNO`, this.schemeRegistrationForm.value.UNIQUEID);
-      this.formdata.append(`Model.model[0].imageData.VOCDATE`, this.commonService.formatDateTime(this.schemeRegistrationForm.value.VOCDATE));
-      this.formdata.append(`Model.model[0].imageData.REMARKS`, '');
-      this.formdata.append(`Model.model[0].imageData.CODE`, this.schemeRegistrationForm.value.Code);
-      this.formdata.append(`Model.model[0].imageData.EXPIRE_DATE`, '');
-      this.formdata.append(`Model.model[0].imageData.DOC_ACTIVESTATUS`, '');
-      this.formdata.append(`Model.model[0].imageData.DOC_LASTRENEWBY`, '');
-      this.formdata.append(`Model.model[0].imageData.DOC_LASTRENEWDATE`, '');
-      this.formdata.append(`Model.model[0].imageData.DOC_NEXTRENEWDATE`, '');
-      this.formdata.append(`Model.model[0].imageData.DOCUMENT_DATE`, this.commonService.formatDateTime(this.schemeRegistrationForm.value.VOCDATE));
-      this.formdata.append(`Model.model[0].imageData.DOCUMENT_NO`, '');
-      this.formdata.append(`Model.model[0].imageData.FROM_KYC`, '');
-      for (let i: number = 0; i < this.Attachedfile.length; i++) {
-        this.formdata.append("Model.Images[" + i + "].Image.File", this.Attachedfile[i]);
+      this.formdata.append(`Model.model[${i}].schemeData.MID`,this.content ? this.content.MID : '0');
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_CUSTOMER_ID`,this.content ? this.content.SCH_CUSTOMER_ID : '0');
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_CUSTOMER_CODE`,this.schemeRegistrationForm.value.Code);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_CUSTOMER_NAME`,this.schemeRegistrationForm.value.Name);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_SCHEME_CODE`,this.schemeRegistrationForm.value.SCHEME_CODE || '');
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_METALCURRENCY`,'AMOUNT');
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_JOIN_DATE`,this.commonService.formatDate(new Date(this.schemeRegistrationForm.value.DateOfJoining)));
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_SCHEME_PERIOD`,this.schemeRegistrationForm.value.TenurePeriod || 0);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_FREQUENCY`,this.schemeRegistrationForm.value.Frequency);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_INST_AMOUNT_FC`,this.schemeRegistrationForm.value.InstallmentAmount);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_INST_AMOUNT_CC`,this.schemeRegistrationForm.value.InstallmentAmount);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_ASSURED_AMT_FC`,this.schemeRegistrationForm.value.SumAssured || 0);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_ASSURED_AMT_CC`,this.schemeRegistrationForm.value.SumAssured || 0);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_EXPIRE_DATE`,this.commonService.formatDate(new Date(this.schemeRegistrationForm.value.MaturingDate)));
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_REMINDER_DAYS`,this.schemeRegistrationForm.value.AlertBeforeDays || 0);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_REMINDER_MODE`,this.schemeRegistrationForm.value.Frequency);
+      this.formdata.append(`Model.model[${i}].schemeData.SCHEME_BONUS`,this.schemeRegistrationForm.value.BonusInstallment);
+      this.formdata.append(`Model.model[${i}].schemeData.REMARKS`,'REMARKS');
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_UNITS`,this.schemeRegistrationForm.value.Units);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_CANCEL_AMT`,this.schemeRegistrationForm.value.CancellationCharge);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_STATUS`,'1');
+      this.formdata.append(`Model.model[${i}].schemeData.PAY_DATE`,this.commonService.formatDate(new Date(this.schemeRegistrationForm.value.DateOfJoining)));
+      this.formdata.append(`Model.model[${i}].schemeData.PAY_BRANCH_CODE`,this.commonService.nullToString(this.commonService.branchCode));
+      this.formdata.append(`Model.model[${i}].schemeData.PAY_VOCTYPE`,this.schemeRegistrationForm.value.VOCTYPE);
+      this.formdata.append(`Model.model[${i}].schemeData.PAY_VOCNO`,'0');
+      this.formdata.append(`Model.model[${i}].schemeData.PAY_YEARMONTH`,this.commonService.nullToString(this.commonService.yearSelected));
+      this.formdata.append(`Model.model[${i}].schemeData.PAY_AMOUNTFC`,this.schemeRegistrationForm.value.InstallmentAmount || 0);
+      this.formdata.append(`Model.model[${i}].schemeData.PAY_AMOUNTCC`,this.schemeRegistrationForm.value.InstallmentAmount || 0);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_ALERT_EMAIL`,this.schemeRegistrationForm.value.Email);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_ALERT_MOBILE`,this.schemeRegistrationForm.value.MobileNo);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_SEND_ALERT`,this.schemeRegistrationForm.value.SendAlert);
+      this.formdata.append(`Model.model[${i}].schemeData.PAN_NUMBER`,this.schemeRegistrationForm.value.PanNo);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_PAN_NUMBER`,this.schemeRegistrationForm.value.PanNo);
+      this.formdata.append(`Model.model[${i}].schemeData.VOCDATE`,this.commonService.formatDate(this.schemeRegistrationForm.value.VOCDATE));
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_CANCEL`,this.schemeRegistrationForm.value.SCH_CANCEL);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_REDEEM`,this.schemeRegistrationForm.value.SCH_REDEEM);
+      this.formdata.append(`Model.model[${i}].schemeData.REDEEM_REFERENCE`,`''`);
+      this.formdata.append(`Model.model[${i}].schemeData.SCHEME_BRANCH`,this.commonService.branchCode);
+      this.SchemeMasterDetails.forEach((item: any, index: any) => {
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].UNIQUEID`,'0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_CODE`,this.schemeRegistrationForm.value.Code);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_CUSTOMER_ID`,'');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].SRNO`,item.SRNO || '0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_DATE`,this.commonService.formatDate(new Date(item.PAY_DATE)));
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_FC`,item.PAY_AMOUNT_FC || 0);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_CC`,item.PAY_AMOUNT_CC || 0);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_STATUS`,this.schemeRegistrationForm.value.REMAINDER_SEND);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_DATE`,this.commonService.formatDate(new Date(item.REMAINDER_DATE)));
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_SEND`,this.schemeRegistrationForm.value.REMAINDER_SEND);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].DT_BRANCH_CODE`,this.commonService.branchCode);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_DATE`,this.commonService.formatDate(new Date(item.RCVD_DATE)));
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_BRANCH_CODE`,item.RCVD_BRANCH_CODE);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCTYPE`,'SRC');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCNO`,'0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_YEARMONTH`,this.commonService.yearSelected);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTFC`,'0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTCC`,'0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCHBAL_AMOUNTFC`,'0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCHBAL_AMOUNTCC`,'0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_PARTIALLY_PAID`,this.schemeRegistrationForm.value.SCH_PARTIALLY_PAID);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RECEIPT_REF`,'0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RECEIPT_MID`,'0');
+      })
+      if (this.Attachedfile.length > 0) {
+        this.formdata.append(`Model.model[0].imageData.VOCNO`,this.schemeRegistrationForm.value.UNIQUEID);
+        this.formdata.append(`Model.model[0].imageData.UNIQUEID`,'');
+        this.formdata.append(`Model.model[0].imageData.SRNO`,this.schemeRegistrationForm.value.UNIQUEID);
+        this.formdata.append(`Model.model[0].imageData.VOCDATE`,this.commonService.formatDate(new Date(this.schemeRegistrationForm.value.VOCDATE)));
+        this.formdata.append(`Model.model[0].imageData.REMARKS`,'REMARKS');
+        this.formdata.append(`Model.model[0].imageData.CODE`,this.schemeRegistrationForm.value.Code);
+        this.formdata.append(`Model.model[0].imageData.EXPIRE_DATE`,'');
+        this.formdata.append(`Model.model[0].imageData.DOC_ACTIVESTATUS`,'');
+        this.formdata.append(`Model.model[0].imageData.DOC_LASTRENEWBY`,'');
+        this.formdata.append(`Model.model[0].imageData.DOC_LASTRENEWDATE`,'');
+        this.formdata.append(`Model.model[0].imageData.DOC_NEXTRENEWDATE`,'');
+        this.formdata.append(`Model.model[0].imageData.DOCUMENT_DATE`,this.commonService.formatDate(new Date(this.schemeRegistrationForm.value.VOCDATE)));
+        this.formdata.append(`Model.model[0].imageData.DOCUMENT_NO`,'');
+        this.formdata.append(`Model.model[0].imageData.FROM_KYC`,'');
+        for (let i: number = 0; i < this.Attachedfile.length; i++) {
+          this.formdata.append("Model.Images[" + i + "].Image.File", this.Attachedfile[i]);
+        }
       }
-    }
+    })
     //save API
     this.isLoading = true;
     this.commonService.showSnackBarMsg('MSG81447');
@@ -876,7 +877,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   setPostData() {
-    return {
+    let params = {
       "MID": this.content ? this.content.MID : 0,
       "SCH_CUSTOMER_ID": this.content ? this.content.SCH_CUSTOMER_ID : "",
       "SCH_CUSTOMER_CODE": this.schemeRegistrationForm.value.Code,
@@ -923,6 +924,8 @@ export class SchemeRegisterComponent implements OnInit {
       "SCHEME_BRANCH": this.schemeRegistrationForm.value.Branch,
       "Details": this.SchemeMasterDetails || []
     }
+    this.detailArray = []
+    this.detailArray.push(params)
   }
   formatDateMaturingDate(event: any) {
     const inputValue = event.target.value;
