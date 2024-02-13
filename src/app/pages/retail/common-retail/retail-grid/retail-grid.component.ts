@@ -73,7 +73,9 @@ export class RetailGridComponent implements OnInit {
 
   // next data call
   nextPage() {
-    if ((this.pageIndex + 1) * this.pageSize < this.totalDataCount) {
+    if (this.pageSize <= this.totalDataCount) {
+      console.log('fored');
+      
       this.pageIndex = this.pageIndex + 1;
       this.getMasterGridData();
     }
@@ -150,22 +152,22 @@ export class RetailGridComponent implements OnInit {
     }
     let params
     // if (data?.MENU_SUB_MODULE == 'Transaction' || this.vocType) {
-      params = {
-        "PAGENO": this.pageIndex,
-        "RECORDS": this.pageSize,
-        "TABLE_NAME": this.checkVocTypeTable(this.tableName),
-        "CUSTOM_PARAM": {
-          "FILTER": {
-            "YEARMONTH": this.yearSelected,
-            "BRANCH_CODE": this.branchCode,
-            "VOCTYPE": this.vocType
-          },
-          "TRANSACTION": {
-            "VOCTYPE": this.CommonService.nullToString(this.vocType),
-            "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
-          }
+    params = {
+      "PAGENO": this.pageIndex,
+      "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
+      "TABLE_NAME": this.checkVocTypeTable(this.tableName),
+      "CUSTOM_PARAM": {
+        "FILTER": {
+          "YEARMONTH": this.yearSelected,
+          "BRANCH_CODE": this.branchCode,
+          "VOCTYPE": this.vocType
+        },
+        "TRANSACTION": {
+          "VOCTYPE": this.CommonService.nullToString(this.vocType),
+          "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
         }
       }
+    }
     // } else {
     //   params = {
     //     "PAGENO": this.pageIndex,
@@ -201,6 +203,7 @@ export class RetailGridComponent implements OnInit {
           } else {
             this.orderedItems = resp.dynamicData[0];
             if (this.orderedItems.length == 10) {
+              console.log('fired');
               this.nextPage()
             }
           }
@@ -208,12 +211,12 @@ export class RetailGridComponent implements OnInit {
           if (this.vocType == 'MASSCH') {
             this.orderedItems = this.changeKeyName(this.orderedItems, 'SCHEME_METALCURRENCY', 'DEPOSIT_IN')
             let headers = Object.keys(this.orderedItems[0]);
-            this.orderedItemsHead = this.filterArrayValues(headers,'SCHEME_UNIT')
-            this.orderedItemsHead = this.filterArrayValues(headers,'SCHEME_CURRENCY_CODE')
-            this.orderedItemsHead = this.filterArrayValues(headers,'SCHEME_METALCURRENCY')
+            this.orderedItemsHead = this.filterArrayValues(headers, 'SCHEME_UNIT')
+            this.orderedItemsHead = this.filterArrayValues(headers, 'SCHEME_CURRENCY_CODE')
+            this.orderedItemsHead = this.filterArrayValues(headers, 'SCHEME_METALCURRENCY')
           }
           let headers = Object.keys(this.orderedItems[0]);
-          this.orderedItemsHead =this.filterArrayValues(headers, 'MID')
+          this.orderedItemsHead = this.filterArrayValues(headers, 'MID')
 
           // this.ChangeDetector.detectChanges()
         } else {
@@ -230,7 +233,7 @@ export class RetailGridComponent implements OnInit {
       });
     this.subscriptions$.push(sub)
   }
-  filterArrayValues(array:any,keyName:any){
+  filterArrayValues(array: any, keyName: any) {
     return array.filter((item: any) => item != keyName)
   }
   changeKeyName(array: any, oldKey: any, newKey: any) {
@@ -245,8 +248,8 @@ export class RetailGridComponent implements OnInit {
       return newObj;
     });
   }
-  changeValuesToYN(array:any) {
-    return array.map((obj:any) => {
+  changeValuesToYN(array: any) {
+    return array.map((obj: any) => {
       const newObj = { ...obj };
       for (let key in newObj) {
         if (typeof newObj[key] === 'boolean') {
