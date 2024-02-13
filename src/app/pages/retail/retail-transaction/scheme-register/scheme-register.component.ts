@@ -180,6 +180,27 @@ export class SchemeRegisterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
+          this.SchemeMasterDetails = data.Details 
+          this.schemeRegistrationForm.controls.Branch.setValue(data.PAY_BRANCH_CODE)
+          this.schemeRegistrationForm.controls.Salesman.setValue(data.SALESPERSON_CODE)
+          this.schemeRegistrationForm.controls.TotalAmountToPay.setValue((data.SCH_INST_AMOUNT_CC*data.SCH_SCHEME_PERIOD)+data.SCHEME_BONUS)
+          this.schemeRegistrationForm.controls.SCHEME_CODE.setValue(data.SCH_SCHEME_CODE)
+          this.schemeRegistrationForm.controls.SchemeId.setValue(data.SCH_SCHEME_CODE)
+          this.schemeRegistrationForm.controls.Units.setValue(data.SCH_UNITS)
+          this.schemeRegistrationForm.controls.SendAlert.setValue(data.SCH_SEND_ALERT)
+          this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCH_SCHEME_PERIOD)
+          this.schemeRegistrationForm.controls.Frequency.setValue(data.SCH_METALCURRENCY)
+          this.schemeRegistrationForm.controls.InstallmentAmount.setValue(data.SCH_INST_AMOUNT_CC)
+          this.schemeRegistrationForm.controls.CancellationCharge.setValue(data.SCH_CANCEL_AMT)
+          this.schemeRegistrationForm.controls.SumAssured.setValue(data.SCH_ASSURED_AMT_FC)
+          this.schemeRegistrationForm.controls.MobileNo.setValue(data.SCH_ALERT_MOBILE)
+          this.schemeRegistrationForm.controls.Email.setValue(data.SCH_ALERT_EMAIL)
+          this.schemeRegistrationForm.controls.BonusInstallment.setValue(data.SCHEME_BONUS)
+          this.schemeRegistrationForm.controls.Remarks.setValue(data.REMARKS)
+          this.schemeRegistrationForm.controls.PanNo.setValue(data.PAN_NUMBER)
+          this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.SCH_JOIN_DATE)
+          this.schemeRegistrationForm.controls.VOCDATE.setValue(data.VOCDATE)
+
           let params = {
             "ID": 1,
             "SCHEME_UNIQUEID": this.commonService.nullToString(data.Details[0].UNIQUEID),
