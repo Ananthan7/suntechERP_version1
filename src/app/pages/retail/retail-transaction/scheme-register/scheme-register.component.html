@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmitWithAttachment()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmitWithAttachment()"
+    (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="row">
     <div class="col-md-12 col-sm-12">
@@ -23,8 +24,8 @@
                                 name="VocDate"
                                 [matDatepicker]="VocDate"
                                 formControlName="VOCDATE"
-                                placeholder="DD/MM/YYYY" 
-                                (dateChange)="formatDate($event)"/>
+                                placeholder="DD/MM/YYYY"
+                                (dateChange)="formatDate($event)" />
                             <mat-datepicker-toggle
                                 matSuffix
                                 [for]="VocDate"></mat-datepicker-toggle>
@@ -42,9 +43,9 @@
                         <label class="matlabels">No of units:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput
+                            <input type="number" matInput [readonly]="viewMode"
                                 formControlName="Units"
-                                class="text-right"/>
+                                class="text-right" />
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
@@ -59,9 +60,10 @@
                         <label class="matlabels">Branch:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput formControlName="Branch" />
+                            <input type="text" readonly matInput
+                                formControlName="Branch" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="customerMasterData"
+                        <master-search *ngIf="!viewMode" [MasterSearchData]="customerMasterData"
                             (newRowClick)="selectedCustomer($event)">
                         </master-search>
                     </div>
@@ -71,17 +73,17 @@
                         <label class="matlabels">Date Of Joining :
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input matInput
+                            <input matInput [disabled]="viewMode"
                                 DateValidation
                                 name="DOJ"
                                 [matDatepicker]="DOJ"
                                 formControlName="DateOfJoining"
-                                placeholder="DD/MM/YYYY" 
-                                (dateChange)="formatDate($event)"/>
+                                placeholder="DD/MM/YYYY"
+                                (dateChange)="formatDate($event)" />
                             <mat-datepicker-toggle
                                 matSuffix
                                 [for]="DOJ"></mat-datepicker-toggle>
-                            <mat-datepicker
+                            <mat-datepicker [disabled]="viewMode"
                                 #DOJ></mat-datepicker>
                             <!-- <mat-error
                                         *ngIf="receiptDetailsForm.controls.VocDate.touched 
@@ -97,7 +99,7 @@
                         <mat-form-field style="width: 50%;">
                             <input type="number" matInput ThreeDecimalInput
                                 formControlName="InstallmentAmount"
-                                class="text-right" />
+                                class="text-right" [readonly]="viewMode" />
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
@@ -105,7 +107,7 @@
                         </label>
                         <mat-form-field style="width: 50%">
                             <input type="text" matInput
-                                formControlName="Email" />
+                                formControlName="Email" [readonly]="viewMode" />
                             <mat-error
                                 *ngIf="schemeRegistrationForm.controls.Email.touched 
                                     && schemeRegistrationForm.controls.Email.hasError('required')">
@@ -123,7 +125,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput
-                                formControlName="PanNo" />
+                                formControlName="PanNo" [readonly]="viewMode" />
                         </mat-form-field>
 
                     </div>
@@ -133,10 +135,11 @@
                         <label class="matlabels">Customer Code:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput formControlName="Code"
+                            <input type="text" [readonly]="viewMode" matInput
+                                formControlName="Code"
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="customerMasterData"
+                        <master-search *ngIf="!viewMode" [MasterSearchData]="customerMasterData"
                             (newRowClick)="selectedCustomer($event)">
                         </master-search>
                     </div>
@@ -144,7 +147,7 @@
                         <label class="matlabels">Alert Before (Days):
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput
+                            <input type="number" matInput [readonly]="viewMode"
                                 formControlName="AlertBeforeDays"
                                 class="text-right" />
                         </mat-form-field>
@@ -153,7 +156,7 @@
                         <label class="matlabels">Mobile Number:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput
+                            <input type="number" matInput [readonly]="viewMode"
                                 formControlName="MobileNo" />
                         </mat-form-field>
                     </div>
@@ -162,7 +165,7 @@
                             <label class="matlabels">Alert:
                             </label>
                             <span>
-                                <input type="checkbox"
+                                <input type="checkbox" [readonly]="viewMode"
                                     formControlName="SendAlert">Send Alert
                             </span>
                         </div>
@@ -173,10 +176,10 @@
                         <label class="matlabels">Scheme Code:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput
+                            <input type="text" matInput [readonly]="viewMode"
                                 formControlName="SchemeId" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="SCHEMEMasterData"
+                        <master-search *ngIf="!viewMode" [MasterSearchData]="SCHEMEMasterData"
                             (newRowClick)="selectedScheme($event)">
                         </master-search>
                     </div>
@@ -186,7 +189,7 @@
                         <mat-form-field style="width: 50%;">
                             <input type="number" matInput ThreeDecimalInput
                                 formControlName="CancellationCharge"
-                                class="text-right" />
+                                class="text-right" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
@@ -194,7 +197,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="number" matInput
-                                class="text-right"
+                                class="text-right" [readonly]="viewMode"
                                 formControlName="TenurePeriod" />
                         </mat-form-field>
                     </div>
@@ -208,8 +211,8 @@
                                     name="MaturingDate"
                                     [matDatepicker]="MaturingDate"
                                     formControlName="MaturingDate"
-                                    placeholder="DD/MM/YYYY" 
-                                    (dateChange)="formatDateMaturingDate($event)"/>
+                                    placeholder="DD/MM/YYYY"
+                                    (dateChange)="formatDateMaturingDate($event)" />
                                 <mat-datepicker-toggle
                                     matSuffix
                                     [for]="MaturingDate"></mat-datepicker-toggle>
@@ -230,7 +233,7 @@
                         <label class="matlabels">Bonus Installment:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput
+                            <input type="number" matInput [readonly]="viewMode"
                                 formControlName="BonusInstallment" />
                         </mat-form-field>
                     </div>
@@ -238,8 +241,8 @@
                         <label class="matlabels">Frequency:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput
-                                class="text-right" ThreeDecimalInput
+                            <input type="text" matInput [readonly]="viewMode"
+                                class="text-right"
                                 formControlName="Frequency" />
                         </mat-form-field>
                     </div>
@@ -247,8 +250,8 @@
                         <label class="matlabels">Total Amount To Pay:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput class="text-right"
-                                ThreeDecimalInput
+                            <input type="number" matInput class="text-right"
+                                ThreeDecimalInput [readonly]="viewMode"
                                 formControlName="TotalAmountToPay" />
                         </mat-form-field>
                     </div>
@@ -257,7 +260,7 @@
                             <label class="matlabels">Scheme Type :
                             </label>
                             <mat-form-field style="width: 50%;">
-                                <input type="text" matInput
+                                <input type="text" matInput [readonly]="viewMode"
                                     formControlName="SchemeType" />
                             </mat-form-field>
                         </div>
@@ -268,14 +271,14 @@
                         <label style="width: 20%;">Salesman:
                         </label>
                         <mat-form-field style="width: 30%;">
-                            <input type="text" matInput
-                                formControlName="Salesman"/>
+                            <input type="text" matInput [readonly]="viewMode"
+                                formControlName="Salesman" />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="SalesmanData"
+                        <master-search *ngIf="!viewMode" [MasterSearchData]="SalesmanData"
                             (newRowClick)="SalesmanSelected($event)">
                         </master-search>
                         <mat-form-field style="width: 30%;">
-                            <input type="text" matInput
+                            <input type="text" matInput [readonly]="viewMode"
                                 formControlName="SalesmanName" />
                         </mat-form-field>
                     </div>
@@ -283,7 +286,7 @@
                         <label class="matlabels">Sum Assured:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput
+                            <input type="number" matInput [readonly]="viewMode"
                                 formControlName="SumAssured"
                                 class="text-right" ThreeDecimalInput />
                         </mat-form-field>
@@ -292,10 +295,12 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-12 col-sm-12">
                         <div class="d-flex align-items-center">
-                            <button mat-raised-button style="color: #1d5592;" (click)="addrowsWithAPI()">
+                            <button mat-raised-button style="color: #1d5592;"
+                                (click)="addrowsWithAPI()">
                                 Process
                             </button>
-                            <button mat-raised-button style="color: #1d5592;" (click)="cancelScheme()">
+                            <button mat-raised-button style="color: #1d5592;"
+                                (click)="cancelScheme()">
                                 Cancel Scheme
                             </button>
                         </div>
@@ -304,102 +309,13 @@
                         <label style="width: 20%;">Remarks:
                         </label>
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput
+                            <input type="text" matInput [readonly]="viewMode"
                                 formControlName="Remarks" />
                         </mat-form-field>
                     </div>
                 </div>
-
-                <!-- old form starts -->
-                <!-- <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-12">
-                        <label class="matlabels">Code:
-                        </label>
-                        <mat-form-field>
-                            <input type="text" matInput formControlName="Code"
-                                (focusout)="searchValueChange($event,'Code')" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="customerMasterData"
-                            (newRowClick)="selectedCustomer($event)">
-                        </master-search>
-                    </div>
-                    <div class="col-lg-5 col-md-5 col-sm-12">
-                        <label class="matlabels">Mobile No*:
-                        </label>
-                        <mat-form-field style="width: 65%">
-                            <input type="text" matInput
-                                (keypress)="isNumeric($event)"
-                                formControlName="MobileNo"
-                                (focusout)="searchValueChange($event,'Mobile')" />
-                        </mat-form-field>
-                        <master-search
-                            [MasterSearchData]="customerMasterWithMobile"
-                            (newRowClick)="selectedCustomer($event)">
-                        </master-search>
-                        <mat-error
-                            *ngIf="schemeRegistrationForm.controls.MobileNo.touched 
-                                    && schemeRegistrationForm.controls.MobileNo.hasError('required')">
-                            Mobile Number <strong>required</strong>
-                        </mat-error>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-12">
-                        <label class="matlabels">Name:
-                        </label>
-                        <mat-form-field style="width: 65%">
-                            <input type="text" matInput
-                                formControlName="Name" />
-                        </mat-form-field>
-                        <master-search
-                            [MasterSearchData]="customerMasterWithName"
-                            (newRowClick)="selectedCustomer($event)">
-                        </master-search>
-                    </div>
-
-                    <div class="col-lg-5 col-md-5 col-sm-12">
-                        <span class="matlabels">Email*:
-                        </span>
-                        <mat-form-field style="width: 65%">
-                            <input type="text" matInput
-                                formControlName="Email" />
-                            <mat-error
-                                *ngIf="schemeRegistrationForm.controls.Email.touched 
-                                    && schemeRegistrationForm.controls.Email.hasError('required')">
-                                Email <strong>required</strong>
-                            </mat-error>
-                            <mat-error
-                                *ngIf="schemeRegistrationForm.controls.Email.touched 
-                                    && schemeRegistrationForm.controls.Email.hasError('pattern')">
-                                Email Format Not Correct
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-7 col-md-12 col-sm-12 d-flex">
-                        <span class="matlabels pt-3"
-                            style="width: 30%;">Government.ID
-                            Type/#ID:
-                        </span>
-                        <mat-form-field style="width: 20%;">
-                            <mat-label>Id Type</mat-label>
-                            <mat-select formControlName="GovIdType">
-                                <mat-option *ngFor="let item of IdTypesList"
-                                    [value]="item.CODE">
-                                    {{ item.CODE }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        &nbsp;
-                        <mat-form-field style="width: 45%;">
-                            <input type="text" placeholder="Id" matInput
-                                formControlName="GovIdNumber">
-                        </mat-form-field>
-                    </div>
-                </div> -->
             </form>
-
+            <!-- grid section starts -->
             <div class="row">
                 <dx-data-grid id="gridContainer"
                     [dataSource]="SchemeMasterDetails"
@@ -441,7 +357,7 @@
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_DATE" dataType="date"
-                         caption="Receipt Date"
+                        caption="Receipt Date"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_BRANCH_CODE"
@@ -466,16 +382,19 @@
                     <dxi-column
                         caption alignment="center">
                     </dxi-column>
-                    <div *dxTemplate="let data of 'PayStatus'">
-                        <mat-checkbox></mat-checkbox>
+                    <div *dxTemplate="let datas of 'PayStatus'">
+                        <input type="checkbox" [readonly]="viewMode"
+                            (change)="PayStatusSelected($event,datas)"
+                            [checked]="datas.value" />
                     </div>
                     <div *dxTemplate="let data of 'ReminderSend'">
-                        <input type="checkbox" (change)="ReminderSendSelected($event,data)"
-                        [checked]="data.value" />
+                        <input type="checkbox" [readonly]="viewMode"
+                            (change)="ReminderSendSelected($event,data)"
+                            [checked]="data.value" />
                     </div>
                     <div *dxTemplate="let data of 'files'">
-                        <input class="form-control fileAttach" type="file" 
-                            (change)="onFileChange($event)" />
+                        <input class="form-control fileAttach" type="file"
+                            (change)="onFileChange($event)" [readonly]="viewMode"/>
                     </div>
                 </dx-data-grid>
             </div>

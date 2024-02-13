@@ -21,7 +21,7 @@ export class SchemeRegisterComponent implements OnInit {
 
   formdata = new FormData();
   isLoading: boolean = false
-  viewOnly: boolean = false;
+  viewMode: boolean = false;
   isViewSchemeMasterGrid: boolean = true;
 
   selectedFieldValue: string = '';
@@ -150,6 +150,9 @@ export class SchemeRegisterComponent implements OnInit {
     this.deleteRow = this.deleteRow.bind(this);
   }
   ngOnInit(): void {
+    if(this.content?.FLAG == 'VIEW'){
+      this.viewMode = true
+    }
     this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
     this.schemeRegistrationForm.controls.DateOfJoining.setValue(this.currentDate)
     this.schemeRegistrationForm.controls.VOCDATE.setValue(this.currentDate)
@@ -373,6 +376,10 @@ export class SchemeRegisterComponent implements OnInit {
 
   ReminderSendSelected(data: any, value: any) {
     this.SchemeMasterDetails[value.data.SRNO - 1].REMAINDER_SEND = data.REMAINDER_SEND ? true : false;
+    //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
+  }
+  PayStatusSelected(data: any, value: any) {
+    this.SchemeMasterDetails[value.data.SRNO - 1].PAY_STATUS = data.PAY_STATUS ? true : false;
     //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
   }
   addrowsWithAPI() {

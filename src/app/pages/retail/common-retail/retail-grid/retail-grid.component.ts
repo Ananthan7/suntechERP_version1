@@ -26,7 +26,8 @@ export class RetailGridComponent implements OnInit {
   totalDataCount: number = 10000; // Total number of items hardcoded 10k will reassign on API call
   pageSize: number = 10; // Number of items per page
   pageIndex: number = 1; // Current page index
-
+  yearSelected = this.CommonService.yearSelected
+  branchCode = this.CommonService.branchCode
   nextCall: any = 0
   //subscription variable
   subscriptions$: Subscription[] = [];
@@ -92,7 +93,7 @@ export class RetailGridComponent implements OnInit {
     return value
   }
   checkVocTypeTable(value: any) {
-    if (!value) return 0
+    if (!value) return ''
     if (this.vocType == 'SRC') return 'CURRENCY_RECEIPT ';
     return value
   }
@@ -148,15 +149,15 @@ export class RetailGridComponent implements OnInit {
       return
     }
     let params
-    if (data?.MENU_SUB_MODULE == 'Transaction' || this.vocType) {
+    // if (data?.MENU_SUB_MODULE == 'Transaction' || this.vocType) {
       params = {
         "PAGENO": this.pageIndex,
         "RECORDS": this.pageSize,
         "TABLE_NAME": this.checkVocTypeTable(this.tableName),
         "CUSTOM_PARAM": {
           "FILTER": {
-            "YEARMONTH": this.CommonService.yearSelected,
-            "BRANCH_CODE": this.CommonService.branchCode,
+            "YEARMONTH": this.yearSelected,
+            "BRANCH_CODE": this.branchCode,
             "VOCTYPE": this.vocType
           },
           "TRANSACTION": {
@@ -165,24 +166,24 @@ export class RetailGridComponent implements OnInit {
           }
         }
       }
-    } else {
-      params = {
-        "PAGENO": this.pageIndex,
-        "RECORDS": this.pageSize,
-        "TABLE_NAME": this.tableName,
-        "CUSTOM_PARAM": {
-          // "FILTER": {
-          //   "YEARMONTH": localStorage.getItem('YEAR') || '',
-          //   "BRANCH_CODE": this.CommonService.branchCode,
-          //   "VOCTYPE": this.vocType || ""
-          // },
-          "TRANSACTION": {
-            // "VOCTYPE": this.vocType || "",
-            "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
-          }
-        }
-      }
-    }
+    // } else {
+    //   params = {
+    //     "PAGENO": this.pageIndex,
+    //     "RECORDS": this.pageSize,
+    //     "TABLE_NAME": this.tableName,
+    //     "CUSTOM_PARAM": {
+    //       // "FILTER": {
+    //       //   "YEARMONTH": localStorage.getItem('YEAR') || '',
+    //       //   "BRANCH_CODE": this.CommonService.branchCode,
+    //       //   "VOCTYPE": this.vocType || ""
+    //       // },
+    //       "TRANSACTION": {
+    //         // "VOCTYPE": this.vocType || "",
+    //         "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+    //       }
+    //     }
+    //   }
+    // }
 
 
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
