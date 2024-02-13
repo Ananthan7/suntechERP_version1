@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IndexedApiService } from 'src/app/services/indexed-api.service';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
@@ -11,9 +11,11 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModulelistComponent implements OnInit {
+  @Output() settingsButtonClicked = new EventEmitter();
   //variables
   menuList: any[] = [];
   isLoading: boolean = false;
+  
 
   subscriptions$!: Subscription;
   constructor(
@@ -47,7 +49,7 @@ export class ModulelistComponent implements OnInit {
         this.menuList.push({
           MID: 15,
           MODULE_NAME: 'Addons',
-          imageUrl: '../../assets/images/lp-icons/add ons.png',
+          imageUrl: '../../assets/images/lp-icons/Property 1=Variant2 (1).png',
           imageUrl_2: '../../assets/images/lp-icons/x31_7.png'
         });
 
@@ -74,40 +76,40 @@ export class ModulelistComponent implements OnInit {
         // }
         this.menuList.forEach(data => {
           if (data.MODULE_NAME == 'Boiling') {
-            data.imageUrl = '../../assets/images/lp-icons/boiling.png'
+            data.imageUrl = '../../assets/images/lp-icons/Page-1.png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Page_1.png'
           } else if (data.MID == 14) {
-            data.imageUrl = '../../assets/images/lp-icons/bullion.png'
+            data.imageUrl = '../../assets/images/lp-icons/Ingot (2).png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Ingot (1).png'
           } else if (data.MID == 10) {
-            data.imageUrl = '../../assets/images/lp-icons/catalogue.png'
+            data.imageUrl = '../../assets/images/lp-icons/Group.png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Group_1.png'
           } else if (data.MID == 13) {
-            data.imageUrl = '../../assets/images/lp-icons/fixed assets.png'
+            data.imageUrl = '../../assets/images/lp-icons/Group (4).png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Group (1).png'
           } else if (data.MID == 5) {
-            data.imageUrl = '../../assets/images/lp-icons/Vector.png'
+            data.imageUrl = '../../assets/images/lp-icons/Group (5).png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Group (2).png'
           } else if (data.MID == 6) {
-            data.imageUrl = '../../assets/images/lp-icons/Group.png'
+            data.imageUrl = '../../assets/images/lp-icons/Group (6).png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Group (3).png'
           } else if (data.MID == 9) {
-            data.imageUrl = '../../assets/images/lp-icons/Vector_1.png'
+            data.imageUrl = '../../assets/images/lp-icons/Vector.png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Vec_1.png'
           } else if (data.MID == 8) {
-            data.imageUrl = '../../assets/images/lp-icons/Page-1.png'
+            data.imageUrl = '../../assets/images/lp-icons/Page-1 (2).png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Page-1 (1).png'
           } else if (data.MID == 11) {
             data.imageUrl = '../../assets/images/lp-icons/Repairing.png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Repairing_1.png'
           } else if (data.MID == 4) {
-            data.imageUrl = '../../assets/images/lp-icons/Vector_2.png'
+            data.imageUrl = '../../assets/images/lp-icons/Vector (2).png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Vector (1).png'
           } else if (data.MID == 1) {
-            data.imageUrl = '../../assets/images/lp-icons/Layer_x0020_1.png'
+            data.imageUrl = '../../assets/images/lp-icons/Layer_x0020_1 (2).png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Layer_x0020_1 (1).png'
           } else if (data.MODULE_NAME == 'Wholesale') {
-            data.imageUrl = '../../assets/images/lp-icons/Layer_x0020_1.png'
+            data.imageUrl = '../../assets/images/lp-icons/Layer_x0020_1 (2).png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Layer_x0020_1 (1).png'
           }
 
@@ -125,5 +127,9 @@ export class ModulelistComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.subscriptions$.unsubscribe()
+  }
+
+  toggleRightSidebar() {
+    this.settingsButtonClicked.emit();
   }
 }

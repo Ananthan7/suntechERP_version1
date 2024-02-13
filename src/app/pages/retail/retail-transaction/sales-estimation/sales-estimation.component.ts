@@ -26,6 +26,7 @@ import { Observable, noop } from 'rxjs';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-sales-estimation',
@@ -160,6 +161,7 @@ export class SalesEstimationComponent implements OnInit {
     balanceAmount: any;
 
     dataForm = new FormGroup({
+      
         vocdate: new FormControl(new Date(new Date())),
         sales_person: new FormControl('', Validators.required),
         branch: new FormControl('', Validators.required),
@@ -401,6 +403,7 @@ export class SalesEstimationComponent implements OnInit {
     public date_lbl: any = 'Date';
     public vocno_lbl: any = 'Voc No';
     public sales_person_lbl: any = 'Sales Person';
+    public voc_type: any = 'EST';
     public customer_name_lbl: any = 'Name';
     public mobile_lbl: any = 'Mobile';
     public slno_lbl: any = 'SLNo';
@@ -474,6 +477,7 @@ export class SalesEstimationComponent implements OnInit {
     }
 
     constructor(
+        private activeModal: NgbActiveModal,
         private modalService: NgbModal,
         private suntechApi: SuntechAPIService,
         public dialog: MatDialog,
@@ -559,6 +563,8 @@ export class SalesEstimationComponent implements OnInit {
             fcn_voc_no: ['', Validators.required],
             sales_person: ['', Validators.required],
             vocdate: ['', Validators.required],
+            vocType:['EST', Validators.required],
+            vocCode:['1', Validators.required],
         });
 
         this.vocDataForm.controls['vocdate'].setValue(this.currentDate);
@@ -686,7 +692,7 @@ export class SalesEstimationComponent implements OnInit {
             fcn_cust_type: ['', Validators.required],
             fcn_cust_desg: ['', Validators.required],
             fcn_mob_code: ['', Validators.required],
-
+         
             fcn_source_of_fund: [''],
 
         });
@@ -10157,6 +10163,10 @@ export class SalesEstimationComponent implements OnInit {
         else
             return date;
     }
+    close(data?: any) {
+        //TODO reset forms and data before closing
+        this.activeModal.close(data);
+      }
 
     generateVocNo() {
         const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.vocType}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.vocDataForm.value.vocdate)}&blnTransferDummyDatabase=false`;
