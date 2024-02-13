@@ -98,7 +98,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" MetalDecimalInput matInput maxlength="12" [readonly]="viewMode" class="text-right"
-                                    formControlName="TrayWeight" />
+                                    formControlName="TrayWeight" appDecimalPlaces />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Target Pcs
@@ -106,7 +106,7 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="number" matInput MetalDecimalInput maxlength="12" [readonly]="viewMode" class="text-right"
-                                    formControlName="TargetPcs" />
+                                    formControlName="TargetPcs" appDecimalPlaces />
                             </mat-form-field>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput MetalDecimalInput maxlength="12" class="text-right" [readonly]="viewMode"
-                                    formControlName="TargetMetalWt" />
+                                    formControlName="TargetMetalWt" appDecimalPlaces />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Target Carat
@@ -124,7 +124,7 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="number" class="text-right" maxlength="12" matInput MetalDecimalInput [readonly]="viewMode"
-                                    formControlName="TargetCaratWt" />
+                                    formControlName="TargetCaratWt" appDecimalPlaces />
                             </mat-form-field>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput maxlength="12" [readonly]="viewMode" class="text-right" MetalDecimalInput
-                                    formControlName="TargetWeight" />
+                                    formControlName="TargetWeight" appDecimalPlaces />
                             </mat-form-field>
                         </div>
                         <div class="col-sm-5">
@@ -179,7 +179,7 @@
                 <div class="col-md-5">
                     <div class="row my-3">
                         <div class="col-md-6">
-                            <button type="button" mat-flat-button color="primary" (click)="selectProcessMasterList()">
+                            <button type="button" mat-flat-button color="primary" (click)="selectProcessMasterList()" [disabled]="viewMode">
                                 Select Process
                             </button>
                         </div>
@@ -187,7 +187,7 @@
                     <div class="row">
                         <dx-data-grid #dataGrid id="gridContainer" width="100%" height="400px" [dataSource]="tableData"
                             [showRowLines]="true" keyExpr="SRNO" [selectedRowKeys]="selectedKey"
-                            (onSelectionChanged)="changedCheckbox($event)" [showBorders]="true">
+                            (onSelectionChanged)="changedCheckbox($event)" [showBorders]="true" [disabled]="viewMode">
                             <!-- <dxo-filter-row [visible]="showFilterRow"
                                 [applyFilter]="currentFilter"></dxo-filter-row>
                             <dxo-header-filter
@@ -197,7 +197,7 @@
                             <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing> -->
                             <dxo-selection mode="multiple"
-                                [showCheckBoxesMode]="isViewMode ? 'never' : 'always'"></dxo-selection>
+                                [showCheckBoxesMode]= "isViewMode ? 'never':'always'"></dxo-selection>
                             <!-- <dxi-column width="auto"
                                 cellTemplate="limitTemplate"
                                 alignment="right"></dxi-column>
