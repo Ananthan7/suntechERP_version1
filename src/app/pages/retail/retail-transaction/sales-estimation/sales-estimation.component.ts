@@ -49,6 +49,8 @@ export class SalesEstimationComponent implements OnInit {
     // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
     // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
 
+    estMode: string = 'ADD';
+
     // baseImgUrl = baseImgUrl;
     maskVocDate: any = new Date();
     amlNameValidation;
@@ -748,7 +750,7 @@ export class SalesEstimationComponent implements OnInit {
 
         // let randomvocno = Math.floor(Math.random() * 100000000 + 1);
         let randomvocno = Math.floor(Math.random() * 1000000 + 1);
-        this.vocDataForm.controls['fcn_voc_no'].setValue(randomvocno);
+        // this.vocDataForm.controls['fcn_voc_no'].setValue(randomvocno);
 
 
         // this.getYearList();
@@ -899,12 +901,20 @@ export class SalesEstimationComponent implements OnInit {
         console.log(this.content);
         console.log('====================================');
 
-        if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
+        // need to enable
+        // this.vocType = this.comFunc.getqueryParamVocType()
+        if (this.content != undefined)
+            this.estMode = this.content?.FLAG;
+
+        if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
 
             this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
+            this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
+            this.getFinancialYear();
+
             this.strBranchcode = this.content.BRANCH_CODE;
             this.vocType = this.content.VOCTYPE;
-            this.baseYear = this.content.YEARMONTH;
+            // this.baseYear = this.content.YEARMONTH;
             this.getRetailEstimationMaster(this.content);
             if (this.content.FLAG == "EDIT") {
                 this.editOnly = true
@@ -913,24 +923,14 @@ export class SalesEstimationComponent implements OnInit {
                 this.viewOnly = true;
             }
 
-        }
-        //   this.acRoute.queryParams.subscribe((params) => {
-        //     if (params.vocNo) {
-        //       this.queryParams = params;
-        //       if (this.router.url.includes('view-estimation')) {
-        //         this.viewOnly = true;
-        //         // this.setReadOnlyForViewMode();
-        //       }
-        //       if (this.router.url.includes('edit-estimation')) this.editOnly = true;
+        } else {
+            this.getFinancialYear();
+            this.generateVocNo();
 
-        //       this.vocDataForm.controls.fcn_voc_no.setValue(params.vocNo);
-        //       this.strBranchcode = params.branchCode;
-        //       this.vocType = params.vocType;
-        //       this.baseYear = params.yearMonth;
-        //       this.getRetailEstimationMaster(params);
-        //     }
-        //   });
+        }
     }
+
+
     getRetailEstimationMaster(data: any) {
         this.snackBar.open('Loading...');
         //   this.suntechApi.getRetailEstimationMaster(data)
@@ -10158,5 +10158,26 @@ export class SalesEstimationComponent implements OnInit {
             return date;
     }
 
+    generateVocNo() {
+        const API = `GenerateNewVoucherNumber/GenerateNewVocNum?VocType=${this.vocType}&BranchCode=${this.strBranchcode}&strYEARMONTH=${this.baseYear}&vocdate=${this.convertDateToYMD(this.vocDataForm.value.vocdate)}&blnTransferDummyDatabase=false`;
+        this.suntechApi.getDynamicAPI(API)
+            .subscribe((resp) => {
+                if (resp.status == "Success") {
+                    this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+                }
+            });
+    }
 
+
+    async getFinancialYear() {
+        const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
+        const res = await this.suntechApi.getDynamicAPI(API).toPromise()
+        // .subscribe((resp) => {
+        console.log(res);
+        if (res.status == "Success") {
+            this.baseYear = res.BaseFinancialyear;
+        }
+        // });
+
+    }
 }
