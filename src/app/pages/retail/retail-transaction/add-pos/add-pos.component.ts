@@ -3022,7 +3022,7 @@ export class AddPosComponent implements OnInit {
           "POSCUSTIDEXP_DATE": this.customerDetailForm.value.fcn_customer_exp_date || this.dummyDate,
 
           // new fields added 27-12-2023
-          "ATTACHMENT_FROM_SCANNER": true,
+          "ATTACHMENT_FROM_SCANNER": true, // need to discuss
           "GOOD_QUALITY_A_K_A": "",
           "LOW_QUALITY_A_K_A": "",
           "POSKNOWNABOUT": 0
@@ -6592,6 +6592,7 @@ export class AddPosComponent implements OnInit {
                 );
 
                 this.setMetalRate(stockInfos.KARAT_CODE);
+                
                 this.manageCalculations();
               } else {
                 this.lineItemForm.controls['fcn_li_rate'].setValue(
@@ -9351,9 +9352,11 @@ export class AddPosComponent implements OnInit {
     // return ((percent / 100) * total).toFixed(2);
   }
   setMetalRate(karatCode: any) {
+    
     const value: any = this.karatRateDetails.filter(
       (data: any) => data.KARAT_CODE == karatCode
     )[0].KARAT_RATE;
+
     this.lineItemForm.controls.fcn_ad_metal_rate.setValue(value);
   }
   changeStoneWt(event: any) {

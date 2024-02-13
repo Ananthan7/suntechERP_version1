@@ -26,6 +26,7 @@ import * as _moment from 'moment';
 
 export class PosCurrencyReceiptDetailsComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
+  @Input() receiptData!: any;
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   branchCode?: String;
@@ -130,6 +131,123 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.branch.setValue(this.branchCode);
 
     this.vatDetails();
+
+    this.setReceiptData();
+
+  }
+  setReceiptData() {
+    console.log(this.receiptData);
+    // let preData =  {
+    //     "UNIQUEID": 0,
+    //     "SRNO": 1,
+    //     "BRANCH_CODE": "JHRGMA",
+    //     "RECPAY_TYPE": "",
+    //     "MODE": "",
+    //     "ACCODE": "",
+    //     "CURRENCY_CODE": "",
+    //     "CURRENCY_RATE": "",
+    //     "AMOUNTFC": "",
+    //     "AMOUNTCC": "",
+    //     "HEADER_AMOUNT": 0,
+    //     "CHEQUE_NO": "",
+    //     "CHEQUE_DATE": "1900-01-01T00:00:00",
+    //     "CHEQUE_BANK": "",
+    //     "REMARKS": "",
+    //     "BANKCODE": "",
+    //     "PDCYN": "s",
+    //     "HDACCOUNT_HEAD": "",
+    //     "MODEDESC": "",
+    //     "D_POSSCHEMEID": "",
+    //     "D_POSSCHEMEUNITS": 0,
+    //     "CARD_NO": "",
+    //     "CARD_HOLDER": "",
+    //     "CARD_EXPIRY": "2024-02-12T06:54:45.529Z",
+    //     "PCRMID": 0,
+    //     "BASE_CONV_RATE": 0,
+    //     "SUBLEDJER_CODE": "",
+    //     "DT_BRANCH_CODE": "",
+    //     "DT_VOCTYPE": "",
+    //     "DT_VOCNO": 0,
+    //     "DT_YEARMONTH": "",
+    //     "TOTAL_AMOUNTFC": 0,
+    //     "TOTAL_AMOUNTCC": 0,
+    //     "CGST_PER": 0,
+    //     "CGST_AMOUNTFC": 0,
+    //     "CGST_AMOUNTCC": 0,
+    //     "SGST_PER": 0,
+    //     "SGST_AMOUNTFC": 0,
+    //     "SGST_AMOUNTCC": 0,
+    //     "IGST_PER": 0,
+    //     "IGST_AMOUNTFC": 0,
+    //     "IGST_AMOUNTCC": 0,
+    //     "CGST_ACCODE": "",
+    //     "SGST_ACCODE": "",
+    //     "IGST_ACCODE": "",
+    //     "GST_HEADER_AMOUNT": 0,
+    //     "GST_NUMBER": "",
+    //     "INVOICE_NUMBER": "",
+    //     "INVOICE_DATE": "2024-02-12T06:54:45.529Z",
+    //     "DT_GST_STATE_CODE": "",
+    //     "DT_GST_TYPE": "",
+    //     "DT_GST_CODE": "",
+    //     "DT_GST_GROUP": "s",
+    //     "CGST_CTRLACCODE": "",
+    //     "SGST_CTRLACCODE": "",
+    //     "IGST_CTRLACCODE": "",
+    //     "HSN_CODE": "",
+    //     "MIDPCR": 0,
+    //     "INCLUSIVE": true,
+    //     "COMM_PER": 0,
+    //     "COMM_AMOUNTCC": 0,
+    //     "COMM_AMOUNTFC": 0,
+    //     "COMM_TAXPER": 0,
+    //     "COMM_TAXAMOUNTCC": 0,
+    //     "COMM_TAXAMOUNTFC": 0,
+    //     "DT_TDS_CODE": "",
+    //     "TDS_PER": 0,
+    //     "TDS_AMOUNTFC": 0,
+    //     "TDS_AMOUNTCC": 0,
+    //     "PDC_WALLETAC": "",
+    //     "WALLET_YN": "s",
+    //     "SL_CODE": "",
+    //     "SL_DESCRIPTION": "",
+    //     "OT_TRANSFER_TIME": "",
+    //     "VAT_EXPENSE_CODE": "",
+    //     "VAT_EXPENSE_CODE_DESC": "",
+    //     "AMLVALIDID": "",
+    //     "AMLSOURCEOFFUNDS": "",
+    //     "AMLTRANSACTION_TYPE": ""
+    // }
+
+    if (this.receiptData != null && this.receiptData != undefined) {
+      this.posCurrencyReceiptDetailsForm.controls.modeOfSelect.setValue(this.receiptData.MODE);
+      this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(this.receiptData.ACCODE);
+
+      this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(this.receiptData.CURRENCY_CODE);
+      this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(this.receiptData.CURRENCY_RATE);
+      this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.receiptData.AMOUNTFC);
+      this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(this.receiptData.AMOUNTCC);
+      this.posCurrencyReceiptDetailsForm.controls.remarks.setValue(this.receiptData.REMARKS);
+      this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(this.receiptData.HDACCOUNT_HEAD);
+      this.posCurrencyReceiptDetailsForm.controls.modeDesc.setValue(this.receiptData.MODEDESC);
+      this.posCurrencyReceiptDetailsForm.controls.creditCardNumber.setValue(this.receiptData.CARD_NO);
+      this.posCurrencyReceiptDetailsForm.controls.creditCardName.setValue(this.receiptData.CARD_HOLDER);
+      this.posCurrencyReceiptDetailsForm.controls.creditCardDate.setValue(this.receiptData.CARD_EXPIRY);
+
+      // this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.receiptData.TOTAL_AMOUNTFC);
+      this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(this.receiptData.TOTAL_AMOUNTCC);
+
+      this.posCurrencyReceiptDetailsForm.controls.invoiceNo.setValue(this.receiptData.INVOICE_NUMBER);
+      this.posCurrencyReceiptDetailsForm.controls.invoiceDate.setValue(this.receiptData.INVOICE_DATE);
+      this.posCurrencyReceiptDetailsForm.controls.vatNo.setValue(this.receiptData.VAT_EXPENSE_CODE);
+
+
+
+    }
+
+
+
+    // receiptData
   }
 
   vatDetails() {
@@ -161,7 +279,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   debitAmountSelected(e: any) {
     console.log(e);
     this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(e.ACCODE);
-    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e['ACCOUNT HEAD']);
+    this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(e['ACCOUNT_HEAD']);
     this.DebitamountChange({ target: { value: e.ACCODE } });
   }
 
@@ -258,9 +376,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       }
 
       let postData = {
-        "UNIQUEID": 0,
-        "SRNO": 0,
-        "BRANCH_CODE": this.branchCode,
+        "UNIQUEID": this.receiptData?.UNIQUEID || 0,
+        "SRNO": this.receiptData?.SRNO || 0,
+        "BRANCH_CODE":  this.branchCode,
         "RECPAY_TYPE": "",
         "MODE": this.posCurrencyReceiptDetailsForm.value.modeOfSelect,
         "ACCODE": this.posCurrencyReceiptDetailsForm.value.debitAmount,
@@ -412,7 +530,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     });
   }
 
-  changeAmountLc(event: any){
+  changeAmountLc(event: any) {
 
   }
 
@@ -424,12 +542,18 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.creditCardDate.setValue(ctrlValue);
     datepicker.close();
   }
-  
+
 
 
   /**USE: close modal window */
   close(data?: any) {
+    console.log(data);
+    
     // this.activeModal.close();
+    if (this.receiptData != null && this.receiptData != undefined && data != null) {
+      data!.isUpdate = true;
+    }
+
     this.activeModal.close(data);
   }
 
