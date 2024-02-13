@@ -1,0 +1,128 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Order Lock & Unlock</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<div class="container-fluid pt-3">
+    <form>
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="row">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Branch :</label>
+                    <div class="col-sm-5">
+                        <div class="position-relative d-flex">
+                            <mat-form-field style="width: 100%">
+                                <input type="text" matInput  />
+                            </mat-form-field>
+                            <master-search></master-search>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="container mt-3">
+                        <div class="row align-items-center border">
+                            <h5 class="offset-5 pt-1">Option</h5>
+                        </div>
+
+                        <div class="row justify-content-center mb-2 border">
+                            <div class="row pt-4">
+                                <mat-radio-button value="1">Show All Locked Orders</mat-radio-button>
+                                <mat-radio-button value="2" class="pl-3">Show All UnLocked Orders</mat-radio-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="container mt-3">
+                    <div class="row align-items-center border">
+                        <h5 class="offset-5 pt-1">Filter By</h5>
+                    </div>
+                    <div class="row justify-content-center mb-2 border">
+                    <div class="row pt-2">
+                        <div class="row mb-1 ml-1">
+                          <div class="col-sm-2">
+                            <mat-radio-button value="1">Order No</mat-radio-button>
+                          </div>
+                          <div class="col-sm-1"></div>
+                          <div class="col-sm-4">
+                            <mat-form-field style="width: 100%">
+                              <input type="text" matInput  />
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-4">
+                            <mat-form-field style="width: 100%">
+                              <input type="text" matInput />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1 ml-1">
+                            <div class="col-sm-2">
+                              <mat-radio-button value="1">Order Age</mat-radio-button>
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-4">
+                              <mat-form-field style="width: 100%">
+                                <input type="text" matInput  />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-sm-4">
+                             <label> Days</label>
+                            </div>
+                          </div>
+                          <div class="row mb-1 ml-1">
+                            <div class="col-sm-2">
+                              <mat-radio-button value="1">Period</mat-radio-button>
+                            </div>
+                            <div class="col-sm-1">
+                                <!-- <label>From</label> -->
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput [matDatepicker]="vocdate"  
+                                    placeholder="DD/MM/YYYY"  DateValidation />
+                                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                                  <mat-datepicker #vocdate></mat-datepicker>
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-sm-1">
+                                <label>To</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput [matDatepicker]="vocdate"  
+                                    placeholder="DD/MM/YYYY"  DateValidation />
+                                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                                  <mat-datepicker  #vocdate></mat-datepicker>
+                                  </mat-form-field>
+                            </div>
+                          </div>
+                      </div>
+                      </div>
+                    </div>
+
+            </div>
+        </div>
+        <div class="row mt-1 pt-3 mb-3">
+            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+            [allowColumnReordering]="true"
+            [allowColumnResizing]="true"
+            [columnAutoWidth]="true">
+              <dxo-paging [enabled]="false"></dxo-paging>
+              <dxo-editing mode="cell" [allowUpdating]="true">
+              </dxo-editing>
+              <dxo-selection mode="multiple"></dxo-selection>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+              <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+    </form>
+</div>
