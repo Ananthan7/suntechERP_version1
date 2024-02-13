@@ -129,7 +129,7 @@
   background-color: #274d90;
   z-index: 1;
   position: absolute;
-  top: -18px;
+  top: -21px;
   left: 133px;
   bottom: -68px;
   right: 127px;
@@ -319,4 +319,26 @@ li:hover span {
   padding-right: 39px;
   /* padding-bottom: 10px; */
   text-align: center;
+}
+
+#offcanvasRight{
+  width: 271px;
+  height: 706px;
+  border-radius: 20px;
+  background: #FFF;
+  box-shadow: 0px 0px 6px 2px rgba(1, 44, 87, 0.25);
+  padding-top: 30p;
+  top: 101px;
+  right: 114px;
+}
+
+.offcanvas-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid #d3cece;
+  width: 265px;
+  height: 72px;
+ 
 }
