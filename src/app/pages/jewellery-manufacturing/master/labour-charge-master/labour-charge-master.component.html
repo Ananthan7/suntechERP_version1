@@ -23,7 +23,7 @@
                 <mat-form-field>
                   <input type="text" matInput maxlength="6" formControlName="divisions" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="divisionCodeData"
+                <master-search [MasterSearchData]="diaDivisionCodeData"
                   (newRowClick)="divisionCodeSelected($event)"></master-search>
               </div>
             </div>
@@ -214,7 +214,7 @@
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput maxlength="6" formControlName="metalDivision">
                 </mat-form-field>
-                <master-search [MasterSearchData]="divisionCodeData"
+                <master-search [MasterSearchData]="metalDivisionCodeData"
                   (newRowClick)="metaldivisionCodeSelected($event)"></master-search>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Stock Code :</label>

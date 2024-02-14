@@ -85,14 +85,26 @@ export class LabourChargeMasterComponent implements OnInit {
     forDesignOnly: [false, [Validators.required]]
   });
 
-  divisionCodeData: MasterSearchModel = {
+  diaDivisionCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 18,
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION_CODE<> ''",
+    WHERECONDITION: "division='S'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  metalDivisionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "division= 'm'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -180,26 +192,27 @@ export class LabourChargeMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Code',
+    SEARCH_HEADING: 'Stock Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: 'DIVISION_CODE ="txtdivision" and  SUBCODE = 0',
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
 
 
   currencyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 176,
+    ORDER_TYPE: 0,
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
+    WHERECONDITION: `CMBRANCH_CODE = ${this.commonService.branchCode}`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
 
 
   karatCodeData: MasterSearchModel = {
@@ -209,7 +222,7 @@ export class LabourChargeMasterComponent implements OnInit {
     SEARCH_FIELD: 'KARAT_CODE',
     SEARCH_HEADING: 'Karat',
     SEARCH_VALUE: '',
-    WHERECONDITION: "KARAT_CODE<> ''",
+    WHERECONDITION: " where ATTR_TYPE='KARAT' AND DESIGN_CODE = '+ txtDesign_Code.Text  +'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

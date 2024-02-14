@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Casting Process </h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Casting Tree Up </h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
@@ -64,9 +64,9 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Process: </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 96%; margin-left:-22px; margin-top: -3px;">
-                  <input type="text" matInput formControlName="processCode" />
+                  <input type="text" matInput formControlName="processCode" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)">
+                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
             </div>
@@ -76,9 +76,9 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Cylinder: </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 80%;margin-left: -9px; margin-top:-4px;">
-                  <input type="text" matInput formControlName="cylinder" />
+                  <input type="text" matInput formControlName="cylinder" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="cylinderCodeData"
+                <master-search [MasterSearchData]="cylinderCodeData" *ngIf="!viewMode"
                 (newRowClick)="cylinderCodeSelected($event)">
             </master-search>
               </div>
@@ -89,7 +89,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Tree:</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%; margin-left: -2px; margin-top: -4PX;">
-                  <input type="number" matInput formControlName="tree" style="text-align: right;" />
+                  <input type="number" matInput formControlName="tree" style="text-align: right;" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -99,7 +99,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Stone Wt * :</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%; margin-right: -10px;">
-                  <input type="text" matInput formControlName="stoneWt" style="text-align: right;" />
+                  <input type="text" matInput formControlName="stoneWt" style="text-align: right;" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -114,7 +114,7 @@
               <label for="inputPassword" class="col-sm-6 col-form-label">Tree No: </label>
               <div class="col-sm-5">
                 <mat-form-field style="width: 114%; margin-left:-22px; margin-top:-4px;">
-                  <input type="text" matInput formControlName="treeNo" />
+                  <input type="text" matInput formControlName="treeNo" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -124,9 +124,9 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Worker: </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 96%; margin-left:-22px; margin-top: -3px;">
-                  <input type="text" matInput formControlName="worker" />
+                  <input type="text" matInput formControlName="worker" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
             </div>
@@ -136,7 +136,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Conv.Fact: </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%; margin-left: -9px; margin-top:-4px;">
-                  <input type="number" matInput formControlName="convFact" style="text-align: right;" />
+                  <input type="number" matInput formControlName="convFact" style="text-align: right;" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -146,7 +146,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Wax Wt * : </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 124%; margin-top: -5px;">
-                  <input type="text" matInput formControlName="waxWt" style="text-align: right;" />
+                  <input type="text" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -156,7 +156,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Req Metal:</label>
               <div class="col-sm-5">
                 <mat-form-field style="width:130%;  margin-left:-1px; margin-top: -6px;">
-                  <input type="text" matInput formControlName="reqMetal" />
+                  <input type="text" matInput formControlName="reqMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
@@ -166,9 +166,9 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Process: </label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 92%; margin-left:-33px; margin-top: -6px;">
-                  <input type="text" matInput formControlName="toProcess" />
+                  <input type="text" matInput formControlName="toProcess" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)">
+                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
             </div>
@@ -180,9 +180,9 @@
               <label for="inputPassword" class="col-sm-6 col-form-label">Entered By:</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 93%; margin-left:-23px; margin-top: -6px;">
-                  <input type="text" matInput formControlName="enteredBy" />
+                  <input type="text" matInput formControlName="enteredBy" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="user"
+                <master-search [MasterSearchData]="user" *ngIf="!viewMode"
                 (newRowClick)="userDataSelected($event)">
             </master-search>
               </div>
@@ -193,9 +193,9 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Karat:</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 96%; margin-left:-22px; margin-top: -3px;">
-                  <input type="text" matInput formControlName="karatCode" />
+                  <input type="text" matInput formControlName="karatCode" [readonly]="viewMode" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="karatCodeData"
+                <master-search [MasterSearchData]="karatCodeData" *ngIf="!viewMode"
                 (newRowClick)="karatCodeSelected($event)">
             </master-search>
               </div>
@@ -204,32 +204,40 @@
 
           <div class="col-md-2">
             <div class="row md-4">
-              <label for="inputPassword" class="col-sm-5 col-form-label ">Base:</label>
+              
               <div class="col-sm-7">
-                <mat-form-field style="width: 85%; margin-left:-12px; margin-top:-4px;">
-                  <input type="text" matInput formControlName="base" />
-                </mat-form-field>
+                
               </div>
             </div>
           </div>
           <div class="col-2">
             <div class="row mb-2">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Rec Metal *:</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Base:</label>
               <div class="col-sm-5">
                 <mat-form-field style="width:153%;  margin-left:-3px; margin-top: -7px;">
-                  <input type="text" matInput formControlName="recMetal" />
+                  <input type="text" matInput formControlName="base" [readonly]="viewMode" class="text-right" MetalDecimalInput  />
                 </mat-form-field>
               </div>
             </div>
           </div>
-          <div class="col-3">
+          <div class="col-2">
             <div class="row md-3">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Worker: </label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Rec Metal *:</label>
               <div class="col-sm-5">
-                <mat-form-field style="width:81%;  margin-left:-50px; margin-top: -7px;">
-                  <input type="text" matInput formControlName="toWorker" />
+                <mat-form-field style="width:130%;  margin-left:-1px; margin-top: -6px;">
+                  <input type="text" matInput formControlName="recMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)">
+              </div>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-5 col-form-label">Worker: </label>
+              <div class="col-sm-7">
+                <mat-form-field style="width: 92%; margin-left:-33px; margin-top: -6px;">
+                  <input type="text" matInput formControlName="toWorker" [readonly]="viewMode"/>
+                </mat-form-field>
+                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
             </div>
@@ -241,9 +249,9 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Color : </label>
               <div class="col-sm-7">
                 <mat-form-field style="width:96%; margin-left:-22px; margin-top: -3px;" >
-                  <input type="text" matInput formControlName="color" />
+                  <input type="text" matInput formControlName="color" [readonly]="viewMode" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="colorData"
+                <master-search [MasterSearchData]="colorData" *ngIf="!viewMode"
                 (newRowClick)="colorDataSelected($event)">
             </master-search>
               </div>
@@ -280,7 +288,7 @@
                 [allowColumnReordering]="true"
                 [allowColumnResizing]="true"
                 [columnAutoWidth]="true">
-                <dxo-editing mode="cell" [allowUpdating]="true">
+                <dxo-editing mode="cell" [allowUpdating]="!viewMode">
                 </dxo-editing>
                 <dxo-selection mode="multiple"></dxo-selection> 
 
