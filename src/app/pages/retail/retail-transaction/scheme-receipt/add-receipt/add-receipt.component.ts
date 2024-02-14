@@ -109,10 +109,9 @@ export class AddReceiptComponent implements OnInit {
         this.receiptEntryForm.controls.Branch.setValue(branch)
       }
     }
+    this.setGridData()
   }
   setInitialValues() {
-    console.log(this.content,'this.content');
-    
     let data = this.content.details[0]
     this.getPaymentType(data.RECPAY_TYPE || data.Type)
     this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
@@ -145,7 +144,24 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.TransactionType.setValue(data.TransactionType)
     this.receiptEntryForm.controls.Narration.setValue(data.Narration)
   }
+  setGridData() {
+    let param = {
+      SCH_CUSTOMER_CODE: this.content.POSCustomerCode || '',
+      SCH_CUSTOMER_ID: this.content.SchemeCode || '',
+    }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeReceipts',param)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
 
+          this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE);
+          this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
+        } else {
+          this.toastr.error('not found')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
   //selected Branch from search
   selectedBranch(data: any) {
     this.receiptEntryForm.controls.Branch.setValue(data.BRANCH_CODE)
