@@ -78,6 +78,10 @@ export class AddReceiptComponent implements OnInit {
     TransactionType: ['',],
     Narration: ['',],
     SRNO: [0],
+    SchemeCode: [''],
+    SchemeId: [''],
+    SchemeBalance: [''],
+    InstallmentAmount: [''],
   })
   private subscriptions: Subscription[] = [];
   constructor(
@@ -112,6 +116,7 @@ export class AddReceiptComponent implements OnInit {
     let data = this.content.details[0]
     this.getPaymentType(data.RECPAY_TYPE || data.Type)
     this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
+    this.receiptEntryForm.controls.SchemeCode.setValue(data.SchemeID)
     // this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE || data.AC_Code)
     this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
     this.receiptEntryForm.controls.CurrRate.setValue(data.CURRENCY_RATE || data.CurrRate)

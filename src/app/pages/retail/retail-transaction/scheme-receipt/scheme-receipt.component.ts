@@ -485,6 +485,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   selectedScheme(data: any) {
     this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_SCHEME_CODE);
+    this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE);
     this.fetchSchemeId(data.SCH_CUSTOMER_ID)
     // this.receiptDetailsForm.controls.SchemeUnits.setValue(data.SCHEME_UNITS);
     // this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(data.SCHEME_TOTAL_VALUE);
