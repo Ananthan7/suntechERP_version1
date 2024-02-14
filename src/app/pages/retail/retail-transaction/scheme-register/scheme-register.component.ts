@@ -614,7 +614,7 @@ export class SchemeRegisterComponent implements OnInit {
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
-      this.editSchemeDetail(this.content)
+      this.editSchemeDetail()
       this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
       return
     }
@@ -661,31 +661,11 @@ export class SchemeRegisterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
-  /**USE: save button click */
-  formSubmitWithAttachment() {
-    let API = 'SchemeRegistration/InsertWithAttachments'
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.editSchemeDetail(this.content)
-      this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
-      return
-    }
-    if (this.schemeRegistrationForm.invalid) {
-      this.commonService.toastErrorByMsgId('select all required details!')
-      return
-    }
-
-    if (this.SchemeMasterDetails.length == 0) {
-      this.commonService.toastErrorByMsgId('Process Scheme Before saving')
-      return
-    }
-    // this.schemeArray = this.newSchemeItems.filter((item: any) => item.ID > 0)
-    this.setPostData(),
-    console.log(this.detailArray,'this.detailArray');
-    
+  /**USE: set form data for saving */
+  setFormData(){
+    this.setPostData();
     this.detailArray.forEach((item: any, i: any) => {
       // delete item.schemeData['ID'];
-
       this.formdata.append(`Model.model[${i}].schemeData.MID`,this.content ? this.content.MID : '0');
       this.formdata.append(`Model.model[${i}].schemeData.SCH_CUSTOMER_ID`,this.content ? this.content.SCH_CUSTOMER_ID : '0');
       this.formdata.append(`Model.model[${i}].schemeData.SCH_CUSTOMER_CODE`,this.schemeRegistrationForm.value.Code);
@@ -769,6 +749,25 @@ export class SchemeRegisterComponent implements OnInit {
         }
       }
     })
+  }
+
+  /**USE: save button click */
+  formSubmitWithAttachment() {
+    let API = 'SchemeRegistration/InsertWithAttachments'
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.editSchemeDetail()
+      this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
+      return
+    }
+    if (this.schemeRegistrationForm.invalid) {
+      this.commonService.toastErrorByMsgId('select all required details!')
+      return
+    }
+    if (this.SchemeMasterDetails.length == 0) {
+      this.commonService.toastErrorByMsgId('Process Scheme Before saving')
+      return
+    }
+    this.setFormData();
     //save API
     this.isLoading = true;
     this.commonService.showSnackBarMsg('MSG81447');
@@ -802,10 +801,11 @@ export class SchemeRegisterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  editSchemeDetail(data: any) {
-    let API = 'SchemeRegistration/UpdateSchemeRegistration/' + data.SCH_CUSTOMER_ID
-    let params
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, params)
+
+  editSchemeDetail() {
+    let API = 'SchemeRegistration/UpdateWithAttachments'
+    this.setFormData();
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, this.formdata)
       .subscribe((result) => {
         if (result.status == "Success") {
           Swal.fire({
@@ -818,6 +818,7 @@ export class SchemeRegisterComponent implements OnInit {
             confirmButtonText: 'Ok'
           }).then((result) => {
             if (result.isConfirmed) {
+              this.formdata = new FormData();
               this.close('reloadMainGrid')
             }
           })
