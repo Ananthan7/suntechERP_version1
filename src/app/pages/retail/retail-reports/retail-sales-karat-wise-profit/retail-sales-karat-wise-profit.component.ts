@@ -6,19 +6,13 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
-  selector: 'app-pos-salesman-target-analysis',
-  templateUrl: './pos-salesman-target-analysis.component.html',
-  styleUrls: ['./pos-salesman-target-analysis.component.scss']
+  selector: 'app-retail-sales-karat-wise-profit',
+  templateUrl: './retail-sales-karat-wise-profit.component.html',
+  styleUrls: ['./retail-sales-karat-wise-profit.component.scss']
 })
-export class PosSalesmanTargetAnalysisComponent implements OnInit {
-  divisionMS: any;
+export class RetailSalesKaratWiseProfitComponent implements OnInit {
 
-  mtdcolumnhead:any[] = ['Code','Sales person','Date','M T D Target','Achieved','GP','Ach.%','Var_Amount','%','Prv year 1','YOY %','Prv Year 2','YOY %','New Daily Trgt'];
-
-  ytdcolumnhead:any[] = ['Code','Sales person','Date','M T D Target','Achieved','GP','Ach.%','Var_Amount','%','Prv year 1','YOY %','Prv Year 2','YOY %','New Daily Trgt'];
-
-  branchcolumnhead:any[]=['Code','Sales person','Pcs / Grms','Branch','Sales Amount','GP %'];
-
+  columnhead:any[]=['Branch Code','Voc Type','Voc no','Karat Code','Pos Rate','Board Rate','Sales Gold Qty','Sales Gold Amount','Sales Gold Profit' ];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -33,7 +27,7 @@ export class PosSalesmanTargetAnalysisComponent implements OnInit {
   }
 
   formSubmit(){
-
+    
   }
 
   close(data?: any) {
