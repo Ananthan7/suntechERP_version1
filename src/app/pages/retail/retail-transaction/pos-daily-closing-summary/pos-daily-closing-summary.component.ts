@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+
+import { PosPurchaseDirectDetailComponent } from '../pos-purchase-direct/pos-purchase-direct-detail/pos-purchase-direct-detail.component';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     fromDate:[''],
     toDate: [''],
   })
+  modalService: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -43,5 +45,16 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  openModal(){
+    
+      const modalRef: NgbModalRef = this.modalService.open(PosPurchaseDirectDetailComponent, {
+        size: 'xl',
+        backdrop: true,//'static'
+        keyboard: false,
+        windowClass: 'modal-full-width',
+      });
+    
+  }
 
 }
+

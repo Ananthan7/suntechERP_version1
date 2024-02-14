@@ -759,71 +759,56 @@ export class ProcessMasterComponent implements OnInit {
     // }
   }
 
-  
-//  onInput(event: Event): void {
-//     const inputElement = event.target as HTMLInputElement;
-//     let inputValue = inputElement.value;
-  
-//     // Remove leading zeros
-//     inputValue = inputValue.replace(/^0+/g, '');
-  
-//     // Split the input into two parts, before and after the decimal point
-//     const [beforeDecimal, afterDecimal] = inputValue.split('.');
-  
-//     // Limit the digits before the decimal to 3
-//     const limitedBeforeDecimal = beforeDecimal.slice(0, 3);
-  
-//     // Limit the digits after the decimal to 3
-//     const limitedAfterDecimal = afterDecimal ? afterDecimal.slice(0, 3) : '';
-  
-//     // Combine the limited values and update the input value
-//     const limitedValue = `${limitedBeforeDecimal}${limitedAfterDecimal ? '.' + limitedAfterDecimal : ''}`;
-//     inputElement.value = limitedValue;
-//   }
-  
+
+
 // onInput(event: Event): void {
-//   const inputElement = event.target as HTMLInputElement;
-//   let inputValue = inputElement.value;
+//   const inputValue = (event.target as HTMLInputElement).value;
 
-//   // Remove leading zeros
-//   inputValue = inputValue.replace(/^0+/g, '');
+//   // Trim the input to 3 letters
+//   const limitedValue = inputValue.slice(0, 3);
 
-//   // Split the input into two parts, before and after the decimal point
-//   const [beforeDecimal, afterDecimal] = inputValue.split('.');
+//   // Update the input value
+//   (event.target as HTMLInputElement).value = limitedValue;
+//   }
 
-//   // Limit the digits before the decimal to 3
-//   const limitedBeforeDecimal = beforeDecimal.slice(0, 3);
 
-//   // Limit the digits after the decimal to 3
-//   const limitedAfterDecimal = afterDecimal ? afterDecimal.slice(0, 3) : '';
 
-//   // Combine the limited values and update the input value
-//   const limitedValue = `${limitedBeforeDecimal}${limitedAfterDecimal ? '.' + limitedAfterDecimal : ''}`;
-//   inputElement.value = limitedValue;
-
-//   // Calculate the cursor position based on limited values
-//   let cursorPosition = limitedValue.length;
-
-//   // If there is a decimal point, adjust the cursor position
-//   if (limitedAfterDecimal) {
-//     cursorPosition = limitedBeforeDecimal.length + 1;
-//   }
-
-//   // Set the cursor position after the input
-//   setTimeout(() => {
-//     inputElement.setSelectionRange(cursorPosition, cursorPosition);
-//   });
-// }
 
 onInput(event: Event): void {
   const inputValue = (event.target as HTMLInputElement).value;
 
-  // Trim the input to 3 letters
-  const limitedValue = inputValue.slice(0, 3);
+  // Remove any non-digit characters
+  const numericValue = inputValue.replace(/[^0-9]/g, '');
+  
+
+  // Insert a dot after the first 3 digits
+  let formattedValue = numericValue.slice(0, 3);
+
+  if (numericValue.length > 3) {
+    formattedValue += '.' + numericValue.slice(3,6);
+  }
 
   // Update the input value
-  (event.target as HTMLInputElement).value = limitedValue;
-  }
+  (event.target as HTMLInputElement).value = formattedValue;
+}
+
+// onInput(event: Event): void {
+//   const inputValue = (event.target as HTMLInputElement).value;
+
+//   // Remove any non-digit characters
+//   const numericValue = inputValue.replace(/[^0-9]/g, '');
+
+//   // Extract up to 3 digits before and after the decimal point
+//   const match = numericValue.match(/^(\d{0,3})(\.\d{0,3})?/);
+
+//   // Combine the digits with a dot
+//   const formattedValue = match ? match[1] + (match[2] || '') : '';
+
+//   // Update the input value
+//   (event.target as HTMLInputElement).value = formattedValue;
+// }
+
+
 
 
 }

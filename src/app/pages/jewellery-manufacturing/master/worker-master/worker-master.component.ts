@@ -92,8 +92,10 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+   
     if(!this.content){
-      
+  
     }
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -260,7 +262,7 @@ export class WorkerMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.close('reloadMainGrid')
+                // this.close('reloadMainGrid')
                 this.tableData = []
               }
             });
@@ -321,7 +323,7 @@ export class WorkerMasterComponent implements OnInit {
               if (result.value) {
                 this.workerMasterForm.reset()
                 this.tableData = []
-                this.close('reloadMainGrid')
+                // this.close('reloadMainGrid')
               }
             });
           }

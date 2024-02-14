@@ -25,7 +25,7 @@ export class ComponentSizeSetComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   selectedIndexes: any = [];
-  
+  indexes: any[] = [];
   componentSizeType: any[] = [];
   
   constructor(
@@ -119,34 +119,82 @@ export class ComponentSizeSetComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  // onSelectionChanged(event: any) {
+  //   const values = event.selectedRowKeys;
+  //   console.log(values);
+  
+  //   let indexes: number[] = [];
+  //   this.tableData.reduce((acc, value, index) => {
+  //     if (values.includes(value.COMPSIZE_CODE)) {
+  //       acc.push(index);
+  //     }
+  //     return acc;
+  //   }, indexes);
+  //   this.selectedIndexes = event.selectedRowKeys as number[];
+  //   this.selectedIndexes = indexes;
+  //   console.log(this.selectedIndexes);
+  // }
+///////////////////////////////////////////////////////////////////////////////////
+  // onSelectionChanged(event: any) {
+  //   const values = event.selectedRowKeys;
+  //   console.log(values);
+  //   console.log("selection change event",this.tableData)
+
+  
+  
+  //   this.indexes.push(values);
+  //   // this.tableData.forEach((value, index) => {
+  //   //   if (values.includes(value.COMPSIZE_CODE)) {
+        
+  //   //     indexes.push(index);
+  //   //   }
+  //   // });
+  
+  //   this.selectedIndexes = this.indexes;
+  //   console.log(this.selectedIndexes);
+  // }
+
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
-    console.log(values);
+    console.log("Selected row keys:", values);
+    console.log("Table data:", this.tableData);
   
-    let indexes: number[] = [];
-    this.tableData.reduce((acc, value, index) => {
-      if (values.includes(value.COMPSIZE_CODE)) {
-        acc.push(index);
-      }
-      return acc;
-    }, indexes);
-    this.selectedIndexes = event.selectedRowKeys as number[];
-    this.selectedIndexes = indexes;
-    console.log(this.selectedIndexes);
+    this.selectedIndexes = values;
+    console.log("Selected indexes:", this.selectedIndexes);
   }
   
+  
+
+
+  // deleteTableData() {
+  //   console.log(this.selectedIndexes);
+  //   if (this.selectedIndexes.length > 0) {
+  //     this.tableData = this.tableData.filter((data, indexes) => !this.selectedIndexes.includes(indexes));
+  //      // Clear selected indexes after deletion
+  //   this.selectedIndexes = [];
+     
+  //   } else {
+  //     // Handle the case when no rows are selected
+  //     this.snackBar.open('Please select record', 'OK', { duration: 2000 });
+  //     console.error('Please select records to delete.');
+  //   }
+  // }
 
   deleteTableData() {
-    console.log(this.selectedIndexes);
-    if (this.selectedIndexes.length > 0) {
-      this.tableData = this.tableData.filter((data, indexes) => !this.selectedIndexes.includes(indexes));
-     
+
+    if (this.selectedIndexes && this.selectedIndexes.length > 0) {
+      // Filter out the selected rows based on their indices
+      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+  
+      // Clear selected indexes after deletion
+       this.selectedIndexes = [];
     } else {
       // Handle the case when no rows are selected
       this.snackBar.open('Please select record', 'OK', { duration: 2000 });
       console.error('Please select records to delete.');
     }
   }
+  
   
   
   formSubmit(){

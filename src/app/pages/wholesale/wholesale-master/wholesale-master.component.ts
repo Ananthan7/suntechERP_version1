@@ -52,7 +52,6 @@ export class WholesaleMasterComponent implements OnInit {
     'CostcentreMagkingchargesComponent': CostcentreMagkingchargesComponent,
     'ColorStoneMasterComponent': ColorStoneMasterComponent,
     'ComponentSizeMasterComponent': ComponentSizeMasterComponent,
-    'ComponentSizeSetComponent': ComponentSizeSetComponent,
     'ConsumableMasterComponent': ConsumableMasterComponent,
     'DesignMasterComponent': DesignMasterComponent,
     'CostcentreConsumableComponent': CostcentreConsumableComponent,
@@ -69,6 +68,7 @@ export class WholesaleMasterComponent implements OnInit {
     'CustomerPricingMasterComponent': CustomerPricingMasterComponent,
     'CostCentreDiamondComponent': CostCentreDiamondComponent,
     'PriceschemesMasterComponent': PriceschemesMasterComponent,
+    'ComponentSizeSetComponent': ComponentSizeSetComponent,
 
     /*add components here and update in form component name menu updation in operationals */
   }

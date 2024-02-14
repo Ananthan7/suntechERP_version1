@@ -98,7 +98,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" MetalDecimalInput matInput maxlength="12" [readonly]="viewMode" class="text-right"
-                                    formControlName="TrayWeight" appDecimalPlaces />
+                                    formControlName="TrayWeight"/>
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Target Pcs
@@ -106,7 +106,7 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="number" matInput MetalDecimalInput maxlength="12" [readonly]="viewMode" class="text-right"
-                                    formControlName="TargetPcs" appDecimalPlaces />
+                                    formControlName="TargetPcs"/>
                             </mat-form-field>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput MetalDecimalInput maxlength="12" class="text-right" [readonly]="viewMode"
-                                    formControlName="TargetMetalWt" appDecimalPlaces />
+                                    formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Target Carat
@@ -124,7 +124,7 @@
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
                                 <input type="number" class="text-right" maxlength="12" matInput MetalDecimalInput [readonly]="viewMode"
-                                    formControlName="TargetCaratWt" appDecimalPlaces />
+                                    formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput maxlength="12" [readonly]="viewMode" class="text-right" MetalDecimalInput
-                                    formControlName="TargetWeight" appDecimalPlaces />
+                                    formControlName="TargetWeight" />
                             </mat-form-field>
                         </div>
                         <div class="col-sm-5">
@@ -220,7 +220,7 @@
             </div>
             <div class="row my-3">
                 <div class="col-md-12">
-                    <button type="button" mat-flat-button color="primary" (click)="printBarcode()">Print
+                    <button type="button"  [disabled]="buttonField" mat-flat-button color="primary" (click)="printBarcode()">Print
                         Barcode
                     </button>
                 </div>

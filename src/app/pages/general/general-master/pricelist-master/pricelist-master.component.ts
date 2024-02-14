@@ -325,7 +325,7 @@ export class PricelistMasterComponent implements OnInit {
       const selectedPriceType = this.priceTypeList.find(pt => pt.value === this.priceListMasterForm.value.priceMethod);
       if (selectedPriceType && selectedPriceType.type === 'Fixed') {
         this.required = false;
-         this.viewMode = true;
+         this.viewMode = false;
 
         this.priceListMasterForm.controls.priceSign.disable();
         this.priceListMasterForm.controls.priceSign.disable();

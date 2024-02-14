@@ -45,7 +45,7 @@ export class ComponentSizeMasterComponent implements OnInit {
   
   private subscribeToFormChanges() {
     this.componentsizemasterForm.valueChanges.subscribe(() => {
-      // this.calculateRadius();
+       this.calculateRadius();
       this.getvaluies()
     });
   }
