@@ -232,7 +232,7 @@
                             [showRowLines]="true" keyExpr="SRNO"
                             [selectedRowKeys]="selectedKey"
                             (onSelectionChanged)="changedCheckbox($event)"
-                            [showBorders]="true" [disabled]="viewMode">
+                            [showBorders]="true">
                             <!-- <dxo-filter-row [visible]="showFilterRow"
                                 [applyFilter]="currentFilter"></dxo-filter-row>
                             <dxo-header-filter
@@ -249,7 +249,7 @@
                                 cellTemplate="limitTemplate"
                                 alignment="right"></dxi-column>
                             <div *dxTemplate="let data of 'limitTemplate'">
-                                <mat-checkbox [checked]="data.value"
+                                <mat-checkbox [checked]="data.value"  [disabled]="viewMode"
                                     (change)="changedCheckbox(data)"></mat-checkbox>
                             </div>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
