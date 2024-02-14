@@ -203,21 +203,18 @@ export class RetailGridComponent implements OnInit {
           } else {
             this.orderedItems = resp.dynamicData[0];
             if (this.orderedItems.length == 10) {
-              console.log('fired');
               this.nextPage()
             }
           }
 
           if (this.vocType == 'MASSCH') {
             this.orderedItems = this.changeKeyName(this.orderedItems, 'SCHEME_METALCURRENCY', 'DEPOSIT_IN')
-            let headers = Object.keys(this.orderedItems[0]);
-            this.orderedItemsHead = this.filterArrayValues(headers, 'SCHEME_UNIT')
-            this.orderedItemsHead = this.filterArrayValues(headers, 'SCHEME_CURRENCY_CODE')
-            this.orderedItemsHead = this.filterArrayValues(headers, 'SCHEME_METALCURRENCY')
+            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_CURRENCY_CODE')
+            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_METALCURRENCY')
+            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_UNIT')
           }
           let headers = Object.keys(this.orderedItems[0]);
           this.orderedItemsHead = this.filterArrayValues(headers, 'MID')
-
           // this.ChangeDetector.detectChanges()
         } else {
           this.snackBar.open('Data not available!', 'Close', {
@@ -233,6 +230,13 @@ export class RetailGridComponent implements OnInit {
       });
     this.subscriptions$.push(sub)
   }
+  removeKeyValueFromArray(arrayOfObjects:any, keyToRemove:any) {
+    return arrayOfObjects.map((obj:any) => {
+        const newObj = { ...obj };
+        delete newObj[keyToRemove];
+        return newObj;
+    });
+}
   filterArrayValues(array: any, keyName: any) {
     return array.filter((item: any) => item != keyName)
   }
