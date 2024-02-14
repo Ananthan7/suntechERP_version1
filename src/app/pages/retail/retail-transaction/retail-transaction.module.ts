@@ -35,6 +35,9 @@ import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.componen
 import { AddReceiptComponent } from './scheme-receipt/add-receipt/add-receipt.component';
 import { AddSchemeComponent } from './scheme-register/add-scheme/add-scheme.component';
 import { CommonRetailModule } from '../common-retail/common-retail.module';
+import { OrderLockUnlockComponent } from './order-lock-unlock/order-lock-unlock.component';
+
+import { PosSalesmanTargetAnalysisComponent } from './pos-salesman-target-analysis/pos-salesman-target-analysis.component';
 
 
 
@@ -66,7 +69,9 @@ import { CommonRetailModule } from '../common-retail/common-retail.module';
     PosPurchaseDirectDetailComponent,
     SchemeReceiptComponent,
     AddReceiptComponent,
-    AddSchemeComponent
+    AddSchemeComponent,
+    OrderLockUnlockComponent, 
+    PosSalesmanTargetAnalysisComponent
     ],
   imports: [
     CommonModule,

@@ -137,11 +137,13 @@ export class ComponentSizeSetComponent implements OnInit {
   
 
   deleteTableData() {
+    console.log(this.selectedIndexes);
     if (this.selectedIndexes.length > 0) {
-      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-      this.selectedIndexes = []; // Clear selected indexes after deletion
+      this.tableData = this.tableData.filter((data, indexes) => !this.selectedIndexes.includes(indexes));
+     
     } else {
       // Handle the case when no rows are selected
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
       console.error('Please select records to delete.');
     }
   }

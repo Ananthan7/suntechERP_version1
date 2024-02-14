@@ -22,3 +22,7 @@
   padding: 6px 15px 6px 15px !important;
   border-radius: 5px !important;
 }
+
+.mat-mdc-radio-button ~ .mat-mdc-radio-button {
+  margin-left: 16px;
+}
