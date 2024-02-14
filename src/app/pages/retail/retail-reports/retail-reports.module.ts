@@ -9,6 +9,7 @@ import { RetailAdvanceReceiptRegisterComponent } from './retail-advance-receipt-
 import { PosSalesmanDetailsComponent } from './pos-daily-closing-summary/pos-salesman-details/pos-salesman-details.component';
 import { PosCustomerFeedbackFollowupComponent } from '../retail-reports/pos-customer-feedback-followup/pos-customer-feedback-followup.component';
 import { PosCustomerFeedbackActionComponent } from '../retail-reports/pos-customer-feedback-action/pos-customer-feedback-action.component';
+import { RetailSalesKaratWiseProfitComponent } from './retail-sales-karat-wise-profit/retail-sales-karat-wise-profit.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { PosCustomerFeedbackActionComponent } from '../retail-reports/pos-custom
     RetailAdvanceReceiptRegisterComponent,
     PosSalesmanDetailsComponent,
     PosCustomerFeedbackFollowupComponent,
-    PosCustomerFeedbackActionComponent
+    PosCustomerFeedbackActionComponent,
+    RetailSalesKaratWiseProfitComponent
   ],
   imports: [
     CommonModule,

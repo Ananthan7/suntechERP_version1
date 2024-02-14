@@ -21,6 +21,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { map, pairwise, startWith, filter } from 'rxjs/operators';
 import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
 import { OrderLockUnlockComponent } from './order-lock-unlock/order-lock-unlock.component';
+import { PosSalesmanTargetAnalysisComponent } from './pos-salesman-target-analysis/pos-salesman-target-analysis.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -120,6 +121,9 @@ export class RetailTransactionComponent implements OnInit {
       'PosPurchaseDirectComponent': PosPurchaseDirectComponent,
       'SchemeReceiptComponent': SchemeReceiptComponent,
       'OrderLockUnlockComponent': OrderLockUnlockComponent,
+      'PosSalesmanTargetAnalysisComponent': PosSalesmanTargetAnalysisComponent,
+
+      
 
       // Add components and update in operationals > menu updation grid form component name
     }

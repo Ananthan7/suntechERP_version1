@@ -268,17 +268,29 @@
 
                             <div class="row">
                                 <div class="col">
-                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [dataSource]="tableData" [showBorders]="true">
                                         <dxo-paging [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell" [allowUpdating]="true">
                                         </dxo-editing>
                                         <dxo-selection mode="multiple"></dxo-selection>
                                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                        <dxi-column *ngFor="let data of columnheads" dataField="{{ data }}"
+                                        <!-- <dxi-column *ngFor="let data of columnheads" dataField="{{ data }}"
                                             caption="{{ data }}" [allowEditing]="true" alignment="center"
                                             backgroundcolor="#000">
-                                        </dxi-column>
+                                        </dxi-column> -->t
+                                        <dxi-column dataField="SRNO" caption="Sr"> </dxi-column>
+                                        <dxi-column dataField="Div" caption="Div"> </dxi-column>
+                                        <dxi-column dataField="Components" caption="Components"> </dxi-column>
+                                        <dxi-column dataField="Location" caption="Location"> </dxi-column>
+                                        <dxi-column dataField="Kt" caption="Kt"> </dxi-column>
+                                        <dxi-column dataField="Purity" caption="Purity"> </dxi-column>
+                                        <dxi-column dataField="Pcs" caption="Pcs"> </dxi-column>
+                                        <dxi-column dataField="Weight" caption="Weight"> </dxi-column>
+                                        <dxi-column dataField="Rate" caption="Rate"> </dxi-column>
+                                        <dxi-column dataField="Amount" caption="Amount"> </dxi-column>
+                                        <dxi-column dataField="Sieve" caption="Sieve"> </dxi-column>
+                                        <dxi-column dataField="Shape" caption="Shape"> </dxi-column>
                                     </dx-data-grid>
                                 </div>
                             </div>

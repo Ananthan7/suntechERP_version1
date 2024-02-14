@@ -5,6 +5,7 @@ import {
   NgbModalRef,
 } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 
 @Component({
   selector: "app-pos-purchase-direct-detail",
@@ -12,7 +13,17 @@ import { FormBuilder, FormGroup } from "@angular/forms";
   styleUrls: ["./pos-purchase-direct-detail.component.scss"],
 })
 export class PosPurchaseDirectDetailComponent implements OnInit {
-  
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
   posPurchaseDirectDetailForm: FormGroup = this.formBuilder.group({
     stockCode: [""],
     stockType: [""],
@@ -63,4 +74,6 @@ export class PosPurchaseDirectDetailComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  
+
 }

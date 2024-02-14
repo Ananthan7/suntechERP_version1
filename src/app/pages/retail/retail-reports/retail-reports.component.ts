@@ -6,6 +6,7 @@ import { PosDailyClosingSummaryComponent } from './pos-daily-closing-summary/pos
 import { RetailAdvanceReceiptRegisterComponent } from './retail-advance-receipt-register/retail-advance-receipt-register.component';
 import { PosCustomerFeedbackFollowupComponent } from './pos-customer-feedback-followup/pos-customer-feedback-followup.component';
 import { PosCustomerFeedbackActionComponent } from './pos-customer-feedback-action/pos-customer-feedback-action.component';
+import { RetailSalesKaratWiseProfitComponent } from './retail-sales-karat-wise-profit/retail-sales-karat-wise-profit.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -50,6 +51,7 @@ export class RetailReportsComponent implements OnInit {
       'RetailAdvanceReceiptRegisterComponent': RetailAdvanceReceiptRegisterComponent,
       'PosCustomerFeedbackFollowupComponent': PosCustomerFeedbackFollowupComponent,
       'PosCustomerFeedbackActionComponent': PosCustomerFeedbackActionComponent,
+      'RetailSalesKaratWiseProfitComponent': RetailSalesKaratWiseProfitComponent,
       
       
   
