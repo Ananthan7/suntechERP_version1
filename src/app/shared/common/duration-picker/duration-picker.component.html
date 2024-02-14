@@ -5,7 +5,7 @@
         
             <div class="col-md-12">
                 <ng-select [items]="days" bindLabel="name" bindValue="value" formControlName="days"
-                    (change)="getDays($event)"></ng-select>
+                    (change)="getDays($event)" [readonly]="viewMode"></ng-select>
             </div>
         </div>
 
@@ -13,7 +13,7 @@
 
             <div class="col-md-12">
                 <ng-select [items]="minutes" bindLabel="name" bindValue="value" formControlName="hours"
-                    (change)="getHours($event)">
+                    (change)="getHours($event)" [readonly]="viewMode">
                 </ng-select>
             </div>
         </div>
@@ -22,7 +22,7 @@
 
             <div class="col-md-12">
                 <ng-select [items]="seconds" bindLabel="name" bindValue="value" formControlName="minutes"
-                    (change)="getMinutes($event)">
+                    (change)="getMinutes($event)" [readonly]="viewMode">
                 </ng-select>
             </div>
         </div>

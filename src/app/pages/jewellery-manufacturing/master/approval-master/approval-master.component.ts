@@ -22,10 +22,13 @@ export class ApprovalMasterComponent implements OnInit {
   selectedIndexes: any = [];
   allMode: string;
   checkBoxesMode: string;
-  isdiabled: boolean = true
+  isdiabled: boolean = true;
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
   isDisabled: boolean = false;
+  controlName : any;
+
+ userCodeEnable: boolean = false;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -62,6 +65,7 @@ export class ApprovalMasterComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.content.FLAG == 'VIEW') {
+      this.userCodeEnable = true;
       this.isDisabled = true;
       this.viewMode = true;
       this.setFormValues();
@@ -70,9 +74,8 @@ export class ApprovalMasterComponent implements OnInit {
       this.setFormValues();
     }
     console.log(this.content);
-
-    
   }
+
   setFormValues() {
     if (!this.content) return
     this.approvalMasterForm.controls.code.setValue(this.content.APPR_CODE)
@@ -90,12 +93,15 @@ export class ApprovalMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  userDataSelected(data: any, value: any) {
+  userDataSelected(data: any, value: any, controlName: string) {
+
+    // if(controlName == 'usertemp'){
+    //    this.userCodeEnable = true;
+    //  }
+
     console.log(value);
     console.log(data);
-
     this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
-    //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
   }
 
   typedataselected(data: any, value: any) {
@@ -263,7 +269,7 @@ export class ApprovalMasterComponent implements OnInit {
       "approvalDetails": this.tableData,
 
     }
-console.log(this.tableData);
+        console.log(this.tableData);
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
