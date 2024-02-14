@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 export class LabourChargeMasterComponent implements OnInit {
   @Input() content!: any;
   viewMode: boolean = false;
+  buttonField: boolean = true;
   forDesignOnlyTrue:boolean = true;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
@@ -46,8 +47,8 @@ export class LabourChargeMasterComponent implements OnInit {
     selling_rate: ['', [Validators.required]],
     sieve_desc: [''],
     selling: ['', [Validators.required]],
-    ctWtFrom: ['', [Validators.required]],
-    ctWtTo: ['', [Validators.required]],
+    ctWtFrom: ['.000', [Validators.required]],
+    ctWtTo: ['.000', [Validators.required]],
     settingType: [''],
     labourType: ['', [Validators.required]],
     unitList: [''],
@@ -79,8 +80,8 @@ export class LabourChargeMasterComponent implements OnInit {
     brand: [''],
     metalunitList: ['', [Validators.required]],
     purity: [''],
-    wtFrom: [''],
-    wtTo: [''],
+    wtFrom: ['.000'],
+    wtTo: ['.000'],
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]]
   });
