@@ -153,6 +153,7 @@ export class SchemeRegisterComponent implements OnInit {
     if(this.content?.FLAG == 'VIEW'){
       this.viewMode = true
     }
+    this.schemeRegistrationForm.controls.SchemeType.setValue('AMOUNT');
     this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
     this.schemeRegistrationForm.controls.DateOfJoining.setValue(this.currentDate)
     this.schemeRegistrationForm.controls.VOCDATE.setValue(this.currentDate)
