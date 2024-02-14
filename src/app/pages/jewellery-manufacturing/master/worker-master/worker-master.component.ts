@@ -92,8 +92,10 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+   
     if(!this.content){
-      
+  
     }
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -101,6 +103,7 @@ export class WorkerMasterComponent implements OnInit {
       this.setFormValues();
       this.selectProcessMasterList();
     } else if (this.content.FLAG == 'EDIT') {
+
       this.viewMode = false;
       this.setFormValues();
       this.selectProcessMasterList()
@@ -138,7 +141,10 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_CARAT_WT, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_METAL_WT, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_WEIGHT, 'METAL'))
+    this.workerMasterForm.controls.DailyTarget.setValue(this.content.TARGET_BY)
+    this.workerMasterForm.controls.Active.setValue(this.content.ACTIVE)
   }
+
   loadFlag: number = 0
   getWorkerMaster() {
     let API = 'WorkerMaster/GetWorkerMasterMIDLookup/' + this.content.MID
@@ -147,10 +153,37 @@ export class WorkerMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
           let data = result.response;
-          this.selectedKey = data.workerDetails.map((obj: any) => obj.SRNO);
+          //this.selectedKey = data.workerDetails.map((obj: any) => obj.SRNO);
+
+          
+          let data1:any =[];
+          this.tableData.forEach((element:any) => {
+
+            for(let i=0; i<data.workerDetails.length; i++){
+
+                 if(element.PROCESS_CODE == data.workerDetails[i].PROCESS_CODE){
+
+
+                  data1.push(element)
+
+                 }
+            }
+
+          })
+   
+            this.tableData.forEach((item, index) => {
+              item.SRNO = index + 1;
+            });
+
+          console.log(data1)
+
+          // this.selectedKey = data1;
+          this.selectedKey = data1.map((obj: any) => obj.SRNO);
+          console.log( this.selectedKey)
           if(this.loadFlag == 0){
             this.loadFlag+=1
             this.tableData = data.workerDetails
+            console.log( this.tableData);
           }
           // this.selectedKey.forEach((element:any) => {
           //   this.tableData.forEach((item:any,index:number) => {
@@ -175,9 +208,8 @@ export class WorkerMasterComponent implements OnInit {
 
   /**USE:  final save API call*/
   formSubmit() {
-
-    this.buttonField = false;
-
+   
+    this.buttonField=false;
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateWorkerMaster()
       return
@@ -207,7 +239,7 @@ export class WorkerMasterComponent implements OnInit {
       "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
       "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
       "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
-      "ACTIVE": true,
+      "ACTIVE":  this.workerMasterForm.value.Active,
       "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
       "TARGET_BY": this.workerMasterForm.value.DailyTarget|| "",
       "FINGER_ID": "",
@@ -230,7 +262,7 @@ export class WorkerMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.close('reloadMainGrid')
+                // this.close('reloadMainGrid')
                 this.tableData = []
               }
             });
@@ -240,7 +272,9 @@ export class WorkerMasterComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
-  }
+
+}
+
   updateWorkerMaster() {
     if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
       this.toastr.error('select all required fields')
@@ -264,9 +298,9 @@ export class WorkerMasterComponent implements OnInit {
       "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
       "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
       "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
-      "ACTIVE": true,
+      "ACTIVE":  this.workerMasterForm.value.Active,
       "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
-      "TARGET_BY": "",
+      "TARGET_BY": this.workerMasterForm.value.DailyTarget|| "",
       "FINGER_ID": "",
       "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
       "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
@@ -289,7 +323,7 @@ export class WorkerMasterComponent implements OnInit {
               if (result.value) {
                 this.workerMasterForm.reset()
                 this.tableData = []
-                this.close('reloadMainGrid')
+                // this.close('reloadMainGrid')
               }
             });
           }
@@ -375,7 +409,7 @@ export class WorkerMasterComponent implements OnInit {
     let value = data.selectedRowsData
     this.selectedProcessArr = []
     value.forEach((item: any) => {
-      // if (value.SrNo == item.SrNo) {
+      // if (value.SrNo == item.SrNo) { 
         // value.isChecked = !value.isChecked
         // if (value.isChecked == true) {
           this.selectedProcessArr.push({
@@ -383,7 +417,7 @@ export class WorkerMasterComponent implements OnInit {
             "SRNO": item.SRNO,
             "WORKER_CODE": this.workerMasterForm.value.WorkerCode,
             "PROCESS_CODE": item.PROCESS_CODE,
-         
+            "DESCRIPTION": item.DESCRIPTION
           })
         // } else if (value.isChecked == false) {
         //   this.selectedProcessArr = this.selectedProcessArr.filter((element) => element.SRNO != value.SrNo)
@@ -405,6 +439,7 @@ export class WorkerMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           this.tableData = result.response;
+          console.log(this.tableData);
           this.tableData.forEach((item: any, i: any) => {
             item.SRNO = i + 1;
           });
