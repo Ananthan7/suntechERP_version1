@@ -110,7 +110,6 @@ export class WorkerMasterComponent implements OnInit {
   setInitialValues() {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METALMETAL'))
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    this.workerMasterForm.controls.TargetPcs.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -204,10 +203,11 @@ export class WorkerMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                // this.close('reloadMainGrid')
-                this.tableData = []
+                this.close('reloadMainGrid')
               }
             });
+            this.workerMasterForm.reset()
+            this.tableData = []
           }
         } else {
           this.toastr.error('Not saved')
@@ -240,7 +240,7 @@ export class WorkerMasterComponent implements OnInit {
               if (result.value) {
                 this.workerMasterForm.reset()
                 this.tableData = []
-                // this.close('reloadMainGrid')
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -360,7 +360,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**select process API call */
   selectProcessMasterList() {
-    if(this.content.FLAG == 'EDIT') return
+    if (this.content && this.content.FLAG == 'EDIT') return
     if (this.workerMasterForm.value.WorkerCode == '') {
       this.commonService.toastErrorByMsgId('Worker Code Required');
       return

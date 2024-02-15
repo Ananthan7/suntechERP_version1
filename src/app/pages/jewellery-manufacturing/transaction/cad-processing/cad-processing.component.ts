@@ -111,14 +111,12 @@ export class CADProcessingComponent implements OnInit {
   
   
   setAllInitialValues() {
-    console.log(this.content)
     if (!this.content) return
     let API = `JobCadProcessDJ/GetJobCadProcessDJWithMID/${this.content.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          console.log(this.content.REMARKS,'working')
           data.Details.forEach((element:any) => {
             this.tableData.push({
               Srno: element.SRNO,

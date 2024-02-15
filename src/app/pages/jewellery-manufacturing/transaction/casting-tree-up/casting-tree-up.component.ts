@@ -139,13 +139,15 @@ export class CastingTreeUpComponent implements OnInit {
     this.yearMonth = this.commonService.yearSelected;
     this.castingTreeUpFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
 
-    console.log(this.content);
-    if (this.content) {
+    
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.setFormValues()
       this.setAllInitialValues()
     }
-    if (this.content.FLAG == 'VIEW') {
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.viewMode = true;
+      this.setFormValues()
+      this.setAllInitialValues()
     }
   }
   setInitialValues(){
@@ -179,7 +181,6 @@ export class CastingTreeUpComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          console.log(data, 'working')
             data.JOB_TREEJOB_DETAIL_DJ.forEach((element: any) => {
             this.tableData.push({
               SRNO: element.SRNO,
@@ -271,19 +272,19 @@ export class CastingTreeUpComponent implements OnInit {
     vocDate: [''],
     processCode: [''],
     cylinder: [''],
-    tree: [''],
-    stoneWt: [''],
-    treeNo: [''],
+    tree: ['',[Validators.required]],
+    stoneWt: ['',[Validators.required]],
+    treeNo: ['',[Validators.required]],
     worker: [''],
     convFact: [''],
-    waxWt: [''],
+    waxWt: ['',[Validators.required]],
     reqMetal: [''],
     toProcess: [''],
     enteredBy: [''],
     karatCode: [''],
     base: [''],
     recMetal: [''],
-    toWorker: [''],
+    toWorker: ['',[Validators.required]],
     color: [''],
   });
 
@@ -497,10 +498,11 @@ export class CastingTreeUpComponent implements OnInit {
       this.update()
       return
     }
-    //  if (this.castingTreeUpFrom.invalid) {
-    //    this.toastr.error('select all required fields')
-    //    return
-    //  }
+     
+     if (this.castingTreeUpFrom.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
 
     let API = 'JobTreeMasterDJ/InsertJobTreeMasterDJ'
     let postData = {
@@ -523,7 +525,7 @@ export class CastingTreeUpComponent implements OnInit {
       "WAX_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.waxWt),
       "WORKER_CODE": this.castingTreeUpFrom.value.worker,
       "PROCESS_CODE": this.castingTreeUpFrom.value.processCode,
-      "CONV_FACT": this.castingTreeUpFrom.value.convFact,
+      "CONV_FACT": this.comService.emptyToZero(this.castingTreeUpFrom.value.CONV_FACT),
       "STOCK_CODE": "",
       "RCVD_MET_WT": this.castingTreeUpFrom.value.recMetal,
       "PRINT_COUNT": 0,
