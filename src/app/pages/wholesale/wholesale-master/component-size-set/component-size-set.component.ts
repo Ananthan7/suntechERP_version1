@@ -17,17 +17,17 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ComponentSizeSetComponent implements OnInit {
 
-  columnheader:any[] = ['SN','Code','Description'];
+  columnheader: any[] = ['SN', 'Code', 'Description'];
   allMode: string;
   checkBoxesMode: string;
 
   private subscriptions: Subscription[] = [];
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
   selectedIndexes: any = [];
   indexes: any[] = [];
   componentSizeType: any[] = [];
-  
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -37,29 +37,30 @@ export class ComponentSizeSetComponent implements OnInit {
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
     private cdRef: ChangeDetectorRef,
-  ) { 
+  ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
-  codetemp(data:any,value: any){
+  codetemp(data: any, value: any) {
     console.log(data);
     this.tableData[value.data.SRNO - 1].COMPSIZE_CODE = data.target.value;
   }
 
-  descriptiontemp(data:any,value: any){
+  descriptiontemp(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].COMPONENT_DESCRIPTION = data.target.value;
   }
- 
+
   ngOnInit(): void {
     this.getComponentSizeTypeOptions();
     console.log(this.content);
-    if(this.content){
+    if (this.content) {
       this.setFormValues()
     }
+
   }
 
- getComponentSizeTypeOptions(){
+  getComponentSizeTypeOptions() {
 
     const API = 'ComponentSizeMaster/GetComponentSizeMasterList';
     const Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
@@ -72,10 +73,10 @@ export class ComponentSizeSetComponent implements OnInit {
     this.subscriptions.push(Sub);
     this.cdRef.detectChanges()
   }
-  
+
 
   setFormValues() {
-    if(!this.content) return
+    if (!this.content) return
     this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE)
     this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION)
 
@@ -84,27 +85,27 @@ export class ComponentSizeSetComponent implements OnInit {
     //   if (data.status == 'Success') {
 
     //     this.tableData = data.response.detail;
-       
+
 
     //   }
     // });
-   
+
   }
 
   componentsizesetmasterForm: FormGroup = this.formBuilder.group({
-    code:['',[Validators.required]],
-    description  : ['',[Validators.required]],
-  
-   });
+    code: ['', [Validators.required]],
+    description: ['', [Validators.required]],
 
-   addTableData(){
+  });
+
+  addTableData() {
     this.getComponentSizeTypeOptions()
     // const compSizeCode = this.componentsizesetmasterForm.value.COMPSIZE_CODE;
     // const componentDescription = this.componentsizesetmasterForm.value.COMPONENT_DESCRIPTION;
 
     let length = this.tableData.length;
     let sn = length + 1;
-    let data =  {
+    let data = {
       "UNIQUEID": 0,
       "SRNO": sn,
       "COMPSIZE_CODE": "",
@@ -119,87 +120,42 @@ export class ComponentSizeSetComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  // onSelectionChanged(event: any) {
-  //   const values = event.selectedRowKeys;
-  //   console.log(values);
-  
-  //   let indexes: number[] = [];
-  //   this.tableData.reduce((acc, value, index) => {
-  //     if (values.includes(value.COMPSIZE_CODE)) {
-  //       acc.push(index);
-  //     }
-  //     return acc;
-  //   }, indexes);
-  //   this.selectedIndexes = event.selectedRowKeys as number[];
-  //   this.selectedIndexes = indexes;
-  //   console.log(this.selectedIndexes);
-  // }
-///////////////////////////////////////////////////////////////////////////////////
-  // onSelectionChanged(event: any) {
-  //   const values = event.selectedRowKeys;
-  //   console.log(values);
-  //   console.log("selection change event",this.tableData)
-
-  
-  
-  //   this.indexes.push(values);
-  //   // this.tableData.forEach((value, index) => {
-  //   //   if (values.includes(value.COMPSIZE_CODE)) {
-        
-  //   //     indexes.push(index);
-  //   //   }
-  //   // });
-  
-  //   this.selectedIndexes = this.indexes;
-  //   console.log(this.selectedIndexes);
-  // }
 
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
     console.log("Selected row keys:", values);
     console.log("Table data:", this.tableData);
-  
+
     this.selectedIndexes = values;
     console.log("Selected indexes:", this.selectedIndexes);
+
+    this.tableData.forEach((item: any, i: any) => {
+      item.SRNO = i + 1;
+    });
   }
-  
-  
 
 
-  // deleteTableData() {
-  //   console.log(this.selectedIndexes);
-  //   if (this.selectedIndexes.length > 0) {
-  //     this.tableData = this.tableData.filter((data, indexes) => !this.selectedIndexes.includes(indexes));
-  //      // Clear selected indexes after deletion
-  //   this.selectedIndexes = [];
-     
-  //   } else {
-  //     // Handle the case when no rows are selected
-  //     this.snackBar.open('Please select record', 'OK', { duration: 2000 });
-  //     console.error('Please select records to delete.');
-  //   }
-  // }
 
   deleteTableData() {
 
-    if (this.selectedIndexes && this.selectedIndexes.length > 0) {
-      // Filter out the selected rows based on their indices
-      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-  
-      // Clear selected indexes after deletion
-       this.selectedIndexes = [];
-    } else {
-      // Handle the case when no rows are selected
-      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
-      console.error('Please select records to delete.');
+    for (let i = 0; i < this.tableData.length; i++) {
+
+
+      for (let j = 0; j < this.selectedIndexes.length; j++) {
+
+        if (this.tableData[i].SRNO == this.selectedIndexes[j]) {
+
+          this.tableData.splice(i, 1);
+        }
+      }
     }
   }
-  
-  
-  
-  formSubmit(){
+
+
+
+  formSubmit() {
     console.log(this.componentSizeType);
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -207,27 +163,27 @@ export class ComponentSizeSetComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'ComponentSizeSetMaster/InsertComponentSizeSetMaster'
     let postData = {
       "MID": 0,
-      "COMPSET_CODE":  this.componentsizesetmasterForm.value.code || "",
-      "DESCRIPTION":  this.componentsizesetmasterForm.value.description || "",
+      "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
+      "DESCRIPTION": this.componentsizesetmasterForm.value.description || "",
       "detail": this.tableData
-        // {
-        //   "UNIQUEID": 0,
-        //   "SRNO": 0,
-        //   "COMPSIZE_CODE": compSizeCode,
-        //   "COMPONENT_DESCRIPTION": componentDescription,
-        //   "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
-        // }
-      
+      // {
+      //   "UNIQUEID": 0,
+      //   "SRNO": 0,
+      //   "COMPSIZE_CODE": compSizeCode,
+      //   "COMPONENT_DESCRIPTION": componentDescription,
+      //   "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
+      // }
+
     }
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -248,25 +204,26 @@ export class ComponentSizeSetComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  update(){
+  
+  update() {
     if (this.componentsizesetmasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'ComponentSizeSetMaster/UpdateComponentSizeSetMaster/'+this.content.COMPSET_CODE
+
+    let API = 'ComponentSizeSetMaster/UpdateComponentSizeSetMaster/' + this.content.COMPSET_CODE
     let postData = {
       "MID": 0,
-      "COMPSET_CODE":  this.componentsizesetmasterForm.value.code || "",
-      "DESCRIPTION":  this.componentsizesetmasterForm.value.description || "",
+      "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
+      "DESCRIPTION": this.componentsizesetmasterForm.value.description || "",
       "detail": this.tableData
     }
-    
-  
+
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
