@@ -387,13 +387,13 @@ export class WorkerMasterComponent implements OnInit {
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {
     if (event.target.value == '' || this.viewMode == true) return
-    let API = 'WorkerMaster/GetWorkerMasterWorkerCodeLookup/' + event.target.value
+    let API = 'WorkerMaster/CheckIfCodeExists/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-        if (result.response) {
+        if (result.checkifExists) {
           Swal.fire({
             title: '',
-            text: 'Worker Already Exists!',
+            text: result.message || 'Worker Already Exists!',
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'

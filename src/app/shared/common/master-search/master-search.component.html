@@ -4,7 +4,7 @@
         <i class="fa fa-search searchIcon"></i>
     </button>
     <!-- panel -->
-    <p-overlayPanel #overlayPanel >
+    <p-overlayPanel #overlayPanel (onHide)="onHidePanel()">
         <ng-template pTemplate="content">
            <div >
                 <div class="d-flex justify-content-between border-bottom">
