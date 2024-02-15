@@ -135,6 +135,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.yearMonth = this.commonService.yearSelected;
   }
   setAllInitialValues() {
+
     let dataFromParent = this.content[0].PROCESS_FORMDETAILS
     if (!dataFromParent) return
     this.meltingIssuedetailsFrom.controls.jobno.setValue(dataFromParent.jobno)

@@ -28,6 +28,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   yearMonth?: String;
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
+  metalDetailData: any[] = [];
     user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -125,8 +126,16 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    
+    
   }
-
+  setAllInitialValues() {
+    let dataFromParent = this.content[0].PROCESS_FORMDETAILS
+    if (!dataFromParent) return
+    this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(dataFromParent.stockcode)
+    this.jewelleryaltrationdetailsFrom.controls.description.setValue(dataFromParent.description)
+    this.jewelleryaltrationdetailsFrom.controls.pcs.setValue(dataFromParent.pcs)
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -268,59 +277,58 @@ removedata(){
   this.tableData.pop();
 }
 formSubmit(){
+  let dataTOparent: any = {
 
-  if(this.content && this.content.FLAG == 'EDIT'){
-    this.update()
-    return
-  }
-  if (this.jewelleryaltrationdetailsFrom.invalid) {
-    this.toastr.error('select all required fields')
-    return
-  }
+    METAL_DETAIL_GRID: [],
+    PROCESS_FORMDETAILS: [],
+}
+dataTOparent.PROCESS_FORMDETAILS = this.jewelleryaltrationdetailsFrom.value;
+dataTOparent.METAL_DETAIL_GRID = this.metalDetailData; //grid data
+dataTOparent.POSTDATA = []
 
   let API = 'DiamondJewelAlteration/InsertDiamondJewelAlteration'
   let postData = {
     "UNIQUEID": 0,
       "SRNO": 0,
-      "STOCK_CODE": this.jewelleryaltrationdetailsFrom.value.stockcode || "",
-      "DESCRIPTION": this.jewelleryaltrationdetailsFrom.value.description || "",
-      "PCS": this.jewelleryaltrationdetailsFrom.value.pcs || "",
-      "COSTFC":this.jewelleryaltrationdetailsFrom.value.costFC || "",
-      "COSTCC":this.jewelleryaltrationdetailsFrom.value.costCC || "",
-      "COSTFCNEW": this.jewelleryaltrationdetailsFrom.value.costFCNEW || "",
-      "COSTCCNEW": this.jewelleryaltrationdetailsFrom.value.costCCNEW || "",
-      "METALWT": this.jewelleryaltrationdetailsFrom.value.metalWT || "",
+      "STOCK_CODE": this.comService.nullToString(this.jewelleryaltrationdetailsFrom.value.stockcode),
+      "DESCRIPTION": this.jewelleryaltrationdetailsFrom.value.description,
+      "PCS": this.jewelleryaltrationdetailsFrom.value.pcs,
+      "COSTFC":this.jewelleryaltrationdetailsFrom.value.costFC,
+      "COSTCC":this.jewelleryaltrationdetailsFrom.value.costCC,
+      "COSTFCNEW": this.jewelleryaltrationdetailsFrom.value.costFCNEW,
+      "COSTCCNEW": this.jewelleryaltrationdetailsFrom.value.costCCNEW,
+      "METALWT": this.jewelleryaltrationdetailsFrom.value.metalWT,
       "PUREWT": 0,
       "STONEWT": 0,
-      "GROSSWT": this.jewelleryaltrationdetailsFrom.value.gross || "",
-    "METAL_AMTFC":this.jewelleryaltrationdetailsFrom.value.metalAMTFC || "",
-    "METAL_AMTCC":this.jewelleryaltrationdetailsFrom.value.metalAMTCC || "",
+      "GROSSWT": this.jewelleryaltrationdetailsFrom.value.gross,
+    "METAL_AMTFC":this.jewelleryaltrationdetailsFrom.value.metalAMTFC,
+    "METAL_AMTCC":this.jewelleryaltrationdetailsFrom.value.metalAMTCC,
       "STONE_AMTFC": 0,
       "STONE_AMTCC": 0,
-      "METALWT_NEW": this.jewelleryaltrationdetailsFrom.value.metalWTNEW || "",
+      "METALWT_NEW": this.jewelleryaltrationdetailsFrom.value.metalWTNEW,
       "PUREWT_NEW": 0,
       "STONEWT_NEW": 0,
-      "GROSSWT_NEW": this.jewelleryaltrationdetailsFrom.value.grossWTNEW || "",
+      "GROSSWT_NEW": this.jewelleryaltrationdetailsFrom.value.grossWTNEW,
       "METAL_AMTFCNEW": 0,
       "METAL_AMTCCNEW": 0,
       "STONE_AMTFCNEW": 0,
       "STONE_AMTCCNEW": 0,
-      "SET_ACCODE": this.jewelleryaltrationdetailsFrom.value.settings || "",
-    "SET_AMTFC":this.jewelleryaltrationdetailsFrom.value.settingsAMTFC || "",
-    "SET_AMTCC": this.jewelleryaltrationdetailsFrom.value.settingsAMTCC || "",
+      "SET_ACCODE": this.jewelleryaltrationdetailsFrom.value.settings,
+    "SET_AMTFC":this.jewelleryaltrationdetailsFrom.value.settingsAMTFC,
+    "SET_AMTCC": this.jewelleryaltrationdetailsFrom.value.settingsAMTCC,
       "SET_AMTFCNEW": 0,
       "SET_AMTCCNEW": 0,
-      "POL_ACCODE": this.jewelleryaltrationdetailsFrom.value.polishing || "",
-    "POL_AMTFC": this.jewelleryaltrationdetailsFrom.value.polishingAMTFC || "",
-    "POL_AMTCC": this.jewelleryaltrationdetailsFrom.value.polishingAMTCC || "",
+      "POL_ACCODE": this.jewelleryaltrationdetailsFrom.value.polishing,
+    "POL_AMTFC": this.jewelleryaltrationdetailsFrom.value.polishingAMTFC,
+    "POL_AMTCC": this.jewelleryaltrationdetailsFrom.value.polishingAMTCC,
       "POL_AMTFCNEW": 0,
       "POL_AMTCCNEW": 0,
-      "RHO_ACCODE": this.jewelleryaltrationdetailsFrom.value.rhodium || "",
-      "RHO_AMTFC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTFC || "",
-      "RHO_AMTCC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTCC || "",
+      "RHO_ACCODE": this.jewelleryaltrationdetailsFrom.value.rhodium,
+      "RHO_AMTFC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTFC,
+      "RHO_AMTCC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTCC,
       "RHO_AMTFCNEW": 0,
       "RHO_AMTCCNEW": 0,
-      "MKG_ACCODE": this.jewelleryaltrationdetailsFrom.value.making || "",
+      "MKG_ACCODE": this.jewelleryaltrationdetailsFrom.value.making,
       "MKG_AMTFC": this.jewelleryaltrationdetailsFrom.value.makingAMTFC || "",
       "MKG_AMTCC": this.jewelleryaltrationdetailsFrom.value.makingAMTCC || "",
       "MKG_AMTFCNEW": 0,
@@ -375,12 +383,13 @@ formSubmit(){
       "COLOR": this.jewelleryaltrationdetailsFrom.value.metalcolor || "",
       "TAG_LINES": "",
   }
+  dataTOparent.POSTDATA.push(postData)
   this.close(postData);
 }
 
 setFormValues() {
   if(!this.content) return
-  console.log(this.content);
+
   
   this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(this.content.STOCK_CODE)
   this.jewelleryaltrationdetailsFrom.controls.description.setValue(this.content.DESCRIPTION)
