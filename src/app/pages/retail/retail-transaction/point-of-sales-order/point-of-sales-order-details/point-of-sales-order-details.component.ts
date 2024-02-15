@@ -19,7 +19,7 @@ export class PointOfSalesOrderDetailsComponent implements OnInit {
   soldItemsDetailsrForm: FormGroup = this.formBuilder.group({
     loaction: [""],
     stockCode: [""],
-    deliveryDate: [""],
+    deliveryDate:[new Date()],
     grossWeight: [""],
     stoneWeight: [""],
     netWeight: [""],

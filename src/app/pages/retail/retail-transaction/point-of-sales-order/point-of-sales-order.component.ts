@@ -9,11 +9,12 @@ import { PointOfSalesOrderDetailsComponent } from './point-of-sales-order-detail
   styleUrls: ['./point-of-sales-order.component.scss']
 })
 export class PointOfSalesOrderComponent implements OnInit {
+  [x: string]: any;
 
 
   vocMaxDate = new Date();
   currentDate = new Date();
-  columnhead:any[] = ['Karat','Rate','Purchase'];
+  columnhead:any[] = ['Karat','Rate','Purchase Rate'];
   columnheadSoldItems:any[] = ['Mode','Currency','Currency','Amount'];
   columnheadDetails:any[] = ['Sr','Stock Code','Division','Description','Quantity','Rate','Amount','Disc Amount','Net Amount'];
   divisionMS: any = 'ID';
@@ -21,8 +22,8 @@ export class PointOfSalesOrderComponent implements OnInit {
 
   posofSalesOrderForm: FormGroup = this.formBuilder.group({
     vocType :[''],
-    vocTypeDescription: [''],
-    vocDate:[''],
+    vocTypeDescription: ['1'],
+    vocDate:[new Date()],
     salesMan:[''],
     currency:[''],
     currencyCode:[''],
@@ -41,10 +42,10 @@ export class PointOfSalesOrderComponent implements OnInit {
     city:[''],
     state:[''],
     remarks:[''],
-    deliveryDate:[''],
+    deliveryDate:[new Date()],
     holdforSalesTill:[false],
     fixMetalRate:[false],
-    normalDate:[''],
+    normalDate:[new Date()],
     invoiceTotal:[''],
     returns:[''],
     exchanges:[''],
@@ -62,6 +63,7 @@ export class PointOfSalesOrderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.posofSalesOrderForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
   }
 
   close(data?: any) {
