@@ -204,10 +204,11 @@ export class WorkerMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                // this.close('reloadMainGrid')
-                this.tableData = []
+                this.close('reloadMainGrid')
               }
             });
+            this.workerMasterForm.reset()
+            this.tableData = []
           }
         } else {
           this.toastr.error('Not saved')
@@ -240,7 +241,7 @@ export class WorkerMasterComponent implements OnInit {
               if (result.value) {
                 this.workerMasterForm.reset()
                 this.tableData = []
-                // this.close('reloadMainGrid')
+                this.close('reloadMainGrid')
               }
             });
           }
@@ -360,7 +361,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**select process API call */
   selectProcessMasterList() {
-    if(this.content.FLAG == 'EDIT') return
+    if (this.content && this.content.FLAG == 'EDIT') return
     if (this.workerMasterForm.value.WorkerCode == '') {
       this.commonService.toastErrorByMsgId('Worker Code Required');
       return
