@@ -19,7 +19,7 @@
                                 <label for="input" class="col-sm-1 col-form-label">Code * :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" maxlength="15" matInput formControlName="code" oninput="this.value = this.value.toUpperCase()" />
+                                        <input type="text" maxlength="15" [readonly]="viewMode" matInput formControlName="code" oninput="this.value = this.value.toUpperCase()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -28,7 +28,7 @@
                                 <div class="col-sm-2">
 
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" maxlength="85" matInput formControlName="description" oninput="this.value = this.value.toUpperCase()" />
+                                        <input type="text" maxlength="85" matInput [readonly]="viewMode" formControlName="description" oninput="this.value = this.value.toUpperCase()" />
                                     </mat-form-field>
 
                                 </div>
@@ -36,13 +36,13 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;margin-left: 7px;">
                                         <input type="number"  matInput step="0.001" min="0" 
-                                            formControlName="metal" (input)="onInput($event)" style="text-align: right;"/>
+                                            formControlName="metal" [readonly]="viewMode" (input)="onInput($event)" style="text-align: right;"/>
                                     </mat-form-field>
                                 </div>
                                 <label for="input" class="col-sm-1 col-form-label">Color * :</label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 70%;margin-left: 7px;">
-                                        <input type="text" matInput maxlength="6" formControlName="color" />
+                                        <input type="text" matInput maxlength="6" formControlName="color" [readonly]="viewMode"/>
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="colorData"
                                         (newRowClick)="colorDataSelected($event)">
@@ -57,7 +57,7 @@
                                             <label for="input" class="col-sm-4 col-form-label">Karat :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput formControlName="karat" />
+                                                    <input type="text" matInput formControlName="karat" [readonly]="viewMode"/>
                                                 </mat-form-field>
                                                 <master-search [MasterSearchData]="karatCodeData"
                                         (newRowClick)="KaratCodeSelected($event)">
@@ -72,7 +72,7 @@
                                             <label for="input" class="col-sm-4 col-form-label">Purity :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" matInput formControlName="purity" style="text-align: right;" />
+                                                    <input type="number" matInput formControlName="purity" [readonly]="viewMode" style="text-align: right;" />
                                                 </mat-form-field>
                                                
                                             </div>
@@ -86,7 +86,7 @@
                                             <label for="input" class="col-sm-4 col-form-label">Alloy % :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number"  matInput formControlName="alloy"  (input)="onInput($event)" style="text-align: right;" />
+                                                    <input type="number"  matInput formControlName="alloy" [readonly]="viewMode"  (input)="onInput($event)" style="text-align: right;" />
                                                 </mat-form-field>
                                                
                                             </div>
@@ -98,7 +98,7 @@
                                             <label for="input" class="col-sm-5 col-form-label">Stock Code :</label>
                                             <div class="col-sm-7">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput formControlName="stockCode" />
+                                                    <input type="text" matInput formControlName="stockCode" [readonly]="viewMode"/>
                                                 </mat-form-field>
                                                 <master-search [MasterSearchData]="stockCodeData"
                                                 (newRowClick)="StockCodeSelected($event)">
@@ -134,7 +134,7 @@
                                 <dxo-selection mode="multiple"></dxo-selection>                            
                                 <dxi-column dataField="SRNO" caption="SR No" class="tab"> </dxi-column>
                                 <dxi-column dataField="MELTYPE_CODE" caption="Division"> </dxi-column>
-                                <dxi-column dataField="DIVISION_CODE" caption="Division Alloy"> </dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Default Alloy"> </dxi-column>
                                 <dxi-column dataField="MELTYPE_DESCRIPTION" caption="Description"> </dxi-column>
                                 <dxi-column dataField="ALLOY_PER" caption="Alloy %"> </dxi-column>
                             </dx-data-grid>
