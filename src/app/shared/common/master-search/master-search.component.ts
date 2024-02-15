@@ -146,7 +146,12 @@ export class MasterSearchComponent implements OnInit {
     }
     this.overlayPanel.show(event);
   }
-
+  onHidePanel(){
+    if(this.MasterSearchData.SEARCH_VALUE != ''){
+      this.MasterSearchData.LOAD_ONCLICK = true
+    }
+    this.MasterSearchData.SEARCH_VALUE = ''
+  }
   closeOverlayPanel() {
     if(this.MasterSearchData.SEARCH_VALUE != ''){
       this.MasterSearchData.LOAD_ONCLICK = true
