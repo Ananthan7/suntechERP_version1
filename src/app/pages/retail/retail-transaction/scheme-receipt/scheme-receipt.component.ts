@@ -102,8 +102,8 @@ export class SchemeReceiptComponent implements OnInit {
     VocType: ["PCR"],
     VocDate: [""],
     VocNo: [""],
-    CurrCode: ["", [Validators.required]],
-    CurrRate: ["", [Validators.required]],
+    CurrCode: [""],
+    CurrRate: [""],
     RefNo: [""],
     DueDays: [""],
     DueDate: [""],
@@ -820,15 +820,6 @@ export class SchemeReceiptComponent implements OnInit {
     } else {
       this.dataToEditrow = this.receiptDetailsForm.value;
     }
-    console.log(this.dataToEditrow,'dataToEditrow');
-    
-    // if (this.receiptDetailsForm.invalid) {
-    //   this.toastr.error('', 'select all details!', {
-    //     timeOut: 1000
-    //   });
-    //   return
-    // }
-
     const modalRef: NgbModalRef = this.modalService.open(AddReceiptComponent, {
       size: "xl",
       backdrop: true, //'static'
@@ -1013,7 +1004,7 @@ export class SchemeReceiptComponent implements OnInit {
       "REC_STATUS": "",
       "CUSTOMER_NAME": this.commonService.nullToString(this.receiptDetailsForm.value.POSCustomerName),
       "CUSTOMER_MOBILE": this.commonService.nullToString(this.receiptDetailsForm.value.POSCustomerMobile),
-      "CUSTOMER_EMAIL": this.commonService.nullToString(this.receiptDetailsForm.value.POSCustomerMobile),
+      "CUSTOMER_EMAIL": this.commonService.nullToString(this.receiptDetailsForm.value.POSCustomerEmail),
       "TDS_CODE": "",
       "TDS_APPLICABLE": true,
       "TDS_TOTALFC": 0,

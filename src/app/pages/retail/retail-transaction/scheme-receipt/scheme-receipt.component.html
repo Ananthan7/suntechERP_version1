@@ -26,12 +26,14 @@
                                             <span class="matlabels">Voc Type*
                                             </span>
                                             <span style="width: 65%">
-                                                <mat-form-field style="width: 30%">
+                                                <mat-form-field
+                                                    style="width: 30%">
                                                     <input type="text" matInput
                                                         readonly
                                                         formControlName="VocType" />
                                                 </mat-form-field>
-                                                <mat-form-field style="width: 40%;margin-left: 4px;">
+                                                <mat-form-field
+                                                    style="width: 40%;margin-left: 4px;">
                                                     <input type="text" matInput
                                                         readonly
                                                         class="text-right"
@@ -45,10 +47,13 @@
                                             <span class="matlabels">Due Days
                                             </span>
                                             <span style="width: 60%">
-                                                <mat-form-field style="width: 30%">
-                                                    <input type="text" matInput formControlName="DueDays"  />
+                                                <mat-form-field
+                                                    style="width: 30%">
+                                                    <input type="text" matInput
+                                                        formControlName="DueDays" />
                                                 </mat-form-field>
-                                                <mat-form-field style="width: 50%;margin-left: 4px;">
+                                                <mat-form-field
+                                                    style="width: 50%;margin-left: 4px;">
                                                     <input matInput
                                                         DateValidation
                                                         (dateChange)="dateRefChange($event)"
@@ -64,20 +69,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-lg-4 col-md-6 col-sm-12">
-                                        <div class="row">
-                                            <span class="matlabels">Branch*
-                                            </span>
-                                            <span style="width: 65%">
-                                                <mat-form-field>
-                                                    <input type="text" matInput
-                                                        readonly
-                                                        formControlName="Branch"
-                                                        maxlength="6" />
-                                                </mat-form-field>
-                                            </span>
-                                        </div>
-                                    </div> -->
+
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-12 col-sm-12">
@@ -114,29 +106,35 @@
                                             </span>
                                         </div>
                                     </div>
+                                    <!-- <div class="col-lg-3 col-md-12 col-sm-12">
+                                        <label class="matlabels">Mobile Number:
+                                        </label>
+                                        <mat-form-field style="width: 50%;">
+                                            <input type="number" matInput 
+                                                formControlName="MobileNo" />
+                                        </mat-form-field>
+                                    </div> -->
                                     <div
                                         class="col-lg-6 col-md-12 col-sm-12 d-flex">
-                                        <span class="matlabels">Customer Code
-                                        </span>
-                                        <span>
-                                            <mat-form-field style="width: 25%">
-                                                <input type="text" matInput
-                                                    (focusout)="customerChange($event,'CODE')"
-                                                    placeholder="Code"
-                                                    formControlName="POSCustomerCode" />
-                                            </mat-form-field>
-                                            <mat-form-field
-                                                style="width: 40%; margin-left: 7px;">
-                                                <input type="text" matInput
-                                                    placeholder="Name"
-                                                    (focusout)="customerChange($event,'NAME')"
-                                                    formControlName="POSCustomerName" />
-                                            </mat-form-field>
-                                            <master-search
-                                                [MasterSearchData]="customerMasterData"
-                                                (newRowClick)="selectedCustomer($event)">
-                                            </master-search>
-                                        </span>
+                                        <label class="matlabels">Customer Code
+                                        </label>
+                                        <mat-form-field style="width: 25%">
+                                            <input type="text" matInput
+                                                (focusout)="customerChange($event,'CODE')"
+                                                placeholder="Code"
+                                                formControlName="POSCustomerCode" />
+                                        </mat-form-field>
+                                        <mat-form-field
+                                            style="width: 40%; margin-left: 7px;">
+                                            <input type="text" matInput
+                                                placeholder="Name"
+                                                (focusout)="customerChange($event,'NAME')"
+                                                formControlName="POSCustomerName" />
+                                        </mat-form-field>
+                                        <master-search
+                                            [MasterSearchData]="customerMasterData"
+                                            (newRowClick)="selectedCustomer($event)">
+                                        </master-search>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -158,7 +156,8 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-12 col-sm-12 d-flex">
+                                    <div
+                                        class="col-lg-6 col-md-12 col-sm-12 d-flex">
                                         <span class="matlabels">Mobile
                                         </span>
                                         <span>
@@ -186,7 +185,8 @@
                                         <span class="matlabels">Party Currency
                                         </span>
                                         <span>
-                                            <mat-form-field style="width: 25%; margin-left: 5px;">
+                                            <mat-form-field
+                                                style="width: 25%; margin-left: 5px;">
                                                 <input type="text" matInput
                                                     readonly
                                                     formControlName="CurrCode" />
@@ -207,7 +207,8 @@
 
                                     <div class="col-lg-6 col-md-12 col-sm-12">
                                         <div class="row">
-                                            <span class="matlabels">Party Address
+                                            <span class="matlabels">Party
+                                                Address
                                             </span>
                                             <span style="width: 65%">
                                                 <mat-form-field>
@@ -293,10 +294,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </form>
                         </div>
-                        
+
                     </div>
                     <div class="row border-top">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
@@ -362,7 +363,7 @@
                                 </span>
                             </div>
                             <div class="row">
-                                <span class="matlabels"> Total 
+                                <span class="matlabels"> Total
                                 </span>
                                 <span style="width: 65%">
                                     <mat-form-field style="width: 100%">

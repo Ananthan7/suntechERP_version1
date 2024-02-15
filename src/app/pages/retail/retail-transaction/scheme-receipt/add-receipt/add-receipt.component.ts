@@ -145,6 +145,8 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.Narration.setValue(data.Narration)
   }
   setGridData() {
+    console.log(this.content,'this.content');
+    
     let param = {
       SCH_CUSTOMER_CODE: this.content.POSCustomerCode || '',
       SCH_CUSTOMER_ID: this.content.SchemeCode || '',
