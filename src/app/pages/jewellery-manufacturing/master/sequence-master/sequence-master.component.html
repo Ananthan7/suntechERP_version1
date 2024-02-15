@@ -81,7 +81,7 @@
                         (cdkDropListDropped)="drop($event)">
                         <thead>
                             <tr>
-                                <th scope="col"><input type="checkbox"
+                                <th scope="col"><input type="checkbox" [disabled]="viewMode"
                                         class="inputSec" [(ngModel)]="selectAll"
                                         (change)="checkAll()"
                                         (change)="oncalculateChange($event)" /></th>
