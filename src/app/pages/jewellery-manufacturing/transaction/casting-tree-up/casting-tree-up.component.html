@@ -29,7 +29,7 @@
           </div>
           <div class="col-3 pt-3">
             <div class="d-flex justify-content-center">
-              <h6>Transfer</h6>
+              <!-- <h6>Transfer</h6> -->
             </div>
           </div>
           <div class="col-4">
@@ -99,14 +99,14 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Stone Wt * :</label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 100%; margin-right: -10px;">
-                  <input type="text" matInput formControlName="stoneWt" style="text-align: right;" [readonly]="viewMode"/>
+                  <input type="number" matInput formControlName="stoneWt" style="text-align: right;" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
           </div>
-          <div class="col-2">
+          <!-- <div class="col-2">
             <label for="inputPassword" class="col-sm-5 col-form-label"><b>To</b></label>
-          </div>
+          </div> -->
         </div>
         <div class="row mb-3">
           <div class="col-2">
@@ -146,7 +146,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Wax Wt * : </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 124%; margin-top: -5px;">
-                  <input type="text" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode"/>
+                  <input type="number" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -156,12 +156,12 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Req Metal:</label>
               <div class="col-sm-5">
                 <mat-form-field style="width:130%;  margin-left:-1px; margin-top: -6px;">
-                  <input type="text" matInput formControlName="reqMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
+                  <input type="number" matInput formControlName="reqMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
           </div>
-          <div class="col-2">
+          <!-- <div class="col-2">
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-5 col-form-label">Process: </label>
               <div class="col-sm-7">
@@ -172,7 +172,7 @@
                 </master-search>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="row mb-3">
           <div class="col-2">
@@ -215,7 +215,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Base:</label>
               <div class="col-sm-5">
                 <mat-form-field style="width:153%;  margin-left:-3px; margin-top: -7px;">
-                  <input type="text" matInput formControlName="base" [readonly]="viewMode" class="text-right" MetalDecimalInput  />
+                  <input type="number" matInput formControlName="base" [readonly]="viewMode" class="text-right" MetalDecimalInput  />
                 </mat-form-field>
               </div>
             </div>
@@ -225,12 +225,12 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Rec Metal *:</label>
               <div class="col-sm-5">
                 <mat-form-field style="width:130%;  margin-left:-1px; margin-top: -6px;">
-                  <input type="text" matInput formControlName="recMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
+                  <input type="number" matInput formControlName="recMetal" [readonly]="viewMode" class="text-right" MetalDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
           </div>
-          <div class="col-2">
+          <!-- <div class="col-2">
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-5 col-form-label">Worker: </label>
               <div class="col-sm-7">
@@ -241,7 +241,7 @@
                 </master-search>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="row mb-3">
           <div class="col-2 offset-sm-2">

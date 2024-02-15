@@ -957,7 +957,7 @@ export class DiamondSalesorderComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.content = dataToComponent;
+    modalRef.componentInstance.this.content = dataToComponent;
 
     modalRef.result.then((result) => {
       if (result) {
