@@ -95,10 +95,10 @@ export class SchemeReceiptComponent implements OnInit {
     VIEW_TABLE: true,
   }
   receiptDetailsForm: FormGroup = this.formBuilder.group({
-    Branch: ["", [Validators.required]],
-    Salesman: ["", [Validators.required]],
+    Branch: [""],
+    Salesman: [""],
     SalesmanName: [""],
-    PartyCode: ["", [Validators.required]],
+    PartyCode: [""],
     VocType: ["PCR"],
     VocDate: [""],
     VocNo: [""],
@@ -109,7 +109,7 @@ export class SchemeReceiptComponent implements OnInit {
     DueDate: [""],
     RefDate: [""],
     PostedDate: [""],
-    SchemeCode: [""],
+    SchemeCode: ["", [Validators.required]],
     SchemeID: ["", [Validators.required]],
     SchemeUniqueID: [""],
     SchemeUnits: [""],

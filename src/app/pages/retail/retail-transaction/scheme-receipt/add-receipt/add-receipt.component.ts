@@ -24,6 +24,8 @@ export class AddReceiptComponent implements OnInit {
   selectedTypeArray: any[] = [];
   isViewTypeCode: boolean = false;
   currencyRate: any;
+  payTypeArray: any[] = [];
+  gridDataSource: any[] = [];
   /**serach modal data */
   branchMasterData: any = {
     TABLE_NAME: 'BRANCH_MASTER',
@@ -48,31 +50,31 @@ export class AddReceiptComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
-  payTypeArray: any[] = [];
+
   /**form group data */
   receiptEntryForm: FormGroup = this.formBuilder.group({
-    Branch: ['', [Validators.required]],
-    AC_Code: ['', [Validators.required]],
+    Branch: [''],
+    AC_Code: [''],
     AC_Description: [''],
-    Type: [null, [Validators.required]],
+    Type: [null],
     TypeCode: ['',],
     TypeCodeDESC: ['',],
-    CurrCode: ['', [Validators.required]],
-    CurrRate: ['', [Validators.required]],
+    CurrCode: [''],
+    CurrRate: [''],
     TRN_No: ['',],
     TRN_Inv: ['',],
     TRN_Inv_Date: [''],
     TRN_Ref: ['',],
     Exp: ['',],
-    HSN_AC: ['', [Validators.required]],
-    Amount_FC: ['', [Validators.required]],
-    Amount_LC: ['', [Validators.required]],
-    Header_Amount: ['', [Validators.required]],
-    TRN_Per: ['', [Validators.required]],
-    TRN_Amount_FC: ['', [Validators.required]],
-    TRN_Amount_LC: ['', [Validators.required]],
-    AmountWithTRN: ['', [Validators.required]],
-    HeaderAmountWithTRN: ['', [Validators.required]],
+    HSN_AC: [''],
+    Amount_FC: [''],
+    Amount_LC: [''],
+    Header_Amount: [''],
+    TRN_Per: [''],
+    TRN_Amount_FC: [''],
+    TRN_Amount_LC: [''],
+    AmountWithTRN: [''],
+    HeaderAmountWithTRN: [''],
     ValidId: ['',],
     SourceofFunds: ['',],
     TransactionType: ['',],
@@ -96,21 +98,22 @@ export class AddReceiptComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.content, 'content');
-
     if (this.content.details && this.content.details.length > 0) {
       this.setInitialValues()
     } else {
       // this.getBranchMasterList()
       this.getPaymentType('Credit Card')
       this.getCreditCardMaster()
-      let branch = localStorage.getItem('userbranch')
-      if (branch) {
-        this.receiptEntryForm.controls.Branch.setValue(branch)
-      }
+      this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
+    }
+    if(this.content){
+      this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeID)
+      this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
+      this.receiptEntryForm.controls.InstallmentAmount.setValue(this.content.SCHEME_AMOUNT)
     }
     this.setGridData()
   }
+
   setInitialValues() {
     let data = this.content.details[0]
     this.getPaymentType(data.RECPAY_TYPE || data.Type)
@@ -145,8 +148,6 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.Narration.setValue(data.Narration)
   }
   setGridData() {
-    console.log(this.content,'this.content');
-    
     let param = {
       SCH_CUSTOMER_CODE: this.content.POSCustomerCode || '',
       SCH_CUSTOMER_ID: this.content.SchemeCode || '',
@@ -154,12 +155,9 @@ export class AddReceiptComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeReceipts',param)
       .subscribe((result) => {
         if (result.response) {
-          let data = result.response
-
-          this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE);
-          this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
+          this.gridDataSource = result.response
         } else {
-          this.toastr.error('not found')
+          this.toastr.error('data not found')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)

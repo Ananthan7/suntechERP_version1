@@ -440,7 +440,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <dx-data-grid width="100%"
+                <dx-data-grid width="100%" [dataSource]="gridDataSource"
                     [showColumnLines]="true" [showRowLines]="true"
                     [showBorders]="true" [columnAutoWidth]="true">
                     <dxo-paging [enabled]="true" [pageSize]="10"
@@ -454,17 +454,17 @@
                     <!-- <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button> -->
                     <dxi-column dataField="SRNO" caption="SRNO" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="CUST" caption="CUST" alignment="center">
+                    <dxi-column dataField="SCH_CUSTOMER_CODE" caption="CUST" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="CUST_ID" caption="CUST_ID" alignment="center">
+                    <dxi-column dataField="SCH_CUSTOMER_ID" caption="CUST_ID" alignment="center">
                     </dxi-column>
                     <dxi-column dataField="PAY_DATE" caption="PAY_DATE" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="PAY_AMT" caption="PAY_AMT" alignment="right">
+                    <dxi-column dataField="PAY_AMOUNT_FC" caption="PAY_AMT" alignment="right">
                     </dxi-column>
                     <dxi-column dataField="PAY_AMOUNT_CC" caption="PAY_AMOUNT_CC" alignment="right">
                     </dxi-column>
-                    <dxi-column dataField="RCVD_AMOUNT" caption="RCVD_AMOUNT" alignment="right">
+                    <dxi-column dataField="RCVD_AMOUNTFC" caption="RCVD_AMOUNTFC" alignment="right">
                     </dxi-column>
                     <dxi-column dataField="RCVD_AMOUNTCC" caption="RCVD_AMOUNTCC" alignment="right">
                     </dxi-column>
