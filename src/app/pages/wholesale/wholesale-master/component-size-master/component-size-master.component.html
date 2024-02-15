@@ -16,7 +16,7 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Code * :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput class="text-left" formControlName="code" oninput="this.value = this.value.toUpperCase()"/>
+                  <input type="text" matInput class="text-left" formControlName="code"   [readonly]="viewMode"  oninput="this.value = this.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
             </div>
@@ -28,7 +28,7 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Description * :</label>
               <div class="col-md-9">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput class="text-left" formControlName="desc" />
+                  <input type="text" matInput class="text-left" formControlName="desc"   [readonly]="viewMode" />
                 </mat-form-field>
               </div>
             </div>
@@ -43,8 +43,8 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Height :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%; text-align: left;">
-                      <input type="number" matInput class="text-left" formControlName="height" id="height" (key)="getvaluies()" />
+                    <mat-form-field style="width: 100%; text-align: right;">
+                      <input type="number" matInput class="text-left" formControlName="height" id="height"   [readonly]="viewMode"  (key)="getValues()" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -53,8 +53,8 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Length :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%; text-align: left;">
-                      <input type="number" matInput class="text-left" formControlName="length" id="length" />
+                    <mat-form-field style="width: 100%; text-align: right;">
+                      <input type="number" matInput class="text-left" formControlName="length" id="length"   [readonly]="viewMode" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -66,8 +66,8 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Width :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%; text-align: left;">
-                      <input type="number" matInput class="text-left" formControlName="width"  id="width" />
+                    <mat-form-field style="width: 100%; text-align: right;">
+                      <input type="number" matInput class="text-left" formControlName="width"  id="width"   [readonly]="viewMode" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -76,8 +76,8 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Radius :</label>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 100%; text-align: left;">
-                      <input type="number" matInput class="text-left" formControlName="radius" [value]="radius"  >
+                    <mat-form-field style="width: 100%; text-align: right;">
+                      <input type="number" matInput class="text-left" formControlName="radius" [value]="radius"   [readonly]="viewMode"  >
                     </mat-form-field>
                   </div>
                 </div>

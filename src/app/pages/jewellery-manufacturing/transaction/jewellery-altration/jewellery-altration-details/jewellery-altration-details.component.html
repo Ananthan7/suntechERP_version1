@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" [isViewContinue]="true" [isViewDelete]="false" [isViewMore]="false" > </modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true" [isViewDelete]="false" [isViewMore]="false" > </modal-header>
 <div class="container-fluid pt-2">
     <form [formGroup]="jewelleryaltrationdetailsFrom">
         <div class="row">

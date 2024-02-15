@@ -160,9 +160,8 @@ export class MeltingIssueComponent implements OnInit {
 
     this.meltingIssueFrom.controls.vocdate.setValue(this.currentDate)
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
-    // this.setAllInitialValues()
     this.setCompanyCurrency()
-    
+    this.setAllInitialValues()
   
   }
   
@@ -174,7 +173,6 @@ export class MeltingIssueComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          console.log(data)
           data.Details.forEach((element:any) => {
             this.tableData.push({
               jobno: element.JOB_NUMBER,

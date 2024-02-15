@@ -29,7 +29,7 @@ export class MeltingTypeComponent implements OnInit {
   alloy:any;
   slNo = 0;
   selectedIndexes: any = [];
-  
+  viewMode: boolean = false;
 
 
   constructor(
@@ -42,8 +42,12 @@ export class MeltingTypeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.content){
-      this.setFormValues()
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setFormValues();
+    } else if (this.content.FLAG == 'EDIT') {
+      this.viewMode = false;
+      this.setFormValues();
     }
   }
 

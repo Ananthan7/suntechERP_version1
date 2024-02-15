@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JewelleryAltrationDetailsComponent } from './jewellery-altration-details/jewellery-altration-details.component';
 
+
 @Component({
   selector: 'app-jewellery-altration',
   templateUrl: './jewellery-altration.component.html',
@@ -16,13 +17,16 @@ import { JewelleryAltrationDetailsComponent } from './jewellery-altration-detail
 })
 export class JewelleryAltrationComponent implements OnInit {
 
-  columnhead:any[] = ['SrNo','Stock Code','Description', 'Pcs','Metal','Stone ','Gross','Cost (OLD)','Cost (New)','Remark'];
+  columnhead:any[] = ['SRNO','STOCK_CODE','DESCRIPTION', 'PCS','METALWT','STONEWT ','GROSSWT','COSTCC','COSTCCNEW','REMARKS_DETAIL'];
   @Input() content!: any; 
   tableData: any[] = [];
   jewelleryaltrationdetail : any[] =[];
+  detailData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  selectRowIndex: any;
+  tableRowCount: number = 0;
   currentDate = new Date();
 
   private subscriptions: Subscription[] = [];
@@ -59,13 +63,14 @@ export class JewelleryAltrationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private commonService: CommonServiceService,
     private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
+    this.setAllInitialValues()
     this.setvalues()
   }
 
@@ -84,6 +89,46 @@ export class JewelleryAltrationComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+setAllInitialValues() {
+  console.log(this.tableData,'working')
+  if (!this.content) return
+  let API = `DiamondJewelAlteration/GetDiamondJewelAlterationWithMID/${this.content.MID}`
+  let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    .subscribe((result) => {
+      if (result.response) {
+        let data = result.response
+        this.jewelleryaltrationFrom = data.Details
+        data.Details.forEach((element:any) => {
+          this.tableData.push({
+            SRNO: element.SRNO,
+            STOCK_CODE: element.STOCK_CODE,
+            DESCRIPTION: element.DESCRIPTION,
+            PCS:element.PCS,
+            METALWT: element.METAL_WT,
+            STONEWT: element.STONE_WT,
+            
+
+          })
+        });
+        this.jewelleryaltrationFrom.controls.vocno.setValue(data.VOCNO)
+        this.jewelleryaltrationFrom.controls.voctype.setValue(data.VOCTYPE)
+        this.jewelleryaltrationFrom.controls.metalrate.setValue(data.METAL_RATE)
+        this.jewelleryaltrationFrom.controls.metalratetype.setValue(data.MET_RATE_TYPE)
+        this.jewelleryaltrationFrom.controls.costcode.setValue(data.CC_RATE)
+        this.jewelleryaltrationFrom.controls.lossaccount.setValue(data.LOSS_ACCODE)
+        this.jewelleryaltrationFrom.controls.enteredby.setValue(data.SMAN)
+        this.jewelleryaltrationFrom.controls.itemcurrency.setValue(data.CURRENCY_CODE)
+        this.jewelleryaltrationFrom.controls.narration.setValue(data.SMAN)
+       
+        
+      } else {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      }
+    }, err => {
+      this.commonService.toastErrorByMsgId('MSG1531')
+    })
+  this.subscriptions.push(Sub)
+}
 
 
   jewelleryaltrationFrom: FormGroup = this.formBuilder.group({
@@ -108,38 +153,82 @@ export class JewelleryAltrationComponent implements OnInit {
     this.jewelleryaltrationFrom.controls.metalratetype.setValue(this.comService.decimalQuantityFormat(0, 'METAL'))
     this.jewelleryaltrationFrom.controls.itemcurrency.setValue(this.comService.compCurrency)
     this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue('1.000')
+
   }
 
 
-  openjewelleryaltrationdetails() {
+  openjewelleryaltrationdetails(data?: any) {
+    console.log(data)
+    if (data) {
+      data[0] = this.jewelleryaltrationFrom.value;
+    } else {
+      data = [{ HEADERDETAILS: this.jewelleryaltrationFrom.value }]
+    }
     const modalRef: NgbModalRef = this.modalService.open(JewelleryAltrationDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.result.then((postData) => {
-      console.log(postData);      
+    modalRef.componentInstance.content = data;
+    modalRef.result.then((postData) => {      
       if (postData) {
         console.log('Data from modal:', postData);       
         this.jewelleryaltrationdetail.push(postData);
         console.log(this.jewelleryaltrationdetail);
+        this.setValuesToHeaderGrid(postData);
         
       }
+     
     });
+  }
+  onRowClickHandler(event: any) {
 
+    this.selectRowIndex = (event.dataIndex)
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+    this.openjewelleryaltrationdetails(selectedData)
+   
 
   }
+  setValuesToHeaderGrid(detailDataToParent: any) {
+    let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
+    // if (PROCESS_FORMDETAILS.SRNO) {
+    //   this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+    // } else {
+    //   this.tableRowCount += 1
+    //   PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+    // }
 
-  deleteTableData(){
- 
+    this.tableData.push(PROCESS_FORMDETAILS)
+
+    if (detailDataToParent) {
+      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+    }
+    //  this.getSequenceDetailData(PROCESS_FORMDETAILS);
+
+  }
+  swapObjects(array1: any, array2: any, index: number) {
+    // Check if the index is valid
+    if (index >= 0 && index < array1.length) {
+      array1[index] = array2[0];
+    } else {
+      console.error('Invalid index');
+    }
   }
 
+  deleteTableData(): void {
+    this.tableRowCount = 0;
+    console.log(this.selectRowIndex)
+   
+      this.tableData.splice(this.selectRowIndex ,1)
+    
+  }
 removedata(){
   this.tableData.pop();
 }
-  formSubmit(){
 
+  formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
@@ -148,21 +237,20 @@ removedata(){
       this.toastr.error('select all required fields')
       return
     }
-  
     let API = 'DiamondJewelAlteration/InsertDiamondJewelAlteration'
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.jewelleryaltrationFrom.value.voctype || "",
-      "VOCNO": this.jewelleryaltrationFrom.value.vocno || "",
-      "VOCDATE": this.jewelleryaltrationFrom.value.vocdate || "",
+      "VOCTYPE": this.comService.nullToString(this.jewelleryaltrationFrom.value.voctype),
+      "VOCNO": this.jewelleryaltrationFrom.value.vocno,
+      "VOCDATE": this.jewelleryaltrationFrom.value.vocdate,
       "YEARMONTH": this.yearMonth,
-      "SMAN": this.jewelleryaltrationFrom.value.enteredby || "",
-      "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount || "",
-      "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency || "",
+      "SMAN": this.comService.nullToString(this.jewelleryaltrationFrom.value.enteredby),
+      "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount,
+      "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency,
       "CC_RATE": 0,
-      "MET_RATE_TYPE": this.jewelleryaltrationFrom.value.metalratetype || "",
-      "METAL_RATE":this.jewelleryaltrationFrom.value.metalrate || "",
+      "MET_RATE_TYPE": this.comService.nullToString(this.jewelleryaltrationFrom.value.metalratetype),
+      "METAL_RATE":this.jewelleryaltrationFrom.value.metalrate,
       "NAVSEQNO": 0,
       "TOTALPCS": 0,
       "TOTAL_LAB_CHARGECC": 0,
@@ -171,7 +259,7 @@ removedata(){
       "TOTAL_COST_OLDFC": 0,
       "TOTAL_COST_NEWCC": 0,
       "TOTAL_COST_NEWFC": 0,
-      "REMARKS": this.jewelleryaltrationFrom.value.narration || "",
+      "REMARKS": this.jewelleryaltrationFrom.value.narration,
       "PRINT_COUNT": 0,
       "POSTDATE": "",
       "AUTOPOSTING": true,
@@ -245,7 +333,7 @@ removedata(){
       return
     }
   
-    let API = 'DiamondJewelAlteration/UpdateDiamondJewelAlteration/'+ this.jewelleryaltrationFrom.value.branchCode  + this.jewelleryaltrationFrom.value.voctype + this.jewelleryaltrationFrom.value.vocno + this.jewelleryaltrationFrom.value.yearMonth
+    let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocNo}/${this.comService.yearSelected}` 
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,

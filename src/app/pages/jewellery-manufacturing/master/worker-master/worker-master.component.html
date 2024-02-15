@@ -80,7 +80,8 @@
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
                                 <input type="number" matInput AmountDecimalInput class="text-right"
-                                    autocomplete="LossAllowed" formControlName="LossAllowed" maxlength="12" [readonly]="viewMode" />
+                                    autocomplete="LossAllowed" formControlName="LossAllowed" maxlength="12"
+                                    [readonly]="viewMode" />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Password
@@ -97,16 +98,16 @@
                             :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="number" MetalDecimalInput matInput maxlength="12" [readonly]="viewMode" class="text-right"
-                                    formControlName="TrayWeight"/>
+                                <input type="number" MetalDecimalInput matInput maxlength="12" [readonly]="viewMode"
+                                    class="text-right" formControlName="TrayWeight" />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Target Pcs
                             :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="number" matInput MetalDecimalInput maxlength="12" [readonly]="viewMode" class="text-right"
-                                    formControlName="TargetPcs"/>
+                                <input type="number" matInput maxlength="12" [readonly]="viewMode" class="text-right"
+                                    formControlName="TargetPcs" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -115,16 +116,16 @@
                             Weight :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="number" matInput MetalDecimalInput maxlength="12" class="text-right" [readonly]="viewMode"
-                                    formControlName="TargetMetalWt" />
+                                <input type="number" matInput MetalDecimalInput maxlength="12" class="text-right"
+                                    [readonly]="viewMode" formControlName="TargetMetalWt" />
                             </mat-form-field>
                         </div>
                         <span class="col-sm-3 col-form-label">Target Carat
                             Weight :</span>
                         <div class="col-sm-2">
                             <mat-form-field style="width: 100px">
-                                <input type="number" class="text-right" maxlength="12" matInput MetalDecimalInput [readonly]="viewMode"
-                                    formControlName="TargetCaratWt" />
+                                <input type="number" class="text-right" maxlength="12" matInput MetalDecimalInput
+                                    [readonly]="viewMode" formControlName="TargetCaratWt" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -133,8 +134,8 @@
                             Target Weight(GMS) :</span>
                         <div class="col-sm-3">
                             <mat-form-field style="width: 150px">
-                                <input type="number" matInput maxlength="12" [readonly]="viewMode" class="text-right" MetalDecimalInput
-                                    formControlName="TargetWeight" />
+                                <input type="number" matInput maxlength="12" [readonly]="viewMode" class="text-right"
+                                    MetalDecimalInput formControlName="TargetWeight" />
                             </mat-form-field>
                         </div>
                         <div class="col-sm-5">
@@ -179,7 +180,8 @@
                 <div class="col-md-5">
                     <div class="row my-3">
                         <div class="col-md-6">
-                            <button type="button" mat-flat-button color="primary" (click)="selectProcessMasterList()" [disabled]="viewMode">
+                            <button type="button" mat-flat-button color="primary" (click)="selectProcessMasterList()"
+                                [disabled]="viewMode">
                                 Select Process
                             </button>
                         </div>
@@ -187,7 +189,7 @@
                     <div class="row">
                         <dx-data-grid #dataGrid id="gridContainer" width="100%" height="400px" [dataSource]="tableData"
                             [showRowLines]="true" keyExpr="SRNO" [selectedRowKeys]="selectedKey"
-                            (onSelectionChanged)="changedCheckbox($event)" [showBorders]="true" [disabled]="viewMode">
+                            (onSelectionChanged)="changedCheckbox($event)" [showBorders]="true">
                             <!-- <dxo-filter-row [visible]="showFilterRow"
                                 [applyFilter]="currentFilter"></dxo-filter-row>
                             <dxo-header-filter
@@ -196,15 +198,14 @@
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing> -->
-                            <dxo-selection mode="multiple"
-                                [showCheckBoxesMode]= "isViewMode ? 'never':'always'"></dxo-selection>
-                            <!-- <dxi-column width="auto"
-                                cellTemplate="limitTemplate"
+                            <!-- <dxo-selection mode="multiple"
+                                [showCheckBoxesMode]= "isViewMode ? 'never':'always'"></dxo-selection> -->
+                            <dxi-column width="auto" dataField="SELECT1" caption cellTemplate="limitTemplate"
                                 alignment="right"></dxi-column>
-                            <div *dxTemplate="let cellInfo of 'limitTemplate'">
-                                <mat-checkbox 
-                                    (change)="changedCheckbox(cellInfo)"></mat-checkbox>
-                            </div> -->
+                            <div *dxTemplate="let data of 'limitTemplate'">
+                                <mat-checkbox [checked]="data.value" [disabled]="viewMode"
+                                    (change)="changedCheckbox(data)"></mat-checkbox>
+                            </div>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
                             <dxi-column dataField="SRNO" width="auto" caption="Sr No" alignment="center">
                             </dxi-column>
@@ -220,9 +221,9 @@
             </div>
             <div class="row my-3">
                 <div class="col-md-12">
-                    <button type="button"  [disabled]="buttonField" mat-flat-button color="primary" (click)="printBarcode()">Print
+                    <!-- <button type="button"  [disabled]="buttonField" mat-flat-button color="primary" (click)="printBarcode()">Print
                         Barcode
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </form>

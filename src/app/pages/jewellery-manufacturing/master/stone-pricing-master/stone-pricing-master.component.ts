@@ -492,6 +492,14 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.currency.setValue(data.CURRENCY_CODE)
   }
 
+  onInputChange(event: any, controlName: string, maxLength: number) {
+    const inputValue = event.target.value;
+
+    if (inputValue.length > maxLength) {
+      this.stonePrizeMasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
+    }
+  }
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

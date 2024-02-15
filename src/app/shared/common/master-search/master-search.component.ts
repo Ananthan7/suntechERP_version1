@@ -146,11 +146,13 @@ export class MasterSearchComponent implements OnInit {
     }
     this.overlayPanel.show(event);
   }
-
-  closeOverlayPanel() {
+  onHidePanel(){
     if(this.MasterSearchData.SEARCH_VALUE != ''){
       this.MasterSearchData.LOAD_ONCLICK = true
     }
+    this.MasterSearchData.SEARCH_VALUE = ''
+  }
+  closeOverlayPanel() {
     this.MasterSearchData.SEARCH_VALUE = ''
     this.overlayPanel.hide();
   }
@@ -193,6 +195,7 @@ export class MasterSearchComponent implements OnInit {
   close() {
 
   }
+ 
   //unsubscriptions of streams
   ngOnDestroy(): void {
     this.subscriptions$ && this.subscriptions$.unsubscribe()

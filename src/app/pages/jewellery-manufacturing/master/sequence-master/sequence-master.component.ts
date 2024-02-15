@@ -101,9 +101,7 @@ export class SequenceMasterComponent implements OnInit {
             item.isChecked = false
             item.orderId = this.dataSource.length
           })
-          if (this.content.FLAG == ('EDIT' || 'VIEW')) {
-            console.log('fired 1');
-            
+          if (this.content.FLAG == 'EDIT' || this.content.FLAG == 'VIEW') {
             this.checkSequenceExists()
           }
         } else {
@@ -119,9 +117,8 @@ export class SequenceMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         let data = result.response
-        if (this.content.FLAG == ('EDIT' || 'VIEW')) {
+        if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
           let itemNum = 0;
-          console.log('fired 2');
           data.sequenceDetails.forEach((item: any) => {
             this.dataSource.forEach((obj: any) => {
               if (item.PROCESS_CODE == obj.PROCESS_CODE) {
@@ -145,8 +142,6 @@ export class SequenceMasterComponent implements OnInit {
               }
             });
           })
-          console.log('fired 3');
-
           this.dataSource.sort((a: any, b: any) => a.orderId - b.orderId)
           this.selectedSequence = this.dataSource.filter((item: any) => item.isChecked == true)
           this.reCalculateSRNO()
@@ -450,15 +445,10 @@ export class SequenceMasterComponent implements OnInit {
     }
   }
   oncalculateChange(event: any) {
-    console.log(event);
     if (event.checked == true) {
       this.sequenceMasterForm.controls['calculatetime'].enable();
 
 
     }
-    //   else{
-    //     this.sequenceMasterForm.controls['calculatetime'].disable();
-    //      
-    //   }
   }
 }
