@@ -49,7 +49,7 @@ export class ModulelistComponent implements OnInit {
         this.menuList.push({
           MID: 15,
           MODULE_NAME: 'Addons',
-          imageUrl: '../../assets/images/lp-icons/Property 1=Default.png',
+          imageUrl: '../../assets/images/lp-icons/Property_Default.png',
           imageUrl_2: '../../assets/images/lp-icons/_x31_7_2.png'
         });
 
@@ -76,41 +76,41 @@ export class ModulelistComponent implements OnInit {
         // }
         this.menuList.forEach(data => {
           if (data.MODULE_NAME == 'Boiling') {
-            data.imageUrl = '../../assets/images/lp-icons/Page-1 (3).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Page-1 (5).png'
+            data.imageUrl = '../../assets/images/lp-icons/Page_3.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/Page-1_5.png'
           } else if (data.MID == 14) {
-            data.imageUrl = '../../assets/images/lp-icons/Ingot (3).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Ingot 3.png'
+            data.imageUrl = '../../assets/images/lp-icons/Ingot_3_1.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/Ingot_3.png'
           } else if (data.MID == 10) {
-            data.imageUrl = '../../assets/images/lp-icons/Group (7).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Group (11).png'
+            data.imageUrl = '../../assets/images/lp-icons/Group_7_1.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/Group_11.png'
           } else if (data.MID == 13) {
-            data.imageUrl = '../../assets/images/lp-icons/Group (8).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Group 7.png'
+            data.imageUrl = '../../assets/images/lp-icons/Group_8_1.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/Group_7.png'
           } else if (data.MID == 5) {
-            data.imageUrl = '../../assets/images/lp-icons/Group (9).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Group 8.png'
+            data.imageUrl = '../../assets/images/lp-icons/Group_9_1.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/Group_8.png'
           } else if (data.MID == 6) {
-            data.imageUrl = '../../assets/images/lp-icons/Group (10).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Group 9.png'
+            data.imageUrl = '../../assets/images/lp-icons/Group_10.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/Group_9.png'
           } else if (data.MID == 9) {
-            data.imageUrl = '../../assets/images/lp-icons/Vector (6).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Vector 6.png'
+            data.imageUrl = '../../assets/images/lp-icons/vector_6_1.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/vector_6_2.png'
           } else if (data.MID == 8) {
-            data.imageUrl = '../../assets/images/lp-icons/Page-1 (4).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Page-1 3.png'
+            data.imageUrl = '../../assets/images/lp-icons/page-1_4.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/page-1_3.png'
           } else if (data.MID == 11) {
-            data.imageUrl = '../../assets/images/lp-icons/Repairing (1).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Repairing 1.png'
+            data.imageUrl = '../../assets/images/lp-icons/repairing_1.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/repairing_1_2.png'
           } else if (data.MID == 4) {
-            data.imageUrl = '../../assets/images/lp-icons/Vector (7).png'
+            data.imageUrl = '../../assets/images/lp-icons/vector_7.png'
             data.imageUrl_2 = '../../assets/images/lp-icons/Vector_6.png'
           } else if (data.MID == 1) {
-            data.imageUrl = '../../assets/images/lp-icons/Layer_x0020_1 (3).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Layer_x0020_1_3.png'
+            data.imageUrl = '../../assets/images/lp-icons/layer_x0020_1_3_1.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/layer_x0020_1_3.png'
           } else if (data.MODULE_NAME == 'Wholesale') {
-            data.imageUrl = '../../assets/images/lp-icons/Layer_x0020_1 (3).png'
-            data.imageUrl_2 = '../../assets/images/lp-icons/Layer_x0020_1_3.png'
+            data.imageUrl = '../../assets/images/lp-icons/layer_x0020_1_3_1.png'
+            data.imageUrl_2 = '../../assets/images/lp-icons/layer_x0020_1_3.png'
           }
 
         });
