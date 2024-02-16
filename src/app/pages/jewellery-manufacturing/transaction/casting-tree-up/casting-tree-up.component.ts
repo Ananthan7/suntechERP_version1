@@ -237,6 +237,7 @@ export class CastingTreeUpComponent implements OnInit {
           this.castingTreeUpFrom.controls.base.setValue(data.BASE_WT)
           this.castingTreeUpFrom.controls.recMetal.setValue(data.RCVD_MET_WT)
           this.castingTreeUpFrom.controls.toWorker.setValue(data.WORKER_CODE)
+   
 
 
         
@@ -719,4 +720,34 @@ export class CastingTreeUpComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
+
+  calculateReqMetal(event: any) {
+    console.log("Input changed: ", event.target.value);
+    var convFact = event.target.value;
+    var waxWt = this.castingTreeUpFrom.value.waxWt;
+    this.castingTreeUpFrom.controls.reqMetal.setValue((convFact * waxWt).toFixed(3));
+   
+   
+}
+calculateWaxMetal(event: any){
+  console.log("Input changed: ", event.target.value);
+  var waxWt = event.target.value;
+  var convFact = this.castingTreeUpFrom.value.convFact;
+  this.castingTreeUpFrom.controls.reqMetal.setValue((convFact * waxWt).toFixed(3));
+  
+}
+calculateTreeMode(event: any){
+  console.log("output changed: ", event.target.value);
+  var base = event.target.value;
+  var tree = this.castingTreeUpFrom.value.tree;
+  var waxWt = tree - base;
+  this.castingTreeUpFrom.controls.waxWt.setValue(tree - base);
+
+}
+calcualteBaseMode(event: any) {
+  console.log("output changed: ", event.target.value);
+  var base = event.target.value;
+  var tree = this.castingTreeUpFrom.value.tree;
+  this.castingTreeUpFrom.controls.waxWt.setValue(tree - base);
+}
 }
