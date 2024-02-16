@@ -33,10 +33,10 @@
                                         Set : </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 90%">
-                                            <input type="text" matInput maxlength="15" formControlName="sleve_set" />
+                                            <input type="text" matInput maxlength="15" formControlName="sieve_set" />
                                         </mat-form-field>
-                                        <master-search [MasterSearchData]="sleve_setData"
-                                            (newRowClick)="sleve_setDataSelected($event)">
+                                        <master-search [MasterSearchData]="sieve_setData"
+                                            (newRowClick)="sieve_setDataSelected($event)">
                                         </master-search>
                                     </div>
                                 </div>
@@ -57,10 +57,10 @@
                                         From * : </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 90%">
-                                            <input type="text" matInput maxlength="6" formControlName="sleve_form" />
+                                            <input type="text" matInput maxlength="6" formControlName="sieve_form" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="sievefromData"
-                                            (newRowClick)="slevefromDataSelected($event)">
+                                            (newRowClick)="sievefromDataSelected($event)">
                                         </master-search>
                                     </div>
                                 </div>
@@ -69,10 +69,10 @@
                                         * : </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 90%">
-                                            <input type="text" matInput maxlength="6" formControlName="sleve_to" />
+                                            <input type="text" matInput maxlength="6" formControlName="sieve_to" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="sievetoData"
-                                            (newRowClick)="slevetoDataSelected($event)">
+                                            (newRowClick)="sievetoDataSelected($event)">
                                         </master-search>
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@
                                             <input type="text" matInput maxlength="6" formControlName="size_from" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="sizefromData"
-                                            (newRowClick)="sievefromDataSelected($event)">
+                                            (newRowClick)="sizefromDataSelected($event)">
                                         </master-search>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
                                             <input type="text" matInput maxlength="6" formControlName="size_to" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="sizetoData"
-                                            (newRowClick)="sievetoDataSelected($event)">
+                                            (newRowClick)="sizetoDataSelected($event)">
                                         </master-search>
                                     </div>
                                 </div>
@@ -144,9 +144,8 @@
                                         Weight * : </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px; text-align: right;">
-                                            <input type="number" matInput formControlName="carat_wt"
-                                            MetalDecimalInput
-                                            (input)="onInputChange($event,'carat_wt', 5)" />
+                                            <input type="number" matInput formControlName="carat_wt" MetalDecimalInput
+                                                (input)="onInputChange($event,'carat_wt', 7)" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -156,8 +155,8 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
-                                            <input type="number" matInput formControlName="sieve_from_desc"
-                                                [disabled]="true" />
+                                            <input type="text" matInput [readonly]="viewMode"
+                                                formControlName="sieve_from_desc" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -166,8 +165,8 @@
                                         Desc : </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
-                                            <input type="number" matInput formControlName="sieve_to_desc"
-                                                [disabled]="true" oninput="this.value = this.value.toUpperCase()" />
+                                            <input type="text" matInput formControlName="sieve_to_desc"
+                                                [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -177,8 +176,8 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" matInput maxlength="15" class="text-right"
-                                                formControlName="wt_from"  MetalDecimalInput
-                                                (input)="onInputChange($event,'wt_from', 5)"/>
+                                                formControlName="wt_from" MetalDecimalInput
+                                                (input)="onInputChange($event,'wt_from', 7)" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -188,8 +187,8 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" matInput maxlength="15" class="text-right"
-                                                formControlName="wt_to" (change)="onweighttto($event)"  MetalDecimalInput
-                                                (input)="onInputChange($event,'wt_to', 5)"/>
+                                                formControlName="wt_to" (change)="onweighttto($event)" MetalDecimalInput
+                                                (input)="onInputChange($event,'wt_to', 7)" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -200,7 +199,7 @@
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" matInput maxlength="15" class="text-right"
                                                 formControlName="issue_rate" MetalDecimalInput
-                                                (input)="onInputChange($event,'issue_rate', 5)"/>
+                                                (input)="onInputChange($event,'issue_rate', 7)" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -210,8 +209,8 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" matInput maxlength="15" class="text-right"
-                                                formControlName="selling"  AmountDecimalInput
-                                                (input)="onInputChange($event,'selling', 3)"/>
+                                                formControlName="selling" AmountDecimalInput
+                                                (input)="onInputChange($event,'selling', 5)" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -222,7 +221,7 @@
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
                                             <input type="number" matInput maxlength="15" class="text-right"
                                                 formControlName="selling_rate" MetalDecimalInput
-                                                (input)="onInputChange($event,'selling_rate', 5)"/>
+                                                (input)="onInputChange($event,'selling_rate', 7)" />
                                         </mat-form-field>
                                     </div>
                                 </div>

@@ -95,10 +95,6 @@ export class ApprovalMasterComponent implements OnInit {
 
   userDataSelected(data: any, value: any, controlName: string) {
 
-    // if(controlName == 'usertemp'){
-    //    this.userCodeEnable = true;
-    //  }
-
     console.log(value);
     console.log(data);
     this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
@@ -140,7 +136,6 @@ export class ApprovalMasterComponent implements OnInit {
   emailid(data: any, value: any) {
     if (!this.commonService.validateEmail(data.target.value)) {
       this.commonService.toastErrorByMsgId('Invalid Email Address')
-      // this.tableData[value.data.SRNO - 1].EMAIL_ID = ''
       return
     }
 
@@ -201,8 +196,7 @@ export class ApprovalMasterComponent implements OnInit {
       };
       
       this.tableData.push(data);
-      
-      // Update SRNO and set isDisabled for each item
+
       this.tableData.forEach((item, i) => {
         item.SRNO = i + 1;
         item.isDisabled = true;

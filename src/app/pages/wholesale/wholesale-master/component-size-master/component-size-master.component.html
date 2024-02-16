@@ -44,7 +44,8 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Height :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="number" matInput class="text-left" formControlName="height" id="height"   [readonly]="viewMode"  (key)="getValues()" />
+                      <input type="number" matInput class="text-left" formControlName="height" id="height"   [readonly]="viewMode"  (key)="getValues()" MetalDecimalInput
+                      (input)="onInputChange($event,'height', 7)" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -54,7 +55,8 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Length :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="number" matInput class="text-left" formControlName="length" id="length"   [readonly]="viewMode" />
+                      <input type="number" matInput class="text-left" formControlName="length" id="length"   [readonly]="viewMode"  MetalDecimalInput
+                      (input)="onInputChange($event,'length', 7)"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -67,7 +69,8 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Width :</label>
                   <div class="col-md-5">
                     <mat-form-field style="width: 100%; text-align: right;">
-                      <input type="number" matInput class="text-left" formControlName="width"  id="width"   [readonly]="viewMode" />
+                      <input type="number" matInput class="text-left" formControlName="width"  id="width"   [readonly]="viewMode" MetalDecimalInput
+                      (input)="onInputChange($event,'width', 7)"/>
                     </mat-form-field>
                   </div>
                 </div>

@@ -260,4 +260,12 @@ export class ComponentSizeMasterComponent implements OnInit {
       }
     });
   }
+
+  onInputChange(event: any, controlName: string, maxLength: number) {
+    const inputValue = event.target.value;
+
+    if (inputValue.length > maxLength) {
+      this.componentsizemasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
+    }
+  }
 }
