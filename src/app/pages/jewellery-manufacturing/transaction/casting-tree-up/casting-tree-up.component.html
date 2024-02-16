@@ -89,7 +89,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Tree:</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%; margin-left: -2px; margin-top: -4PX;">
-                  <input type="number" matInput formControlName="tree" style="text-align: right;" [readonly]="viewMode"/>
+                  <input type="number" matInput formControlName="tree" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateTreeMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -133,10 +133,10 @@
           </div>
           <div class="col-2">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label">Conv.Fact: </label>
+              <label for="inputPassword" class="col-sm-5 col-form-label">Conv.Fact:</label>
               <div class="col-sm-6">
-                <mat-form-field style="width: 100%; margin-left: -9px; margin-top:-4px;">
-                  <input type="number" matInput formControlName="convFact" style="text-align: right;" [readonly]="viewMode"/>
+                <mat-form-field style="width: 100%; margin-left: -9px; margin-top:-4px;" >
+                  <input type="number" matInput formControlName="convFact" style="text-align: right;" [readonly]="viewMode"  (focusout)="calculateReqMetal($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -146,7 +146,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Wax Wt * : </label>
               <div class="col-sm-6">
                 <mat-form-field style="width: 124%; margin-top: -5px;">
-                  <input type="number" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode"/>
+                  <input type="number" matInput formControlName="waxWt" style="text-align: right;" [readonly]="viewMode" (focusout)="calculateWaxMetal($event)"/>
                 </mat-form-field>
               </div>
             </div>
@@ -215,7 +215,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Base:</label>
               <div class="col-sm-5">
                 <mat-form-field style="width:153%;  margin-left:-3px; margin-top: -7px;">
-                  <input type="number" matInput formControlName="base" [readonly]="viewMode" class="text-right" MetalDecimalInput  />
+                  <input type="number" matInput formControlName="base" [readonly]="viewMode" class="text-right" MetalDecimalInput (focusout)="calcualteBaseMode" />
                 </mat-form-field>
               </div>
             </div>
@@ -310,6 +310,19 @@
                     <dxi-column dataField="Job_Pcs" caption="Job Pcs"> </dxi-column>
                     <dxi-column dataField="Loss_Wt" caption="Loss Wt"> </dxi-column>
                     <dxi-column dataField="Loss_Pure" caption="Loss Pure"> </dxi-column>
+
+                    <dxo-summary>
+                      <dxi-total-item column="Gross_Weight"  [alignment]="'right'">
+                      </dxi-total-item>
+                      <dxi-total-item column="Metal_Weight" [alignment]="'right'">
+                      </dxi-total-item>
+                      <dxi-total-item column="Stone_Weight" [alignment]="'right'">
+                      </dxi-total-item>
+                      <dxi-total-item column="RCVD_Gross_Weight" [alignment]="'right'">
+                      </dxi-total-item>
+                      <dxi-total-item column="Pure_Weight" [alignment]="'right'">
+                      </dxi-total-item>
+                  </dxo-summary>
 
             </dx-data-grid>
 
