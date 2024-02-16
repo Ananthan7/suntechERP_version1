@@ -75,7 +75,7 @@ export class RetailGridComponent implements OnInit {
   nextPage() {
     if (this.pageSize <= this.totalDataCount) {
       console.log('fored');
-      
+
       this.pageIndex = this.pageIndex + 1;
       this.getMasterGridData();
     }
@@ -151,36 +151,37 @@ export class RetailGridComponent implements OnInit {
       return
     }
     let params
-    // if (data?.MENU_SUB_MODULE == 'Transaction' || this.vocType) {
-    params = {
-      "PAGENO": this.pageIndex,
-      "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
-      "TABLE_NAME": this.checkVocTypeTable(this.tableName),
-      "CUSTOM_PARAM": {
-        "FILTER": {
-          "YEARMONTH": this.yearSelected,
-          "BRANCH_CODE": this.branchCode,
-          "VOCTYPE": this.vocType
-        },
-        "TRANSACTION": {
-          "VOCTYPE": this.CommonService.nullToString(this.vocType),
-          "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+    // if (this.vocType != 'SCR') {
+      params = {
+        "PAGENO": this.pageIndex,
+        "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
+        "TABLE_NAME": this.checkVocTypeTable(this.tableName),
+        "CUSTOM_PARAM": {
+          "FILTER": {
+            "YEARMONTH": this.yearSelected,
+            "BRANCH_CODE": this.branchCode,
+            "VOCTYPE": this.vocType
+          },
+          "TRANSACTION": {
+            "VOCTYPE": this.CommonService.nullToString(this.vocType),
+            "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+          }
         }
       }
-    }
-    // } else {
+    // } 
+    // else {
     //   params = {
     //     "PAGENO": this.pageIndex,
     //     "RECORDS": this.pageSize,
     //     "TABLE_NAME": this.tableName,
     //     "CUSTOM_PARAM": {
-    //       // "FILTER": {
-    //       //   "YEARMONTH": localStorage.getItem('YEAR') || '',
-    //       //   "BRANCH_CODE": this.CommonService.branchCode,
-    //       //   "VOCTYPE": this.vocType || ""
-    //       // },
+    //       "FILTER": {
+    //         "YEARMONTH": this.yearSelected,
+    //         "BRANCH_CODE": this.branchCode,
+    //         "VOCTYPE": this.vocType
+    //       },
     //       "TRANSACTION": {
-    //         // "VOCTYPE": this.vocType || "",
+    //         "VOCTYPE": this.CommonService.nullToString(this.vocType),
     //         "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
     //       }
     //     }
@@ -213,7 +214,7 @@ export class RetailGridComponent implements OnInit {
             this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_METALCURRENCY')
             this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_UNIT')
           }
-          if(this.vocType == 'SCR'){            
+          if (this.vocType == 'SCR') {
             this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
           }
           let headers = Object.keys(this.orderedItems[0]);
@@ -233,13 +234,13 @@ export class RetailGridComponent implements OnInit {
       });
     this.subscriptions$.push(sub)
   }
-  removeKeyValueFromArray(arrayOfObjects:any, keyToRemove:any) {
-    return arrayOfObjects.map((obj:any) => {
-        const newObj = { ...obj };
-        delete newObj[keyToRemove];
-        return newObj;
+  removeKeyValueFromArray(arrayOfObjects: any, keyToRemove: any) {
+    return arrayOfObjects.map((obj: any) => {
+      const newObj = { ...obj };
+      delete newObj[keyToRemove];
+      return newObj;
     });
-}
+  }
   filterArrayValues(array: any, keyName: any) {
     return array.filter((item: any) => item != keyName)
   }
