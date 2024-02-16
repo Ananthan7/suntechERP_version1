@@ -223,7 +223,7 @@
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput maxlength="6" formControlName="stock_code" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="stockCodeData"
+                <master-search    *ngIf="stockcodeDisable == false" [MasterSearchData]="stockCodeData"
                   (newRowClick)="stockCodeSelected($event)"></master-search>
               </div>
             </div>

@@ -18,18 +18,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./melting-type.component.scss']
 })
 export class MeltingTypeComponent implements OnInit {
-  @Input() content!: any; 
+  @Input() content!: any;
 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
-  metal:any;
-  description:any;
-  code:any;
-  alloy:any;
+  metal: any;
+  description: any;
+  code: any;
+  alloy: any;
   slNo = 0;
   selectedIndexes: any = [];
   viewMode: boolean = false;
+  SearchDisable: boolean = false;
 
 
   constructor(
@@ -59,70 +60,61 @@ export class MeltingTypeComponent implements OnInit {
       if (values.includes(parseFloat(value.SRNO))) {
         acc.push(index);
         console.log(acc);
-        
+
       }
       return acc;
     }, indexes);
     this.selectedIndexes = indexes;
     console.log(this.selectedIndexes);
   }
-  
-  formSubmit(){
+
+  formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateMeltingType()
       return
     }
 
-    // if (this.meltingTypeForm.invalid) {
-    
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
-    
-
-
-
     let API = 'MeltingType/InsertMeltingType'
-    let postData=
-      {
-        "MID": 0,
-        "MELTYPE_CODE":  this.meltingTypeForm.value.code,
-        "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
-        "KARAT_CODE": this.meltingTypeForm.value.karat,
-        "PURITY": this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
-        "METAL_PER": this.metal,
-        "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
-        "CREATED_BY": this.userName,
-        "COLOR": this.meltingTypeForm.value.color,
-        "STOCK_CODE": this.meltingTypeForm.value.stockCode,
-        "MELTING_TYPE_DETAIL": this.tableData
-      
+    let postData =
+    {
+      "MID": 0,
+      "MELTYPE_CODE": this.meltingTypeForm.value.code,
+      "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
+      "KARAT_CODE": this.meltingTypeForm.value.karat,
+      "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
+      "METAL_PER": this.metal,
+      "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
+      "CREATED_BY": this.userName,
+      "COLOR": this.meltingTypeForm.value.color,
+      "STOCK_CODE": this.meltingTypeForm.value.stockCode,
+      "MELTING_TYPE_DETAIL": this.tableData
+
     }
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-    .subscribe((result) => {
-   
-      if (result.response) {
-        if (result.status == "Success") {
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.meltingTypeForm.reset();
-              this.tableData = [];
-              this.close('reloadMainGrid')
-              
-            }
-          });
+      .subscribe((result) => {
+
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.meltingTypeForm.reset();
+                this.tableData = [];
+                this.close('reloadMainGrid')
+
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
         }
-      } else {
-        this.toastr.error('Not saved')
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
   onInput(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
@@ -132,15 +124,15 @@ export class MeltingTypeComponent implements OnInit {
 
     // Update the input value
     (event.target as HTMLInputElement).value = limitedValue;
-  }
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  resetAllocation(){}
-  
-  columnheads:any[] = ['Sr','Division','Default Alloy','Description','Alloy %'];
-  
+  resetAllocation() { }
+
+  columnheads: any[] = ['Sr', 'Division', 'Default Alloy', 'Description', 'Alloy %'];
+
 
   colorData: MasterSearchModel = {
     PAGENO: 1,
@@ -170,7 +162,7 @@ export class MeltingTypeComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  KaratCodeSelected(e:any){
+  KaratCodeSelected(e: any) {
     console.log(e);
     this.meltingTypeForm.controls.karat.setValue(e['Karat Code']);
   }
@@ -187,7 +179,7 @@ export class MeltingTypeComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  StockCodeSelected(e:any){
+  StockCodeSelected(e: any) {
     console.log(e);
     this.meltingTypeForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.meltingTypeForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
@@ -195,7 +187,7 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   meltingTypeForm: FormGroup = this.formBuilder.group({
-    mid:[],
+    mid: [],
     code: ['', [Validators.required]],
     description: ['', [Validators.required]],
     metal: [''],
@@ -204,33 +196,32 @@ export class MeltingTypeComponent implements OnInit {
     purity: [''],
     alloy: [''],
     stockCode: [''],
-    stockCodeDes : [''],
-    divCode : [''],
-   
+    stockCodeDes: [''],
+    divCode: [''],
+
   });
 
-  addTableData(){
+  addTableData() {
 
-    if(this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "")
-    {
-      console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
+    if (this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "") {
+      console.log(this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity));
       this.slNo = this.slNo + 1;
       let data = {
         "UNIQUEID": 0,
         "SRNO": this.slNo,
-        "MELTYPE_CODE":  this.meltingTypeForm.value.code,
-        "MELTYPE_DESCRIPTION":  this.meltingTypeForm.value.description,
-        "KARAT_CODE":  this.meltingTypeForm.value.karat,
-        "PURITY":  this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
-        "DIVISION_CODE":  this.meltingTypeForm.value.divCode,
-        "DEF_ALLOY_STOCK":  this.meltingTypeForm.value.stockCode,
-        "DEF_ALLOY_DESCRIPTION":  this.meltingTypeForm.value.stockCodeDes,
-        "ALLOY_PER":  parseFloat(this.meltingTypeForm.value.alloy)
+        "MELTYPE_CODE": 'Y'||"",
+        "MELTYPE_DESCRIPTION": "",
+        "KARAT_CODE": this.meltingTypeForm.value.karat,
+        "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
+        "DIVISION_CODE": this.meltingTypeForm.value.divCode,
+        "DEF_ALLOY_STOCK": this.meltingTypeForm.value.stockCode,
+        "DEF_ALLOY_DESCRIPTION": this.meltingTypeForm.value.stockCodeDes,
+        "ALLOY_PER": ""
       }
-  
+
       this.tableData.push(data);
       console.log(this.tableData);
-  
+
       // this.metal = this.meltingTypeForm.value.metal
       // this.description=this.meltingTypeForm.value.description
       // this.code=this.meltingTypeForm.value.code
@@ -246,16 +237,16 @@ export class MeltingTypeComponent implements OnInit {
       // this.meltingTypeForm.controls.color.setValue("");
       // this.meltingTypeForm.controls.metal.setValue("");
     }
-  else {
-    this.toastr.error('Please Fill all Mandatory Fields')
+    else {
+      this.toastr.error('Please Fill all Mandatory Fields')
+    }
+
   }
-    
-  }
-  
+
   setFormValues() {
-    if(!this.content) return
+    if (!this.content) return
     console.log(this.content);
-    
+
     this.meltingTypeForm.controls.mid.setValue(this.content.MID);
     this.meltingTypeForm.controls.code.setValue(this.content.MELTYPE_CODE);
     this.meltingTypeForm.controls.description.setValue(this.content.MELTYPE_DESCRIPTION);
@@ -268,22 +259,22 @@ export class MeltingTypeComponent implements OnInit {
     this.tableData = this.content.MELTING_TYPE_DETAIL;
 
   }
- updateMeltingType() {
-  let API = 'MeltingType/UpdateMeltingType/'+ this.meltingTypeForm.value.mid;
-    let postData=
-      {
-        "MID": this.meltingTypeForm.value.mid,
-        "MELTYPE_CODE":  this.meltingTypeForm.value.code,
-        "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
-        "KARAT_CODE": this.meltingTypeForm.value.karat,
-        "PURITY": this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity),
-        "METAL_PER": this.meltingTypeForm.value.metal,
-        "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
-        "CREATED_BY": this.userName,
-        "COLOR": this.meltingTypeForm.value.color,
-        "STOCK_CODE": this.meltingTypeForm.value.stockCode,
-        "MELTING_TYPE_DETAIL": this.tableData || []
-      
+  updateMeltingType() {
+    let API = 'MeltingType/UpdateMeltingType/' + this.meltingTypeForm.value.mid;
+    let postData =
+    {
+      "MID": this.meltingTypeForm.value.mid,
+      "MELTYPE_CODE": this.meltingTypeForm.value.code,
+      "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
+      "KARAT_CODE": this.meltingTypeForm.value.karat,
+      "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
+      "METAL_PER": this.meltingTypeForm.value.metal,
+      "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
+      "CREATED_BY": this.userName,
+      "COLOR": this.meltingTypeForm.value.color,
+      "STOCK_CODE": this.meltingTypeForm.value.stockCode,
+      "MELTING_TYPE_DETAIL": this.tableData || []
+
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -385,16 +376,65 @@ export class MeltingTypeComponent implements OnInit {
     }
   }
 
- 
-  deleteTableData(){
-    console.log(this.commonService.transformDecimalVB(6,this.meltingTypeForm.value.purity));
-  //  this.tableData.push(data);
-  console.log(this.selectedIndexes);
-  if (this.selectedIndexes.length > 0) {
-    this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-  } else {
-    this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
-  } 
-    
+
+  deleteTableData() {
+    console.log(this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity));
+    //  this.tableData.push(data);
+    console.log(this.selectedIndexes);
+    if (this.selectedIndexes.length > 0) {
+      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+    }
+
   }
+
+  defaultAlloy: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Default Alloy Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  defaultAlloySelected(data: any, value: any, controlName: string) {
+
+    // if(controlName == 'usertemp'){
+    //    this.userCodeEnable = true;
+    //  }
+
+    console.log(value);
+    console.log(data);
+    this.tableData[value.data.SRNO - 1].STOCK_CODE = data.STOCK_CODE;
+    this.tableData[value.data.SRNO - 1].MELTYPE_DESCRIPTION = data.DESCRIPTION;
+  }
+
+
+  division(data: any, value: any) {
+    // if (!this.commonService.validateEmail(data.target.value)) {
+    //   this.commonService.toastErrorByMsgId('Invalid Email Address')
+    //   // this.tableData[value.data.SRNO - 1].EMAIL_ID = ''
+    //   return
+    // }
+
+    this.tableData[value.data.SRNO - 1].MELTYPE_CODE = data.target.value;
+  }
+
+  alloyPer(data: any, value: any) {
+    // if (!this.commonService.validateEmail(data.target.value)) {
+    //   this.commonService.toastErrorByMsgId('Invalid Email Address')
+    //   // this.tableData[value.data.SRNO - 1].EMAIL_ID = ''
+    //   return
+    // }
+
+    this.tableData[value.data.SRNO - 1].ALLOY_PER = data.target.value;
+  }
+
+
+
 }
