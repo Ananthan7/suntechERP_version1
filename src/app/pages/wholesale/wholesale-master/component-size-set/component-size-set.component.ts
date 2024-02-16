@@ -76,6 +76,7 @@ export class ComponentSizeSetComponent implements OnInit {
 
 
   setFormValues() {
+   this.getComponentSizeTypeOptions()
     if (!this.content) return
     this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE)
     this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION)

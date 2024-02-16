@@ -18,10 +18,10 @@ export class ComponentSizeMasterComponent implements OnInit {
   componentsizemasterForm!: FormGroup;
   // subscriptions: any;
   private subscriptions: Subscription[] = [];
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
-  radius!:number;
-
+  radius!: number;
+  viewMode: boolean = false;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -30,62 +30,84 @@ export class ComponentSizeMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) { }
- 
+
   ngOnInit(): void {
     this.componentsizemasterForm = this.formBuilder.group({
-      code:['',[Validators.required]],
-      desc : ['',[Validators.required]],
-      height:[''],
-      width : [''],
-      length:[''],
-      radius:['']
-     });
-     this.subscribeToFormChanges();
+      code: ['', [Validators.required]],
+      desc: ['', [Validators.required]],
+      height: [''],
+      width: [''],
+      length: [''],
+      radius: ['']
+    });
+    this.subscribeToFormChanges();
   }
-  
+
   private subscribeToFormChanges() {
     this.componentsizemasterForm.valueChanges.subscribe(() => {
-       this.calculateRadius();
-      this.getvaluies()
+      this.calculateRadius();
+      this.getValues()
     });
+
+    if (this.content.FLAG == 'VIEW') {
+      this.setFormValues()
+      this.viewMode = true;
+     
+    } else if (this.content.FLAG == 'EDIT') {
+      this.setFormValues()
+    }
   }
 
-  private calculateRadius() {
+  setFormValues() {
+    console.log(this.content);
+    if (!this.content) return
+    this.componentsizemasterForm.controls.code.setValue(this.content.COMPSIZE_CODE)
+    this.componentsizemasterForm.controls.desc.setValue(this.content.DESCRIPTION)
+    this.componentsizemasterForm.controls.height.setValue(this.content.HEIGHT)
+    this.componentsizemasterForm.controls.width.setValue(this.content.WIDTH)
+    this.componentsizemasterForm.controls.length.setValue(this.content.LENGTH)
+    this.componentsizemasterForm.controls.radius.setValue(this.content.RADIUS)
+  }
+
+
+  calculateRadius() {
     const height = this.componentsizemasterForm.get('height')?.value;
     const width = this.componentsizemasterForm.get('width')?.value;
-    const length = this.componentsizemasterForm.get('length')?.value;
-
-    if (height !== null && width !== null && length !== null) {
-      const radiusValue = Math.sqrt((height ** 2) + (width ** 2) + (length ** 2)) / 2;
-      
-      const formattedRadius = radiusValue.toFixed(2);
-
-      this.componentsizemasterForm.patchValue({
-        radius: formattedRadius
-      }, { emitEvent: false });
+  
+    if (height !== null && width !== null) {
+      // Calculate the radius based on the provided formula
+      const radiusValue = Math.pow(((width * width) / (8 * height) + (height / 2)),3/3);
+      return radiusValue.toFixed(2); 
+    } else {
+      return '0'; 
     }
   }
   
-  getvaluies(){
+  getValues() {
     const height = this.componentsizemasterForm.value.height || 0;
-    const width = this.componentsizemasterForm.value.width || 0;
-    const length = this.componentsizemasterForm.value.length || 0;
-    const radius = this.componentsizemasterForm.value.radius || 0;
-    const formattedDesc = `H ${height}#, W ${width}#, L ${length}#,R ${radius}#`;
-    // console.log(formattedDesc);    
-    this.componentsizemasterForm.patchValue({
-      desc:formattedDesc
-    }, { emitEvent: false });
+      const width = this.componentsizemasterForm.value.width || 0;
+      const length = this.componentsizemasterForm.value.length || 0;
+      const radius = this.calculateRadius();
+    
+      const formattedDesc = `H ${height}#, W ${width}#, L ${length}#, R ${radius}#`;
+    
+      // Update the form control with the calculated result and description
+      this.componentsizemasterForm.patchValue({
+        radius: radius,
+        desc: formattedDesc
+      }, { emitEvent: false });
   }
   
+
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  formSubmit(){
-  console.log(this.componentsizemasterForm.value);
-  
-    if(this.content && this.content.FLAG == 'EDIT'){
+  formSubmit() {
+    console.log(this.componentsizemasterForm.value);
+
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -93,22 +115,22 @@ export class ComponentSizeMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'ComponentSizeMaster/InsertComponentSizeMaster'
     let postData = {
       "MID": 0,
       "COMPSIZE_CODE": this.componentsizemasterForm.value.code || "",
       "DESCRIPTION": this.componentsizemasterForm.value.desc || "",
-      "RADIUS":this.componentsizemasterForm.value.radius || 0,
+      "RADIUS": this.componentsizemasterForm.value.radius || 0,
       "LENGTH": this.componentsizemasterForm.value.length || 0,
       "WIDTH": this.componentsizemasterForm.value.width || 0,
       "HEIGHT": this.componentsizemasterForm.value.height || 0
     }
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -129,30 +151,30 @@ export class ComponentSizeMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub);
   }
-  
-  update(){
+
+  update() {
     if (this.componentsizemasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'ComponentSizeMaster/UpdateComponentSizeMaster/'+this.content.COMPSIZE_CODE
-    let postData = 
+
+    let API = 'ComponentSizeMaster/UpdateComponentSizeMaster/' + this.content.COMPSIZE_CODE
+    let postData =
     {
       "MID": 0,
       "COMPSIZE_CODE": this.componentsizemasterForm.value.code || "",
       "DESCRIPTION": this.componentsizemasterForm.value.desc || "",
-      "RADIUS":this.componentsizemasterForm.value.radius || "",
+      "RADIUS": this.componentsizemasterForm.value.radius || "",
       "LENGTH": this.componentsizemasterForm.value.length || "",
       "WIDTH": this.componentsizemasterForm.value.width || "",
       "HEIGHT": this.componentsizemasterForm.value.height || ""
     }
-    
-  
+
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -237,5 +259,13 @@ export class ComponentSizeMasterComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+
+  onInputChange(event: any, controlName: string, maxLength: number) {
+    const inputValue = event.target.value;
+
+    if (inputValue.length > maxLength) {
+      this.componentsizemasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
+    }
   }
 }

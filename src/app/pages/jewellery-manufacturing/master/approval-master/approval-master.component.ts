@@ -95,10 +95,6 @@ export class ApprovalMasterComponent implements OnInit {
 
   userDataSelected(data: any, value: any, controlName: string) {
 
-    // if(controlName == 'usertemp'){
-    //    this.userCodeEnable = true;
-    //  }
-
     console.log(value);
     console.log(data);
     this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
@@ -140,7 +136,6 @@ export class ApprovalMasterComponent implements OnInit {
   emailid(data: any, value: any) {
     if (!this.commonService.validateEmail(data.target.value)) {
       this.commonService.toastErrorByMsgId('Invalid Email Address')
-      // this.tableData[value.data.SRNO - 1].EMAIL_ID = ''
       return
     }
 
@@ -201,8 +196,7 @@ export class ApprovalMasterComponent implements OnInit {
       };
       
       this.tableData.push(data);
-      
-      // Update SRNO and set isDisabled for each item
+
       this.tableData.forEach((item, i) => {
         item.SRNO = i + 1;
         item.isDisabled = true;
@@ -247,7 +241,9 @@ export class ApprovalMasterComponent implements OnInit {
     final = this.tableData.filter((item:any)=> item.APPR_TYPE == '3')
     return final.length == 0
   }
+
   formSubmit() {
+
     if(this.checkFinalApproval()){
       this.toastr.error('Final Approval Type Not Selected')
       return
@@ -295,6 +291,74 @@ export class ApprovalMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+  // formSubmit() {
+  //   if (this.checkFinalApproval()) {
+  //     this.toastr.error('Final Approval Type Not Selected');
+  //     return;
+  //   }
+    
+  //   // Check if message template is true and mobile number is empty
+  //   const messageTemplate = this.tableData.find(data => data.template === 'messagetemp');
+  //   const mobileNumberData = this.tableData.find(data => data.template === 'mobilenumber');
+  //   if (messageTemplate && messageTemplate.value && !mobileNumberData.value) {
+  //     this.toastr.error('Mobile Number is required for Message Template');
+  //     return;
+  //   }
+  
+  //   // Check if email template is true and email ID is empty
+  //   const emailTemplate = this.tableData.find(data => data.template === 'emailtemp');
+  //   const emailIdData = this.tableData.find(data => data.template === 'emailid');
+  //   if (emailTemplate && emailTemplate.value && !emailIdData.value) {
+  //     this.toastr.error('Email ID is required for Email Template');
+  //     return;
+  //   }
+  
+  //   if (this.approvalMasterForm.invalid) {
+  //     this.toastr.error('Select all required fields');
+  //     return;
+  //   }
+  
+  //   if (this.content && this.content.FLAG == 'EDIT') {
+  //     this.update();
+  //     return;
+  //   }
+  
+  //   let API = 'ApprovalMaster/InsertApprovalMaster';
+  //   let postData = {
+  //     "APPR_CODE": this.approvalMasterForm.value.code || "",
+  //     "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
+  //     "approvalDetails": this.tableData,
+  //   };
+  
+  //   console.log(this.tableData);
+  
+  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         if (result.status == "Success") {
+  //           Swal.fire({
+  //             title: result.message || 'Success',
+  //             text: '',
+  //             icon: 'success',
+  //             confirmButtonColor: '#336699',
+  //             confirmButtonText: 'Ok'
+  //           }).then((result: any) => {
+  //             if (result.value) {
+  //               this.approvalMasterForm.reset();
+  //               this.tableData = [];
+  //               this.close('reloadMainGrid');
+  //             }
+  //           });
+  //         }
+  //       } else {
+  //         this.toastr.error('Not saved');
+  //       }
+  //     }, err => alert(err));
+  
+  //   this.subscriptions.push(Sub);
+  // }
+  
 
   update() {
     if (this.approvalMasterForm.invalid) {

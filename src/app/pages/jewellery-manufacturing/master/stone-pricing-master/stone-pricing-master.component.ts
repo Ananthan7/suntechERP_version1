@@ -18,7 +18,9 @@ export class StonePricingMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   tableData: any[] = [];
   isReadOnly:any
-  isDisabled:boolean=true
+  viewMode: boolean = false;
+
+
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -38,7 +40,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES = 'SHAPE MASTER'",
+    WHERECONDITION: "TYPES = 'SHAPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -50,19 +52,19 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Clarity',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES = 'CLARITY MASTER'",
+    WHERECONDITION: "TYPES = 'CLARITY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  sleve_setData: MasterSearchModel = {
+  sieve_setData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
+    LOOKUPID: 86,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'sieve Set',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES = 'SIEVE SET MASTER'",
+    WHERECONDITION: "TYPES = 'SIEVE SET MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -74,7 +76,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve From',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES='SIEVE MASTER'",
+    WHERECONDITION: "TYPES='SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -86,7 +88,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve To',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES='SIEVE MASTER'",
+    WHERECONDITION: "TYPES='SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -98,7 +100,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size From',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES = 'SIZE MASTER'",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -110,17 +112,17 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size To',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES = 'SIZE MASTER'",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  sleveData: MasterSearchModel = {
+  sieveData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 38,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Sleve',
+    SEARCH_HEADING: 'sieve',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -134,7 +136,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WHERE TYPES = 'COLOR MASTER'",
+    WHERECONDITION: "TYPES = 'COLOR SET'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -146,7 +148,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CMBRANCH_CODE = this.commonservice.branchCode''",
+    WHERECONDITION: " CURRENCY_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -155,14 +157,13 @@ export class StonePricingMasterComponent implements OnInit {
 
   stonePrizeMasterForm: FormGroup = this.formBuilder.group({
     price_code: ['', [Validators.required]],
-    sleve_set: [''],
+    sieve_set: [''],
     shape: ['', [Validators.required]],
-    sleve_form: ['', [Validators.required]],
-    sleve_to: ['', [Validators.required]],
+    sieve_form: ['', [Validators.required]],
+    sieve_to: ['', [Validators.required]],
     color: ['', [Validators.required]],
     clarity: ['', [Validators.required]],
     sieve_from: [''],
-    sieve_to: [''],
     currency: ['', [Validators.required]],
     carat_wt: ['', [Validators.required]],
     sieve_from_desc: [''],
@@ -183,14 +184,15 @@ export class StonePricingMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.viewMode = true;
     console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
       this.viewFormValues();
-    }else if(this.content.FLAG == 'EDIT'){
+    }
+    else(this.content.FLAG == 'EDIT')
+    {
       this.setFormValues();
-    }else
-    this.stonePrizeMasterForm.controls['sieve_from_desc'].disable();
-    this.stonePrizeMasterForm.controls['sieve_to_desc'].disable();
+    }
 
   }
 
@@ -211,10 +213,10 @@ export class StonePricingMasterComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
     this.stonePrizeMasterForm.controls.price_code.setValue(this.content.CODE)
-    this.stonePrizeMasterForm.controls.sleve_set.setValue(this.content.SIEVE_SET)
+    this.stonePrizeMasterForm.controls.sieve_set.setValue(this.content.SIEVE_SET)
     this.stonePrizeMasterForm.controls.shape.setValue(this.content.SHAPE)
-    this.stonePrizeMasterForm.controls.sleve_form.setValue(this.content.SIEVE)
-    this.stonePrizeMasterForm.controls.sleve_to.setValue(this.content.SIEVE_TO)
+    this.stonePrizeMasterForm.controls.sieve_form.setValue(this.content.SIEVE)
+    this.stonePrizeMasterForm.controls.sieve_to.setValue(this.content.SIEVE_TO)
     this.stonePrizeMasterForm.controls.color.setValue(this.content.COLOR)
     this.stonePrizeMasterForm.controls.clarity.setValue(this.content.CLARITY)
     this.stonePrizeMasterForm.controls.size_from.setValue(this.content.SIZE_FROM)
@@ -234,10 +236,10 @@ export class StonePricingMasterComponent implements OnInit {
   viewFormValues() {
     if (!this.content) return
     this.stonePrizeMasterForm.controls.price_code.setValue(this.content.CODE)
-    this.stonePrizeMasterForm.controls.sleve_set.setValue(this.content.SIEVE_SET)
+    this.stonePrizeMasterForm.controls.sieve_set.setValue(this.content.SIEVE_SET)
     this.stonePrizeMasterForm.controls.shape.setValue(this.content.SHAPE)
-    this.stonePrizeMasterForm.controls.sleve_form.setValue(this.content.SIEVE)
-    this.stonePrizeMasterForm.controls.sleve_to.setValue(this.content.SIEVE_TO)
+    this.stonePrizeMasterForm.controls.sieve_form.setValue(this.content.SIEVE)
+    this.stonePrizeMasterForm.controls.sieve_to.setValue(this.content.SIEVE_TO)
     this.stonePrizeMasterForm.controls.color.setValue(this.content.COLOR)
     this.stonePrizeMasterForm.controls.clarity.setValue(this.content.CLARITY)
     this.stonePrizeMasterForm.controls.size_from.setValue(this.content.SIZE_FROM)
@@ -282,11 +284,11 @@ export class StonePricingMasterComponent implements OnInit {
       "LAST_SELLING_RATE": 0,
       "SELLING_PER": this.stonePrizeMasterForm.value.selling || 0,
       "CARAT_WT": this.stonePrizeMasterForm.value.carat_wt || 0,
-      "SIEVE": this.stonePrizeMasterForm.value.sleve_form || "",
-      "SIEVE_SET": this.stonePrizeMasterForm.value.sleve_set || "",
+      "SIEVE": this.stonePrizeMasterForm.value.sieve_form || "",
+      "SIEVE_SET": this.stonePrizeMasterForm.value.sieve_set || "",
       "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
       "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
-      "SIEVE_TO": this.stonePrizeMasterForm.value.sleve_to || "",
+      "SIEVE_TO": this.stonePrizeMasterForm.value.sieve_to || "",
       "SIEVEFROM_DESC": this.stonePrizeMasterForm.value.sieve_from_desc || "",
       "SIEVETO_DESC": this.stonePrizeMasterForm.value.sieve_to_desc || "",
       "LAST_UPDATE": new Date().toISOString()
@@ -345,10 +347,10 @@ export class StonePricingMasterComponent implements OnInit {
       "SELLING_PER": this.stonePrizeMasterForm.value.selling || 0,
       "CARAT_WT": this.stonePrizeMasterForm.value.carat_wt || 0,
       "SIEVE": "",
-      "SIEVE_SET": this.stonePrizeMasterForm.value.sleve_set || "",
+      "SIEVE_SET": this.stonePrizeMasterForm.value.sieve_set || "",
       "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
       "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
-      "SIEVE_TO": this.stonePrizeMasterForm.value.sleve_to || "",
+      "SIEVE_TO": this.stonePrizeMasterForm.value.sieve_to || "",
       "SIEVEFROM_DESC": this.stonePrizeMasterForm.value.sieve_from_desc || "",
       "SIEVETO_DESC": this.stonePrizeMasterForm.value.sieve_to_desc || "",
       "LAST_UPDATE": new Date().toISOString()
@@ -457,21 +459,23 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.price_code.setValue(data.CODE)
   }
 
-  sleve_setDataSelected(data: any) {
+  sieve_setDataSelected(data: any) {
     console.log(data);
-    this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
+    this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE)
   }
 
   shapeDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.shape.setValue(data.CODE)
   }
 
-  slevefromDataSelected(data: any) {
-    this.stonePrizeMasterForm.controls.sleve_form.setValue(data.CODE);
+  sievefromDataSelected(data: any) {
+    console.log(data);
+    this.stonePrizeMasterForm.controls.sieve_form.setValue(data.CODE);
     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(data.DESCRIPTION);
   }
-  slevetoDataSelected(data: any) {
-    this.stonePrizeMasterForm.controls.sleve_to.setValue(data.CODE);
+  sievetoDataSelected(data: any) {
+    console.log(data);
+    this.stonePrizeMasterForm.controls.sieve_to.setValue(data.CODE);
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
 
   }
@@ -482,14 +486,22 @@ export class StonePricingMasterComponent implements OnInit {
   clarityDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.clarity.setValue(data.CODE)
   }
-  sievefromDataSelected(data: any) {
+  sizefromDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.size_from.setValue(data.CODE)
   }
-  sievetoDataSelected(data: any) {
+  sizetoDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.size_to.setValue(data.CODE)
   }
   currencyDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.currency.setValue(data.CURRENCY_CODE)
+  }
+
+  onInputChange(event: any, controlName: string, maxLength: number) {
+    const inputValue = event.target.value;
+
+    if (inputValue.length > maxLength) {
+      this.stonePrizeMasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
+    }
   }
 
   ngOnDestroy() {
@@ -498,9 +510,4 @@ export class StonePricingMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-
-}
-
-function disable(): HTMLElement | null {
-  throw new Error('Function not implemented.');
 }

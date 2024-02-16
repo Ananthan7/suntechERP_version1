@@ -49,10 +49,10 @@ export class PriceschemesMasterComponent implements OnInit {
       priceCode: ['', [Validators.required]],
       priceDescription: ['', [Validators.required]],
       price1: ['', [Validators.required]],
-      price2: [{ value: '', disabled: true }, Validators.required],
-      price3: [{ value: '', disabled: true }, Validators.required],
-      price4: [{ value: '', disabled: true }, Validators.required],
-      price5: [{ value: '', disabled: true }, Validators.required],
+      price2: [{ value: '', disabled: true },Validators.required],
+      price3: [{ value: '', disabled: true }],
+      price4: [{ value: '', disabled: true }],
+      price5: [{ value: '', disabled: true }],
     })
 
   }
@@ -270,11 +270,11 @@ private getNextFieldName(currentField: string): string {
     return {
       "PRICE_CODE": this.priceSchemaMasterForm.value.priceCode.toUpperCase(),
       "PRICE_DESCRIPTION": this.priceSchemaMasterForm.value.priceDescription.toUpperCase(),
-      "PRICE1": this.priceSchemaMasterForm.value.price1,
-      "PRICE2": this.priceSchemaMasterForm.value.price2,
-      "PRICE3": this.priceSchemaMasterForm.value.price3,
-      "PRICE4": this.priceSchemaMasterForm.value.price4,
-      "PRICE5": this.priceSchemaMasterForm.value.price5,
+      "PRICE1": this.priceSchemaMasterForm.value.price1 || "",
+      "PRICE2": this.priceSchemaMasterForm.value.price2 || "",
+      "PRICE3": this.priceSchemaMasterForm.value.price3 || "",
+      "PRICE4": this.priceSchemaMasterForm.value.price4 || "",
+      "PRICE5": this.priceSchemaMasterForm.value.price5 || "",
       "MID": this.content ? this.content.MID : 0,
     };
   }

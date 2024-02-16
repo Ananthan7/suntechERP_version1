@@ -82,7 +82,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PREFIX_CODE<> ''",
+    WHERECONDITION: "COMP_PREFIX = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,    
     LOAD_ONCLICK: true,
@@ -100,7 +100,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: " types = 'type master'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -128,27 +128,27 @@ export class ComponentMasterComponent implements OnInit {
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 89,
-    SEARCH_FIELD: 'COMPSIZE_CODE',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COMPSIZE_CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   sizeCodeSelected(e:any){
     console.log(e);
-    this.componentmasterForm.controls.size.setValue(e.COMPSIZE_CODE);
+    this.componentmasterForm.controls.size.setValue(e.CODE);
   }
 
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 33,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SHAPE MASTER'",
+    WHERECONDITION: " TYPES='SHAPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -196,7 +196,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'COST_CODE',
     SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COST_CODE<> ''",
+    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
