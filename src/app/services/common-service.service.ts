@@ -879,6 +879,26 @@ export class CommonServiceService {
     const futureDate = new Date(currentDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000); // Add days in milliseconds
     return futureDate;
   }
+  addMonthsToDate(startDate: any, numberOfMonths: number) {
+    const endDate = new Date(startDate);
+    const newMonth = endDate.getMonth() + numberOfMonths;
+    
+    // Adjust for cases where adding/subtracting months might affect the year
+    endDate.setMonth(newMonth);
+    // If the new month is greater than 11 (December), we need to adjust the year
+    if (newMonth > 11) {
+      const yearDiff = Math.floor(newMonth / 12);
+      endDate.setFullYear(endDate.getFullYear() + yearDiff);
+      endDate.setMonth(newMonth % 12); // Set the month back to 0-based index
+    }
+
+    return endDate;
+  }
+  addWeeksToDate(startDate: Date, numberOfWeeks: number) {
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + numberOfWeeks * 7);
+    return endDate;
+  }
   commaSeperation(data: any) {
     if (!Number(data)) return data
     return Number(data).toLocaleString('en-US', { style: 'decimal' })

@@ -114,18 +114,19 @@ export class SchemeMasterComponent implements OnInit {
     });
     this.subscriptions.push(receipts2);
   }
-  getSchemeMasterList(event: any) {
-    if (event.target.value == "") return;
-    let Sub: Subscription = this.dataService.getDynamicAPI('SchemeMaster/GetSchemeMasterList')
+  getSchemeMasterList() {
+    let API = 'SchemeMaster/GetSchemeMasterDetails/' + this.comService.branchCode + '/' + this.schemeMasterForm.value.code
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((resp: any) => {
-        if (resp.status == 'Success') {
-          let items = resp.response
-          items.forEach((element: any) => {
-            if (element.SCHEME_CODE == event.target.value) {
-              this.comService.showSnackBarMsg('Scheme Already Exists')
-              this.schemeMasterForm.controls.code.setValue('')
-            }
-          });
+        if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
+          let data = resp.response
+          this.schemeMasterForm.controls.startDate.setValue(data.START_DATE)
+        }else{
+          if (resp.status == 'Success') {
+            this.comService.showSnackBarMsg('Scheme Already Exists')
+            this.schemeMasterForm.controls.code.setValue('')
+            return
+          }
         }
       });
     this.subscriptions.push(Sub);
@@ -201,7 +202,7 @@ export class SchemeMasterComponent implements OnInit {
       "BRANCH_CODE": this.comService.nullToString(this.branchCode),
       "SCHEME_CODE": this.comService.nullToString(this.schemeMasterForm.value.code),
       "SCHEME_NAME": this.comService.nullToString(this.schemeMasterForm.value.description),
-      "SCHEME_UNIT": this.comService.emptyToZero(this.schemeMasterForm.value.bonusInstallment),
+      "SCHEME_UNIT": 0,
       "SCHEME_BONUS": this.comService.emptyToZero(this.schemeMasterForm.value.bonusInstallment),
       "SCHEME_PERIOD": this.comService.emptyToZero(this.schemeMasterForm.value.tenurePeriod),
       "SCHEME_REMARKS": this.comService.nullToString(this.schemeMasterForm.value.remarks),
@@ -221,13 +222,11 @@ export class SchemeMasterComponent implements OnInit {
   }
   setInitialValues() {
     if (!this.content) return
-    console.log(this.content);
     this.schemeMasterForm.controls.mid.setValue(this.content.MID);
     this.schemeMasterForm.controls.code.setValue(this.content.SCHEME_CODE);
     this.schemeMasterForm.controls.description.setValue(this.content.SCHEME_NAME);
     this.schemeMasterForm.controls.remarks.setValue(this.content.SCHEME_REMARKS);
     this.schemeMasterForm.controls.frequency.setValue(this.content.SCHEME_FREQUENCY);
-    this.schemeMasterForm.controls.startDate.setValue(this.content.START_DATE)
     this.schemeMasterForm.controls.prefix.setValue(this.content.PREFIX_CODE);
     this.schemeMasterForm.controls.installmentAmount.setValue(this.content.SCHEME_AMOUNT);
     this.schemeMasterForm.controls.cancelCharges.setValue(this.content.CANCEL_CHARGE);
@@ -236,12 +235,12 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.receiptModeone.setValue(this.content.INST_RECTYPE);
     this.schemeMasterForm.controls.bonusInstallment.setValue(this.content.SCHEME_BONUS);
     this.schemeMasterForm.controls.tenurePeriod.setValue(this.content.SCHEME_PERIOD);
-    this.schemeMasterForm.controls.schemeStatus.setValue(this.content.STATUS);
-    this.schemeMasterForm.controls.SCHEMEFIXEDAMT.setValue(this.content.SCHEME_FIXEDAMT);
+    this.schemeMasterForm.controls.schemeStatus.setValue(this.content.STATUS == 'Y'? true : false);
+    this.schemeMasterForm.controls.SCHEMEFIXEDAMT.setValue(this.content.SCHEME_FIXEDAMT == 'Y'? true : false);
     this.schemeMasterForm.controls.branch.setValue(this.content.BRANCH_CODE);
     this.schemeMasterForm.controls.depositIn.setValue(this.content.DEPOSIT_IN);
-    // this.schemeMasterForm.controls.SCHEME_METALCURRENCY.setValue(this.content.depositIn);
-  }
+    this.getSchemeMasterList()
+    }
   prefixCodeValidate() {
     let API = 'PrefixMaster/GetPrefixMasterDetail/' + this.schemeMasterForm.value.prefix
     let Sub: Subscription = this.dataService.getDynamicAPI(API)

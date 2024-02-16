@@ -332,7 +332,7 @@
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="PAY_DATE" dataType="date"
-                        caption="Pay Date"
+                        caption="Pay Date" [format]="'dd-MM-yyyy'"
                         [allowEditing]="true"
                         alignment="center">
                     </dxi-column>
@@ -348,6 +348,7 @@
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_DATE"
                         caption="Reminder Date" dataType="date"
+                        [format]="'dd-MM-yyyy'"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_SEND"
@@ -357,6 +358,7 @@
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_DATE" dataType="date"
+                        [format]="'dd-MM-yyyy'"
                         caption="Receipt Date"
                         [allowEditing]="true" alignment="center">
                     </dxi-column>

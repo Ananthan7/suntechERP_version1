@@ -21,7 +21,7 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text"
-                                (focusout)="getSchemeMasterList($event)"
+                                (focusout)="getSchemeMasterList()"
                                 matInput formControlName="code" />
                         </mat-form-field>
                     </div>
@@ -162,13 +162,18 @@
                         class="col-sm-2 col-form-label">Start Date</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input matInput [matDatepicker]="startDate"
-                                [max]="startDate" formControlName="startDate"
-                                placeholder="DD/MM/YYYY" DateValidation
+                            <input matInput readonly
+                                DateValidation
+                                name="startDate"
+                                [matDatepicker]="StartDate"
+                                formControlName="startDate"
+                                placeholder="DD/MM/YYYY"
                                 (dateChange)="formatDate($event)" />
-                            <mat-datepicker-toggle matSuffix
-                                [for]="startDate"></mat-datepicker-toggle>
-                            <mat-datepicker #startDate></mat-datepicker>
+                            <mat-datepicker-toggle
+                                matSuffix
+                                [for]="StartDate"></mat-datepicker-toggle>
+                            <mat-datepicker disabled="true"
+                                #StartDate></mat-datepicker>
                         </mat-form-field>
                     </div>
                     <div class="col-md-2">
