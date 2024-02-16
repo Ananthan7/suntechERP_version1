@@ -15,10 +15,11 @@ export class PointOfSalesOrderComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   columnhead:any[] = ['Karat','Rate','Purchase Rate'];
-  columnheadSoldItems:any[] = ['Mode','Currency','Currency','Amount'];
-  columnheadDetails:any[] = ['Sr','Stock Code','Division','Description','Quantity','Rate','Amount','Disc Amount','Net Amount'];
+  columnheadSoldItems:any[] = ['Mode','Currency','Currency','Amount','DTYEARMONTH','IGST ACCODE','IGST PER','IGST AMOUNTFC','IGST AMOUNTCC','HSN CODE','GST CODE','TOTAMTWITHOUTVATFC','TOTAMTWITHOUTVATLC'];
+  columnheadDetails:any[] = ['Sr','Stock Code','Division','Description','Quantity','Rate','Amount','Disc Amount','Net Amount','Total AmountCC','MKGVALUECC'];
   divisionMS: any = 'ID';
-
+  columnheadItems:any[] = ['Item Code','Item Description','Pcs','Weight','Making Amount','Metal Amount','Disc Amount','Net Amount'];
+  columnheadsItems:any[]=['Item Code','Item Description','Pcs','Weight','PURITY','PUREWT','MKG_RATEFC','Making Amount','Metal Amount','Stone Amount','WASTAGEPER','WASTAGEQTY','Net Amount','DIVISION CODE','STONEWT','NETWT','CHARGABLEWT','OZWT','METAL RATE GMSFC','STONE RATEFC','PUDIFF','STONEDIFF','STOCK','WASTAGEAMOUNTFC','LOCTYPE CODE','SUPPLIER','SRNO','VOCTYPE','VOCNUMBER'];
 
   posofSalesOrderForm: FormGroup = this.formBuilder.group({
     vocType :[''],

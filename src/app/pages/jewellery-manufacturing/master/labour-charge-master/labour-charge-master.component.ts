@@ -22,7 +22,7 @@ export class LabourChargeMasterComponent implements OnInit {
   userName = localStorage.getItem('username');
   branch = localStorage.getItem('userbranch');
   private subscriptions: Subscription[] = [];
-
+  stockcodeDisable:boolean = false;
   methodList: any[] = [];
   labourTypeList: any[] = [];
   DialabourTypeList: any[] = [];
@@ -829,14 +829,19 @@ export class LabourChargeMasterComponent implements OnInit {
   onforDesignOnlyChange(event: any) {
     console.log(event);
     if (event.checked === true) {
+      this.stockcodeDisable = true;
       this.metallabourMasterForm.controls['stock_code'].disable();
       this.metallabourMasterForm.controls['color'].disable();
       this.metallabourMasterForm.controls['metallabourType'].disable();
+      this.metallabourMasterForm.controls['metalunitList'].disable();
     }
     else {
+      this.stockcodeDisable = false;
       this.metallabourMasterForm.controls['stock_code'].enable();
       this.metallabourMasterForm.controls['color'].enable();
       this.metallabourMasterForm.controls['metallabourType'].enable();
+      this.metallabourMasterForm.controls['metalunitList'].enable();
+
     }
   }
 

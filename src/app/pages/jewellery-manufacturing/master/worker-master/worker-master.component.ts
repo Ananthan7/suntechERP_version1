@@ -410,6 +410,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   //selected field value setting
   WorkerAcCodeSelected(data: any) {
+    console.log(data);
     this.workerMasterForm.controls.WorkerAcCode.setValue(data.ACCODE)
   }
   supervisorSelected(data: any) {
