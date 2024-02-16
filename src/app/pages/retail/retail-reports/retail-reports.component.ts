@@ -4,6 +4,9 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { PosDailyClosingSummaryComponent } from './pos-daily-closing-summary/pos-daily-closing-summary.component';
 import { RetailAdvanceReceiptRegisterComponent } from './retail-advance-receipt-register/retail-advance-receipt-register.component';
+import { PosCustomerFeedbackFollowupComponent } from './pos-customer-feedback-followup/pos-customer-feedback-followup.component';
+import { PosCustomerFeedbackActionComponent } from './pos-customer-feedback-action/pos-customer-feedback-action.component';
+import { RetailSalesKaratWiseProfitComponent } from './retail-sales-karat-wise-profit/retail-sales-karat-wise-profit.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -46,6 +49,11 @@ export class RetailReportsComponent implements OnInit {
     this.componentDbList = {
       'PosDailyclosingSummary': PosDailyClosingSummaryComponent,
       'RetailAdvanceReceiptRegisterComponent': RetailAdvanceReceiptRegisterComponent,
+      'PosCustomerFeedbackFollowupComponent': PosCustomerFeedbackFollowupComponent,
+      'PosCustomerFeedbackActionComponent': PosCustomerFeedbackActionComponent,
+      'RetailSalesKaratWiseProfitComponent': RetailSalesKaratWiseProfitComponent,
+      
+      
   
       // Add components and update in operationals > menu updation grid form component name
     }

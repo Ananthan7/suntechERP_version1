@@ -29,7 +29,7 @@ export class WorkerMasterComponent implements OnInit {
   selectedKey: number[] = []
   private subscriptions: Subscription[] = [];
   readonlyMode: boolean = false;
-  
+
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -92,34 +92,24 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.content){
-      
-    }
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.isViewMode = true;
       this.setFormValues();
-      this.selectProcessMasterList();
+      this.selectProcessWithSP()
     } else if (this.content.FLAG == 'EDIT') {
       this.viewMode = false;
       this.setFormValues();
-      this.selectProcessMasterList()
+      this.selectProcessWithSP()
     }
 
-    if (this.isViewMode) {
-      this.tableData.forEach((item, index) => {
-        item.SRNO = index + 1;
-      });
-    }
-  
   }
 
 
- 
+
   setInitialValues() {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(0, 'METALMETAL'))
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    this.workerMasterForm.controls.TargetPcs.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -138,44 +128,52 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_CARAT_WT, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_METAL_WT, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_WEIGHT, 'METAL'))
-  }
-  loadFlag: number = 0
-  getWorkerMaster() {
-    let API = 'WorkerMaster/GetWorkerMasterMIDLookup/' + this.content.MID
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
-        if (result.response) {
-          let data = result.response;
-          this.selectedKey = data.workerDetails.map((obj: any) => obj.SRNO);
-          if(this.loadFlag == 0){
-            this.loadFlag+=1
-            this.tableData = data.workerDetails
-          }
-          // this.selectedKey.forEach((element:any) => {
-          //   this.tableData.forEach((item:any,index:number) => {
-          //     if(element == item.SRNO){
-          //       item.SORTID = index+1
-          //     }else{
-          //       item.SORTID = this.tableData.length
-          //     }
-          //   });
-          // });
-          // this.tableData = this.tableData.sort((a:any,b:any)=> a.SORTID - b.SORTID)
-          // this.tableData.forEach((item:any,index:number) => {
-          //   item.SRNO = index+1
-        // });
-        }
-      }, err => {
-        this.commonService.closeSnackBarMsg()
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
+    this.workerMasterForm.controls.DailyTarget.setValue(this.content.TARGET_BY)
+    this.workerMasterForm.controls.Active.setValue(this.content.ACTIVE == 'Y' ? true : false)
   }
 
+  setPostData() {
+    this.tableData.forEach((item) => {
+      if (item.SELECT1 == true) {
+        this.selectedProcessArr.push({
+          "UNIQUEID": 0,
+          "SRNO": item.SRNO,
+          "WORKER_CODE": this.workerMasterForm.value.WorkerCode,
+          "PROCESS_CODE": item.PROCESS_CODE,
+        })
+      }
+    })
+
+    let postData = {
+      "MID": this.content?.MID ? this.content.MID : 0,
+      "WORKER_CODE": this.commonService.nullToString((this.workerMasterForm.value.WorkerCode).toUpperCase()),
+      "DESCRIPTION": this.commonService.nullToString((this.workerMasterForm.value.WorkerDESCRIPTION).toUpperCase()),
+      "DEPARTMENT_CODE": "",
+      "NETSAL": 0,
+      "PERKS": 0,
+      "GROSSAL": 0,
+      "EXP": 0,
+      "TOTALSAL": 0,
+      "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
+      "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
+      "SECRET_CODE": this.workerMasterForm.value.Password || "",
+      "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
+      "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
+      "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
+      "ACTIVE": this.workerMasterForm.value.Active,
+      "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
+      "TARGET_BY": this.workerMasterForm.value.DailyTarget || "",
+      "FINGER_ID": "",
+      "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
+      "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
+      "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0.000,
+      "WORKER_EXPIRY_DATE": "",
+      "workerDetails": this.selectedProcessArr
+    }
+    return postData
+  }
   /**USE:  final save API call*/
   formSubmit() {
-
     this.buttonField = false;
 
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -191,32 +189,7 @@ export class WorkerMasterComponent implements OnInit {
     });
 
     let API = 'WorkerMaster/InsertWorkerMaster'
-    let postData = {
-      "MID": 0,
-      "WORKER_CODE": this.commonService.nullToString((this.workerMasterForm.value.WorkerCode).toUpperCase()),
-      "DESCRIPTION": this.commonService.nullToString((this.workerMasterForm.value.WorkerDESCRIPTION).toUpperCase()),
-      "DEPARTMENT_CODE": "",
-      "NETSAL": 0,
-      "PERKS": 0,
-      "GROSSAL": 0,
-      "EXP": 0,
-      "TOTALSAL": 0,
-      "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
-      "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": this.workerMasterForm.value.Password || "",
-      "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
-      "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
-      "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
-      "ACTIVE": true,
-      "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
-      "TARGET_BY": this.workerMasterForm.value.DailyTarget|| "",
-      "FINGER_ID": "",
-      "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
-      "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
-      "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0.000,
-      "WORKER_EXPIRY_DATE": "",
-      "workerDetails": this.selectedProcessArr
-    }
+    let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -231,16 +204,19 @@ export class WorkerMasterComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.close('reloadMainGrid')
-                this.tableData = []
               }
             });
+            this.workerMasterForm.reset()
+            this.tableData = []
           }
         } else {
           this.toastr.error('Not saved')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
+
   }
+
   updateWorkerMaster() {
     if (this.selectedProcessArr.length == 0 && this.workerMasterForm.invalid) {
       this.toastr.error('select all required fields')
@@ -248,32 +224,7 @@ export class WorkerMasterComponent implements OnInit {
     }
 
     let API = 'WorkerMaster/UpdateWorkerMaster/' + this.workerMasterForm.value.WorkerCode
-    let postData = {
-      "MID": this.content.MID,
-      "WORKER_CODE": this.workerMasterForm.value.WorkerCode || "",
-      "DESCRIPTION": this.workerMasterForm.value.WorkerDESCRIPTION || "",
-      "DEPARTMENT_CODE": "",
-      "NETSAL": 0,
-      "PERKS": 0,
-      "GROSSAL": 0,
-      "EXP": 0,
-      "TOTALSAL": 0,
-      "ACCODE": this.workerMasterForm.value.WorkerAcCode || "",
-      "LOSS_ALLOWED": this.workerMasterForm.value.LossAllowed || 0,
-      "SECRET_CODE": this.workerMasterForm.value.Password || "",
-      "PROCESS_CODE": this.workerMasterForm.value.DefaultProcess || "",
-      "TRAY_WEIGHT": this.workerMasterForm.value.TrayWeight || 0,
-      "SUPERVISOR": this.workerMasterForm.value.NameOfSupervisor || "",
-      "ACTIVE": true,
-      "TARGET_WEIGHT": this.workerMasterForm.value.TargetWeight || 0.000,
-      "TARGET_BY": "",
-      "FINGER_ID": "",
-      "TARGET_PCS": this.workerMasterForm.value.TargetPcs || 0,
-      "TARGET_CARAT_WT": this.workerMasterForm.value.TargetCaratWt || 0.000,
-      "TARGET_METAL_WT": this.workerMasterForm.value.TargetMetalWt || 0.000,
-      "WORKER_EXPIRY_DATE": "",
-      "workerDetails": this.selectedProcessArr
-    }
+    let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -366,34 +317,50 @@ export class WorkerMasterComponent implements OnInit {
     });
   }
 
-  printBarcode(){
-    
+  printBarcode() {
+
   }
 
   /**use: checkbox change */
-  changedCheckbox(data: any) {
-    let value = data.selectedRowsData
-    this.selectedProcessArr = []
-    value.forEach((item: any) => {
-      // if (value.SrNo == item.SrNo) {
-        // value.isChecked = !value.isChecked
-        // if (value.isChecked == true) {
-          this.selectedProcessArr.push({
-            "UNIQUEID": 0,
-            "SRNO": item.SRNO,
-            "WORKER_CODE": this.workerMasterForm.value.WorkerCode,
-            "PROCESS_CODE": item.PROCESS_CODE,
-         
+  changedCheckbox(event: any) {
+    this.tableData[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
+  }
+  selectProcessWithSP() {
+    let postData = {
+      "SPID": "049",
+      "parameter": {
+        "WORKER_CODE": this.content.WORKER_CODE || "",
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") { //
+          let data = result.dynamicData[0]
+          data.forEach((item: any, index: any) => {
+            item.SRNO = index + 1
+            if (item.SELECT1 == 1) {
+              item.SELECT1 = true
+            } else {
+              item.SELECT1 = false
+            }
           })
-        // } else if (value.isChecked == false) {
-        //   this.selectedProcessArr = this.selectedProcessArr.filter((element) => element.SRNO != value.SrNo)
-        // }
-        
-      // }
-    })
+          this.tableData = data
+          // this.selectedKey = selecteditem.map((item:any)=> item.SRNO)
+        } else {
+          this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
+            timeOut: 3000,
+          })
+        }
+      }, err => {
+        this.toastr.error('Server Error', '', {
+          timeOut: 3000,
+        })
+      })
+    this.subscriptions.push(Sub)
   }
   /**select process API call */
   selectProcessMasterList() {
+    if (this.content && this.content.FLAG == 'EDIT') return
     if (this.workerMasterForm.value.WorkerCode == '') {
       this.commonService.toastErrorByMsgId('Worker Code Required');
       return
@@ -404,22 +371,18 @@ export class WorkerMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
-          this.tableData = result.response;
-          this.tableData.forEach((item: any, i: any) => {
+          let data = result.response;
+          data.forEach((item: any, i: any) => {
+            item.SELECT1 = false
             item.SRNO = i + 1;
           });
-          this.selectedKey = []
-          if ((this.content.FLAG == 'EDIT' || 'VIEW')) {
-            this.getWorkerMaster()
-          }
+          this.tableData = data
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
-
-
 
   /**use: to check worker exists in db */
   checkWorkerExists(event: any) {

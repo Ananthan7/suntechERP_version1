@@ -1,0 +1,15 @@
+button.touch-big-button {
+    border: none;
+    background: none;
+    padding: 0; 
+    cursor: pointer; 
+  }
+  
+  .touch-big-button-inner {
+    display: flex;
+    align-items: center; 
+  }
+  
+  .touch-big-button-inner span {
+    margin-left: 5px; 
+  }

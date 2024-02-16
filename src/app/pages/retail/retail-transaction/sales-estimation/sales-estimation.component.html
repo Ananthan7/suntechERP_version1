@@ -241,7 +241,7 @@
           "
           *ngIf="invReturnSalesTotalNetTotal != 0"
         >
-          <td colspan="9" style="font-weight: 600">
+          <td colspan="9" style="font-weight: 600;">
             Sales Return : {{ invReturnSalesTotalNetTotal | number : "1.2" }}
           </td>
         </tr>
@@ -315,6 +315,9 @@
 
 <div class="text-right p-2">
   <button type="button" class="btn btn-primary" (click)="addNew()">Add</button>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
   <!-- <zxing-scanner [formats]="['QR_CODE', 'EAN_13', 'CODE_128', 'DATA_MATRIX']" [autostart]="true" [autofocusEnabled]="true"></zxing-scanner> -->
 </div>
 <!-- <div style="height: 15%;"> -->
@@ -347,10 +350,37 @@
   <div class="col-xl-12">
     <form [formGroup]="vocDataForm" style="width: 100%; max-width: none">
       <div class="row" style="background-color: #efefef; margin-bottom: 10px">
+        <div class="col-md-2 m-t-10">
+          <mat-form-field>
+            <mat-label>Voucher</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="vocType"
+              id="voc_type"
+            
+              [readonly]="viewOnly"
+            />
+          </mat-form-field>
+         
+        </div>
+        <!-- <div class="col-md-1 m-t-10">
+          <mat-form-field>
+           
+            <input
+              type="text"
+              matInput
+              formControlName="vocCode"
+              id="voc_code"
+              [readonly]="viewOnly"
+            />
+          </mat-form-field>
+        </div> -->
+        
         <!--- <div class="col-md-3">
                   <h5 style="padding-top:15px;">Point Of Sale</h5>
               </div> -->
-        <div class="col-md-3 m-t-10">
+        <div class="col-md-2 m-t-10">
           <!-- <mat-form-field>
               <input matInput [textMask]="mask" [matDatepicker]="pickers" placeholder="Choose a date">
               <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
@@ -404,18 +434,18 @@
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field> -->
         </div>
-        <div class="col-md-3 m-t-10">
+        <div class="col-md-2">
           <mat-form-field>
             <mat-label>{{ vocno_lbl }}</mat-label>
             <input
               type="text"
               matInput
               formControlName="fcn_voc_no"
-              [readonly]="viewOnly"
+              [readonly]="true"
             />
           </mat-form-field>
         </div>
-        <div class="col-md-3 m-t-10">
+        <div class="col-md-1 m-t-10">
           <mat-form-field>
             <mat-label>{{ sales_person_lbl }}</mat-label>
             <input
@@ -441,6 +471,9 @@
             </mat-autocomplete>
           </mat-form-field>
         </div>
+        <div class="col-md-2 m-t-10">
+          <mat-checkbox formControlName="checkboxFormControl">Component Wise Invoice</mat-checkbox>
+        </div>
 
         <div class="col-md-3" style="background-color: #d6d8da">
           <div class="form-group">
@@ -460,13 +493,15 @@
     </form>
   </div>
 </div>
+
 <div class="row">
+
   <div class="col-xl-9">
     <div style="background-color: #ffffff">
       <div>
         <form
           [formGroup]="customerDataForm"
-          style="width: 100%; max-width: none"
+          style="width:100%; max-width: none"
         >
           <div class="row">
             <div class="col-md-2">
@@ -474,6 +509,7 @@
                 <mat-label>Mobile Number</mat-label>
                 <input
                   type="text"
+                  
                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                   matInput
                   (focusout)="!viewOnly && onCustomerNameFocus()"
@@ -1370,6 +1406,7 @@
                 <td>
                   <input
                     type="text"
+                    style="text-align: right"
                     class="form-control textboxcorner"
                     id=""
                     value="{{ prnt_inv_total_gross_amt | number : '1.2' }}"
@@ -1384,6 +1421,7 @@
                 <td>
                   <input
                     type="text"
+                    style="text-align: right"
                     class="form-control textboxcorner"
                     id=""
                     value="{{ this.order_items_total_tax | number : '1.2' }}"
@@ -1399,6 +1437,7 @@
                 <td>
                   <input
                     type="text"
+                    style="text-align: right"
                     class="form-control textboxcorner"
                     id=""
                     value="{{
@@ -1417,6 +1456,7 @@
                 <td>
                   <input
                     type="text"
+                    style="text-align: right"
                     class="form-control textboxcorner"
                     id=""
                     value="{{ invReturnSalesTotalNetTotal | number : '1.2' }}"
@@ -1431,6 +1471,7 @@
                 <td>
                   <input
                     type="text"
+                    style="text-align: right"
                     class="form-control textboxcorner"
                     id=""
                     value="{{ order_total_exchange | number : '1.2' }}"
@@ -1450,6 +1491,7 @@
                 <td>
                   <input
                     type="text"
+                    style="text-align: right"
                     class="form-control textboxcorner"
                     id=""
                     value="{{
@@ -1475,6 +1517,7 @@
                 <td>
                   <input
                     type="text"
+                    style="text-align: right"
                     class="form-control textboxcorner"
                     id=""
                     value="{{ order_items_total_net_amount | number : '1.2' }}"
@@ -1564,11 +1607,16 @@
             (click)="viewOnly || isSaved ? '' : saveOrder()"
             *ngIf="!viewOnly"
           >
-            <div class="touch-big-button touch-big-button-black">
+            <!-- <div class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
                 <i class="fa fa-save"></i> <span> Save Bill</span>
               </div>
-            </div>
+            </div> -->
+            <button class="touch-big-button touch-big-button-black">
+              <div class="touch-big-button-inner">
+                <i class="fa fa-save"></i> <span> Save Bill</span>
+              </div>
+            </button>
           </div>
 
           <div
@@ -1577,21 +1625,22 @@
             (click)="printInvoice()"
           >
             <!-- *ngIf="!viewOnly" -->
-            <div class="touch-big-button">
+           
+            <button class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
-                <i class="fa fa-print"></i> <span> Print Bill</span>
+                <i class="fa fa-print"></i> <span>Print Bill</span>
               </div>
-            </div>
+            </button>
           </div>
         </div>
 
         <div class="row m-t-10 m-b-20" *ngIf="!viewOnly">
           <div class="col-md-6 col-xl-6" style="padding-right: 5px">
-            <div class="touch-big-button touch-big-button-black">
+            <button class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
-                <i class="fa fa-search"></i> <span> Search</span>
+                <i class="fa fa-search"></i> <span>Search</span>
               </div>
-            </div>
+            </button>
           </div>
 
           <div
@@ -1599,11 +1648,12 @@
             style="padding-left: 5px"
             routerLink="/pos"
           >
-            <div class="touch-big-button">
+
+            <button class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
                 <i class="fa fa-window-close"></i> <span> Cancel Bill</span>
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -3629,7 +3679,7 @@
               <div class="col-md-12">
                 <div class="bg-gray-card">
                   <div class="form-group row">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                       <mat-form-field>
                         <mat-label>Division </mat-label>
                         <input
@@ -3641,10 +3691,11 @@
                         />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-3">
-                      <mat-form-field>
-                        <mat-label>Item Code </mat-label>
-                        <input
+                    <div class="col-md-2">
+                
+                   
+                     
+                        <!-- <input
                           type="text"
                           matInput
                           formControlName="fcn_li_item_code"
@@ -3653,14 +3704,22 @@
                           autofocus
                           (change)="getStockDesc($event)"
                           [readonly]="viewOnly"
-                        />
+                        /> -->
+                        <mat-form-field style="width: 70%;">
+                          <mat-label>Item Code </mat-label>
+                          <input type="text" matInput formControlName="design" />
+                     
+                        </mat-form-field>
+                        <master-search >
+                        </master-search>
+                 
                         <!-- <input type="text" matInput formControlName="fcn_li_item_code" #fcn_li_item_code
                             id="fcn_li_item_code" value="{{ li_item_code_val }}" autofocus
                             (focusout)="getStockDesc($event)" /> -->
-                      </mat-form-field>
+                      
                       <!-- <button><i class="feather icon-camera" (click)="scannerFunc()"></i></button> -->
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                       <mat-form-field>
                         <mat-label>Item Description </mat-label>
                         <input
@@ -3684,6 +3743,9 @@
                         />
                       </mat-form-field>
                     </div>
+                    <div class="col-md-2">
+                      <mat-checkbox formControlName="checkboxFormControl">Inclusive</mat-checkbox>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -3692,11 +3754,12 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <div class="col-md-3">
+                      <div class="col-md-6">
                         <mat-form-field aria-readonly="true">
                           <mat-label>PCs</mat-label>
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -3729,7 +3792,8 @@
                           </mat-error>
                         </mat-form-field>
                       </div>
-                      <div class="col-md-3">
+                     
+                      <div class="col-md-6">
                         <mat-form-field>
                           <mat-label>{{
                             newDictionary?.lblGrossWeight || "Gross Wt"
@@ -3737,6 +3801,7 @@
                           <!-- <mat-label>{{newDictionary?.lblGrossWeight}}</mat-label> -->
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -3769,8 +3834,9 @@
                           </mat-error>
                         </mat-form-field>
                       </div>
+                     
                       <div
-                        class="col-md-3"
+                        class="col-md-6"
                         *ngIf="this.divisionMS == 'S' ? false : true"
                       >
                         <mat-form-field>
@@ -3779,6 +3845,7 @@
                           }}</mat-label>
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -3792,13 +3859,15 @@
                         </mat-form-field>
                       </div>
                       <div
-                        class="col-md-3"
+                        class="col-md-6"
                         *ngIf="this.divisionMS == 'S' ? false : true"
                       >
                         <mat-form-field>
                           <mat-label>Net Wt </mat-label>
                           <input
                             class="st_txt_right"
+                            
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -3820,6 +3889,7 @@
                           <mat-label>Purity </mat-label>
                           <input
                             type="number"
+                            style="text-align: right;"
                             [min]="0"
                             [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -3836,6 +3906,7 @@
                           <mat-label>Pure Weight</mat-label>
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -3857,6 +3928,7 @@
                           <mat-label>Metal Rate</mat-label>
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -3873,6 +3945,7 @@
                           <mat-label>Metal Amount</mat-label>
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -3893,6 +3966,7 @@
                           }}</mat-label>
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -3942,6 +4016,7 @@
                           >
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -3996,6 +4071,7 @@
                           <mat-label>Discount %</mat-label>
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -4013,6 +4089,7 @@
                           <mat-label>Discount Amount</mat-label>
                           <input
                             class="st_txt_right"
+                            style="text-align: right;"
                             type="number"
                             [min]="0"
                             [maxLength]="14"
@@ -4066,6 +4143,7 @@
                         <!-- <mat-label>Gross Amount</mat-label> -->
                         <input
                           class="st_txt_right"
+                          style="text-align: right;"
                           type="number"
                           [min]="0"
                           [maxLength]="14"
@@ -4111,6 +4189,7 @@
                         <mat-label>Tax %</mat-label>
                         <input
                           class="st_txt_right"
+                          style="text-align: right;"
                           type="number"
                           [min]="0"
                           [maxLength]="14"
@@ -4127,6 +4206,7 @@
                         <mat-label>CGST %</mat-label>
                         <input
                           class="st_txt_right"
+                          style="text-align: right;"
                           type="number"
                           [min]="0"
                           [maxLength]="14"
@@ -4144,6 +4224,7 @@
                         <mat-label>Tax Amount</mat-label>
                         <input
                           class="st_txt_right"
+                          style="text-align: right;"
                           type="number"
                           [min]="0"
                           [maxLength]="14"
@@ -4160,6 +4241,7 @@
                         <mat-label>CGST Amount</mat-label>
                         <input
                           class="st_txt_right"
+                          style="text-align: right;"
                           type="number"
                           [min]="0"
                           [maxLength]="14"
@@ -4179,6 +4261,7 @@
                         <!-- <mat-label>Net Amount</mat-label> -->
                         <input
                           class="st_txt_right"
+                          style="text-align: right;"
                           type="number"
                           (focus)="
                             setValToLocalStorage($event, 'fcn_li_net_amount')

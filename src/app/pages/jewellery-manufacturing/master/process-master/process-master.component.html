@@ -54,7 +54,7 @@
                                 <label for="input" class="col-sm-1  col-form-label">Standard
                                     Time * :</label>
                                 <div class="col-sm-6">
-                                    <app-duration-picker [content]="yourContent"
+                                    <app-duration-picker [content]="yourContent" [viewMode]="viewMode"
                                         (updateDuration)="updateStandardTime($event)" [duration2]="standTime"
                                         formControlName="stand_time" [disabled]="viewMode"></app-duration-picker>
                                 </div>
@@ -73,7 +73,7 @@
                                 </div>
                                 <label for="input" class="col-sm-1 col-form-label">Maximum Time* :</label>
                                 <div class="col-sm-6">
-                                    <app-duration-picker [content]="maxContent" [duration1]="maxTime"
+                                    <app-duration-picker [content]="maxContent" [duration1]="maxTime" [viewMode]="viewMode"
                                         (updateDuration)="updateMaximumTime($event)" formControlName="max_time"
                                         [disabled]="viewMode"></app-duration-picker>
                                 </div>
@@ -187,14 +187,15 @@
                                     :</label>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput maxlength="3" style="text-align: right;"
-                                         formControlName="loss_standard" [readonly]="islossReadOnly" />
+                                        <input type="number" matInput  style="text-align: right;"
+                                         formControlName="loss_standard" [readonly]="islossReadOnly"  (input)="onInput($event)"
+                                         />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput maxlength="3" style="text-align: right;"
-                                        [readonly]="viewMode"    formControlName="standard_end" [readonly]="isRecovReadOnly" />
+                                        <input type="number" matInput  style="text-align: right;"
+                                        [readonly]="viewMode"  formControlName="standard_end" [readonly]="isRecovReadOnly"  (input)="onInput($event)" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -205,16 +206,16 @@
                                     :</label>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput maxlength="3" step="0.01" min="0" maxlength="4"
+                                        <input type="number" matInput 
                                         style="text-align: right;" formControlName="loss_min"
-                                            [readonly]="islossReadOnly" />
+                                            [readonly]="islossReadOnly"    (input)="onInput($event)"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="number" matInput maxlength="3" step="0.01" min="0" maxlength="4"
+                                        <input type="number" matInput 
                                         style="text-align: right;" formControlName="min_end"
-                                            [readonly]="isRecovReadOnly" />
+                                            [readonly]="isRecovReadOnly"   (input)="onInput($event)"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -226,7 +227,7 @@
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 100%;">
                                         <input type="number" matInput maxlength="3" formControlName="loss_max"
-                                         style="text-align: right;" [readonly]="islossReadOnly" />
+                                         style="text-align: right;" [readonly]="islossReadOnly"   (input)="onInput($event)" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -237,7 +238,7 @@
                                     Code :</label>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="number" matInput  formControlName="accountStart"
+                                        <input type="text" matInput  formControlName="accountStart"
                                             [readonly]="islossReadOnly" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="accountStartData" *ngIf="viewMode == false"
@@ -246,7 +247,7 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="number" matInput  formControlName="accountMiddle"
+                                        <input type="text" matInput  formControlName="accountMiddle"
                                             [readonly]="isRecovReadOnly" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="accountMiddleData" *ngIf="viewMode == false"
@@ -255,7 +256,7 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="number" matInput  formControlName="accountEnd"
+                                        <input type="text" matInput  formControlName="accountEnd"
                                             [readonly]="isAlloWGainReadOnly" />
                                     </mat-form-field>
                                     <master-search [MasterSearchData]="accountEndData" *ngIf="viewMode == false"

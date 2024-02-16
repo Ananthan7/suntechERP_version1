@@ -62,7 +62,7 @@
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceCodeSelected($event, 'price3')">
+                                            (newRowClick)="priceCodeSelected($event, 'price3')" *ngIf="price3SearchEnable == true">
                                         </master-search>
                                     </div>
                                     <label for="inputPassword"
@@ -75,7 +75,7 @@
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceCodeSelected($event, 'price5')">
+                                            (newRowClick)="priceCodeSelected($event, 'price5')" *ngIf="price5SearchEnable == true">
                                         </master-search>
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceCodeSelected($event, 'price2')">
+                                            (newRowClick)="priceCodeSelected($event, 'price2')" *ngIf="price2SearchEnable == true">
                                         </master-search>
                                     </div>
                                     <label for="inputPassword"
@@ -103,7 +103,7 @@
                                         </mat-form-field>
                                         <master-search
                                             [MasterSearchData]="priceCodeData"
-                                            (newRowClick)="priceCodeSelected($event, 'price4')">
+                                            (newRowClick)="priceCodeSelected($event, 'price4')" *ngIf="price4SearchEnable == true">
                                         </master-search>
                                     </div>
                                 </div>

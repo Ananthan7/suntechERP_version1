@@ -2,33 +2,32 @@
     <div class="row mb-3">
 
         <div class="col-md-2">
-            <!-- <label for="example-search-input" class="col-md-12 col-form-label">Days</label> -->
-
+        
             <div class="col-md-12">
                 <ng-select [items]="days" bindLabel="name" bindValue="value" formControlName="days"
-                    (change)="getDays($event)"></ng-select>
+                    (change)="getDays($event)" [readonly]="viewMode"></ng-select>
             </div>
         </div>
 
         <div class="col-md-2">
-            <!-- <label for="input" class="col-sm-6 col-form-label">Hours</label> -->
 
             <div class="col-md-12">
                 <ng-select [items]="minutes" bindLabel="name" bindValue="value" formControlName="hours"
-                    (change)="getHours($event)">
+                    (change)="getHours($event)" [readonly]="viewMode">
                 </ng-select>
             </div>
         </div>
 
         <div class="col-md-2">
-            <!-- <label for="input" class="col-sm-6 col-form-label">Mins</label> -->
 
             <div class="col-md-12">
                 <ng-select [items]="seconds" bindLabel="name" bindValue="value" formControlName="minutes"
-                    (change)="getMinutes($event)">
+                    (change)="getMinutes($event)" [readonly]="viewMode">
                 </ng-select>
             </div>
-
+        </div>
+        <div class="col-md-2">
+        <label class="col-md-12 col-form-label">(D:H:M)</label>
         </div>
     </div>
 </form>

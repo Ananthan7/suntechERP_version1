@@ -17,6 +17,9 @@ export class DurationPickerComponent implements OnInit {
   @Input() content!: any;
   @Input() duration1!: any;
   @Input() duration2!: any;
+  @Input() viewMode:  boolean = false;
+  
+
   @Output() updateDuration = new EventEmitter<any>();
   durationPickerForm!: FormGroup;
 
@@ -28,7 +31,7 @@ export class DurationPickerComponent implements OnInit {
   daystime2: any;
   hoursTime2: any;
   minutesTime2: any;
-
+  //viewMode: boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal,

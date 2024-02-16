@@ -171,9 +171,34 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(e.PRICE_CODE);
   }
 
-  addTableData(){ 
+  addTableData() {
   
-  }
+   
+    
+  
+      let srno = length + 1;
+      let data = {
+        "Div": "",
+        "Components": "",
+        "Location": "",
+        "Kt": "",
+        "Purity": "",
+        "Pcs": "",
+        "Weight": "",
+        "Rate": "",
+        "Amount": "",
+        "Sieve": "",
+        "Shape": "",
+      };
+      this.tableData.push(data);
+      
+      // Update SRNO and set isDisabled for each item
+      this.tableData.forEach((item, i) => {
+        item.SRNO = i + 1;
+        item.isDisabled = true;
+      });
+  
+    }
   
   deleteTableData(){
    

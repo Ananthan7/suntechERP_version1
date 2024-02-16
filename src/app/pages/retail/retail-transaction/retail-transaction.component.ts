@@ -20,6 +20,8 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { map, pairwise, startWith, filter } from 'rxjs/operators';
 import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
+import { OrderLockUnlockComponent } from './order-lock-unlock/order-lock-unlock.component';
+import { PosSalesmanTargetAnalysisComponent } from './pos-salesman-target-analysis/pos-salesman-target-analysis.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -118,6 +120,10 @@ export class RetailTransactionComponent implements OnInit {
       'PointOfSalesOrderComponent': PointOfSalesOrderComponent,
       'PosPurchaseDirectComponent': PosPurchaseDirectComponent,
       'SchemeReceiptComponent': SchemeReceiptComponent,
+      'OrderLockUnlockComponent': OrderLockUnlockComponent,
+      'PosSalesmanTargetAnalysisComponent': PosSalesmanTargetAnalysisComponent,
+
+      
 
       // Add components and update in operationals > menu updation grid form component name
     }
@@ -129,7 +135,7 @@ export class RetailTransactionComponent implements OnInit {
     const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
       size: 'xl',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       windowClass: 'modal-full-width'
     });
 
@@ -181,7 +187,7 @@ export class RetailTransactionComponent implements OnInit {
         {
           size: "lg",
           backdrop: true,
-          keyboard: false,
+          keyboard: true,
           windowClass: "modal-full-width",
         }
       );
