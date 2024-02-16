@@ -7,6 +7,9 @@ import { RetailAdvanceReceiptRegisterComponent } from './retail-advance-receipt-
 import { PosCustomerFeedbackFollowupComponent } from './pos-customer-feedback-followup/pos-customer-feedback-followup.component';
 import { PosCustomerFeedbackActionComponent } from './pos-customer-feedback-action/pos-customer-feedback-action.component';
 import { RetailSalesKaratWiseProfitComponent } from './retail-sales-karat-wise-profit/retail-sales-karat-wise-profit.component';
+import { PosCrmDashboardComponent } from './pos-crm-dashboard/pos-crm-dashboard.component';
+import { FestivalSalesComparisonComponent } from './festival-sales-comparison/festival-sales-comparison.component';
+import { PosTargetDashboardComponent } from './pos-target-dashboard/pos-target-dashboard.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -52,7 +55,9 @@ export class RetailReportsComponent implements OnInit {
       'PosCustomerFeedbackFollowupComponent': PosCustomerFeedbackFollowupComponent,
       'PosCustomerFeedbackActionComponent': PosCustomerFeedbackActionComponent,
       'RetailSalesKaratWiseProfitComponent': RetailSalesKaratWiseProfitComponent,
-      
+      'PosCrmDashboardComponent': PosCrmDashboardComponent,
+      'FestivalSalesComparisonComponent': FestivalSalesComparisonComponent,
+      'PosTargetDashboardComponent': PosTargetDashboardComponent,  
       
   
       // Add components and update in operationals > menu updation grid form component name

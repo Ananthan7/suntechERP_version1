@@ -1,1 +1,126 @@
-<p>pos-crm-dashboard works!</p>
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS CRM Dashboard</h5>
+    <button type="button" class="btn btn-close close-btn">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+
+
+<div class="row">
+    <div>
+        <div class="container-fluid pt-3">
+            <div class="row mb-12">
+                <h6>Branch</h6>
+            </div>
+            <div class="check_radio_btn">
+                <div class="row">
+                    <div class="row mb-12">
+                        <label for="input" class="col-sm-1 col-form-label">Festival</label>
+                        <div class="col-sm-2">
+                            <div class="datepick">
+                                <mat-form-field style="width: 100%">
+                                    <input matInput DateValidation [matDatepicker]="jobdate" formControlName="jobdate"
+                                        placeholder="DD/MM/YYYY" />
+                                    <mat-datepicker-toggle matSuffix [for]="jobdate"></mat-datepicker-toggle>
+                                    <mat-datepicker #jobdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="input" class="col-sm-1 col-form-label"></label>
+                        </div>
+                        <div class="col-sm-3">
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin">Show Buying Pattern Summary By
+                                </mat-checkbox>
+                            </section>
+                        </div>
+                        <div class="col-sm-3">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="jobno" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row mb-12">
+                        <label for="input" class="col-sm-1 col-form-label">Date Range</label>
+                        <div class="col-sm-2">
+                            <div class="datepick">
+                                <mat-form-field style="width: 100%">
+                                    <input matInput DateValidation [matDatepicker]="jobdate" formControlName="jobdate"
+                                        placeholder="DD/MM/YYYY" />
+                                    <mat-datepicker-toggle matSuffix [for]="jobdate"></mat-datepicker-toggle>
+                                    <mat-datepicker #jobdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="datepick">
+                                <mat-form-field style="width: 100%">
+                                    <input matInput DateValidation [matDatepicker]="jobdate" formControlName="jobdate"
+                                        placeholder="DD/MM/YYYY" />
+                                    <mat-datepicker-toggle matSuffix [for]="jobdate"></mat-datepicker-toggle>
+                                    <mat-datepicker #jobdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <label for="input" class="col-sm-3 col-form-label">Diamond Section</label>
+                        <div class="col-sm-2">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput formControlName="orderType" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row mb-12">
+                        <label for="input" class="col-sm-1 col-form-label">Division</label>
+                        <div class="col-sm-2">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput formControlName="orderType" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="input" class="col-sm-1 col-form-label"></label>
+                        </div>
+                        <label for="input" class="col-sm-3 col-form-label">Metal</label>
+                        <div class="col-sm-2">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput formControlName="orderType" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="p-2 bd-highlight">
+                                <button type="button" class="btn btn-primary metal-issue-add-btn">
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mt-3">
+            <mat-tab-group style="background-color: #f5f2ee;">
+                <mat-tab label="Customer Details">
+                    <dx-data-grid></dx-data-grid>
+
+
+                </mat-tab>
+                <mat-tab label="Summary">
+
+                </mat-tab>
+                <mat-tab label="Sales Suggestion(Diamond Jew)">
+
+                </mat-tab>
+                <mat-tab label="Sales Suggestion(Metal Jew)">
+
+                </mat-tab>
+            </mat-tab-group>
+
+        </div>
+
+    </div>
+</div>
