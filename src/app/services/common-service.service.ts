@@ -881,14 +881,14 @@ export class CommonServiceService {
   }
   addMonthsToDate(startDate: any, numberOfMonths: number) {
     const endDate = new Date(startDate);
-    const newMonth = endDate.getMonth() + numberOfMonths;
+    const newMonth = startDate.getMonth() + numberOfMonths;
     
     // Adjust for cases where adding/subtracting months might affect the year
     endDate.setMonth(newMonth);
     // If the new month is greater than 11 (December), we need to adjust the year
     if (newMonth > 11) {
       const yearDiff = Math.floor(newMonth / 12);
-      endDate.setFullYear(endDate.getFullYear() + yearDiff);
+      endDate.setFullYear(startDate.getFullYear() + yearDiff);
       endDate.setMonth(newMonth % 12); // Set the month back to 0-based index
     }
 
@@ -896,7 +896,7 @@ export class CommonServiceService {
   }
   addWeeksToDate(startDate: Date, numberOfWeeks: number) {
     const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + numberOfWeeks * 7);
+    endDate.setDate(startDate.getDate() + numberOfWeeks * 7);
     return endDate;
   }
   commaSeperation(data: any) {
