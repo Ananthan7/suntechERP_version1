@@ -148,12 +148,16 @@ export class MasterSearchComponent implements OnInit {
   }
   onHidePanel(){
     if(this.MasterSearchData.SEARCH_VALUE != ''){
+      this.currentPage = 1
+      this.MasterSearchData.PAGENO = 1
       this.MasterSearchData.LOAD_ONCLICK = true
     }
     this.MasterSearchData.SEARCH_VALUE = ''
   }
   closeOverlayPanel() {
     if(this.MasterSearchData.SEARCH_VALUE != ''){
+      this.currentPage = 1
+      this.MasterSearchData.PAGENO = 1
       this.MasterSearchData.LOAD_ONCLICK = true
     }
     this.MasterSearchData.SEARCH_VALUE = ''

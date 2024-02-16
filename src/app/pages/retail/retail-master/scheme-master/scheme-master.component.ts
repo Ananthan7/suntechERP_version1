@@ -42,12 +42,12 @@ export class SchemeMasterComponent implements OnInit {
 
   schemeMasterForm: FormGroup = this.formBuilder.group({
     mid: [""],
-    code: ["",Validators.required],
+    code: ["", Validators.required],
     branch: [""],
     prefix: [""],
     description: [""],
-    frequency: ["",Validators.required],
-    tenurePeriod: ["",Validators.required],
+    frequency: ["", Validators.required],
+    tenurePeriod: ["", Validators.required],
     installmentAmount: [""],
     bonusInstallment: [""],
     receiptModeone: [""],
@@ -73,9 +73,10 @@ export class SchemeMasterComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    this.setInitialValues()
     this.getAllSelectOptions()
     if (this.content) {
+      this.setInitialValues()
+    } else {
       this.setFormValues()
     }
   }
@@ -86,13 +87,16 @@ export class SchemeMasterComponent implements OnInit {
         this.frequencyList = resp.response
       }
     });
+    this.subscriptions.push(sub);
+
     let depositinAPI = 'ComboFilter/scheme%20type';
     let subs: Subscription = this.dataService.getDynamicAPI(depositinAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {
-        this.depositinList = resp.response.filter((item:any)=> item.ENGLISH == 'AMOUNT')
+        this.depositinList = resp.response.filter((item: any) => item.ENGLISH == 'AMOUNT')
         this.schemeMasterForm.controls.depositIn.setValue('AMOUNT')
       }
     });
+    this.subscriptions.push(subs);
 
     let receiptAPI = 'CreditCardMaster/GetReceiptModes/3/' + this.branchCode;
     let receipts1: Subscription = this.dataService.getDynamicAPI(receiptAPI).subscribe((resp: any) => {
@@ -100,6 +104,7 @@ export class SchemeMasterComponent implements OnInit {
         this.receipt1List = resp.response
       }
     });
+    this.subscriptions.push(receipts1);
 
     let receiptAPI2 = 'CreditCardMaster/GetReceiptModes/2/' + this.branchCode;
     let receipts2: Subscription = this.dataService.getDynamicAPI(receiptAPI2).subscribe((resp: any) => {
@@ -107,6 +112,7 @@ export class SchemeMasterComponent implements OnInit {
         this.receipt2List = resp.response
       }
     });
+    this.subscriptions.push(receipts2);
   }
   getSchemeMasterList(event: any) {
     if (event.target.value == "") return;
@@ -124,7 +130,7 @@ export class SchemeMasterComponent implements OnInit {
       });
     this.subscriptions.push(Sub);
   }
-  setInitialValues() {
+  setFormValues() {
     this.schemeMasterForm.controls.startDate.setValue(this.currentDate)
   }
 
@@ -189,7 +195,7 @@ export class SchemeMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   };
 
-  setPostData(){
+  setPostData() {
     return {
       "MID": this.content?.MID || 0,
       "BRANCH_CODE": this.comService.nullToString(this.branchCode),
@@ -213,7 +219,7 @@ export class SchemeMasterComponent implements OnInit {
       "SCHEME_FIXEDAMT": this.schemeMasterForm.value.SCHEMEFIXEDAMT
     }
   }
-  setFormValues() {
+  setInitialValues() {
     if (!this.content) return
     console.log(this.content);
     this.schemeMasterForm.controls.mid.setValue(this.content.MID);
@@ -221,7 +227,7 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.description.setValue(this.content.SCHEME_NAME);
     this.schemeMasterForm.controls.remarks.setValue(this.content.SCHEME_REMARKS);
     this.schemeMasterForm.controls.frequency.setValue(this.content.SCHEME_FREQUENCY);
-    this.schemeMasterForm.controls.startDate.setValue(this.content.START_DATE);
+    this.schemeMasterForm.controls.startDate.setValue(this.content.START_DATE)
     this.schemeMasterForm.controls.prefix.setValue(this.content.PREFIX_CODE);
     this.schemeMasterForm.controls.installmentAmount.setValue(this.content.SCHEME_AMOUNT);
     this.schemeMasterForm.controls.cancelCharges.setValue(this.content.CANCEL_CHARGE);
@@ -236,7 +242,17 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.depositIn.setValue(this.content.DEPOSIT_IN);
     // this.schemeMasterForm.controls.SCHEME_METALCURRENCY.setValue(this.content.depositIn);
   }
-
+  prefixCodeValidate() {
+    let API = 'PrefixMaster/GetPrefixMasterDetail/' + this.schemeMasterForm.value.prefix
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((resp: any) => {
+        if (resp.status == 'Failed') {
+          this.comService.toastErrorByMsgId('Prefix code not found')
+          this.schemeMasterForm.controls.prefix.setValue('')
+        }
+      });
+    this.subscriptions.push(Sub);
+  }
   update() {
     if (this.schemeMasterForm.invalid) {
       this.toastr.error('select all required fields')

@@ -29,6 +29,7 @@
                         <label class="col-form-label m-2">Prefix</label>
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput
+                                (focusout)="prefixCodeValidate()"
                                 formControlName="prefix" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="prefixCodeData"

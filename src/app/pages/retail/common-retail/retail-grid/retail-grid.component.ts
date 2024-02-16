@@ -213,6 +213,9 @@ export class RetailGridComponent implements OnInit {
             this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_METALCURRENCY')
             this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_UNIT')
           }
+          if(this.vocType == 'SCR'){            
+            this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
+          }
           let headers = Object.keys(this.orderedItems[0]);
           this.orderedItemsHead = this.filterArrayValues(headers, 'MID')
           // this.ChangeDetector.detectChanges()
