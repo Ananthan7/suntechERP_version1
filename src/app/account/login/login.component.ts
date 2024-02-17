@@ -86,8 +86,7 @@ export class LoginComponent implements OnInit {
     // }
   }
   ngOnInit() {
-
-
+    this.getYearMonthAPI()
   }
 
   private _filter(value: string): string[] {
@@ -242,6 +241,22 @@ export class LoginComponent implements OnInit {
     }
 
   }
+  yearSelected: any = ''
+  getYearMonthAPI(){
+    let API = 'BaseFinanceYear/GetBaseFinancialYear'
+    let yr = this.comService.currentDate
+    let param = {
+      VOCDATE: this.comService.formatYYMMDD(yr)
+    }
+    let sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+    .subscribe((resp: any) => {
+      if (resp.status == "Success") {
+        this.yearSelected = resp.BaseFinancialyear
+        localStorage.setItem('YEAR', this.yearSelected);
+      }
+    });
+    this.subscriptions.push(sub)
+  }
   /**USE: sign in with API branchmaster */
   signin() {
     let branch = this.dataForm.value.branch;
@@ -265,7 +280,6 @@ export class LoginComponent implements OnInit {
             // localStorage.setItem('currentUser', JSON.stringify(this.userDetails));
             localStorage.setItem('username', this.user_name);
             localStorage.setItem('userbranch', branch);
-            localStorage.setItem('YEAR', year);
             console.log('fired2');
 
             // this.getBranchCurrencyMaster();
