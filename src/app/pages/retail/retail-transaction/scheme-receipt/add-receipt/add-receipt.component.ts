@@ -248,8 +248,6 @@ export class AddReceiptComponent implements OnInit {
   }
   //USE to get HSN and VAT and calculations
   getTaxDetails() {
-    console.log(this.content, 'fired');
-
     let date = this.commonService.formatDate(new Date())
     let accountCode = this.content.PartyCode
     if (!accountCode) {
@@ -263,7 +261,7 @@ export class AddReceiptComponent implements OnInit {
 
           this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_SAC_CODE);
           this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER);
-          this.content.SCHEME_AMOUNT = 100 //TODO
+          // this.content.SCHEME_AMOUNT = 100 //TODO
           console.log(this.content.SCHEME_AMOUNT, 'this.content.SCHEME_AMOUNT ');
 
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)

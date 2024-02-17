@@ -120,7 +120,7 @@ export class SchemeReceiptComponent implements OnInit {
     POSCustomerEmail: [""],
     Narration: [""],
     MID: [""],
-    SCHEME_AMOUNT: [""],
+    SCHEME_AMOUNT: [0],
   });
   private subscriptions: Subscription[] = [];
   constructor(
@@ -137,7 +137,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.content) {
+    if (!this.content) {
       this.fetchPartyCode();
       this.setCompanyCurrency();
     }
@@ -159,7 +159,6 @@ export class SchemeReceiptComponent implements OnInit {
       this.receiptDetailsForm.controls.RefDate.setValue(this.currentDate);
       return
     }
-    console.log(this.content, 'content');
     this.receiptDetailsForm.controls.Branch.setValue(this.commonService.nullToString(this.content.BRANCH_CODE));
     this.receiptDetailsForm.controls.VocType.setValue(this.commonService.nullToString(this.content.VOCTYPE));
     this.receiptDetailsForm.controls.VocDate.setValue(this.content.VOCDATE);
@@ -214,7 +213,7 @@ export class SchemeReceiptComponent implements OnInit {
   getDetailsForEdit(MID: any) {
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(`SchemeCurrencyReceipt/${MID}`)
-    .subscribe((resp: any) => {
+      .subscribe((resp: any) => {
         this.commonService.closeSnackBarMsg;
         if (resp.response) {
           if (resp.response) {
@@ -239,10 +238,10 @@ export class SchemeReceiptComponent implements OnInit {
             }
           );
         }
-      },(err) => {
+      }, (err) => {
         this.commonService.closeSnackBarMsg;
       }
-    );
+      );
     this.subscriptions.push(Sub);
   }
   //date validation
@@ -365,44 +364,21 @@ export class SchemeReceiptComponent implements OnInit {
       (result) => {
         if (result.response) {
           let data = result.response;
-          console.log(data,' schemeid api response');
-          
-          if (result.response.length > 0) {
-            if (data[0].SCHEME_ID != "") {
-              this.receiptDetailsForm.controls.SchemeID.setValue(data[0].SCH_SCHEME_CODE)
-              this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data[0].SCH_CUSTOMER_ID)
-              this.newReceiptData.SCHEME_AMOUNT = data[0]?.PAY_AMOUNTFC
-              this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(
-                this.commonService.emptyToZero(data[0].PAY_AMOUNTFC)
-              )
-            } else {
-              this.receiptDetailsForm.controls.SchemeID.setValue("");
-              this.receiptDetailsForm.controls.SchemeUniqueID.setValue("");
-              this.toastr.error(
-                "Scheme Not found",
-                result.Message ? result.Message : "",
-                {
-                  timeOut: 2000,
-                }
-              );
-            }
-          }
+          this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_SCHEME_CODE)
+          this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data.SCH_CUSTOMER_ID)
+          this.newReceiptData.SCHEME_AMOUNT = data?.PAY_AMOUNTFC
+          console.log(data.PAY_AMOUNTFC, '....................');
+
+          this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(
+            this.commonService.emptyToZero(data.PAY_AMOUNTFC)
+          )
         } else {
           this.receiptDetailsForm.controls.SchemeID.setValue("");
           this.receiptDetailsForm.controls.SchemeUniqueID.setValue("");
-          this.toastr.error(
-            "",
-            result.Message ? result.Message : "Scheme Not found",
-            {
-              timeOut: 2000,
-            }
-          );
+          this.commonService.toastErrorByMsgId(result.Message ? result.Message : "Scheme Not found");
         }
       },
-      (err) =>
-        this.toastr.error("Server Error", "", {
-          timeOut: 3000,
-        })
+      (err) => this.commonService.toastErrorByMsgId("Server Error")
     );
     this.subscriptions.push(Sub);
   }
@@ -423,10 +399,7 @@ export class SchemeReceiptComponent implements OnInit {
           }
         }
       },
-      (err) =>
-        this.toastr.error("Server Error", "", {
-          timeOut: 3000,
-        })
+      (err) => this.commonService.toastErrorByMsgId("Server Error")
     );
     this.subscriptions.push(Sub);
   }
@@ -950,7 +923,7 @@ export class SchemeReceiptComponent implements OnInit {
       return;
     }
     console.log(this.receiptDetailsForm.value);
-    
+
     let postData = {
       "MID": 1,
       "BRANCH_CODE": this.receiptDetailsForm.value.Branch || "",
@@ -1057,11 +1030,11 @@ export class SchemeReceiptComponent implements OnInit {
         } else {
           this.toastr.error(
             "Not saved try again", "", {
-              timeOut: 3000,
-            }
+            timeOut: 3000,
+          }
           );
         }
-      },(err) => {
+      }, (err) => {
         this.commonService.closeSnackBarMsg;
       });
   }

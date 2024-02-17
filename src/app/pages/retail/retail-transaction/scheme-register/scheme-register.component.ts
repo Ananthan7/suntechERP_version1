@@ -194,7 +194,7 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.Units.setValue(data.SCH_UNITS)
           this.schemeRegistrationForm.controls.SendAlert.setValue(data.SCH_SEND_ALERT)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCH_SCHEME_PERIOD)
-          this.schemeRegistrationForm.controls.Frequency.setValue(data.SCH_METALCURRENCY)
+          this.schemeRegistrationForm.controls.Frequency.setValue(data.SCH_FREQUENCY)
           this.schemeRegistrationForm.controls.InstallmentAmount.setValue(data.SCH_INST_AMOUNT_CC)
           this.schemeRegistrationForm.controls.CancellationCharge.setValue(data.SCH_CANCEL_AMT)
           this.schemeRegistrationForm.controls.SumAssured.setValue(data.SCH_ASSURED_AMT_FC)
