@@ -21,28 +21,41 @@
                         autocomplete="off">
                         <div class="row justify-content-center">
                             <div class="col-md-8">
-                                <div class="mb-1">
+                               
+
+                                <div class="">
                                     <label for="input"
                                         class=" col-form-label">Username</label>
-                                    <mat-form-field style="width: 100%;">
+                                    <!-- <mat-form-field appearance="outline" style="width: 100%;">
                                         <input matInput  value
                                             (keyup)="changeTextUpperCase($event)"
                                             (focusout)="checkUserName($event)">
+                                    </mat-form-field> -->
+                                    <mat-form-field appearance="outline"  style="width: 100%;">
+                                        <!-- <mat-label>Outline form field</mat-label> -->
+                                        <!-- <input matInput placeholder="Placeholder"> -->
+                                        <input matInput  value
+                                            (keyup)="changeTextUpperCase($event)"
+                                            (focusout)="checkUserName($event)">
+                                        <!-- <mat-icon matPrefix class="srchicon">search</mat-icon> -->
+                                        <mat-icon matPrefix class="person">person</mat-icon>
                                     </mat-form-field>
                                 </div>
-                                <div class="mb-1">
+                                <div class="">
                                     <label for="input"
                                         class=" col-form-label">Password</label>
-                                    <mat-form-field style="width: 100%;">
+                                    <mat-form-field appearance="outline" style="width: 100%;">
                                         <input id="password" type="password"
                                             matInput   value
                                             (focusout)="checkUserNamePassword($event)">
+                                        <mat-icon matPrefix class="lock">lock</mat-icon>
                                     </mat-form-field>
+                                    
                                 </div>
-                                <div class="mb-1">
+                                <div class="">
                                     <label for="input"
                                         class=" col-form-label">Branch</label>
-                                    <mat-form-field style="width: 100%;">
+                                    <mat-form-field appearance="outline" style="width: 100%;">
                                         <input id="branch" type="text"
                                             autocomplete="new-password"
                                             matInput
@@ -59,12 +72,13 @@
                                                 {{option}}
                                             </mat-option>
                                         </mat-autocomplete>
+                                        <mat-icon matPrefix class="webhook">webhook</mat-icon>
                                     </mat-form-field>
                                 </div>
-                                <div class="mb-1">
+                                <div class="">
                                     <label for="input"
                                         class=" col-form-label">Year</label>
-                                    <mat-form-field style="width: 100%;">
+                                    <mat-form-field appearance="outline" style="width: 100%;">
                                         <input id="year" matInput type="text"
                                             formControlName="year"
                                             [matAutocomplete]="year"
@@ -78,6 +92,7 @@
                                                 {{option}}
                                             </mat-option>
                                         </mat-autocomplete>
+                                        <mat-icon matPrefix class="date_range">date_range</mat-icon>
                                     </mat-form-field>
                                 </div>
                                 <div class="my-2">
@@ -97,60 +112,74 @@
                                         (click)="signin()">Sign In</button>
                                 </div>
                             </div>
-                        </div>
-                        <!-- <mat-form-field class="example-full-width">
-                            <mat-label>Username</mat-label>
-                            <input matInput placeholder="Username" value
-                                (keyup)="changeTextUpperCase($event)"
-                                (focusout)="checkUserName($event)">
-                        </mat-form-field>
+                        </div> 
+                        <!-- <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Outline form field</mat-label>
+                                    <input matInput placeholder="Placeholder">
+                                    <mat-icon
+                                        matSuffix>sentiment_very_satisfied</mat-icon>
+                                    <mat-hint>Hint</mat-hint>
+                                </mat-form-field>
 
-                        <mat-form-field class="example-full-width">
-                            <mat-label>Password</mat-label>
-                            <input id="password" type="password" matInput
-                                placeholder="Password"
-                                value
-                                (focusout)="checkUserNamePassword($event)">
-                        </mat-form-field>
-                        <mat-form-field class="example-full-width">
-                            <mat-label>Branch</mat-label>
-                            <input id="branch" type="text"
-                                autocomplete="new-password"
-                                matInput
-                                formControlName="branch"
-                                [matAutocomplete]="branch"
-                                (keyup)="changeBranchText($event)"
-                                (focusout)="changeBranch($event)">
-                            <mat-autocomplete #branch="matAutocomplete"
-                                autoActiveFirstOption>
-                                <mat-option
-                                    *ngFor="let option of  filteredOptions | async"
-                                    [value]="option">
-                                    {{option}}
-                                </mat-option>
-                            </mat-autocomplete>
-                        </mat-form-field>
-                        <mat-form-field class="example-full-width">
-                            <mat-label>Year</mat-label>
-                            <input id="year" matInput type="text"
-                                formControlName="year"
-                                [matAutocomplete]="year"
-                                (focusout)="validateYear($event)">
-                            <mat-autocomplete #year="matAutocomplete"
-                                autoActiveFirstOption>
-                                <mat-option
-                                    *ngFor="let option of  filteredOptions_year | async"
-                                    [value]="option">
-                                    {{option}}
-                                </mat-option>
-                            </mat-autocomplete>
-                        </mat-form-field> -->
-                    </form>
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Username</mat-label>
+                                    <input matInput placeholder="Username" value
+                                        (keyup)="changeTextUpperCase($event)"
+                                        (focusout)="checkUserName($event)">
+                                </mat-form-field>
 
-                    <!-- <button class="btn btn-block btn-primary w-100 mb-0"
-                        style="border-radius: 5px !important;"
-                        (click)="signin()">Sign In</button>
-                    <div class="text-center">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Password</mat-label>
+                                    <input id="password" type="password"
+                                        matInput
+                                        placeholder="Password"
+                                        value
+                                        (focusout)="checkUserNamePassword($event)">
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Branch</mat-label>
+                                    <input id="branch" type="text"
+                                        autocomplete="new-password"
+                                        matInput
+                                        formControlName="branch"
+                                        [matAutocomplete]="branch"
+                                        (keyup)="changeBranchText($event)"
+                                        (focusout)="changeBranch($event)">
+                                    <mat-autocomplete #branch="matAutocomplete"
+                                        autoActiveFirstOption>
+                                        <mat-option
+                                            *ngFor="let option of  filteredOptions | async"
+                                            [value]="option">
+                                            {{option}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Year</mat-label>
+                                    <input id="year" matInput type="text"
+                                        formControlName="year"
+                                        [matAutocomplete]="year"
+                                        (focusout)="validateYear($event)">
+                                    <mat-autocomplete #year="matAutocomplete"
+                                        autoActiveFirstOption>
+                                        <mat-option
+                                            *ngFor="let option of  filteredOptions_year | async"
+                                            [value]="option">
+                                            {{option}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                        </div> -->
+                            </form>
+
+                            <!-- <button class="btn btn-block btn-primary w-100 mb-0"
+                                style="border-radius: 5px !important;"
+                                (click)="signin()">Sign In</button> -->
+                    
+                    <!--<div class="text-center">
                         <div class="saprator my-4"><span></span></div>
                         <p class="mb-2 text-muted">Forgot password? <a
                                 style="font-weight: 600;"

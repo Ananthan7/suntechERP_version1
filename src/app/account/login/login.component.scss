@@ -73,16 +73,7 @@
   //   letter-spacing: normal;
   // }
 
-  .mat-form-field-appearance-legacy .mat-form-field-infix {
+  .mat-form-field-appearance-outline .mat-form-field-outline{
     background-color: #fff !important;
-    border-color: #fff !important;
-  }
-
-  .mat-form-field-appearance-legacy .mat-form-field-underline {
-    bottom: 0.25em;
-  }
-
-  .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-    padding-bottom: 0.25em;
   }
 }
