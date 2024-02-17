@@ -887,6 +887,8 @@ export class AddPosComponent implements OnInit {
     // this.vocDataForm.controls['fcn_voc_no'].setValue(randomvocno);
     console.log(randomvocno, 'randomvocno');
 
+    this.customerDetailForm.controls.fcn_mob_code.setValue(this.comFunc.allbranchMaster.MOBILECOUNTRY_CODE);
+
     // this.getArgs();
     this.indexedDb.getAllData('compparams').subscribe((data) => {
       if (data.length > 0) {
@@ -3120,12 +3122,12 @@ export class AddPosComponent implements OnInit {
               this.customerDetails.CODE
             );
 
-            // this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
-            //   this.customerDetails.POSCUSTIDEXP_DATE
-            // );
-            // this.customerDataForm.controls.fcn_customer_exp_date.setValue(
-            //   this.customerDetails.POSCUSTIDEXP_DATE
-            // );
+            this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+              this.customerDetails.POSCUSTIDEXP_DATE
+            );
+            this.customerDataForm.controls.fcn_customer_exp_date.setValue(
+              this.customerDetails.POSCUSTIDEXP_DATE
+            );
 
             // this.snackBar.open('Customer details saved successfully');
             // this.snackBar.dismiss();
