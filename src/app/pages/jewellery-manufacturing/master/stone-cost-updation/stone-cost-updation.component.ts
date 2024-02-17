@@ -446,6 +446,7 @@ export class StoneCostUpdationComponent implements OnInit {
   }
   
   deleteRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.VOCTYPE) {
       Swal.fire({
         title: '',

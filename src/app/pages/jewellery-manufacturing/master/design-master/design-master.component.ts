@@ -1633,6 +1633,7 @@ removedatas(){
 
 
   deleteRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.MID) {
       Swal.fire({
         title: '',

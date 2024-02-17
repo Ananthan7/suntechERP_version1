@@ -937,6 +937,7 @@ export class AlloyMasterComponent implements OnInit {
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.WORKER_CODE) {
       Swal.fire({
         title: '',

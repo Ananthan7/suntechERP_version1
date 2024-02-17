@@ -271,6 +271,7 @@ export class SequenceMasterComponent implements OnInit {
   }
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.SEQ_CODE) {
       Swal.fire({
         title: '',

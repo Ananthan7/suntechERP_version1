@@ -305,6 +305,7 @@ export class MeltingTypeComponent implements OnInit {
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.meltingTypeForm.value.code) {
       Swal.fire({
         title: '',

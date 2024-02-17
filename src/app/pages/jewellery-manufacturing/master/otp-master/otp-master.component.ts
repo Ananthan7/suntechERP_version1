@@ -151,6 +151,7 @@ export class OtpMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   deleteRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.MID) {
       Swal.fire({
         title: '',

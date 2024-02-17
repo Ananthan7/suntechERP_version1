@@ -389,6 +389,7 @@ export class StonePricingMasterComponent implements OnInit {
 
   /**USE: delete worker master from row */
   deleteStonepriceMaster() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.stonePrizeMasterForm.value.price_code) {
       Swal.fire({
         title: '',

@@ -635,19 +635,7 @@ export class ProcessMasterComponent implements OnInit {
 
   /**USE: delete worker master from row */
   deleteProcessMaster() {
-    // if (!this.content.WORKER_CODE) {
-    //   Swal.fire({
-    //     title: '',
-    //     text: 'Please Select data to delete!',
-    //     icon: 'error',
-    //     confirmButtonColor: '#336699',
-    //     confirmButtonText: 'Ok'
-    //   }).then((result: any) => {
-    //     if (result.value) {
-    //     }
-    //   });
-    //   return
-    // }
+    if (this.content && this.content.FLAG == 'VIEW') return
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
