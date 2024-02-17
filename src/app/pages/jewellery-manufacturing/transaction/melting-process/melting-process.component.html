@@ -8,6 +8,15 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true"></modal-header>
 <div class="row">
+  <div class="row mb-2 text-right">
+    <div class="col-md-12">
+        <div class="p-1 bd-highlight">
+            <button type="button" class="btn btn-outline-primary  add-btn"  (click)="addSalesOrder()">
+               Select Sales Order
+            </button>
+        </div>
+    </div>
+</div>
   <div class="col-md-12">
     <form [formGroup]="meltingProcessFrom">
       <div class="container-fluid pt-3">
