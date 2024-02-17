@@ -202,6 +202,7 @@ formatNumber(): void {
   }
 
   formSubmit(){
+    if (this.content && this.content.FLAG == 'VIEW') return
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return

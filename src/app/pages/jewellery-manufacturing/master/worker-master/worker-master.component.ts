@@ -175,7 +175,7 @@ export class WorkerMasterComponent implements OnInit {
   /**USE:  final save API call*/
   formSubmit() {
     this.buttonField = false;
-
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateWorkerMaster()
       return

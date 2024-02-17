@@ -59,7 +59,7 @@ export class OtpMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
   formSubmit(){
-
+    if (this.content && this.content.FLAG == 'VIEW') return
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return

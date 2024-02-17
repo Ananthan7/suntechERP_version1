@@ -69,6 +69,7 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   formSubmit() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateMeltingType()
       return
