@@ -126,7 +126,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    
+    this.setAllInitialValues()
     
   }
   setAllInitialValues() {
@@ -290,7 +290,7 @@ dataTOparent.POSTDATA = []
   let postData = {
     "UNIQUEID": 0,
       "SRNO": 0,
-      "STOCK_CODE": this.comService.nullToString(this.jewelleryaltrationdetailsFrom.value.stockcode),
+      "STOCK_CODE":this.jewelleryaltrationdetailsFrom.value.stockcode,
       "DESCRIPTION": this.jewelleryaltrationdetailsFrom.value.description,
       "PCS": this.jewelleryaltrationdetailsFrom.value.pcs,
       "COSTFC":this.jewelleryaltrationdetailsFrom.value.costFC,

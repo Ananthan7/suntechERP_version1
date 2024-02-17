@@ -187,19 +187,6 @@ export class LabourChargeMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  // metallabourMasterForm
-  stockCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: 'DIVISION_CODE ="txtdivision" and  SUBCODE = 0',
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
 
 
   currencyCodeData: MasterSearchModel = {
@@ -290,6 +277,20 @@ export class LabourChargeMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+  // metallabourMasterForm
+stockCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 23,
+  SEARCH_FIELD: 'STOCK_CODE',
+  SEARCH_HEADING: 'Stock Type',
+  SEARCH_VALUE: '',
+  WHERECONDITION: `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`,
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+  LOAD_ONCLICK:true,
+};
 
 
 
@@ -484,7 +485,10 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   metaldivisionCodeSelected(e: any) {
+    
+    console.log(e);
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
   labouracSelected(e: any) {
@@ -509,6 +513,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
+     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
   currencyCodeSelected(e: any) {
@@ -609,6 +614,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   formSubmit() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updatelabourChargeMaster()
       return
@@ -623,8 +629,8 @@ export class LabourChargeMasterComponent implements OnInit {
     let postData = {
       "MID": 0,
       "SRNO": 0,
-      "CODE": this.diamondlabourMasterForm.value.labour_code || "str",
-      "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description || "str",
+      "CODE": this.diamondlabourMasterForm.value.labour_code || "",
+      "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description || "",
       "LABTYPE": this.diamondlabourMasterForm.value.labourType || "",
       "METHOD": this.diamondlabourMasterForm.value.method || "",
       "DIVISION": this.diamondlabourMasterForm.value.division,
@@ -639,7 +645,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
-      "DIVISION_CODE": this.metallabourMasterForm.value.division || "S",
+      "DIVISION_CODE": this.metallabourMasterForm.value.division || "",
       "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
       "SELLING_PER": this.diamondlabourMasterForm.value.selling,
       "ACCESSORIES": 0,
@@ -759,6 +765,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.WORKER_CODE) {
       Swal.fire({
         title: '',

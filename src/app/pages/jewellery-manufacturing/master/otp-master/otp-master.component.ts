@@ -59,7 +59,7 @@ export class OtpMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
   formSubmit(){
-
+    if (this.content && this.content.FLAG == 'VIEW') return
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
@@ -151,6 +151,7 @@ export class OtpMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   deleteRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.MID) {
       Swal.fire({
         title: '',

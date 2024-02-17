@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -76,33 +76,25 @@ export class ComponentSizeSetComponent implements OnInit {
 
 
   setFormValues() {
-   this.getComponentSizeTypeOptions()
+    this.getComponentSizeTypeOptions()
     if (!this.content) return
     this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE)
     this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION)
-
-
-    // this.dataService.getDynamicAPI('ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/'+this.content.COMPSET_CODE).subscribe((data) => {
-    //   if (data.status == 'Success') {
-
-    //     this.tableData = data.response.detail;
-
-
-    //   }
-    // });
 
   }
 
   componentsizesetmasterForm: FormGroup = this.formBuilder.group({
     code: ['', [Validators.required]],
     description: ['', [Validators.required]],
+    COMPSIZE_CODE: [''],
 
   });
 
   addTableData() {
     this.getComponentSizeTypeOptions()
-    // const compSizeCode = this.componentsizesetmasterForm.value.COMPSIZE_CODE;
-    // const componentDescription = this.componentsizesetmasterForm.value.COMPONENT_DESCRIPTION;
+
+      // Get the default value or select the first option from your dropdown options
+  //let defaultCompSizeCode = this.componentSizeType.length > 0 ? this.componentSizeType[0].COMPSIZE_CODE : "";
 
     let length = this.tableData.length;
     let sn = length + 1;
@@ -115,6 +107,7 @@ export class ComponentSizeSetComponent implements OnInit {
     };
     this.tableData.push(data);
   }
+  
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -171,14 +164,6 @@ export class ComponentSizeSetComponent implements OnInit {
       "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
       "DESCRIPTION": this.componentsizesetmasterForm.value.description || "",
       "detail": this.tableData
-      // {
-      //   "UNIQUEID": 0,
-      //   "SRNO": 0,
-      //   "COMPSIZE_CODE": compSizeCode,
-      //   "COMPONENT_DESCRIPTION": componentDescription,
-      //   "COMPSET_CODE": this.componentsizesetmasterForm.value.code || "",
-      // }
-
     }
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
@@ -205,7 +190,7 @@ export class ComponentSizeSetComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   update() {
     if (this.componentsizesetmasterForm.invalid) {
       this.toastr.error('select all required fields')

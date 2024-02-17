@@ -69,6 +69,7 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   formSubmit() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateMeltingType()
       return
@@ -304,6 +305,7 @@ export class MeltingTypeComponent implements OnInit {
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.meltingTypeForm.value.code) {
       Swal.fire({
         title: '',

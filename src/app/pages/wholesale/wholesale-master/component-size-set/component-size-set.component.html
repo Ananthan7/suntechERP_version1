@@ -75,7 +75,7 @@
             <div *dxTemplate="let data of 'codetemp'">
               <div>
                 <mat-form-field style="width: 85%; margin-left: 7px;">
-                  <mat-select (change)="codetemp($event, data)" *ngIf="componentSizeType.length > 0">
+                  <mat-select (change)="codetemp($event, data)" formControlName="COMPSIZE_CODE" *ngIf="componentSizeType.length > 0">
                     <mat-option *ngFor="let option of componentSizeType" [value]="option.COMPSIZE_CODE"
                       style="width: 100%;">
                       {{ option.COMPSIZE_CODE }}
