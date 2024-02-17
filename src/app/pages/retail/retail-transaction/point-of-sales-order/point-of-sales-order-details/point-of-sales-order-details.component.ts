@@ -30,7 +30,8 @@ export class PointOfSalesOrderDetailsComponent implements OnInit {
     metalAmount:[''],
     StoneAmount:[''],
     StoneRate:[''],
-    customerSampleStock:[false]
+    customerSampleStock:[false],
+    net_amount:['']
   });
 
   constructor(
