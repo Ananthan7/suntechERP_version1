@@ -17,6 +17,7 @@ import themes from 'devextreme/ui/themes';
 })
 export class ApprovalMasterComponent implements OnInit {
 
+
   @Input() content!: any;
   tableData: any[] = [];
   selectedIndexes: any = [];
@@ -175,6 +176,14 @@ export class ApprovalMasterComponent implements OnInit {
   adddata() {
   
     const userCodeValue = this.approvalMasterForm.value.USER_CODE;
+    const mobileCheck = this.approvalMasterForm.value.ORG_MESSAGE;
+    const emailCheck = this.approvalMasterForm.value.EMAIL;
+    const mobilenum = this.approvalMasterForm.value.MOBILE_NO  || "";
+    const emailId = this.approvalMasterForm.value.EMAIL_ID  || "";
+
+
+
+    
   
     if (this.approvalMasterForm.value.code !== "" && this.approvalMasterForm.value.description !== "") {
       let length = this.tableData.length;
@@ -188,11 +197,11 @@ export class ApprovalMasterComponent implements OnInit {
         "APPR_TYPE": 0,
         "APPRREQUIRED": false,
         "ATTACH_REQ": false,
-        "ORG_MESSAGE": false,
-        "EMAIL": false,
+        "ORG_MESSAGE": mobileCheck,
+        "EMAIL": emailCheck,
         "SYS_MESSAGE": false,
-        "EMAIL_ID": "",
-        "MOBILE_NO": "",
+        "EMAIL_ID": emailId,
+        "MOBILE_NO":mobilenum,
       };
       
       this.tableData.push(data);
@@ -243,7 +252,7 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   formSubmit() {
-
+   
     if(this.checkFinalApproval()){
       this.toastr.error('Final Approval Type Not Selected')
       return

@@ -125,65 +125,65 @@ export class MeltingProcessComponent implements OnInit {
     this.meltingProcessFrom.controls.vocType.setValue(this.comService.getqueryParamVocType())
     console.log(this.meltingProcessFrom.value.vocType, 'this is voctype')
     // this.setAllInitialValues = this.dataToParent;
-    this.setAllInitialValues()
-    this.setCompanyCurrency()
-    this.setvalues()
+   // this.setAllInitialValues();
+    // this.setvalues();
+    //this.setCompanyCurrency();
    
   }
   
-  setAllInitialValues() {
-    console.log(this.content)
-    if (!this.content) return
-    let API = `JobMeltingProcessDJ/GetJobMeltingProcessDJWithMID/${this.content.MID}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
-          console.log(data)
-          this.meltingprocessDetailsData = data.Details
-          data.Details.forEach((element:any) => {
-            this.tableData.push({
-              jobno: element.JOB_NUMBER,
-              stockcode: element.STOCK_CODE,
-              process: element.PROCESS_CODE,
-              worker: element.WORKER_CODE,
-              pcs: element.PCS,
-              grossweight: element.GROSS_WT,
-              purity: element.PURITY,
-              pureweight: element.PUREWT,
-              SRNO: element.SRNO,
-              Rate: element.RATE,
-              Amount: element.Amount,
+  // setAllInitialValues() {
+  //   console.log(this.content)
+  //   if (!this.content) return
+  //   let API = `JobMeltingProcessDJ/GetJobMeltingProcessDJWithMID/${this.content.MID}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         let data = result.response
+  //         console.log(data)
+  //         this.meltingprocessDetailsData = data.Details
+  //         data.Details.forEach((element:any) => {
+  //           this.tableData.push({
+  //             jobno: element.JOB_NUMBER,
+  //             stockcode: element.STOCK_CODE,
+  //             process: element.PROCESS_CODE,
+  //             worker: element.WORKER_CODE,
+  //             pcs: element.PCS,
+  //             grossweight: element.GROSS_WT,
+  //             purity: element.PURITY,
+  //             pureweight: element.PUREWT,
+  //             SRNO: element.SRNO,
+  //             Rate: element.RATE,
+  //             Amount: element.Amount,
             
 
-            })
-          });
+  //           })
+  //         });
           
-          this.meltingProcessFrom.controls.voctype.setValue(data.content.VOCTYPE)
-          this.meltingProcessFrom.controls.vocNo.setValue(data.VOCNO)
-          this.meltingProcessFrom.controls.vocdate.setValue(data.VOCDATE)
-          this.meltingProcessFrom.controls.processcode.setValue(data.content.PROCESS_CODE)
-          this.meltingProcessFrom.controls.worker.setValue(data.WORKER_CODE)
-          this.meltingProcessFrom.controls.workerdes.setValue(data.WORKER_DESC)
-          this.meltingProcessFrom.controls.processdes.setValue(data.PROCESS_DESC)
-          this.meltingProcessFrom.controls.jobno.setValue(data.JOB_NUMBER)
-          this.meltingProcessFrom.controls.jobdes.setValue(data.Details[0].JOB_DESCRIPTION)
-          this.meltingProcessFrom.controls.color.setValue(data.COLOR)
-          this.meltingProcessFrom.controls.grossweight.setValue(data.Details[0].GROSS_WT)
-          this.meltingProcessFrom.controls.pureweight.setValue(data.Details[0].PUREWT)
-          this.meltingProcessFrom.controls.pcs.setValue(data.Details[0].PCS)
-          this.meltingProcessFrom.controls.stockcode.setValue(data.Details[0].STOCK_CODE)
-          this.meltingProcessFrom.controls.purity.setValue(data.Details[0].PURITY)
+  //         this.meltingProcessFrom.controls.voctype.setValue(data.content.VOCTYPE)
+  //         this.meltingProcessFrom.controls.vocNo.setValue(data.VOCNO)
+  //         this.meltingProcessFrom.controls.vocdate.setValue(data.VOCDATE)
+  //         this.meltingProcessFrom.controls.processcode.setValue(data.content.PROCESS_CODE)
+  //         this.meltingProcessFrom.controls.worker.setValue(data.WORKER_CODE)
+  //         this.meltingProcessFrom.controls.workerdes.setValue(data.WORKER_DESC)
+  //         this.meltingProcessFrom.controls.processdes.setValue(data.PROCESS_DESC)
+  //         this.meltingProcessFrom.controls.jobno.setValue(data.JOB_NUMBER)
+  //         this.meltingProcessFrom.controls.jobdes.setValue(data.Details[0].JOB_DESCRIPTION)
+  //         this.meltingProcessFrom.controls.color.setValue(data.COLOR)
+  //         this.meltingProcessFrom.controls.grossweight.setValue(data.Details[0].GROSS_WT)
+  //         this.meltingProcessFrom.controls.pureweight.setValue(data.Details[0].PUREWT)
+  //         this.meltingProcessFrom.controls.pcs.setValue(data.Details[0].PCS)
+  //         this.meltingProcessFrom.controls.stockcode.setValue(data.Details[0].STOCK_CODE)
+  //         this.meltingProcessFrom.controls.purity.setValue(data.Details[0].PURITY)
           
           
-        } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
+  //       } else {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('MSG1531')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -228,26 +228,24 @@ export class MeltingProcessComponent implements OnInit {
     console.log(e);
     this.meltingProcessFrom.controls.time.setValue(e.CODE);
   }
-  setCompanyCurrency() {
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    this.meltingProcessFrom.controls.currency.setValue(CURRENCY_CODE);
-    this.setCurrencyRate()
-  }
-  /**USE: to set currency from branch currency master */
-  setCurrencyRate() {
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.meltingProcessFrom.value.currency);
-    if (CURRENCY_RATE.length > 0) {
-      this.meltingProcessFrom.controls.currencyrate.setValue(
-        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-      );
-    } else {
-      this.meltingProcessFrom.controls.currency.setValue('')
-      this.meltingProcessFrom.controls.currencyrate.setValue('')
-      this.commonService.toastErrorByMsgId('MSG1531')
-    }
-  }
-
-
+  // setCompanyCurrency() {
+  //   let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+  //   this.meltingProcessFrom.controls.currency.setValue(CURRENCY_CODE);
+  //   this.setCurrencyRate()
+  // }
+  // /**USE: to set currency from branch currency master */
+  // setCurrencyRate() {
+  //   const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.meltingProcessFrom.value.currency);
+  //   if (CURRENCY_RATE.length > 0) {
+  //     this.meltingProcessFrom.controls.currencyrate.setValue(
+  //       this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+  //     );
+  //   } else {
+  //     this.meltingProcessFrom.controls.currency.setValue('')
+  //     this.meltingProcessFrom.controls.currencyrate.setValue('')
+  //     this.commonService.toastErrorByMsgId('MSG1531')
+  //   }
+  // }
 
 
   meltingProcessFrom: FormGroup = this.formBuilder.group({
@@ -283,6 +281,11 @@ export class MeltingProcessComponent implements OnInit {
     balPure : [''],
     currencyCode: [''],
     currencyRate: [''],
+    remarks: [''],
+    balance: [''],
+    allocated: [''],
+    required: [''],
+    issued: [''],
     
   });
 
@@ -655,6 +658,17 @@ deleteRecord() {
     }
   });
 }
+
+addSalesOrder(){
+  const modalRef: NgbModalRef = this.modalService.open(JobAllocationMeltingComponent,{
+    size: 'xl',
+    backdrop: true,//'static'
+    keyboard: false,
+    windowClass: 'modal-full-width',
+  });
+}
+
+
 }
   
 
