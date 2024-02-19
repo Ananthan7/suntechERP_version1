@@ -250,7 +250,7 @@ removedata(){
       "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency,
       "CC_RATE": 0,
       "MET_RATE_TYPE": this.comService.nullToString(this.jewelleryaltrationFrom.value.metalratetype),
-      "METAL_RATE":this.jewelleryaltrationFrom.value.metalrate,
+      "METAL_RATE":this.comService.emptyToZero(this.jewelleryaltrationFrom.value.metalrate),
       "NAVSEQNO": 0,
       "TOTALPCS": 0,
       "TOTAL_LAB_CHARGECC": 0,
@@ -303,7 +303,7 @@ removedata(){
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if(result.status.trim() == "Success"){
             Swal.fire({
               title: result.message || 'Success',
               text: '',

@@ -4,6 +4,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
   selector: 'app-order-lock-unlock',
@@ -13,7 +14,18 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 export class OrderLockUnlockComponent implements OnInit {
 
   columnhead:any[] = ['NO','BRANCH' ,'VOCTYPE' , 'VOCNO','VOCDATE','YEAR','SALESMAN','PARTY NAME','REMARKS','ORDER AMOUNT'];
-
+  branchCodeData:MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 5,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'Branch Data',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+ 
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,

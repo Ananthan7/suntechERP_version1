@@ -738,14 +738,15 @@ calculateWaxMetal(event: any){
 }
 calculateTreeMode(event: any){
   console.log("output changed: ", event.target.value);
-  var base = event.target.value;
-  var tree = this.castingTreeUpFrom.value.tree;
-  var waxWt = tree - base;
-  this.castingTreeUpFrom.controls.waxWt.setValue(tree - base);
+  var tree = parseFloat(event.target.value); // Parse as float or integer
+  var base = this.castingTreeUpFrom.value.base;
+ 
 
+  this.castingTreeUpFrom.controls.waxWt.setValue(tree - base);
 }
+
 calcualteBaseMode(event: any) {
-  console.log("output changed: ", event.target.value);
+  console.log("output changed1: ", event.target.value);
   var base = event.target.value;
   var tree = this.castingTreeUpFrom.value.tree;
   this.castingTreeUpFrom.controls.waxWt.setValue(tree - base);

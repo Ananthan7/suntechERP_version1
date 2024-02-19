@@ -639,6 +639,7 @@ export class JobcardComponent implements OnInit {
 
 
   formSubmit(){
+    if (this.content && this.content.FLAG == 'VIEW') return
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
@@ -1164,6 +1165,7 @@ export class JobcardComponent implements OnInit {
   }
   
   deleteRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.VOCTYPE) {
       Swal.fire({
         title: '',

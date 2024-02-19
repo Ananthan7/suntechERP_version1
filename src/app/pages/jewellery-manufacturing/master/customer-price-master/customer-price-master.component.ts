@@ -202,6 +202,7 @@ formatNumber(): void {
   }
 
   formSubmit(){
+    if (this.content && this.content.FLAG == 'VIEW') return
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
@@ -462,6 +463,7 @@ formatNumber(): void {
   }
 
   deleteRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.MID) {
       Swal.fire({
         title: '',

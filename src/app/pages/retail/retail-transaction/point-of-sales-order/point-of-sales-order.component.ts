@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PointOfSalesOrderDetailsComponent } from './point-of-sales-order-details/point-of-sales-order-details.component';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
   selector: 'app-point-of-sales-order',
@@ -55,12 +56,18 @@ export class PointOfSalesOrderComponent implements OnInit {
     netTotal:[''],
     receiptTotal:[''],
     refundDue:[''],
+    s_total:['0'],
+    Qty_total:['0.000'],
+    amt_total:['0.00'],
+    disc_total:['0.00'],
+    net_total:['0.00'],
   })
 
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {

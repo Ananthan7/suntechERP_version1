@@ -175,7 +175,7 @@ export class WorkerMasterComponent implements OnInit {
   /**USE:  final save API call*/
   formSubmit() {
     this.buttonField = false;
-
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateWorkerMaster()
       return
@@ -252,6 +252,7 @@ export class WorkerMasterComponent implements OnInit {
   }
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.WORKER_CODE) {
       Swal.fire({
         title: '',

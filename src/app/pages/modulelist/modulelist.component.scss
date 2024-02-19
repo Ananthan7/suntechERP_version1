@@ -494,7 +494,7 @@ li:hover span {
 .div_hover_1 {
   background-color: #FFFFFF;
   padding-left: 0px;
-  width: 236px;
+  width: 268px;
   border-radius: 7px;
 }
 
@@ -532,6 +532,7 @@ li:hover span {
 }
 
 .tx_7{
+  margin-left: 9px;
   padding-right: 74px;
   color: var(--light-black, #5B5B5B);
   text-align: center;
@@ -541,15 +542,20 @@ li:hover span {
   font-weight: 500;
   line-height: normal;
   padding-top: 12px;
+  padding-left: 21px;
 }
 
-
+.div_1{
+  padding-left: 10px;
+}
 
 .i_2{
   display: none;
   padding-top: 18px;
   color: black;
   font-size: 12px;
+  /* padding-left: 103px; */
+  margin-left: 22px;
 }
 
 

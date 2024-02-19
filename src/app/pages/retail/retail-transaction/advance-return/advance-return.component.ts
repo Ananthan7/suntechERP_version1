@@ -197,6 +197,8 @@ export class AdvanceReturnComponent implements OnInit {
             if (data && data[0].CURRENCY_CODE) {
               this.advanceReturnForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE)
               this.advanceReturnForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
+              this.advanceReturnForm.controls.partyAddress.setValue(data[0].ADDRESS)
+              
               // this.advanceReturnForm.controls.baseCurrency.setValue(data[0].CURRENCY_CODE)
               // this.advanceReturnForm.controls.baseCurrencyRate.setValue(data[0].CONV_RATE)
            }

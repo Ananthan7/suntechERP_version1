@@ -46,7 +46,7 @@ import {MatIconModule} from '@angular/material/icon';
     FormsModule,
     NgSelectModule,
     ToastrModule.forRoot(),
-
+    MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
