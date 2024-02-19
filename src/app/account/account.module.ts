@@ -23,6 +23,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatInputModule,
     MatSnackBarModule,
     MatAutocompleteModule,
+    MatIconModule
   ]
 })
 export class AccountModule { }

@@ -17,6 +17,7 @@ import { ExtrapagesModule } from './extrapages/extrapages.module';
 import { FakeBackendInterceptor } from './core/helpers/fake-backend';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
+import {MatIconModule} from '@angular/material/icon';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -176,6 +177,7 @@ const dbConfig: DBConfig = {
     ExtrapagesModule,
     EmailEditorModule,
     BrowserAnimationsModule,
+    MatIconModule,
     ToastrModule.forRoot(),
     DxDataGridModule,
     NgChartsModule.forRoot(),
