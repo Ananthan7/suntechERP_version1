@@ -149,8 +149,8 @@ export class AddReceiptComponent implements OnInit {
   }
   setGridData() {
     let param = {
-      SCH_CUSTOMER_CODE: this.content.POSCustomerCode || '',
-      SCH_CUSTOMER_ID: this.content.SchemeCode || '',
+      SCH_CUSTOMER_CODE: this.content.SCH_CUSTOMER_CODE || '',
+      SCH_CUSTOMER_ID: this.content.SchemeID || '',
     }
     let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeReceipts',param)
       .subscribe((result) => {

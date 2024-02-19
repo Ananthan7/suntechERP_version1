@@ -81,13 +81,12 @@ export class SchemeMasterComponent implements OnInit {
     }
   }
   getAllSelectOptions() {
-    // let frequencyAPI = 'ComboFilter/scheme%20frequency';
-    // let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
-    //   if (resp.status == 'Success') {
-    //     this.frequencyList = resp.response
-    //   }
-    // });
-    // this.subscriptions.push(sub);
+    let frequencyAPI = 'ComboFilter/scheme%20frequency';
+    let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+        this.frequencyList = resp.response
+      }
+    });
     this.schemeMasterForm.value.frequency('Monthly')
     let depositinAPI = 'ComboFilter/scheme%20type';
     let subs: Subscription = this.dataService.getDynamicAPI(depositinAPI).subscribe((resp: any) => {
@@ -96,23 +95,18 @@ export class SchemeMasterComponent implements OnInit {
         this.schemeMasterForm.controls.depositIn.setValue('AMOUNT')
       }
     });
-    this.subscriptions.push(subs);
-
     let receiptAPI = 'CreditCardMaster/GetReceiptModes/3/' + this.branchCode;
     let receipts1: Subscription = this.dataService.getDynamicAPI(receiptAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {
         this.receipt1List = resp.response
       }
     });
-    this.subscriptions.push(receipts1);
-
     let receiptAPI2 = 'CreditCardMaster/GetReceiptModes/2/' + this.branchCode;
     let receipts2: Subscription = this.dataService.getDynamicAPI(receiptAPI2).subscribe((resp: any) => {
       if (resp.status == 'Success') {
         this.receipt2List = resp.response
       }
     });
-    this.subscriptions.push(receipts2);
   }
   getSchemeMasterList() {
     let API = 'SchemeMaster/GetSchemeMasterDetails/' + this.comService.branchCode + '/' + this.schemeMasterForm.value.code

@@ -121,6 +121,7 @@ export class SchemeReceiptComponent implements OnInit {
     Narration: [""],
     MID: [""],
     SCHEME_AMOUNT: [0],
+    SCH_CUSTOMER_CODE: [0],
   });
   private subscriptions: Subscription[] = [];
   constructor(
@@ -364,7 +365,8 @@ export class SchemeReceiptComponent implements OnInit {
       (result) => {
         if (result.response) {
           let data = result.response;
-          this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_SCHEME_CODE)
+          this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID)
+          this.receiptDetailsForm.controls.SCH_CUSTOMER_CODE.setValue(data.SCH_CUSTOMER_CODE)
           this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data.SCH_CUSTOMER_ID)
           this.newReceiptData.SCHEME_AMOUNT = data?.PAY_AMOUNTFC
           console.log(data.PAY_AMOUNTFC, '....................');
@@ -457,8 +459,8 @@ export class SchemeReceiptComponent implements OnInit {
     }
   }
   selectedScheme(data: any) {
-    this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_SCHEME_CODE);
     this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE);
+    this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID);
     this.fetchSchemeId(data.SCH_CUSTOMER_ID)
     // this.receiptDetailsForm.controls.SchemeUnits.setValue(data.SCHEME_UNITS);
     // this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(data.SCHEME_TOTAL_VALUE);
