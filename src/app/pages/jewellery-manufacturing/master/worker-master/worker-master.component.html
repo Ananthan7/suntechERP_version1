@@ -141,7 +141,7 @@
                         <div class="col-sm-5">
                             <div class="text-right mb-1">
                                 <mat-checkbox class="example-margin" [disabled]="viewMode"
-                                    formControlName="Active">Active</mat-checkbox>
+                                    formControlName="Active" (change)="CheckWorkerwiseMetalBalanceBoth($event)">Active</mat-checkbox>
                             </div>
                             <div>
                                 <mat-radio-group aria-label="Select an option" [disabled]="viewMode"

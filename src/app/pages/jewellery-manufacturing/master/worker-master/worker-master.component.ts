@@ -359,6 +359,34 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  CheckWorkerwiseMetalBalanceBoth(event:any) {
+    // if(event.checked) return
+    if(this.workerMasterForm.value.WorkerCode == ''){
+      this.commonService.toastErrorByMsgId('please select workercode')
+      return
+    }
+    let postData = {
+      "SPID": "050",
+      "parameter": {
+        "strBranchCode": this.commonService.branchCode || "",
+        "strWorkerCode": this.workerMasterForm.value.WorkerCode || "",
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") { //
+          let data = result.dynamicData[0]
+          if(data.length > 0){
+            this.commonService.toastErrorByMsgId('worker cannot be inactive')
+            this.workerMasterForm.controls.Active.setValue(true)
+            this.workerMasterForm.controls.Active.disable();
+          }
+        } 
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
+      })
+    this.subscriptions.push(Sub)
+  }
   /**select process API call */
   selectProcessMasterList() {
     if (this.content && this.content.FLAG == 'EDIT') return
