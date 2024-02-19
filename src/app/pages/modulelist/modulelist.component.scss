@@ -314,34 +314,34 @@ nav {
   color: black;
 }
 
-.tx_1 {
+.text_1 {
   font-size: 18px;
   padding-top: 3px;
-  padding-right: 76px;
+  padding-right: 118px;
 }
 
-.tx_2 {
+.text_2 {
   font-size: 18px;
   padding-top: 3px;
-  padding-right: 46px;
+  padding-right: 87px;
 }
 
-.tx_3 {
-  padding-right: 61px;
-  font-size: 18px;
-  padding-top: 3px;
-}
-
-.tx_4 {
-  padding-right: 122px;
+.text_3 {
+  padding-right: 100px;
   font-size: 18px;
   padding-top: 3px;
 }
 
-.tx_5 {
+.text_4 {
+  padding-right: 158px;
   font-size: 18px;
   padding-top: 3px;
-  padding-right: 20px;
+}
+
+.text_5 {
+  font-size: 18px;
+  padding-top: 3px;
+  padding-right: 55px;
 }
 
 li:hover {
@@ -442,25 +442,11 @@ li:hover span {
   font-weight: 500;
   line-height: normal;
   padding-top: 8px;
-  padding-left: 10px;
+  margin-left: 16px;
 }
 
-.pt_2 {
-  padding-left: 18px;
-}
-
-.pl_1 {
-  padding-left: 20px;
-}
-
-.pl_2 {
-  padding-top: 6px;
-  padding-left: 96px;
-}
-
-.pl_3 {
-  padding-top: 6px;
-  padding-left: 95px;
+.pl-1{
+  margin-left: 7px;
 }
 
 .im_1 {
@@ -486,7 +472,6 @@ li:hover span {
 
 .div_hover {
   background-color: #FFFFFF;
-  padding-left: 0px;
   width: 500px;
   border-radius: 7px;
 }
@@ -494,8 +479,8 @@ li:hover span {
 .div_hover_1 {
   background-color: #FFFFFF;
   padding-left: 0px;
-  width: 268px;
-  border-radius: 7px;
+  width: 300px;
+  border-radius: 30px;
 }
 
 .div_hover:hover {
@@ -519,7 +504,7 @@ li:hover span {
   padding-top: 5px;
   margin-top: 11px;
 }
-.tx_6 {
+.text_6 {
   color: var(--light-black, #5B5B5B);
   text-align: center;
   font-family: Poppins;
@@ -531,7 +516,7 @@ li:hover span {
   padding-left: 25px;
 }
 
-.tx_7{
+.text_7{
   margin-left: 9px;
   padding-right: 74px;
   color: var(--light-black, #5B5B5B);
@@ -545,8 +530,9 @@ li:hover span {
   padding-left: 21px;
 }
 
-.div_1{
-  padding-left: 10px;
+
+.list_2{
+  background-color: white;
 }
 
 .i_2{
@@ -555,45 +541,7 @@ li:hover span {
   color: black;
   font-size: 12px;
   /* padding-left: 103px; */
-  margin-left: 22px;
+  margin-left: 30px;
 }
 
 
-// .list_hover {
-//   font-size: 14px;
-//   font-weight: 500;
-//   align-items: center;
-//   padding: 10px;
-//   display: flex;
-
-//   i:first-child {
-//     margin-right: 10px;
-//     display: none;
-//   }
-
-//   .list_text {
-//     align-items: center;
-//     width: 90%;
-//     padding: 10px;
-//     img {
-//       width: 62px;
-//       height: 50px;
-//     }
-
-//     i {
-//       display: none;
-//     }
-//   }
-// }
-
-// .list_hover:hover{
-//   i:first-child {
-//     display: block;
-//   }
-//   .list_text {
-//     background-color: #ddd;
-//     i {
-//       display: block;
-//     }
-//   }
-// }
