@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -61,6 +61,9 @@ export class WorkerMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+
+
   workerMasterForm = this.formBuilder.group({
     WorkerCode: ['', [Validators.required]],
     WorkerDESCRIPTION: ['', [Validators.required]],
@@ -124,7 +127,7 @@ export class WorkerMasterComponent implements OnInit {
     this.workerMasterForm.controls.LossAllowed.setValue(this.commonService.decimalQuantityFormat(this.content.LOSS_ALLOWED, 'METAL'))
     this.workerMasterForm.controls.Password.setValue(this.content.SECRET_CODE)
     this.workerMasterForm.controls.TrayWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TRAY_WEIGHT, 'METAL'))
-    this.workerMasterForm.controls.TargetPcs.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_PCS, 'METAL'))
+    this.workerMasterForm.controls.TargetPcs.setValue(this.content.TARGET_PCS)
     this.workerMasterForm.controls.TargetCaratWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_CARAT_WT, 'METAL'))
     this.workerMasterForm.controls.TargetMetalWt.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_METAL_WT, 'METAL'))
     this.workerMasterForm.controls.TargetWeight.setValue(this.commonService.decimalQuantityFormat(this.content.TARGET_WEIGHT, 'METAL'))
@@ -356,6 +359,34 @@ export class WorkerMasterComponent implements OnInit {
         this.toastr.error('Server Error', '', {
           timeOut: 3000,
         })
+      })
+    this.subscriptions.push(Sub)
+  }
+  CheckWorkerwiseMetalBalanceBoth(event:any) {
+    // if(event.checked) return
+    if(this.workerMasterForm.value.WorkerCode == ''){
+      this.commonService.toastErrorByMsgId('please select workercode')
+      return
+    }
+    let postData = {
+      "SPID": "050",
+      "parameter": {
+        "strBranchCode": this.commonService.branchCode || "",
+        "strWorkerCode": this.workerMasterForm.value.WorkerCode || "",
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") { //
+          let data = result.dynamicData[0]
+          if(data.length > 0){
+            this.commonService.toastErrorByMsgId('worker cannot be inactive')
+            this.workerMasterForm.controls.Active.setValue(true)
+            this.workerMasterForm.controls.Active.disable();
+          }
+        } 
+      }, err => {
+        this.commonService.toastErrorByMsgId('Server Error')
       })
     this.subscriptions.push(Sub)
   }

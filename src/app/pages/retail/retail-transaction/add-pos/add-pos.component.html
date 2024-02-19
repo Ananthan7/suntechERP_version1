@@ -2323,7 +2323,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field dateFormat3>
                 <mat-label>Date Of Birth</mat-label>
                 <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="fcn_cust_detail_dob"
                   formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
@@ -2595,27 +2595,31 @@
                 <div class="bg-gray-card">
                   <div class="form-group row">
                     <div class="col-md-2">
-                      <mat-form-field>
+                      <mat-form-field style="width: 70%;">
                         <mat-label>Division </mat-label>
                         <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division" readonly />
                       </mat-form-field>
+                      <master-search [MasterSearchData]="divisionCodeData"
+                        (newRowClick)="divisionCodeSelected($event)">>
+                        </master-search>
                     </div>
                     <div class="col-md-2">
-                      <mat-form-field>
+                      <mat-form-field style="width: 70px;">
                         <mat-label>Item Code </mat-label>
-                        <input type="text" matInput formControlName="fcn_li_item_code" #fcn_li_item_code
+                        <input type="text" matInput formControlName="fcn_li_item_code"  #fcn_li_item_code
                           id="fcn_li_item_code" autofocus (change)="getStockDesc($event)" [readonly]="viewOnly" />
-                        <!-- <input type="text" matInput formControlName="fcn_li_item_code" #fcn_li_item_code
-                            id="fcn_li_item_code" value="{{ li_item_code_val }}" autofocus
-                            (focusout)="getStockDesc($event)" /> -->
+                       
+                           
                       </mat-form-field>
-                      <!-- <button><i class="feather icon-camera" (click)="scannerFunc()"></i></button> -->
+                      <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)"></master-search>
+                     
+                    
                     </div>
                     <div class="col-md-3">
                       <mat-form-field>
                         <mat-label>Item Description </mat-label>
                         <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
-                          [readonly]="viewOnly" />
+                          [readonly]="true" />
                       </mat-form-field>
                     </div>
                     <div class="col-md-2">

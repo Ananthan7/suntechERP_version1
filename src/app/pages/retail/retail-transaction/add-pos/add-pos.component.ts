@@ -39,7 +39,7 @@ interface VocTypesEx {
 @Component({
   selector: 'app-add-pos',
   templateUrl: './add-pos.component.html',
-  styleUrls: ['./add-pos.component.scss']
+  styleUrls: ['./add-pos.component.scss'],
 })
 export class AddPosComponent implements OnInit {
   @Input() content!: any;
@@ -274,6 +274,41 @@ export class AddPosComponent implements OnInit {
     orderNo: ['', Validators.required],
     customerCode: ['', Validators.required],
   });
+
+  itemcodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_HEADING: "Item Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  itemcodeSelected(value: any) {
+    console.log(value);
+    this.lineItemForm.controls.fcn_li_item_code.setValue(value.PREFIX_CODE);
+    this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION)
+  }
+
+  divisionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  divisionCodeSelected(e:any){
+    console.log(e);
+    this.lineItemForm.controls.fcn_li_division.setValue(e.DIVISION_CODE);
+  
+  }
 
   docTypeData: MasterSearchModel =
     {
@@ -886,6 +921,8 @@ export class AddPosComponent implements OnInit {
     let randomvocno = Math.floor(Math.random() * 1000000 + 1);
     // this.vocDataForm.controls['fcn_voc_no'].setValue(randomvocno);
     console.log(randomvocno, 'randomvocno');
+
+    this.customerDetailForm.controls.fcn_mob_code.setValue(this.comFunc.allbranchMaster.MOBILECOUNTRY_CODE);
 
     // this.getArgs();
     this.indexedDb.getAllData('compparams').subscribe((data) => {
@@ -3120,12 +3157,12 @@ export class AddPosComponent implements OnInit {
               this.customerDetails.CODE
             );
 
-            // this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
-            //   this.customerDetails.POSCUSTIDEXP_DATE
-            // );
-            // this.customerDataForm.controls.fcn_customer_exp_date.setValue(
-            //   this.customerDetails.POSCUSTIDEXP_DATE
-            // );
+            this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+              this.customerDetails.POSCUSTIDEXP_DATE
+            );
+            this.customerDataForm.controls.fcn_customer_exp_date.setValue(
+              this.customerDetails.POSCUSTIDEXP_DATE
+            );
 
             // this.snackBar.open('Customer details saved successfully');
             // this.snackBar.dismiss();

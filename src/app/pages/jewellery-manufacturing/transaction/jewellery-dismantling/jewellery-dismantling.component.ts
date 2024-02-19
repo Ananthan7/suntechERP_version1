@@ -51,6 +51,24 @@ export class JewelleryDismantlingComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  StockcodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  StockcodeSelected(value: any) {
+    console.log(value);
+    this.jewellerydismantlingFrom.controls.stock.setValue(value.STOCK_CODE);
+    this.jewellerydismantlingFrom.controls.description.setValue(value.DESCRIPTION);
+  }
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,

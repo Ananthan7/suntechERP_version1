@@ -17,6 +17,7 @@ import { ExtrapagesModule } from './extrapages/extrapages.module';
 import { FakeBackendInterceptor } from './core/helpers/fake-backend';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
+import { MatIconModule } from '@angular/material/icon';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -40,6 +41,9 @@ import { allIcons } from 'angular-feather/icons';
 
 import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { CustomDateFormat3, DATE_FORMAT_3 } from './pages/retail/retail-transaction/pos-currency-receipt/pos-currency-receipt-details/cust-dateformats.component';
 
 
 const dbConfig: DBConfig = {
@@ -176,20 +180,28 @@ const dbConfig: DBConfig = {
     ExtrapagesModule,
     EmailEditorModule,
     BrowserAnimationsModule,
+    MatIconModule,
     ToastrModule.forRoot(),
     DxDataGridModule,
     NgChartsModule.forRoot(),
     FeatherModule.pick(allIcons),
     NgxIndexedDBModule.forRoot(dbConfig),
-    
-    ],
+
+  ],
   providers: [ConfigService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
-    { provide: NgChartsConfiguration, useValue: { generateColors: false }},
+    { provide: NgChartsConfiguration, useValue: { generateColors: false } },
     DecimalPipe,
     DatePipe,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_3 },
+    CustomDateFormat3,
 
   ],
   bootstrap: [AppComponent]

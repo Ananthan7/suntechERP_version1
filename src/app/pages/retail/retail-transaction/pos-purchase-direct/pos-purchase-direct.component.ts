@@ -108,6 +108,8 @@ export class PosPurchaseDirectComponent implements OnInit {
     otherAmtDes:[''],
     grossAmt:[''],
     grossAmtDes:[''],
+    partyCode1:[''],
+
   });
 
 
@@ -149,7 +151,8 @@ export class PosPurchaseDirectComponent implements OnInit {
   partyCodeSelected(e:any){
     console.log(e);
     this.posPurchaseForm.controls.partyCode.setValue(e.ACCODE);
-    this.posPurchaseForm.controls.partyCodeName.setValue(e)
+    this.posPurchaseForm.controls.partyCodeName.setValue(e['ACCOUNT HEAD'])
+    this.posPurchaseForm.controls.partyCode1.setValue(e['ACCOUNT HEAD'])  
   }
 
   partyCurrencyCodeSelected(e:any){
