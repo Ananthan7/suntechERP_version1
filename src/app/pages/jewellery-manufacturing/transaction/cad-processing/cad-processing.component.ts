@@ -21,6 +21,8 @@ export class CADProcessingComponent implements OnInit {
   selectedIndex!: number | null;
   tableData: any[] = [];  
   tableDatas: any[] = [];  
+  firstTableWidth : any;
+  secondTableWidth : any;
   columnheadItemDetails:any[] = ['Srno','Division','Stone Type','Stock Code','Karat','Color','Shape','Sieve','Size','Pcs','Wt/Ct','Setting Type','Pointer Wt','Remarks'];
   columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
   divisionMS: any = 'ID';
@@ -37,6 +39,9 @@ export class CADProcessingComponent implements OnInit {
   selectedTabIndex = 0;
   urls: string | ArrayBuffer | null | undefined;
   url: any;
+  formattedTime: any;
+  maxTime: any;
+  standTime: any;
   // setAllInitialValues: any;
   constructor(
     private activeModal: NgbActiveModal,
@@ -67,7 +72,19 @@ export class CADProcessingComponent implements OnInit {
   
   }
 
-  
+  private handleResize(): void {
+    // Access screen size here using window.innerWidth and window.innerHeight
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    if (screenWidth > 1200) {
+      this.firstTableWidth = 800
+      this.secondTableWidth = 450
+    } else if (screenWidth >= 768 && screenWidth < 1200) {
+      this.firstTableWidth = 700
+      this.secondTableWidth = 350
+    }
+  }
+
 
   cadProcessingForm: FormGroup = this.formBuilder.group({
     voctype: [,''],
@@ -183,6 +200,21 @@ export class CADProcessingComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  openFileExplorer() {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    fileInput.click();
+  }
+
+  handleFileInput(event: any) {
+    const selectedFile = event.target.files[0];
+    
+    // Assuming you want to display the file path in the input field
+    this.cadProcessingForm.get('attachments')?.setValue(selectedFile.name);
+
+    // You can also handle the file in other ways, such as uploading it
+  }
+
+
   onFileChanged(event:any) {
     this.url = event.target.files[0].name
     console.log(this.url)
@@ -207,8 +239,24 @@ export class CADProcessingComponent implements OnInit {
     });
     
   }
- 
-  
+  updateStandardTime(duration: any) {
+    // this.yourContent.standardTime.totalDays = duration[0] || 0;
+    // this.yourContent.standardTime.totalHours = duration[1] || 0;
+    // this.yourContent.standardTime.totalMinutes = duration[2] || 0;
+
+    this.formattedTime = duration;
+
+    // console.log(this.formattedTime);
+
+    console.log(duration)
+  }
+  yourContent = {
+    standardTime: {
+      totalDays: 0,
+      totalHours: 0,
+      totalMinutes: 0,
+    }
+  }
  
  
 

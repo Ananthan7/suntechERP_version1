@@ -20,7 +20,7 @@ interface dataToSave {
 })
 export class AddNewdetailComponent implements OnInit {
   @Input() content!: any; //use: To get clicked row details from master grid
-
+  diamondSalesDetailForm!: FormGroup;
   favoriteSeason: string = ''
   seasons: string[] = ['Metal', 'Stones'];
   season2: string[] = ['Metal', 'Stones', 'Total'];
@@ -175,28 +175,7 @@ export class AddNewdetailComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
  
-  /**USE: details main form group*/
-  diamondSalesDetailForm: FormGroup = this.formBuilder.group({
-    designCode: ['', [Validators.required]],
-    designDescription: ['', [Validators.required]],
-    divisionCode: [''],
-    StockCode: ['', [Validators.required]],
-    StockCodeDesc: ['', [Validators.required]],
-    DeliveryType: [''],
-    DeliveryType2: [''],
-    ProductionDate: [this.currentDate],
-    DeliveryOnDate: [this.currentDate],
-    Remarks: [''],
-    StockBOM: [false],
-    PCS: [''],
-    METAL_WT: [''],
-    RATEFC: [''],
-    STONE_WT: [''],
-    AMOUNT: [''],
-    GROSS_WT: [''],
-    STOCK_CODE: [''],
-    designCodeSelect: ['design'],
-  })
+  
   /**USE:  first sub form group for summary details tab*/
   summaryDetailForm: FormGroup = this.formBuilder.group({
     CATEGORY_CODE: [''],
@@ -247,6 +226,29 @@ export class AddNewdetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    /**USE: details main form group*/
+  this.diamondSalesDetailForm = this.formBuilder.group({
+    designCode: ['',[Validators.required]],
+    designDescription: ['',[Validators.required]],
+    divisionCode: [''],
+    StockCode: ['',[Validators.required]],
+    StockCodeDesc: ['',[Validators.required]],
+    DeliveryType: [''],
+    DeliveryType2: [''],
+    ProductionDate: [this.currentDate],
+    DeliveryOnDate: [this.currentDate],
+    Remarks: [''],
+    StockBOM: [false],
+    PCS: [''],
+    METAL_WT: [''],
+    RATEFC: [''],
+    STONE_WT: [''],
+    AMOUNT: [''],
+    GROSS_WT: [''],
+    STOCK_CODE: [''],
+    designCodeSelect: [''],
+  })
+
     this.setInitialValues()
     this.handleResize()
   }

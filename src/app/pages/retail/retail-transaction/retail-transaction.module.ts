@@ -19,7 +19,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
-import { CustomDateFormat1, CustomDateFormat2 } from './pos-currency-receipt/pos-currency-receipt-details/cust-dateformats.component';
+import { CustomDateFormat1, CustomDateFormat2, CustomDateFormat3 } from './pos-currency-receipt/pos-currency-receipt-details/cust-dateformats.component';
 import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
@@ -62,6 +62,7 @@ import { PosSalesmanTargetAnalysisComponent } from './pos-salesman-target-analys
     PcrSelectionComponent,
     CustomDateFormat1,
     CustomDateFormat2,
+    CustomDateFormat3,
     SalesEstimationComponent,
     PointOfSalesOrderComponent,
     PointOfSalesOrderDetailsComponent,

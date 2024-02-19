@@ -161,9 +161,11 @@
                         <div class="row mb-1">
                           <label for="inputPassword" class="col-sm-6"> Stock : </label>
                           <div class="col-sm-6">
-                            <mat-form-field style="width: 100%;">
+                            <mat-form-field style="width: 70%;">
                               <input type="text" matInput formControlName="stock" />
                             </mat-form-field>
+                            <master-search [MasterSearchData]="StockcodeData" (newRowClick)="StockcodeSelected($event)">
+                            </master-search>
                           </div>
                         </div>
                         <div class="row mb-1">

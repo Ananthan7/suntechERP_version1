@@ -39,7 +39,7 @@ interface VocTypesEx {
 @Component({
   selector: 'app-add-pos',
   templateUrl: './add-pos.component.html',
-  styleUrls: ['./add-pos.component.scss']
+  styleUrls: ['./add-pos.component.scss'],
 })
 export class AddPosComponent implements OnInit {
   @Input() content!: any;
