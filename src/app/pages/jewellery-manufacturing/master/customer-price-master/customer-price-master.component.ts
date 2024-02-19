@@ -58,7 +58,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     SEARCH_FIELD: 'CUSTOMER_CODE',
     SEARCH_HEADING: 'Customer Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "where account_mode in ('B','R','P')",
+    WHERECONDITION: "account_mode in ('B','R','P')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

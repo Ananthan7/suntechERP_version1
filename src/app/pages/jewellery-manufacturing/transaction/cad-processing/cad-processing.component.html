@@ -17,7 +17,7 @@
 
                     </div>
                     <div class="col-md-6 px-5">
-                    <h5>Approval Pending</h5>
+                        <h5>Approval Pending</h5>
                     </div>
                 </div>
                 <div class="row">
@@ -34,7 +34,8 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input class="text-right" type="number" matInput formControlName="vocNo" [readonly]="viewMode"/>
+                                        <input class="text-right" type="number" matInput formControlName="vocNo"
+                                            [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -43,11 +44,11 @@
                             <label for="inputPassword" class="col-sm-6 col-form-label">Voucher Date : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 72%;">
-                                    <input matInput [matDatepicker]="vocDate"  formControlName="vocDate" [readonly]="viewMode"
-                                    placeholder="DD/MM/YYYY"  DateValidation />
-                                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-                                  </mat-form-field>
+                                    <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
+                                        [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                                </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -84,7 +85,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label ">So Number : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="soNumber" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="soNumber" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -93,7 +94,7 @@
 
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="design" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="design" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -101,18 +102,18 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label ">Completed : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput [matDatepicker]="completed"  formControlName="completed" [readonly]="viewMode"
-                                    placeholder="DD/MM/YYYY"  DateValidation />
-                                  <mat-datepicker-toggle matSuffix [for]="completed"></mat-datepicker-toggle>
-                                  <mat-datepicker [startAt]="currentDate" #completed></mat-datepicker>
-                                  </mat-form-field>
+                                    <input matInput [matDatepicker]="completed" formControlName="completed"
+                                        [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
+                                    <mat-datepicker-toggle matSuffix [for]="completed"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #completed></mat-datepicker>
+                                </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5 col-form-label ">To Worker * : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="toWorker" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="toWorker" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="workerCodeData" *ngIf="!viewMode"
                                     (newRowClick)="toWorkedSelected($event)"></master-search>
@@ -134,7 +135,7 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Job : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="job" [readonly]="viewMode"/>
+                                    <input type="text" matInput formControlName="job" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -142,7 +143,8 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Sub Job Id : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="subJobId"   style="text-align: right;" />
+                                    <input type="number" matInput formControlName="subJobId"
+                                        style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -150,12 +152,13 @@
                             <label for="inputPassword" class="col-sm-7 col-form-label">Time Taken : </label>
                             <div class="col-sm-5">
                                 <mat-form-field style="width: 100%;">
-                                    <input  type="time" matInput formControlName="timeTaken"   [readonly]="viewMode"  step="2" />
+                                    <input type="time" matInput formControlName="timeTaken" [readonly]="viewMode"
+                                        step="2" />
                                 </mat-form-field>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3"> 
+                    <div class="col-md-3">
                         <div class="icons">
                             <div class="image_box">
                                 <img src={{urls}} style="width:324px;height:151px">
@@ -172,7 +175,8 @@
                         <div class="p-2 bd-highlight">
                             <div class="upload-btn-wrapper">
                                 <button class="btn btnnew"> Image</button>
-                                <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" (change)="onFileChanged($event)">
+                                <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                                    class="uploadproduct" (change)="onFileChanged($event)">
                             </div>
                         </div>
                     </div>
@@ -180,146 +184,120 @@
                 <div class="row mt-3">
                     <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                            (addClick)="selectedTabIndex == 0 ? adddata():adddatas();"  (deleteClick)="selectedTabIndex == 0 ? removedata():removedatas()">
+                            (addClick)="selectedTabIndex == 0 ? adddata():adddatas();"
+                            (deleteClick)="selectedTabIndex == 0 ? removedata():removedatas()">
                         </menu-buttons>
                     </div>
-                    <div class="col-md-12" >
-                        <mat-tab-group   [(selectedIndex)]="selectedTabIndex"  >
-                            <mat-tab  label="Components" id="get" >
+                    <div class="col-md-12">
+                        <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+                            <mat-tab label="Components" id="get">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
-                                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
-                                        [showRowLines]="true" class="mt-3">
-                                        <dxo-editing mode="cell" [allowUpdating]="!viewMode" >
-                                        </dxo-editing>
-                                        <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
-                                        <dxi-column dataField="Division" caption="Division"></dxi-column>
-                                        <dxi-column dataField="StoneType" caption="Stone Type" cellTemplate="stonetypetemp"  [allowEditing]="false" alignment="left"></dxi-column>
-                                       <!-- stonetype search starts -->
-                                       <div
-                                       *dxTemplate="let data of 'stonetypetemp'">
-                                       <div
-                                           (mouseenter)="onHoverstoneType(data)"
-                                           class="d-flex justify-content-between">
-                                           <div>
-                                               <a
-                                                   href="javascript:void(0)"
-                                                   class="mx-1"
-                                                   [innerHTML]="data.value"></a>
-                                           </div>
-                                           <master-search
-                                               *ngIf="!viewMode"
-                                               [MasterSearchData]="generalMaster"
-                                               (newRowClick)="stoneTypeSelected($event,data)">
-                                           </master-search>
-                                       </div>
-                                   </div>
-                                        <dxi-column dataField="StockCode" caption="Stock Code" cellTemplate="stockcodetemp" [allowEditing]="false" alignment="left"></dxi-column>
-                                        <!-- stock code Select search starts -->
-                                        <div
-                                                *dxTemplate="let data of 'stockcodetemp'">
-                                                <div
-                                                    (mouseenter)="onHoverStockCode(data)"
+                                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                                            [showColumnLines]="true" [showRowLines]="true" class="mt-3">
+                                            <dxo-editing mode="cell" [allowUpdating]="!viewMode">
+                                            </dxo-editing>
+                                            <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                                            <dxi-column dataField="Division" caption="Division"></dxi-column>
+                                            <dxi-column dataField="StoneType" caption="Stone Type"
+                                                cellTemplate="stonetypetemp" [allowEditing]="false"
+                                                alignment="left"></dxi-column>
+                                            <!-- stonetype search starts -->
+                                            <div *dxTemplate="let data of 'stonetypetemp'">
+                                                <div (mouseenter)="onHoverstoneType(data)"
                                                     class="d-flex justify-content-between">
                                                     <div>
-                                                        <a
-                                                            href="javascript:void(0)"
-                                                            class="mx-1"
+                                                        <a href="javascript:void(0)" class="mx-1"
                                                             [innerHTML]="data.value"></a>
                                                     </div>
-                                                    <master-search
-                                                    *ngIf="!viewMode"
-                                                        [MasterSearchData]="stockCode"
+                                                    <master-search *ngIf="!viewMode" [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="stoneTypeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <dxi-column dataField="StockCode" caption="Stock Code"
+                                                cellTemplate="stockcodetemp" [allowEditing]="false"
+                                                alignment="left"></dxi-column>
+                                            <!-- stock code Select search starts -->
+                                            <div *dxTemplate="let data of 'stockcodetemp'">
+                                                <div (mouseenter)="onHoverStockCode(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a href="javascript:void(0)" class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search *ngIf="!viewMode" [MasterSearchData]="stockCode"
                                                         (newRowClick)="stockCodeSelected($event,data)">
                                                     </master-search>
                                                 </div>
                                             </div>
-                                        <dxi-column dataField="Karat" caption="Karat" cellTemplate="karattemp" [allowEditing]="false" alignment="left"></dxi-column>
-                                         <!-- stock code Select search starts -->
-                                         <div
-                                         *dxTemplate="let data of 'karattemp'">
-                                         <div
-                                             (mouseenter)="onHoverKaratCode(data)"
-                                             class="d-flex justify-content-between">
-                                             <div>
-                                                 <a
-                                                     href="javascript:void(0)"
-                                                     class="mx-1"
-                                                     [innerHTML]="data.value"></a>
-                                             </div>
-                                             <master-search
-                                                 *ngIf="!viewMode"
-                                                 [MasterSearchData]="karatCodeData"
-                                                 (newRowClick)="karatCodeSelected($event,data)">
-                                             </master-search>
-                                         </div>
-                                     </div>
-                                        <dxi-column dataField="Color" caption="Color" cellTemplate="colortemp"  [allowEditing]="false" alignment="left"></dxi-column>
-                                        <!-- color Select search starts -->
-                                        <div
-                                        *dxTemplate="let data of 'colortemp'">
-                                        <div
-                                            (mouseenter)="onHoverColorCode(data)"
-                                            class="d-flex justify-content-between">
-                                            <div>
-                                                <a href="javascript:void(0)"
-                                                    class="mx-1"
-                                                    [innerHTML]="data.value"></a>
+                                            <dxi-column dataField="Karat" caption="Karat" cellTemplate="karattemp"
+                                                [allowEditing]="false" alignment="left"></dxi-column>
+                                            <!-- stock code Select search starts -->
+                                            <div *dxTemplate="let data of 'karattemp'">
+                                                <div (mouseenter)="onHoverKaratCode(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a href="javascript:void(0)" class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search *ngIf="!viewMode" [MasterSearchData]="karatCodeData"
+                                                        (newRowClick)="karatCodeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
                                             </div>
-                                            <master-search
-                                                *ngIf="!viewMode"
-                                                [MasterSearchData]="generalMaster"
-                                                (newRowClick)="colorCodeSelected($event,data)">
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                        <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp" [allowEditing]="false" alignment="left"></dxi-column>
-                                         <!-- shape Select search starts -->
-                                         <div
-                                         *dxTemplate="let data of 'shapetemp'">
-                                         <div
-                                             (mouseenter)="onHoverShape(data)"
-                                             class="d-flex justify-content-between">
-                                             <div>
-                                                 <a
-                                                     href="javascript:void(0)"
-                                                     class="mx-1"
-                                                     [innerHTML]="data.value"></a>
-                                             </div>
-                                             <master-search
-                                                 *ngIf="!viewMode"
-                                                 [MasterSearchData]="generalMaster"
-                                                 (newRowClick)="shapeSelected($event,data)">
-                                             </master-search>
-                                         </div>
-                                     </div>
-                                        <dxi-column dataField="Sieve" caption="Sieve" cellTemplate="sievetemp" [allowEditing]="false" alignment="left"></dxi-column>
-                                        <!-- sieve Select search starts -->
-                                        <div
-                                        *dxTemplate="let data of 'sievetemp'">
-                                        <div
-                                            (mouseenter)="onHoverSieve(data)"
-                                            class="d-flex justify-content-between">
-                                            <div>
-                                                <a
-                                                    href="javascript:void(0)"
-                                                    class="mx-1"
-                                                    [innerHTML]="data.value"></a>
+                                            <dxi-column dataField="Color" caption="Color" cellTemplate="colortemp"
+                                                [allowEditing]="false" alignment="left"></dxi-column>
+                                            <!-- color Select search starts -->
+                                            <div *dxTemplate="let data of 'colortemp'">
+                                                <div (mouseenter)="onHoverColorCode(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a href="javascript:void(0)" class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search *ngIf="!viewMode" [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="colorCodeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
                                             </div>
-                                            <master-search
-                                                *ngIf="!viewMode"
-                                                [MasterSearchData]="generalMaster"
-                                                (newRowClick)="sieveSelected($event,data)">
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                        <dxi-column dataField="Size" caption="Size"></dxi-column>
-                                        <dxi-column dataField="Pcs" caption="Pcs"></dxi-column>
-                                        <dxi-column dataField="WtCt" caption="Wt/Ct"></dxi-column>
-                                        <dxi-column dataField="SettingType" caption="Setting Type"></dxi-column>
-                                        <dxi-column dataField="PointerWt" caption="Pointer Wt"></dxi-column>
-                                        <dxi-column dataField="Remarks" caption="Remarks"></dxi-column>
-                                          <!-- <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                                            <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp"
+                                                [allowEditing]="false" alignment="left"></dxi-column>
+                                            <!-- shape Select search starts -->
+                                            <div *dxTemplate="let data of 'shapetemp'">
+                                                <div (mouseenter)="onHoverShape(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a href="javascript:void(0)" class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search *ngIf="!viewMode" [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="shapeSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <dxi-column dataField="Sieve" caption="Sieve" cellTemplate="sievetemp"
+                                                [allowEditing]="false" alignment="left"></dxi-column>
+                                            <!-- sieve Select search starts -->
+                                            <div *dxTemplate="let data of 'sievetemp'">
+                                                <div (mouseenter)="onHoverSieve(data)"
+                                                    class="d-flex justify-content-between">
+                                                    <div>
+                                                        <a href="javascript:void(0)" class="mx-1"
+                                                            [innerHTML]="data.value"></a>
+                                                    </div>
+                                                    <master-search *ngIf="!viewMode" [MasterSearchData]="generalMaster"
+                                                        (newRowClick)="sieveSelected($event,data)">
+                                                    </master-search>
+                                                </div>
+                                            </div>
+                                            <dxi-column dataField="Size" caption="Size"></dxi-column>
+                                            <dxi-column dataField="Pcs" caption="Pcs"></dxi-column>
+                                            <dxi-column dataField="WtCt" caption="Wt/Ct"></dxi-column>
+                                            <dxi-column dataField="SettingType" caption="Setting Type"></dxi-column>
+                                            <dxi-column dataField="PointerWt" caption="Pointer Wt"></dxi-column>
+                                            <dxi-column dataField="Remarks" caption="Remarks"></dxi-column>
+                                            <!-- <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
                                           <dxi-column dataField="Division" caption="Division" cellTemplate="divisiontemp"></dxi-column>
                                           <dxi-column dataField="StoneType" caption="Stone Type" cellTemplate="stonetypetemp"></dxi-column>
                                           <dxi-column dataField="StockCode" caption="Stock Code" cellTemplate="stockcodetemp"></dxi-column>
@@ -385,70 +363,77 @@
                                             <input type="text" (change)="remarkstemp($event,data)" style="width: 100%;" />
                                           </div> -->
 
-                                      </dx-data-grid>
+                                        </dx-data-grid>
                                     </div>
                                 </div>
                             </mat-tab>
                             <mat-tab label="Components Set">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <dx-data-grid id="gridContainer" [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
-                                        [showRowLines]="true" class="mt-3">
-                                        <dxo-editing mode="cell" [allowUpdating]="!viewMode">
-                                        </dxo-editing>
-                      
-                                          <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
-                                          <dxi-column dataField="CompCode" caption="Comp Code"> </dxi-column>
-                                          <dxi-column dataField="Description" caption="Description"></dxi-column>
-                                          <dxi-column dataField="Pcs" caption="Pcs"></dxi-column>
-                                          <dxi-column dataField="SizeSet" caption="Size Set"></dxi-column>
-                                          <dxi-column dataField="SizeCode" caption="Size Code"></dxi-column>
-                                          <dxi-column dataField="Type" caption="Type"></dxi-column>
-                                          <dxi-column dataField="Category" caption="Category" cellTemplate="categorytemp" [allowEditing]="false" alignment="left"></dxi-column>
-                                           <!-- Category Select search starts --> 
-                                        <div
-                                        *dxTemplate="let data of 'categorytemp'" >
-                                        <div
-                                            (mouseenter)="onHoverCategory(data)"
-                                            class="d-flex justify-content-between">
-                                            <div>
-                                                <a
-                                                    href="javascript:void(0)"
-                                                    class="mx-1"
-                                                    [innerHTML]="data.value"></a>
-                                            </div>
-                                            <master-search
-                                                *ngIf="!viewMode"
-                                                [MasterSearchData]="generalMaster"
-                                                (newRowClick)="categortySelected($event,data)">
-                                            </master-search>
-                                        </div>
-                                    </div>
-                                          <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp" [allowEditing]="false" alignment="left"></dxi-column>
-                                          <div
-                                          *dxTemplate="let data of 'shapetemp'">
-                                          <div
-                                              (mouseenter)="onHoverShape(data)"
-                                              class="d-flex justify-content-between">
-                                              <div>
-                                                  <a
-                                                      href="javascript:void(0)"
-                                                      class="mx-1"
-                                                      [innerHTML]="data.value"></a>
-                                              </div>
-                                              <master-search
-                                                  *ngIf="!viewMode"
-                                                  [MasterSearchData]="generalMaster"
-                                                  (newRowClick)="shapeSelected1($event,data)">
-                                              </master-search>
-                                          </div>
-                                      </div>
-                                          <dxi-column dataField="Height" caption="Height"></dxi-column>
-                                          <dxi-column dataField="Width" caption="Width"></dxi-column>
-                                          <dxi-column dataField="Length" caption="Length"></dxi-column>
-                                          <dxi-column dataField="Radius" caption="Radius"></dxi-column>
-                                          <dxi-column dataField="Remarks" caption="Remarks"></dxi-column>
-                                          <!-- <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                                        <dx-resizable id="gridContainer" [width]="firstTableWidth" [height]="280"
+                                            [keepAspectRatio]="false" handles="right">
+                                            <dx-data-grid  width="auto" #dataGrid id="gridContainer" [dataSource]="tableDatas"
+                                                [showBorders]="true" [showColumnLines]="true" height="300" [showRowLines]="true"
+                                                class="mt-3">
+                                                <dxo-editing mode="cell" [allowUpdating]="!viewMode">
+                                                </dxo-editing>
+                                                <dxo-paging [enabled]="false"></dxo-paging>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxo-selection mode="single"></dxo-selection>
+                                                <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                                                <dxi-column dataField="CompCode" caption="Comp Code"> </dxi-column>
+                                                <dxi-column dataField="Description" caption="Description"></dxi-column>
+                                                <dxi-column width="auto" [allowEditing]="true" dataField="PCS" caption="Pcs"
+                                                alignment="right">
+                                            </dxi-column>
+                                                <dxi-column dataField="SizeSet" caption="Size Set"></dxi-column>
+                                                <dxi-column dataField="SizeCode" caption="Size Code"></dxi-column>
+                                                <dxi-column dataField="Type" caption="Type"></dxi-column>
+                                                <dxi-column dataField="Category" caption="Category"
+                                                    cellTemplate="categorytemp" [allowEditing]="false"
+                                                    alignment="left"></dxi-column>
+
+                                                <dxo-summary>
+                                                    <dxi-total-item displayFormat="{0}" column="PCS" summaryType="sum">
+                                                    </dxi-total-item>
+
+                                                </dxo-summary>
+
+                                                <!-- Category Select search starts -->
+                                                <div *dxTemplate="let data of 'categorytemp'">
+                                                    <div (mouseenter)="onHoverCategory(data)"
+                                                        class="d-flex justify-content-between">
+                                                        <div>
+                                                            <a href="javascript:void(0)" class="mx-1"
+                                                                [innerHTML]="data.value"></a>
+                                                        </div>
+                                                        <master-search *ngIf="!viewMode"
+                                                            [MasterSearchData]="generalMaster"
+                                                            (newRowClick)="categortySelected($event,data)">
+                                                        </master-search>
+                                                    </div>
+                                                </div>
+                                                <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp"
+                                                    [allowEditing]="false" alignment="left"></dxi-column>
+                                                <div *dxTemplate="let data of 'shapetemp'">
+                                                    <div (mouseenter)="onHoverShape(data)"
+                                                        class="d-flex justify-content-between">
+                                                        <div>
+                                                            <a href="javascript:void(0)" class="mx-1"
+                                                                [innerHTML]="data.value"></a>
+                                                        </div>
+                                                        <master-search *ngIf="!viewMode"
+                                                            [MasterSearchData]="generalMaster"
+                                                            (newRowClick)="shapeSelected1($event,data)">
+                                                        </master-search>
+                                                    </div>
+                                                </div>
+                                                <dxi-column dataField="Height" caption="Height"></dxi-column>
+                                                <dxi-column dataField="Width" caption="Width"></dxi-column>
+                                                <dxi-column dataField="Length" caption="Length"></dxi-column>
+                                                <dxi-column dataField="Radius" caption="Radius"></dxi-column>
+                                                <dxi-column dataField="Remarks" caption="Remarks"></dxi-column>
+                                                <!-- <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
                                           <dxi-column dataField="CompCode" caption="Comp Code" cellTemplate="compcodetemp"> </dxi-column>
                                           <dxi-column dataField="Description" caption="Description" cellTemplate="descriptiontemp"></dxi-column>
                                           <dxi-column dataField="Pcs" caption="Pcs" cellTemplate="Pcs2temp"></dxi-column>
@@ -503,7 +488,8 @@
                                           <div *dxTemplate="let data2 of 'remarks2temp'">
                                             <input type="text" (change)="remarks2temp($event,data2)" style="width: 100%;" />
                                           </div> -->
-                                      </dx-data-grid>
+                                            </dx-data-grid>
+                                        </dx-resizable>
                                     </div>
                                 </div>
                             </mat-tab>
@@ -530,20 +516,23 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Date : </label>
+                                                        <label for="inputPassword" class="col-sm-4 col-form-label ">Date
+                                                            : </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input matInput [matDatepicker]="date"  formControlName="date"
-                                                                placeholder="YYYY/MM/DD"  DateValidation />
-                                                              <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
-                                                              <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
-                                                              </mat-form-field>
+                                                                <input matInput [matDatepicker]="date"
+                                                                    formControlName="date" placeholder="DD/MM/YYYY"
+                                                                    DateValidation />
+                                                                <mat-datepicker-toggle matSuffix
+                                                                    [for]="date"></mat-datepicker-toggle>
+                                                                <mat-datepicker [startAt]="currentDate"
+                                                                    #date></mat-datepicker>
+                                                            </mat-form-field>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Copy : </label>
+                                                        <label for="inputPassword" class="col-sm-4 col-form-label ">Copy
+                                                            : </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput formControlName="copy" />
@@ -551,11 +540,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Type : </label>
+                                                        <label for="inputPassword" class="col-sm-4 col-form-label ">Type
+                                                            : </label>
                                                         <div class="col-sm-8">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="number" matInput formControlName="type" style="text-align: right;" />
+                                                                <input type="number" matInput formControlName="type"
+                                                                    style="text-align: right;" />
                                                             </mat-form-field>
                                                         </div>
                                                     </div>
@@ -588,13 +578,20 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Attachments : </label>
-                                                        <div class="col-sm-8">
+                                                        <div class="col-sm-4 bd-highlight">
+                                                            <button type="button" class="btn btn-primary add-btn"
+                                                                (click)="openFileExplorer()">
+                                                                Attachments
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-sm-6">
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput
                                                                     formControlName="attachments" />
                                                             </mat-form-field>
+                                                            <input type="file" id="fileInput" style="display: none"
+                                                                (change)="handleFileInput($event)" />
+
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -609,16 +606,22 @@
                                                         <div class="col-sm-2">
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="number" matInput
-                                                                    formControlName="deliveryOnDays" style="text-align: right;" />
+                                                                    formControlName="deliveryOnDays"
+                                                                    style="text-align: right;" />
                                                             </mat-form-field>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input [disabled]="true"  matInput [matDatepicker]="deliveryOnDate"  formControlName="deliveryOnDate"
-                                                                placeholder="YYYY/MM/DD"  DateValidation />
-                                                              <mat-datepicker-toggle matSuffix [for]="deliveryOnDate"></mat-datepicker-toggle>
-                                                              <mat-datepicker [disabled]="true" [startAt]="currentDate" #deliveryOnDate></mat-datepicker>
-                                                              </mat-form-field>
+                                                                <input [disabled]="true" matInput
+                                                                    [matDatepicker]="deliveryOnDate"
+                                                                    formControlName="deliveryOnDate"
+                                                                    placeholder="DD/MM/YYYY" DateValidation />
+                                                                <mat-datepicker-toggle matSuffix
+                                                                    [for]="deliveryOnDate"></mat-datepicker-toggle>
+                                                                <mat-datepicker [disabled]="true"
+                                                                    [startAt]="currentDate"
+                                                                    #deliveryOnDate></mat-datepicker>
+                                                            </mat-form-field>
                                                         </div>
                                                     </div>
                                                 </div>
