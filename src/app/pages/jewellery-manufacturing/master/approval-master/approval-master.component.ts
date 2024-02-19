@@ -88,7 +88,29 @@ export class ApprovalMasterComponent implements OnInit {
       }
     });
   }
-
+  checkCodeExists(event: any) {
+    if (event.target.value == '' || this.viewMode == true) return
+    let API = 'ApprovalMaster/CheckIfApprCodePresent/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Approval Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+            }
+          });
+          this.approvalMasterForm.controls.code.setValue('')
+        }
+      }, err => {
+        this.approvalMasterForm.controls.code.setValue('')
+      })
+    this.subscriptions.push(Sub)
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -144,20 +166,6 @@ export class ApprovalMasterComponent implements OnInit {
   }
   mobilenumber(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
-  }
-
-  approvalCodeValidate(event:any){
-    if (event.target.value == '') return
-    this.commonService.showSnackBarMsg('MSG81447');
-    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/' + event.target.value)
-    .subscribe((data) => {
-      this.commonService.closeSnackBarMsg()
-      if (data.status == 'Success') {
-        this.commonService.toastErrorByMsgId('Code Already Exists')
-        this.approvalMasterForm.controls.code.setValue('')
-        this.approvalMasterForm.controls.description.setValue('')
-      }
-    });
   }
 
   dataGridConfig = {

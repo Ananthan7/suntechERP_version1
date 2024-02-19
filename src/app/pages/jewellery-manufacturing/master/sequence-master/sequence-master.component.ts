@@ -110,6 +110,30 @@ export class SequenceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+  /**use: to check code exists in db */
+  checkCodeExists(event: any) {
+    if (event.target.value == '' || this.viewMode == true) return
+    let API = 'SequenceMasterDJ/CheckIfSeqCodeExists/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Sequence Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+            }
+          });
+          this.sequenceMasterForm.controls.sequenceCode.setValue('')
+        }
+      }, err => {
+        this.sequenceMasterForm.controls.sequenceCode.setValue('')
+      })
+    this.subscriptions.push(Sub)
+  }
   // check sequence exists and fill grid
   checkSequenceExists() {
     if (this.sequenceMasterForm.value.sequenceCode == '') return
@@ -128,17 +152,17 @@ export class SequenceMasterComponent implements OnInit {
                 obj.orderId = item.SEQ_NO
                 obj.WIP_ACCODE = item.WIP_ACCODE
                 obj.STD_TIME = this.commonService.MinutesToHours(item.STD_TIME) || 0,
-                obj.MAX_TIME = this.commonService.MinutesToHours(item.MAX_TIME) || 0,
-                obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
-                obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
-                obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
-                obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
-                obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
-                obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
-                obj.POINTS = item.POINTS || 0,
-                obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
-                obj.GAIN_AC = "",
-                obj.TIMEON_PROCESS = item.TIMEON_PROCESS
+                  obj.MAX_TIME = this.commonService.MinutesToHours(item.MAX_TIME) || 0,
+                  obj.STD_LOSS = this.commonService.decimalQuantityFormat(item.STD_LOSS, 'METAL'),
+                  obj.MIN_LOSS = this.commonService.decimalQuantityFormat(item.MIN_LOSS, 'METAL'),
+                  obj.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL'),
+                  obj.LOSS_ACCODE = this.commonService.nullToString(item.LOSS_ACCODE),
+                  obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
+                  obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
+                  obj.POINTS = item.POINTS || 0,
+                  obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_ACCODE),
+                  obj.GAIN_AC = "",
+                  obj.TIMEON_PROCESS = item.TIMEON_PROCESS
               }
             });
           })

@@ -21,7 +21,7 @@
                                     <mat-form-field style="width: 100%;">
                                         <input type="text" matInput formControlName="code" maxlength="6"
                                             oninput="this.value = this.value.toUpperCase()"
-                                            (focusout)="approvalCodeValidate($event)" [readonly]="viewMode" />
+                                            (focusout)="checkCodeExists($event)" [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>

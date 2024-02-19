@@ -428,9 +428,9 @@ export class WorkerMasterComponent implements OnInit {
             confirmButtonText: 'Ok'
           }).then((result: any) => {
             if (result.value) {
-              this.workerMasterForm.reset()
             }
           });
+          this.workerMasterForm.controls.WorkerCode.setValue('')
         }
       }, err => {
         this.workerMasterForm.reset()

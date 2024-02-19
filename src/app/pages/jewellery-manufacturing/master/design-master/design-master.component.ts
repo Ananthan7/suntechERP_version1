@@ -1630,7 +1630,29 @@ removedatas(){
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-
+  checkCodeExists(event: any) {
+    if (event.target.value == '') return
+    let API = 'DesignMaster/CheckIfDesignCodePresent/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Design Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+            }
+          });
+          this.designmasterForm.controls.code.setValue('')
+        }
+      }, err => {
+        this.designmasterForm.controls.code.setValue('')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   deleteRecord() {
     if (this.content && this.content.FLAG == 'VIEW') return
