@@ -57,7 +57,8 @@ export class RetailReportsComponent implements OnInit {
       'RetailSalesKaratWiseProfitComponent': RetailSalesKaratWiseProfitComponent,
       'PosCrmDashboardComponent': PosCrmDashboardComponent,
       'FestivalSalesComparisonComponent': FestivalSalesComparisonComponent,
-      'PosTargetDashboardComponent': PosTargetDashboardComponent,  
+      'PosTargetDashboardComponent': PosTargetDashboardComponent, 
+      
       
   
       // Add components and update in operationals > menu updation grid form component name
