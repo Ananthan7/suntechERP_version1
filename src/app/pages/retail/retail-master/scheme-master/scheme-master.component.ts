@@ -81,14 +81,14 @@ export class SchemeMasterComponent implements OnInit {
     }
   }
   getAllSelectOptions() {
-    let frequencyAPI = 'ComboFilter/scheme%20frequency';
-    let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
-      if (resp.status == 'Success') {
-        this.frequencyList = resp.response
-      }
-    });
-    this.subscriptions.push(sub);
-
+    // let frequencyAPI = 'ComboFilter/scheme%20frequency';
+    // let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
+    //   if (resp.status == 'Success') {
+    //     this.frequencyList = resp.response
+    //   }
+    // });
+    // this.subscriptions.push(sub);
+    this.schemeMasterForm.value.frequency('Monthly')
     let depositinAPI = 'ComboFilter/scheme%20type';
     let subs: Subscription = this.dataService.getDynamicAPI(depositinAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {

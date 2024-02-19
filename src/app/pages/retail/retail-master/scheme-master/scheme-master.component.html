@@ -37,7 +37,8 @@
                     </div>
                     <div class="col-md-4">
                         <label class="col-form-label me-2">Status</label>
-                        <mat-checkbox class="mt-2" formControlName="schemeStatus">Active</mat-checkbox>
+                        <mat-checkbox class="mt-2"
+                            formControlName="schemeStatus">Active</mat-checkbox>
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -56,8 +57,7 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <mat-select formControlName="frequency">
-                                <mat-option
-                                    *ngFor="let data of frequencyList"
+                                <mat-option *ngFor="let data of frequencyList"
                                     [value]="data.ENGLISH">{{ data.ENGLISH
                                     }}</mat-option>
                             </mat-select>
