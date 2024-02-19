@@ -22,6 +22,7 @@
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 85%; margin-left: 7px;">
                                         <input type="text" matInput #code placeholder="CODE"
+                                            (focusout)="checkCodeExists($event)"
                                             (input)="code.value = code.value.toUpperCase()"
                                             formControlName="processCode" maxlength="6" [readonly]="viewMode" />
                                         <mat-error *ngIf="processMasterForm.controls.processCode.touched 
