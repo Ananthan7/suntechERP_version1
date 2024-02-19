@@ -25,7 +25,6 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatIconModule} from '@angular/material/icon';
 
-
 @NgModule({
   declarations: [
     LoginComponent,
@@ -52,6 +51,7 @@ import {MatIconModule} from '@angular/material/icon';
     MatInputModule,
     MatSnackBarModule,
     MatAutocompleteModule,
+    MatIconModule
   ]
 })
 export class AccountModule { }
