@@ -57,7 +57,7 @@ export class SchemeMasterComponent implements OnInit {
     depositIn: [""],
     startDate: [""],
     remarks: [""],
-    schemeStatus: [false],
+    schemeStatus: [true],
     SCHEMEFIXEDAMT: [false],
   });
 
@@ -87,11 +87,12 @@ export class SchemeMasterComponent implements OnInit {
         this.frequencyList = resp.response
       }
     });
-    this.schemeMasterForm.value.frequency('Monthly')
+    
     let depositinAPI = 'ComboFilter/scheme%20type';
     let subs: Subscription = this.dataService.getDynamicAPI(depositinAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {
-        this.depositinList = resp.response.filter((item: any) => item.ENGLISH == 'AMOUNT')
+        this.depositinList = resp.response
+        this.depositinList = this.depositinList.filter((item: any) => item.ENGLISH == 'AMOUNT')
         this.schemeMasterForm.controls.depositIn.setValue('AMOUNT')
       }
     });
@@ -196,7 +197,7 @@ export class SchemeMasterComponent implements OnInit {
       "BRANCH_CODE": this.comService.nullToString(this.branchCode),
       "SCHEME_CODE": this.comService.nullToString(this.schemeMasterForm.value.code),
       "SCHEME_NAME": this.comService.nullToString(this.schemeMasterForm.value.description),
-      "SCHEME_UNIT": 0,
+      "SCHEME_UNIT": 1,
       "SCHEME_BONUS": this.comService.emptyToZero(this.schemeMasterForm.value.bonusInstallment),
       "SCHEME_PERIOD": this.comService.emptyToZero(this.schemeMasterForm.value.tenurePeriod),
       "SCHEME_REMARKS": this.comService.nullToString(this.schemeMasterForm.value.remarks),
