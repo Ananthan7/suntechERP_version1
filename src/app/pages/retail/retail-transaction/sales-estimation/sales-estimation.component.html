@@ -505,11 +505,10 @@
         >
           <div class="row">
             <div class="col-md-2">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Mobile Number</mat-label>
                 <input
                   type="text"
-                  
                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                   matInput
                   (focusout)="!viewOnly && onCustomerNameFocus()"
@@ -530,7 +529,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-2">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Name</mat-label>
                 <input
                   type="text"
@@ -562,7 +561,7 @@
             </div>
             <div class="col-md-2">
               <!-- <div class="col-md-2" *ngIf="this.customerDetails?.CODE != undefined || null || ''"> -->
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Code</mat-label>
                 <input
                   type="text"
@@ -587,7 +586,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-2">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>ID Type </mat-label>
                 <input
                   type="text"
@@ -620,7 +619,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-2">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>ID#</mat-label>
                 <input
                   type="text"
@@ -3117,8 +3116,8 @@
           <div class="form-group row">
             <div class="col-md-3">
               <div class="form-group row">
-                <div class="col-md-4">
-                  <mat-form-field>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 50px;">
                     <mat-label>Code</mat-label>
                     <input
                       type="text"
@@ -3153,8 +3152,8 @@
                   </mat-form-field>
                 </div>
 
-                <div class="col-md-8">
-                  <mat-form-field>
+                <div class="col-md-7">
+                  <mat-form-field style="width: 100px;">
                     <mat-label>Mobile 1</mat-label>
                     <input
                       type="text"
@@ -3180,7 +3179,7 @@
               </div>
             </div>
             <div class="col-md-2">
-              <mat-form-field>
+              <mat-form-field style="width: 120px;">
                 <mat-label>Designation </mat-label>
                 <mat-select
                   formControlName="fcn_cust_desg"
@@ -3205,7 +3204,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Name</mat-label>
                 <input
                   type="text"
@@ -3238,7 +3237,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-2">
-              <mat-form-field>
+              <mat-form-field style="width: 120px;">
                 <mat-label>First Name</mat-label>
                 <input
                   type="text"
@@ -3258,7 +3257,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-2">
-              <mat-form-field>
+              <mat-form-field style="width: 120px;">
                 <mat-label>Middle Name</mat-label>
                 <input
                   type="text"
@@ -3272,7 +3271,7 @@
 
           <div class="form-group row">
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Last Name</mat-label>
                 <input
                   type="text"
@@ -3283,7 +3282,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Mobile 2</mat-label>
                 <input
                   type="text"
@@ -3295,7 +3294,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Email Address</mat-label>
                 <input
                   type="email"
@@ -3321,7 +3320,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Gender</mat-label>
                 <!-- <input type="text" matInput formControlName="fcn_cust_detail_gender" [readonly]="viewOnly" /> -->
                 <mat-select
@@ -3349,7 +3348,7 @@
 
           <div class="form-group row">
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Marital Status</mat-label>
                 <mat-select
                   formControlName="fcn_cust_detail_marital_status"
@@ -3367,7 +3366,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Date Of Birth</mat-label>
                 <input
                   matInput
@@ -3398,7 +3397,7 @@
                 </mat-form-field> -->
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Nationality</mat-label>
                 <!-- <input type="text" matInput formControlName="fcn_cust_detail_city" [readonly]="viewOnly" /> -->
                 <input
@@ -3432,7 +3431,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Country</mat-label>
                 <!-- <input type="text" matInput formControlName="fcn_cust_detail_country" [readonly]="viewOnly" /> -->
                 <!-- (optionSelected)="cahngeCountry($event.option.value)" -->
@@ -3468,7 +3467,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>State</mat-label>
                 <input
                   type="text"
@@ -3492,7 +3491,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>City</mat-label>
                 <!-- <input type="text" matInput formControlName="fcn_cust_detail_city" [readonly]="viewOnly" /> -->
                 <input
@@ -3514,7 +3513,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Address</mat-label>
                 <input
                   type="text"
@@ -3526,7 +3525,7 @@
             </div>
 
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>ID Type </mat-label>
                 <input
                   type="text"
@@ -3559,7 +3558,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>ID Card</mat-label>
                 <input
                   type="text"
@@ -3579,7 +3578,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3">
-              <mat-form-field>
+              <mat-form-field style="width: 130px;">
                 <mat-label>Occupation</mat-label>
                 <input
                   type="text"
@@ -3589,8 +3588,8 @@
                 />
               </mat-form-field>
             </div>
-            <div class="col-md-2">
-              <mat-form-field>
+            <div class="col-md-3">
+              <mat-form-field style="width: 130px;">
                 <mat-label>Employer</mat-label>
                 <input
                   type="text"
@@ -3600,8 +3599,8 @@
                 />
               </mat-form-field>
             </div>
-            <div class="col-md-4">
-              <mat-form-field>
+            <div class="col-md-3">
+              <mat-form-field style="width: 130px;">
                 <mat-label>Source Of Fund</mat-label>
                 <input
                   type="text"
@@ -3680,7 +3679,7 @@
                 <div class="bg-gray-card">
                   <div class="form-group row">
                     <div class="col-md-3">
-                      <mat-form-field>
+                      <mat-form-field style="width: 70%;">
                         <mat-label>Division </mat-label>
                         <input
                           type="text"
@@ -3690,6 +3689,9 @@
                           readonly
                         />
                       </mat-form-field>
+                      <master-search [MasterSearchData]="divisionCodeData"
+                      (newRowClick)="divisionCodeSelected($event)">>
+                      </master-search>
                     </div>
                     <div class="col-md-2">
                 
@@ -3710,7 +3712,7 @@
                           <input type="text" matInput formControlName="design" />
                      
                         </mat-form-field>
-                        <master-search >
+                        <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)">
                         </master-search>
                  
                         <!-- <input type="text" matInput formControlName="fcn_li_item_code" #fcn_li_item_code

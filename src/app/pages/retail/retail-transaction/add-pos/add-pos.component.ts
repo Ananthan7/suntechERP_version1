@@ -275,6 +275,41 @@ export class AddPosComponent implements OnInit {
     customerCode: ['', Validators.required],
   });
 
+  itemcodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_HEADING: "Item Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  itemcodeSelected(value: any) {
+    console.log(value);
+    this.lineItemForm.controls.fcn_li_item_code.setValue(value.PREFIX_CODE);
+    this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION)
+  }
+
+  divisionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  divisionCodeSelected(e:any){
+    console.log(e);
+    this.lineItemForm.controls.fcn_li_division.setValue(e.DIVISION_CODE);
+  
+  }
+
   docTypeData: MasterSearchModel =
     {
       "PAGENO": 1,
