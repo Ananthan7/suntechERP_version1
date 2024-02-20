@@ -6,389 +6,419 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-(deleteClick)="deleteRecord()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <!-- content section -->
 
 
 <div class="pos-sales-modalbody modelbody">
   <div class="card-body sales-card-body p-2">
     <form [formGroup]="designmasterForm">
-      <mat-tab-group  >
-          <mat-tab label="General">
-            <div class="card metal-sales-card">
-              <div class="card-body sales-card-body p-2">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-1">
-                      <mat-radio-button value="1">Diamond</mat-radio-button>
-                    </div>
-                    <div class="col-md-2">
-                      <mat-radio-button value="2">Metal</mat-radio-button>
-                    </div>
-                  
+      <mat-tab-group>
+        <mat-tab label="General">
+          <div class="card metal-sales-card">
+            <div class="card-body sales-card-body p-2">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-1">
+                    <mat-radio-button value="1">Diamond</mat-radio-button>
+                  </div>
+                  <div class="col-md-2">
+                    <mat-radio-button value="2">Metal</mat-radio-button>
+                  </div>
+
                 </div>
               </div>
-                <div class="row">       
-                  <div class="col-md-5">
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Design * :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="code" 
-                          oninput="this.value = this.value.toUpperCase()"
-                          (focusout)="checkCodeExists($event)"/>
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-6">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="designdesc" />
-                        </mat-form-field>
-                      </div>
+              <div class="row">
+                <div class="col-md-5">
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Design * :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="code"
+                          oninput="this.value = this.value.toUpperCase()" (focusout)="checkCodeExists($event)" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="designCodeData"
+                        (newRowClick)="designCodeSelected($event)"></master-search>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">SKU Prefix * :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="prefix" />
-                        </mat-form-field>
-                      </div>
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Parent Design:</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
+                    <div class="col-md-6">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput formControlName="designdesc" />
+                      </mat-form-field>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Attribute :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
-                      <label for="inputPassword" class="col-sm-3 col-form-label">No Sub Items:</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">SKU Prefix * :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 80%;">
+                        <input type="text" matInput formControlName="prefix" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="prefixCodeData"
+                      (newRowClick)="prefixCodeSelected($event)"></master-search>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Cost Center * :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="costcenter" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="costCenterData"
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Parent Design:</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 80%;">
+                        <input type="text" matInput formControlName="parentDesign" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="parentDesignCodeData"
+                      (newRowClick)="parentDesignCodeSelected($event)"></master-search>
+
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Attribute :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" oninput="this.value = this.value.toUpperCase()" matInput />
+                      </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-3 col-form-label">No Sub Items:</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%;">
+                        <input type="number" style="text-align: right;" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Cost Center * :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="costcenter" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="costCenterData"
                         (newRowClick)="costCenterSelected($event)"></master-search>
-                      </div>
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Set Ref:</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Karat * :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="karat" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="karatCodeData"
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Set Ref:</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Karat * :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="karat" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="karatCodeData"
                         (newRowClick)="karatCodeSelected($event)"></master-search>
-                      </div>
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Pair Ref :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Category :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="category" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="categoryCodeData"
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Pair Ref :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Category :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="category" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="categoryCodeData"
                         (newRowClick)="categoryCodeSelected($event)"></master-search>
-                      </div>
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Vendor Ref :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Sub Category :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="subcategory" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="subcategoryCodeData"
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Vendor Ref :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Sub Category :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="subcategory" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="subcategoryCodeData"
                         (newRowClick)="subcategoryCodeSelected($event)"></master-search>
-                      </div>
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Surface :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Type :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="type"/>
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="typeCodeData"
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Surface :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Type :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="type" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="typeCodeData"
                         (newRowClick)="typeCodeSelected($event)"></master-search>
-                      </div>
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Finish Type:</label>
-                      <div class="col-md-3">
-                          <mat-form-field style="width: 100%;">
-                              <mat-label></mat-label>
-                              <mat-select>
-                              </mat-select>
-                            </mat-form-field>
-                      </div>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Brand :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="brand" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="BrandCodeData"
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Finish Type:</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%;">
+                        <mat-label></mat-label>
+                        <mat-select>
+                          <mat-option value="mat">Mat</mat-option>
+                          <mat-option value="glossy">Glossy</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Brand :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="brand" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="BrandCodeData"
                         (newRowClick)="brandCodeSelected($event)"></master-search>
-                      </div>
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Country:</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="country" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="countryCodeData"
+                    </div>
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Country:</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="country" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="countryCodeData"
                         (newRowClick)="countryCodeSelected($event)"></master-search>
-                      </div>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Style :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="style" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="StyleCodeData"
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Style :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="style" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="StyleCodeData"
                         (newRowClick)="StyleCodeSelected($event)"></master-search>
-                      </div>
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Vend/Cust:</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Range :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput formControlName="range" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="RangeCodeData"
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Vend/Cust:</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Range :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="range" />
+                      </mat-form-field>
+                      <master-search [MasterSearchData]="RangeCodeData"
                         (newRowClick)="RangeCodeSelected($event)"></master-search>
+                    </div>
+                    <div class="col-md-3 pl-5">
+                      <mat-checkbox class="example-margin">Making On Gross Wt</mat-checkbox>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Purity :</label>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 70%;">
+                        <input type="number" style="text-align: right;" matInput />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-3 pl-5">
+                      <mat-checkbox class="example-margin">Metal On Gross Wt</mat-checkbox>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-md-4">
+                  <mat-tab-group>
+                    <mat-tab label="CAD Details">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Cad Designer:</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="text" matInput />
+                              </mat-form-field>
+                            </div>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Width:</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="number" style="text-align: right;" matInput />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Designer:</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="text" matInput />
+                              </mat-form-field>
+                            </div>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Thickness:</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="number" style="text-align: right;" matInput />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Grade:</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="text" matInput />
+                              </mat-form-field>
+                            </div>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Metal Wt :</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="number" style="text-align: right;" matInput />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Model Maker:</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="text" matInput />
+                              </mat-form-field>
+                            </div>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Currency * :</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 70%;">
+                                <input type="text" matInput formControlName="currency" />
+                              </mat-form-field>
+                              <master-search [MasterSearchData]="currencyCodeData"
+                        (newRowClick)="currencyCodeSelected($event)"></master-search>
+                            </div>
+                          </div>
+                          <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Instructor:</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="text" matInput />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Jewellery Size:</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="number" style="text-align: right;" matInput />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                              <mat-radio-button name="unit" value="1">Cm</mat-radio-button>
+                            </div>
+                            <div class="col-md-3">
+                              <mat-radio-button name="unit" value="2">Inch</mat-radio-button>
+                            </div>
+                          </div>
+                          <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">Req Metal:</label>
+                            <div class="col-md-3">
+                              <mat-form-field style="width: 100%;">
+                                <input type="number" style="text-align: right;" matInput />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                              <mat-radio-button name="type" value="1">%</mat-radio-button>
+                            </div>
+                            <div class="col-md-3">
+                              <mat-radio-button name="type" value="2">Weight</mat-radio-button>
+                            </div>
+                          </div>
+                          <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-6 col-form-label">Production Instruction</label>
+                          </div>
+                          <div class="row align-items-center mb-1">
+                            <div class="col-md-6">
+                              <textarea id="story" name="story" rows="5" cols="23"></textarea>
+                            </div>
+                            <div class="col-md-3">
+                              <mat-checkbox class="example-margin">Customer Exclusive</mat-checkbox>
+                              <mat-checkbox class="example-margin">Keep On Hold</mat-checkbox>
+                              <mat-checkbox class="example-margin">Add Steel</mat-checkbox>
+                            </div>
+                          </div>
+
+                        </div>
                       </div>
-                      <div class="col-md-3 pl-5">
-                          <mat-checkbox class="example-margin">Making On Gross Wt</mat-checkbox>
+
+                    </mat-tab>
+                    <mat-tab label="Price Scheme">
+
+                      <div class="col-md-12">
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-3 col-form-label">Price 1</label>
+                          <div class="col-md-3">
+                            <mat-form-field style="width: 80%;">
+                              <input type="text" matInput formControlName="price1"/>
+                            </mat-form-field>
+                            <master-search [MasterSearchData]="price1CodeData"
+                            (newRowClick)="price1CodeSelected($event)"></master-search>
+                          </div>
+
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-3 col-form-label">Price 2:</label>
+                          <div class="col-md-3">
+                            <mat-form-field style="width: 80%;">
+                              <input type="text" matInput formControlName="price2"/>
+                            </mat-form-field>
+                            <master-search [MasterSearchData]="price2CodeData"
+                            (newRowClick)="price2CodeSelected($event)"></master-search>
+                          </div>
+
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-3 col-form-label">Price 3:</label>
+                          <div class="col-md-3">
+                            <mat-form-field style="width: 80%;">
+                              <input type="text" matInput formControlName="price3"/>
+                            </mat-form-field>
+                            <master-search [MasterSearchData]="price3CodeData"
+                            (newRowClick)="price3CodeSelected($event)"></master-search>
+                          </div>
+
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-3 col-form-label">Price 4</label>
+                          <div class="col-md-3">
+                            <mat-form-field style="width: 80%;">
+                              <input type="text" matInput formControlName="price4"/>
+                            </mat-form-field>
+                            <master-search [MasterSearchData]="price4CodeData"
+                            (newRowClick)="price4CodeSelected($event)"></master-search>
+                          </div>
+
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-3 col-form-label">Price 5</label>
+                          <div class="col-md-3">
+                            <mat-form-field style="width: 80%;">
+                              <input type="text" matInput formControlName="price5"/>
+                            </mat-form-field>
+                            <master-search [MasterSearchData]="price5CodeData"
+                            (newRowClick)="price5CodeSelected($event)"></master-search>
+                          </div>
+                        </div>
+
+                      </div>
+
+
+
+                    </mat-tab>
+                  </mat-tab-group>
+                </div>
+                <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-7">
+                      <div class="upload-btn-wrapper">
+                        <button class="btn btnnew border-dark">
+                          <img src={{image}} style="width:126px;height:124px">
+
+                        </button>
+                        <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                          (change)="onFileChangedimage($event)">
                       </div>
                     </div>
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">Purity :</label>
-                      <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-3 pl-5">
-                          <mat-checkbox class="example-margin">Metal On Gross Wt</mat-checkbox>
-                      </div>
-                    </div>
-                    
-                  </div>
-                  <div class="col-md-4">
-                      <mat-tab-group  >
-                          <mat-tab label="CAD Details">
-                              <div class="row">
-                                  <div class="col-md-12">
-                                      <div class="row align-items-center mb-1">
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Cad Designer:</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Width:</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                        </div>
-                                        <div class="row align-items-center mb-1">
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Designer:</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Thickness:</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                        </div> 
-                                        <div class="row align-items-center mb-1">
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Grade:</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Metal Wt :</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                        </div> 
-                                        <div class="row align-items-center mb-1">
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Model Maker:</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Currency * :</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput formControlName="currency"/>
-                                            </mat-form-field>
-                                          </div>
-                                        </div> 
-                                        <div class="row align-items-center mb-1">
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Instructor:</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                        </div> 
-                                        <div class="row align-items-center mb-1">
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Jewellery Size:</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                          <div class="col-md-3">
-                                              <mat-radio-button value="1">Cm</mat-radio-button>  
-                                      </div>
-                                      <div class="col-md-3">
-                                          <mat-radio-button value="1">Inch</mat-radio-button>
-                                  </div>
-                                        </div> 
-                                        <div class="row align-items-center mb-1">
-                                          <label for="inputPassword" class="col-sm-3 col-form-label">Req Metal:</label>
-                                          <div class="col-md-3">
-                                            <mat-form-field style="width: 100%;">
-                                              <input type="text" matInput />
-                                            </mat-form-field>
-                                          </div>
-                                          <div class="col-md-2">
-                                              <mat-radio-button value="1">%</mat-radio-button>  
-                                      </div>
-                                      <div class="col-md-3">
-                                          <mat-radio-button value="1">Weight</mat-radio-button>
-                                  </div>
-                                        </div>  
-                                        <div class="row align-items-center mb-1">
-                                          <label for="inputPassword" class="col-sm-6 col-form-label">Production Instruction</label>
-                                        </div>
-                                        <div class="row align-items-center mb-1">
-                                          <div class="col-md-6">
-                                              <textarea id="story" name="story" rows="5" cols="23"></textarea>
-                                          </div>
-                                          <div class="col-md-3">
-                                              <mat-checkbox class="example-margin">Customer Exclusive</mat-checkbox>
-                                              <mat-checkbox class="example-margin">Keep On Hold</mat-checkbox>
-                                              <mat-checkbox class="example-margin">Add Steel</mat-checkbox>
-                                          </div>
-                                        </div>  
 
-                                  </div>
-                              </div>
-
-                          </mat-tab>
-                          <mat-tab label="Price Scheme">
-                            
-                              <div class="col-md-12">
-                                  <div class="row align-items-center mb-1">
-                                      <label for="inputPassword" class="col-sm-3 col-form-label">Price 1</label>
-                                      <div class="col-md-3">
-                                        <mat-form-field style="width: 100%;">
-                                          <input type="text" matInput />
-                                        </mat-form-field>
-                                      </div>
-                                     
-                                    </div>
-                                    <div class="row align-items-center mb-1">
-                                      <label for="inputPassword" class="col-sm-3 col-form-label">Price 2:</label>
-                                      <div class="col-md-3">
-                                        <mat-form-field style="width: 100%;">
-                                          <input type="text" matInput />
-                                        </mat-form-field>
-                                      </div>
-                                     
-                                    </div> 
-                                    <div class="row align-items-center mb-1">
-                                      <label for="inputPassword" class="col-sm-3 col-form-label">Price 3:</label>
-                                      <div class="col-md-3">
-                                        <mat-form-field style="width: 100%;">
-                                          <input type="text" matInput />
-                                        </mat-form-field>
-                                      </div>
-                                     
-                                    </div> 
-                                    <div class="row align-items-center mb-1">
-                                      <label for="inputPassword" class="col-sm-3 col-form-label">Price 4</label>
-                                      <div class="col-md-3">
-                                        <mat-form-field style="width: 100%;">
-                                          <input type="text" matInput />
-                                        </mat-form-field>
-                                      </div>
-                                     
-                                    </div> 
-                                    <div class="row align-items-center mb-1">
-                                      <label for="inputPassword" class="col-sm-3 col-form-label">Price 5</label>
-                                      <div class="col-md-3">
-                                        <mat-form-field style="width: 100%;">
-                                          <input type="text" matInput />
-                                        </mat-form-field>
-                                      </div>
-                                    </div> 
-                                    
-                                    </div>  
-
-                              
-                          
-                          </mat-tab>
-                      </mat-tab-group>           
-                  </div>
-                  <div class="col-md-3">
-                   <div class="row">
-                      <div class="col-md-7">
+                    <!-- <div class="col-md-7">
                           <div class="icons">
                               <div class="image_box"></div>
                               <div class="icons_footer">
@@ -401,633 +431,645 @@
                                 <i class="fas fa-plus icon-common"></i>
                               </div>
                             </div>
+                      </div> -->
+                    <div class="col-md-5">
+                      <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
+                          (click)="openaddDesignSequence()">
+                          Sequence
+                        </button>
                       </div>
-                      <div class="col-md-5">
-                          <div class="p-1 bd-highlight">
-                              <button type="button" class="btn btn-outline-primary metal-issue-del-btn" (click)="openaddDesignSequence()">
-                                Sequence
-                              </button>
-                            </div>
-                            <div class="p-1 bd-highlight">
-                              <button type="button" class="btn btn-outline-primary metal-issue-del-btn" (click)="openaddLabourChargesDetails()">
-                                Labour Charges
-                              </button>
-                            </div>
-                            <div class="p-1 bd-highlight">
-                              <button type="button" class="btn btn-outline-primary metal-issue-del-btn" (click)="openaddDesignTransaction()">
-                                Transaction
-                              </button>
-                            </div>
+                      <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
+                          (click)="openaddLabourChargesDetails()">
+                          Labour Charges
+                        </button>
                       </div>
+                      <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
+                          (click)="openaddDesignTransaction()">
+                          Transaction
+                        </button>
+                      </div>
+                    </div>
 
-                   </div>
-                   <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-6 col-form-label">Engraving Text:</label>
-                      <div class="col-md-6">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
-                    </div> 
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-6 col-form-label">Commends:</label>
-                      <div class="col-md-6">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
-                    </div> 
-                    <div class="row align-items-center mb-1">
-                      <label for="inputPassword" class="col-sm-6 col-form-label">Fault Details:</label>
-                      <div class="col-md-6">
-                        <mat-form-field style="width: 100%;">
-                          <input type="text" matInput />
-                        </mat-form-field>
-                      </div>
-                    </div> 
                   </div>
-                </div>
-                <div class="col-md-12">
-                  <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                      <dxo-paging [enabled]="false"></dxo-paging>
-                      <dxo-editing mode="cell" [allowUpdating]="true">
-                      </dxo-editing>
-                      <dxo-selection mode="multiple"></dxo-selection>
-                      <dxo-scrolling mode="virtual"></dxo-scrolling>
-      
-                      <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}"  caption="{{ data }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                      </dxi-column>
-                    </dx-data-grid>
-                </div>
-              </div>
-            </div>
-          </mat-tab>
-          <mat-tab label="BOM Details">
-            <div class="row">
-              <div class="col-md-3">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Size Set :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput formControlName="sizeset"/>
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="sizesetCodeData"
-                    (newRowClick)="sizesetCodeSelected($event)"></master-search>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-6 col-form-label">Engraving Text:</label>
+                    <div class="col-md-6">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput />
+                      </mat-form-field>
+                    </div>
                   </div>
-                </div> 
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Size :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput formControlName="size" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="sizeCodeData"
-                    (newRowClick)="sizeCodeSelected($event)"></master-search>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-6 col-form-label">Comments:</label>
+                    <div class="col-md-6">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput />
+                      </mat-form-field>
+                    </div>
                   </div>
-                </div> 
-              </div>
-              <div class="col-md-4">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Height :</label>
-                  <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Length :</label>
-                  <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Width :</label>
-                  <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                  </div>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Radius :</label>
-                  <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
+                  <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-6 col-form-label">Fault Details:</label>
+                    <div class="col-md-6">
+                      <mat-form-field style="width: 100%;">
+                        <input type="text" matInput />
+                      </mat-form-field>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div> 
-            <div class="row pl-4">
-              <div class="col-md-3 d-flex mb-2">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                    (addClick)="selectedTabIndex == 0 ? adddata() : adddatas();"  (deleteClick)="selectedTabIndex == 0 ? removedata():removedatas()">
-                </menu-buttons>
-            </div>
-            </div>
               <div class="col-md-12">
-                <mat-tab-group  [(selectedIndex)]="selectedTabIndex">
-                <mat-tab label="BOM Details">
-                  <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing>
+                  <dxo-selection mode="multiple"></dxo-selection>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                  <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  </dxi-column>
+                </dx-data-grid>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="BOM Details">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Size Set :</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="sizeset" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="sizesetCodeData"
+                    (newRowClick)="sizesetCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Size :</label>
+                <div class="col-md-6">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="size" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="sizeCodeData"
+                    (newRowClick)="sizeCodeSelected($event)"></master-search>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-3 col-form-label">Height :</label>
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" style="text-align: right;" matInput formControlName="height" />
+                  </mat-form-field>
+                </div>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Length :</label>
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" style="text-align: right;" matInput formControlName="length" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-3 col-form-label">Width :</label>
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" style="text-align: right;" matInput formControlName="width" />
+                  </mat-form-field>
+                </div>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Radius :</label>
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" style="text-align: right;" matInput formControlName="radius" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row pl-4">
+            <div class="col-md-3 d-flex mb-2">
+              <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                (addClick)="selectedTabIndex == 0 ? adddata() : adddatas();"
+                (deleteClick)="selectedTabIndex == 0 ? removedata():removedatas()">
+              </menu-buttons>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+              <mat-tab label="BOM Details">
+                <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
                   [showRowLines]="true" class="mt-3">
                   <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
 
-               
-                    <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
-                    <dxi-column dataField="Division" caption="Division" cellTemplate="divisiontemp"></dxi-column>
-                    <dxi-column dataField="StoneType" caption="Stone Type" cellTemplate="stoneTypetemp"></dxi-column>
-                    <dxi-column dataField="StockCode" caption="Stock Code" cellTemplate="stockCodetemp"></dxi-column>
-                    <dxi-column dataField="Karat" caption="Karat" cellTemplate="karattemp"></dxi-column>
-                    <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp"></dxi-column>
-                    <dxi-column dataField="Color" caption="Color" cellTemplate="colortemp"></dxi-column>
-                    <dxi-column dataField="ExtColor" caption="Ext.Color" cellTemplate="extColortemp"></dxi-column>
-                    <dxi-column dataField="Clarity" caption="Clarity" cellTemplate="claritytemp"></dxi-column>
-                    <dxi-column dataField="ExtClarity" caption="Ext.Clarity" cellTemplate="extClaritytemp"></dxi-column>
-                    <dxi-column dataField="SieveStd" caption="Sieve Std." cellTemplate="sieveStdtemp"></dxi-column>
-                    <dxi-column dataField="Description" caption="Description" cellTemplate="descriptiontemp"></dxi-column>
-                    <dxi-column dataField="SieveFrom" caption="Sieve From" cellTemplate="sieveFromtemp"></dxi-column>
-                    
-              
-                 
-                    <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
 
-                    <div *dxTemplate="let data of 'divisiontemp'">
-                      <input type="text" (change)="divisiontemp($event,data)" style="width: 100%;" />
-                    </div>
+                  <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                  <dxi-column dataField="Division" caption="Division" cellTemplate="divisiontemp"></dxi-column>
+                  <dxi-column dataField="StoneType" caption="Stone Type" cellTemplate="stoneTypetemp"></dxi-column>
+                  <dxi-column dataField="StockCode" caption="Stock Code" cellTemplate="stockCodetemp"></dxi-column>
+                  <dxi-column dataField="Karat" caption="Karat" cellTemplate="karattemp"></dxi-column>
+                  <dxi-column dataField="Shape" caption="Shape" cellTemplate="shapetemp"></dxi-column>
+                  <dxi-column dataField="Color" caption="Color" cellTemplate="colortemp"></dxi-column>
+                  <dxi-column dataField="ExtColor" caption="Ext.Color" cellTemplate="extColortemp"></dxi-column>
+                  <dxi-column dataField="Clarity" caption="Clarity" cellTemplate="claritytemp"></dxi-column>
+                  <dxi-column dataField="ExtClarity" caption="Ext.Clarity" cellTemplate="extClaritytemp"></dxi-column>
+                  <dxi-column dataField="SieveStd" caption="Sieve Std." cellTemplate="sieveStdtemp"></dxi-column>
+                  <dxi-column dataField="Description" caption="Description" cellTemplate="descriptiontemp"></dxi-column>
+                  <dxi-column dataField="SieveFrom" caption="Sieve From" cellTemplate="sieveFromtemp"></dxi-column>
+
+
+
+                  <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
+
+                  <div *dxTemplate="let data of 'divisiontemp'">
+                    <input type="text" (change)="divisiontemp($event,data)" style="width: 100%;" />
+                  </div>
 
                   <div *dxTemplate="let data of 'stoneTypetemp'">
                     <input type="text" (change)="stoneTypetemp($event,data)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let data of 'stockCodetemp'">
-                      <input type="text" (change)="stockCodetemp($event,data)" style="width: 100%;" />
-                    </div>
+                    <input type="text" (change)="stockCodetemp($event,data)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let data of 'karattemp'">
-                      <input type="text" (change)="karattemp($event,data)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let data of 'karattemp'">
+                    <input type="text" (change)="karattemp($event,data)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let data of 'shapetemp'">
-                      <input type="text" (change)="shapetemp($event,data)" style="width: 100%;"  />
-                    </div>
+                  <div *dxTemplate="let data of 'shapetemp'">
+                    <input type="text" (change)="shapetemp($event,data)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let data of 'colortemp'">
-                      <input type="text" (change)="colortemp($event,data)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let data of 'colortemp'">
+                    <input type="text" (change)="colortemp($event,data)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let data of 'extColortemp'">
-                      <input type="text" (change)="extColortemp($event,data)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let data of 'extColortemp'">
+                    <input type="text" (change)="extColortemp($event,data)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let data of 'claritytemp'">
-                      <input type="text" (change)="claritytemp($event,data)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let data of 'claritytemp'">
+                    <input type="text" (change)="claritytemp($event,data)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let data of 'extClaritytemp'">
-                      <input type="text" (change)="extClaritytemp($event,data)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let data of 'extClaritytemp'">
+                    <input type="text" (change)="extClaritytemp($event,data)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let data of 'sieveStdtemp'">
-                      <input type="text" (change)="sieveStdtemp($event,data)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let data of 'sieveStdtemp'">
+                    <input type="text" (change)="sieveStdtemp($event,data)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let data of 'descriptiontemp'">
-                      <input type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let data of 'descriptiontemp'">
+                    <input type="text" (change)="descriptiontemp($event,data)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let data of 'sieveFromtemp'">
-                      <input type="text" (change)="sieveFromtemp($event,data)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let data of 'sieveFromtemp'">
+                    <input type="text" (change)="sieveFromtemp($event,data)" style="width: 100%;" />
+                  </div>
 
                 </dx-data-grid>
 
-                </mat-tab>
-                <mat-tab label="Component Set">
-                  <dx-data-grid id="gridContainer" [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
+              </mat-tab>
+              <mat-tab label="Component Set">
+                <dx-data-grid id="gridContainer" [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
                   [showRowLines]="true" class="mt-3">
                   <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
 
-               
-                    <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
-                    <dxi-column dataField="CompCode" caption="Comp.Code" cellTemplate="compCodetemp"></dxi-column>
-                    <dxi-column dataField="Description" caption="Description" cellTemplate="Descriptiontemp"></dxi-column>
-                    <dxi-column dataField="Pcs" caption="Pcs" cellTemplate="Pcstemp"></dxi-column>
-                    <dxi-column dataField="SizeSetCode" caption="Size Set Code" cellTemplate="sizeSetCodetemp"></dxi-column>
-                    <dxi-column dataField="SizeCode" caption="Size Code" cellTemplate="sizeCodetemp"></dxi-column>
-                    <dxi-column dataField="Type" caption="Type" cellTemplate="typetemp"></dxi-column>
-                    <dxi-column dataField="Category" caption="Category" cellTemplate="categorytemp"></dxi-column>
-                    <dxi-column dataField="Shape" caption="Shape" cellTemplate="Shapetemp"></dxi-column>
-                    <dxi-column dataField="Height" caption="Height" cellTemplate="heighttemp"></dxi-column>
-                    <dxi-column dataField="Width" caption="Width" cellTemplate="widthtemp"></dxi-column>
-                    <dxi-column dataField="Length" caption="Length" cellTemplate="lengthtemp"></dxi-column>
-                    <dxi-column dataField="Radious" caption="Radious" cellTemplate="radioustemp"></dxi-column>
-                    
-              
-                 
-                    <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
 
-                    <div *dxTemplate="let datas of 'compCodetemp'">
-                      <input type="text" (change)="compCodetemp($event,datas)" style="width: 100%;" />
-                    </div>
+                  <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                  <dxi-column dataField="CompCode" caption="Comp.Code" cellTemplate="compCodetemp"></dxi-column>
+                  <dxi-column dataField="Description" caption="Description" cellTemplate="Descriptiontemp"></dxi-column>
+                  <dxi-column dataField="Pcs" caption="Pcs" cellTemplate="Pcstemp"></dxi-column>
+                  <dxi-column dataField="SizeSetCode" caption="Size Set Code"
+                    cellTemplate="sizeSetCodetemp"></dxi-column>
+                  <dxi-column dataField="SizeCode" caption="Size Code" cellTemplate="sizeCodetemp"></dxi-column>
+                  <dxi-column dataField="Type" caption="Type" cellTemplate="typetemp"></dxi-column>
+                  <dxi-column dataField="Category" caption="Category" cellTemplate="categorytemp"></dxi-column>
+                  <dxi-column dataField="Shape" caption="Shape" cellTemplate="Shapetemp"></dxi-column>
+                  <dxi-column dataField="Height" caption="Height" cellTemplate="heighttemp"></dxi-column>
+                  <dxi-column dataField="Width" caption="Width" cellTemplate="widthtemp"></dxi-column>
+                  <dxi-column dataField="Length" caption="Length" cellTemplate="lengthtemp"></dxi-column>
+                  <dxi-column dataField="Radius" caption="Radius" cellTemplate="radiustemp"></dxi-column>
+
+
+
+                  <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
+
+                  <div *dxTemplate="let datas of 'compCodetemp'">
+                    <input type="text" (change)="compCodetemp($event,datas)" style="width: 100%;" />
+                  </div>
 
                   <div *dxTemplate="let datas of 'Descriptiontemp'">
                     <input type="text" (change)="Descriptiontemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'Pcstemp'">
-                      <input type="text" (change)="Pcstemp($event,datas)" style="width: 100%;" />
-                    </div>
+                    <input type="text" (change)="Pcstemp($event,datas)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let datas of 'sizeSetCodetemp'">
-                      <input type="text" (change)="sizeSetCodetemp($event,datas)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let datas of 'sizeSetCodetemp'">
+                    <input type="text" (change)="sizeSetCodetemp($event,datas)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let datas of 'sizeCodetemp'">
-                      <input type="text" (change)="sizeCodetemp($event,datas)" style="width: 100%;"  />
-                    </div>
+                  <div *dxTemplate="let datas of 'sizeCodetemp'">
+                    <input type="text" (change)="sizeCodetemp($event,datas)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let datas of 'typetemp'">
-                      <input type="text" (change)="typetemp($event,datas)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let datas of 'typetemp'">
+                    <input type="text" (change)="typetemp($event,datas)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let datas of 'categorytemp'">
-                      <input type="text" (change)="categorytemp($event,datas)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let datas of 'categorytemp'">
+                    <input type="text" (change)="categorytemp($event,datas)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let datas of 'Shapetemp'">
-                      <input type="text" (change)="Shapetemp($event,datas)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let datas of 'Shapetemp'">
+                    <input type="text" (change)="Shapetemp($event,datas)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let datas of 'heighttemp'">
-                      <input type="text" (change)="heighttemp($event,datas)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let datas of 'heighttemp'">
+                    <input type="text" (change)="heighttemp($event,datas)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let datas of 'widthtemp'">
-                      <input type="text" (change)="widthtemp($event,datas)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let datas of 'widthtemp'">
+                    <input type="text" (change)="widthtemp($event,datas)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let datas of 'lengthtemp'">
-                      <input type="text" (change)="lengthtemp($event,datas)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let datas of 'lengthtemp'">
+                    <input type="text" (change)="lengthtemp($event,datas)" style="width: 100%;" />
+                  </div>
 
-                    <div *dxTemplate="let datas of 'radioustemp'">
-                      <input type="text" (change)="radioustemp($event,datas)" style="width: 100%;" />
-                    </div>
+                  <div *dxTemplate="let datas of 'radiustemp'">
+                    <input type="text" (change)="radiustemp($event,datas)" style="width: 100%;" />
+                  </div>
 
                 </dx-data-grid>
+              </mat-tab>
+              <mat-tab label="Design Parts Details">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing>
+                  <dxo-selection mode="multiple"></dxo-selection>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                  <dxi-column *ngFor="let data of columnhead2" dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  </dxi-column>
+                </dx-data-grid>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+          <div class="col-md-12 ">
+            <div class="row pt-3">
+              <div class="col-md-10">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing>
+                  <dxo-selection mode="multiple"></dxo-selection>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                  <dxi-column *ngFor="let data of columnheader2" dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  </dxi-column>
+                </dx-data-grid>
+              </div>
+              <div class="col-md-2">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing>
+                  <dxo-selection mode="multiple"></dxo-selection>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                  <dxi-column *ngFor="let data of columnheader3" dataField="{{ data }}" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  </dxi-column>
+                </dx-data-grid>
+              </div>
+
+            </div>
+
+          </div>
+        </mat-tab>
+        <mat-tab label="Attributes">
+          <div class="row">
+            <div class="col-md-12">
+              <mat-tab-group>
+                <mat-tab label="Cut Range">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column1" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
                 </mat-tab>
-                <mat-tab label="Design Parts Details">
-                  <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
-                    <dxo-selection mode="multiple"></dxo-selection>
-                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-    
-                    <dxi-column *ngFor="let data of columnhead2" dataField="{{ data }}"  caption="{{ data }}"
-                      [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                    </dxi-column>
-                  </dx-data-grid>
+                <mat-tab label="Country Range">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column2" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Dye Strip Range">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column3" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Weight Range">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column15" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Wax Models">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column4" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Approved Vendors">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column5" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Enamel Color">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column6" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Components">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column7" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Size Range">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of columnheader4" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Width Range">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column8" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Length">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column9" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Height">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column10" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Karat Range">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column11" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Color Range">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column12" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Stock Code">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column13" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Finishing Range">
+                  <div class="col-md-12 pt-2">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column *ngFor="let data of column14" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
                 </mat-tab>
               </mat-tab-group>
-              </div>
-              <div class="col-md-12 ">
-                <div class="row pt-3">
-                  <div class="col-md-10">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                      <dxo-paging [enabled]="false"></dxo-paging>
-                      <dxo-editing mode="cell" [allowUpdating]="true">
-                      </dxo-editing>
-                      <dxo-selection mode="multiple"></dxo-selection>
-                      <dxo-scrolling mode="virtual"></dxo-scrolling>
-      
-                      <dxi-column *ngFor="let data of columnheader2" dataField="{{ data }}"  caption="{{ data }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                      </dxi-column>
-                    </dx-data-grid>
-                  </div>
-                  <div class="col-md-2">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                      <dxo-paging [enabled]="false"></dxo-paging>
-                      <dxo-editing mode="cell" [allowUpdating]="true">
-                      </dxo-editing>
-                      <dxo-selection mode="multiple"></dxo-selection>
-                      <dxo-scrolling mode="virtual"></dxo-scrolling>
-      
-                      <dxi-column *ngFor="let data of columnheader3" dataField="{{ data }}"  caption="{{ data }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                      </dxi-column>
-                    </dx-data-grid>
-                  </div>
-
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="UDF Grouping">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Collection :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="collection" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="collectionCodeData"
+                    (newRowClick)="collectionCodeSelected($event)"></master-search>
                 </div>
+              </div>
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Sub-Collection :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="subCollection" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="subCollectionCodeData"
+                    (newRowClick)="subCollectionCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Stone Type/Lo :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="stoneType" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="stoneTypeCodeData"
+                    (newRowClick)="stoneTypeCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Setting :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="setting" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="settingCodeData"
+                    (newRowClick)="settingCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Shape :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="shape" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="shapeCodeData"
+                    (newRowClick)="shapeCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Inc.Cat :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="incCat" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="incCatCodeData"
+                    (newRowClick)="incCatCodeSelected($event)"></master-search>
+                </div>
+              </div>
+              <div class="row align-items-center mb-1">
+                <label for="inputPassword" class="col-sm-4 col-form-label">Order Ref :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput formControlName="orderRef" />
+                  </mat-form-field>
+                  <master-search [MasterSearchData]="orderRefCodeData"
+                    (newRowClick)="orderRefCodeSelected($event)"></master-search>
+                </div>
+              </div>
 
-              </div>
-          </mat-tab>
-          <mat-tab label="Attributes">
-            <div class="row">
-              <div class="col-md-12">
-                <mat-tab-group>
-                  <mat-tab label="Cut Range">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column1" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Country Range">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column2" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Dye Strip Range">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column3" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Weight Range">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column15" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Wax Models">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column4" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Aproved Vendors">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column5" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Enamel Color">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column6" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Components">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column7" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Size Range">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of columnheader4" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Width Range">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column8" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Length">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column9" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Height">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column10" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Karat Range">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column11" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Color Range">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column12" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Stock Code">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column13" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  <mat-tab label="Finishing Range">
-                    <div class="col-md-12 pt-2">
-                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true">
-                        </dxo-editing>
-                        <dxo-selection mode="multiple"></dxo-selection>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column *ngFor="let data of column14" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                </mat-tab-group>
-              </div>
             </div>
-          </mat-tab>
-          <mat-tab label="UDF Grouping">
-            <div class="row">
-              <div class="col-md-5">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Collection :</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div> 
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Sub-Collection :</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div> 
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Stone Type/Lo :</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div> 
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Setting :</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div> 
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Shape :</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div> 
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Inc.Cat :</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div> 
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">Order Ref :</label>
-                  <div class="col-md-5">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput />
-                    </mat-form-field>
-                    <master-search></master-search>
-                  </div>
-                </div> 
-
-              </div>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
-        </form>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </form>
   </div>
 
 </div>
