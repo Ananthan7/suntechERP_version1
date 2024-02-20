@@ -20,25 +20,26 @@
                         class="col-sm-2 col-form-label">Code*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text"
+                            <input type="text" [readonly]="viewMode"
                                 oninput="this.value = this.value.toUpperCase()"
-                                (focusout)="getSchemeMasterList()"
+                                (focusout)="getSchemeMasterList()" maxlength="6"
                                 matInput formControlName="code" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <label class="col-form-label m-2">Prefix</label>
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput
+                            <input type="text" matInput [readonly]="viewMode"
                                 (focusout)="prefixCodeValidate()"
                                 formControlName="prefix" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="prefixCodeData"
+                            *ngIf="!viewMode"
                             (newRowClick)="prefixSelected($event)"></master-search>
                     </div>
                     <div class="col-md-4">
                         <label class="col-form-label me-2">Status</label>
-                        <mat-checkbox class="mt-2"
+                        <mat-checkbox class="mt-2" [disabled]="viewMode"
                             formControlName="schemeStatus">Active</mat-checkbox>
                     </div>
                 </div>
@@ -47,9 +48,9 @@
                         class="col-sm-2 col-form-label">Description</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput
+                            <input [readonly]="viewMode" type="text" matInput
                                 oninput="this.value = this.value.toUpperCase()"
-                                formControlName="description" />
+                                formControlName="description" maxlength="40"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -57,13 +58,17 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Frequency*</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <ng-select [readonly]="viewMode" [items]="frequencyList"
+                            bindLabel="ENGLISH"
+                            bindValue="ENGLISH"
+                            formControlName="frequency"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
                             <mat-select formControlName="frequency">
                                 <mat-option *ngFor="let data of frequencyList"
                                     [value]="data.ENGLISH">{{ data.ENGLISH
                                     }}</mat-option>
                             </mat-select>
-                        </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -71,8 +76,8 @@
                         class="col-sm-2 col-form-label">Tenure/Period*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput
-                                class="text-right"
+                            <input type="number" matInput max="5"
+                                class="text-right" [readonly]="viewMode"
                                 formControlName="tenurePeriod" />
                         </mat-form-field>
                     </div>
@@ -83,21 +88,25 @@
                         Amount</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" style="text-align: right;"
+                            <input max="15" type="number" [readonly]="viewMode"
+                                style="text-align: right;"
                                 matInput formControlName="installmentAmount" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <ng-select [items]="receipt1List" [readonly]="viewMode"
+                            bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
+                            formControlName="receiptModeone"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeone">
                                 <mat-option
                                     *ngFor="let data of receipt1List"
                                     [value]="data.CREDIT_CODE">{{
                                     data.CREDIT_CODE }}</mat-option>
                             </mat-select>
-                        </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -106,21 +115,25 @@
                     </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" style="text-align: right;"
+                            <input max="15" type="number" style="text-align: right;"
+                                [readonly]="viewMode"
                                 matInput formControlName="bonusInstallment" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
-                            <mat-select formControlName="receiptModeTwo">
+                        <ng-select [items]="receipt2List" [readonly]="viewMode"
+                            bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
+                            formControlName="receiptModeTwo"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
+                           <mat-select formControlName="receiptModeTwo">
                                 <mat-option
                                     *ngFor="let data of receipt2List"
                                     [value]="data.CREDIT_CODE">{{
                                     data.CREDIT_CODE }}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                            </mat-select> 
+                        </mat-form-field>-->
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -128,35 +141,42 @@
                         class="col-sm-2 col-form-label">Cancel Charges </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" style="text-align: right;"
+                            <input max="15" type="number" style="text-align: right;"
+                                [readonly]="viewMode"
                                 matInput formControlName="cancelCharges" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <ng-select [items]="receipt2List" [readonly]="viewMode"
+                            bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
+                            formControlName="receiptModeThree"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeThree">
                                 <mat-option
                                     *ngFor="let data of receipt2List"
                                     [value]="data.CREDIT_CODE">{{
                                     data.CREDIT_CODE }}</mat-option>
                             </mat-select>
-                        </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Deposit In</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <ng-select [items]="depositinList" bindLabel="ENGLISH"
+                            bindValue="ENGLISH" [readonly]="viewMode"
+                            formControlName="depositIn"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
                             <mat-select formControlName="depositIn">
                                 <mat-option
                                     *ngFor="let data of depositinList"
                                     [value]="data.ENGLISH">{{ data.ENGLISH
                                     }}</mat-option>
                             </mat-select>
-                        </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -164,9 +184,9 @@
                         class="col-sm-2 col-form-label">Start Date</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input matInput readonly
-                                DateValidation
+                            <input matInput DateValidation
                                 name="startDate"
+                                [readonly]="viewMode"
                                 [matDatepicker]="StartDate"
                                 formControlName="startDate"
                                 placeholder="DD/MM/YYYY"
@@ -174,13 +194,14 @@
                             <mat-datepicker-toggle
                                 matSuffix
                                 [for]="StartDate"></mat-datepicker-toggle>
-                            <mat-datepicker disabled="true"
+                            <mat-datepicker [disabled]="viewMode"
                                 #StartDate></mat-datepicker>
                         </mat-form-field>
                     </div>
                     <div class="col-md-2">
-                        <mat-checkbox formControlName="SCHEMEFIXEDAMT">Scheme
-                            Amt Not Fixed</mat-checkbox>
+                        <mat-checkbox formControlName="SCHEMEFIXEDAMT"
+                            [disabled]="viewMode">
+                            Scheme Amt Not Fixed</mat-checkbox>
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -188,8 +209,8 @@
                         class="col-sm-2 col-form-label">Remarks</label>
                     <div class="col-md-10">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput
-                                formControlName="remarks" />
+                            <input type="text" matInput [readonly]="viewMode"
+                                formControlName="remarks" maxlength="100" />
                         </mat-form-field>
                     </div>
                 </div>

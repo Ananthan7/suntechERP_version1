@@ -27,6 +27,7 @@ export class SchemeMasterComponent implements OnInit {
   receipt2List: any[] = [];
   branchCode?: String;
   yearMonth?: String;
+  viewMode: boolean = false;
 
   prefixCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -47,7 +48,7 @@ export class SchemeMasterComponent implements OnInit {
     prefix: [""],
     description: [""],
     frequency: ["", Validators.required],
-    tenurePeriod: ["", Validators.required],
+    tenurePeriod: [""],
     installmentAmount: [""],
     bonusInstallment: [""],
     receiptModeone: [""],
@@ -74,12 +75,16 @@ export class SchemeMasterComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.getAllSelectOptions()
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+    }
     if (this.content) {
       this.setInitialValues()
     } else {
       this.setFormValues()
     }
   }
+
   getAllSelectOptions() {
     let frequencyAPI = 'ComboFilter/scheme%20frequency';
     let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
@@ -282,6 +287,7 @@ export class SchemeMasterComponent implements OnInit {
   // SchemeMaster/UpdateSchemeMaster
 
   deleteSchemeMaster() {
+    if (this.content?.FLAG == 'VIEW') return
     if (!this.content.MID) {
       Swal.fire({
         title: '',
@@ -305,7 +311,7 @@ export class SchemeMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'SchemeMaster/DeleteSchemeMaster/' + this.schemeMasterForm.value.branch + this.schemeMasterForm.value.code;
+        let API = 'SchemeMaster/DeleteSchemeMaster/' + this.schemeMasterForm.value.branch +'/'+ this.schemeMasterForm.value.code;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
