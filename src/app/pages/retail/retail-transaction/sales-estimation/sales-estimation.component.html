@@ -439,6 +439,7 @@
             <mat-label>{{ vocno_lbl }}</mat-label>
             <input
               type="text"
+              style="text-align: right;"
               matInput
               formControlName="fcn_voc_no"
               [readonly]="true"
@@ -509,6 +510,7 @@
                 <mat-label>Mobile Number</mat-label>
                 <input
                   type="text"
+                  style="text-align: right;"
                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                   matInput
                   (focusout)="!viewOnly && onCustomerNameFocus()"
@@ -3121,6 +3123,7 @@
                     <mat-label>Code</mat-label>
                     <input
                       type="text"
+                      style="text-align: right;"
                       matInput
                       formControlName="fcn_mob_code"
                       id="fcn_mob_code"
@@ -3157,6 +3160,7 @@
                     <mat-label>Mobile 1</mat-label>
                     <input
                       type="text"
+                      style="text-align: right;"
                       #mobile1
                       (change)="onCustomerNameFocus(mobile1.value)"
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
@@ -3286,6 +3290,7 @@
                 <mat-label>Mobile 2</mat-label>
                 <input
                   type="text"
+                  style="text-align: right;"
                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                   matInput
                   formControlName="fcn_cust_detail_phone2"
@@ -4321,6 +4326,7 @@
                   <mat-label>Stone Rate</mat-label>
                   <input
                     class="st_txt_right"
+                    style="text-align: right;"
                     type="number"
                     [min]="0"
                     [maxLength]="14"
@@ -4339,6 +4345,7 @@
                   <mat-label>Stone Amount</mat-label>
                   <input
                     class="st_txt_right"
+                    style="text-align: right;"
                     type="number"
                     [min]="0"
                     [maxLength]="14"
@@ -4358,6 +4365,7 @@
                   <mat-label>Making Rate</mat-label>
                   <input
                     class="st_txt_right"
+                    style="text-align: right;"
                     type="number"
                     [min]="0"
                     [maxLength]="14"
@@ -4374,6 +4382,7 @@
                   <mat-label>Making Amount</mat-label>
                   <input
                     class="st_txt_right"
+                    style="text-align: right;"
                     type="number"
                     [min]="0"
                     [maxLength]="14"
