@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Design Master</h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Design Master (MFG)</h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
@@ -35,7 +35,9 @@
                       <label for="inputPassword" class="col-sm-3 col-form-label">Design * :</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%;">
-                          <input type="text" matInput formControlName="code" />
+                          <input type="text" matInput formControlName="code" 
+                          oninput="this.value = this.value.toUpperCase()"
+                          (focusout)="checkCodeExists($event)"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-6">

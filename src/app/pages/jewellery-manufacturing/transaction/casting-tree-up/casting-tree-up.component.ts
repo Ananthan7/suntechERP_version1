@@ -157,6 +157,7 @@ export class CastingTreeUpComponent implements OnInit {
   this.castingTreeUpFrom.controls.waxWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   this.castingTreeUpFrom.controls.reqMetal.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   this.castingTreeUpFrom.controls.base.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  this.castingTreeUpFrom.controls.vocDate.setValue(this.comService.currentDate)
   }
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -290,36 +291,38 @@ export class CastingTreeUpComponent implements OnInit {
   });
 
   adddata() {
+    console.log(this.tableData,'eee')
     let length = this.tableData.length;
     let srno = length + 1;
     let data = {
       "UNIQUEID": 12345,
       "APPR_CODE": "string",
       "SRNO": srno,
-      "Job_Code": this.castingTreeUpFrom.value.Job_Code,
-      'Unique_job_ID': this.castingTreeUpFrom.value.Unique_job_ID,
-      'Design_Code': this.castingTreeUpFrom.value.Design_Code,
-      'Gross_Weight': this.castingTreeUpFrom.value.Gross_Weight,
-      'Metal_Weight': this.castingTreeUpFrom.value.Metal_Weight,
-      'Stone_Weight': this.castingTreeUpFrom.value.Stone_Weight,
-      'RCVD_Gross_Weight': this.castingTreeUpFrom.value.RCVD_Gross_Weight,
-      'Karat_Code': this.castingTreeUpFrom.value.Karat_Code,
-      'Purity': this.castingTreeUpFrom.value.Purity,
-      'Pure_Weight': this.castingTreeUpFrom.value.Pure_Weight,
-      'Metal_Color': this.castingTreeUpFrom.value.Metal_Color,
-      'RCVD_Pure_Weight': this.castingTreeUpFrom.value.RCVD_Pure_Weight,
-      'Stock_Code': this.castingTreeUpFrom.value.Stock_Code,
-      'Pieces': this.castingTreeUpFrom.value.Pieces,
-      'Job_Pcs': this.castingTreeUpFrom.value.Job_Pcs,
-      'Loss_Wt': this.castingTreeUpFrom.value.Loss_Wt,
-      'Loss_Pure': this.castingTreeUpFrom.value.Loss_Pure,
-      "EMAIL_ID": this.castingTreeUpFrom.value.EMAIL_ID,
+      "Job_Code": 0,
+      'Unique_job_ID': 0,
+      'Design_Code': 0,
+      'Gross_Weight': 0,
+      'Metal_Weight': 0,
+      'Stone_Weight': 0,
+      'RCVD_Gross_Weight': 0,
+      'Karat_Code': 0,
+      'Purity': 0,
+      'Pure_Weight': 0,
+      'Metal_Color': 0,
+      'RCVD_Pure_Weight': 0,
+      'Stock_Code': 0,
+      'Pieces': 0,
+      'Job_Pcs': 0,
+      'Loss_Wt': 0,
+      'Loss_Pure': 0,
+      "EMAIL_ID": 0,
     };
     this.tableData.push(data);
     
   }
 
   adddatas() {
+    console.log(this.tableData1,'console')
     let length1 = this.tableData1.length;
     let srno1 = length1 + 1;
     let data1 = {
@@ -331,7 +334,7 @@ export class CastingTreeUpComponent implements OnInit {
       'Stock_Code': this.castingTreeUpFrom.value.Stock_Code,
       'Sub_Stock_Code': this.castingTreeUpFrom.value.Sub_Stock_Code,
       'Divcode': this.castingTreeUpFrom.value.Divcode,
-      'Gross_Weight': this.castingTreeUpFrom.value.Gross_Weight,
+      'Gross_Weight': "",
       'Party': this.castingTreeUpFrom.value.Party,
       'Pure_Weiht': this.castingTreeUpFrom.value.Pure_Weiht,
       'Balance': this.castingTreeUpFrom.value.Balance,

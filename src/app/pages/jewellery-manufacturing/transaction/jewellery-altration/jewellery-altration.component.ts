@@ -97,21 +97,26 @@ setAllInitialValues() {
     .subscribe((result) => {
       if (result.response) {
         let data = result.response
-        this.jewelleryaltrationFrom = data.Details
+        console.log(data,'ll')
+        this.jewelleryaltrationdetail = data.Details
         data.Details.forEach((element:any) => {
           this.tableData.push({
             SRNO: element.SRNO,
             STOCK_CODE: element.STOCK_CODE,
             DESCRIPTION: element.DESCRIPTION,
-            PCS:element.PCS,
-            METALWT: element.METAL_WT,
-            STONEWT: element.STONE_WT,
-            
+            pcs:element.PCS,
+            METALWT: element.METALWT,
+            STONEWT: element.STONEWT,
+            GROSSWT:element.GROSSWT,
+            COSTCC:element.COSTCC,
+            COSTCCNEW:element.COSTCCNEW,
+            REMARKS_DETAIL:element.REMARKS_DETAIL
 
+            
           })
         });
-        this.jewelleryaltrationFrom.controls.vocno.setValue(data.VOCNO)
         this.jewelleryaltrationFrom.controls.voctype.setValue(data.VOCTYPE)
+        this.jewelleryaltrationFrom.controls.vocno.setValue(data.VOCNO)
         this.jewelleryaltrationFrom.controls.metalrate.setValue(data.METAL_RATE)
         this.jewelleryaltrationFrom.controls.metalratetype.setValue(data.MET_RATE_TYPE)
         this.jewelleryaltrationFrom.controls.costcode.setValue(data.CC_RATE)
@@ -119,6 +124,7 @@ setAllInitialValues() {
         this.jewelleryaltrationFrom.controls.enteredby.setValue(data.SMAN)
         this.jewelleryaltrationFrom.controls.itemcurrency.setValue(data.CURRENCY_CODE)
         this.jewelleryaltrationFrom.controls.narration.setValue(data.SMAN)
+
        
         
       } else {
@@ -132,8 +138,8 @@ setAllInitialValues() {
 
 
   jewelleryaltrationFrom: FormGroup = this.formBuilder.group({
-    voctype:['',[Validators.required]],
-    vocno:['',[Validators.required]],
+    voctype:[''],
+    vocno:[''],
    vocdate:[''],
    metalrate:[''],
    metalratetype:[''],
@@ -193,12 +199,12 @@ setAllInitialValues() {
   }
   setValuesToHeaderGrid(detailDataToParent: any) {
     let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
-    // if (PROCESS_FORMDETAILS.SRNO) {
-    //   this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
-    // } else {
-    //   this.tableRowCount += 1
-    //   PROCESS_FORMDETAILS.SRNO = this.tableRowCount
-    // }
+    if (PROCESS_FORMDETAILS.SRNO) {
+      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+    } else {
+      this.tableRowCount += 1
+      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+    }
 
     this.tableData.push(PROCESS_FORMDETAILS)
 
@@ -220,10 +226,9 @@ setAllInitialValues() {
   deleteTableData(): void {
     this.tableRowCount = 0;
     console.log(this.selectRowIndex)
-   
-      this.tableData.splice(this.selectRowIndex ,1)
-    
+    this.tableData.splice(this.selectRowIndex, 1)
   }
+  
 removedata(){
   this.tableData.pop();
 }
@@ -245,7 +250,7 @@ removedata(){
       "VOCNO": this.jewelleryaltrationFrom.value.vocno,
       "VOCDATE": this.jewelleryaltrationFrom.value.vocdate,
       "YEARMONTH": this.yearMonth,
-      "SMAN": this.comService.nullToString(this.jewelleryaltrationFrom.value.enteredby),
+      "SMAN": this.comService.nullToString(this.jewelleryaltrationFrom.value.SMAN),
       "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount,
       "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency,
       "CC_RATE": 0,
@@ -271,7 +276,7 @@ removedata(){
       "DetailComponents": [
         {
           "REFMID": 0,
-          "MAINCODE": "str",
+          "MAINCODE":"",
           "SLNO": 0,
           "METALSTONE": "s",
           "DIVISION": "s",
@@ -333,7 +338,7 @@ removedata(){
       return
     }
   
-    let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocNo}/${this.comService.yearSelected}` 
+    let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocno}/${this.comService.yearSelected}` 
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
@@ -463,7 +468,7 @@ removedata(){
       "DetailComponents": [
         {
           "REFMID": 0,
-          "MAINCODE": "",
+          "MAINCODE": this.jewelleryaltrationFrom.value.MAINCODE,
           "SLNO": 0,
           "METALSTONE": "",
           "DIVISION": "",

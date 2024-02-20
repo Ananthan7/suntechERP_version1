@@ -50,7 +50,30 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-
+/**use: to check code exists in db */
+checkCodeExists(event: any) {
+  if (event.target.value == '' || this.viewMode == true) return
+  let API = 'ProcessMasterDj/CheckIfCodeExists/' + event.target.value
+  let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    .subscribe((result) => {
+      if (result.checkifExists) {
+        Swal.fire({
+          title: '',
+          text: result.message || 'Process Code Already Exists!',
+          icon: 'warning',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        }).then((result: any) => {
+          if (result.value) {
+          }
+        });
+        this.processMasterForm.controls.processCode.setValue('')
+      }
+    }, err => {
+      this.processMasterForm.controls.processCode.setValue('')
+    })
+  this.subscriptions.push(Sub)
+}
 
   updateStandardTime(duration: any) {
     // this.yourContent.standardTime.totalDays = duration[0] || 0;

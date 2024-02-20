@@ -166,6 +166,17 @@ export class MeltingTypeComponent implements OnInit {
   KaratCodeSelected(e: any) {
     console.log(e);
     this.meltingTypeForm.controls.karat.setValue(e['Karat Code']);
+    this.meltingTypeForm.controls.purity.setValue(e.STD_PURITY);
+
+     // Calculate Metal and Alloy percentages
+     const purity = parseFloat(e.STD_PURITY);
+     const metalPercentage = purity * 100;
+     const alloyPercentage = 100 - metalPercentage;
+ 
+     // Set the calculated values in the form controls
+     this.meltingTypeForm.controls.metal.setValue(metalPercentage);
+     this.meltingTypeForm.controls.alloy.setValue(alloyPercentage);
+     
   }
 
   stockCodeData: MasterSearchModel = {
