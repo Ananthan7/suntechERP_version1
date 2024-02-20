@@ -56,13 +56,16 @@
 .m_1 {
   margin-left: 50px;
 }
-
+.image{
+  transition: background-color 0.5s;
+}
 .image_hover {
   display: none;
   position: absolute;
   top: 4px;
   left: 28px;
   z-index: 88;
+  transition: .3s;
 }
 
 .card_item {
@@ -103,8 +106,9 @@
 
   .card-item_title .image_hover {
     display: inline;
-    transition: 3ms ease;
-
+    // transition: 3ms ease;
+    // transition-delay:13s;
+    transition: all 0.8s ease 0s; 
   }
 
 }
@@ -159,7 +163,7 @@
   bottom: -68px;
   right: 127px;
   border-radius: 50%;
-  transition: all 0.5s ease;
+  transition: all 0.10s ease;
 }
 
 .card-item_title {
@@ -241,7 +245,8 @@ nav {
   margin: 0;
   padding: 0;
   max-width: 75px;
-  padding-top: 47px;
+  padding-top: 30px;
+  margin-bottom: 25px;
 }
 
 .ul_1:after {
