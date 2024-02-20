@@ -457,9 +457,9 @@ removedatas(){
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 36,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color',
+    SEARCH_HEADING: 'size Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
@@ -489,17 +489,17 @@ removedatas(){
   sizesetCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 36,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color',
+    LOOKUPID: 90,
+    SEARCH_FIELD: 'COMPSET_CODE',
+    SEARCH_HEADING: 'Size set code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SIZE MASTER'",
+    WHERECONDITION: "COMPSET_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   sizesetCodeSelected(e:any){
     console.log(e);
-    this.designmasterForm.controls.sizeset.setValue(e.CODE);
+    this.designmasterForm.controls.sizeset.setValue(e.COMPSET_CODE);
   }
 
 
