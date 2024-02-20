@@ -366,6 +366,7 @@ export class SchemeReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID)
+          this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE)
           this.receiptDetailsForm.controls.SCH_CUSTOMER_CODE.setValue(data.SCH_CUSTOMER_CODE)
           this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data.SCH_CUSTOMER_ID)
           this.newReceiptData.SCHEME_AMOUNT = data?.PAY_AMOUNTFC

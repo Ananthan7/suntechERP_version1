@@ -21,6 +21,7 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text"
+                                oninput="this.value = this.value.toUpperCase()"
                                 (focusout)="getSchemeMasterList()"
                                 matInput formControlName="code" />
                         </mat-form-field>
@@ -47,6 +48,7 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput
+                                oninput="this.value = this.value.toUpperCase()"
                                 formControlName="description" />
                         </mat-form-field>
                     </div>
@@ -55,17 +57,13 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Frequency*</label>
                     <div class="col-md-2">
-                        <select class="selectBankList" formControlName="frequency">
-                            <option *ngFor="let data of frequencyList"
-                                [value]="data.ENGLISH">{{data.ENGLISH}}</option>
-                        </select>
-                        <!-- <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;">
                             <mat-select formControlName="frequency">
                                 <mat-option *ngFor="let data of frequencyList"
                                     [value]="data.ENGLISH">{{ data.ENGLISH
                                     }}</mat-option>
                             </mat-select>
-                        </mat-form-field> -->
+                        </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -92,18 +90,14 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <select class="selectBankList" formControlName="receiptModeone">
-                            <option *ngFor="let data of receipt1List"
-                                [value]="data.CREDIT_CODE">{{data.CREDIT_CODE}}</option>
-                        </select>
-                        <!-- <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeone">
                                 <mat-option
                                     *ngFor="let data of receipt1List"
                                     [value]="data.CREDIT_CODE">{{
                                     data.CREDIT_CODE }}</mat-option>
                             </mat-select>
-                        </mat-form-field> -->
+                        </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -119,18 +113,14 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <select class="selectBankList" formControlName="receiptModeTwo">
-                            <option *ngFor="let data of receipt2List"
-                                [value]="data.CREDIT_CODE">{{data.CREDIT_CODE}}</option>
-                        </select>
-                        <!-- <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeTwo">
                                 <mat-option
                                     *ngFor="let data of receipt2List"
                                     [value]="data.CREDIT_CODE">{{
                                     data.CREDIT_CODE }}</mat-option>
                             </mat-select>
-                        </mat-form-field> -->
+                        </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -145,18 +135,14 @@
                     <label for="inputPassword"
                         class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <select class="selectBankList" formControlName="receiptModeThree">
-                            <option *ngFor="let data of receipt2List"
-                                [value]="data.CREDIT_CODE">{{data.CREDIT_CODE}}</option>
-                        </select>
-                        <!-- <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeThree">
                                 <mat-option
                                     *ngFor="let data of receipt2List"
                                     [value]="data.CREDIT_CODE">{{
                                     data.CREDIT_CODE }}</mat-option>
                             </mat-select>
-                        </mat-form-field> -->
+                        </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center">

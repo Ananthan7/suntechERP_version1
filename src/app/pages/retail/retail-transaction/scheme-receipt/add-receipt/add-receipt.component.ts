@@ -107,7 +107,7 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
     }
     if(this.content){
-      this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeID)
+      this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
       this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
       this.receiptEntryForm.controls.InstallmentAmount.setValue(this.content.SCHEME_AMOUNT)
     }
