@@ -177,7 +177,7 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                formControlName="SchemeId" />
+                                formControlName="SchemeId" (focusout)="fetchSchemeWithCustCode()"/>
                         </mat-form-field>
                         <master-search *ngIf="!viewMode" [MasterSearchData]="SCHEMEMasterData"
                             (newRowClick)="selectedScheme($event)">
