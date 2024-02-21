@@ -153,17 +153,16 @@
 
 .card_item_bg {
   height: 64px;
-  width: 63px;
+  width: 64px;
   background-color: #274d90;
   z-index: 1;
   position: absolute;
-  top: -21px;
-  left: 120px;
-  ;
+  top: -20px;
+  left: 121px;
   bottom: -68px;
   right: 127px;
   border-radius: 50%;
-  transition: all 0.10s ease;
+  transition: all 0.1s ease;
 }
 
 .card-item_title {
