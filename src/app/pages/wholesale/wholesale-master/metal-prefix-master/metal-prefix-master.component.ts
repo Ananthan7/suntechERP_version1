@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import validator from 'devextreme/ui/validator';
 
 @Component({
   selector: 'app-metal-prefix-master',
@@ -42,20 +43,20 @@ export class MetalPrefixMasterComponent implements OnInit {
     );
   }
   metalprefixForm: FormGroup = this.formBuilder.group({
-    prefixcode: [''],
-    prefixcodedes: [''],
-    currencyRate: [''],
+    prefixcode: ['',[Validators.required]],
+    prefixcodedes: ['',[Validators.required]],
+    currencyRate: ['',[Validators.required]],
     currency: [''],
     lastno: ['00000', ''],
-    tagWt: [''],
+    tagWt: ['',[Validators.required]],
     branch: [''],
     suffixcode: [''],
     hsn: [''],
-    jobcardprefix: [''],
-    setrefprefix: [''],
-    schemeprefix: [''],
-    refinervprefix: [''],
-    designprefix: [''],
+    jobcardprefix: false,
+    setrefprefix: false,
+    schemeprefix: false,
+    refinervprefix: false,
+    designprefix: false,
     userdefined_1: [''],
     userdefined_2: [''],
     userdefined_3: [''],
@@ -138,11 +139,11 @@ export class MetalPrefixMasterComponent implements OnInit {
       "DIVISION": "s",
       "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
       "PM_BRANCHCODE": "",
-      "JOB_PREFIX": this.metalprefixForm.value.jobcardprefix || "",
-      "SETREF_PREFIX": this.metalprefixForm.value.setrefprefix || "",
+      "JOB_PREFIX": this.metalprefixForm.value.jobcardprefix ,
+      "SETREF_PREFIX": this.metalprefixForm.value.setrefprefix,
       "BRANCH_CODE": this.metalprefixForm.value.branch || "",
       "BOIL_PREFIX": true,
-      "SCHEME_PREFIX": this.metalprefixForm.value.schemeprefix || "",
+      "SCHEME_PREFIX": this.metalprefixForm.value.schemeprefix,
       "UDF1": this.metalprefixForm.value.userdefined_1 || "",
       "UDF2": this.metalprefixForm.value.userdefined_2 || "",
       "UDF3": this.metalprefixForm.value.userdefined_3 || "",
@@ -160,8 +161,8 @@ export class MetalPrefixMasterComponent implements OnInit {
       "UDF15": this.metalprefixForm.value.userdefined_15 || "",
       "TAG_WT": this.metalprefixForm.value.tagWt || "",
       "COMP_PREFIX": true,
-      "DESIGN_PREFIX": this.metalprefixForm.value.designprefix || "",
-      "REFINE_PREFIX": this.metalprefixForm.value.refinervprefix || "",
+      "DESIGN_PREFIX": this.metalprefixForm.value.designprefix,
+      "REFINE_PREFIX": this.metalprefixForm.value.refinervprefix,
       "SUBLEDGER_PREFIX": true,
       "SUFFIX_CODE": this.metalprefixForm.value.suffixcode || "",
       "HSN_CODE": this.metalprefixForm.value.hsn || "",

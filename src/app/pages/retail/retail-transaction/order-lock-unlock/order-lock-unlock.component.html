@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (continueClick)="continueClick()"
+[isViewContinue]="true"></modal-header>
 <div class="container-fluid pt-3">
     <form>
         <div class="row mb-3">
@@ -106,6 +107,11 @@
                       </div>
                     </div>
 
+            </div>
+            <div class="col-md-4">
+              <button type="button" class="btns add-btn">
+                Show Details
+            </button>
             </div>
         </div>
         <div class="row mt-1 pt-3 mb-3">

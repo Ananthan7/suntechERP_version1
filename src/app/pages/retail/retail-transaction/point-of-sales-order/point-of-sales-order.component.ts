@@ -79,6 +79,8 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  continueClick(){}
+
   openaddalloyallocation() {
     const modalRef: NgbModalRef = this.modalService.open(PointOfSalesOrderDetailsComponent, {
       size: 'xl',
