@@ -26,6 +26,7 @@ export class AddReceiptComponent implements OnInit {
   currencyRate: any;
   payTypeArray: any[] = [];
   gridDataSource: any[] = [];
+  schemeFlag: boolean = false;
   /**serach modal data */
   branchMasterData: any = {
     TABLE_NAME: 'BRANCH_MASTER',

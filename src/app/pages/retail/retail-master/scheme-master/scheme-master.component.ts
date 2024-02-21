@@ -84,7 +84,10 @@ export class SchemeMasterComponent implements OnInit {
       this.setFormValues()
     }
   }
-
+  //number validation
+  isNumeric(event: any) {
+    return this.comService.isNumeric(event);
+  }
   getAllSelectOptions() {
     let frequencyAPI = 'ComboFilter/scheme%20frequency';
     let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {

@@ -80,23 +80,8 @@ export class RetailGridComponent implements OnInit {
       this.getMasterGridData();
     }
   }
-  checkVocTypeCondition(value: any) {
-    if (!value) return ''
-    if (this.vocType == 'SCR') return '';
-    if (this.vocType == 'SRC') return '';
-    if (this.vocType == 'MASSCH') return '';
-    return value
-  }
-  checkVocTypeReturnNumber(value: any) {
-    if (!value) return 0
-    if (this.vocType == 'SCR') return 0;
-    if (this.vocType == 'SRC') return 0;
-    if (this.vocType == 'MASSCH') return 0;
-    return value
-  }
   checkVocTypeTable(value: any) {
-    if (!value) return ''
-    if (this.vocType == 'SRC') return 'CURRENCY_RECEIPT ';
+    if (this.vocType == 'SRC') return 'CURRENCY_RECEIPT'; 
     return value
   }
   getSchemeMaturedAPI() {
@@ -249,18 +234,6 @@ export class RetailGridComponent implements OnInit {
       return newObj;
     });
   }
-  changeValuesToYN(array: any) {
-    return array.map((obj: any) => {
-      const newObj = { ...obj };
-      for (let key in newObj) {
-        if (typeof newObj[key] === 'boolean') {
-          newObj[key] = newObj[key] ? 'Y' : 'N';
-        }
-      }
-      return newObj;
-    });
-  }
-
   //unsubscriptions of streams
   ngOnDestroy() {
     this.snackBar.dismiss();

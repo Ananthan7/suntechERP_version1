@@ -94,6 +94,17 @@ export class SchemeRegisterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  BranchMasterFindData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: "BRANCH_CODE",
+    SEARCH_HEADING: "Branch Master",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "BRANCH_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
   Attachedfile: any[] = [];
 
   schemeRegistrationForm: FormGroup = this.formBuilder.group({
@@ -167,6 +178,9 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.Salesman.setValue(event.SALESPERSON_CODE)
     this.schemeRegistrationForm.controls.SalesmanName.setValue(event.DESCRIPTION)
   }
+  BranchMasterChange(event: any) {
+    this.schemeRegistrationForm.controls.Branch.setValue(event.BRANCH_CODE)
+  }
   setInitialValues() {
     if (!this.content) return;
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.content.PAY_VOCTYPE)
@@ -174,6 +188,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.schemeRegistrationForm.controls.Name.setValue(this.content.SCH_CUSTOMER_NAME)
     this.schemeRegistrationForm.controls.MobileNo.setValue(this.content.SCH_ALERT_MOBILE)
     this.schemeRegistrationForm.controls.Email.setValue(this.content.SCH_ALERT_EMAIL)
+    this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
     this.getSchemeRegistrationDetail(this.content.SCH_CUSTOMER_ID)
   }
   //schemeid EDIT and VIEW Value Change

@@ -1,6 +1,10 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Scheme Registration</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Scheme Registration
+        <span *ngIf="schemeRegistrationForm.value.SCH_CUSTOMER_ID!=''">
+            ({{schemeRegistrationForm.value.SCH_CUSTOMER_ID}})
+        </span>
+    </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -63,8 +67,9 @@
                             <input type="text" readonly matInput
                                 formControlName="Branch" />
                         </mat-form-field>
-                        <master-search *ngIf="!viewMode" [MasterSearchData]="customerMasterData"
-                            (newRowClick)="selectedCustomer($event)">
+                        <master-search *ngIf="!viewMode"
+                            [MasterSearchData]="BranchMasterFindData"
+                            (newRowClick)="BranchMasterChange($event)">
                         </master-search>
                     </div>
                 </div>
@@ -99,7 +104,8 @@
                         <mat-form-field style="width: 50%;">
                             <input type="number" matInput ThreeDecimalInput
                                 formControlName="InstallmentAmount"
-                                class="text-right" [readonly]="viewMode" />
+                                class="text-right"
+                                [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''" />
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
@@ -139,7 +145,8 @@
                                 formControlName="Code"
                                 (focusout)="searchValueChange($event,'Code')" />
                         </mat-form-field>
-                        <master-search *ngIf="!viewMode" [MasterSearchData]="customerMasterData"
+                        <master-search *ngIf="!viewMode"
+                            [MasterSearchData]="customerMasterData"
                             (newRowClick)="selectedCustomer($event)">
                         </master-search>
                     </div>
@@ -177,9 +184,11 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="text" matInput [readonly]="viewMode"
-                                formControlName="SchemeId" (focusout)="fetchSchemeWithCustCode()"/>
+                                formControlName="SchemeId"
+                                (focusout)="fetchSchemeWithCustCode()" />
                         </mat-form-field>
-                        <master-search *ngIf="!viewMode" [MasterSearchData]="SCHEMEMasterData"
+                        <master-search *ngIf="!viewMode"
+                            [MasterSearchData]="SCHEMEMasterData"
                             (newRowClick)="selectedScheme($event)">
                         </master-search>
                     </div>
@@ -189,7 +198,8 @@
                         <mat-form-field style="width: 50%;">
                             <input type="number" matInput ThreeDecimalInput
                                 formControlName="CancellationCharge"
-                                class="text-right" [readonly]="viewMode"/>
+                                class="text-right"
+                                [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''" />
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
@@ -197,7 +207,8 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="number" matInput
-                                class="text-right" [readonly]="viewMode"
+                                class="text-right"
+                                [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
                                 formControlName="TenurePeriod" />
                         </mat-form-field>
                     </div>
@@ -233,7 +244,8 @@
                         <label class="matlabels">Bonus Installment:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput [readonly]="viewMode"
+                            <input type="number" matInput
+                                [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
                                 formControlName="BonusInstallment" />
                         </mat-form-field>
                     </div>
@@ -241,7 +253,7 @@
                         <label class="matlabels">Frequency:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="text" matInput [readonly]="viewMode"
+                            <input type="text" matInput readonly
                                 class="text-right"
                                 formControlName="Frequency" />
                         </mat-form-field>
@@ -251,7 +263,8 @@
                         </label>
                         <mat-form-field style="width: 50%;">
                             <input type="number" matInput class="text-right"
-                                ThreeDecimalInput [readonly]="viewMode"
+                                ThreeDecimalInput
+                                [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
                                 formControlName="TotalAmountToPay" />
                         </mat-form-field>
                     </div>
@@ -274,7 +287,8 @@
                             <input type="text" matInput [readonly]="viewMode"
                                 formControlName="Salesman" />
                         </mat-form-field>
-                        <master-search *ngIf="!viewMode" [MasterSearchData]="SalesmanData"
+                        <master-search *ngIf="!viewMode"
+                            [MasterSearchData]="SalesmanData"
                             (newRowClick)="SalesmanSelected($event)">
                         </master-search>
                         <mat-form-field style="width: 30%;">
@@ -286,7 +300,8 @@
                         <label class="matlabels">Sum Assured:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput [readonly]="viewMode"
+                            <input type="number" matInput
+                                [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
                                 formControlName="SumAssured"
                                 class="text-right" ThreeDecimalInput />
                         </mat-form-field>
@@ -396,7 +411,8 @@
                     </div>
                     <div *dxTemplate="let data of 'files'">
                         <input class="form-control fileAttach" type="file"
-                            (change)="onFileChange($event)" [readonly]="viewMode"/>
+                            (change)="onFileChange($event)"
+                            [readonly]="viewMode" />
                     </div>
                 </dx-data-grid>
             </div>
