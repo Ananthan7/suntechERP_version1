@@ -222,12 +222,5 @@
   width: 30px !important;
 }
 
-body[data-layout="horizontal"][data-layout-size="boxed"]{
-  #page-topbar, #layout-wrapper, .footer {
-      max-width: 100%;
-  }
-  .container-fluid, .navbar-header {
-      max-width: calc(100vw - 1400px);
-  }
-}
+ 
 

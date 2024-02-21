@@ -42,6 +42,7 @@ interface VocTypesEx {
   styleUrls: ['./add-pos.component.scss'],
 })
 export class AddPosComponent implements OnInit {
+  [x: string]: any;
   @Input() content!: any;
 
   @ViewChild('print_invoice', { static: true }) printInvoiceDiv!: ElementRef;
@@ -730,6 +731,8 @@ export class AddPosComponent implements OnInit {
     this.vocDataForm = this.formBuilder.group({
       fcn_voc_no: ['',],
       // fcn_voc_no: ['', Validators.required],
+      voc_type:['POS'],
+      voc_no:[1],
       sales_person: ['', [Validators.required, this.autoCompleteValidator(() => this.salesPersonOptions, 'SALESPERSON_CODE')]],
       vocdate: ['', Validators.required],
       txtCurrency: [],
@@ -1575,7 +1578,10 @@ export class AddPosComponent implements OnInit {
     //Add 'implements AfterViewInit' to the class.
     if (this.viewOnly) this.setReadOnlyForViewMode();
   }
+
   ngOnInit(): void {
+
+
     /* this.receiptDetailsList = [
       {
         mode: 'CASH',
@@ -1691,6 +1697,7 @@ export class AddPosComponent implements OnInit {
     this.userwiseDiscount = this.comFunc.getCompanyParamValue('USERWISEDISCOUNT').toString() == '0' ? false : true;
 
     this.vocDataForm.controls.txtCurrency.setValue(this.comFunc.compCurrency);
+    
     this.vocDataForm.controls.txtCurRate.setValue(this.comFunc.getCurrRate(this.comFunc.compCurrency));
   }
   getKaratDetails() {

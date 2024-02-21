@@ -16,14 +16,26 @@ export class PosPurchaseDirectDetailComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: "",
-    SEARCH_HEADING: "",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "",
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  };
+  }
+
+  clarityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 37,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Supplier type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'CLARITY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   posPurchaseDirectDetailForm: FormGroup = this.formBuilder.group({
     stockCode: [""],
     stockType: [""],
