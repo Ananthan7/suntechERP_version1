@@ -2608,7 +2608,7 @@
                 <div class="bg-gray-card">
                   <div class="form-group row">
                     <div class="col-md-2">
-                      <mat-form-field style="width: 70%;">
+                      <mat-form-field style="width: 75%; display:inline-block !important;">
                         <mat-label>Division </mat-label>
                         <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division" readonly />
                       </mat-form-field>
@@ -2617,7 +2617,7 @@
                         </master-search>
                     </div>
                     <div class="col-md-2">
-                      <mat-form-field style="width: 70px;">
+                      <mat-form-field  style="width: 75%; display:inline-block !important;">
                         <mat-label>Item Code </mat-label>
                         <input type="text" matInput formControlName="fcn_li_item_code"  #fcn_li_item_code
                           id="fcn_li_item_code" autofocus (change)="getStockDesc($event)" [readonly]="viewOnly" />

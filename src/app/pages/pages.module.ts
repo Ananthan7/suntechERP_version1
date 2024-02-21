@@ -15,7 +15,8 @@ FullCalendarModule.registerPlugins([
   interactionPlugin
 ]);
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [ 
     CommonModule,
     PagesRoutingModule,

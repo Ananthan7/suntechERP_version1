@@ -5,7 +5,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (cancelClick)="close()"(continueClick)="continueClick()"
+[isViewContinue]="true"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="posofSalesOrderForm">

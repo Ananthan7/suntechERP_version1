@@ -4,3 +4,21 @@
       z-index: 1070 !important;
     }
   }
+
+  .btns {
+    padding: 15px 25px;
+    border: none;
+    background-color: #415a77;
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin-left: 211px;
+    margin-top: 169px;
+  }
+
+// .btn:hover {
+//     background-color: #0056b3; /* Darker shade on hover, you can change it */
+// }
