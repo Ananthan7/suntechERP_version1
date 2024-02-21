@@ -39,9 +39,10 @@ interface VocTypesEx {
 @Component({
   selector: 'app-add-pos',
   templateUrl: './add-pos.component.html',
-  styleUrls: ['./add-pos.component.scss']
+  styleUrls: ['./add-pos.component.scss'],
 })
 export class AddPosComponent implements OnInit {
+  [x: string]: any;
   @Input() content!: any;
 
   @ViewChild('print_invoice', { static: true }) printInvoiceDiv!: ElementRef;
@@ -274,6 +275,41 @@ export class AddPosComponent implements OnInit {
     orderNo: ['', Validators.required],
     customerCode: ['', Validators.required],
   });
+
+  itemcodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_HEADING: "Item Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  itemcodeSelected(value: any) {
+    console.log(value);
+    this.lineItemForm.controls.fcn_li_item_code.setValue(value.PREFIX_CODE);
+    this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION)
+  }
+
+  divisionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  divisionCodeSelected(e:any){
+    console.log(e);
+    this.lineItemForm.controls.fcn_li_division.setValue(e.DIVISION_CODE);
+  
+  }
 
   docTypeData: MasterSearchModel =
     {
@@ -695,6 +731,8 @@ export class AddPosComponent implements OnInit {
     this.vocDataForm = this.formBuilder.group({
       fcn_voc_no: ['',],
       // fcn_voc_no: ['', Validators.required],
+      voc_type:['POS'],
+      voc_no:[1],
       sales_person: ['', [Validators.required, this.autoCompleteValidator(() => this.salesPersonOptions, 'SALESPERSON_CODE')]],
       vocdate: ['', Validators.required],
       txtCurrency: [],
@@ -1540,7 +1578,10 @@ export class AddPosComponent implements OnInit {
     //Add 'implements AfterViewInit' to the class.
     if (this.viewOnly) this.setReadOnlyForViewMode();
   }
+
   ngOnInit(): void {
+
+
     /* this.receiptDetailsList = [
       {
         mode: 'CASH',
@@ -1656,6 +1697,7 @@ export class AddPosComponent implements OnInit {
     this.userwiseDiscount = this.comFunc.getCompanyParamValue('USERWISEDISCOUNT').toString() == '0' ? false : true;
 
     this.vocDataForm.controls.txtCurrency.setValue(this.comFunc.compCurrency);
+    
     this.vocDataForm.controls.txtCurRate.setValue(this.comFunc.getCurrRate(this.comFunc.compCurrency));
   }
   getKaratDetails() {

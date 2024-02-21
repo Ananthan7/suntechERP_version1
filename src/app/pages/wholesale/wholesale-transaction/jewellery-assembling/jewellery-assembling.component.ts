@@ -86,6 +86,7 @@ export class JewelleryAssemblingComponent implements OnInit {
     this.jewelleryAssemblingForm.controls.partyCode.setValue(e.PARTYCODE);
   }
 
+
   enteredByCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -101,6 +102,43 @@ export class JewelleryAssemblingComponent implements OnInit {
   enteredBySelected(e:any){
     this.jewelleryAssemblingForm.controls.enteredBy.setValue(e.SALESPERSON_CODE);
   }
+
+  rateCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 22,
+    SEARCH_FIELD: 'RATE_TYPE',
+    SEARCH_HEADING: 'Rate Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "RATE_TYPE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  rateCodeSelected(e:any){
+    console.log(e);
+    this.jewelleryAssemblingForm.controls.rateCode.setValue(e.DIVISION_CODE);
+    this.jewelleryAssemblingForm.controls.rateDescription.setValue(e.RATE_TYPE);
+  }
+
+  itemCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Item Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  itemCodeSelected(e:any){
+    console.log(e);
+    this.jewelleryAssemblingForm.controls.itemCurrencyCode.setValue(e.CURRENCY_CODE);
+    this.jewelleryAssemblingForm.controls.itemCurrencyDesc.setValue(e.DESCRIPTION);
+  }
+  
 
 
   openJewelleryAssembilingDetails(){

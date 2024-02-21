@@ -51,17 +51,7 @@ export class PosPurchaseDirectComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
-  partyCurrencyCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 9,
-    SEARCH_FIELD: "Currency",
-    SEARCH_HEADING: "Party Currency",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "Currency <>''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
+
 
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -74,6 +64,18 @@ export class PosPurchaseDirectComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+
+  partyCurrencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 9,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Party Currency',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   
   posPurchaseForm: FormGroup = this.formBuilder.group({
     vocType:[''],
@@ -108,6 +110,8 @@ export class PosPurchaseDirectComponent implements OnInit {
     otherAmtDes:[''],
     grossAmt:[''],
     grossAmtDes:[''],
+    partyCode1:[''],
+
   });
 
 
@@ -149,7 +153,8 @@ export class PosPurchaseDirectComponent implements OnInit {
   partyCodeSelected(e:any){
     console.log(e);
     this.posPurchaseForm.controls.partyCode.setValue(e.ACCODE);
-    this.posPurchaseForm.controls.partyCodeName.setValue(e)
+    this.posPurchaseForm.controls.partyCodeName.setValue(e['ACCOUNT HEAD'])
+    this.posPurchaseForm.controls.partyCode1.setValue(e['ACCOUNT HEAD'])  
   }
 
   partyCurrencyCodeSelected(e:any){

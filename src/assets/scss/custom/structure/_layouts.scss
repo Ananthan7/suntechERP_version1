@@ -39,9 +39,12 @@ body[data-layout="horizontal"][data-layout-size="boxed"]{
         max-width: 100%;
     }
     .container-fluid, .navbar-header {
-        max-width: $boxed-layout-width;
+        max-width: 100%;
     }
 }
+
+
+
 
 // Scrollable layout
 body[data-layout-scrollable="true"] {

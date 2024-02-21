@@ -27,6 +27,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
     selector: 'app-sales-estimation',
@@ -149,7 +150,40 @@ export class SalesEstimationComponent implements OnInit {
         { value: '2', label: 'Mrs' },
         { value: '3', label: 'Ms' },
     ];
+    itemcodeData: MasterSearchModel = {
+        PAGENO: 1,
+        RECORDS: 10,
+        LOOKUPID: 14,
+        SEARCH_FIELD: "PREFIX_CODE",
+        SEARCH_HEADING: "Item Code",
+        SEARCH_VALUE: "",
+        WHERECONDITION: "PREFIX_CODE<> ''",
+        VIEW_INPUT: true,
+        VIEW_TABLE: true,
+      };
 
+      itemcodeSelected(value: any) {
+        console.log(value);
+        this.lineItemForm.controls.fcn_li_item_code.setValue(value.PREFIX_CODE);
+        this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION)
+      }
+
+      divisionCodeData: MasterSearchModel = {
+        PAGENO: 1,
+        RECORDS: 10,
+        LOOKUPID: 18,
+        SEARCH_FIELD: 'DIVISION_CODE',
+        SEARCH_HEADING: 'Division',
+        SEARCH_VALUE: '',
+        WHERECONDITION: "DIVISION_CODE<> ''",
+        VIEW_INPUT: true,
+        VIEW_TABLE: true,
+      }
+      divisionCodeSelected(e:any){
+        console.log(e);
+        this.lineItemForm.controls.fcn_li_division.setValue(e.DIVISION_CODE);
+      
+      }
     modalReference: any;
     modalReferenceSalesReturn: any;
     closeResult!: string;

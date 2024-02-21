@@ -509,7 +509,7 @@ export class JobcardComponent implements OnInit {
   customerCodeSelected(e:any){
     console.log(e);
     this.jobCardFrom.controls.customer.setValue(e.ACCODE);
-    this.jobCardFrom.controls.customername.setValue(e.DESCRIPTION);
+    this.jobCardFrom.controls.customername.setValue(e['ACCOUNT HEAD']);
   }
 
   costCodeSelected(e:any){

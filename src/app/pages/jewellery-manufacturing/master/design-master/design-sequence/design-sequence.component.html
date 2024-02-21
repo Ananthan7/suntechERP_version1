@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Design Master</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Design Sequence</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -11,11 +11,13 @@
 <div class="container-fluid">
     <form [formGroup]="designSequenceForm">
         <div class="row mb-2">
-            <label for="inputPassword" class="col-sm-3 col-form-label">Process</label>
+            <label for="inputPassword" class="col-sm-1 col-form-label">Process</label>
             <div class="col-md-3">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 80%">
                     <input type="text" matInput formControlName="processCode" />
                 </mat-form-field>
+                <master-search [MasterSearchData]="processCodeData"
+                    (newRowClick)="processCodeSelected($event)"></master-search>
             </div>
             <div class="col-md-3">
                 <mat-form-field style="width: 100%">

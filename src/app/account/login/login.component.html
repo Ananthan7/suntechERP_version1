@@ -2,72 +2,136 @@
     <div class="container-fluid">
         <div class="row">
             <!-- left section starts -->
-            <div
-                class="col-md-6 col-sm-10 d-flex justify-content-center flex-column bg_1">
+            <div class="col-md-6 col-sm-10 d-flex justify-content-end flex-column bg_1">
                 <!-- <h1 class="text-white">SUN FACETS 2.0</h1>
                 <span class="description text-white">Presenting
                     efficient ERP software for Jewellery business providing integrated
                     automation solutions catering to the Jewellery Industry.</span> -->
+                <div>
+                    <div class="overlay overlay_1">
+                        <div class="slideshow-container">
+                            <div class="mySlides">
+                                <div class="text-head">
+                                    <div class="text-body">
+                                        <h5 class="text-white mb-0">Lorem Ipsum has been the industry's ?</h5>
+                                    </div>
+
+                                    <div class="text-card">
+                                        <div>
+                                            <p>
+                                                Lorem Ipsum has been the industry's standard dummy text ever since the
+                                                1500s,
+                                                when an unknown printer took a galley of type and scrambled it to make a
+                                                type specimen book.
+                                                It has survived not only five centuries
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mySlides">
+                                <div class="text-head">
+                                    <div class="text-body">
+                                        <h5 class="text-white mb-0">Lorem Ipsum has been the industry's Two?</h5>
+                                    </div>
+
+                                    <div class="text-card">
+                                        <div>
+                                            <p>
+                                                Lorem Ipsum has been the industry's standard dummy text ever since the
+                                                1500s,
+                                                when an unknown printer took a galley of type and scrambled it to make a
+                                                type specimen book.
+                                                It has survived not only five centuries
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mySlides">
+                                <div class="text-head">
+                                    <div class="text-body">
+                                        <h5 class="text-white mb-0">Lorem Ipsum has been the industry's Three?</h5>
+                                    </div>
+
+                                    <div class="text-card">
+                                        <div>
+                                            <p>
+                                                Lorem Ipsum has been the industry's standard dummy text ever since the
+                                                1500s,
+                                                when an unknown printer took a galley of type and scrambled it to make a
+                                                type specimen book.
+                                                It has survived not only five centuries
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <button (click)="plusSlides(-1)">Previous</button>
+                            <button (click)="plusSlides(1)">Next</button> -->
+
+                        </div>
+                        <br>
+
+                        <div class="indicator" style="text-align:center;margin-top: 100px;">
+                            <span class="dot active" (click)="currentSlide(1)"></span>
+                            <span class="dot active" (click)="currentSlide(2)"></span>
+                            <span class="dot active" (click)="currentSlide(3)"></span>
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
+
             <!-- right section / form section starts -->
             <div class="col-md-6 auth-side-form p-5">
                 <div class="auth-content">
                     <div class="d-flex justify-content-center">
-                        <img src="assets/images/logo/logo-suntech.png" w alt
-                            class="img-fluid mb-2 d-block">
+                        <img src="assets/images/logo/logo-suntech.png" w alt class="img-fluid mb-2 d-block">
                     </div>
                     <span style="font-size: 24px;font-weight: 600;">Login</span>
-                    <form class="example-form" [formGroup]='dataForm'
-                        autocomplete="off">
+                    <form class="example-form" [formGroup]='dataForm' autocomplete="off">
                         <div class="row justify-content-center">
                             <div class="col-md-8">
-                               
+
 
                                 <div class="">
-                                    <label for="input"
-                                        class=" col-form-label">Username</label>
+                                    <label for="input" class=" col-form-label">Username</label>
                                     <!-- <mat-form-field appearance="outline" style="width: 100%;">
                                         <input matInput  value
                                             (keyup)="changeTextUpperCase($event)"
                                             (focusout)="checkUserName($event)">
                                     </mat-form-field> -->
-                                    <mat-form-field appearance="outline"  style="width: 100%;">
+                                    <mat-form-field appearance="outline" style="width: 100%;">
                                         <!-- <mat-label>Outline form field</mat-label> -->
                                         <!-- <input matInput placeholder="Placeholder"> -->
-                                        <input matInput  value
-                                            (keyup)="changeTextUpperCase($event)"
+                                        <input matInput value (keyup)="changeTextUpperCase($event)"
                                             (focusout)="checkUserName($event)">
                                         <!-- <mat-icon matPrefix class="srchicon">search</mat-icon> -->
                                         <mat-icon matPrefix class="person">person</mat-icon>
                                     </mat-form-field>
                                 </div>
                                 <div class="">
-                                    <label for="input"
-                                        class=" col-form-label">Password</label>
+                                    <label for="input" class=" col-form-label">Password</label>
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input id="password" type="password"
-                                            matInput   value
+                                        <input id="password" type="password" matInput value
                                             (focusout)="checkUserNamePassword($event)">
                                         <mat-icon matPrefix class="lock">lock</mat-icon>
                                     </mat-form-field>
-                                    
+
                                 </div>
                                 <div class="">
-                                    <label for="input"
-                                        class=" col-form-label">Branch</label>
+                                    <label for="input" class=" col-form-label">Branch</label>
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input id="branch" type="text"
-                                            autocomplete="new-password"
-                                            matInput
-                                            formControlName="branch"
-                                            [matAutocomplete]="branch"
-                                            (keyup)="changeBranchText($event)"
-                                            (focusout)="changeBranch($event)">
-                                        <mat-autocomplete
-                                            #branch="matAutocomplete"
-                                            autoActiveFirstOption>
-                                            <mat-option
-                                                *ngFor="let option of  filteredOptions | async"
+                                        <input id="branch" type="text" autocomplete="new-password" matInput
+                                            formControlName="branch" [matAutocomplete]="branch"
+                                            (keyup)="changeBranchText($event)" (focusout)="changeBranch($event)">
+                                        <mat-autocomplete #branch="matAutocomplete" autoActiveFirstOption>
+                                            <mat-option *ngFor="let option of  filteredOptions | async"
                                                 [value]="option">
                                                 {{option}}
                                             </mat-option>
@@ -76,18 +140,12 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="">
-                                    <label for="input"
-                                        class=" col-form-label">Year</label>
+                                    <label for="input" class=" col-form-label">Year</label>
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input id="year" matInput type="text"
-                                            formControlName="year"
-                                            [matAutocomplete]="year"
-                                            (focusout)="validateYear($event)">
-                                        <mat-autocomplete
-                                            #year="matAutocomplete"
-                                            autoActiveFirstOption>
-                                            <mat-option
-                                                *ngFor="let option of  filteredOptions_year | async"
+                                        <input id="year" matInput type="text" formControlName="year"
+                                            [matAutocomplete]="year" (focusout)="validateYear($event)">
+                                        <mat-autocomplete #year="matAutocomplete" autoActiveFirstOption>
+                                            <mat-option *ngFor="let option of  filteredOptions_year | async"
                                                 [value]="option">
                                                 {{option}}
                                             </mat-option>
@@ -97,22 +155,18 @@
                                 </div>
                                 <div class="my-2">
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input"
-                                            type="checkbox"
-                                            id="flexSwitchCheckDefault">
-                                        <label class="form-check-label"
-                                            for="flexSwitchCheckDefault">Keep me
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">Keep me
                                             logged in</label>
                                     </div>
                                 </div>
                                 <div class="mt-4">
-                                    <button
-                                        class="btn btn-block btn-primary w-100 mb-0"
+                                    <button class="btn btn-block btn-primary w-100 mb-0"
                                         style="border-radius: 5px !important; background: linear-gradient(180deg, #1E3C72 0%, #2A5298 100%) !important"
                                         (click)="signin()">Sign In</button>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                         <!-- <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <mat-form-field appearance="outline">
@@ -173,12 +227,12 @@
                                 </mat-form-field>
                             </div>
                         </div> -->
-                            </form>
+                    </form>
 
-                            <!-- <button class="btn btn-block btn-primary w-100 mb-0"
+                    <!-- <button class="btn btn-block btn-primary w-100 mb-0"
                                 style="border-radius: 5px !important;"
                                 (click)="signin()">Sign In</button> -->
-                    
+
                     <!--<div class="text-center">
                         <div class="saprator my-4"><span></span></div>
                         <p class="mb-2 text-muted">Forgot password? <a

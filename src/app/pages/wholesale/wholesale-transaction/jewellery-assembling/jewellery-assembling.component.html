@@ -69,9 +69,11 @@
                             </div>
                             <label for="inputPassword" class="col-sm-2 col-form-label">Rate Type</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 80%">
                                     <input type="text" matInput formControlName="rateCode" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="rateCodeData"
+                                (newRowClick)="rateCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%">
@@ -82,9 +84,11 @@
                         <div class="row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Item Currency</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 80%">
                                     <input type="text" matInput formControlName="itemCurrencyCode" />
                                 </mat-form-field>
+                                <master-search [MasterSearchData]="itemCodeData"
+                                (newRowClick)="itemCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%">
@@ -93,7 +97,7 @@
                             </div>
                             <label for="inputPassword" class="col-sm-2 col-form-label">Entered By</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 70%">
+                                <mat-form-field style="width: 80%">
                                     <input type="text" matInput formControlName="enteredBy" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="enteredByCodeData"
@@ -116,15 +120,16 @@
                                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
                                             (addClick)="openJewelleryAssembilingDetails()"
                                             (deleteClick)="deleteTableData()">
-                                          
-
                                         </menu-buttons>
-                                        <!-- <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                                            Excel Import
-                                          </button> -->
-                
+
+                                        <div class="icons_wrap mt-1">
+                                            <a class="pe-2">
+                                                <img src="../../../assets/images/menu/xls.png" 
+                                                    alt="excel" width="24px" height="23px" />
+                                            </a>
+                                            
+                                        </div>
                                     </div>
-                                  
                                 </div>
                                 <div class="mt-2">
                                     <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"

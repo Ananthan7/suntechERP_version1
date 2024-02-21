@@ -26,7 +26,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 75px;
+  padding-top: 10px;
 }
 
 .btn-primary {
@@ -75,5 +75,152 @@
 
   .mat-form-field-appearance-outline .mat-form-field-outline{
     background-color: #fff !important;
+    border-radius: 15px !important;
   }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 5px !important;
+    margin: 0px !important;
 }
+}
+
+::ng-deep .mat-form-field {
+  .mat-form-field-outline {
+    &-end {
+      border-radius: 0 15px 15px 0 !important;
+    }
+
+    &-start {
+      border-radius: 15px 0 0 15px !important;
+      flex-grow: 1;
+    }
+  }
+  
+}
+
+.overlay {
+  position: relative; 
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%);
+  /* center overlay text */
+  // display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay_1 {
+  left: -11px;
+  width: 770px;
+  height: 200px;
+  padding: 0rem;
+ 
+}
+
+/* Position text in the middle of the page/image */
+.text-head {
+  color: white;
+  font-weight: bold;
+  border: 3px solid #f1f1f1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 65%;
+  border-radius: 15px;
+  border: 1px solid var(--white, #FFF);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 100%);
+  box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.25);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(5px);
+  padding: 20px;
+  /* text-align: center;*/
+  
+}
+
+.text-body{
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  width: 381px;
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #1E3C72 0%, #2A5298 100%);
+  box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.25);
+}
+
+
+
+.text-card {
+  margin-top: 11px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  /* width: 431px; */
+  /* height: 117px; */
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px 12px;
+}
+
+
+.text-card p{
+  color: rgba(7, 0, 0, 0.91);
+  font-family: "Poppins",sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; 
+  margin-bottom: 0;
+}
+
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+
+
+// /* Caption text */
+// .text {
+//   color: #f2f2f2;
+//   font-size: 15px;
+//   padding: 8px 12px;
+//   position: absolute;
+//   bottom: 8px;
+//   width: 100%;
+//   text-align: center;
+// }
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+.indicator {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+.indicator .dot {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  margin: 4px;
+  border-radius: 15px;
+  background: #fff;
+  cursor: pointer;
+  transition: width 0.5s ease-in-out;
+}
+
+.dot.active {
+  width: 30px !important;
+}
+
+ 
+

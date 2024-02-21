@@ -17,7 +17,6 @@ import themes from 'devextreme/ui/themes';
 })
 export class ApprovalMasterComponent implements OnInit {
 
-
   @Input() content!: any;
   tableData: any[] = [];
   selectedIndexes: any = [];
@@ -28,7 +27,7 @@ export class ApprovalMasterComponent implements OnInit {
   viewMode: boolean = false;
   isDisabled: boolean = false;
   controlName : any;
-
+  orgMessageCheckbox: any;
  userCodeEnable: boolean = false;
 
   user: MasterSearchModel = {
@@ -49,8 +48,13 @@ export class ApprovalMasterComponent implements OnInit {
   approvalMasterForm: FormGroup = this.formBuilder.group({
     code: ['', [Validators.required]],
     description: ['', [Validators.required]],
+    ORG_MESSAGE: [false],
+    EMAIL: [false],
+    MOBILE_NO: [''],
+    EMAIL_ID: [''],
 
   });
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -88,7 +92,29 @@ export class ApprovalMasterComponent implements OnInit {
       }
     });
   }
-
+  checkCodeExists(event: any) {
+    if (event.target.value == '' || this.viewMode == true) return
+    let API = 'ApprovalMaster/CheckIfApprCodePresent/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Approval Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+            }
+          });
+          this.approvalMasterForm.controls.code.setValue('')
+        }
+      }, err => {
+        this.approvalMasterForm.controls.code.setValue('')
+      })
+    this.subscriptions.push(Sub)
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -144,20 +170,6 @@ export class ApprovalMasterComponent implements OnInit {
   }
   mobilenumber(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
-  }
-
-  approvalCodeValidate(event:any){
-    if (event.target.value == '') return
-    this.commonService.showSnackBarMsg('MSG81447');
-    this.dataService.getDynamicAPI('ApprovalMaster/GetApprovalMasterDetail/' + event.target.value)
-    .subscribe((data) => {
-      this.commonService.closeSnackBarMsg()
-      if (data.status == 'Success') {
-        this.commonService.toastErrorByMsgId('Code Already Exists')
-        this.approvalMasterForm.controls.code.setValue('')
-        this.approvalMasterForm.controls.description.setValue('')
-      }
-    });
   }
 
   dataGridConfig = {
@@ -252,54 +264,84 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   formSubmit() {
-   
-    if(this.checkFinalApproval()){
-      this.toastr.error('Final Approval Type Not Selected')
-      return
-    }
-    if (this.approvalMasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
-      return
-    }
+    let conditionMet = false;
 
+    this.tableData.forEach((item: any, index: number) => {
+      console.log(`Checking item at index ${index}:`, item);
     
-    let API = 'ApprovalMaster/InsertApprovalMaster'
-    let postData = {
-      "APPR_CODE": this.approvalMasterForm.value.code || "",
-      "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
-      "approvalDetails": this.tableData,
-
-    }
-        console.log(this.tableData);
-
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.approvalMasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
+      const orgMessageChecked = item.ORG_MESSAGE;
+      const emailChecked = item.EMAIL;
+      const mobileNo = item.MOBILE_NO;
+      const emailId = item.EMAIL_ID;
+    
+      console.log('orgMessageChecked:', orgMessageChecked);
+      console.log('emailChecked:', emailChecked);
+      console.log('mobileNo:', mobileNo);
+      console.log('emailId:', emailId);
+    
+      if ((orgMessageChecked || emailChecked) && (!mobileNo.trim() || !emailId.trim())) {
+        console.log("Condition met: selected fields cannot be empty");
+        this.toastr.error("selected fields cannot be empty")
+        conditionMet = true;
+        return; // Prevent further execution for the current item
+      }
+    });
+    
+    if (!conditionMet) {
+      // Continue with the rest of your code for submission
+      if (this.checkFinalApproval()) {
+        this.toastr.error('Final Approval Type Not Selected');
+        return;
+      }
+    
+      if (this.approvalMasterForm.invalid) {
+        this.toastr.error('Select all required fields');
+        return;
+      }
+    
+      if (this.content && this.content.FLAG == 'EDIT') {
+        this.update();
+        return;
+      }
+    
+      // Omit mobilenum and emailId from postData when mobileCheck or emailCheck is true
+      const postData: any = {
+        "APPR_CODE": this.approvalMasterForm.value.code || "",
+        "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
+        "approvalDetails": this.tableData,
+      };
+    
+      let API = 'ApprovalMaster/InsertApprovalMaster';
+    
+      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+        .subscribe((result) => {
+          if (result.response) {
+            if (result.status == "Success") {
+              Swal.fire({
+                title: result.message || 'Success',
+                text: '',
+                icon: 'success',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then((result: any) => {
+                if (result.value) {
+                  this.approvalMasterForm.reset()
+                  this.tableData = []
+                  this.close('reloadMainGrid')
+                }
+              });
+            }
+          } else {
+            this.toastr.error('Not saved')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+        }, err => alert(err));
+    
+      this.subscriptions.push(Sub);
+    }
   }
+  
+
+
 
   // formSubmit() {
   //   if (this.checkFinalApproval()) {
