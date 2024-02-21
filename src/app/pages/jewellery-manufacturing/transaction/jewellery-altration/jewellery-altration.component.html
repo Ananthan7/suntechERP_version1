@@ -21,14 +21,15 @@
               <div class="col-md-3">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput formControlName="voctype"  [readonly]="viewMode"/>
+                    <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%;">
-                    <input type="number" matInput formControlName="vocno"  style="text-align: right;" [readonly]="viewMode"/>
+                    <input type="number" matInput formControlName="vocno" style="text-align: right;"
+                      [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
               </div>
@@ -37,10 +38,10 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 72%;">
-                  <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
-                  placeholder="DD/MM/YYYY" DateValidation />
-                <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                  <input matInput [matDatepicker]="vocdate" formControlName="vocdate" placeholder="DD/MM/YYYY"
+                    DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -48,11 +49,10 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Enter By :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 72%;">
-                  <input type="text" matInput formControlName="enteredby" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="enteredby" [readonly]="viewMode" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="user" *ngIf="!viewMode"
-                (newRowClick)="userDataSelected($event)">
-            </master-search>
+                <master-search [MasterSearchData]="user" *ngIf="!viewMode" (newRowClick)="userDataSelected($event)">
+                </master-search>
               </div>
             </div>
             <div class="row">
@@ -64,7 +64,8 @@
               </div>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="itemcurrencycc"  style="text-align: right;" [readonly]="viewMode"/>
+                  <input type="number" matInput formControlName="itemcurrencycc" style="text-align: right;"
+                    [readonly]="viewMode" />
                 </mat-form-field>
               </div>
             </div>
@@ -75,12 +76,13 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Metal Rate :</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="metalrate"  [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="metalrate" [readonly]="viewMode" />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%;">
-                  <input type="number" matInput formControlName="metalratetype"  style="text-align: right;" [readonly]="viewMode"/>
+                  <input type="number" matInput formControlName="metalratetype" style="text-align: right;"
+                    [readonly]="viewMode" />
                 </mat-form-field>
               </div>
             </div>
@@ -88,11 +90,11 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Cost Code :</label>
               <div class="col-md-8">
                 <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="costcode" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="costcode" [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="costCodeData" *ngIf="!viewMode"
-                (newRowClick)="costCodeSelected($event)">
-            </master-search>
+                  (newRowClick)="costCodeSelected($event)">
+                </master-search>
               </div>
             </div>
 
@@ -100,7 +102,7 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Loss Account:</label>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="lossaccount" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="lossaccount" [readonly]="viewMode" />
                 </mat-form-field>
               </div>
             </div>
@@ -123,13 +125,9 @@
     <div class="pt-3">
       <div class="row">
         <div class="col-12 d-flex">
-          <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-          [viewImportBtn]="false"
-          (addClick)="openjewelleryaltrationdetails()"
-          (deleteClick)="deleteTableData()"
-          (deleteClick)="deleteRecord()"
-          >
-      </menu-buttons>
+          <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+            (addClick)="openjewelleryaltrationdetails()" (deleteClick)="deleteClicked()">
+          </menu-buttons>
           <div class="col-sm-3">
             <mat-form-field style="width: 80%;">
               <input type="text" matInput />
@@ -142,20 +140,19 @@
 
       <div class="row">
         <div class="col pt-3">
-          <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="jewelleryaltrationdetail" (onRowClick)="onRowClickHandler($event)"
-          [allowColumnReordering]="true"
-          [allowColumnResizing]="true"
-          [columnAutoWidth]="true">
+          <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="jewelleryaltrationdetail"
+            (onRowClick)="onRowClickHandler($event)" [allowColumnReordering]="true" [allowColumnResizing]="true"
+            [columnAutoWidth]="true" [selectedRowKeys]="selectedKey">
             <dxo-paging [enabled]="false"></dxo-paging>
             <!-- <dxo-editing mode="cell" [allowUpdating]="true">
             </dxo-editing> -->
             <!-- <dxo-editing mode="cell" [allowUpdating]="!viewMode">
             </dxo-editing> -->
-            <dxo-selection mode="single"></dxo-selection>
+            <dxo-selection mode="multiple"></dxo-selection>
             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
             <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-              [allowEditing]="false" alignment="center" backgroundcolor="#000" >
+              [allowEditing]="false" alignment="center" backgroundcolor="#000">
             </dxi-column>
           </dx-data-grid>
         </div>
