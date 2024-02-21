@@ -306,6 +306,19 @@
         </div>
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
+            <mat-label>Voucher</mat-label>
+            <input type="text" matInput id="voc_type" formControlName="voc_type" />
+          
+          </mat-form-field>
+        </div>
+        <div class="col-md-1 m-t-10 pt-2">
+          <mat-form-field>
+        
+            <input type="number" matInput id="voc_no" formControlName="voc_no" />
+          </mat-form-field>
+        </div>
+        <div class="col-md-1 m-t-10 pt-2">
+          <mat-form-field>
             <mat-label>Currency</mat-label>
             <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" />
           </mat-form-field>
@@ -1740,7 +1753,7 @@
           <div class="form-group row">
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Chargable Wt </mat-label>
+                <mat-label>Chargeable wt </mat-label>
                 <input type="number" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput formControlName="fcn_exchange_chargeable_wt" [readonly]="viewOnly"
                   id="fcn_exchange_chargeable_wt" [max]="this.exchangeForm.value.fcn_exchange_gross_wt" />
@@ -2061,7 +2074,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Sales Man</mat-label>
+                <mat-label>Salesman</mat-label>
                 <input type="text" matInput formControlName="fcn_returns_sales_man"
                   value="{{ fcn_returns_sales_man_val }}" [readonly]="viewOnly" />
               </mat-form-field>
@@ -2086,7 +2099,7 @@
           <div class="form-group row">
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>CustName</mat-label>
+                <mat-label>Cust Name</mat-label>
                 <input type="text" matInput formControlName="fcn_returns_cust_name" [readonly]="true" />
               </mat-form-field>
             </div>

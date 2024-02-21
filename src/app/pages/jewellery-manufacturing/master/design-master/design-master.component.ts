@@ -20,7 +20,10 @@ import { DesignTransactionComponent } from './design-transaction/design-transact
 export class DesignMasterComponent implements OnInit {
   @Input() content!: any; 
   favoriteSeason: string = "";
-
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+  imageurl: any;
+  image: string | ArrayBuffer | null | undefined;
 
   tableData: any[] = [];
   tableDatas: any[] = [];
@@ -52,7 +55,7 @@ export class DesignMasterComponent implements OnInit {
   column13:any[] = ['SINO','Billing Code','Description'];
   column14:any[] = ['SINO','Finishing Code','Description','Default'];
   column15:any[] = ['Size','Pcs'];
-  columnhead1:any[] = ['Srno','Comp.Code','Description','Pcs', 'Size Set Code','Size Code','Type','Category','Shape','Height','Width','Length','Radious'];
+  columnhead1:any[] = ['Srno','Comp.Code','Description','Pcs', 'Size Set Code','Size Code','Type','Category','Shape','Height','Width','Length','Radius'];
   columnhead2:any[] = ['DESIGN_C','PART_CODE','PART_DESCRIPTION','METAL_WT', 'LS_PCS','LS_WT','CS_PCS','CS_WT','PL_PCS','PL_WT','OTH_PCS','OTH_WT','TOTAL_PCS'];
 
   seasons: string[] = ['Customer Exclusive', 'Keep on Hold', 'Add Steel'];
@@ -147,6 +150,18 @@ export class DesignMasterComponent implements OnInit {
     price5 : [''],
     metalwt: [''],
     prefix: ['',[Validators.required]],
+    height : [''],
+    length : [''],
+    width : [''],
+    radius : [''],
+    orderRef : [''],
+    incCat : [''],
+    shape : [''],
+    setting : [''],
+    stoneType : [''],
+    subCollection : [''],
+    collection : [''],
+    parentDesign : [''],
   });
 
   openaddDesignSequence() {
@@ -313,8 +328,8 @@ lengthtemp(data:any,value: any){
   this.tableDatas[value.data.SRNO - 1].Length = data.target.value;
 }
 
-radioustemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Radious = data.target.value;
+radiustemp(data:any,value: any){
+  this.tableDatas[value.data.SRNO - 1].Radius = data.target.value;
 }
 
 
@@ -500,6 +515,290 @@ removedatas(){
   sizesetCodeSelected(e:any){
     console.log(e);
     this.designmasterForm.controls.sizeset.setValue(e.COMPSET_CODE);
+  }
+
+  collectionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Range Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  collectionCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.range.setValue(e.CODE);
+  }
+
+  subCollectionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Range Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  subCollectionCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.range.setValue(e.CODE);
+  }
+
+  stoneTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Range Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stoneTypeCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.range.setValue(e.CODE);
+  }
+
+  settingCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Setting Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  settingCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.setting.setValue(e.CODE);
+  }
+
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Shape Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='SHAPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  shapeCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.shape.setValue(e.CODE);
+  }
+
+  incCatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Range Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  incCatCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.range.setValue(e.CODE);
+  }
+
+  orderRefCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'orderRef Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  orderRefCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.range.setValue(e.CODE);
+  }
+
+  currencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  currencyCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.currency.setValue(e.CURRENCY_CODE);
+  }
+
+  designCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Design Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DESIGN_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  designCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.code.setValue(e.DESIGN_CODE);
+    this.designmasterForm.controls.designdesc.setValue(e.DESIGN_DESCRIPTION);
+  }
+
+  prefixCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_HEADING: 'Prefix Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PREFIX_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  prefixCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.prefix.setValue(e.PREFIX_CODE);
+  }
+  
+  parentDesignCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 56,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Parent Design Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DESIGN_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  parentDesignCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.parentDesign.setValue(e.DESIGN_CODE);
+  }
+
+  price1CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price1CodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.price1.setValue(e.PRICE_CODE);
+  }
+
+  price2CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price2CodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.price2.setValue(e.PRICE_CODE);
+  }
+
+  price3CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price3CodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.price3.setValue(e.PRICE_CODE);
+  }
+
+  price4CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price4CodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.price4.setValue(e.PRICE_CODE);
+  }
+
+  price5CodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  price5CodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.price5.setValue(e.PRICE_CODE);
+  }
+
+
+  onFileChangedimage(event:any) {
+    this.imageurl = event.target.files[0]
+    console.log(this.imageurl)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.image = reader.result; 
+      };
+    }
+  }
+
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
   }
 
 

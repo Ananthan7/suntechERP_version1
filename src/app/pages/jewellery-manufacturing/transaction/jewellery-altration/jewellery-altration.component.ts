@@ -28,6 +28,7 @@ export class JewelleryAltrationComponent implements OnInit {
   selectRowIndex: any;
   tableRowCount: number = 0;
   currentDate = new Date();
+  viewMode: boolean = false;
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -70,7 +71,16 @@ export class JewelleryAltrationComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    this.setAllInitialValues()
+    
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.setAllInitialValues()
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setAllInitialValues()
+      return
+    }
     this.setvalues()
   }
 
@@ -82,6 +92,16 @@ export class JewelleryAltrationComponent implements OnInit {
   userDataSelected(value: any) {
     console.log(value);
        this.jewelleryaltrationFrom.controls.enteredby.setValue(value.UsersName);
+  }
+   deleteTableData(): void {
+    this.tableRowCount = 0;
+    console.log(this.selectRowIndex)
+    this.tableData.splice(this.selectRowIndex, 1)
+
+  }
+  checkAndAllowEditing(data: any){
+    if (data == 'SRNO') return false
+    return true
   }
 
   close(data?: any) {
@@ -123,7 +143,7 @@ setAllInitialValues() {
         this.jewelleryaltrationFrom.controls.lossaccount.setValue(data.LOSS_ACCODE)
         this.jewelleryaltrationFrom.controls.enteredby.setValue(data.SMAN)
         this.jewelleryaltrationFrom.controls.itemcurrency.setValue(data.CURRENCY_CODE)
-        this.jewelleryaltrationFrom.controls.narration.setValue(data.SMAN)
+        this.jewelleryaltrationFrom.controls.narration.setValue(data.REMARKS)
 
        
         
@@ -154,7 +174,7 @@ setAllInitialValues() {
   setvalues(){
     console.log(this.comService);
     this.jewelleryaltrationFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.jewelleryaltrationFrom.controls.vocno.setValue('1')
+    this.jewelleryaltrationFrom.controls.vocno.setValue('')
     this.jewelleryaltrationFrom.controls.vocdate.setValue(this.comService.currentDate)
     this.jewelleryaltrationFrom.controls.metalratetype.setValue(this.comService.decimalQuantityFormat(0, 'METAL'))
     this.jewelleryaltrationFrom.controls.itemcurrency.setValue(this.comService.compCurrency)
@@ -198,15 +218,15 @@ setAllInitialValues() {
 
   }
   setValuesToHeaderGrid(detailDataToParent: any) {
-    let PROCESS_FORMDETAILS = detailDataToParent.PROCESS_FORMDETAILS
+    let PROCESS_FORMDETAILS = detailDataToParent.content
     if (PROCESS_FORMDETAILS.SRNO) {
-      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+      this.swapObjects(this.tableData, [this.content], (this.content.SRNO - 1))
     } else {
       this.tableRowCount += 1
-      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+      this.content.SRNO = this.tableRowCount
     }
 
-    this.tableData.push(PROCESS_FORMDETAILS)
+    this.tableData.push(this.content)
 
     if (detailDataToParent) {
       this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
@@ -221,12 +241,6 @@ setAllInitialValues() {
     } else {
       console.error('Invalid index');
     }
-  }
-
-  deleteTableData(): void {
-    this.tableRowCount = 0;
-    console.log(this.selectRowIndex)
-    this.tableData.splice(this.selectRowIndex, 1)
   }
   
 removedata(){
@@ -247,7 +261,7 @@ removedata(){
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.comService.nullToString(this.jewelleryaltrationFrom.value.voctype),
-      "VOCNO": this.jewelleryaltrationFrom.value.vocno,
+      "VOCNO": this.jewelleryaltrationFrom.value.VOCNO,
       "VOCDATE": this.jewelleryaltrationFrom.value.vocdate,
       "YEARMONTH": this.yearMonth,
       "SMAN": this.comService.nullToString(this.jewelleryaltrationFrom.value.SMAN),
@@ -276,7 +290,7 @@ removedata(){
       "DetailComponents": [
         {
           "REFMID": 0,
-          "MAINCODE":"",
+          "MAINCODE": "string",
           "SLNO": 0,
           "METALSTONE": "s",
           "DIVISION": "s",
@@ -337,21 +351,21 @@ removedata(){
       this.toastr.error('select all required fields')
       return
     }
-  
+   console.log(this.jewelleryaltrationdetail)
     let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocno}/${this.comService.yearSelected}` 
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.jewelleryaltrationFrom.value.voctype || "",
-      "VOCNO": this.jewelleryaltrationFrom.value.vocno || "",
-      "VOCDATE": this.jewelleryaltrationFrom.value.vocdate || "",
+      "VOCTYPE":this.comService.nullToString(this.jewelleryaltrationFrom.value.voctype),
+      "VOCNO": this.jewelleryaltrationFrom.value.vocno,
+      "VOCDATE": this.comService.formatDateTime(this.currentDate),
       "YEARMONTH": this.yearMonth,
-      "SMAN": this.jewelleryaltrationFrom.value.enteredby || "",
-      "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount || "",
-      "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency || "",
+      "SMAN": this.jewelleryaltrationFrom.value.enteredby,
+      "LOSS_ACCODE": this.jewelleryaltrationFrom.value.lossaccount,
+      "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency,
       "CC_RATE": 0,
-      "MET_RATE_TYPE": this.jewelleryaltrationFrom.value.metalratetype || "",
-      "METAL_RATE":this.jewelleryaltrationFrom.value.metalrate || "",
+      "MET_RATE_TYPE": this.jewelleryaltrationFrom.value.metalratetype,
+      "METAL_RATE":this.jewelleryaltrationFrom.value.metalrate,
       "NAVSEQNO": 0,
       "TOTALPCS": 0,
       "TOTAL_LAB_CHARGECC": 0,
@@ -462,13 +476,19 @@ removedata(){
           "CERT_CHARGESFCNEW": 0,
           "CERT_CHARGESCCNEW": 0,
           "COLOR": "",
-          "TAG_LINES": ""
+          "TAG_LINES": "",
+          "CLARITY": "string",
+          "LANDEDCOSTNEW": 0,
+          "LANDEDCOSTOLD": 0,
+          "SIEVE": "string",
+          "SIZE": "string",
+          "STONE_TYPE": "string"
         }
       ],
       "DetailComponents": [
         {
           "REFMID": 0,
-          "MAINCODE": this.jewelleryaltrationFrom.value.MAINCODE,
+          "MAINCODE": "string",
           "SLNO": 0,
           "METALSTONE": "",
           "DIVISION": "",
