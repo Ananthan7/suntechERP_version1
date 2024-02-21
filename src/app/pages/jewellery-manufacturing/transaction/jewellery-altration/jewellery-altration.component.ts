@@ -17,10 +17,10 @@ import { JewelleryAltrationDetailsComponent } from './jewellery-altration-detail
 })
 export class JewelleryAltrationComponent implements OnInit {
 
-  columnhead:any[] = ['SRNO','STOCK_CODE','DESCRIPTION', 'PCS','METALWT','STONEWT ','GROSSWT','COSTCC','COSTCCNEW','REMARKS_DETAIL'];
-  @Input() content!: any; 
+  columnhead: any[] = ['SRNO', 'STOCK_CODE', 'DESCRIPTION', 'PCS', 'METALWT', 'STONEWT ', 'GROSSWT', 'COSTCC', 'COSTCCNEW', 'REMARKS_DETAIL'];
+  @Input() content!: any;
   tableData: any[] = [];
-  jewelleryaltrationdetail : any[] =[];
+  jewelleryaltrationdetail: any[] = [];
   detailData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
@@ -29,6 +29,7 @@ export class JewelleryAltrationComponent implements OnInit {
   tableRowCount: number = 0;
   currentDate = new Date();
   viewMode: boolean = false;
+  selectedKey: number[] = []
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -43,7 +44,7 @@ export class JewelleryAltrationComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
- 
+
   costCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -56,6 +57,7 @@ export class JewelleryAltrationComponent implements OnInit {
     VIEW_TABLE: true,
   }
  
+
 
 
   constructor(
@@ -71,7 +73,7 @@ export class JewelleryAltrationComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    
+
     if (this.content && this.content.FLAG == 'EDIT') {
       this.setAllInitialValues()
       return
@@ -84,22 +86,24 @@ export class JewelleryAltrationComponent implements OnInit {
     this.setvalues()
   }
 
-  costCodeSelected(e:any){
+  costCodeSelected(e: any) {
     console.log(e);
     this.jewelleryaltrationFrom.controls.costcode.setValue(e.COST_CODE);
   }
 
   userDataSelected(value: any) {
     console.log(value);
-       this.jewelleryaltrationFrom.controls.enteredby.setValue(value.UsersName);
+    this.jewelleryaltrationFrom.controls.enteredby.setValue(value.UsersName);
   }
-   deleteTableData(): void {
-    this.tableRowCount = 0;
-    console.log(this.selectRowIndex)
-    this.tableData.splice(this.selectRowIndex, 1)
-
+  deleteClicked(): void {
+    console.log(this.selectedKey,'data')
+    this.selectedKey.forEach((element: any) => {
+      this.jewelleryaltrationdetail.splice(element.SRNO-1,1)
+      })
+   
   }
-  checkAndAllowEditing(data: any){
+  
+  checkAndAllowEditing(data: any) {
     if (data == 'SRNO') return false
     return true
   }
@@ -109,69 +113,70 @@ export class JewelleryAltrationComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-setAllInitialValues() {
-  console.log(this.tableData,'working')
-  if (!this.content) return
-  let API = `DiamondJewelAlteration/GetDiamondJewelAlterationWithMID/${this.content.MID}`
-  let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    .subscribe((result) => {
-      if (result.response) {
-        let data = result.response
-        console.log(data,'ll')
-        this.jewelleryaltrationdetail = data.Details
-        data.Details.forEach((element:any) => {
-          this.tableData.push({
-            SRNO: element.SRNO,
-            STOCK_CODE: element.STOCK_CODE,
-            DESCRIPTION: element.DESCRIPTION,
-            pcs:element.PCS,
-            METALWT: element.METALWT,
-            STONEWT: element.STONEWT,
-            GROSSWT:element.GROSSWT,
-            COSTCC:element.COSTCC,
-            COSTCCNEW:element.COSTCCNEW,
-            REMARKS_DETAIL:element.REMARKS_DETAIL
+  setAllInitialValues() {
+    console.log(this.tableData, 'working')
+    if (!this.content) return
+    let API = `DiamondJewelAlteration/GetDiamondJewelAlterationWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data, 'll')
+          this.jewelleryaltrationdetail = data.Details
+          data.Details.forEach((element: any) => {
+            this.tableData.push({
+              SRNO: element.SRNO,
+              STOCK_CODE: element.STOCK_CODE,
+              DESCRIPTION: element.DESCRIPTION,
+              pcs: element.PCS,
+              METALWT: element.METALWT,
+              STONEWT: element.STONEWT,
+              GROSSWT: element.GROSSWT,
+              COSTCC: element.COSTCC,
+              COSTCCNEW: element.COSTCCNEW,
+              REMARKS_DETAIL: element.REMARKS_DETAIL
 
-            
-          })
-        });
-        this.jewelleryaltrationFrom.controls.voctype.setValue(data.VOCTYPE)
-        this.jewelleryaltrationFrom.controls.vocno.setValue(data.VOCNO)
-        this.jewelleryaltrationFrom.controls.metalrate.setValue(data.METAL_RATE)
-        this.jewelleryaltrationFrom.controls.metalratetype.setValue(data.MET_RATE_TYPE)
-        this.jewelleryaltrationFrom.controls.costcode.setValue(data.CC_RATE)
-        this.jewelleryaltrationFrom.controls.lossaccount.setValue(data.LOSS_ACCODE)
-        this.jewelleryaltrationFrom.controls.enteredby.setValue(data.SMAN)
-        this.jewelleryaltrationFrom.controls.itemcurrency.setValue(data.CURRENCY_CODE)
-        this.jewelleryaltrationFrom.controls.narration.setValue(data.REMARKS)
 
-       
-        
-      } else {
+            })
+          });
+          this.jewelleryaltrationFrom.controls.voctype.setValue(data.VOCTYPE)
+          this.jewelleryaltrationFrom.controls.vocno.setValue(data.VOCNO)
+          this.jewelleryaltrationFrom.controls.metalrate.setValue(data.METAL_RATE)
+          this.jewelleryaltrationFrom.controls.metalratetype.setValue(data.MET_RATE_TYPE)
+          this.jewelleryaltrationFrom.controls.costcode.setValue(data.CC_RATE)
+          this.jewelleryaltrationFrom.controls.lossaccount.setValue(data.LOSS_ACCODE)
+          this.jewelleryaltrationFrom.controls.enteredby.setValue(data.SMAN)
+          this.jewelleryaltrationFrom.controls.itemcurrency.setValue(data.CURRENCY_CODE)
+          this.jewelleryaltrationFrom.controls.narration.setValue(data.REMARKS)
+         
+
+
+
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')
-      }
-    }, err => {
-      this.commonService.toastErrorByMsgId('MSG1531')
-    })
-  this.subscriptions.push(Sub)
-}
+      })
+    this.subscriptions.push(Sub)
+  }
 
 
   jewelleryaltrationFrom: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocno:[''],
-   vocdate:[''],
-   metalrate:[''],
-   metalratetype:[''],
-   costcode:[''],
-   lossaccount:[''],
-   enteredby:[''],
-   itemcurrency:[''],
-   itemcurrencycc:[''],
-   narration:[''],
+    voctype: [''],
+    vocno: [''],
+    vocdate: [''],
+    metalrate: [''],
+    metalratetype: [''],
+    costcode: [''],
+    lossaccount: [''],
+    enteredby: [''],
+    itemcurrency: [''],
+    itemcurrencycc: [''],
+    narration: [''],
   });
 
-  setvalues(){
+  setvalues() {
     console.log(this.comService);
     this.jewelleryaltrationFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
     this.jewelleryaltrationFrom.controls.vocno.setValue('')
@@ -197,15 +202,15 @@ setAllInitialValues() {
       windowClass: 'modal-full-width',
     });
     modalRef.componentInstance.content = data;
-    modalRef.result.then((postData) => {      
+    modalRef.result.then((postData) => {
       if (postData) {
-        console.log('Data from modal:', postData);       
+        console.log('Data from modal:', postData);
         this.jewelleryaltrationdetail.push(postData);
         console.log(this.jewelleryaltrationdetail);
         this.setValuesToHeaderGrid(postData);
-        
+
       }
-     
+
     });
   }
   onRowClickHandler(event: any) {
@@ -214,19 +219,21 @@ setAllInitialValues() {
     let selectedData = event.data
     let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
     this.openjewelleryaltrationdetails(selectedData)
-   
+
 
   }
   setValuesToHeaderGrid(detailDataToParent: any) {
-    let PROCESS_FORMDETAILS = detailDataToParent.content
+    let PROCESS_FORMDETAILS = detailDataToParent
     if (PROCESS_FORMDETAILS.SRNO) {
-      this.swapObjects(this.tableData, [this.content], (this.content.SRNO - 1))
+      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
     } else {
       this.tableRowCount += 1
-      this.content.SRNO = this.tableRowCount
+      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+      // this.tableRowCount += 1
+      // this.content.SRNO = this.tableRowCount
     }
 
-    this.tableData.push(this.content)
+    this.tableData.push(PROCESS_FORMDETAILS)
 
     if (detailDataToParent) {
       this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
@@ -242,13 +249,13 @@ setAllInitialValues() {
       console.error('Invalid index');
     }
   }
-  
-removedata(){
-  this.tableData.pop();
-}
 
-  formSubmit(){
-    if(this.content && this.content.FLAG == 'EDIT'){
+  removedata() {
+    this.tableData.pop();
+  }
+ 
+  formSubmit() {
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -269,7 +276,7 @@ removedata(){
       "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency,
       "CC_RATE": 0,
       "MET_RATE_TYPE": this.comService.nullToString(this.jewelleryaltrationFrom.value.metalratetype),
-      "METAL_RATE":this.comService.emptyToZero(this.jewelleryaltrationFrom.value.metalrate),
+      "METAL_RATE": this.comService.emptyToZero(this.jewelleryaltrationFrom.value.metalrate),
       "NAVSEQNO": 0,
       "TOTALPCS": 0,
       "TOTAL_LAB_CHARGECC": 0,
@@ -286,7 +293,7 @@ removedata(){
       "REMARKS_DETAIL": "",
       "GENSEQNO": 0,
       "Details": this.jewelleryaltrationdetail,
-      
+
       "DetailComponents": [
         {
           "REFMID": 0,
@@ -318,11 +325,11 @@ removedata(){
         }
       ]
     }
-  
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status.trim() == "Success"){
+          if (result.status.trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -346,17 +353,17 @@ removedata(){
 
 
 
-  update(){
+  update() {
     if (this.jewelleryaltrationFrom.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-   console.log(this.jewelleryaltrationdetail)
-    let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocno}/${this.comService.yearSelected}` 
+    console.log(this.jewelleryaltrationdetail)
+    let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocno}/${this.comService.yearSelected}`
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
-      "VOCTYPE":this.comService.nullToString(this.jewelleryaltrationFrom.value.voctype),
+      "VOCTYPE": this.comService.nullToString(this.jewelleryaltrationFrom.value.voctype),
       "VOCNO": this.jewelleryaltrationFrom.value.vocno,
       "VOCDATE": this.comService.formatDateTime(this.currentDate),
       "YEARMONTH": this.yearMonth,
@@ -365,7 +372,7 @@ removedata(){
       "CURRENCY_CODE": this.jewelleryaltrationFrom.value.itemcurrency,
       "CC_RATE": 0,
       "MET_RATE_TYPE": this.jewelleryaltrationFrom.value.metalratetype,
-      "METAL_RATE":this.jewelleryaltrationFrom.value.metalrate,
+      "METAL_RATE": this.jewelleryaltrationFrom.value.metalrate,
       "NAVSEQNO": 0,
       "TOTALPCS": 0,
       "TOTAL_LAB_CHARGECC": 0,
@@ -385,7 +392,7 @@ removedata(){
         {
           "UNIQUEID": 0,
           "SRNO": 0,
-          "STOCK_CODE": "",
+          "STOCK_CODE":"",
           "DESCRIPTION": "",
           "PCS": 0,
           "COSTFC": 0,
@@ -516,11 +523,11 @@ removedata(){
         }
       ]
     }
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -541,9 +548,9 @@ removedata(){
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
-    if (!this.content.VOCTYPE) {
+    if (!this.content.MID) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -566,7 +573,7 @@ removedata(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'DiamondJewelAlteration/DeleteDiamondJewelAlteration/' + this.jewelleryaltrationFrom.value.branchCode  + this.jewelleryaltrationFrom.value.voctype + this.jewelleryaltrationFrom.value.vocno + this.jewelleryaltrationFrom.value.yearMonth
+        let API = `DiamondJewelAlteration/DeleteDiamondJewelAlteration/${this.branchCode}/${this.jewelleryaltrationFrom.value.voctype}/${this.jewelleryaltrationFrom.value.vocno}/${this.comService.yearSelected}`
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -607,7 +614,7 @@ removedata(){
       }
     });
   }
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
