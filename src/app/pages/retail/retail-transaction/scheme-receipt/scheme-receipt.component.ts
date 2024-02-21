@@ -1118,7 +1118,9 @@ export class SchemeReceiptComponent implements OnInit {
       if (item.TRN_Inv_Date != "")
         item.TRN_Inv_Date = item.TRN_Inv_Date.toISOString();
     });
-    this.orderedItemsHead = Object.keys(this.orderedItems[0]);
+    console.log(this.orderedItems);
+    
+    this.orderedItemsHead = ['SRNO','Branch','Mode','AC_Code','CurrCode','AC_Description','CurrRate','Amount_FC'];
     // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
     this.calculateTotalValues();
     // this.closeModal();
