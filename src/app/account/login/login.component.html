@@ -112,7 +112,7 @@
                                         <input matInput value (keyup)="changeTextUpperCase($event)"
                                             (focusout)="checkUserName($event)">
                                         <!-- <mat-icon matPrefix class="srchicon">search</mat-icon> -->
-                                        <mat-icon matPrefix class="person">person</mat-icon>
+                                        <mat-icon matPrefix class="person icon_1">person</mat-icon>
                                     </mat-form-field>
                                 </div>
                                 <div class="">
@@ -120,7 +120,7 @@
                                     <mat-form-field appearance="outline" style="width: 100%;">
                                         <input id="password" type="password" matInput value
                                             (focusout)="checkUserNamePassword($event)">
-                                        <mat-icon matPrefix class="lock">lock</mat-icon>
+                                        <mat-icon matPrefix class="lock icon_1">lock</mat-icon>
                                     </mat-form-field>
 
                                 </div>
@@ -136,7 +136,7 @@
                                                 {{option}}
                                             </mat-option>
                                         </mat-autocomplete>
-                                        <mat-icon matPrefix class="webhook">webhook</mat-icon>
+                                        <mat-icon matPrefix class="webhook icon_1">webhook</mat-icon>
                                     </mat-form-field>
                                 </div>
                                 <div class="">
@@ -150,17 +150,17 @@
                                                 {{option}}
                                             </mat-option>
                                         </mat-autocomplete>
-                                        <mat-icon matPrefix class="date_range">date_range</mat-icon>
+                                        <mat-icon matPrefix class="date_range icon_1">date_range</mat-icon>
                                     </mat-form-field>
                                 </div>
                                 <div class="my-2">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                        <label class="form-check-label" for="flexSwitchCheckDefault">Keep me
+                                        <label class="form-check-label l_1" for="flexSwitchCheckDefault">Keep me
                                             logged in</label>
                                     </div>
                                 </div>
-                                <div class="mt-4">
+                                <div class="mt-4 pt-4">
                                     <button class="btn btn-block btn-primary w-100 mb-0"
                                         style="border-radius: 5px !important; background: linear-gradient(180deg, #1E3C72 0%, #2A5298 100%) !important"
                                         (click)="signin()">Sign In</button>
