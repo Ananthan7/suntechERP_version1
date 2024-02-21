@@ -32,8 +32,16 @@
           </mat-autocomplete>
         </mat-form-field>
       </div>
-      <div class="col-md-2">
-        <mat-form-field appearance="outline" class="w-100">
+      <div class="col-md-2  d-flex align-items-center">
+        <!-- <button mat-button class="mat-button-round mat-raised-button">
+  <span>Advance Filter</span>
+  <button mat-icon-button>
+    <mat-icon>refresh</mat-icon>
+  </button>
+ </button> -->
+ <button class="btn btn_white filter-btn  border_light b_r_20 w-100" (click)="openFilter()"> Advance Filter <i class="fas fa-filter"></i></button>
+     
+ <!-- <mat-form-field appearance="outline" class="w-100">
           <mat-label>Brand</mat-label>
           <input
             id="branch"
@@ -50,7 +58,7 @@
               {{ option }}
             </mat-option>
           </mat-autocomplete>
-        </mat-form-field>
+        </mat-form-field> -->
       </div>
 
       <div class="col-md-3">

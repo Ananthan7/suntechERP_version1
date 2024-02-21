@@ -5,9 +5,10 @@ import { ProductAnalysisSalesOrderRoutingModule } from './product-analysis-sales
 import { ProductAnalysisSalesOrderComponent } from './product-analysis-sales-order.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatIconModule } from '@angular/material/icon';
+import { ProductAnalysisAdvanceFilterComponent } from './product-analysis-advance-filter/product-analysis-advance-filter.component';
 
 @NgModule({
-  declarations: [ProductAnalysisSalesOrderComponent],
+  declarations: [ProductAnalysisSalesOrderComponent,  ProductAnalysisAdvanceFilterComponent],
   imports: [
     ProductAnalysisSalesOrderRoutingModule,
     CommonModule,

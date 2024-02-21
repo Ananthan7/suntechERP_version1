@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
+import { ProductAnalysisAdvanceFilterComponent } from './product-analysis-advance-filter/product-analysis-advance-filter.component';
 
 @Component({
   selector: 'app-product-analysis-sales-order',
@@ -41,9 +43,29 @@ export class ProductAnalysisSalesOrderComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(
+    private modalService: NgbModal,
+
+  ) { }
 
   ngOnInit(): void {
   }
 
+
+  openFilter(){
+    const modalRef: NgbModalRef = this.modalService.open(ProductAnalysisAdvanceFilterComponent, {
+      size: 'lg',
+      backdrop: true,
+      keyboard: true,
+      windowClass: 'modal-full-width',
+    });
+    modalRef.result.then(
+      (result) => {
+        console.log(`Closed with: ${result}`);
+      },
+      (reason) => {
+        console.log(`Dismissed ${reason}`);
+      }
+    );
+  }
 }

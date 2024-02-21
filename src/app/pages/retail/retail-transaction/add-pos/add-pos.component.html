@@ -313,10 +313,11 @@
         </div>
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
-        
-            <input type="number" matInput id="voc_no" formControlName="voc_no" />
+            <mat-label>{{ vocno_lbl }}</mat-label>
+            <input type="text" matInput formControlName="fcn_voc_no" [readonly]="true" />
           </mat-form-field>
         </div>
+      
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>Currency</mat-label>
@@ -344,12 +345,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-md-2 m-t-10 pt-2">
-          <mat-form-field>
-            <mat-label>{{ vocno_lbl }}</mat-label>
-            <input type="text" matInput formControlName="fcn_voc_no" [readonly]="true" />
-          </mat-form-field>
-        </div>
+        
         <div class="col-md-2 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>{{ sales_person_lbl }}</mat-label>
@@ -600,10 +596,10 @@
                           </dxo-editing>
 
                           <dxo-selection mode="single"></dxo-selection>
-                          <dxi-column dataField="sn_no" [width]="100" caption="SL No." [allowEditing]="false"
+                          <dxi-column dataField="sn_no" [width]="80" caption="SL No." [allowEditing]="false"
                             alignment="center">
                           </dxi-column>
-                          <dxi-column dataField="stock_code" [width]="120" [allowEditing]="false">
+                          <dxi-column dataField="stock_code" [width]="100" [allowEditing]="false">
                           </dxi-column>
                           <dxi-column dataField="description" [width]="150" [allowEditing]="false" alignment="center">
                           </dxi-column>
@@ -616,9 +612,9 @@
 
                           <dxi-column dataField="total_amount" caption="Mkg amount" alignment="right" format="currency"
                             [format]="{ style: 'currency', currency: 'AED' }" [allowEditing]="false"
-                            precision="2"></dxi-column>
+                            precision="2"  [width]="150"></dxi-column>
                           <dxi-column dataField="net_amount" caption="Total amount" alignment="right" format="currency"
-                            [format]="{ style: 'currency', currency: 'AED' }" [allowEditing]="false" precision="2">
+                            [format]="{ style: 'currency', currency: 'AED' }" [allowEditing]="false" precision="2"  [width]="150">
                           </dxi-column>
 
                           <!-- <dxi-column type="buttons" >
