@@ -1,12 +1,12 @@
 <app-loader [isLoading]="isLoading"></app-loader>
 <!-- module list section starts -->
 <div class="landing_page">
-    <div class="container con_1">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="row m_1">
-                        <div class="col-md-3 my-2" *ngFor="let data of menuList; let i = index">
+    <div class="container con_1 px-5 py-5">
+        <div class="col-lg-12">
+            <div class="d-flex">
+                <div class="col-md-11 pl_1">
+                    <div class="row m_1 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
+                        <div class="col my-2" *ngFor="let data of menuList; let i = index">
                             <!-- Assuming you want to navigate to the route /target-route with query parameters -->
                             <!-- <a [routerLink]="['/module-container']" [queryParams]="{ modulename :data.MODULE_NAME, id: i }"> -->
                             <a class="w-100" routerLink="/{{ data.ANG_CMB_PATH_NAME || 'module-container' }}"
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-1 pl_2">
                     <div class="row offset-8">
                         <nav class="offset-2">
                             <ul class="ul_1">

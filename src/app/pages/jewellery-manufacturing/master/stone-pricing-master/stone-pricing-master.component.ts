@@ -13,12 +13,14 @@ import Swal from 'sweetalert2';
   styleUrls: ['./stone-pricing-master.component.scss']
 })
 export class StonePricingMasterComponent implements OnInit {
-  [x: string]: any;
+
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   tableData: any[] = [];
   isReadOnly:any
   viewMode: boolean = false;
+  viewModeAll: boolean = false;
+  viewDisable:boolean = false;
 
 
   priceCodeData: MasterSearchModel = {
@@ -188,6 +190,8 @@ export class StonePricingMasterComponent implements OnInit {
     console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
       this.viewFormValues();
+      this.viewModeAll = true;
+      this.viewDisable = true;
     }
     else(this.content.FLAG == 'EDIT')
     {

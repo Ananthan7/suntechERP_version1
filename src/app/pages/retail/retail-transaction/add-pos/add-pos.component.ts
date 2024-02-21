@@ -5280,9 +5280,27 @@ export class AddPosComponent implements OnInit {
         this.exchangeForm.controls['fcn_exchange_division'].setValue('');
         this.exchangeForm.controls['fcn_exchange_item_desc'].setValue('');
         this.exchangeForm.controls['fcn_exchange_item_code'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_pcs'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_gross_wt'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_stone_wt'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_net_wt'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_chargeable_wt'].setValue('');
         this.exchangeForm.controls['fcn_exchange_purity'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_pure_weight'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_purity_diff'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_stone_rate'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_stone_amount'].setValue('');
         this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_making_rate'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_making_amt'].setValue('');
         this.exchangeForm.controls['fcn_exchange_metal_amount'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_net_amount'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_scrap_bag_no'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_scrap_bag_desc'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_location'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_jawahara'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_resale_recycle'].setValue('');
+        this.exchangeForm.controls['fcn_exchange_cash_exchange'].setValue('');
         if (btn == 'saveBtn') this.modalReference.close();
         this.sumTotalValues();
 

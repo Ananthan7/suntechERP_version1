@@ -49,7 +49,7 @@
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-3 col-form-label">SKU Prefix * :</label>
                     <div class="col-md-3">
-                      <mat-form-field style="width: 80%;">
+                      <mat-form-field style="width: 70%;">
                         <input type="text" matInput formControlName="prefix" />
                       </mat-form-field>
                       <master-search [MasterSearchData]="prefixCodeData"
@@ -57,7 +57,7 @@
                     </div>
                     <label for="inputPassword" class="col-sm-3 col-form-label">Parent Design:</label>
                     <div class="col-md-3">
-                      <mat-form-field style="width: 80%;">
+                      <mat-form-field style="width: 70%;">
                         <input type="text" matInput formControlName="parentDesign" />
                       </mat-form-field>
                       <master-search [MasterSearchData]="parentDesignCodeData"
@@ -192,9 +192,12 @@
                     </div>
                     <label for="inputPassword" class="col-sm-3 col-form-label">Vend/Cust:</label>
                     <div class="col-md-3">
-                      <mat-form-field style="width: 100%;">
-                        <input type="text" matInput />
+                      <mat-form-field style="width: 70%;">
+                        <input type="text" matInput formControlName="vendCust" />
                       </mat-form-field>
+                      <master-search [MasterSearchData]="vendCustCodeData"
+                      (newRowClick)="vendCustCodeSelected($event)"></master-search>
+
                     </div>
                   </div>
                   <div class="row align-items-center mb-1">
@@ -434,7 +437,8 @@
                       </div> -->
                     <div class="col-md-5">
                       <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
+                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 25px;
+                        padding-right: 25px;"
                           (click)="openaddDesignSequence()">
                           Sequence
                         </button>
@@ -446,7 +450,8 @@
                         </button>
                       </div>
                       <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
+                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn"style="padding-left: 21px;
+                        padding-right: 21px;"
                           (click)="openaddDesignTransaction()">
                           Transaction
                         </button>

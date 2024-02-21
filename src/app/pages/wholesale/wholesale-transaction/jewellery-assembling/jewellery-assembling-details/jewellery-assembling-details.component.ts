@@ -506,6 +506,86 @@ fluoresceSelected(e:any){
   this.jewelleryAssemblingDetailsForm.controls.fluoresce.setValue(e.CODE);
 }
 
+price1CodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 82,
+  SEARCH_FIELD: 'PRICE_CODE',
+  SEARCH_HEADING: 'Price Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "PRICE_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+price1Selected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.price1.setValue(e.PRICE_CODE);
+}
+
+price2CodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 82,
+  SEARCH_FIELD: 'PRICE_CODE',
+  SEARCH_HEADING: 'Price Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "PRICE_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+price2Selected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.price2.setValue(e.PRICE_CODE);
+}
+
+price3CodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 82,
+  SEARCH_FIELD: 'PRICE_CODE',
+  SEARCH_HEADING: 'Price Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "PRICE_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+price3Selected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.price3.setValue(e.PRICE_CODE);
+}
+
+price4CodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 82,
+  SEARCH_FIELD: 'PRICE_CODE',
+  SEARCH_HEADING: 'Price Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "PRICE_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+price4Selected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.price4.setValue(e.PRICE_CODE);
+}
+
+price5CodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 82,
+  SEARCH_FIELD: 'PRICE_CODE',
+  SEARCH_HEADING: 'Price Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "PRICE_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+price5Selected(e:any){
+  this.jewelleryAssemblingDetailsForm.controls.price5.setValue(e.PRICE_CODE);
+}
+
   setInitialDatas() {
 
     this.jewelleryAssemblingDetailsForm.controls.vocDate.setValue(this.commonService.currentDate)

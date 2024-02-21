@@ -78,33 +78,69 @@ export class CustomerPriceMasterComponent implements OnInit {
  
   ngOnInit(): void {
 
-    const apiUrl = 'CustomerPriceMaster/GetCustomerStonePricingMasterGrid';  
-    let postData = {
-      "strCode": "TBG-5.4-5.7",
-      "strType": "LABO",
-      "strVocDate": "2024-02-07"
-    }
-   
-    let sub: Subscription = this.dataService.postDynamicAPI(apiUrl,postData).subscribe((result) => {
-      if (result.status == 'Success' ) {
-             // console.log(result.dynamicData[0]);
-              this.tableDatalabour = result.dynamicData[0]
-              console.log(this.tableDatalabour);
-      } 
-    });
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API = 'StonePriceMasterDJ/GetStonePriceMasterList'
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response;
+          data.forEach((item: any, i: any) => {
+            item.SELECT1 = false
+            item.SRNO = i + 1;
+          });
+          this.tableDatastone = data
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
 
-    let getdata = {
-      "strCode": "BLKRD+11-12",
-      "strType": "STO",
-      "strVocDate": "2024-02-07"
-    }
-    let subu: Subscription = this.dataService.postDynamicAPI(apiUrl,getdata).subscribe((result) => {
-      if (result.status == 'Success' ) {
-             // console.log(result.dynamicData[0]);
-              this.tableDatastone = result.dynamicData[0]
-              console.log(this.tableDatastone);
-      } 
-    });
+
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API1 = 'LabourChargeMasterDj/GetLabourChargeMasterList'
+    let Sub1: Subscription = this.dataService.getDynamicAPI(API1)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response;
+          data.forEach((item: any, i: any) => {
+            item.SELECT1 = false
+            item.SRNO = i + 1;
+          });
+          this.tableDatalabour = data
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+
+
+    console.log(API1);
+
+    // const apiUrl = 'CustomerPriceMaster/GetCustomerStonePricingMasterGrid';  
+    // let postData = {
+    //   "strCode": "TBG-5.4-5.7",
+    //   "strType": "LABO",
+    //   "strVocDate": "2024-02-07"
+    // }
+   
+    // let sub: Subscription = this.dataService.postDynamicAPI(apiUrl,postData).subscribe((result) => {
+    //   if (result.status == 'Success' ) {
+    //          // console.log(result.dynamicData[0]);
+    //           this.tableDatalabour = result.dynamicData[0]
+    //           console.log(this.tableDatalabour);
+    //   } 
+    // });
+
+    // let getdata = {
+    //   "strCode": "BLKRD+11-12",
+    //   "strType": "STO",
+    //   "strVocDate": "2024-02-07"
+    // }
+    // let subu: Subscription = this.dataService.postDynamicAPI(apiUrl,getdata).subscribe((result) => {
+    //   if (result.status == 'Success' ) {
+    //          // console.log(result.dynamicData[0]);
+    //           this.tableDatastone = result.dynamicData[0]
+    //           console.log(this.tableDatastone);
+    //   } 
+    // });
 
     console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {

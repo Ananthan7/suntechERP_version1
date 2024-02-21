@@ -46,7 +46,6 @@ export class CostCentreMetalDetailsComponent implements OnInit {
     purchaseReturn:[''],
     importPurchase:[''],
     importPurchaseReturn:[''],
-
     repairPurchase:[''],
     repairPurchaseReturn:[''],
     Wholesales:[''],
@@ -120,7 +119,7 @@ export class CostCentreMetalDetailsComponent implements OnInit {
 
   purchaseCodeSelected(e:any){
     console.log(e); 
-    this.costcenterdiamonddetailsForm.controls.purchase.setValue(e.ACCODE);   
+    this.costcenterdiamonddetailsForm.controls.purchase.setValue(e.ACCODE);    
   }
 
   purchaseReturnCodeSelected(e:any){
@@ -232,7 +231,7 @@ export class CostCentreMetalDetailsComponent implements OnInit {
 
   branchTransferOUTCodeSelected(e:any){
     console.log(e);
-    this.costcenterdiamonddetailsForm.controls.branchTransferIn.setValue(e.ACCODE);
+    this.costcenterdiamonddetailsForm.controls.branchTransferOUT.setValue(e.ACCODE);
   }
 
   manufactureCodeSelected(e:any){
@@ -308,6 +307,11 @@ export class CostCentreMetalDetailsComponent implements OnInit {
   unFixSalCtrlAcCodeSelected(e:any){
     console.log(e);
     this.costcenterdiamonddetailsForm.controls.unFixSalCtrlAc.setValue(e.ACCODE);
+  }
+
+  unFixCustCtrlAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.unFixCustCtrlAc.setValue(e.ACCODE);
   }
 
   purchaseAcCodeSelected(e:any){

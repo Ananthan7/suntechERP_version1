@@ -1,5 +1,5 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Cost Center - Making Charges Details</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Cost Center Metal - Detail</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -463,7 +463,7 @@
                             <input type="text" matInput formControlName="unFixCustCtrlAc" />
                         </mat-form-field>
                            <master-search [MasterSearchData]="purchaseCodeData"
-                            (newRowClick)="purchaseCodeSelected($event)"></master-search>
+                            (newRowClick)="unFixCustCtrlAcCodeSelected($event)"></master-search>
                     </div>
                 </div>
             </div>
