@@ -134,7 +134,7 @@
                     <input type="text" matInput readonly
                         formControlName="AC_Description" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="accountMasterData"
+                <master-search [MasterSearchData]="accountMasterData" *ngIf="receiptEntryForm.value.Type != 'Credit Card'"
                     (newRowClick)="selectedAcCode($event)">
                 </master-search>
             </div>
@@ -185,8 +185,7 @@
                 </div>
             </div>
         </div>
-        <div class="row"
-            style="background-color: #f0f0f0;border-top: 1px solid #dbdbdb;">
+        <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="row">
                     <span class="matlabels">Amount FC *

@@ -158,7 +158,7 @@ export class AddReceiptComponent implements OnInit {
         if (result.response) {
           this.gridDataSource = result.response
         } else {
-          this.toastr.error('data not found')
+          this.toastr.error('grid data not found')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -361,8 +361,15 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result: any) => {
         if (result.response) {
           let data = result.response
-          this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode' && value.ENGLISH == 'Credit Card')
-          this.receiptEntryForm.controls.Type.setValue(value)
+          // this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode' && value.ENGLISH == 'Credit Card')
+          this.payTypeArray = [
+            {ENGLISH: 'Cash'},
+            {ENGLISH: 'Credit Card'},
+            {ENGLISH: 'Cheque'},
+            {ENGLISH: 'IT'},
+            {ENGLISH: 'Others'},
+          ]
+          // this.receiptEntryForm.controls.Type.setValue(value)
         } else {
           this.toastr.error('Receipt Mode not found')
         }

@@ -47,8 +47,9 @@ export class MasterSearchComponent implements OnInit {
       this.loadData();
     }
   }
-  getAllValue() {
+  getAPIValue() {
     let API:string = this.MasterSearchData.API_VALUE || ''
+    this.commonService.toastSuccessByMsgId('MSG81447');
     this.subscriptions$ = this.dataService.getDynamicAPI(API)
     .subscribe((result) => {
       console.log(result);
@@ -56,6 +57,9 @@ export class MasterSearchComponent implements OnInit {
         this.dataSourceHead = this.MasterSearchData.SEARCH_FIELD?.split(',').map(item => item.trim()) || []
         this.dataSource = result.response
       } else {
+        this.dataSourceHead = []
+        this.dataSource = []
+        this.closeOverlayPanel()
         this.toastr.error('Data Not Available')
       }
     }, err => alert(err))
@@ -78,7 +82,7 @@ export class MasterSearchComponent implements OnInit {
   /**use: first call to load data */
   loadData() {
     if (this.MasterSearchData.API_VALUE && this.MasterSearchData.API_VALUE != '') {
-      this.getAllValue()
+      this.getAPIValue()
       return
     }
     let param = {

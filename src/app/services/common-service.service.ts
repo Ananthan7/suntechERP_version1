@@ -876,7 +876,7 @@ export class CommonServiceService {
   }
   addDaysToDate(startDate: any, daysToAdd: any) {
     const currentDate = new Date(startDate); // Create a Date object from the given date
-    const futureDate = new Date(currentDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000); // Add days in milliseconds
+    const futureDate = new Date(currentDate.getTime() + Number(daysToAdd) * 24 * 60 * 60 * 1000); // Add days in milliseconds
     return futureDate;
   }
   addMonthsToDate(startDate: any, numberOfMonths: number) {

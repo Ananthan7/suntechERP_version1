@@ -398,7 +398,6 @@ export class SchemeRegisterComponent implements OnInit {
 
   ReminderSendSelected(data: any, value: any) {
     this.SchemeMasterDetails[value.data.SRNO - 1].REMAINDER_SEND = data.REMAINDER_SEND ? true : false;
-    //this.stonePrizeMasterForm.controls.sleve_set.setValue(data.CODE)
   }
   PayStatusSelected(data: any, value: any) {
     this.SchemeMasterDetails[value.data.SRNO - 1].PAY_STATUS = data.PAY_STATUS ? true : false;
@@ -436,41 +435,41 @@ export class SchemeRegisterComponent implements OnInit {
       });
     this.subscriptions.push(sub)
   }
-  addRowsToGridFrontend(period?: any) {
-    this.SchemeMasterDetails = []
-    let noOFInstallment = Number(this.schemeRegistrationForm.value.TenurePeriod) || period
-    for (let index = 0; index < noOFInstallment; index++) {
-      this.SchemeMasterDetails.push(
-        {
-          UNIQUEID: 0,
-          SCH_CUSTOMER_CODE: this.schemeRegistrationForm.value.code,
-          SCH_CUSTOMER_ID: "",
-          SRNO: index + 1,
-          PAY_DATE: this.schemeRegistrationForm.value.DateOfJoining,
-          PAY_AMOUNT_FC: this.schemeRegistrationForm.value.installmentAmount,
-          PAY_AMOUNT_CC: this.schemeRegistrationForm.value.installmentAmount,
-          PAY_STATUS: this.schemeRegistrationForm.value.PAY_STATUS,
-          REMAINDER_DATE: this.schemeRegistrationForm.value.DateOfJoining,
-          REMAINDER_SEND: 0,
-          DT_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
-          RCVD_DATE: this.schemeRegistrationForm.value.DateOfJoining,
-          RCVD_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
-          RCVD_VOCTYPE: this.schemeRegistrationForm.value.VOCTYPE,
-          RCVD_VOCNO: 0,
-          RCVD_YEARMONTH: 0,
-          RCVD_AMOUNTFC: 0,
-          RCVD_AMOUNTCC: 0,
-          SCHBAL_AMOUNTFC: 0,
-          SCHBAL_AMOUNTCC: 0,
-          SCH_PARTIALLY_PAID: true,
-          RECEIPT_REF: "",
-          RECEIPT_MID: 0,
-          Images: []
-        }
-      )
+  // addRowsToGridFrontend(period?: any) {
+  //   this.SchemeMasterDetails = []
+  //   let noOFInstallment = Number(this.schemeRegistrationForm.value.TenurePeriod) || period
+  //   for (let index = 0; index < noOFInstallment; index++) {
+  //     this.SchemeMasterDetails.push(
+  //       {
+  //         UNIQUEID: 0,
+  //         SCH_CUSTOMER_CODE: this.schemeRegistrationForm.value.code,
+  //         SCH_CUSTOMER_ID: "",
+  //         SRNO: index + 1,
+  //         PAY_DATE: this.schemeRegistrationForm.value.DateOfJoining,
+  //         PAY_AMOUNT_FC: this.schemeRegistrationForm.value.installmentAmount,
+  //         PAY_AMOUNT_CC: this.schemeRegistrationForm.value.installmentAmount,
+  //         PAY_STATUS: this.schemeRegistrationForm.value.PAY_STATUS,
+  //         REMAINDER_DATE: this.schemeRegistrationForm.value.DateOfJoining,
+  //         REMAINDER_SEND: 0,
+  //         DT_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
+  //         RCVD_DATE: this.schemeRegistrationForm.value.DateOfJoining,
+  //         RCVD_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
+  //         RCVD_VOCTYPE: this.schemeRegistrationForm.value.VOCTYPE,
+  //         RCVD_VOCNO: 0,
+  //         RCVD_YEARMONTH: 0,
+  //         RCVD_AMOUNTFC: 0,
+  //         RCVD_AMOUNTCC: 0,
+  //         SCHBAL_AMOUNTFC: 0,
+  //         SCHBAL_AMOUNTCC: 0,
+  //         SCH_PARTIALLY_PAID: true,
+  //         RECEIPT_REF: "",
+  //         RECEIPT_MID: 0,
+  //         Images: []
+  //       }
+  //     )
 
-    }
-  }
+  //   }
+  // }
   exportToExcel() {
     this.commonService.exportExcel(this.schemeReceiptList, 'Scheme Details')
   }
@@ -723,7 +722,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${i}].schemeData.SCH_SEND_ALERT`, formValue.SendAlert);
       this.formdata.append(`Model.model[${i}].schemeData.PAN_NUMBER`, formValue.PanNo);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_PAN_NUMBER`, formValue.PanNo);
-      this.formdata.append(`Model.model[${i}].schemeData.VOCDATE`, this.commonService.formatDate(formValue.VOCDATE));
+      this.formdata.append(`Model.model[${i}].schemeData.VOCDATE`, this.commonService.formatDate(new Date(formValue.VOCDATE)));
       this.formdata.append(`Model.model[${i}].schemeData.SCH_CANCEL`, formValue.SCH_CANCEL);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_REDEEM`, formValue.SCH_REDEEM);
       this.formdata.append(`Model.model[${i}].schemeData.REDEEM_REFERENCE`, `''`);
@@ -738,9 +737,9 @@ export class SchemeRegisterComponent implements OnInit {
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_DATE`, this.commonService.formatDate(new Date(item.PAY_DATE)));
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_FC`, item.PAY_AMOUNT_FC || 0);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_AMOUNT_CC`, item.PAY_AMOUNT_CC || 0);
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_STATUS`, formValue.REMAINDER_SEND);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].PAY_STATUS`, item.PAY_STATUS);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_DATE`, this.commonService.formatDate(new Date(item.REMAINDER_DATE)));
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_SEND`, formValue.REMAINDER_SEND);
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].REMAINDER_SEND`, item.REMAINDER_SEND);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].DT_BRANCH_CODE`, this.commonService.branchCode);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_DATE`, this.commonService.formatDate(new Date(item.RCVD_DATE)));
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_BRANCH_CODE`, item.RCVD_BRANCH_CODE);

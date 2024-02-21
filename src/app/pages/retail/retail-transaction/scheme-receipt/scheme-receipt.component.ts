@@ -54,7 +54,7 @@ export class SchemeReceiptComponent implements OnInit {
   VocNumberMain: string = "";
   schemeIdEdit: string = "";
   branchName: any = localStorage.getItem("BRANCH_PARAMETER");
-
+  schemeDataFlag: boolean = false;
   customerMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -198,12 +198,8 @@ export class SchemeReceiptComponent implements OnInit {
         item.CURRENCY_CODE == this.receiptDetailsForm.value.CurrCode
     );
     if (CURRENCY_RATE.length > 0) {
-      this.receiptDetailsForm.controls.CurrRate.setValue(
-        this.commonService.decimalQuantityFormat(
-          CURRENCY_RATE[0].CONV_RATE,
-          "RATE"
-        )
-      );
+      let currency = this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE,"RATE")
+      this.receiptDetailsForm.controls.CurrRate.setValue(currency);
     } else {
       this.receiptDetailsForm.controls.currency.setValue("");
       this.receiptDetailsForm.controls.currencyrate.setValue("");
@@ -244,6 +240,10 @@ export class SchemeReceiptComponent implements OnInit {
       }
       );
     this.subscriptions.push(Sub);
+  }
+  calculateDueDays(){
+    let date = this.commonService.addDaysToDate(this.receiptDetailsForm.value.RefDate,this.receiptDetailsForm.value.DueDays)
+    this.receiptDetailsForm.controls.RefDate.setValue(date)
   }
   //date validation
   dateChange(event: any, flag?: any) {
@@ -349,7 +349,7 @@ export class SchemeReceiptComponent implements OnInit {
   fetchSchemeWithCustCode(customerCode: string) {
     let custCode = "";
     custCode = customerCode;
-
+    this.schemeDataFlag = true
     this.SchemeMasterFindData = {
       SEARCH_FIELD: 'SCH_CUSTOMER_ID,SCH_SCHEME_CODE',
       VIEW_INPUT: false,
@@ -370,7 +370,6 @@ export class SchemeReceiptComponent implements OnInit {
           this.receiptDetailsForm.controls.SCH_CUSTOMER_CODE.setValue(data.SCH_CUSTOMER_CODE)
           this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data.SCH_CUSTOMER_ID)
           this.newReceiptData.SCHEME_AMOUNT = data?.PAY_AMOUNTFC
-          console.log(data.PAY_AMOUNTFC, '....................');
 
           this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(
             this.commonService.emptyToZero(data.PAY_AMOUNTFC)
@@ -459,13 +458,20 @@ export class SchemeReceiptComponent implements OnInit {
       this.currencyCodeChange(data.CURRENCY_CODE);
     }
   }
+  schemeCodeClick(){
+    if(this.receiptDetailsForm.value.POSCustomerCode == ''){
+      this.commonService.toastErrorByMsgId('please select customer')
+      return
+    }
+  }
   selectedScheme(data: any) {
+    if(this.receiptDetailsForm.value.POSCustomerCode == ''){
+      this.commonService.toastErrorByMsgId('please select customer')
+      return
+    }
     this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE);
     this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID);
     this.fetchSchemeId(data.SCH_CUSTOMER_ID)
-    // this.receiptDetailsForm.controls.SchemeUnits.setValue(data.SCHEME_UNITS);
-    // this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(data.SCHEME_TOTAL_VALUE);
-    // this.newReceiptData.SCHEME_AMOUNT = data.SCHEME_TOTAL_VALUE;
   }
   //customer selection from search
   selectedCustomer(data: any) {
@@ -732,7 +738,9 @@ export class SchemeReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           if (data.CONV_RATE) {
-            this.receiptDetailsForm.controls.CurrRate.setValue(data.CONV_RATE);
+            this.receiptDetailsForm.controls.CurrRate.setValue(
+              this.commonService.decimalQuantityFormat(data.CONV_RATE,'RATE')
+            );
             this.newReceiptData.CONV_RATE = data.CONV_RATE;
           }
         } else {
@@ -791,6 +799,10 @@ export class SchemeReceiptComponent implements OnInit {
 
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
+    if(this.receiptDetailsForm.value.SchemeCode == ''){
+      this.commonService.toastErrorByMsgId('select a scheme')
+      return
+    }
     if (data) {
       this.dataToEditrow = data;
     } else {
