@@ -22,6 +22,19 @@ import { map, pairwise, startWith, filter } from 'rxjs/operators';
 import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
 import { OrderLockUnlockComponent } from './order-lock-unlock/order-lock-unlock.component';
 import { PosSalesmanTargetAnalysisComponent } from './pos-salesman-target-analysis/pos-salesman-target-analysis.component';
+import { GoldExchangeComponent } from './gold-exchange/gold-exchange.component';
+import { PosReturnComponent } from './pos-return/pos-return.component';
+import { RepairMetalPurchaseComponent } from './repair-metal-purchase/repair-metal-purchase.component';
+import { RepairDiamondPurchaseComponent } from './repair-diamond-purchase/repair-diamond-purchase.component';
+import { LoyaltyRegisterComponent } from './loyalty-register/loyalty-register.component';
+import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-salesman-commission.component';
+import { PosCreditSaleReciptComponent } from './pos-credit-sale-recipt/pos-credit-sale-recipt.component';
+import { RepairJewelleryReceiptComponent } from './repair-jewellery-receipt/repair-jewellery-receipt.component';
+import { BranchTransferRepairOutComponent } from './branch-transfer-repair-out/branch-transfer-repair-out.component';
+import { RepairIssueToWorkshopComponent } from './repair-issue-to-workshop/repair-issue-to-workshop.component';
+import { RepairIssueFromWorkshopComponent } from './repair-issue-from-workshop/repair-issue-from-workshop.component';
+import { BranchTransferRepairRtnComponent } from './branch-transfer-repair-rtn/branch-transfer-repair-rtn.component';
+import { RepairCustomerDeliveryComponent } from './repair-customer-delivery/repair-customer-delivery.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -122,8 +135,18 @@ export class RetailTransactionComponent implements OnInit {
       'SchemeReceiptComponent': SchemeReceiptComponent,
       'OrderLockUnlockComponent': OrderLockUnlockComponent,
       'PosSalesmanTargetAnalysisComponent': PosSalesmanTargetAnalysisComponent,
-
-      
+      'GoldExchangeComponent': GoldExchangeComponent,      
+      'RepairMetalPurchaseComponent': RepairMetalPurchaseComponent,
+      'RepairDiamondPurchaseComponent': RepairDiamondPurchaseComponent,
+      'RepairJewelleryReceiptComponent': RepairJewelleryReceiptComponent,
+      'RepairIssueToWorkshopComponent': RepairIssueToWorkshopComponent,
+      'RepairIssueFromWorkshopComponent': RepairIssueFromWorkshopComponent,
+      'RepairCustomerDeliveryComponent': RepairCustomerDeliveryComponent, 
+      'LoyaltyRegisterComponent': LoyaltyRegisterComponent,
+      'PosSalesmanCommissionComponent': PosSalesmanCommissionComponent,
+      'PosCreditSaleReciptComponent': PosCreditSaleReciptComponent,
+      'BranchTransferRepairOutComponent': BranchTransferRepairOutComponent,
+      'BranchTransferRepairRtnComponent': BranchTransferRepairRtnComponent,      
 
       // Add components and update in operationals > menu updation grid form component name
     }
