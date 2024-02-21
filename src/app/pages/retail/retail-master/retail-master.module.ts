@@ -7,13 +7,15 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-customer-master-main.component';
 import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
 import { CommonRetailModule } from '../common-retail/common-retail.module';
+import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-customer.component';
 
 
 @NgModule({
   declarations: [
     RetailMasterComponent,
     PosCustomerMasterMainComponent,
-    SchemeMasterComponent
+    SchemeMasterComponent,
+    PosWalkinCustomerComponent
   ],
   imports: [
     CommonModule,
