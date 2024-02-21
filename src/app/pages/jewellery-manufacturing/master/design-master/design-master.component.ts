@@ -137,6 +137,7 @@ export class DesignMasterComponent implements OnInit {
     currency:['',[Validators.required]],
     clarity:[''],
     vendor  : [''],
+    vendCust  : [''],
     metalcolor  : [''],
     pairref  : [''],
     setref : [''],
@@ -474,7 +475,7 @@ removedatas(){
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'size Code',
+    SEARCH_HEADING: 'Size Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
@@ -596,6 +597,24 @@ removedatas(){
     console.log(e);
     this.designmasterForm.controls.shape.setValue(e.CODE);
   }
+
+  
+  vendCustCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Vend/Cust Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE <>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  vendCustCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.vendCust.setValue(e.ACCODE);
+  }
+
 
   incCatCodeData: MasterSearchModel = {
     PAGENO: 1,

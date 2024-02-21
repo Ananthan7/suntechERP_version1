@@ -232,7 +232,7 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
 
   branchTransferOUTCodeSelected(e:any){
     console.log(e);
-    this.costcenterdiamonddetailsForm.controls.branchTransferIn.setValue(e.ACCODE);
+    this.costcenterdiamonddetailsForm.controls.branchTransferOUT.setValue(e.ACCODE);
   }
 
   manufactureCodeSelected(e:any){
@@ -308,6 +308,10 @@ export class CostCenterMakingChargesDetailsComponent implements OnInit {
   unFixSalCtrlAcCodeSelected(e:any){
     console.log(e);
     this.costcenterdiamonddetailsForm.controls.unFixSalCtrlAc.setValue(e.ACCODE);
+  }
+  unFixCustCtrlAcCodeSelected(e:any){
+    console.log(e);
+    this.costcenterdiamonddetailsForm.controls.unFixCustCtrlAc.setValue(e.ACCODE);
   }
 
   purchaseAcCodeSelected(e:any){

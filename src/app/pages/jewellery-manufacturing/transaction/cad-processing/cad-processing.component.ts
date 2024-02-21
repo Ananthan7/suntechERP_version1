@@ -338,6 +338,11 @@ remarkstemp(data:any,value: any){
 stoneTypeSelected(event: any, value: any) {
   this.tableData[value.data.Srno - 1].StoneType = event.CODE;
 }
+DivisionSelected(event: any, value: any) {
+  console.log(event);
+  this.tableData[value.data.Srno - 1].Division = event.DIVISION_CODE;
+}
+
 onHoverstoneType({ data }: any) {
   this.generalMaster.WHERECONDITION = `TYPES = 'STONE TYPE MASTER' AND DIV_${data.DIVCODE}=1`
 }
@@ -764,6 +769,20 @@ componentSet(){
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+
+  divisionMaster: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
   stockCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,

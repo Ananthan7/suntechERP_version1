@@ -10,13 +10,13 @@
 <div class="row">
   <div class="row mb-2 text-right">
     <div class="col-md-12">
-        <div class="p-1 bd-highlight">
-            <button type="button" class="btn btn-outline-primary  add-btn"  (click)="addSalesOrder()">
-               Select Sales Order
-            </button>
-        </div>
+      <div class="p-1 bd-highlight">
+        <button type="button" class="btn btn-outline-primary  add-btn" (click)="addSalesOrder()">
+          Select Sales Order
+        </button>
+      </div>
     </div>
-</div>
+  </div>
   <div class="col-md-12">
     <form [formGroup]="meltingProcessFrom">
       <div class="container-fluid pt-3">
@@ -34,7 +34,7 @@
                 <mat-form-field style="width: 100%;">
                   <input type="text" matInput formControlName="vocType" />
                 </mat-form-field>
-              </div> 
+              </div>
             </div>
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-4">Voucher No * :</label>
@@ -53,10 +53,10 @@
                   <input type="date" matInput />
                 </mat-form-field> -->
                 <mat-form-field style="width: 100%">
-                  <input matInput [matDatepicker]="vocDate"  formControlName="vocDate"
-                  placeholder="DD-MM-YYYY"  DateValidation />
-                <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                  <input matInput [matDatepicker]="vocDate" formControlName="vocDate" placeholder="DD-MM-YYYY"
+                    DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -131,22 +131,55 @@
           <div class="row">
             <div class="col-md-12">
               <dx-data-grid #dataGrid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
-              [showRowLines]="true" (onRowClick)="onRowClickHandler($event)" 
-              [allowColumnReordering]="true" height="200" [dataSource]="tableData">
+                [showRowLines]="true" (onRowClick)="onRowClickHandler($event)" [allowColumnReordering]="true"
+                height="200" [dataSource]="tableData">
                 <!-- <dxo-paging [enabled]="false"></dxo-paging> -->
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
-                <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                   [allowEditing]="false" alignment="center" backgroundcolor="#000">
                 </dxi-column>
                 <dxi-column alignment="center" caption="TO_METAL_PCS"
                 dataField="data">
-              </dxi-column>
-               
+              </dxi-column> -->
+              columnhead: any[] = ['SRNO', 'Div', 'jobno', 'stockcode', 'stockcodedes', 'process','worker', 'pcs', 'grossweight', 'stoneweight', 'netweight', 'purity', 'pureweight', 'lossweight', 'purediff'];
+                <dxi-column [width]="100" dataField="SRNO" caption="SRNO"></dxi-column>
+                <dxi-column [width]="100" dataField="DIV" caption="DIV"></dxi-column>
+                <dxi-column [width]="100" dataField="JobNo" caption="Job No"></dxi-column>
+                <dxi-column [width]="100" dataField="StockCode" caption="Stock Code"></dxi-column>
+                <dxi-column [width]="100" dataField="stockCodeDes" caption="Stock Code Description"></dxi-column>
+                <dxi-column [width]="100" dataField="Process" caption="Process"></dxi-column>
+                <dxi-column [width]="100" dataField="Worker" caption="Worker"></dxi-column>
+                <dxi-column [width]="100" dataField="Pcs" caption="Pcs"></dxi-column>
+                <dxi-column [width]="100" dataField="GrossWeight" caption="Gross Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="Stoneweight" caption="Stone Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="Netweight" caption="Net Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="Purity" caption="Purity"></dxi-column>
+                <dxi-column [width]="100" dataField="PureWeight" caption="Pure Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="BalanceWeight" caption="Balance Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="BalancePure" caption="Balance Pure"></dxi-column>
+
+                <dxo-summary>
+                  <dxi-total-item column="Pcs">
+                  </dxi-total-item>
+                  <dxi-total-item column="GrossWeight">
+                  </dxi-total-item>
+                  <dxi-total-item column="Stoneweight">
+                  </dxi-total-item>
+                  <dxi-total-item column="Netweight">
+                  </dxi-total-item>
+                  <dxi-total-item column="PureWeight">
+                  </dxi-total-item>
+                  <dxi-total-item column="BalanceWeight">
+                  </dxi-total-item>
+                  <dxi-total-item column="BalancePure">
+                  </dxi-total-item>
+                </dxo-summary>
+
               </dx-data-grid>
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;">
                     <input type="text" matInput  />
@@ -182,9 +215,9 @@
                     <input type="text" matInput  />
                   </mat-form-field>
                 </div>
-              </div>
-              
-              
+              </div> -->
+
+
             </div>
             <div class="col-md-12 ">
               <div class="row">
@@ -373,9 +406,7 @@
             </div>
             <div class="col-md-12 mt-2">
               <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-              [allowColumnReordering]="true"
-              [allowColumnResizing]="true"
-              [columnAutoWidth]="true">
+                [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
