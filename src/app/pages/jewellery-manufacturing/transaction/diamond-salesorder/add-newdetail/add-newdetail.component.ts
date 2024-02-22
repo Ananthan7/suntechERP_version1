@@ -32,6 +32,8 @@ export class AddNewdetailComponent implements OnInit {
   secondTableWidth: any;
   headerDetails: any;
   summaryDetailData:any;
+  designCodeDisable:boolean = false;
+  stockCodeDisable:boolean = true;
   intLabType: number = this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE')
 
   isViewComponentsTab: boolean = false;
@@ -321,7 +323,26 @@ export class AddNewdetailComponent implements OnInit {
   
  
   radioButtonChanged() {
-    this.codeSearchFlag = this.diamondSalesDetailForm.value.designCodeSelect
+    this.codeSearchFlag = this.diamondSalesDetailForm.value.designCodeSelect;
+    if(this.codeSearchFlag != 'design')
+    {
+      this.diamondSalesDetailForm.controls.designCode.disable();
+      this.diamondSalesDetailForm.controls.designDescription.disable();
+      this.diamondSalesDetailForm.controls.StockCode.enable();
+      this.diamondSalesDetailForm.controls.StockCodeDesc.enable();
+      this.diamondSalesDetailForm.controls.designCode.setValue('');
+      this.diamondSalesDetailForm.controls.designDescription.setValue('');
+    }
+    else
+    {
+      this.diamondSalesDetailForm.controls.StockCode.disable();
+      this.diamondSalesDetailForm.controls.StockCodeDesc.disable();
+      this.diamondSalesDetailForm.controls.designCode.enable();
+      this.diamondSalesDetailForm.controls.designDescription.enable();
+      this.diamondSalesDetailForm.controls.StockCode.setValue('');
+      this.diamondSalesDetailForm.controls.StockCodeDesc.setValue('');
+
+    }
   }
   customizeComma(data: any) {
     if (!Number(data.value)) return data.value
