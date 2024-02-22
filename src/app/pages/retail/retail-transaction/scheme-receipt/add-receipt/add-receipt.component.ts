@@ -58,7 +58,7 @@ export class AddReceiptComponent implements OnInit {
     SEARCH_FIELD: "CREDIT_CODE",
     SEARCH_HEADING: "Credit Master",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CREDIT_CODE<>''",
+    WHERECONDITION: "MODE = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -96,6 +96,10 @@ export class AddReceiptComponent implements OnInit {
     SchemeId: [''],
     SchemeBalance: [''],
     InstallmentAmount: [''],
+    ChequeNumber: [''],
+    ChequeDate: [''],
+    DrawnBank: [''],
+    DepBank: [''],
   })
   private subscriptions: Subscription[] = [];
   constructor(
@@ -412,39 +416,19 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           this.branchArray = result.response
-          console.log(this.branchArray,'this.branchArray');
-
           let AcCode = this.branchArray.filter((item: any) => item.BRANCH_CODE = this.receiptEntryForm.value.Branch)
           if (AcCode[0].CASH_ACCODE) {
             this.receiptEntryForm.controls.AC_Code.setValue(AcCode[0].CASH_ACCODE)
-            this.receiptEntryForm.controls.AC_Description.setValue(AcCode[0].DESCRIPTION)
             this.getAccountMaster(AcCode[0].CASH_ACCODE)
+          }else{
+            this.commonService.toastErrorByMsgId('Cash code not found' )
           }
-
-        } else {
-          Swal.fire({
-            title: 'branch Not Found!',
-            text: "",
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ok'
-          }).then((result) => {
-            // if (result.isConfirmed) {
-            // }
-          })
+        } else { 
+          this.commonService.toastErrorByMsgId('branch Not Found!' )
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  // private _filterBranch(value: string): any[] {
-  //   const filterValue = value.toLowerCase();
-  //   return this.branchArray.filter((option: any) =>
-  //     option.BRANCH_CODE.toLowerCase().includes(filterValue) ||
-  //     option.DESCRIPTION.toLowerCase().includes(filterValue));
-  // }
-
   branchCodeChange(event: any) {
     if (event.option.value) {
       let AcCode = this.branchArray.filter((item: any) => item.BRANCH_CODE = event.option.value)

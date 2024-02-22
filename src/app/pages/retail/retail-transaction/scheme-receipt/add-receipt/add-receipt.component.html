@@ -155,22 +155,10 @@
                     </span>
                     <mat-form-field style="width: 55%">
                         <input type="text" matInput readonly
-                            formControlName="CurrCode" />
+                            formControlName="ChequeNumber" />
                     </mat-form-field>
                 </div>
             </div>
-            <!-- <div class="col-lg-3 col-md-3 col-sm-12">
-                <div class="row">
-                    <span class="matlabels">Curr Rate*
-                    </span>
-                    <mat-form-field style="width: 45%">
-                        <input type="text" matInput readonly
-                            class="text-right"
-                            formControlName="CurrRate"
-                            (keypress)="isNumeric($event)" />
-                    </mat-form-field>
-                </div>
-            </div> -->
         </div>
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-12 border-left">
@@ -204,7 +192,7 @@
                         <input matInput
                             DateValidation
                             [matDatepicker]="RefDate"
-                            formControlName="Header_Amount"
+                            formControlName="ChequeDate"
                             placeholder="DD/MM/YYYY" />
                         <mat-datepicker-toggle
                             matSuffix
@@ -232,12 +220,12 @@
             </div>
             <div class="col-lg-3 col-md-3 col-sm-12">
                 <div class="row">
-                    <span class="matlabels">Header Amount *
+                    <span class="matlabels">Header Amount
                     </span>
                     <span style="width: 45%">
                         <mat-form-field>
                             <input type="text" matInput
-                                class="text-right"
+                                class="text-right" readonly
                                 formControlName="Header_Amount"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
@@ -251,7 +239,7 @@
                     <mat-form-field style="width: 50%">
                         <input type="text" matInput readonly
                             class="text-right"
-                            formControlName="CurrRate"
+                            formControlName="DrawnBank"
                             (keypress)="isNumeric($event)" />
                     </mat-form-field>
                 </div>
@@ -276,12 +264,12 @@
             </div>
             <div class="col-lg-3 col-md-3 col-sm-12 border-left">
                 <div class="row">
-                    <span class="matlabels">Dep Bank
+                    <span class="matlabels">Dep. Bank
                     </span>
                     <mat-form-field style="width: 50%">
                         <input type="text" matInput readonly
                             class="text-right"
-                            formControlName="CurrRate"
+                            formControlName="DepBank"
                             (keypress)="isNumeric($event)" />
                     </mat-form-field>
                 </div>
