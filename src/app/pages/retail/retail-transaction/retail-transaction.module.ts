@@ -86,6 +86,8 @@ import { PosSalesPaymentComponent } from './point-of-sales-order/pos-sales-payme
     AddSchemeComponent,
     OrderLockUnlockComponent, 
     PosSalesmanTargetAnalysisComponent, 
+    BranchTransferRepairOutComponent, 
+    BranchTransferRepairRtnComponent,
     
     GoldExchangeComponent, 
     PosReturnComponent, 
@@ -94,13 +96,14 @@ import { PosSalesPaymentComponent } from './point-of-sales-order/pos-sales-payme
     LoyaltyRegisterComponent, 
     PosSalesmanCommissionComponent, 
     PosCreditSaleReciptComponent, 
-    RepairJewelleryReceiptComponent, 
-    BranchTransferRepairOutComponent, 
+    RepairJewelleryReceiptComponent,     
     RepairIssueToWorkshopComponent, 
     RepairIssueFromWorkshopComponent, 
     BranchTransferRepairRtnComponent, 
     RepairCustomerDeliveryComponent,
     PosSalesPaymentComponent,
+    RepairIssueFromWorkshopComponent,    
+    RepairCustomerDeliveryComponent
     ],
   imports: [
     CommonModule,
