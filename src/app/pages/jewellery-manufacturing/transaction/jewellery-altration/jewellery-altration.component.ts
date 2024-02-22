@@ -223,23 +223,21 @@ export class JewelleryAltrationComponent implements OnInit {
 
   }
   setValuesToHeaderGrid(detailDataToParent: any) {
-    let PROCESS_FORMDETAILS = detailDataToParent
-    if (PROCESS_FORMDETAILS.SRNO) {
-      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+    console.log(detailDataToParent,'detailDataToParent');
+    
+    if (detailDataToParent.SRNO) {
+      console.log(this.jewelleryaltrationdetail);
+      
+      this.swapObjects(this.jewelleryaltrationdetail, [detailDataToParent], (detailDataToParent.SRNO-1))
     } else {
       this.tableRowCount += 1
-      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+      detailDataToParent.SRNO = this.tableRowCount
       // this.tableRowCount += 1
       // this.content.SRNO = this.tableRowCount
     }
-
-    this.tableData.push(PROCESS_FORMDETAILS)
-
     if (detailDataToParent) {
       this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
     }
-    //  this.getSequenceDetailData(PROCESS_FORMDETAILS);
-
   }
   swapObjects(array1: any, array2: any, index: number) {
     // Check if the index is valid
