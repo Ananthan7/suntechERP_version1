@@ -86,6 +86,8 @@ import { RepairCustomerDeliveryComponent } from './repair-customer-delivery/repa
     AddSchemeComponent,
     OrderLockUnlockComponent, 
     PosSalesmanTargetAnalysisComponent, 
+    BranchTransferRepairOutComponent, 
+    BranchTransferRepairRtnComponent,
     
     GoldExchangeComponent, 
     PosReturnComponent, 
@@ -94,11 +96,9 @@ import { RepairCustomerDeliveryComponent } from './repair-customer-delivery/repa
     LoyaltyRegisterComponent, 
     PosSalesmanCommissionComponent, 
     PosCreditSaleReciptComponent, 
-    RepairJewelleryReceiptComponent, 
-    BranchTransferRepairOutComponent, 
+    RepairJewelleryReceiptComponent,     
     RepairIssueToWorkshopComponent, 
-    RepairIssueFromWorkshopComponent, 
-    BranchTransferRepairRtnComponent, 
+    RepairIssueFromWorkshopComponent,    
     RepairCustomerDeliveryComponent
     ],
   imports: [

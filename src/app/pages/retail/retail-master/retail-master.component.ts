@@ -7,6 +7,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-customer-master-main.component';
 import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
+import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-customer.component';
 @Component({
   selector: 'app-retail-master',
   templateUrl: './retail-master.component.html',
@@ -75,6 +76,7 @@ export class RetailMasterComponent implements OnInit {
     this.componentDbList = {
       'PosCustomerMaster': PosCustomerMasterMainComponent,
       'SchemeMasterComponent': SchemeMasterComponent,
+      'PosWalkinCustomerComponent': PosWalkinCustomerComponent,
   
       // Add components and update in operationals > menu updation grid form component name
     }
