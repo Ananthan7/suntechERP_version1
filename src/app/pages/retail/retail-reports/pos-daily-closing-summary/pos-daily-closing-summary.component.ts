@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { PosSalesmanDetailsComponent } from './pos-salesman-details/pos-salesman-details.component';
-
+import { PosDailyClosingBranchComponent } from './pos-daily-closing-branch/pos-daily-closing-branch.component';
 @Component({
   selector: 'app-pos-daily-closing-summary',
   templateUrl: './pos-daily-closing-summary.component.html',
@@ -65,6 +65,24 @@ export class PosDailyClosingSummaryComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  @ViewChild('mymodal') public mymodal!: NgbModal;
+
+  open(modalname?: any) {
+      
+      const modalRef: NgbModalRef = this.modalService.open(PosDailyClosingBranchComponent, {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        windowClass: 'modal-full-width'
+      });
+  
+      modalRef.result.then((result) => {
+       
+      }, (reason) => {
+       
+      });
+    }
 
   close(data?: any) {
     //TODO reset forms and data before closing
