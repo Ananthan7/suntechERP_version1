@@ -311,11 +311,11 @@
                     <div class="col-lg-3 col-md-12 col-sm-12">
                         <div class="d-flex align-items-center">
                             <button mat-raised-button style="color: #1d5592;"
-                                (click)="addrowsWithAPI()">
+                                (click)="addrowsWithAPI()" [disabled]="viewMode">
                                 Process
                             </button>
                             <button mat-raised-button style="color: #1d5592;"
-                                (click)="cancelScheme()">
+                                (click)="cancelScheme()" [disabled]="viewMode">
                                 Cancel Scheme
                             </button>
                         </div>

@@ -79,7 +79,7 @@
             <div class="col-lg-3 col-md-4 col-sm-12 d-flex">
                 <span class="matlabels">Mode Of Receipt
                 </span>
-                <ng-select [items]="payTypeArray" style="width: 40%"
+                <ng-select [items]="payTypeArray" style="width: 40%;margin-left: 15px;"
                     bindLabel="ENGLISH"
                     bindValue="ENGLISH" (change)="paymentTypeChange($event)"
                     formControlName="Type">
@@ -133,19 +133,18 @@
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <span class="matlabels">A/C Code
                 </span>
-                &nbsp;&nbsp;
-                <mat-form-field style="width: 30%">
+                <mat-form-field style="width: 30%;margin-left: 38px;">
                     <input type="text" matInput
                         (focusout)="accountMasterChanged($event)"
                         placeholder="ACCODE"
                         formControlName="AC_Code" />
                 </mat-form-field>
-                <mat-form-field style="width: 50%;margin-left: 4px;">
+                <mat-form-field style="width: 40%;margin-left: 5px;">
                     <input type="text" matInput readonly
                         formControlName="AC_Description" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="accountMasterData"
-                    *ngIf="receiptEntryForm.value.Type != 'Credit Card'"
+                    *ngIf="receiptEntryForm.value.Type != 'Credit Card' && receiptEntryForm.value.Type != ''"
                     (newRowClick)="selectedAcCode($event)">
                 </master-search>
             </div>
@@ -222,7 +221,7 @@
                 <div class="row">
                     <span class="matlabels">Header Amount
                     </span>
-                    <span style="width: 45%">
+                    <span style="width: 40%">
                         <mat-form-field>
                             <input type="text" matInput
                                 class="text-right" readonly

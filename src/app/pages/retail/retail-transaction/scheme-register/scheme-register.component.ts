@@ -632,56 +632,7 @@ export class SchemeRegisterComponent implements OnInit {
       }
     }
   }
-  formSubmit() {
-    if (this.content && this.content.FLAG == 'VIEW') return
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.editSchemeDetail()
-      this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
-      return
-    }
-    if (this.schemeRegistrationForm.invalid) {
-      this.commonService.toastErrorByMsgId('select all required details!')
-      return
-    }
-
-    if (this.SchemeMasterDetails.length == 0) {
-      this.commonService.toastErrorByMsgId('Process Scheme Before saving')
-      return
-    }
-    let postData = this.setPostData()
-    this.isLoading = true;
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = 'SchemeRegistration/InsertSchemeRegistration'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result: any) => {
-        this.isLoading = false;
-        this.commonService.closeSnackBarMsg();
-        if (result.status == "Success") {
-          this.detailArray = []
-          this.formdata = new FormData();
-          Swal.fire({
-            title: result.status,
-            text: result.message || "",
-            icon: 'success',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ok'
-          }).then((result) => {
-            this.close('reloadMainGrid')
-          })
-        } else {
-          this.detailArray = []
-          this.commonService.toastErrorByMsgId('Scheme Not Saved, try again')
-        }
-      }, err => {
-        this.detailArray = []
-        this.commonService.closeSnackBarMsg();
-        this.commonService.toastErrorByMsgId('MSG1531')
-        this.isLoading = false;
-      })
-    this.subscriptions.push(Sub)
-  }
+  
   /**USE: set form data for saving */
   setFormData() {
     this.setPostData();
@@ -778,7 +729,8 @@ export class SchemeRegisterComponent implements OnInit {
 
   /**USE: save button click */
   formSubmitWithAttachment() {
-    let API = 'SchemeRegistration/InsertWithAttachments'
+    if (this.content && this.content.FLAG == 'VIEW') return
+
     if (this.content && this.content.FLAG == 'EDIT') {
       this.editSchemeDetail()
       this.schemeRegistrationForm.controls.SCH_CUSTOMER_ID.setValue(this.content.SCH_CUSTOMER_ID)
@@ -796,6 +748,7 @@ export class SchemeRegisterComponent implements OnInit {
     //save API
     this.isLoading = true;
     this.commonService.showSnackBarMsg('MSG81447');
+    let API = 'SchemeRegistration/InsertWithAttachments'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, this.formdata)
       .subscribe((result: any) => {
         this.isLoading = false;

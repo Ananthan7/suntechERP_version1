@@ -7,7 +7,8 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    [isViewAuditTrail]="true" [isViewPost]="true" [isViewDelete]="false"></modal-header>
+    [isViewAuditTrail]="true" [isViewPost]="true"
+    [isViewDelete]="false"></modal-header>
 
 <!-- content section starts -->
 <div class="row">
@@ -142,15 +143,18 @@
                                             <span class="matlabels">Party Code*
                                             </span>
                                             <span style="width: 70%">
-                                                <mat-form-field style="width: 25%">
+                                                <mat-form-field
+                                                    style="width: 25%">
                                                     <input type="text" matInput
                                                         formControlName="PartyCode"
                                                         maxlength="6"
                                                         (focusout)="partyCodeChange($event,'ACCODE')" />
                                                 </mat-form-field>
-                                                <mat-form-field style="width: 35%;margin-left: 4px;">
-                                                    <input type="text" matInput readonly
-                                                        formControlName="PartyDescription"/>
+                                                <mat-form-field
+                                                    style="width: 35%;margin-left: 4px;">
+                                                    <input type="text" matInput
+                                                        readonly
+                                                        formControlName="PartyDescription" />
                                                 </mat-form-field>
                                                 <master-search
                                                     [MasterSearchData]="partyCodeMasterData"
@@ -230,6 +234,31 @@
                                             <span class="matlabels">Entered by
                                             </span>
                                             <span style="width: 70%">
+                                                <mat-form-field
+                                                    style="width: 25%">
+                                                    <input type="text" matInput
+                                                        formControlName="Salesman"
+                                                        (focusout)="salesmanChange($event)" />
+                                                </mat-form-field>
+                                                <mat-form-field
+                                                    style="width: 35%;margin-left: 4px;">
+                                                    <input type="text" matInput
+                                                        readonly
+                                                        formControlName="SalesmanName" />
+                                                </mat-form-field>
+                                                <master-search
+                                                    [MasterSearchData]="salesPersonMasterData"
+                                                    (newRowClick)="selectedSalesman($event)">
+                                                </master-search>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <div class="row">
+                                            <span class="matlabels">Entered by
+                                            </span>
+                                            <span style="width: 70%">
                                                 <mat-form-field style="width: 50%">
                                                     <input type="text" matInput
                                                         formControlName="Salesman"
@@ -241,7 +270,7 @@
                                                 </master-search>
                                             </span>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -300,7 +329,7 @@
                         </div>
 
                     </div>
-                  
+
                     <div class="row border-top">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
                             [viewImportBtn]="false"
@@ -330,22 +359,38 @@
                                         icon="fa fa-edit"></dxi-button>
                                     </dxi-column> -->
                                 <!-- <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button> -->
-                                <dxi-column dataField="SRNO" caption="SRNO" alignment="center" >
+                                <dxi-column dataField="SRNO" caption="SRNO"
+                                    alignment="center">
                                 </dxi-column>
-                                <dxi-column dataField="Branch" caption="Branch" alignment="center" >
+                                <dxi-column dataField="Branch" caption="Branch"
+                                    alignment="center">
                                 </dxi-column>
-                                <dxi-column dataField="Type" caption="Mode" alignment="center" >
+                                <dxi-column dataField="Type" caption="Mode"
+                                    alignment="center">
                                 </dxi-column>
-                                <dxi-column dataField="AC_Code" caption="A/C Code" alignment="center" >
+                                <dxi-column dataField="AC_Code"
+                                    caption="A/C Code" alignment="center">
                                 </dxi-column>
-                                <dxi-column dataField="CurrCode" caption="Currency" alignment="center" >
+                                <dxi-column dataField="CurrCode"
+                                    caption="Currency" alignment="center">
                                 </dxi-column>
-                                <dxi-column dataField="AC_Description" caption="Account Head" alignment="center" >
+                                <dxi-column dataField="AC_Description"
+                                    caption="Account Head" alignment="center">
                                 </dxi-column>
-                                <dxi-column dataField="CurrRate" caption="Curr Rate" alignment="center" >
+                                <dxi-column dataField="CurrRate"
+                                    caption="Curr Rate" alignment="center">
                                 </dxi-column>
-                                <dxi-column dataField="Amount_FC" caption="Amount" alignment="center" >
+                                <dxi-column dataField="Amount_FC"
+                                    caption="Amount" alignment="center">
                                 </dxi-column>
+                                <dxo-summary>
+                                    <dxi-total-item column="SRNO"
+                                        summaryType="sum">
+                                    </dxi-total-item>
+                                    <dxi-total-item column="Amount_FC"
+                                        summaryType="sum">
+                                    </dxi-total-item>
+                                </dxo-summary>
                             </dx-data-grid>
                         </div>
                     </div>
