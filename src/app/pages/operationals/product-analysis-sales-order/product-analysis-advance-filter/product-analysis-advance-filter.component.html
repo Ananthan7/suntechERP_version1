@@ -1,20 +1,101 @@
-<div class="container p-5">
-  <div class="text-start">
-    <button class="btn btn-primary border_light b_r_20">Criteria</button>
-  </div>
+<div class="product_analysis">
+  <div class="container">
+    <!-- <div class="text-start">
+      <button class="btn btn-primary border_light b_r_20">Criteria</button>
+    </div> -->
+    <div class="card_time">
+      <div class="btn_margins">
+        <button class="btn btn-primary">Criteria</button>
+      </div>
 
-  <div>
-    <div class="text-end p3">
-       
-        <button mat-stroked-button  color="light" class="ms-2 mr-2" >
+      <div class="card_time_line_wrap">
+        <div class="card_time_line_icons">
+          <img src="../../../../../assets/images/product_analayase/menu.svg" alt="menu">
+        </div>
+        <div class="card_time_line_form">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                <mat-select>
+                  <mat-option>Category</mat-option>
+                  <mat-option>Category 1</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                <mat-select>
+                  <mat-option>Is equal to</mat-option>
+                  <mat-option>Is equal To 1</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                <mat-select>
+                  <mat-option>Open</mat-option>
+                  <mat-option>Closed</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="card_time_line_icons">
+          <img src="../../../../../assets/images/product_analayase/deleted.svg" alt="menu">
+        </div>
+      </div>
+      <div class="card_time_line_wrap">
+        <div class="card_time_line_icons">
+          <img src="../../../../../assets/images/product_analayase/menu.svg" alt="menu">
+        </div>
+        <div class="card_time_line_form">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                <mat-select>
+                  <mat-option>Category</mat-option>
+                  <mat-option>Category 1</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                <mat-select>
+                  <mat-option>Is equal to</mat-option>
+                  <mat-option>Is equal To 1</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                <mat-select>
+                  <mat-option>Open</mat-option>
+                  <mat-option>Closed</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="card_time_line_icons">
+          <img src="../../../../../assets/images/product_analayase/deleted.svg" alt="menu">
+        </div>
+      </div>
+      <div class="card_time_line_wrap border-0 justify-content-start">
+        <button class="btn btn-primary">
+          Add <i class="fas fa-plus-circle"></i>
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-end">
+        <button class="me-2 btn btn-outline-primary  rounded-pill" (click)="close()">
           Cancel
         </button>
-
-        <button mat-flat-button  color="primary" >
+        <button class="btn btn-primary rounded-pill">
           Save
         </button>
-        
-        &nbsp;
       </div>
+    </div>
   </div>
 </div>
