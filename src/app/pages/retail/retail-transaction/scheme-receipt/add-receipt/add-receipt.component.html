@@ -14,87 +14,82 @@
 <div class="row p-3">
     <form [formGroup]="receiptEntryForm">
         <div class="row">
-
-            <div class="col-lg-6 col-md-6 col-sm-12">
-                <span class="matlabels">Branch
-                </span>
-                <span style="width: 45%">
-                    <mat-form-field class="example-full-width">
-                        <input type="text" placeholder="Branch Code" matInput
-                            readonly formControlName="Branch">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Branch
+                    </span>
+                    <mat-form-field style="width: 50%">
+                        <input type="text" matInput
+                            readonly
+                            formControlName="Branch" />
                     </mat-form-field>
-                </span>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-12 ">
-                        <div class="row">
-                            <span class="matlabels">Scheme Code
-                            </span>
-                            <mat-form-field style="width: 55%">
-                                <input type="text" matInput readonly
-                                    formControlName="SchemeCode" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="row">
-                            <span class="matlabels">Scheme Id
-                            </span>
-                            <mat-form-field style="width: 45%">
-                                <input type="text" matInput readonly
-                                    class="text-right"
-                                    formControlName="SchemeId"
-                                    (keypress)="isNumeric($event)" />
-                            </mat-form-field>
-                        </div>
-                    </div>
                 </div>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="row">
-                            <span class="matlabels">Scheme Balance
-                            </span>
-                            <mat-form-field style="width: 55%">
-                                <input type="text" matInput readonly
-                                    formControlName="SchemeBalance" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="row">
-                            <span class="matlabels">Installment Amount
-                            </span>
-                            <mat-form-field style="width: 45%">
-                                <input type="text" matInput readonly
-                                    class="text-right"
-                                    formControlName="InstallmentAmount"
-                                    (keypress)="isNumeric($event)" />
-                            </mat-form-field>
-                        </div>
-                    </div>
+                    <span class="matlabels">Scheme Code
+                    </span>
+                    <mat-form-field style="width: 50%">
+                        <input type="text" matInput
+                            readonly
+                            formControlName="SchemeCode" />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Scheme Id
+                    </span>
+                    <mat-form-field style="width: 50%">
+                        <input type="text" matInput
+                            readonly formControlName="SchemeId"
+                            (keypress)="isNumeric($event)" />
+                    </mat-form-field>
                 </div>
             </div>
         </div>
         <div class="row">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Scheme Balance
+                    </span>
+                    <mat-form-field style="width: 55%">
+                        <input type="text" matInput readonly
+                            formControlName="SchemeBalance" />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Installment Amount
+                    </span>
+                    <mat-form-field style="width: 45%">
+                        <input type="text" matInput readonly
+                            class="text-right"
+                            formControlName="InstallmentAmount"
+                            (keypress)="isNumeric($event)" />
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-12">
                 <span class="matlabels">Mode Of Receipt
                 </span>
-                <span style="width: 45%">
-                    <mat-form-field>
-                        <mat-select
-                            (selectionChange)="paymentTypeChange($event)"
-                            formControlName="Type">
-                            <mat-option *ngFor="let option of payTypeArray"
-                                [value]="option.ENGLISH">
-                                {{ option.ENGLISH }}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </span>
+                <mat-form-field style="width: 45%">
+                    <mat-select
+                        (selectionChange)="paymentTypeChange($event)"
+                        formControlName="Type">
+                        <mat-option *ngFor="let option of payTypeArray"
+                            [value]="option.ENGLISH">
+                            {{ option.ENGLISH }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <div class="col-lg-5 col-md-5 col-sm-12 ">
-                <span class="matlabels">Type Code
-                </span>
+            <div class="col-lg-3 col-md-5 col-sm-12 ">
                 &nbsp;
                 <span>
                     <mat-form-field style="width: 35%;"
@@ -113,10 +108,14 @@
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
-                    <!-- <mat-form-field style="width: 40%;margin-left: 5px;">
-                        <input type="text" matInput readonly formControlName="TypeCodeDESC" />
-                    </mat-form-field> -->
+                    <mat-form-field style="width: 40%;margin-left: 5px;">
+                        <input type="text" matInput readonly
+                            formControlName="TypeCodeDESC" />
+                    </mat-form-field>
                 </span>
+            </div>
+            <div class="col-lg-3 col-md-5 col-sm-12 mt-3 border-left">
+                <b>Cheque Details</b>
             </div>
         </div>
         <div class="row border-right">
@@ -134,13 +133,14 @@
                     <input type="text" matInput readonly
                         formControlName="AC_Description" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="accountMasterData" *ngIf="receiptEntryForm.value.Type != 'Credit Card'"
+                <master-search [MasterSearchData]="accountMasterData"
+                    *ngIf="receiptEntryForm.value.Type != 'Credit Card'"
                     (newRowClick)="selectedAcCode($event)">
                 </master-search>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-12 border-left">
                 <div class="row">
-                    <span class="matlabels">Curr Code
+                    <span class="matlabels">Number
                     </span>
                     <mat-form-field style="width: 55%">
                         <input type="text" matInput readonly
@@ -148,7 +148,7 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-12">
+            <!-- <div class="col-lg-3 col-md-3 col-sm-12">
                 <div class="row">
                     <span class="matlabels">Curr Rate*
                     </span>
@@ -159,7 +159,7 @@
                             (keypress)="isNumeric($event)" />
                     </mat-form-field>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-12 border-left">
@@ -184,9 +184,28 @@
                     </mat-form-field>
                 </div>
             </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 border-left">
+                <div class="row">
+                    <span class="matlabels">Cheque date
+                    </span>
+                    <mat-form-field
+                    style="width: 50%;margin-left: 4px;">
+                    <input matInput
+                        DateValidation 
+                        [matDatepicker]="RefDate"
+                        formControlName="Header_Amount"
+                        placeholder="DD/MM/YYYY" />
+                    <mat-datepicker-toggle
+                        matSuffix
+                        [for]="RefDate"></mat-datepicker-toggle>
+                    <mat-datepicker
+                        #RefDate></mat-datepicker>
+                </mat-form-field>
+                </div>
+            </div>
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-3 col-md-3 col-sm-12 border-left">
                 <div class="row">
                     <span class="matlabels">Amount FC *
                     </span>
@@ -200,7 +219,35 @@
                     </span>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <div class="row">
+                    <span class="matlabels">Header Amount *
+                    </span>
+                    <span style="width: 45%">
+                        <mat-form-field>
+                            <input type="text" matInput
+                                class="text-right"
+                                formControlName="Header_Amount"
+                                (keypress)="isNumeric($event)" />
+                        </mat-form-field>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 border-left">
+                <div class="row">
+                    <span class="matlabels">Drawn Bank
+                    </span>
+                    <mat-form-field style="width: 50%">
+                        <input type="text" matInput readonly
+                            class="text-right"
+                            formControlName="CurrRate"
+                            (keypress)="isNumeric($event)" />
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-12">
                 <div class="row">
                     <span class="matlabels">Amount LC *
                     </span>
@@ -214,18 +261,18 @@
                     </span>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-3 col-md-3 col-sm-12">
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 border-left">
                 <div class="row">
-                    <span class="matlabels">Header Amount *
+                    <span class="matlabels">Dep Bank
                     </span>
-                    <span style="width: 45%">
-                        <mat-form-field>
-                            <input type="text" matInput
-                                class="text-right"
-                                formControlName="Header_Amount"
-                                (keypress)="isNumeric($event)" />
-                        </mat-form-field>
-                    </span>
+                    <mat-form-field style="width: 50%">
+                        <input type="text" matInput readonly
+                            class="text-right"
+                            formControlName="CurrRate"
+                            (keypress)="isNumeric($event)" />
+                    </mat-form-field>
                 </div>
             </div>
         </div>
@@ -369,21 +416,29 @@
                         icon="fa fa-edit"></dxi-button>
                     </dxi-column> -->
                     <!-- <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button> -->
-                    <dxi-column dataField="SRNO" caption="SRNO" alignment="center">
+                    <dxi-column dataField="SRNO" caption="SRNO"
+                        alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SCH_CUSTOMER_CODE" caption="CUST" alignment="center">
+                    <dxi-column dataField="SCH_CUSTOMER_CODE" caption="CUST"
+                        alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SCH_CUSTOMER_ID" caption="CUST_ID" alignment="center">
+                    <dxi-column dataField="SCH_CUSTOMER_ID" caption="CUST_ID"
+                        alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="PAY_DATE" caption="PAY_DATE" alignment="center">
+                    <dxi-column dataField="PAY_DATE" caption="PAY_DATE"
+                        alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="PAY_AMOUNT_FC" caption="PAY_AMT" alignment="right">
+                    <dxi-column dataField="PAY_AMOUNT_FC" caption="PAY_AMT"
+                        alignment="right">
                     </dxi-column>
-                    <dxi-column dataField="PAY_AMOUNT_CC" caption="PAY_AMOUNT_CC" alignment="right">
+                    <dxi-column dataField="PAY_AMOUNT_CC"
+                        caption="PAY_AMOUNT_CC" alignment="right">
                     </dxi-column>
-                    <dxi-column dataField="RCVD_AMOUNTFC" caption="RCVD_AMOUNTFC" alignment="right">
+                    <dxi-column dataField="RCVD_AMOUNTFC"
+                        caption="RCVD_AMOUNTFC" alignment="right">
                     </dxi-column>
-                    <dxi-column dataField="RCVD_AMOUNTCC" caption="RCVD_AMOUNTCC" alignment="right">
+                    <dxi-column dataField="RCVD_AMOUNTCC"
+                        caption="RCVD_AMOUNTCC" alignment="right">
                     </dxi-column>
                     <dxo-summary>
                     </dxo-summary>
