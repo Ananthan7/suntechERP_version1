@@ -56,7 +56,23 @@ export class JewelleryAltrationComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+  itemCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Item Currency Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  itemCodeSelected(e:any){
+    console.log(e);
+    this.jewelleryaltrationFrom.controls.itemcurrency.setValue(e.CURRENCY_CODE);
+    this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue(e.CONV_RATE);
+  }
 
 
 

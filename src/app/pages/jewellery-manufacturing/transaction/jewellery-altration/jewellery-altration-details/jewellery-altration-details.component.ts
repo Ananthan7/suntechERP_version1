@@ -53,6 +53,17 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  priceSchemeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 177,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Scheme',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   price1CodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -121,6 +132,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
@@ -154,6 +166,11 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+  codeSelected(e: any) {
+    this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE)
+    this.jewelleryaltrationdetailsFrom.controls.description.setValue(e.DESCRIPTION)
+    
   }
 
   stockCodeSelected(e: any) {
@@ -220,7 +237,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   }
 
   jewelleryaltrationdetailsFrom: FormGroup = this.formBuilder.group({
-    stockcode: [''],
+    stockcode: ['',[Validators.required]],
     description: [''],
     pcs: [''],
     refvoc: ['', [Validators.required]],
@@ -705,6 +722,37 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions = []; // Clear the array
     }
+  }
+  checkStockCode(): boolean {
+    console.log('false')
+    if (this.jewelleryaltrationdetailsFrom.value.stockcode == '') {
+      this.commonService.toastErrorByMsgId('please enter stockcode')
+      return true
+    }
+    return false
+  }
+  priceSchemeValidate(e: any) {
+    console.log('yap')
+    if (this.checkStockCode()) return
+    this.jewelleryaltrationdetailsFrom.controls.pricescheme.setValue(e.PRICE_CODE)
+    let API = 'PriceSchemeMaster/GetPriceSchemeMasterList/' + this.jewelleryaltrationdetailsFrom.value.pricescheme
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.response) {
+
+          let data = result.response;
+          this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(data.PRICE1)
+          this.jewelleryaltrationdetailsFrom.controls.price2PER.setValue(data.PRICE2)
+          this.jewelleryaltrationdetailsFrom.controls.price3PER.setValue(data.PRICE3)
+          this.jewelleryaltrationdetailsFrom.controls.price4PER.setValue(data.PRICE4)
+          this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(data.PRICE5)
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
 }
