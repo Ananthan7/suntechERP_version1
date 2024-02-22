@@ -10,7 +10,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmitWithAttachment()"
+<modal-header (saveClick)="formSubmitWithAttachment()" [isViewDelete]="false"
     (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="row">
@@ -348,7 +348,7 @@
                     </dxi-column>
                     <dxi-column dataField="PAY_DATE" dataType="date"
                         caption="Pay Date" [format]="'dd-MM-yyyy'"
-                        [allowEditing]="true"
+                        [allowEditing]="false"
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="PAY_AMOUNT_CC"
@@ -364,7 +364,7 @@
                     <dxi-column dataField="REMAINDER_DATE"
                         caption="Reminder Date" dataType="date"
                         [format]="'dd-MM-yyyy'"
-                        [allowEditing]="true" alignment="center">
+                        [allowEditing]="false" alignment="center">
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_SEND"
                         caption="Reminder Send"
@@ -375,7 +375,7 @@
                     <dxi-column dataField="RCVD_DATE" dataType="date"
                         [format]="'dd-MM-yyyy'"
                         caption="Receipt Date"
-                        [allowEditing]="true" alignment="center">
+                        [allowEditing]="false" alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_BRANCH_CODE"
                         caption="Receipt Branch"

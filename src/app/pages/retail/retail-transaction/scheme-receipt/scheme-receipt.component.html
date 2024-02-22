@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
+    [isViewAuditTrail]="true" [isViewPost]="true" [isViewDelete]="false"></modal-header>
 
 <!-- content section starts -->
 <div class="row">
@@ -142,11 +142,15 @@
                                             <span class="matlabels">Party Code*
                                             </span>
                                             <span style="width: 70%">
-                                                <mat-form-field>
+                                                <mat-form-field style="width: 25%">
                                                     <input type="text" matInput
                                                         formControlName="PartyCode"
                                                         maxlength="6"
                                                         (focusout)="partyCodeChange($event,'ACCODE')" />
+                                                </mat-form-field>
+                                                <mat-form-field style="width: 35%;margin-left: 4px;">
+                                                    <input type="text" matInput readonly
+                                                        formControlName="PartyDescription"/>
                                                 </mat-form-field>
                                                 <master-search
                                                     [MasterSearchData]="partyCodeMasterData"
@@ -220,9 +224,26 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row">
-
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <div class="row">
+                                            <span class="matlabels">Entered by
+                                            </span>
+                                            <span style="width: 70%">
+                                                <mat-form-field style="width: 50%">
+                                                    <input type="text" matInput
+                                                        formControlName="Salesman"
+                                                        (focusout)="salesmanChange($event)" />
+                                                </mat-form-field>
+                                                <master-search
+                                                    [MasterSearchData]="salesPersonMasterData"
+                                                    (newRowClick)="selectedSalesman($event)">
+                                                </master-search>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-lg-4 col-md-6 col-sm-12">
                                         <div class="row">
                                             <span class="matlabels">
@@ -279,6 +300,7 @@
                         </div>
 
                     </div>
+                  
                     <div class="row border-top">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
                             [viewImportBtn]="false"

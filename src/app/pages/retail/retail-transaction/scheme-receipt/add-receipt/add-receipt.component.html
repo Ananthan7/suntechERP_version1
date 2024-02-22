@@ -74,12 +74,17 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-12">
+            <div class="col-lg-3 col-md-4 col-sm-12 d-flex">
                 <span class="matlabels">Mode Of Receipt
                 </span>
-                <mat-form-field style="width: 45%">
+                <ng-select [items]="payTypeArray" style="width: 40%"
+                    bindLabel="ENGLISH"
+                    bindValue="ENGLISH" (change)="paymentTypeChange($event)"
+                    formControlName="Type">
+                </ng-select>
+                <!--  <mat-form-field style="width: 45%">
                     <mat-select
                         (selectionChange)="paymentTypeChange($event)"
                         formControlName="Type">
@@ -87,12 +92,24 @@
                             [value]="option.ENGLISH">
                             {{ option.ENGLISH }}</mat-option>
                     </mat-select>
-                </mat-form-field>
+                </mat-form-field> -->
             </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 ">
-                &nbsp;
-                <span>
-                    <mat-form-field style="width: 35%;"
+            <div class="col-lg-4 col-md-5 col-sm-12 d-flex">
+                <mat-form-field style="width: 30%">
+                    <input type="text" placeholder="select" matInput
+                        readonly
+                        formControlName="TypeCode">
+                </mat-form-field>
+                <mat-form-field style="width: 40%;margin-left: 5px;">
+                    <input type="text" matInput readonly
+                        formControlName="TypeCodeDESC" />
+                </mat-form-field>
+                <master-search [MasterSearchData]="creditMasterData"
+                    *ngIf="isViewTypeCode"
+                    (newRowClick)="creditCardSelect($event)">
+                </master-search>
+            </div>
+            <!-- <mat-form-field style="width: 35%;"
                         class="example-full-width" style="width: 30%">
                         <input type="text" placeholder="select" matInput
                             [readonly]="isViewTypeCode"
@@ -107,14 +124,8 @@
                                 {{ option.DESCRIPTION }}
                             </mat-option>
                         </mat-autocomplete>
-                    </mat-form-field>
-                    <mat-form-field style="width: 40%;margin-left: 5px;">
-                        <input type="text" matInput readonly
-                            formControlName="TypeCodeDESC" />
-                    </mat-form-field>
-                </span>
-            </div>
-            <div class="col-lg-3 col-md-5 col-sm-12 mt-3 border-left">
+                    </mat-form-field> -->
+            <div class="col-lg-3 col-md-5 col-sm-12 mt-3">
                 <b>Cheque Details</b>
             </div>
         </div>
@@ -189,18 +200,18 @@
                     <span class="matlabels">Cheque date
                     </span>
                     <mat-form-field
-                    style="width: 50%;margin-left: 4px;">
-                    <input matInput
-                        DateValidation 
-                        [matDatepicker]="RefDate"
-                        formControlName="Header_Amount"
-                        placeholder="DD/MM/YYYY" />
-                    <mat-datepicker-toggle
-                        matSuffix
-                        [for]="RefDate"></mat-datepicker-toggle>
-                    <mat-datepicker
-                        #RefDate></mat-datepicker>
-                </mat-form-field>
+                        style="width: 50%;margin-left: 4px;">
+                        <input matInput
+                            DateValidation
+                            [matDatepicker]="RefDate"
+                            formControlName="Header_Amount"
+                            placeholder="DD/MM/YYYY" />
+                        <mat-datepicker-toggle
+                            matSuffix
+                            [for]="RefDate"></mat-datepicker-toggle>
+                        <mat-datepicker
+                            #RefDate></mat-datepicker>
+                    </mat-form-field>
                 </div>
             </div>
         </div>

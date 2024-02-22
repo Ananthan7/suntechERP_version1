@@ -99,6 +99,7 @@ export class SchemeReceiptComponent implements OnInit {
     Salesman: [""],
     SalesmanName: [""],
     PartyCode: [""],
+    PartyDescription: [""],
     VocType: ["PCR"],
     VocDate: [""],
     VocNo: [""],
@@ -392,9 +393,8 @@ export class SchemeReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           if (data[0].DEFACCODE != "") {
-            this.receiptDetailsForm.controls.PartyCode.setValue(
-              data[0].DEFACCODE
-            );
+            console.log('1111111111');
+            this.receiptDetailsForm.controls.PartyCode.setValue(data[0].DEFACCODE);
             this.newReceiptData.PARTY_CODE = data[0].DEFACCODE;
           } else {
             this.fetchCreditCardMaster();
@@ -410,20 +410,17 @@ export class SchemeReceiptComponent implements OnInit {
     let API = `CreditCardMaster/GetCreditCardMaster`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
+        console.log(result);
+        
         if (result.response) {
           let res = result.response.filter((item: any) => item.MODE == 3);
           if (res[0].ACCODE) {
             this.receiptDetailsForm.controls.PartyCode.setValue(res[0].ACCODE);
+            this.receiptDetailsForm.controls.PartyDescription.setValue(res[0].DESCRIPTION);
             this.newReceiptData.PARTY_CODE = res[0].ACCODE;
             this.rightSideHeader = res[0].DESCRIPTION;
           } else {
-            this.toastr.error(
-              "PartyCode not found in credit master",
-              result.Message ? result.Message : "",
-              {
-                timeOut: 3000,
-              }
-            );
+            this.commonService.toastErrorByMsgId("PartyCode not found in credit master");
           }
           if (res[0].CURRENCY_CODE != "") {
             this.receiptDetailsForm.controls.CurrCode.setValue(
@@ -451,6 +448,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   selectedParty(data: any) {
     this.receiptDetailsForm.controls.PartyCode.setValue(data.ACCODE);
+    this.receiptDetailsForm.controls.PartyDescription.setValue(data['ACCOUNT HEAD']);
     this.newReceiptData.PARTY_CODE = data.ACCODE;
     if (data.CURRENCY_CODE) {
       this.receiptDetailsForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
@@ -492,36 +490,31 @@ export class SchemeReceiptComponent implements OnInit {
   customerChange(event: any, searchFlag: string) {
     if (event.target.value == "") return;
     this.VocNumberMain = "";
-    this.snackBar.open("Loading ...");
-    let API = `Scheme/CustomerMaster?${searchFlag}=${event.target.value}`;
+    this.commonService.showSnackBarMsg('Loading ...')
+    let API = `PosCustomerMaster/GetCustomerMaster/${searchFlag}=${event.target.value}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
-        this.snackBar.dismiss();
+        this.commonService.closeSnackBarMsg();
         if (result.response) {
           let data = result.response;
-          if (data.NAME) {
+          if (data) {
             this.receiptDetailsForm.controls.POSCustomerName.setValue(
               data.NAME
             );
             this.receiptDetailsForm.controls.POSCustomerMobile.setValue(
               data.MOBILE
             );
+            this.receiptDetailsForm.controls.POSCustomerCode.setValue(
+              data.CODE
+            );
             this.fetchSchemeWithCustCode(data.CODE);
           }
         } else {
-          this.toastr.error(
-            "Customer not found",
-            result.Message ? result.Message : "",
-            {
-              timeOut: 3000,
-            }
-          );
+          this.commonService.toastErrorByMsgId("Customer not found");
         }
       },
       (err) =>
-        this.toastr.error("Server Error", "", {
-          timeOut: 3000,
-        })
+        this.commonService.toastErrorByMsgId("Server Error")
     );
     this.subscriptions.push(Sub);
   }
@@ -774,19 +767,11 @@ export class SchemeReceiptComponent implements OnInit {
             //   map(value => this._filterSalesman(value || '')),
             // );
           } else {
-            this.toastr.error(
-              "Salesman not found",
-              result.Message ? result.Message : "",
-              {
-                timeOut: 3000,
-              }
-            );
+            this.commonService.toastErrorByMsgId("Salesman not found");
           }
         },
         (err) =>
-          this.toastr.error("Server Error", "", {
-            timeOut: 3000,
-          })
+          this.commonService.toastErrorByMsgId("Server Error")
       );
     this.subscriptions.push(Sub);
   }
@@ -937,7 +922,6 @@ export class SchemeReceiptComponent implements OnInit {
       });
       return;
     }
-    console.log(this.receiptDetailsForm.value);
 
     let postData = {
       "MID": 1,

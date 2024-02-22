@@ -51,6 +51,17 @@ export class AddReceiptComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+  creditMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 25,
+    SEARCH_FIELD: "CREDIT_CODE",
+    SEARCH_HEADING: "Credit Master",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CREDIT_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
 
   /**form group data */
   receiptEntryForm: FormGroup = this.formBuilder.group({
@@ -107,7 +118,7 @@ export class AddReceiptComponent implements OnInit {
       this.getCreditCardMaster()
       this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
     }
-    if(this.content){
+    if (this.content) {
       this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
       this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
       this.receiptEntryForm.controls.InstallmentAmount.setValue(this.content.SCHEME_AMOUNT)
@@ -153,7 +164,7 @@ export class AddReceiptComponent implements OnInit {
       SCH_CUSTOMER_CODE: this.content.SCH_CUSTOMER_CODE || '',
       SCH_CUSTOMER_ID: this.content.SchemeID || '',
     }
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeReceipts',param)
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeReceipts', param)
       .subscribe((result) => {
         if (result.response) {
           this.gridDataSource = result.response
@@ -177,6 +188,10 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD)
       this.getAccountMaster(data.ACCODE)
     }
+  }
+  creditCardSelect(data: any) {
+    this.receiptEntryForm.controls.TypeCode.setValue(data.Credit_Code)
+    this.receiptEntryForm.controls.TypeCodeDESC.setValue(data.Description)
   }
   //party Code Change
   branchChange(event: any) {
@@ -363,11 +378,11 @@ export class AddReceiptComponent implements OnInit {
           let data = result.response
           // this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode' && value.ENGLISH == 'Credit Card')
           this.payTypeArray = [
-            {ENGLISH: 'Cash'},
-            {ENGLISH: 'Credit Card'},
-            {ENGLISH: 'Cheque'},
-            {ENGLISH: 'IT'},
-            {ENGLISH: 'Others'},
+            { ENGLISH: 'Cash' },
+            { ENGLISH: 'Credit Card' },
+            { ENGLISH: 'Cheque' },
+            { ENGLISH: 'IT' },
+            { ENGLISH: 'Others' },
           ]
           // this.receiptEntryForm.controls.Type.setValue(value)
         } else {
@@ -378,16 +393,16 @@ export class AddReceiptComponent implements OnInit {
   }
   //type change
   paymentTypeChange(event: any) {
-    if (event.value == 'Credit Card') {
-      this.isViewTypeCode = false;
+    if (event.ENGLISH == 'Credit Card') {
+      this.isViewTypeCode = true;
       this.receiptEntryForm.controls.AC_Code.setValue('');
       this.receiptEntryForm.controls.AC_Description.setValue('');
     } else {
       this.receiptEntryForm.controls.TypeCode.setValue(null);
       this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
-      this.isViewTypeCode = true;
+      this.isViewTypeCode = false;
     }
-    if (event.value == 'Cash') {
+    if (event.ENGLISH == 'Cash') {
       this.getBranchMasterList()
     }
   }
@@ -397,17 +412,13 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           this.branchArray = result.response
-          // this.branchFilteredOptions = this.receiptEntryForm.controls.Branch.valueChanges.pipe(
-          //   startWith(''),
-          //   map(value => this._filterBranch(value || '')),
-          // );
+          console.log(this.branchArray,'this.branchArray');
 
           let AcCode = this.branchArray.filter((item: any) => item.BRANCH_CODE = this.receiptEntryForm.value.Branch)
           if (AcCode[0].CASH_ACCODE) {
-
-            // this.receiptEntryForm.controls.AC_Code.setValue(AcCode[0].CASH_ACCODE)
-            // this.receiptEntryForm.controls.AC_Description.setValue(AcCode[0].DESCRIPTION)
-            // this.getAccountMaster(AcCode[0].CASH_ACCODE)
+            this.receiptEntryForm.controls.AC_Code.setValue(AcCode[0].CASH_ACCODE)
+            this.receiptEntryForm.controls.AC_Description.setValue(AcCode[0].DESCRIPTION)
+            this.getAccountMaster(AcCode[0].CASH_ACCODE)
           }
 
         } else {
