@@ -196,7 +196,7 @@
         <div class="col-md-12 pt-3">
           <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
             <mat-tab label="Stone Pricing">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [dataSource]="tableDatastone" >
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
@@ -208,7 +208,7 @@
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Labour Charges">
-              <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true" [dataSource]="tableDatalabour" [height]="200">
+              <dx-data-grid #dataGrid id="gridContainer"  keyExpr="SRNO"  [showBorders]="true" [dataSource]="tableDatalabour" [height]="200">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>

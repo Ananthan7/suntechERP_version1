@@ -266,7 +266,7 @@
                 </div>
 
                 <div *dxTemplate="let data of 'Psctemp'">
-                  <input type="number" (change)="Psctemp($event,data)" style="width: 100%; text-align: right;"  [value]="data.value" />
+                  <input type="number" NumberOnly (change)="Psctemp($event,data)" style="width: 100%; text-align: right;"  [value]="data.value" />
                 </div>
                 <div *dxTemplate="let data of 'gross_weighttemp'">
                   <input type="number" (change)="gross_weighttemp($event,data)" style="width: 100%;  text-align: right;"

@@ -82,6 +82,14 @@
     padding-bottom: 5px !important;
     margin: 0px !important;
 }
+  .mat-form-field-appearance-outline .mat-form-field-infix{
+    padding: 10px;
+  }
+
+  .icon_1{
+    color: #C3CFE2;
+  }
+
 }
 
 ::ng-deep .mat-form-field {
@@ -97,6 +105,7 @@
   }
   
 }
+
 
 .overlay {
   position: relative; 
@@ -222,5 +231,13 @@
   width: 30px !important;
 }
 
+.l_1{
+  padding-left: 10px;
+  padding-top: 4px;
+}
  
+.form-switch .form-check-input {
+  width: 3em;
+  height: 20px;
+}
 

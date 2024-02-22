@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { OperationalsComponent } from './operationals.component';
+import { ProductAnalysisSalesOrderModule } from '../operationals/product-analysis-sales-order/product-analysis-sales-order.module';
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
     path: 'grid-settings',
     loadChildren: () => import('../operationals/grid-settings/grid-settings.module').then(m => m.GridSettingsModule)
   },
+  {
+    path: 'product-analysis-sales-order',
+    loadChildren: ()=> import('../operationals/product-analysis-sales-order/product-analysis-sales-order.module').then(m => ProductAnalysisSalesOrderModule )
+  }
 ];
 
 @NgModule({

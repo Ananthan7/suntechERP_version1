@@ -1,0 +1,91 @@
+
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Loyalty Register (POS)</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" ></modal-header>
+<!-- content section -->
+<div class="container-fluid pt-3">
+    <form>
+        <div class="row">
+           
+            
+            <div class="col-md-4">
+                <div class="row">
+                    <label for="inputPassword" class="col-md-4 col-form-label">Branch</label>
+                    <div class="col-md-6">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                
+                </div>
+                <div class="row">
+                    <label for="inputPassword" class="col-md-4 col-form-label">Filter</label>
+                    <label for="inputPassword" class="col-md-4 col-form-label">From</label>
+                    <label for="inputPassword" class="col-md-4 col-form-label">To</label>
+                 
+                        <label for="inputPassword" class="col-md-4 col-form-label">Date</label>
+                        <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                                <input type="date" matInput />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                                <input type="date" matInput />
+                            </mat-form-field>
+                        </div>
+                     
+  
+                </div>
+                <div class="row">
+                    <label for="inputPassword" class="col-md-4 col-form-label">Customer</label>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="inputPassword" class="col-md-4 col-form-label">Points</label>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                    </div>
+                </div>
+            
+            </div>
+            <div class="col-md-4">
+                
+                <div class="row pt-5">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Report To</label>
+                    <div class="col-md-6">
+                        <mat-form-field style="width: 70%;">
+                            <input type="text" matInput />
+                        </mat-form-field>
+                        <master-search></master-search>
+                    </div>
+                </div>
+              
+            </div>
+         
+           
+        </div>
+    </form>
+</div>

@@ -1,0 +1,199 @@
+<div class="col-md-12 col-sm-12">
+  <div class="ps-2 pt-2">
+    <h4>Product Analysis</h4>
+  </div>
+
+  <div class="card card-rounded pt-2">
+    <div class="row">
+      <div class="col-md-1 d-flex align-items-center justify-content-center">
+        <mat-icon class="tune mr-2">tune</mat-icon>
+        <div class="ms-2">
+          <label>Filter</label>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Branch</mat-label>
+          <input
+            id="branch"
+            type="text"
+            autocomplete=""
+            matInput
+            [matAutocomplete]="branch"
+          />
+          <mat-autocomplete #branch="matAutocomplete" autoActiveFirstOption>
+            <mat-option
+              *ngFor="let option of branchFilteredOptions | async"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="col-md-2  d-flex align-items-center">
+        <!-- <button mat-button class="mat-button-round mat-raised-button">
+  <span>Advance Filter</span>
+  <button mat-icon-button>
+    <mat-icon>refresh</mat-icon>
+  </button>
+ </button> -->
+ <button class="btn btn_white filter-btn  border_light b_r_20 w-100" (click)="openFilter()"> Advance Filter <i class="fas fa-filter"></i></button>
+     
+ <!-- <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Brand</mat-label>
+          <input
+            id="branch"
+            type="text"
+            autocomplete=""
+            matInput
+            [matAutocomplete]="branch"
+          />
+          <mat-autocomplete #branch="matAutocomplete" autoActiveFirstOption>
+            <mat-option
+              *ngFor="let option of branchFilteredOptions | async"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field> -->
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Start Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="startDate"
+            name="startDate"
+            placeholder="DD/MM/YYYY"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="startDate"
+          ></mat-datepicker-toggle>
+          <mat-datepicker [startAt]="currentDate" #startDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>End Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="endDate"
+            name="endDate"
+            placeholder="DD/MM/YYYY"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="endDate"
+          ></mat-datepicker-toggle>
+          <mat-datepicker [startAt]="currentDate" #endDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-md-1">
+        <button
+          mat-fab
+          style="background-color: #f3e7e982; color: black; border: #9ca3af"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Sales Metrics</h4>
+
+      <div
+        class="card px-5 py-3 d-flex flex-row flex-wrap justify-content-between"
+      >
+        <div>
+          <p>Total Sales</p>
+          <h3>21.71K</h3>
+        </div>
+        <div>
+          <p>GM</p>
+          <h3>9K</h3>
+        </div>
+        <div>
+          <p>GM %</p>
+          <h3>20%</h3>
+        </div>
+        <div>
+          <p>Sample</p>
+          <h3>18%</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h4>Inventory Metrics</h4>
+      <div
+        class="card px-5 py-3 d-flex flex-row flex-wrap justify-content-between"
+      >
+        <div>
+          <p>Total Quantity Sold</p>
+          <h3>21.71K</h3>
+        </div>
+        <div>
+          <p>Total Quantity in Inventory</p>
+          <h3>9K</h3>
+        </div>
+        <div>
+          <p>Quantity In Hand</p>
+          <h3>20%</h3>
+        </div>
+        <div>
+          <p>Reorder Date</p>
+          <h3>18%</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <h4>Product Details</h4>
+  </div>
+
+  <div
+    class="card px-5 py-2 d-flex flex-row flex-wrap justify-content-between align-items-center"
+    *ngFor="let data of productList"
+  >
+    <div>
+      <img src="{{ data.img }}" alt="" style="width: 120px; height: 120px" />
+    </div>
+
+    <div>
+      <p>DESIGN CODE : {{ data.designCode }}</p>
+      <h5>{{ data.name }}</h5>
+      <h6>STOCK CODE : {{ data.stockCode }}</h6>
+    </div>
+    <div>
+      <p>Vendor REF</p>
+      <h5>{{ data.vendorRef }}</h5>
+    </div>
+    <div>
+      <p>AVAILABLE QTY</p>
+      <h5>{{ data.qty }}</h5>
+    </div>
+    <div>
+      <p>LAST SELLING PRICE</p>
+      <h5>{{ data.sellingPrice }}</h5>
+    </div>
+    <div>
+      <p>BRANCH SOLD</p>
+      <h5>{{ data.branchSold }}</h5>
+    </div>
+    <div>
+      <p>AGEING (DAYS)</p>
+      <h5>{{ data.ageingDays }}</h5>
+    </div>
+    <div>
+      <p align="right"><input type="checkbox" /></p>
+      <h5>Expect {{ data.date | date : "dd-mm-yyyy" }}</h5>
+    </div>
+  </div>
+</div>

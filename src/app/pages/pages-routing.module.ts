@@ -33,6 +33,7 @@ const routes: Routes = [
     path: 'component-wise-diamond',
     loadChildren: () => import('../pages/wholesale/wholesale.module').then(m => m.WholesaleModule)
   },
+ 
   
   /**Add here new modules from modulelist */
 ];

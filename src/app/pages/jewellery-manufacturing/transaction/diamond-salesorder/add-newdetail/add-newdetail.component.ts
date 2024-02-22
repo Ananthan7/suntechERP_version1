@@ -508,20 +508,21 @@ export class AddNewdetailComponent implements OnInit {
       
       if (data.DESCRIPTION) {
         this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.DESCRIPTION)
+        this.diamondSalesDetailForm.controls.StockCode.setValue(data.CODE)
       }
-      if (data.Stock_Description) {
-        this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.Stock_Description)
-      }
-      if (data.STOCK_CODE) {
-        this.diamondSalesDetailForm.controls.StockCode.setValue(data.STOCK_CODE)
-        this.designCodeValidate({ target: { value: data.STOCK_CODE } }, 'STOCK')
-      }
-      if (data.Stock_Code) {
-        console.log(data.Stock_Code,'data.StockCode');
+      // if (data.Stock_Description) {
+      //   this.diamondSalesDetailForm.controls.StockCodeDesc.setValue(data.Stock_Description)
+      // }
+      // if (data.STOCK_CODE) {
+      //   this.diamondSalesDetailForm.controls.StockCode.setValue(data.STOCK_CODE)
+      //   this.designCodeValidate({ target: { value: data.STOCK_CODE } }, 'STOCK')
+      // }
+      // if (data.Stock_Code) {
+      //   console.log(data.Stock_Code,'data.StockCode');
         
-        this.diamondSalesDetailForm.controls.StockCode.setValue(data.Stock_Code)
-        this.designCodeValidate({ target: { value: data.Stock_Code } }, 'STOCK')
-      }
+      //   this.diamondSalesDetailForm.controls.StockCode.setValue(data.Stock_Code)
+      //   this.designCodeValidate({ target: { value: data.Stock_Code } }, 'STOCK')
+      // }
       
     } else {
       this.commonService.toastErrorByMsgId('MSG1531');
