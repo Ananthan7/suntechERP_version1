@@ -94,7 +94,8 @@ export class AddReceiptComponent implements OnInit {
     SRNO: [0],
     SchemeCode: [''],
     SchemeId: [''],
-    SchemeBalance: [''],
+    SchemeBalance: [0],
+    SchemeTotalAmount: [''],
     InstallmentAmount: [''],
     ChequeNumber: [''],
     ChequeDate: [''],
@@ -125,9 +126,15 @@ export class AddReceiptComponent implements OnInit {
     if (this.content) {
       this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
       this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
-      this.receiptEntryForm.controls.InstallmentAmount.setValue(this.content.SCHEME_AMOUNT)
+      this.receiptEntryForm.controls.InstallmentAmount.setValue(
+        this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+      )
+      this.receiptEntryForm.controls.SchemeTotalAmount.setValue(this.content.SCHEME_AMOUNT)
+      this.receiptEntryForm.controls.SchemeBalance.setValue(
+        this.commonService.decimalQuantityFormat((this.content.SCHEME_AMOUNT - this.content.SCH_INST_AMOUNT_FC), 'AMOUNT')
+      )
     }
-    this.setGridData()
+    this.paymentTypeChange({ ENGLISH: 'Cash' })
   }
 
   setInitialValues() {
@@ -164,6 +171,10 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.Narration.setValue(data.Narration)
   }
   setGridData() {
+    if (this.gridDataSource.length > 0) {
+      this.calculateGridAmount()
+      return
+    }
     let param = {
       SCH_CUSTOMER_CODE: this.content.SCH_CUSTOMER_CODE || '',
       SCH_CUSTOMER_ID: this.content.SchemeID || '',
@@ -172,6 +183,7 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           this.gridDataSource = result.response
+          this.calculateGridAmount()
         } else {
           this.toastr.error('grid data not found')
         }
@@ -287,16 +299,17 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
 
-          let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCHEME_AMOUNT))
+          this.receiptEntryForm.controls.Header_Amount.setValue(this.content.SCH_INST_AMOUNT_FC)
+          this.receiptEntryForm.controls.Amount_LC.setValue(this.content.SCH_INST_AMOUNT_FC)
+          this.receiptEntryForm.controls.Amount_FC.setValue(this.content.SCH_INST_AMOUNT_FC)
+
+          let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
 
           amount_LC = Number(amount_LC.toFixed(2))
-          this.receiptEntryForm.controls.Amount_LC.setValue(amount_LC)
 
-          this.receiptEntryForm.controls.Header_Amount.setValue(amount_LC)
 
           let amount_FC: number = Number(this.currencyRate) * amount_LC
           amount_FC = Number(amount_FC.toFixed(2))
-          this.receiptEntryForm.controls.Amount_FC.setValue(amount_FC)
 
           let trn_Fc_amount: number = Number(this.content.SCHEME_AMOUNT) - amount_FC
           trn_Fc_amount = Number(trn_Fc_amount.toFixed(2))
@@ -322,6 +335,39 @@ export class AddReceiptComponent implements OnInit {
   private calculateVAT(VAT: number, AMOUNT: number): number {
     return (AMOUNT / (100 + VAT)) * 100
   }
+  calculateAmountLC() {
+    if (this.receiptEntryForm.value.SchemeTotalAmount < this.receiptEntryForm.value.Amount_LC) {
+      this.receiptEntryForm.controls.Amount_LC.setValue(0)
+      this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than ' + this.receiptEntryForm.value.SchemeTotalAmount)
+      return
+    }
+    this.receiptEntryForm.controls.Header_Amount.setValue(this.receiptEntryForm.value.Amount_LC)
+    this.receiptEntryForm.controls.Amount_FC.setValue(this.receiptEntryForm.value.Amount_LC)
+    this.setGridData()
+  }
+  calculateAmountFC() {
+    if (this.receiptEntryForm.value.SchemeTotalAmount < this.receiptEntryForm.value.Amount_FC) {
+      this.receiptEntryForm.controls.Amount_FC.setValue(0)
+      this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than ' + this.receiptEntryForm.value.SchemeTotalAmount)
+      return
+    }
+    this.receiptEntryForm.controls.Header_Amount.setValue(this.receiptEntryForm.value.Amount_FC)
+    this.receiptEntryForm.controls.Amount_LC.setValue(this.receiptEntryForm.value.Amount_FC)
+    this.setGridData()
+  }
+  calculateGridAmount() {
+    this.gridDataSource.forEach((item: any, index: any) => {
+      if (this.receiptEntryForm.value.Amount_LC >= item.PAY_AMOUNT_FC) {
+        item.RCVD_AMOUNTFC = item.PAY_AMOUNT_FC
+        this.gridDataSource[index + 1].RCVD_AMOUNTFC = item.PAY_AMOUNT_FC - this.receiptEntryForm.value.Amount_FC
+        item.RCVD_AMOUNTCC = item.PAY_AMOUNT_CC
+        this.gridDataSource[index + 1].RCVD_AMOUNTCC = item.PAY_AMOUNT_CC - this.receiptEntryForm.value.Amount_LC
+      } else {
+        item.RCVD_AMOUNTFC = this.receiptEntryForm.value.Amount_FC
+        item.RCVD_AMOUNTCC = this.receiptEntryForm.value.Amount_LC
+      }
+    })
+  }
   //currency Code Change
   currencyCodeChange(value: string) {
     if (value == '') return
@@ -331,7 +377,9 @@ export class AddReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response
           if (data.CONV_RATE) {
-            this.receiptEntryForm.controls.CurrRate.setValue(data.CONV_RATE)
+            this.receiptEntryForm.controls.CurrRate.setValue(
+              this.commonService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
+            )
             this.getTaxDetails()
             this.currencyRate = data.CONV_RATE
           }
@@ -380,15 +428,16 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result: any) => {
         if (result.response) {
           let data = result.response
-          // this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode' && value.ENGLISH == 'Credit Card')
-          this.payTypeArray = [
-            { ENGLISH: 'Cash' },
-            { ENGLISH: 'Credit Card' },
-            { ENGLISH: 'Cheque' },
-            { ENGLISH: 'IT' },
-            { ENGLISH: 'Others' },
-          ]
-          // this.receiptEntryForm.controls.Type.setValue(value)
+          this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode')
+
+          // this.payTypeArray = [
+          //   { ENGLISH: 'Cash' },
+          //   { ENGLISH: 'Credit Card' },
+          //   { ENGLISH: 'Cheque' },
+          //   { ENGLISH: 'IT' },
+          //   { ENGLISH: 'Others' },
+          // ]
+          this.receiptEntryForm.controls.Type.setValue('Cash')
         } else {
           this.toastr.error('Receipt Mode not found')
         }
@@ -401,14 +450,14 @@ export class AddReceiptComponent implements OnInit {
       this.isViewTypeCode = true;
       this.receiptEntryForm.controls.AC_Code.setValue('');
       this.receiptEntryForm.controls.AC_Description.setValue('');
+    } else if (event.ENGLISH == 'Cash') {
+      this.getBranchMasterList()
     } else {
       this.receiptEntryForm.controls.TypeCode.setValue(null);
       this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
       this.isViewTypeCode = false;
     }
-    if (event.ENGLISH == 'Cash') {
-      this.getBranchMasterList()
-    }
+
   }
   /**USE: branch autocomplete starts*/
   getBranchMasterList() {
@@ -420,11 +469,11 @@ export class AddReceiptComponent implements OnInit {
           if (AcCode[0].CASH_ACCODE) {
             this.receiptEntryForm.controls.AC_Code.setValue(AcCode[0].CASH_ACCODE)
             this.getAccountMaster(AcCode[0].CASH_ACCODE)
-          }else{
-            this.commonService.toastErrorByMsgId('Cash code not found' )
+          } else {
+            this.commonService.toastErrorByMsgId('Cash code not found')
           }
-        } else { 
-          this.commonService.toastErrorByMsgId('branch Not Found!' )
+        } else {
+          this.commonService.toastErrorByMsgId('branch Not Found!')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)

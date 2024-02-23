@@ -210,8 +210,9 @@
                     <span style="width: 45%">
                         <mat-form-field>
                             <input type="text" matInput
-                                class="text-right"
+                                class="text-right" AmountDecimalInput
                                 formControlName="Amount_FC"
+                                (focusout)="calculateAmountFC()"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </span>
@@ -252,8 +253,9 @@
                     <span style="width: 45%">
                         <mat-form-field>
                             <input type="text" matInput
-                                class="text-right"
+                                class="text-right" AmountDecimalInput
                                 formControlName="Amount_LC"
+                                (focusout)="calculateAmountLC()"
                                 (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </span>
@@ -274,120 +276,6 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="row" style="background-color: #f0f0f0;">
-            <div class="col-lg-4 col-md-4 col-sm-12">
-                <div class="row">
-                    <span class="matlabels">TRN Per % *
-                    </span>
-                    <span style="width: 65%">
-                        <mat-form-field>
-                            <input type="text" matInput readonly
-                                class="text-right"
-                                (keypress)="isNumeric($event)"
-                                formControlName="TRN_Per" />
-                        </mat-form-field>
-                    </span>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12">
-                <div class="row">
-                    <span class="matlabels">TRN Amount FC *
-                    </span>
-                    <span style="width: 65%">
-                        <mat-form-field>
-                            <input type="text" matInput readonly
-                                class="text-right"
-                                formControlName="TRN_Amount_FC"
-                                (keypress)="isNumeric($event)" />
-                        </mat-form-field>
-                    </span>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12">
-                <div class="row">
-                    <span class="matlabels">TRN Amount LC *
-                    </span>
-                    <span style="width: 65%">
-                        <mat-form-field>
-                            <input type="text" matInput readonly
-                                class="text-right"
-                                formControlName="TRN_Amount_LC"
-                                (keypress)="isNumeric($event)" />
-                        </mat-form-field>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="row"
-            style="background-color: #f0f0f0;border-bottom: 1px solid #dbdbdb;">
-            <div class="col-lg-4 col-md-4 col-sm-12">
-                <div class="row">
-                    <span class="matlabels">Amount With TRN*
-                    </span>
-                    <span style="width: 45%">
-                        <mat-form-field>
-                            <input type="text" matInput readonly
-                                class="text-right"
-                                formControlName="AmountWithTRN"
-                                (keypress)="isNumeric($event)" />
-                        </mat-form-field>
-                    </span>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12">
-                <div class="row">
-                    <span class="matlabels">Header Amount With TRN*
-                    </span>
-                    <span style="width: 45%">
-                        <mat-form-field>
-                            <input type="text" matInput readonly
-                                class="text-right"
-                                formControlName="HeaderAmountWithTRN"
-                                (keypress)="isNumeric($event)" />
-                        </mat-form-field>
-                    </span>
-                </div>
-            </div>
-            <div class="border-left">&nbsp;</div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12">
-                <div class="row">
-                    <span class="matlabels">Valid Id
-                    </span>
-                    <span style="width: 65%">
-                        <mat-form-field>
-                            <input type="text" matInput
-                                formControlName="ValidId" />
-                        </mat-form-field>
-                    </span>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12">
-                <div class="row">
-                    <span class="matlabels">Source of Funds
-                    </span>
-                    <span style="width: 65%">
-                        <mat-form-field>
-                            <input type="text" matInput
-                                formControlName="SourceofFunds" />
-                        </mat-form-field>
-                    </span>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12">
-                <div class="row">
-                    <span class="matlabels">Transaction Type
-                    </span>
-                    <span style="width: 65%">
-                        <mat-form-field>
-                            <input type="text" matInput
-                                formControlName="TransactionType" />
-                        </mat-form-field>
-                    </span>
-                </div>
-            </div>
-        </div> -->
         <div class="row border-bottom">
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <span class="matlabels">Narration

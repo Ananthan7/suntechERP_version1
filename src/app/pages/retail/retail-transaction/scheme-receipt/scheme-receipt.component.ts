@@ -123,6 +123,7 @@ export class SchemeReceiptComponent implements OnInit {
     MID: [""],
     SCHEME_AMOUNT: [0],
     SCH_CUSTOMER_CODE: [0],
+    SCH_INST_AMOUNT_FC: [0],
   });
   private subscriptions: Subscription[] = [];
   constructor(
@@ -370,6 +371,7 @@ export class SchemeReceiptComponent implements OnInit {
           this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE)
           this.receiptDetailsForm.controls.SCH_CUSTOMER_CODE.setValue(data.SCH_CUSTOMER_CODE)
           this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data.SCH_CUSTOMER_ID)
+          this.receiptDetailsForm.controls.SCH_INST_AMOUNT_FC.setValue(data.SCH_INST_AMOUNT_FC)
           this.newReceiptData.SCHEME_AMOUNT = data?.PAY_AMOUNTFC
 
           this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(
