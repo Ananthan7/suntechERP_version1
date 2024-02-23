@@ -1,0 +1,84 @@
+.product_analysis {
+  padding: 42px 10px 20px !important;
+}
+
+.btn_margins {
+    .btn{
+        padding: 5px 26px !important;
+    }
+}
+
+.card_time {
+  position: relative;
+  margin: 0 auto;
+}
+
+.card_time::after  {
+    content: "";
+    position: absolute;
+    /*height: 78%;*/
+    width: 2px;
+    background-color: #9ca3af;
+    top: 16%;
+    bottom: 7%;
+    left: 42px;
+    margin-left: 0px;
+}
+
+.card_time_line_wrap {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 0px;
+  margin: 25px 0px 20px 11%;
+  border: 1px solid #9ca3af;
+  position: relative;
+}
+
+.card_time_line_wrap::after {
+  content: "";
+  content: "";
+  width: 35px;
+  height: 0;
+  border-bottom: 1px solid #a19e9e;
+  position: absolute;
+  top: 50%;
+  left: -6%;
+  right: 0;
+}
+
+.card_time_line_form {
+  border-right: 1px solid #c1c1c1;
+  padding: 5px;
+  border-left: 1px solid #c1c1c1;
+}
+
+.card_time_line_icons {
+  padding: 5px;
+  i {
+    font-size: 18px;
+  }
+}
+
+::ng-deep {
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  .mat-form-field-infix {
+    padding: 8px !important;
+  }
+
+  .mat-form-field-outline {
+    &-end {
+      border-radius: 0 20px 20px 0 !important;
+    }
+
+    &-start {
+      border-radius: 20px 0 0 20px !important;
+      flex-grow: 1;
+    }
+  }
+}

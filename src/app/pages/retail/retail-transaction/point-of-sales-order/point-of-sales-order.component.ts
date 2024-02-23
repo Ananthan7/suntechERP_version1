@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PointOfSalesOrderDetailsComponent } from './point-of-sales-order-details/point-of-sales-order-details.component';
 import { CommonServiceService } from 'src/app/services/common-service.service';
-
+import { PosSalesPaymentComponent } from './pos-sales-payment/pos-sales-payment.component';
 @Component({
   selector: 'app-point-of-sales-order',
   templateUrl: './point-of-sales-order.component.html',
@@ -90,4 +90,22 @@ export class PointOfSalesOrderComponent implements OnInit {
     });
 
   }
+
+  @ViewChild('mymodal') public mymodal!: NgbModal;
+
+  open(modalname?: any) {
+      
+      const modalRef: NgbModalRef = this.modalService.open(PosSalesPaymentComponent, {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        windowClass: 'modal-full-width'
+      });
+  
+      modalRef.result.then((result) => {
+       
+      }, (reason) => {
+       
+      });
+    }
 }

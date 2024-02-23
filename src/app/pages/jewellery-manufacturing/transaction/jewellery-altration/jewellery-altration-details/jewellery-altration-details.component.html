@@ -21,7 +21,7 @@
                                     <input type="text" matInput formControlName="stockcode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="stockCodeData"
-                                    (newRowClick)="stockCodeSelected($event)">
+                                    (newRowClick)="codeSelected($event)">
                                 </master-search>
                             </div>
                         </div>
@@ -268,7 +268,7 @@
 
                             <div class="row">
                                 <div class="col">
-                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [dataSource]="tableData" [showBorders]="true">
+                                    <dx-data-grid #dataGrid id="gridContainer"  [dataSource]="tableData" [showBorders]="true" [showRowLines]="true">
                                         <dxo-paging [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell" [allowUpdating]="true">
                                         </dxo-editing>
@@ -298,7 +298,7 @@
                         <mat-tab label="Original Components">
                             <div class="row">
                                 <div class="col">
-                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                    <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true">
                                         <dxo-paging [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell" [allowUpdating]="true">
                                         </dxo-editing>
@@ -329,7 +329,7 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label text-center">Cost(FC)</label>
                     <label for="inputPassword" class="col-sm-2 col-form-label text-center">Cost(LC)</label>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <label for="inputPassword" class="col-sm-3 col-form-label">Price Scheme:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
@@ -350,6 +350,17 @@
                         <mat-form-field style="width: 100%;">
                             <input type="text" matInput />
                         </mat-form-field>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="price_box">
+                            <a>PriceScheme</a>
+                            <master-search 
+                                [MasterSearchData]="priceSchemeData"
+                                (newRowClick)="priceSchemeValidate($event)"></master-search>
+                                <a>{{jewelleryaltrationdetailsFrom.value.pricescheme}}</a>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
