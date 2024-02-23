@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Jewellery Altration</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Salesman Commission</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
       <i class="feather icon-x close-icon"></i>
     </button>
@@ -17,10 +17,9 @@
           <div class="row ">
             <div class="col-md-2 pt-3">
              
-              <div class="row">
+              <div class="row mg_1">
                 <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                    Import
-     
+                    Invoice Amount
                   </button>
               </div>
             </div>
@@ -39,10 +38,10 @@
           </div>
         </div>
       </div>
-      <div class="pt-3">
+      <div class="pt-2">
 
         <div class="row">
-          <div class="col pt-3">
+          <div class="col pt-2">
             <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="jewelleryaltrationdetail"
               [allowColumnReordering]="true" [allowColumnResizing]="true"
               [columnAutoWidth]="true" [selectedRowKeys]="selectedKey">
@@ -63,12 +62,86 @@
   
       </div>
 
-      <div class="col-md-12">
+      <div class="col-md-12 pt-2">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
+              
+              <div class="row">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Sales Man :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 72%;">
+                    <input type="text" matInput />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-5 pt-3">
+                  <div class="p-2 bd-highlight">
+                    <button type="button" class="btn btn-primary apporoval-add-btn">
+                      Continue
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Percentage :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 72%;">
+                    <input type="text" matInput />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-5 pt-3">
+                  <div class="p-2 bd-highlight">
+                    <button type="button" class="btn btn-primary apporoval-add-btn">
+                  Save
+                </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Amount LC :</label>
+                <div class="col-md-5">
+                  <mat-form-field style="width: 72%;">
+                    <input type="text" matInput />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-5 pt-3">
+                  <div class="p-2 bd-highlight">
+                    <button type="button" class="btn btn-primary apporoval-add-btn">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
 
             </div>
 
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-8 d-flex">
+
+            <div class="p-2 bd-highlight">
+              <button type="button" class="btn btn-primary apporoval-add-btn">
+                Add
+              </button>
+            </div>
+
+            <div class="p-2 bd-highlight mg_2">
+              <button type="button" class="btn btn-primary apporoval-add-btn">
+                Delete
+              </button>
+            </div>
+
+            <div class="p-2 bd-highlight mg_2">
+              <button type="button" class="btn btn-primary apporoval-add-btn">
+                Close
+              </button>
+            </div> 
+
+          </div>
         </div>
       </div>
   
