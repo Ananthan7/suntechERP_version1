@@ -103,6 +103,11 @@ export class RepairCustomerDeliveryComponent implements OnInit {
     address:[''],
     check1:[''],
     check2:[''],
+    vocType:[''],
+    repairAmt:[''],
+    subTotal:[''],
+    roundOffAmount:[''],
+    netTotal:[''],
 
     process: ['',''],
     worker: ['PARIMA',''],
