@@ -53,6 +53,17 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  priceSchemeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 177,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Scheme',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   price1CodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -121,6 +132,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
@@ -154,6 +166,11 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+  codeSelected(e: any) {
+    this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE)
+    this.jewelleryaltrationdetailsFrom.controls.description.setValue(e.DESCRIPTION)
+    
   }
 
   stockCodeSelected(e: any) {
@@ -220,7 +237,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   }
 
   jewelleryaltrationdetailsFrom: FormGroup = this.formBuilder.group({
-    stockcode: [''],
+    stockcode: ['',[Validators.required]],
     description: [''],
     pcs: [''],
     refvoc: ['', [Validators.required]],
@@ -300,11 +317,11 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     dataTOparent.PROCESS_FORMDETAILS = this.jewelleryaltrationdetailsFrom.value;
     dataTOparent.METAL_DETAIL_GRID = this.metalDetailData; //grid data
     dataTOparent.POSTDATA = []
-
-    let API = 'DiamondJewelAlteration/InsertDiamondJewelAlteration'
+    console.log(this.content,'this.content');
+    
     let postData = {
       "UNIQUEID": 0,
-      "SRNO": 0,
+      "SRNO": this.content.SRNO,
       "STOCK_CODE": this.jewelleryaltrationdetailsFrom.value.stockcode,
       "DESCRIPTION": this.jewelleryaltrationdetailsFrom.value.description,
       "PCS": this.jewelleryaltrationdetailsFrom.value.pcs,
@@ -474,237 +491,42 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.jewelleryaltrationdetailsFrom.controls.remarks.setValue(this.content.REMARKS)
   }
 
-
-  update() {
-    if (this.jewelleryaltrationdetailsFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    let API = 'DiamondJewelAlteration/UpdateDiamondJewelAlteration/' + this.jewelleryaltrationdetailsFrom.value.branchCode + this.jewelleryaltrationdetailsFrom.value.voctype + this.jewelleryaltrationdetailsFrom.value.vocno + this.jewelleryaltrationdetailsFrom.value.yearMonth
-    let postData = {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "STOCK_CODE": this.jewelleryaltrationdetailsFrom.value.stockcode || "",
-          "DESCRIPTION": this.jewelleryaltrationdetailsFrom.value.description || "",
-          "PCS": this.jewelleryaltrationdetailsFrom.value.pcs || "",
-          "COSTFC":this.jewelleryaltrationdetailsFrom.value.costFC || "",
-          "COSTCC":this.jewelleryaltrationdetailsFrom.value.costCC || "",
-          "COSTFCNEW": this.jewelleryaltrationdetailsFrom.value.costFCNEW || "",
-          "COSTCCNEW": this.jewelleryaltrationdetailsFrom.value.costCCNEW || "",
-          "METALWT": this.jewelleryaltrationdetailsFrom.value.metalWT || "",
-          "PUREWT": 0,
-          "STONEWT": 0,
-          "GROSSWT": this.jewelleryaltrationdetailsFrom.value.gross || "",
-          "METAL_AMTFC":this.jewelleryaltrationdetailsFrom.value.metalAMTFC || "",
-          "METAL_AMTCC":this.jewelleryaltrationdetailsFrom.value.metalAMTCC || "",
-          "STONE_AMTFC": 0,
-          "STONE_AMTCC": 0,
-          "METALWT_NEW": this.jewelleryaltrationdetailsFrom.value.metalWTNEW || "",
-          "PUREWT_NEW": 0,
-          "STONEWT_NEW": 0,
-          "GROSSWT_NEW": this.jewelleryaltrationdetailsFrom.value.grossWTNEW || "",
-          "METAL_AMTFCNEW": 0,
-          "METAL_AMTCCNEW": 0,
-          "STONE_AMTFCNEW": 0,
-          "STONE_AMTCCNEW": 0,
-          "SET_ACCODE": this.jewelleryaltrationdetailsFrom.value.settings || "",
-          "SET_AMTFC":this.jewelleryaltrationdetailsFrom.value.settingsAMTFC || "",
-          "SET_AMTCC": this.jewelleryaltrationdetailsFrom.value.settingsAMTCC || "",
-          "SET_AMTFCNEW": 0,
-          "SET_AMTCCNEW": 0,
-          "POL_ACCODE": this.jewelleryaltrationdetailsFrom.value.polishing || "",
-          "POL_AMTFC": this.jewelleryaltrationdetailsFrom.value.polishingAMTFC || "",
-          "POL_AMTCC": this.jewelleryaltrationdetailsFrom.value.polishingAMTCC || "",
-          "POL_AMTFCNEW": 0,
-          "POL_AMTCCNEW": 0,
-          "RHO_ACCODE": this.jewelleryaltrationdetailsFrom.value.rhodium || "",
-          "RHO_AMTFC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTFC || "",
-          "RHO_AMTCC": this.jewelleryaltrationdetailsFrom.value.rhodiumAMTCC || "",
-          "RHO_AMTFCNEW": 0,
-          "RHO_AMTCCNEW": 0,
-          "MKG_ACCODE": this.jewelleryaltrationdetailsFrom.value.making || "",
-          "MKG_AMTFC": this.jewelleryaltrationdetailsFrom.value.makingAMTFC || "",
-          "MKG_AMTCC": this.jewelleryaltrationdetailsFrom.value.makingAMTCC || "",
-          "MKG_AMTFCNEW": 0,
-          "MKG_AMTCCNEW": 0,
-          "MIS_ACCODE": this.jewelleryaltrationdetailsFrom.value.misccharges || "",
-          "MIS_AMTFC":this.jewelleryaltrationdetailsFrom.value.miscchargesAMTFC || "",
-          "MIS_AMTCC": this.jewelleryaltrationdetailsFrom.value.miscchargesAMTCC || "",
-          "MIS_AMTFCNEW": 0,
-          "MIS_AMTCCNEW": 0,
-          "TOTALLAB_AMTFC": this.jewelleryaltrationdetailsFrom.value.totalAMTFC || "",
-          "TOTALLAB_AMTCC": this.jewelleryaltrationdetailsFrom.value.totalAMTCC || "",
-          "TOTALLAB_AMTFCNEW": 0,
-          "TOTALLAB_AMTCCNEW": 0,
-          "MFGVOC_REF": "string",
-          "MFGVOC_DATE": "2023-10-19T10:00:12.767Z",
-          "LOSS_ACCODE": "string",
-          "COST_CODE": this.jewelleryaltrationdetailsFrom.value.costcode || "",
-          "REMARKS_DETAIL": "string",
-          "STOCK_FCCOST": 0,
-          "STOCK_LCCOST": 0,
-          "PRICE1PER": this.jewelleryaltrationdetailsFrom.value.price1PER || "",
-          "PRICE2PER": this.jewelleryaltrationdetailsFrom.value.price2PER || "",
-          "PRICE3PER": this.jewelleryaltrationdetailsFrom.value.price3PER || "",
-          "PRICE4PER": this.jewelleryaltrationdetailsFrom.value.price4PER || "",
-          "PRICE5PER": this.jewelleryaltrationdetailsFrom.value.price5PER || "",
-          "PRICE1FC": this.jewelleryaltrationdetailsFrom.value.price1FC || "",
-          "PRICE1LC": this.jewelleryaltrationdetailsFrom.value.price1LC || "",
-          "PRICE2FC": this.jewelleryaltrationdetailsFrom.value.price2FC || "",
-          "PRICE2LC": this.jewelleryaltrationdetailsFrom.value.price2LC || "",
-          "PRICE3FC": this.jewelleryaltrationdetailsFrom.value.price3FC || "",
-          "PRICE3LC": this.jewelleryaltrationdetailsFrom.value.price3LC || "",
-          "PRICE4FC": this.jewelleryaltrationdetailsFrom.value.price4FC || "",
-          "PRICE4LC": this.jewelleryaltrationdetailsFrom.value.price4LC || "",
-          "PRICE5FC": this.jewelleryaltrationdetailsFrom.value.price5FC || "",
-          "PRICE5LC": this.jewelleryaltrationdetailsFrom.value.price5LC || "",
-          "CURRENCY_CODE": "stri",
-          "CC_RATE": 0,
-          "DT_BRANCH_CODE": this.branchCode,
-          "DT_VOCTYPE": "str",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH":  this.yearMonth,
-          "PLAT_ACCODE":this.jewelleryaltrationdetailsFrom.value.platecharges || "",
-          "CERT_ACCODE": this.jewelleryaltrationdetailsFrom.value.certcharges || "",
-          "PLAT_CHARGESFC": this.jewelleryaltrationdetailsFrom.value.platechargesFC || "",
-          "PLAT_CHARGESCC": this.jewelleryaltrationdetailsFrom.value.platechargesCC || "",
-          "CERT_CHARGESFC":this.jewelleryaltrationdetailsFrom.value.certchargesFC || "",
-          "CERT_CHARGESCC":this.jewelleryaltrationdetailsFrom.value.certchargesCC || "",
-          "PLAT_CHARGESFCNEW": 0,
-          "PLAT_CHARGESCCNEW": 0,
-          "CERT_CHARGESFCNEW": 0,
-          "CERT_CHARGESCCNEW": 0,
-          "COLOR": this.jewelleryaltrationdetailsFrom.value.metalcolor || "",
-        "TAG_LINES": "string",
-      "DetailComponents": [
-        {
-          "REFMID": this.jewelleryaltrationdetailsFrom.value.refvoc || "",
-          "MAINCODE":"",
-          "SLNO": 0,
-          "METALSTONE": "s",
-          "DIVISION": "s",
-          "DET_STOCK_CODE": "string",
-          "RET_STOCK_CODE": "string",
-          "KARAT_CODE": this.jewelleryaltrationdetailsFrom.value.karat || "",
-          "PURITY": 0,
-          "PCS": 0,
-          "WEIGHT": 0,
-          "PUREWT": 0,
-          "RATEFC": 0,
-          "RATECC": 0,
-          "AMOUNTFC": 0,
-          "AMOUNTCC": 0,
-          "REMOVED": 0,
-          "NEWENTRY": 0,
-          "LOC_TYPE": "string",
-          "COLOR": "string",
-          "SHAPE": "string",
-          "SIEVE": "string",
-          "STONE_TYPE": "string",
-          "CLARITY": "string",
-          "SIZE": "string",
-          "SIEVE_SET": "string"
-        }
-      ]
-    }
-
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.jewelleryaltrationdetailsFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
-
-  deleteRecord() {
-    if (!this.content.VOCTYPE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'DiamondJewelAlteration/DeleteDiamondJewelAlteration/' + this.jewelleryaltrationdetailsFrom.value.branchCode + this.jewelleryaltrationdetailsFrom.value.voctype + this.jewelleryaltrationdetailsFrom.value.vocno + this.jewelleryaltrationdetailsFrom.value.yearMonth
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.jewelleryaltrationdetailsFrom.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.jewelleryaltrationdetailsFrom.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
-    });
-  }
-
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions = []; // Clear the array
     }
+  }
+  checkStockCode(): boolean {
+    console.log('false')
+    if (this.jewelleryaltrationdetailsFrom.value.stockcode == '') {
+      this.commonService.toastErrorByMsgId('please enter stockcode')
+      return true
+    }
+    return false
+  }
+  priceSchemeValidate(e: any) {
+    console.log('yap')
+    if (this.checkStockCode()) return
+    this.jewelleryaltrationdetailsFrom.controls.pricescheme.setValue(e.PRICE_CODE)
+    let API = 'PriceSchemeMaster/GetPriceSchemeMasterList/' + this.jewelleryaltrationdetailsFrom.value.pricescheme
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.response) {
+
+          let data = result.response;
+          this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(data.PRICE1)
+          this.jewelleryaltrationdetailsFrom.controls.price2PER.setValue(data.PRICE2)
+          this.jewelleryaltrationdetailsFrom.controls.price3PER.setValue(data.PRICE3)
+          this.jewelleryaltrationdetailsFrom.controls.price4PER.setValue(data.PRICE4)
+          this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(data.PRICE5)
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
 }

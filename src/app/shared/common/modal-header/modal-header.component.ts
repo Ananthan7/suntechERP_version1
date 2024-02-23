@@ -28,6 +28,10 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewPost: boolean = false;
   @Input() isViewPreview: boolean = false;
   @Input() isViewExport: boolean = false;
+  @Input() isSelectAll: boolean = false;
+  @Input() isSelectNone: boolean = false;
+  @Input() isInvert: boolean = false;
+  @Input() isLock: boolean = false;
   @Input() editSaveBtnText?: string = '';
 
   branchCode: any = localStorage.getItem('userbranch')
@@ -68,6 +72,22 @@ export class ModalHeaderComponent implements OnInit {
     this.PostClick.emit();
   }
   PreviewClicked(){
+    this.PostClick.emit();
+
+  }
+  selectallClicked(){
+    this.PostClick.emit();
+
+  }
+  selectnoneClicked(){
+    this.PostClick.emit();
+
+  }
+  invertClicked(){
+    this.PostClick.emit();
+
+  }
+  lockClicked(){
     this.PostClick.emit();
 
   }

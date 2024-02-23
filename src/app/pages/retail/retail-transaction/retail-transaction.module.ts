@@ -51,7 +51,7 @@ import { RepairIssueToWorkshopComponent } from './repair-issue-to-workshop/repai
 import { RepairIssueFromWorkshopComponent } from './repair-issue-from-workshop/repair-issue-from-workshop.component';
 import { BranchTransferRepairRtnComponent } from './branch-transfer-repair-rtn/branch-transfer-repair-rtn.component';
 import { RepairCustomerDeliveryComponent } from './repair-customer-delivery/repair-customer-delivery.component';
-
+import { PosSalesPaymentComponent } from './point-of-sales-order/pos-sales-payment/pos-sales-payment.component';
 
 
 @NgModule({
@@ -88,16 +88,24 @@ import { RepairCustomerDeliveryComponent } from './repair-customer-delivery/repa
     PosSalesmanTargetAnalysisComponent, 
     BranchTransferRepairOutComponent, 
     BranchTransferRepairRtnComponent,
-    
+
+    LoyaltyRegisterComponent, 
+    PosSalesmanCommissionComponent, 
     GoldExchangeComponent, 
+
+    
     PosReturnComponent, 
     RepairMetalPurchaseComponent, 
     RepairDiamondPurchaseComponent, 
-    LoyaltyRegisterComponent, 
-    PosSalesmanCommissionComponent, 
     PosCreditSaleReciptComponent, 
+
+    
     RepairJewelleryReceiptComponent,     
     RepairIssueToWorkshopComponent, 
+    RepairIssueFromWorkshopComponent, 
+    BranchTransferRepairRtnComponent, 
+    RepairCustomerDeliveryComponent,
+    PosSalesPaymentComponent,
     RepairIssueFromWorkshopComponent,    
     RepairCustomerDeliveryComponent
     ],

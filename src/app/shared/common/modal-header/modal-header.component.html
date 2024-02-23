@@ -74,6 +74,30 @@
                     Export
                 </button>
             </div>
+            <div class="p-1" *ngIf="isSelectAll">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="selectallClicked()">
+                    Select All
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isSelectNone">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="selectnoneClicked()">
+                    Select None
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isInvert">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="invertClicked()">
+                    Invert
+                </button>
+            </div>
+            <div class="p-1" *ngIf="isLock">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="lockClicked()">
+                    Lock
+                </button>
+            </div>
             <div class="p-1 dropdown text-right" *ngIf="isViewMore">
                 <div class="d-inline-block" ngbDropdown
                     #myDrop="ngbDropdown">
