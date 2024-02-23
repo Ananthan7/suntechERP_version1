@@ -6,8 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (continueClick)="continueClick()"
-[isViewContinue]="true"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (continueClick)="lockClicked()"
+[isLock]="true"></modal-header>
 <div class="container-fluid pt-3">
     <form>
         <div class="row mb-3">
