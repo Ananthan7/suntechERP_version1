@@ -26,7 +26,10 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  summaryDetailData:any;
   currentDate = new Date();
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
   private subscriptions: Subscription[] = [];
   metalDetailData: any[] = [];
   user: MasterSearchModel = {
@@ -167,12 +170,34 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  codeSelected(e: any) {
-    this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE)
-    this.jewelleryaltrationdetailsFrom.controls.description.setValue(e.DESCRIPTION)
-    
+  //number validation
+  isNumeric(event: any) {
+    return this.comService.isNumeric(event);
   }
-
+  onFileChanged(event:any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result; 
+      };
+    }
+  }
+  codeSelected(data: any): void {
+    // this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE)
+    // this.jewelleryaltrationdetailsFrom.controls.description.setValue(e.DESCRIPTION)
+    if (data.STOCK_CODE) {
+      this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(data.STOCK_CODE)
+      this.jewelleryaltrationdetailsFrom.controls.description.setValue(data.DESCRIPTION)
+      this.stockCodeValidate({ target: { value: data.STOCK_CODE } }, 'STOCKCODE')
+    } else {
+      this.commonService.toastErrorByMsgId('MSG1531');
+    }
+  }
+  
   stockCodeSelected(e: any) {
     console.log(e);
     this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
@@ -528,5 +553,82 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  stockCodeValidate(event: any, flag?: string): void {
+    console.log('tpp')
+    // 'GetDesignStnmtlDetailNet'
+    if (event.target.value == 'stockcode') return
+    //this.snackBar.open('Loading...')
+   
+    let postData = {
+      "SPID": "003",
+      "parameter": {
+        "FLAG": 'VIEW',
+        "DESIGNCODE": this.jewelleryaltrationdetailsFrom.value.stockcode|| '',
+        "STRDESIGN_STOCK": 'Y',
+        "METAL_COLOR": '',
+        "MRG_PERC": '',
+        "ACCODE": this.content.PartyCode || ''
+        
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.dynamicData || result.status == 'Success') {
+         
+          let data: any = []
+          // 1st result set Summary details data
+          if (result.dynamicData[0] && result.dynamicData[0].length > 0) {
+            data = result.dynamicData[0]
+            data = this.commonService.arrayEmptyObjectToString(data)
+            this.summaryDetailData = data[0]
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531');
+          }
+          // 2nd and 3rd result Parts / Components details data
+          if ((result.dynamicData[1]?.length > 0) ||
+            (result.dynamicData[2]?.length > 0)) {
+            // this.gridComponents = result.dynamicData[1]
+            // this.gridParts = result.dynamicData[2]
+          } 
+          //4th result is BOM Details data
+          
+          
+          // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
 
+          
+
+          this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(this.summaryDetailData.STOCK_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.description.setValue(this.summaryDetailData.DESCRIPTION)
+
+          this.jewelleryaltrationdetailsFrom.controls.karat.setValue(data.KARAT_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.costcode.setValue(this.summaryDetailData.METALWT)
+          this.jewelleryaltrationdetailsFrom.controls.metalcolor.setValue(this.summaryDetailData.STOCK_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.Remarks.setValue(this.summaryDetailData.KARAT_CODE + ':' + this.summaryDetailData.COLOR + ':' + this.summaryDetailData.DESIGN_DESCRIPTION)
+
+          this.jewelleryaltrationdetailsFrom.controls.metalAMTFC.setValue(this.summaryDetailData.CATEGORY_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.metalWT.setValue(this.summaryDetailData.SUBCATEGORY_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.metalAMTCC.setValue(this.summaryDetailData.COLOR)
+          this.jewelleryaltrationdetailsFrom.controls.metalWTNEW.setValue(this.summaryDetailData.KARAT_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.diamonds.setValue(this.commonService.decimalQuantityFormat(this.summaryDetailData.PURITY, 'PURITY'))
+          this.jewelleryaltrationdetailsFrom.controls.gross.setValue(this.summaryDetailData.SUPPLIER_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.grossWTNEW.setValue(this.summaryDetailData.SEQ_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.costFC.setValue(this.summaryDetailData.BRAND_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.costCC.setValue(this.summaryDetailData.TYPE_CODE)
+          this.jewelleryaltrationdetailsFrom.controls.costFCNEW.setValue(this.summaryDetailData.SIZE)
+          this.jewelleryaltrationdetailsFrom.controls.costCCNEW.setValue(this.summaryDetailData.SURFACEPROPERTY)
+          this.jewelleryaltrationdetailsFrom.controls.pricescheme.setValue(this.summaryDetailData.WIDTH)
+          this.jewelleryaltrationdetailsFrom.controls.price1.setValue(this.summaryDetailData.THICKNESS)
+          this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(this.summaryDetailData.ENGRAVING_TEXT)
+          this.jewelleryaltrationdetailsFrom.controls.price1FC .setValue(this.summaryDetailData.ENGRAVING_FONT)
+
+          
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531');
+        }
+      }, err => {
+        
+        this.commonService.toastErrorByMsgId('MSG1531');
+      })
+    this.subscriptions.push(Sub)
+  }
 }

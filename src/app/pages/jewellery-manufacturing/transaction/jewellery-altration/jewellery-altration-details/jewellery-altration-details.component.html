@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true" [isViewDelete]="false" [isViewMore]="false" > </modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true" [isViewDelete]="false"
+    [isViewMore]="false"> </modal-header>
 <div class="container-fluid pt-2">
     <form [formGroup]="jewelleryaltrationdetailsFrom">
         <div class="row">
@@ -18,10 +19,10 @@
                                 Code :</label>
                             <div class="col-md-7">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text" matInput formControlName="stockcode" />
+                                    <input type="text" matInput formControlName="stockcode" (focusout)="stockCodeValidate($event)"/>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="stockCodeData"
-                                    (newRowClick)="codeSelected($event)">
+                                <master-search [MasterSearchData]="stockCodeData" (newRowClick)="codeSelected($event)"
+                                    jewelleryaltrationdetailsFrom >
                                 </master-search>
                             </div>
                         </div>
@@ -138,22 +139,26 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Diamonds :</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="diamonds" />
+                                    <input type="text" matInput formControlName="diamonds" style="text-align: right;"
+                                        (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput style="text-align: right;"
+                                        (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput style="text-align: right;"
+                                        (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput style="text-align: right;"
+                                        (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -161,23 +166,27 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Gross :</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput formControlName="gross" style="text-align: right;" />
+                                    <input type="number" matInput formControlName="gross" style="text-align: right;"
+                                        (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput style="text-align: right;"
+                                        (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="number" matInput formControlName="grossWTNEW"
-                                        style="text-align: right;" />
+                                        style="text-align: right;" style="text-align: right;"
+                                        (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput />
+                                    <input type="text" matInput style="text-align: right;"
+                                        (keypress)="isNumeric($event)" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -268,7 +277,8 @@
 
                             <div class="row">
                                 <div class="col">
-                                    <dx-data-grid #dataGrid id="gridContainer"  [dataSource]="tableData" [showBorders]="true" [showRowLines]="true">
+                                    <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData"
+                                        [showBorders]="true" [showRowLines]="true">
                                         <dxo-paging [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell" [allowUpdating]="true">
                                         </dxo-editing>
@@ -298,7 +308,7 @@
                         <mat-tab label="Original Components">
                             <div class="row">
                                 <div class="col">
-                                    <dx-data-grid #dataGrid id="gridContainer"  [showBorders]="true">
+                                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true">
                                         <dxo-paging [enabled]="false"></dxo-paging>
                                         <dxo-editing mode="cell" [allowUpdating]="true">
                                         </dxo-editing>
@@ -356,10 +366,9 @@
                     <div class="col-md-12">
                         <div class="price_box">
                             <a>PriceScheme</a>
-                            <master-search 
-                                [MasterSearchData]="priceSchemeData"
+                            <master-search [MasterSearchData]="priceSchemeData"
                                 (newRowClick)="priceSchemeValidate($event)"></master-search>
-                                <a>{{jewelleryaltrationdetailsFrom.value.pricescheme}}</a>
+                            <a>{{jewelleryaltrationdetailsFrom.value.pricescheme}}</a>
                         </div>
                     </div>
                 </div>
@@ -374,17 +383,19 @@
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price1FC" />
+                            <input type="number" matInput formControlName="price1FC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price1LC" style="text-align: right;" />
+                            <input type="number" matInput formControlName="price1LC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput style="text-align: right;" (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -399,17 +410,19 @@
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price2FC" style="text-align: right;" />
+                            <input type="number" matInput formControlName="price2FC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price2LC" style="text-align: right;" />
+                            <input type="number" matInput formControlName="price2LC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput style="text-align: right;" (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -424,17 +437,19 @@
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price3FC" style="text-align: right;" />
+                            <input type="number" matInput formControlName="price3FC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price3LC" style="text-align: right;" />
+                            <input type="number" matInput formControlName="price3LC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput style="text-align: right;" (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -449,17 +464,19 @@
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price4FC" style="text-align: right;" />
+                            <input type="number" matInput formControlName="price4FC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price4LC" style="text-align: right;" />
+                            <input type="number" matInput formControlName="price4LC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput style="text-align: right;" (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -474,17 +491,19 @@
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price5FC" />
+                            <input type="number" matInput formControlName="price5FC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="price5LC" style="text-align: right;" />
+                            <input type="number" matInput formControlName="price5LC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput />
+                            <input type="text" matInput style="text-align: right;" (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -498,7 +517,8 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Settings:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="settings" />
+                            <input type="text" matInput formControlName="settings" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
@@ -517,7 +537,8 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Polishing:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="polishing" />
+                            <input type="text" matInput formControlName="polishing" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
@@ -536,7 +557,8 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Rhodium:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="rhodium" />
+                            <input type="text" matInput formControlName="rhodium" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
@@ -555,7 +577,8 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Making:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="making" />
+                            <input type="text" matInput formControlName="making" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
@@ -574,7 +597,8 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Plate Charges:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="platecharges" />
+                            <input type="text" matInput formControlName="platecharges" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
@@ -593,7 +617,8 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Cert Charges:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="certcharges" />
+                            <input type="text" matInput formControlName="certcharges" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
@@ -612,7 +637,8 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Misc Charges:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="misccharges" />
+                            <input type="text" matInput formControlName="misccharges" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
@@ -632,7 +658,8 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">Total :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="totalAMTFC" style="text-align: right;" />
+                            <input type="number" matInput formControlName="totalAMTFC" style="text-align: right;"
+                                (keypress)="isNumeric($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">

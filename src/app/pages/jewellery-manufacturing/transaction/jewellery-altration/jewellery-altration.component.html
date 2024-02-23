@@ -6,8 +6,8 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-  (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
+
 
 <div class="container-fluid">
   <form [formGroup]="jewelleryaltrationFrom">
