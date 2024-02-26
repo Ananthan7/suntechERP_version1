@@ -1,0 +1,33 @@
+.add-btn {
+    font-size: 12px;
+    padding: 3px 20px !important;
+    border-radius: 5px !important;
+  }
+  
+  .box_wrap {
+    border: 1px solid #c1c1c1;
+    height: 200px;
+  }
+  
+  .bank_option{
+    border: 1px solid #656663;
+    padding: 3px;
+    margin-bottom: 2px;
+    background-color: #fff;
+  }
+  
+  .border-bottom-10 {
+    border-bottom: 1px solid #8f8e8e !important;
+    width: 100%;
+  }
+  
+  ::ng-deep {
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
+    .mat-tab-body-content {
+      overflow: hidden !important;
+    }
+  }
+  
