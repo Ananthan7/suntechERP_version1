@@ -30,6 +30,7 @@ export class MeltingTypeComponent implements OnInit {
   slNo = 0;
   selectedIndexes: any = [];
   viewMode: boolean = false;
+  viewModeField: boolean = true;
   SearchDisable: boolean = false;
 
 
@@ -43,6 +44,7 @@ export class MeltingTypeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.viewModeField = true;
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
@@ -53,70 +55,87 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   onSelectionChanged(event: any) {
-    const values = event.selectedRowKeys;
-    console.log(values);
-    let indexes: Number[] = [];
-    this.tableData.reduce((acc, value, index) => {
-      if (values.includes(parseFloat(value.SRNO))) {
-        acc.push(index);
-        console.log(acc);
+    // const values = event.selectedRowKeys;
+    // console.log(values);
+    // let indexes: Number[] = [];
+    // this.tableData.reduce((acc, value, index) => {
+    //   if (values.includes(parseFloat(value.SRNO))) {
+    //     acc.push(index);
+    //     console.log(acc);
 
+    //   }
+    //   return acc;
+    // }, indexes);
+    // this.selectedIndexes = indexes;
+    // console.log(this.selectedIndexes);
+    const values: number[] = event.selectedRowKeys;
+    const indexes: number[] = [];
+
+    values.forEach((selectedValue: number) => {
+      const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
+
+      // Check if the value is not already in the selectedIndexes array
+      if (index !== -1 && !this.selectedIndexes.includes(index)) {
+        indexes.push(index);
       }
-      return acc;
-    }, indexes);
+    });
+
     this.selectedIndexes = indexes;
     console.log(this.selectedIndexes);
   }
 
   formSubmit() {
-    if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
-      this.updateMeltingType()
-      return
+      this.updateMeltingType();
+      return;
     }
 
-    let API = 'MeltingType/InsertMeltingType'
-    let postData =
-    {
-      "MID": 0,
-      "MELTYPE_CODE": this.meltingTypeForm.value.code,
-      "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
-      "KARAT_CODE": this.meltingTypeForm.value.karat,
-      "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
-      "METAL_PER": this.metal,
-      "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
-      "CREATED_BY": this.userName,
-      "COLOR": this.meltingTypeForm.value.color,
-      "STOCK_CODE": this.meltingTypeForm.value.stockCode,
-      "MELTING_TYPE_DETAIL": this.tableData
+    if (this.meltingTypeForm.value.code != '' && this.meltingTypeForm.value.description != '' && this.meltingTypeForm.value.color != '' && this.tableData.length > 0 ) {
+      let API = 'MeltingType/InsertMeltingType';
+      let postData = {
+        "MID": 0,
+        "MELTYPE_CODE": this.meltingTypeForm.value.code,
+        "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
+        "KARAT_CODE": this.meltingTypeForm.value.karat,
+        "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
+        "METAL_PER": this.meltingTypeForm.value.metal,
+        "ALLOY_PER": parseFloat(this.meltingTypeForm.value.alloy),
+        "CREATED_BY": this.userName,
+        "COLOR": this.meltingTypeForm.value.color,
+        "STOCK_CODE": this.meltingTypeForm.value.stockCode,
+        "MELTING_TYPE_DETAIL": this.tableData,
+      };
 
-    }
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.meltingTypeForm.reset();
-                this.tableData = [];
-                this.close('reloadMainGrid')
-
-              }
-            });
+      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe(
+        (result) => {
+          if (result.response) {
+            if (result.status == 'Success') {
+              Swal.fire({
+                title: result.message || 'Success',
+                text: '',
+                icon: 'success',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok',
+              }).then((result: any) => {
+                if (result.value) {
+                  this.meltingTypeForm.reset();
+                  this.tableData = [];
+                  this.close('reloadMainGrid');
+                }
+              });
+            }
+          } else {
+            this.toastr.error('Not saved');
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+        },
+        (err) => alert(err)
+      );
+      this.subscriptions.push(Sub);
+    } else {
+      this.toastr.error('Fill All Mandatory Field and provide table data');
+    }
   }
+
   onInput(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
 
@@ -168,15 +187,25 @@ export class MeltingTypeComponent implements OnInit {
     this.meltingTypeForm.controls.karat.setValue(e['Karat Code']);
     this.meltingTypeForm.controls.purity.setValue(e.STD_PURITY);
 
-     // Calculate Metal and Alloy percentages
-     const purity = parseFloat(e.STD_PURITY);
-     const metalPercentage = purity * 100;
-     const alloyPercentage = 100 - metalPercentage;
- 
-     // Set the calculated values in the form controls
-     this.meltingTypeForm.controls.metal.setValue(metalPercentage);
-     this.meltingTypeForm.controls.alloy.setValue(alloyPercentage);
-     
+    //  // Calculate Metal and Alloy percentages
+    //  const purity = parseFloat(e.STD_PURITY);
+    //  const metalPercentage = purity * 100;
+    //  const alloyPercentage = 100 - metalPercentage;
+
+    //  // Set the calculated values in the form controls
+    //  this.meltingTypeForm.controls.metal.setValue(metalPercentage);
+    //  this.meltingTypeForm.controls.alloy.setValue(alloyPercentage);
+
+    // Calculate Metal and Alloy percentages
+    const purity = parseFloat(e.STD_PURITY.toFixed(3));
+    const metalPercentage = (purity * 100).toFixed(3);
+    const alloyPercentage = (100 - parseFloat(metalPercentage)).toFixed(3);
+
+    // Set the calculated values in the form controls
+    this.meltingTypeForm.controls.metal.setValue(parseFloat(metalPercentage));
+    this.meltingTypeForm.controls.alloy.setValue(parseFloat(alloyPercentage));
+
+
   }
 
   stockCodeData: MasterSearchModel = {
@@ -216,66 +245,58 @@ export class MeltingTypeComponent implements OnInit {
   addTableData() {
 
     if (this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "") {
-      console.log(this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity));
-      this.slNo = this.slNo + 1;
+      let length = this.tableData.length;
+      this.slNo = length + 1;
       let data = {
         "UNIQUEID": 0,
         "SRNO": this.slNo,
-        "MELTYPE_CODE": 'Y'||"",
+        "MELTYPE_CODE": 'Y' || "",
         "MELTYPE_DESCRIPTION": "",
         "KARAT_CODE": this.meltingTypeForm.value.karat,
         "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
         "DIVISION_CODE": this.meltingTypeForm.value.divCode,
         "DEF_ALLOY_STOCK": this.meltingTypeForm.value.stockCode,
         "DEF_ALLOY_DESCRIPTION": this.meltingTypeForm.value.stockCodeDes,
-        "ALLOY_PER": ""
-      }
-
+        "ALLOY_PER": "",
+      };
       this.tableData.push(data);
-      console.log(this.tableData);
-
-      // this.metal = this.meltingTypeForm.value.metal
-      // this.description=this.meltingTypeForm.value.description
-      // this.code=this.meltingTypeForm.value.code
-      // this.alloy=this.meltingTypeForm.value.alloy
-      // this.meltingTypeForm.controls.code.setValue("");
-      // this.meltingTypeForm.controls.description.setValue("");
-      // this.meltingTypeForm.controls.karat.setValue("");
-      // this.meltingTypeForm.controls.purity.setValue("");
-      // this.meltingTypeForm.controls.divCode.setValue("");
-      // this.meltingTypeForm.controls.stockCode.setValue("");
-      // this.meltingTypeForm.controls.stockCodeDes.setValue("");
-      // this.meltingTypeForm.controls.alloy.setValue("");
-      // this.meltingTypeForm.controls.color.setValue("");
-      // this.meltingTypeForm.controls.metal.setValue("");
+      console.log(data);
     }
     else {
       this.toastr.error('Please Fill all Mandatory Fields')
     }
-
   }
 
   setFormValues() {
     if (!this.content) return
     console.log(this.content);
 
-    this.meltingTypeForm.controls.mid.setValue(this.content.MID);
-    this.meltingTypeForm.controls.code.setValue(this.content.MELTYPE_CODE);
-    this.meltingTypeForm.controls.description.setValue(this.content.MELTYPE_DESCRIPTION);
-    this.meltingTypeForm.controls.karat.setValue(this.content.KARAT_CODE);
-    this.meltingTypeForm.controls.purity.setValue(this.content.PURITY);
-    this.meltingTypeForm.controls.metal.setValue(this.content.METAL_PER);
-    this.meltingTypeForm.controls.alloy.setValue(this.content.ALLOY_PER);
-    this.meltingTypeForm.controls.color.setValue(this.content.COLOR);
-    this.meltingTypeForm.controls.stockCode.setValue(this.content.STOCK_CODE);
-    this.tableData = this.content.MELTING_TYPE_DETAIL;
+    let API = 'MeltingType/GetMeltingTypeWithMID/' + this.content.MID;
+
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result: any) => {
+        console.log(result);
+
+        let data = result.response;
+
+        this.meltingTypeForm.controls.mid.setValue(data.MID);
+        this.meltingTypeForm.controls.code.setValue(data.MELTYPE_CODE);
+        this.meltingTypeForm.controls.description.setValue(data.MELTYPE_DESCRIPTION);
+        this.meltingTypeForm.controls.karat.setValue(data.KARAT_CODE);
+        this.meltingTypeForm.controls.purity.setValue(data.PURITY);
+        this.meltingTypeForm.controls.metal.setValue(data.METAL_PER);
+        this.meltingTypeForm.controls.alloy.setValue(data.ALLOY_PER);
+        this.meltingTypeForm.controls.color.setValue(data.COLOR);
+        this.meltingTypeForm.controls.stockCode.setValue(data.STOCK_CODE);
+        this.tableData = data.MELTING_TYPE_DETAIL;
+      })
 
   }
   updateMeltingType() {
-    let API = 'MeltingType/UpdateMeltingType/' + this.meltingTypeForm.value.mid;
+    let API = 'MeltingType/UpdateMeltingType/' + this.meltingTypeForm.value.code;
     let postData =
     {
-      "MID": this.meltingTypeForm.value.mid,
+      "MID": this.content.MID,
       "MELTYPE_CODE": this.meltingTypeForm.value.code,
       "MELTYPE_DESCRIPTION": this.meltingTypeForm.value.description,
       "KARAT_CODE": this.meltingTypeForm.value.karat,
@@ -285,8 +306,7 @@ export class MeltingTypeComponent implements OnInit {
       "CREATED_BY": this.userName,
       "COLOR": this.meltingTypeForm.value.color,
       "STOCK_CODE": this.meltingTypeForm.value.stockCode,
-      "MELTING_TYPE_DETAIL": this.tableData || []
-
+      "MELTING_TYPE_DETAIL": this.tableData,
     }
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -301,8 +321,8 @@ export class MeltingTypeComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.meltingTypeForm.reset()
-                this.tableData = []
+                this.meltingTypeForm.reset();
+                this.tableData = [];
                 this.close('reloadMainGrid')
               }
             });
@@ -405,11 +425,11 @@ export class MeltingTypeComponent implements OnInit {
   defaultAlloy: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 41,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Default Alloy Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION: "item = 'Y' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,

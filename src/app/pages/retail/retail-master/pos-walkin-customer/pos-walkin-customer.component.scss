@@ -1,0 +1,105 @@
+.metal-issue-add-btn {
+    font-size: 12px;
+    padding: 3px 20px !important;
+    border-radius: 5px !important;
+  }
+  
+  .metal-issue-del-btn {
+    font-size: 12px;
+    padding: 2px 10px 2px 10px;
+  }
+
+  ::ng-deep {
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
+  }
+  .apporoval-add-btn {
+    font-size: 12px;
+    padding: 3px 20px !important;
+    border-radius: 5px !important;
+  }
+  
+  .apporoval-del-btn {
+    font-size: 12px;
+    padding: 2px 10px 2px 10px;
+  }
+  
+  .table_head_title {
+    text-align: center;
+    background-color: #13b6db;
+    color: #ffffff;
+    text-transform: none;
+  }
+  
+  .table_sub_title {
+    text-align: center;
+    background-color: #c2e8f3;
+    color: #080808;
+    text-transform: none;
+  }
+  
+  
+  .metal-issue-add-btn {
+    font-size: 12px;
+    padding: 3px 20px !important;
+    border-radius: 5px !important;
+  }
+  
+  .metal-issue-del-btn {
+    font-size: 12px;
+    padding: 2px 10px 2px 10px;
+  }
+
+  ::ng-deep {
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
+  }
+
+  .upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+}
+
+.upload-btn-wrapper 
+.btnnew {
+    color: white;
+    font-size: 14px;
+    background: #ffffff;
+    padding: 70px 80px;
+    margin-left: 14px;
+}
+
+.upload-btn-wrapper 
+.uploadproduct {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    font-size: 100px;
+    cursor: pointer;
+}
+
+.btn-primary {
+  // background-color: #012C57 !important;
+  background-color: #415a77 !important;
+  border-color: #415a77 !important;
+  font-size: 12px;
+  border-radius: 5px !important;
+  padding: 6px 15px 6px 15px !important;
+}
+.btn-danger {
+  font-size: 12px;
+  padding: 6px 15px 6px 15px !important;
+  border-radius: 5px !important;
+}
+
+#gridContainer{
+  margin-bottom: 30px;
+}
