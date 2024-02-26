@@ -62,8 +62,6 @@ export class WorkerMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-
-
   workerMasterForm = this.formBuilder.group({
     WorkerCode: ['', [Validators.required]],
     WorkerDESCRIPTION: ['', [Validators.required]],
@@ -362,9 +360,9 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  CheckWorkerwiseMetalBalanceBoth(event:any) {
+  CheckWorkerwiseMetalBalanceBoth(event: any) {
     // if(event.checked) return
-    if(this.workerMasterForm.value.WorkerCode == ''){
+    if (this.workerMasterForm.value.WorkerCode == '') {
       this.commonService.toastErrorByMsgId('please select workercode')
       return
     }
@@ -379,12 +377,12 @@ export class WorkerMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") { //
           let data = result.dynamicData[0]
-          if(data.length > 0){
+          if (data.length > 0) {
             this.commonService.toastErrorByMsgId('worker cannot be inactive')
             this.workerMasterForm.controls.Active.setValue(true)
             this.workerMasterForm.controls.Active.disable();
           }
-        } 
+        }
       }, err => {
         this.commonService.toastErrorByMsgId('Server Error')
       })
@@ -440,6 +438,38 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  /**use: to check worker exists in db */
+  workerCodeChange(event: any, flag: any) {
+    this.accountMasterData.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let API = 'WorkerMaster/GetWorkerMasterAccodeLookUp/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.setwithFormControl(result.status, flag)
+      }, err => {
+        this.workerMasterForm.reset()
+      })
+    this.subscriptions.push(Sub)
+  }
+  setwithFormControl(status: any, code: any) {
+    if (status == "Failed") {
+      this.commonService.toastErrorByMsgId('MSG1531')
+      this.workerMasterForm.controls[code].setValue('')
+    }
+  }
+  /**use: to check process exists in db */
+  processCodeChange(event: any, code: any) {
+    this.accountMasterData.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let API = 'ProcessMasterDj/GetProcessMasterDjWithProcessCode/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.setwithFormControl(result.status, code)
+      }, err => {
+        this.workerMasterForm.reset()
+      })
+    this.subscriptions.push(Sub)
+  }
   //selected field value setting
   WorkerAcCodeSelected(data: any) {
     console.log(data);
@@ -450,9 +480,6 @@ export class WorkerMasterComponent implements OnInit {
   }
   defaultProcessSelected(data: any) {
     this.workerMasterForm.controls.DefaultProcess.setValue(data.Process_Code)
-  }
-  workerCodeChange(event: any) {
-    this.accountMasterData.SEARCH_VALUE = event.target.value
   }
 
   /**USE: close modal window */
