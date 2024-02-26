@@ -313,13 +313,22 @@
   </div>
 </div>
 
-<div class="text-right p-2">
-  <button type="button" class="btn btn-primary" (click)="addNew()">Add</button>
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Sales Estimation</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="addNew()" (cancelClick)="close()"></modal-header>
+
+<!-- <div class="text-right p-2 modal-header">
+  <button type="button" class="btn btn-primary float-end" (click)="addNew()">Add</button>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
-  </button>
+  </button> -->
   <!-- <zxing-scanner [formats]="['QR_CODE', 'EAN_13', 'CODE_128', 'DATA_MATRIX']" [autostart]="true" [autofocusEnabled]="true"></zxing-scanner> -->
-</div>
+<!-- </div> -->
 <!-- <div style="height: 15%;"> -->
 <!-- working -->
 <!-- <ngx-barcode-scanner #myscanner id="myscanner" [(value)]="barcode" [codes]="['code_128']" (exception)="onError($event)"  (valueChange)="onValueChanges($event)"
@@ -346,6 +355,7 @@
       </div>
     </section>
   </div> -->
+  <div class="modal-body">
 <div class="row">
   <div class="col-xl-12">
     <form [formGroup]="vocDataForm" style="width: 100%; max-width: none">
@@ -1660,6 +1670,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <ng-template #sales_payment_modal let-modal modal-lg>

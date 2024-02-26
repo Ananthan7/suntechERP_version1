@@ -15,7 +15,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class PosSalesmanCommissionComponent implements OnInit {
 
-  columnhead: any[] = ['SRNO', 'STOCK_CODE', 'DESCRIPTION', 'PCS', 'METALWT', 'STONEWT ', 'GROSSWT', 'COSTCC', 'COSTCCNEW', 'REMARKS_DETAIL'];
+  columnhead: any[] = ['S.No', 'Salesman', 'Amount',];
   @Input() content!: any;
   tableData: any[] = [];
   jewelleryaltrationdetail: any[] = [];

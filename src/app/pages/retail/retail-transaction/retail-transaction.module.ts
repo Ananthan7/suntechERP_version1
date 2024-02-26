@@ -88,14 +88,18 @@ import { PosSalesPaymentComponent } from './point-of-sales-order/pos-sales-payme
     PosSalesmanTargetAnalysisComponent, 
     BranchTransferRepairOutComponent, 
     BranchTransferRepairRtnComponent,
-    
+
+    LoyaltyRegisterComponent, 
+    PosSalesmanCommissionComponent, 
     GoldExchangeComponent, 
+
+    
     PosReturnComponent, 
     RepairMetalPurchaseComponent, 
     RepairDiamondPurchaseComponent, 
-    LoyaltyRegisterComponent, 
-    PosSalesmanCommissionComponent, 
     PosCreditSaleReciptComponent, 
+
+    
     RepairJewelleryReceiptComponent,     
     RepairIssueToWorkshopComponent, 
     RepairIssueFromWorkshopComponent, 

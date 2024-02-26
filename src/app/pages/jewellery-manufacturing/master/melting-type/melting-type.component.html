@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"  (deleteClick)="deleteMeltingType()"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -38,8 +38,8 @@
                                 <label for="input" class="col-sm-1 col-form-label">Metal % :</label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;margin-left: 7px;">
-                                        <input type="number" matInput step="0.001" min="0" formControlName="metal"
-                                            [readonly]="viewMode" (input)="onInput($event)"
+                                        <input type="number" matInput [readonly]="viewModeField" step="0.001" min="0" formControlName="metal"
+                                             (input)="onInput($event)"
                                             style="text-align: right;" />
                                     </mat-form-field>
                                 </div>
@@ -63,7 +63,7 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="karat"
-                                                        [readonly]="viewMode" />
+                                                    [readonly]="viewModeField" />
                                                 </mat-form-field>
                                                 <master-search [MasterSearchData]="karatCodeData"
                                                     (newRowClick)="KaratCodeSelected($event)"
@@ -79,8 +79,8 @@
                                             <label for="input" class="col-sm-4 col-form-label">Purity :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" matInput formControlName="purity"
-                                                        [readonly]="viewMode" style="text-align: right;" />
+                                                    <input type="number" matInput [readonly]="viewModeField" formControlName="purity"
+                                                      style="text-align: right;" />
                                                 </mat-form-field>
 
                                             </div>
@@ -94,8 +94,8 @@
                                             <label for="input" class="col-sm-4 col-form-label">Alloy % :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" matInput formControlName="alloy"
-                                                        [readonly]="viewMode" (input)="onInput($event)"
+                                                    <input type="number" matInput [readonly]="viewModeField" formControlName="alloy"
+                                                      (input)="onInput($event)"
                                                         style="text-align: right;" />
                                                 </mat-form-field>
 

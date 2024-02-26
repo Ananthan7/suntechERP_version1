@@ -41,7 +41,7 @@ export class OrderLockUnlockComponent implements OnInit {
   formSubmit(){
 
   }
-  continueClick(){}
+  lockClicked(){}
 
   close(data?: any) {
     //TODO reset forms and data before closing

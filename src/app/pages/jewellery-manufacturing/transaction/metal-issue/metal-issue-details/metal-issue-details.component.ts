@@ -26,6 +26,8 @@ export class MetalIssueDetailsComponent implements OnInit {
   yearMonth?: String;
   urls: string | ArrayBuffer | null | undefined;
   url: any;
+  jobNumberDetailData: any[] = [];
+  userName = localStorage.getItem('username');
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
   isViewContinue!: boolean;
@@ -85,6 +87,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.jobNumDes.setValue(e.job_description);
     this.metalIssueDetailsForm.controls.subJobNo.setValue(e.job_number);
     this.metalIssueDetailsForm.controls.subJobNoDes.setValue(e.job_description);
+    this.jobNumberValidate({ target: { value: e.job_number } })
     
   }
 
@@ -509,6 +512,93 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+  subJobNumberValidate(event?: any) {
+    let postData = {
+      "SPID": "040",
+      "parameter": {
+        'strUNQ_JOB_ID': this.metalIssueDetailsForm.value.subjobno,
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        console.log(postData,'uuu')
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          this.metalIssueDetailsForm.controls.processCode.setValue(data[0].PROCESS)
+          this.metalIssueDetailsForm.controls.workerCode.setValue(data[0].WORKER)
+          this.metalIssueDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.metalIssueDetailsForm.controls.pureWeight.setValue(data[0].PUREWT)
+          this.metalIssueDetailsForm.controls.pcs.setValue(data[0].PCS)
+          this.metalIssueDetailsForm.controls.workerCodeDes.setValue(data[0].WORKERDESC)
+          this.metalIssueDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
+          this.metalIssueDetailsForm.controls.grossWeight.setValue(data[0].NETWT)
+          this.metalIssueDetailsForm.controls.purity.setValue(data[0].PURITY)
+          this.metalIssueDetailsForm.controls.netWeight.setValue(data[0].NETWT)
+          // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
+          //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
+
+          // this.meltingIssuedetailsFrom.controls.StoneWeight.setValue(data[0].STONE)
+
+          // this.meltingIssuedetailsFrom.controls.PURITY.setValue(data[0].PURITY)
+          // this.meltingIssuedetailsFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
+          // this.meltingIssuedetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          // // this.stockCodeScrapValidate()
+          // this.meltingIssuedetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
+          // this.meltingIssuedetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
+          // this.meltingIssuedetailsFrom.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
+          // this.meltingIssuedetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
+          // this.meltingIssuedetailsFrom.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
+          // this.fillStoneDetails()
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strJobNumber': this.comService.nullToString(event.target.value),
+        'strCurrenctUser': this.comService.nullToString(this.userName)
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.jobNumberDetailData = data
+            this.metalIssueDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
+            this.metalIssueDetailsForm.controls.subJobNoDes.setValue(data[0].JOB_DESCRIPTION)
+
+            this.subJobNumberValidate()
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
 

@@ -92,6 +92,12 @@
                     Invert
                 </button>
             </div>
+            <div class="p-1" *ngIf="isLock">
+                <button type="button" class="btn btn-danger text-center"
+                    (click)="lockClicked()">
+                    Lock
+                </button>
+            </div>
             <div class="p-1 dropdown text-right" *ngIf="isViewMore">
                 <div class="d-inline-block" ngbDropdown
                     #myDrop="ngbDropdown">

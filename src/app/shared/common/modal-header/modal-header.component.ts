@@ -31,6 +31,7 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isSelectAll: boolean = false;
   @Input() isSelectNone: boolean = false;
   @Input() isInvert: boolean = false;
+  @Input() isLock: boolean = false;
   @Input() editSaveBtnText?: string = '';
 
   branchCode: any = localStorage.getItem('userbranch')
@@ -83,6 +84,10 @@ export class ModalHeaderComponent implements OnInit {
 
   }
   invertClicked(){
+    this.PostClick.emit();
+
+  }
+  lockClicked(){
     this.PostClick.emit();
 
   }
