@@ -283,7 +283,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           "VOCDATE": "2023-11-18T10:54:29.344Z",
           "JOB_NUMBER": this.metalIssueDetailsForm.value.jobNumber,
           "JOB_DATE": "2023-11-18T10:54:29.344Z",
-          "JOB_SO_NUMBER": this.metalIssueDetailsForm.value.subJobNo,
+          "JOB_SO_NUMBER": this.comService.emptyToZero(this.metalIssueDetailsForm.value.subJobNo),
           "UNQ_JOB_ID": "string",
           "JOB_DESCRIPTION": this.metalIssueDetailsForm.value.subJobNoDes,
           "BRANCH_CODE": "dm3",
@@ -312,31 +312,31 @@ export class MetalIssueDetailsComponent implements OnInit {
           "MAKING_AMOUNTLC": 0,
           "TOTAL_RATEFC": 0,
           "TOTAL_RATELC": 0,
-          "TOTAL_AMOUNTFC":  this.metalIssueDetailsForm.value.totalAmountFc,
-          "TOTAL_AMOUNTLC":  this.metalIssueDetailsForm.value.totalAmountLc,
+          "TOTAL_AMOUNTFC":  this.comService.emptyToZero(this.metalIssueDetailsForm.value.totalAmountFc),
+          "TOTAL_AMOUNTLC":   this.comService.emptyToZero(this.metalIssueDetailsForm.value.totalAmountLc),
           "PROCESS_CODE": this.metalIssueDetailsForm.value.processCode,
           "PROCESS_NAME": this.metalIssueDetailsForm.value.processCodeDesc,
           "WORKER_CODE": this.metalIssueDetailsForm.value.workerCode,
           "WORKER_NAME": this.metalIssueDetailsForm.value.workerCodeDes,
           "UNQ_DESIGN_ID": this.metalIssueDetailsForm.value.unqDesignId,
           "WIP_ACCODE": "string",
-          "UNIQUEID": this.metalIssueDetailsForm.value.uniqueId,
+          "UNIQUEID": this.comService.emptyToZero(this.metalIssueDetailsForm.value.uniqueId),
           "LOCTYPE_CODE": this.metalIssueDetailsForm.value.location,
-          "AMOUNTFC":this.metalIssueDetailsForm.value.amountFc,
-          "AMOUNTLC": this.metalIssueDetailsForm.value.amountLc,
+          "AMOUNTFC":this.comService.emptyToZero(this.metalIssueDetailsForm.value.amountFc),
+          "AMOUNTLC": this.comService.emptyToZero(this.metalIssueDetailsForm.value.amountLc),
           "PICTURE_NAME": this.metalIssueDetailsForm.value.pictureName,
           "PART_CODE": this.metalIssueDetailsForm.value.partCode,
           "MASTER_METAL": this.metalIssueDetailsForm.value.masterMetal,
-          "STONE_WT": this.metalIssueDetailsForm.value.stoneWeight,
+          "STONE_WT": this.comService.emptyToZero(this.metalIssueDetailsForm.value.stoneWeight),
           "NET_WT": this.metalIssueDetailsForm.value.netWeight,
           "DT_BRANCH_CODE": this.branchCode,
           "DT_VOCTYPE": "MIS",
           "DT_VOCNO": 0,
           "DT_YEARMONTH": "string",
-          "TO_STOCK_CODE": this.metalIssueDetailsForm.value.toStockCode,
-          "TO_STOCK_DESCRIPTION":  this.metalIssueDetailsForm.value.toStockCodeDes,
-          "PUDIFF": this.metalIssueDetailsForm.value.purityDiff,
-          "JOB_PURITY":  this.metalIssueDetailsForm.value.jobPurity,
+          "TO_STOCK_CODE": "string",
+          "TO_STOCK_DESCRIPTION":  this.comService.nullToString(this.metalIssueDetailsForm.value.toStockCodeDes),
+          "PUDIFF": this.comService.emptyToZero(this.metalIssueDetailsForm.value.purityDiff),
+          "JOB_PURITY":  this.comService.emptyToZero(this.metalIssueDetailsForm.value.jobPurity),
           "EXCLUDE_TRANSFER_WT": true
         }
           this.closed(postData);  
@@ -517,7 +517,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': this.metalIssueDetailsForm.value.subjobno,
+        'strUNQ_JOB_ID': this.metalIssueDetailsForm.value.subJobNo,
         'strBranchCode': this.comService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
@@ -533,6 +533,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.processCode.setValue(data[0].PROCESS)
           this.metalIssueDetailsForm.controls.workerCode.setValue(data[0].WORKER)
           this.metalIssueDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.metalIssueDetailsForm.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
           this.metalIssueDetailsForm.controls.pureWeight.setValue(data[0].PUREWT)
           this.metalIssueDetailsForm.controls.pcs.setValue(data[0].PCS)
           this.metalIssueDetailsForm.controls.workerCodeDes.setValue(data[0].WORKERDESC)
@@ -540,10 +541,12 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.grossWeight.setValue(data[0].NETWT)
           this.metalIssueDetailsForm.controls.purity.setValue(data[0].PURITY)
           this.metalIssueDetailsForm.controls.netWeight.setValue(data[0].NETWT)
+          this.metalIssueDetailsForm.controls.karat.setValue(data[0].KARAT)
+          this.metalIssueDetailsForm.controls.stoneWeight.setValue(data[0].STONE)
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
 
-          // this.meltingIssuedetailsFrom.controls.StoneWeight.setValue(data[0].STONE)
+          
 
           // this.meltingIssuedetailsFrom.controls.PURITY.setValue(data[0].PURITY)
           // this.meltingIssuedetailsFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
