@@ -201,7 +201,7 @@ export class SchemeReceiptComponent implements OnInit {
         item.CURRENCY_CODE == this.receiptDetailsForm.value.CurrCode
     );
     if (CURRENCY_RATE.length > 0) {
-      let currency = this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE,"RATE")
+      let currency = this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, "RATE")
       this.receiptDetailsForm.controls.CurrRate.setValue(currency);
     } else {
       this.receiptDetailsForm.controls.currency.setValue("");
@@ -244,8 +244,8 @@ export class SchemeReceiptComponent implements OnInit {
       );
     this.subscriptions.push(Sub);
   }
-  calculateDueDays(){
-    let date = this.commonService.addDaysToDate(this.receiptDetailsForm.value.RefDate,this.receiptDetailsForm.value.DueDays)
+  calculateDueDays() {
+    let date = this.commonService.addDaysToDate(this.receiptDetailsForm.value.RefDate, this.receiptDetailsForm.value.DueDays)
     this.receiptDetailsForm.controls.RefDate.setValue(date)
   }
   //date validation
@@ -363,9 +363,10 @@ export class SchemeReceiptComponent implements OnInit {
   }
   fetchSchemeId(customerId: any) {
     let API = `SchemeRegistration/GetSchemeRegistrationDetail/${customerId}`;
-    this.commonService.toastInfoByMsgId('MSG81447');
+    this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
+        this.commonService.closeSnackBarMsg();
         if (result.response) {
           let data = result.response;
           this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID)
@@ -383,7 +384,10 @@ export class SchemeReceiptComponent implements OnInit {
           this.commonService.toastErrorByMsgId(result.Message ? result.Message : "Scheme Not found");
         }
       },
-      (err) => this.commonService.toastErrorByMsgId("Server Error")
+      (err) => { 
+        this.commonService.closeSnackBarMsg();
+        this.commonService.toastErrorByMsgId("Server Error") 
+      }
     );
     this.subscriptions.push(Sub);
   }
@@ -413,7 +417,7 @@ export class SchemeReceiptComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
         console.log(result);
-        
+
         if (result.response) {
           let res = result.response.filter((item: any) => item.MODE == 3);
           if (res[0].ACCODE) {
@@ -458,14 +462,14 @@ export class SchemeReceiptComponent implements OnInit {
       this.currencyCodeChange(data.CURRENCY_CODE);
     }
   }
-  schemeCodeClick(){
-    if(this.receiptDetailsForm.value.POSCustomerCode == ''){
+  schemeCodeClick() {
+    if (this.receiptDetailsForm.value.POSCustomerCode == '') {
       this.commonService.toastErrorByMsgId('please select customer')
       return
     }
   }
   selectedScheme(data: any) {
-    if(this.receiptDetailsForm.value.POSCustomerCode == ''){
+    if (this.receiptDetailsForm.value.POSCustomerCode == '') {
       this.commonService.toastErrorByMsgId('please select customer')
       return
     }
@@ -733,7 +737,7 @@ export class SchemeReceiptComponent implements OnInit {
           let data = result.response;
           if (data.CONV_RATE) {
             this.receiptDetailsForm.controls.CurrRate.setValue(
-              this.commonService.decimalQuantityFormat(data.CONV_RATE,'RATE')
+              this.commonService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
             );
             this.newReceiptData.CONV_RATE = data.CONV_RATE;
           }
@@ -785,7 +789,7 @@ export class SchemeReceiptComponent implements OnInit {
 
   /**use: open new scheme details */
   openNewSchemeDetails(data?: any) {
-    if(this.receiptDetailsForm.value.SchemeCode == ''){
+    if (this.receiptDetailsForm.value.SchemeID == '') {
       this.commonService.toastErrorByMsgId('select a scheme')
       return
     }
@@ -1104,8 +1108,8 @@ export class SchemeReceiptComponent implements OnInit {
         item.TRN_Inv_Date = item.TRN_Inv_Date.toISOString();
     });
     console.log(this.orderedItems);
-    
-    this.orderedItemsHead = ['SRNO','Branch','Mode','AC_Code','CurrCode','AC_Description','CurrRate','Amount_FC'];
+
+    this.orderedItemsHead = ['SRNO', 'Branch', 'Mode', 'AC_Code', 'CurrCode', 'AC_Description', 'CurrRate', 'Amount_FC'];
     // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
     this.calculateTotalValues();
     // this.closeModal();

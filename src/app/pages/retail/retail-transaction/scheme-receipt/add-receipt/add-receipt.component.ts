@@ -130,7 +130,6 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.InstallmentAmount.setValue(
         this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
       )
-      console.log(this.content,'this.content.SCHEME_AMOUNT');
       
       this.receiptEntryForm.controls.SchemeTotalAmount.setValue(this.content.SCHEME_AMOUNT)
       this.receiptEntryForm.controls.SchemeBalance.setValue(
@@ -367,17 +366,35 @@ export class AddReceiptComponent implements OnInit {
     this.setGridData()
   }
   calculateGridAmount() {
+    let formData = this.receiptEntryForm.value
+    console.log(formData.InstallmentAmount);
+    
     this.gridDataSource.forEach((item: any, index: any) => {
-      if (this.receiptEntryForm.value.Amount_LC > item.PAY_AMOUNT_FC) {
-        this.gridDataSource[0].RCVD_AMOUNTFC = item.PAY_AMOUNT_FC
-        this.gridDataSource[1].RCVD_AMOUNTFC = item.PAY_AMOUNT_FC - this.receiptEntryForm.value.Amount_FC
-        this.gridDataSource[0].RCVD_AMOUNTCC = item.PAY_AMOUNT_CC
-        this.gridDataSource[1].RCVD_AMOUNTCC = item.PAY_AMOUNT_CC - this.receiptEntryForm.value.Amount_LC
+      console.log(formData.Amount_LC,'formData.InstallmentAmount');
+      
+      if (Number(formData.Amount_LC) > formData.InstallmentAmount || Number(formData.Amount_FC) > formData.InstallmentAmount) {
+        if(index == 0){
+          this.gridDataSource[0].RCVD_AMOUNTFC = formData.InstallmentAmount
+          this.gridDataSource[0].RCVD_AMOUNTCC = formData.InstallmentAmount
+        }else{
+          this.gridDataSource[index].RCVD_AMOUNTFC = this.calculateTot(this.gridDataSource[index-1].RCVD_AMOUNTCC,formData.InstallmentAmount)
+          this.gridDataSource[index].RCVD_AMOUNTCC = this.calculateTot(this.gridDataSource[index-1].RCVD_AMOUNTCC,formData.InstallmentAmount)
+        }
+        
+        // this.gridDataSource[1].RCVD_AMOUNTFC = formData.Amount_FC - formData.InstallmentAmount
+        // this.gridDataSource[1].RCVD_AMOUNTCC = formData.Amount_LC - formData.InstallmentAmount
       } else {
-        this.gridDataSource[0].RCVD_AMOUNTFC = this.receiptEntryForm.value.Amount_FC
-        this.gridDataSource[0].RCVD_AMOUNTCC = this.receiptEntryForm.value.Amount_LC
+        this.gridDataSource[0].RCVD_AMOUNTFC = formData.Amount_FC
+        this.gridDataSource[0].RCVD_AMOUNTCC = formData.Amount_LC
+        this.gridDataSource[1].RCVD_AMOUNTFC = 0.00
+        this.gridDataSource[1].RCVD_AMOUNTCC = 0.00
       }
     })
+  }
+  calculateTot(amount:any,installment:any){
+    if(parseInt(amount)>parseInt(installment)) return amount - installment
+    if(parseInt(amount)<parseInt(installment)) return amount
+    return 0
   }
   //currency Code Change
   currencyCodeChange(value: string) {
