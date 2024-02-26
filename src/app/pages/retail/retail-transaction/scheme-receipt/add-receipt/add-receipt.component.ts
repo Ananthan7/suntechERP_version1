@@ -130,7 +130,7 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.InstallmentAmount.setValue(
         this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
       )
-      
+
       this.receiptEntryForm.controls.SchemeTotalAmount.setValue(this.content.SCHEME_AMOUNT)
       this.receiptEntryForm.controls.SchemeBalance.setValue(
         this.commonService.decimalQuantityFormat((this.content.SCHEME_AMOUNT), 'AMOUNT')
@@ -305,13 +305,13 @@ export class AddReceiptComponent implements OnInit {
           // this.receiptEntryForm.controls.Amount_LC.setValue(this.content.SCH_INST_AMOUNT_FC)
           // this.receiptEntryForm.controls.Amount_FC.setValue(this.content.SCH_INST_AMOUNT_FC)
           this.receiptEntryForm.controls.Header_Amount.setValue(
-            this.commonService.decimalQuantityFormat(0,'AMOUNT')
+            this.commonService.decimalQuantityFormat(0, 'AMOUNT')
           )
           this.receiptEntryForm.controls.Amount_LC.setValue(
-            this.commonService.decimalQuantityFormat(0,'AMOUNT')
+            this.commonService.decimalQuantityFormat(0, 'AMOUNT')
           )
           this.receiptEntryForm.controls.Amount_FC.setValue(
-            this.commonService.decimalQuantityFormat(0,'AMOUNT')
+            this.commonService.decimalQuantityFormat(0, 'AMOUNT')
           )
           let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
 
@@ -367,35 +367,34 @@ export class AddReceiptComponent implements OnInit {
   }
   calculateGridAmount() {
     let formData = this.receiptEntryForm.value
-    console.log(formData.InstallmentAmount);
-    
+    let balanceAmount: number = parseInt(formData.Amount_LC) - parseInt(formData.InstallmentAmount)
+    let totalRowsToUpdate = Math.floor(formData.Amount_LC / formData.InstallmentAmount)
+
+    let flag = 0
     this.gridDataSource.forEach((item: any, index: any) => {
-      console.log(formData.Amount_LC,'formData.InstallmentAmount');
-      
-      if (Number(formData.Amount_LC) > formData.InstallmentAmount || Number(formData.Amount_FC) > formData.InstallmentAmount) {
-        if(index == 0){
-          this.gridDataSource[0].RCVD_AMOUNTFC = formData.InstallmentAmount
-          this.gridDataSource[0].RCVD_AMOUNTCC = formData.InstallmentAmount
-        }else{
-          this.gridDataSource[index].RCVD_AMOUNTFC = this.calculateTot(this.gridDataSource[index-1].RCVD_AMOUNTCC,formData.InstallmentAmount)
-          this.gridDataSource[index].RCVD_AMOUNTCC = this.calculateTot(this.gridDataSource[index-1].RCVD_AMOUNTCC,formData.InstallmentAmount)
-        }
-        
-        // this.gridDataSource[1].RCVD_AMOUNTFC = formData.Amount_FC - formData.InstallmentAmount
-        // this.gridDataSource[1].RCVD_AMOUNTCC = formData.Amount_LC - formData.InstallmentAmount
-      } else {
+      if(balanceAmount <= 0){
         this.gridDataSource[0].RCVD_AMOUNTFC = formData.Amount_FC
-        this.gridDataSource[0].RCVD_AMOUNTCC = formData.Amount_LC
-        this.gridDataSource[1].RCVD_AMOUNTFC = 0.00
-        this.gridDataSource[1].RCVD_AMOUNTCC = 0.00
+        flag = 1
       }
+      if(flag == 1) return
+      if(totalRowsToUpdate >= index+1){
+        item.RCVD_AMOUNTFC = formData.InstallmentAmount
+      }else{
+        item.RCVD_AMOUNTFC = parseInt(formData.Amount_LC) - (totalRowsToUpdate*formData.InstallmentAmount)
+        flag = 1
+      }
+      if(flag == 1) return
     })
   }
-  calculateTot(amount:any,installment:any){
-    if(parseInt(amount)>parseInt(installment)) return amount - installment
-    if(parseInt(amount)<parseInt(installment)) return amount
+  calculateTot(amount: any, installment: any) {
+    console.log(amount, 'amount');
+    console.log(installment, 'amount');
+    if (parseInt(amount) < 0) return amount+amount+amount
+    if (parseInt(amount) > parseInt(installment)) return installment
+    if (parseInt(amount) <= parseInt(installment)) return amount
     return 0
   }
+
   //currency Code Change
   currencyCodeChange(value: string) {
     if (value == '') return
