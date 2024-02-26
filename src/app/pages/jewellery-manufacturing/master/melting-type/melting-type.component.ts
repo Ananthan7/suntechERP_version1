@@ -244,7 +244,7 @@ export class MeltingTypeComponent implements OnInit {
 
   addTableData() {
 
-    if (this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "") {
+    if (this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != ""  && this.meltingTypeForm.value.color != "") {
       let length = this.tableData.length;
       this.slNo = length + 1;
       let data = {
