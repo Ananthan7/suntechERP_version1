@@ -338,59 +338,55 @@
                     height="300" [columnAutoWidth]="true"
                     [showBorders]="true"
                     [allowColumnResizing]="true">
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
+                    <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing> -->
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-selection mode="single"></dxo-selection>
                     <dxi-column dataField="SRNO" caption="Sr No"
-                        [allowEditing]="false"
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="PAY_DATE" dataType="date"
                         caption="Pay Date" [format]="'dd-MM-yyyy'"
-                        [allowEditing]="false"
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="PAY_AMOUNT_CC"
                         displayFormat="{0}"
-                        caption="Pay Amout" [allowEditing]="true"
+                        caption="Pay Amount" [allowEditing]="!viewMode"
                         alignment="right">
                     </dxi-column>
                     <dxi-column dataField="PAY_STATUS"
-                        [allowEditing]="false"
                         cellTemplate="PayStatus" caption="Pay Status"
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_DATE"
                         caption="Reminder Date" dataType="date"
                         [format]="'dd-MM-yyyy'"
-                        [allowEditing]="false" alignment="center">
+                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="REMAINDER_SEND"
                         caption="Reminder Send"
-                        [allowEditing]="false"
                         cellTemplate="ReminderSend"
                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_DATE" dataType="date"
                         [format]="'dd-MM-yyyy'"
                         caption="Receipt Date"
-                        [allowEditing]="false" alignment="center">
+                         alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_BRANCH_CODE"
                         caption="Receipt Branch"
-                        [allowEditing]="true" alignment="center">
+                        alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_VOCTYPE"
                         caption="Receipt Voctype"
-                        [allowEditing]="true" alignment="center">
+                        alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_VOCNO" caption="Receipt No"
-                        [allowEditing]="true" alignment="center">
+                        alignment="center">
                     </dxi-column>
                     <dxi-column dataField="RCVD_AMOUNTCC"
                         caption="Receipt Amount"
-                        [allowEditing]="true" alignment="center">
+                        alignment="center">
                     </dxi-column>
                     <dxi-column width="200"
                         caption="Attachment"

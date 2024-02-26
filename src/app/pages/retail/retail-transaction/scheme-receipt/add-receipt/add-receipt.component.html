@@ -83,16 +83,7 @@
                     bindLabel="ENGLISH"
                     bindValue="ENGLISH" (change)="paymentTypeChange($event)"
                     formControlName="Type">
-                </ng-select>
-                <!--  <mat-form-field style="width: 45%">
-                    <mat-select
-                        (selectionChange)="paymentTypeChange($event)"
-                        formControlName="Type">
-                        <mat-option *ngFor="let option of payTypeArray"
-                            [value]="option.ENGLISH">
-                            {{ option.ENGLISH }}</mat-option>
-                    </mat-select>
-                </mat-form-field> -->
+                </ng-select> 
             </div>
             <div class="col-lg-4 col-md-5 col-sm-12 d-flex">
                 <mat-form-field style="width: 30%">
@@ -153,7 +144,7 @@
                     <span class="matlabels">Number
                     </span>
                     <mat-form-field style="width: 55%">
-                        <input type="text" matInput readonly
+                        <input type="text" matInput [readonly]="isViewCheckDetail"
                             formControlName="ChequeNumber" />
                     </mat-form-field>
                 </div>
@@ -189,14 +180,14 @@
                     <mat-form-field
                         style="width: 50%;margin-left: 4px;">
                         <input matInput
-                            DateValidation
+                            DateValidation [readonly]="isViewCheckDetail"
                             [matDatepicker]="RefDate"
                             formControlName="ChequeDate"
                             placeholder="DD/MM/YYYY" />
                         <mat-datepicker-toggle
                             matSuffix
                             [for]="RefDate"></mat-datepicker-toggle>
-                        <mat-datepicker
+                        <mat-datepicker [disabled]="isViewCheckDetail"
                             #RefDate></mat-datepicker>
                     </mat-form-field>
                 </div>
@@ -237,7 +228,7 @@
                     <span class="matlabels">Drawn Bank
                     </span>
                     <mat-form-field style="width: 50%">
-                        <input type="text" matInput readonly
+                        <input type="text" matInput [readonly]="isViewCheckDetail"
                             class="text-right"
                             formControlName="DrawnBank"
                             (keypress)="isNumeric($event)" />
@@ -268,7 +259,7 @@
                     <span class="matlabels">Dep. Bank
                     </span>
                     <mat-form-field style="width: 50%">
-                        <input type="text" matInput readonly
+                        <input type="text" matInput [readonly]="isViewCheckDetail"
                             class="text-right"
                             formControlName="DepBank"
                             (keypress)="isNumeric($event)" />
@@ -308,20 +299,20 @@
                     <dxi-column dataField="SCH_CUSTOMER_CODE" caption="CUST"
                         alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="SCH_CUSTOMER_ID" caption="CUST_ID"
+                    <dxi-column dataField="SCH_CUSTOMER_ID" caption="CUST ID"
                         alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="PAY_DATE" caption="PAY_DATE"
+                    <dxi-column dataField="PAY_DATE" caption="PAY DATE"
                         alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="PAY_AMOUNT_FC" caption="PAY_AMT"
+                    <dxi-column dataField="PAY_AMOUNT_FC" caption="PAY AMT"
                         alignment="right">
                     </dxi-column>
                     <dxi-column dataField="PAY_AMOUNT_CC"
-                        caption="PAY_AMOUNT_CC" alignment="right">
+                        caption="PAY AMOUNT CC" alignment="right">
                     </dxi-column>
                     <dxi-column dataField="RCVD_AMOUNTFC"
-                        caption="RCVD_AMOUNTFC" alignment="right">
+                        caption="RCVD AMOUNT" alignment="right">
                     </dxi-column>
                     <dxi-column dataField="RCVD_AMOUNTCC"
                         caption="RCVD_AMOUNTCC" alignment="right">

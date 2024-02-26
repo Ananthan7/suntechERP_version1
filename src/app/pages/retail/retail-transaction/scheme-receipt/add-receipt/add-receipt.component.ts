@@ -19,10 +19,10 @@ export class AddReceiptComponent implements OnInit {
   @Output() newRowSaveClick = new EventEmitter();
   @Output() closebtnClick = new EventEmitter();
   branchArray: any[] = [];
-  typeCodeFilteredOptions!: Observable<any[]>;
   typeCodeArray: any[] = [];
   selectedTypeArray: any[] = [];
   isViewTypeCode: boolean = false;
+  isViewCheckDetail: boolean = true;
   currencyRate: any;
   payTypeArray: any[] = [];
   gridDataSource: any[] = [];
@@ -122,6 +122,7 @@ export class AddReceiptComponent implements OnInit {
       this.getPaymentType('Credit Card')
       this.getCreditCardMaster()
       this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
+      this.receiptEntryForm.controls.ChequeDate.setValue(this.commonService.currentDate)
     }
     if (this.content) {
       this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
@@ -129,9 +130,11 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.InstallmentAmount.setValue(
         this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
       )
+      console.log(this.content,'this.content.SCHEME_AMOUNT');
+      
       this.receiptEntryForm.controls.SchemeTotalAmount.setValue(this.content.SCHEME_AMOUNT)
       this.receiptEntryForm.controls.SchemeBalance.setValue(
-        this.commonService.decimalQuantityFormat((this.content.SCHEME_AMOUNT - this.content.SCH_INST_AMOUNT_FC), 'AMOUNT')
+        this.commonService.decimalQuantityFormat((this.content.SCHEME_AMOUNT), 'AMOUNT')
       )
     }
     this.paymentTypeChange({ ENGLISH: 'Cash' })
@@ -208,6 +211,7 @@ export class AddReceiptComponent implements OnInit {
   creditCardSelect(data: any) {
     this.receiptEntryForm.controls.TypeCode.setValue(data.Credit_Code)
     this.receiptEntryForm.controls.TypeCodeDESC.setValue(data.Description)
+    this.changeTypeCode(data.Credit_Code)
   }
   //party Code Change
   branchChange(event: any) {
@@ -294,15 +298,22 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_SAC_CODE);
           this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER);
           // this.content.SCHEME_AMOUNT = 100 //TODO
-          console.log(this.content.SCHEME_AMOUNT, 'this.content.SCHEME_AMOUNT ');
 
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
 
-          this.receiptEntryForm.controls.Header_Amount.setValue(this.content.SCH_INST_AMOUNT_FC)
-          this.receiptEntryForm.controls.Amount_LC.setValue(this.content.SCH_INST_AMOUNT_FC)
-          this.receiptEntryForm.controls.Amount_FC.setValue(this.content.SCH_INST_AMOUNT_FC)
-
+          // this.receiptEntryForm.controls.Header_Amount.setValue(this.content.SCH_INST_AMOUNT_FC)
+          // this.receiptEntryForm.controls.Amount_LC.setValue(this.content.SCH_INST_AMOUNT_FC)
+          // this.receiptEntryForm.controls.Amount_FC.setValue(this.content.SCH_INST_AMOUNT_FC)
+          this.receiptEntryForm.controls.Header_Amount.setValue(
+            this.commonService.decimalQuantityFormat(0,'AMOUNT')
+          )
+          this.receiptEntryForm.controls.Amount_LC.setValue(
+            this.commonService.decimalQuantityFormat(0,'AMOUNT')
+          )
+          this.receiptEntryForm.controls.Amount_FC.setValue(
+            this.commonService.decimalQuantityFormat(0,'AMOUNT')
+          )
           let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
 
           amount_LC = Number(amount_LC.toFixed(2))
@@ -357,14 +368,14 @@ export class AddReceiptComponent implements OnInit {
   }
   calculateGridAmount() {
     this.gridDataSource.forEach((item: any, index: any) => {
-      if (this.receiptEntryForm.value.Amount_LC >= item.PAY_AMOUNT_FC) {
-        item.RCVD_AMOUNTFC = item.PAY_AMOUNT_FC
-        this.gridDataSource[index + 1].RCVD_AMOUNTFC = item.PAY_AMOUNT_FC - this.receiptEntryForm.value.Amount_FC
-        item.RCVD_AMOUNTCC = item.PAY_AMOUNT_CC
-        this.gridDataSource[index + 1].RCVD_AMOUNTCC = item.PAY_AMOUNT_CC - this.receiptEntryForm.value.Amount_LC
+      if (this.receiptEntryForm.value.Amount_LC > item.PAY_AMOUNT_FC) {
+        this.gridDataSource[0].RCVD_AMOUNTFC = item.PAY_AMOUNT_FC
+        this.gridDataSource[1].RCVD_AMOUNTFC = item.PAY_AMOUNT_FC - this.receiptEntryForm.value.Amount_FC
+        this.gridDataSource[0].RCVD_AMOUNTCC = item.PAY_AMOUNT_CC
+        this.gridDataSource[1].RCVD_AMOUNTCC = item.PAY_AMOUNT_CC - this.receiptEntryForm.value.Amount_LC
       } else {
-        item.RCVD_AMOUNTFC = this.receiptEntryForm.value.Amount_FC
-        item.RCVD_AMOUNTCC = this.receiptEntryForm.value.Amount_LC
+        this.gridDataSource[0].RCVD_AMOUNTFC = this.receiptEntryForm.value.Amount_FC
+        this.gridDataSource[0].RCVD_AMOUNTCC = this.receiptEntryForm.value.Amount_LC
       }
     })
   }
@@ -396,25 +407,15 @@ export class AddReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.typeCodeArray = data.filter((value: any) => value.MODE == 1)
-
-          this.typeCodeFilteredOptions = this.receiptEntryForm.controls.TypeCode.valueChanges.pipe(
-            startWith(''),
-            map(value => this._filterTypeCode(value || '')),
-          );
         } else {
           this.toastr.error('Currency rate not Found')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  private _filterTypeCode(value: string): any[] {
-    const filterValue = value.toLowerCase();
-    return this.typeCodeArray.filter((option: any) =>
-      option.CREDIT_CODE.toLowerCase().includes(filterValue) ||
-      option.DESCRIPTION.toLowerCase().includes(filterValue));
-  }
+
   changeTypeCode(event: any) {
-    this.selectedTypeArray = this.typeCodeArray.filter((item: any) => item.CREDIT_CODE == event.option.value)
+    this.selectedTypeArray = this.typeCodeArray.filter((item: any) => item.CREDIT_CODE == event)
     this.receiptEntryForm.controls.TypeCodeDESC.setValue(this.selectedTypeArray[0].DESCRIPTION)
     this.receiptEntryForm.controls.AC_Code.setValue(this.selectedTypeArray[0].ACCODE)
 
@@ -428,15 +429,16 @@ export class AddReceiptComponent implements OnInit {
       .subscribe((result: any) => {
         if (result.response) {
           let data = result.response
-          this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode')
+          // this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode')
 
-          // this.payTypeArray = [
-          //   { ENGLISH: 'Cash' },
-          //   { ENGLISH: 'Credit Card' },
-          //   { ENGLISH: 'Cheque' },
-          //   { ENGLISH: 'IT' },
-          //   { ENGLISH: 'Others' },
-          // ]
+          this.payTypeArray = [
+            { ENGLISH: 'Cash' },
+            { ENGLISH: 'Credit Card' },
+            { ENGLISH: 'Cheque' },
+            { ENGLISH: 'TT' },
+            { ENGLISH: 'Others' },
+            { ENGLISH: 'VAT' },
+          ]
           this.receiptEntryForm.controls.Type.setValue('Cash')
         } else {
           this.toastr.error('Receipt Mode not found')
@@ -451,13 +453,20 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.AC_Code.setValue('');
       this.receiptEntryForm.controls.AC_Description.setValue('');
     } else if (event.ENGLISH == 'Cash') {
-      this.getBranchMasterList()
-    } else {
       this.receiptEntryForm.controls.TypeCode.setValue(null);
       this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
       this.isViewTypeCode = false;
+      this.getBranchMasterList()
+    } else if (event.ENGLISH == 'Cheque') {
+      this.isViewCheckDetail = false;
+    } else {
+      this.receiptEntryForm.controls.AC_Code.setValue('');
+      this.receiptEntryForm.controls.AC_Description.setValue('');
+      this.receiptEntryForm.controls.TypeCode.setValue(null);
+      this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
+      this.isViewTypeCode = false;
+      this.isViewCheckDetail = true;
     }
-
   }
   /**USE: branch autocomplete starts*/
   getBranchMasterList() {

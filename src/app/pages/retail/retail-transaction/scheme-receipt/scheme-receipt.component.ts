@@ -59,10 +59,10 @@ export class SchemeReceiptComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 2,
-    SEARCH_FIELD: "NAME",
+    SEARCH_FIELD: "",
     SEARCH_HEADING: "Pos Customer Master",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -124,6 +124,7 @@ export class SchemeReceiptComponent implements OnInit {
     SCHEME_AMOUNT: [0],
     SCH_CUSTOMER_CODE: [0],
     SCH_INST_AMOUNT_FC: [0],
+    PartyAmount: [''],
   });
   private subscriptions: Subscription[] = [];
   constructor(
@@ -362,18 +363,17 @@ export class SchemeReceiptComponent implements OnInit {
   }
   fetchSchemeId(customerId: any) {
     let API = `SchemeRegistration/GetSchemeRegistrationDetail/${customerId}`;
-
+    this.commonService.toastInfoByMsgId('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
         if (result.response) {
           let data = result.response;
           this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID)
           this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE)
+          this.receiptDetailsForm.controls.PartyAmount.setValue(data.SCH_ASSURED_AMT_FC)
           this.receiptDetailsForm.controls.SCH_CUSTOMER_CODE.setValue(data.SCH_CUSTOMER_CODE)
           this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data.SCH_CUSTOMER_ID)
           this.receiptDetailsForm.controls.SCH_INST_AMOUNT_FC.setValue(data.SCH_INST_AMOUNT_FC)
-          this.newReceiptData.SCHEME_AMOUNT = data?.PAY_AMOUNTFC
-
           this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(
             this.commonService.emptyToZero(data.PAY_AMOUNTFC)
           )
@@ -470,7 +470,6 @@ export class SchemeReceiptComponent implements OnInit {
       return
     }
     this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE);
-    this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID);
     this.fetchSchemeId(data.SCH_CUSTOMER_ID)
   }
   //customer selection from search

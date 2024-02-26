@@ -184,7 +184,7 @@ export class SchemeRegisterComponent implements OnInit {
   setInitialValues() {
     if (!this.content) return;
     this.schemeRegistrationForm.controls.VOCTYPE.setValue(this.content.PAY_VOCTYPE)
-    this.schemeRegistrationForm.controls.Code.setValue(this.content.SCH_SCHEME_CODE)
+    this.schemeRegistrationForm.controls.Code.setValue(this.content.SCH_CUSTOMER_CODE)
     this.schemeRegistrationForm.controls.Name.setValue(this.content.SCH_CUSTOMER_NAME)
     this.schemeRegistrationForm.controls.MobileNo.setValue(this.content.SCH_ALERT_MOBILE)
     this.schemeRegistrationForm.controls.Email.setValue(this.content.SCH_ALERT_EMAIL)
@@ -353,6 +353,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.isViewSchemeMasterGrid = false
   }
   fetchSchemeWithCustCode() {
+    if (this.schemeRegistrationForm.value.SchemeId == '' || this.content?.FLAG == 'VIEW') return
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = `SchemeMaster/GetSchemeMasterDetails/${this.schemeRegistrationForm.value.Branch}/${this.schemeRegistrationForm.value.SchemeId}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -485,7 +486,7 @@ export class SchemeRegisterComponent implements OnInit {
   }
   //search Value Change SCHEME_CUSTCODE
   searchValueChange(event: any, searchFlag: string, schemeFlag?: boolean) {
-    if (event.target.value == '') return
+    if (event.target.value == '' || this.content?.FLAG == 'VIEW') return
     // let API = `Scheme/CustomerMaster?${searchFlag}=${event.target.value}`
     let API = `PosCustomerMaster/GetCustomerByCode/${searchFlag}=${event.target.value}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
