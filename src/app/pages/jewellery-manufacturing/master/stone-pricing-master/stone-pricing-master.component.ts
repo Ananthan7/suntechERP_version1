@@ -21,6 +21,7 @@ export class StonePricingMasterComponent implements OnInit {
   viewMode: boolean = false;
   viewModeAll: boolean = false;
   viewDisable:boolean = false;
+  editPrice:boolean = false;
 
 
   priceCodeData: MasterSearchModel = {
@@ -78,7 +79,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve From',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "TYPES ='SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -90,7 +91,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve To',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "TYPES ='SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -146,11 +147,11 @@ export class StonePricingMasterComponent implements OnInit {
   currencyData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 8,
+    LOOKUPID: 176,
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: " CURRENCY_CODE<>''",
+    WHERECONDITION: " CMBRANCH_CODE = '' + strBranchCode + '' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -163,7 +164,7 @@ export class StonePricingMasterComponent implements OnInit {
     shape: ['', [Validators.required]],
     sieve_form: ['', [Validators.required]],
     sieve_to: ['', [Validators.required]],
-    color: ['', [Validators.required]],
+    color: [''],
     clarity: ['', [Validators.required]],
     sieve_from: [''],
     currency: ['', [Validators.required]],
@@ -175,8 +176,8 @@ export class StonePricingMasterComponent implements OnInit {
     size_to: [''],
     size_from: [''],
     issue_rate: ['', [Validators.required]],
-    selling: ['', [Validators.required]],
-    selling_rate: ['', [Validators.required]],
+    selling: [''],
+    selling_rate: [''],
   })
   constructor(
     private activeModal: NgbActiveModal,
@@ -190,11 +191,13 @@ export class StonePricingMasterComponent implements OnInit {
     console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
       this.viewFormValues();
+      this.editPrice = true;
       this.viewModeAll = true;
       this.viewDisable = true;
     }
     else(this.content.FLAG == 'EDIT')
     {
+      this.editPrice = true;
       this.setFormValues();
     }
 
@@ -271,6 +274,12 @@ export class StonePricingMasterComponent implements OnInit {
       return
     }
 
+    if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
+      this.toastr.error('Enter values either Selling % or Selling Rate');
+      return;
+    }
+    else{
+
     let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
     let postData = {
       "MID": 0,
@@ -323,6 +332,7 @@ export class StonePricingMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+}
 
   update() {
     console.log(this.stonePrizeMasterForm.value);
@@ -351,7 +361,7 @@ export class StonePricingMasterComponent implements OnInit {
       "LAST_SELLING_RATE": 0,
       "SELLING_PER": this.stonePrizeMasterForm.value.selling || 0,
       "CARAT_WT": this.stonePrizeMasterForm.value.carat_wt || 0,
-      "SIEVE": "",
+      "SIEVE": this.stonePrizeMasterForm.value.sieve_form || "",
       "SIEVE_SET": this.stonePrizeMasterForm.value.sieve_set || "",
       "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
       "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
