@@ -14,6 +14,8 @@ import { PosCrmDashboardComponent } from './pos-crm-dashboard/pos-crm-dashboard.
 import { FestivalSalesComparisonComponent } from './festival-sales-comparison/festival-sales-comparison.component';
 import { PosTargetDashboardComponent } from './pos-target-dashboard/pos-target-dashboard.component';
 import { PosDailyClosingBranchComponent } from './pos-daily-closing-summary/pos-daily-closing-branch/pos-daily-closing-branch.component';
+import { RepairEnquiryComponent } from './repair-enquiry/repair-enquiry.component';
+import { RepairRegisterComponent } from './repair-register/repair-register.component';
 
 
 @NgModule({
@@ -29,6 +31,8 @@ import { PosDailyClosingBranchComponent } from './pos-daily-closing-summary/pos-
     FestivalSalesComparisonComponent,
     PosTargetDashboardComponent,
     PosDailyClosingBranchComponent,
+    RepairEnquiryComponent,
+    RepairRegisterComponent,
   ],
   imports: [
     CommonModule,
