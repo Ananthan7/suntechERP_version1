@@ -378,31 +378,24 @@ export class AddReceiptComponent implements OnInit {
     })
     this.gridDataSource.forEach((item: any, index: any) => {
       if(balanceAmount <= 0){
-        this.gridDataSource[0].RCVD_AMOUNTFC = formData.Amount_FC
-        this.gridDataSource[0].RCVD_AMOUNTCC = formData.Amount_LC
+        this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(formData.Amount_FC,'THREE')
+        this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(formData.Amount_LC,'THREE')
         flag = 1
       }
       if(flag == 1) return
       if(totalRowsToUpdate >= index+1){
-        item.RCVD_AMOUNTFC = formData.InstallmentAmount
-        item.RCVD_AMOUNTCC = formData.InstallmentAmount
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(formData.InstallmentAmount,'THREE')
+        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(formData.InstallmentAmount,'THREE')
       }else{
         item.RCVD_AMOUNTFC = parseInt(formData.Amount_FC) - (totalRowsToUpdate*formData.InstallmentAmount)
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC,'THREE')
         item.RCVD_AMOUNTCC = parseInt(formData.Amount_LC) - (totalRowsToUpdate*formData.InstallmentAmount)
+        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC,'THREE')
         flag = 1
       }
       if(flag == 1) return
     })
   }
-  calculateTot(amount: any, installment: any) {
-    console.log(amount, 'amount');
-    console.log(installment, 'amount');
-    if (parseInt(amount) < 0) return amount+amount+amount
-    if (parseInt(amount) > parseInt(installment)) return installment
-    if (parseInt(amount) <= parseInt(installment)) return amount
-    return 0
-  }
-
   //currency Code Change
   currencyCodeChange(value: string) {
     if (value == '') return

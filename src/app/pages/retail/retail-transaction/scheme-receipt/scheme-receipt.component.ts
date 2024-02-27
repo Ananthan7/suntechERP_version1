@@ -23,12 +23,11 @@ export class SchemeReceiptComponent implements OnInit {
   schemeReceiptList: any[] = [];
   schemeReceiptListHead: any[] = [];
   orderedItems: any[] = [];
-  orderedItemsHead: any[] = [];
   branchArray: any[] = [];
   newReceiptData: any = {};
   currentDate: any = new Date();
   dataToEditrow: any;
-
+  disableAddBtn: boolean = true;
   // filteredOptions!: Observable<any[]>;
   salesmanArray: any[] = [];
   rightSideHeader: string = "";
@@ -185,7 +184,7 @@ export class SchemeReceiptComponent implements OnInit {
   onRowClickHandler(event: any) {
     this.VIEWEDITFLAG = 'EDIT'
     this.dataIndex = event.dataIndex
-    this.openNewSchemeDetails(event.data)
+    this.openNewReceiptDetails(event.data)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -224,10 +223,8 @@ export class SchemeReceiptComponent implements OnInit {
               item.SRNO = i + 1;
             });
           }
-          this.orderedItemsHead = Object.keys(this.orderedItems[0]);
           this.calculateTotalonView();
 
-          // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
           // this.ChangeDetector.detectChanges()
         } else {
           this.toastr.error(
@@ -780,15 +777,9 @@ export class SchemeReceiptComponent implements OnInit {
       );
     this.subscriptions.push(Sub);
   }
-  // private _filterSalesman(value: string): any[] {
-  //   const filterValue = value.toLowerCase();
-  //   return this.salesmanArray.filter((option: any) =>
-  //     option.SALESPERSON_CODE.toLowerCase().includes(filterValue) ||
-  //     option.DESCRIPTION.toLowerCase().includes(filterValue));
-  // }
 
   /**use: open new scheme details */
-  openNewSchemeDetails(data?: any) {
+  openNewReceiptDetails(data?: any) {
     if (this.receiptDetailsForm.value.SchemeID == '') {
       this.commonService.toastErrorByMsgId('select a scheme')
       return
@@ -828,7 +819,7 @@ export class SchemeReceiptComponent implements OnInit {
         "MODE": item.TypeCode || "",
         "ACCODE": item.AC_Code || "",
         "CURRENCY_CODE": item.CurrCode || "",
-        "CURRENCY_RATE": item.CurrRate || 0,
+        "CURRENCY_RATE": this.commonService.emptyToZero(item.CurrRate) || 0,
         "AMOUNTFC": this.commonService.emptyToZero(item.Amount_FC),
         "AMOUNTCC": this.commonService.emptyToZero(item.Amount_LC),
         "HEADER_AMOUNT": this.commonService.emptyToZero(item.Header_Amount),
@@ -851,8 +842,8 @@ export class SchemeReceiptComponent implements OnInit {
         "CARD_EXPIRY": this.commonService.formatDateTime(this.currentDate),
         "BASE_CONV_RATE": this.commonService.emptyToZero(this.receiptDetailsForm.value.CurrRate),
         "SUBLEDJER_CODE": "",
-        "TOTAL_AMOUNTFC": this.TOTAL_AMOUNTFC,
-        "TOTAL_AMOUNTCC": this.TOTAL_AMOUNTLC,
+        "TOTAL_AMOUNTFC": this.commonService.emptyToZero(this.TOTAL_AMOUNTFC),
+        "TOTAL_AMOUNTCC": this.commonService.emptyToZero(this.TOTAL_AMOUNTLC),
         "CGST_PER": 0,
         "CGST_AMOUNTFC": 0,
         "CGST_AMOUNTCC": 0,
@@ -886,9 +877,9 @@ export class SchemeReceiptComponent implements OnInit {
         "COMM_TAXAMOUNTCC": 0,
         "COMM_TAXAMOUNTFC": 0,
         "DT_TDS_CODE": "",
-        "TDS_PER": item.TRN_Per,
-        "TDS_AMOUNTFC": item.TRN_Amount_FC || 0,
-        "TDS_AMOUNTCC": item.TRN_Amount_LC || 0,
+        "TDS_PER": this.commonService.emptyToZero(item.TRN_Per),
+        "TDS_AMOUNTFC": this.commonService.emptyToZero(item.TRN_Amount_FC),
+        "TDS_AMOUNTCC": this.commonService.emptyToZero(item.TRN_Amount_LC),
         "PDC_WALLETAC": "",
         "WALLET_YN": "",
         "SL_CODE": "",
@@ -904,31 +895,8 @@ export class SchemeReceiptComponent implements OnInit {
     });
     return detailsArray
   }
-  formSubmit() {
-    if (this.orderedItems.length == 0) {
-      this.toastr.warning("Add new receipt to save", "", {
-        timeOut: 3000,
-      });
-      return;
-    }
-    if (this.isSaved) {
-      this.toastr.warning(
-        "Saved Receipt! please cancel to add new receipt",
-        "",
-        {
-          timeOut: 3000,
-        }
-      );
-      return;
-    }
-    if (this.receiptDetailsForm.invalid) {
-      this.toastr.warning("Select all required fields", "", {
-        timeOut: 3000,
-      });
-      return;
-    }
-
-    let postData = {
+  setPostDateToSave(){
+    return {
       "MID": 1,
       "BRANCH_CODE": this.receiptDetailsForm.value.Branch || "",
       "VOCTYPE": this.receiptDetailsForm.value.VocType || "PCR",
@@ -938,9 +906,9 @@ export class SchemeReceiptComponent implements OnInit {
       "YEARMONTH": this.commonService.yearSelected,
       "PARTYCODE": this.receiptDetailsForm.value.PartyCode || "",
       "PARTY_CURRENCY": this.receiptDetailsForm.value.CurrCode || "",
-      "PARTY_CURR_RATE": this.receiptDetailsForm.value.CurrRate || 0,
-      "TOTAL_AMOUNTFC": this.TOTAL_AMOUNTFC || 0,
-      "TOTAL_AMOUNTCC": this.TOTAL_AMOUNTLC || 0,
+      "PARTY_CURR_RATE": this.commonService.emptyToZero(this.receiptDetailsForm.value.CurrRate),
+      "TOTAL_AMOUNTFC": this.commonService.emptyToZero(this.TOTAL_AMOUNTFC),
+      "TOTAL_AMOUNTCC": this.commonService.emptyToZero(this.TOTAL_AMOUNTLC),
       "REMARKS": this.receiptDetailsForm.value.Narration || "",
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "NAVSEQNO": 0,
@@ -1004,6 +972,22 @@ export class SchemeReceiptComponent implements OnInit {
       "POSORDER_REF": "",
       Details: this.setDetailData(),
     };
+  }
+  formSubmit() {
+    if (this.orderedItems.length == 0) {
+      this.commonService.toastErrorByMsgId("Add new receipt to save");
+      return;
+    }
+    if (this.isSaved) {
+      this.commonService.toastErrorByMsgId("Saved Receipt! please cancel to add new receipt");
+      return;
+    }
+    if (this.receiptDetailsForm.invalid) {
+      this.commonService.toastErrorByMsgId("Select all required fields");
+      return;
+    }
+
+    let postData = this.setPostDateToSave()
     if (this.editFlag) {
       this.submitEditedForm(postData);
       return;
@@ -1082,7 +1066,6 @@ export class SchemeReceiptComponent implements OnInit {
     this.CustomerNameSearch = "";
     this.receiptDetailsForm.reset();
     this.orderedItems = [];
-    this.orderedItemsHead = [];
     this.receiptDetailsForm.controls.VocType.setValue("PCR");
 
     this.isViewSchemeMasterGrid = true;
@@ -1107,10 +1090,8 @@ export class SchemeReceiptComponent implements OnInit {
       if (item.TRN_Inv_Date != "")
         item.TRN_Inv_Date = item.TRN_Inv_Date.toISOString();
     });
-    console.log(this.orderedItems);
+    console.log(this.orderedItems,'///////////');
 
-    this.orderedItemsHead = ['SRNO', 'Branch', 'Mode', 'AC_Code', 'CurrCode', 'AC_Description', 'CurrRate', 'Amount_FC'];
-    // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
     this.calculateTotalValues();
     // this.closeModal();
   }

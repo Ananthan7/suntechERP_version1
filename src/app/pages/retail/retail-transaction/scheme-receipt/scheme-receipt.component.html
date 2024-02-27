@@ -331,9 +331,10 @@
                     </div>
 
                     <div class="row border-top">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                        <menu-buttons [viewAddBtn]="true"
+                            [viewDeleteBtn]="true"
                             [viewImportBtn]="false"
-                            (addClick)="openNewSchemeDetails()"
+                            (addClick)="openNewReceiptDetails()"
                             (deleteClick)="deleteTableData()">
                         </menu-buttons>
                         <!-- <div class="m-2">
@@ -385,7 +386,7 @@
                                 </dxi-column>
                                 <dxo-summary>
                                     <dxi-total-item column="SRNO"
-                                        summaryType="sum" displayFormat="{0}">
+                                        summaryType="count" displayFormat="{0}">
                                     </dxi-total-item>
                                     <dxi-total-item column="Amount_FC"
                                         summaryType="sum" displayFormat="{0}">
