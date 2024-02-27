@@ -58,7 +58,7 @@ export class SchemeReceiptComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 2,
-    SEARCH_FIELD: "",
+    SEARCH_FIELD: "code",
     SEARCH_HEADING: "Pos Customer Master",
     SEARCH_VALUE: "",
     WHERECONDITION: "",
@@ -124,6 +124,8 @@ export class SchemeReceiptComponent implements OnInit {
     SCH_CUSTOMER_CODE: [0],
     SCH_INST_AMOUNT_FC: [0],
     PartyAmount: [''],
+    TotalAmount: [0],
+    TotalTax: [0],
   });
   private subscriptions: Subscription[] = [];
   constructor(
@@ -368,10 +370,10 @@ export class SchemeReceiptComponent implements OnInit {
           let data = result.response;
           this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID)
           this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE)
-          this.receiptDetailsForm.controls.PartyAmount.setValue(data.SCH_ASSURED_AMT_FC)
           this.receiptDetailsForm.controls.SCH_CUSTOMER_CODE.setValue(data.SCH_CUSTOMER_CODE)
           this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data.SCH_CUSTOMER_ID)
           this.receiptDetailsForm.controls.SCH_INST_AMOUNT_FC.setValue(data.SCH_INST_AMOUNT_FC)
+          this.receiptDetailsForm.controls.POSCustomerEmail.setValue(data.SCH_ALERT_EMAIL)
           this.receiptDetailsForm.controls.SCHEME_AMOUNT.setValue(
             this.commonService.emptyToZero(data.PAY_AMOUNTFC)
           )
@@ -956,8 +958,8 @@ export class SchemeReceiptComponent implements OnInit {
       "TDS_TOTALCC": 0,
       "ADRRETURNREF": "",
       "ADVRETURN": false,
-      "SCH_SCHEME_CODE": this.receiptDetailsForm.value.SchemeID,
-      "SCH_CUSTOMER_ID": this.receiptDetailsForm.value.SchemeUniqueID,
+      "SCH_SCHEME_CODE": this.receiptDetailsForm.value.SchemeCode,
+      "SCH_CUSTOMER_ID": this.receiptDetailsForm.value.SchemeID,
       "REFDOCNO": "",
       "FROM_TOUCH": false,
       "SL_CODE": "",
@@ -1077,6 +1079,8 @@ export class SchemeReceiptComponent implements OnInit {
   }
   /**use: add new row to grid */
   addNewRow(data: any) {
+    console.log(data,'data');
+    
     if (data.SRNO) {
       this.orderedItems = this.orderedItems.filter(
         (item: any) => item.SRNO != data.SRNO
@@ -1084,12 +1088,15 @@ export class SchemeReceiptComponent implements OnInit {
     }
     this.orderedItems.push(data);
     this.orderedItems.map((s: any, i: any) => (s.id = i + 1));
+    //TRN_Per
     this.orderedItems.forEach((item: any, i: any) => {
+      item.VAT_AMT = parseInt(item.TRN_Per)
       item.Id = i + 1;
       item.SRNO = i + 1;
       if (item.TRN_Inv_Date != "")
         item.TRN_Inv_Date = item.TRN_Inv_Date.toISOString();
     });
+
     console.log(this.orderedItems,'///////////');
 
     this.calculateTotalValues();
@@ -1108,15 +1115,23 @@ export class SchemeReceiptComponent implements OnInit {
       this.totalValue = 0;
       this.totalValue_FC = 0;
       this.totalValueInText = "";
+      let vatTotal = 0
 
       this.orderedItems.forEach((item: any) => {
-        this.totalAmount_LC += item.Amount_LC;
-        this.VATAmount += item.TRN_Amount_LC;
-        this.totalAmount_FC += item.Amount_FC;
-        this.VATAmount_FC += item.TRN_Amount_FC;
-        this.TOTAL_AMOUNTFC += item.Amount_FC;
-        this.TOTAL_AMOUNTLC += item.Amount_LC;
+        item.AMOUNT_VAT = ((parseInt(item.Amount_FC)/(100 + item.VAT_AMT)) * 100).toFixed(2)
+        item.VAT_AMT = parseInt(item.Amount_FC) - item.AMOUNT_VAT
+        vatTotal += item.VAT_AMT;
+        this.totalAmount_LC += parseInt(item.Amount_LC);
+        this.VATAmount += parseInt(item.TRN_Amount_LC);
+        this.totalAmount_FC += parseInt(item.Amount_FC);
+        this.VATAmount_FC += parseInt(item.TRN_Amount_FC);
+        this.TOTAL_AMOUNTFC += parseInt(item.Amount_FC);
+        this.TOTAL_AMOUNTLC += parseInt(item.Amount_LC);
       });
+      this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
+      this.receiptDetailsForm.controls.TotalAmount.setValue(this.totalAmount_FC.toFixed(2))
+      this.receiptDetailsForm.controls.PartyAmount.setValue(this.totalAmount_FC.toFixed(2))
+
       this.totalValue = this.totalAmount_LC + this.VATAmount;
       this.totalValue_FC = this.totalAmount_FC + this.VATAmount_FC;
       this.totalPartyValue = this.totalAmount_LC + this.VATAmount;
@@ -1124,6 +1139,9 @@ export class SchemeReceiptComponent implements OnInit {
         .priceToTextWithCurrency(this.totalValue, "UNITED ARAB EMIRATES DIRHAM")
         ?.toUpperCase();
     }
+  }
+  private calculateVAT(VAT: number, AMOUNT: number): number {
+    return (AMOUNT / (100 + VAT)) * 100
   }
   /**use: caluculate the total values for printing */
   private calculateTotalonView(): void {

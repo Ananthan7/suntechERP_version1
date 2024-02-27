@@ -51,10 +51,10 @@ export class SchemeMasterComponent implements OnInit {
     tenurePeriod: [""],
     installmentAmount: ["", Validators.required],
     bonusInstallment: [""],
-    receiptModeone: ["", Validators.required],
-    receiptModeTwo: ["", Validators.required],
+    receiptModeone: [""],
+    receiptModeTwo: [""],
     cancelCharges: [""],
-    receiptModeThree: ["", Validators.required],
+    receiptModeThree: [""],
     depositIn: [""],
     startDate: [""],
     remarks: [""],
@@ -108,14 +108,18 @@ export class SchemeMasterComponent implements OnInit {
     let receipts1: Subscription = this.dataService.getDynamicAPI(receiptAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {
         this.receipt1List = resp.response
+        this.schemeMasterForm.controls.receiptModeone.setValue(this.receipt1List[0].CREDIT_CODE);
       }
     });
     let receiptAPI2 = 'CreditCardMaster/GetReceiptModes/2/' + this.branchCode;
     let receipts2: Subscription = this.dataService.getDynamicAPI(receiptAPI2).subscribe((resp: any) => {
       if (resp.status == 'Success') {
         this.receipt2List = resp.response
+        this.schemeMasterForm.controls.receiptModeTwo.setValue(this.receipt2List[0].CREDIT_CODE);
+        this.schemeMasterForm.controls.receiptModeThree.setValue(this.receipt2List[0].CREDIT_CODE);
       }
     });
+
   }
   getSchemeMasterList() {
     let API = 'SchemeMaster/GetSchemeMasterDetails/' + this.comService.branchCode + '/' + this.schemeMasterForm.value.code

@@ -132,9 +132,6 @@ export class AddReceiptComponent implements OnInit {
       )
 
       this.receiptEntryForm.controls.SchemeTotalAmount.setValue(this.content.SCHEME_AMOUNT)
-      this.receiptEntryForm.controls.SchemeBalance.setValue(
-        this.commonService.decimalQuantityFormat((this.content.SCHEME_AMOUNT), 'AMOUNT')
-      )
     }
     this.paymentTypeChange({ ENGLISH: 'Cash' })
   }
@@ -348,7 +345,7 @@ export class AddReceiptComponent implements OnInit {
   calculateAmountLC() {
     if (this.receiptEntryForm.value.SchemeTotalAmount < this.receiptEntryForm.value.Amount_LC) {
       this.receiptEntryForm.controls.Amount_LC.setValue(0)
-      this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than ' + this.receiptEntryForm.value.SchemeTotalAmount)
+      this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance' + this.receiptEntryForm.value.SchemeBalance)
       return
     }
     this.receiptEntryForm.controls.Header_Amount.setValue(this.receiptEntryForm.value.Amount_LC)
@@ -358,7 +355,7 @@ export class AddReceiptComponent implements OnInit {
   calculateAmountFC() {
     if (this.receiptEntryForm.value.SchemeTotalAmount < this.receiptEntryForm.value.Amount_FC) {
       this.receiptEntryForm.controls.Amount_FC.setValue(0)
-      this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than ' + this.receiptEntryForm.value.SchemeTotalAmount)
+      this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance' + this.receiptEntryForm.value.SchemeBalance)
       return
     }
     this.receiptEntryForm.controls.Header_Amount.setValue(this.receiptEntryForm.value.Amount_FC)
@@ -368,32 +365,50 @@ export class AddReceiptComponent implements OnInit {
   /**calculate amount and split to rows */
   calculateGridAmount() {
     let formData = this.receiptEntryForm.value
+    
+    let payAmountSum:number = 0
+    this.gridDataSource.forEach((item: any, index: any) => {
+      payAmountSum += parseInt(item.PAY_AMOUNT_FC)
+      item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0, 'THREE')
+      item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(0, 'THREE')
+    })
+    this.receiptEntryForm.controls.SchemeBalance.setValue(
+      this.commonService.decimalQuantityFormat((payAmountSum), 'AMOUNT')
+    )
+    if(formData.Amount_LC>payAmountSum || formData.Amount_FC>payAmountSum){
+      this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than ' + this.receiptEntryForm.value.SchemeBalance)
+      this.receiptEntryForm.controls.Amount_LC.setValue(
+        this.commonService.decimalQuantityFormat(0, 'AMOUNT')
+      )
+      this.receiptEntryForm.controls.Amount_FC.setValue(
+        this.commonService.decimalQuantityFormat(0, 'AMOUNT')
+      )
+      this.receiptEntryForm.controls.Header_Amount.setValue(
+        this.commonService.decimalQuantityFormat(0, 'AMOUNT')
+      )
+      return
+    }
     let balanceAmount: number = parseInt(formData.Amount_LC) - parseInt(formData.InstallmentAmount)
     let totalRowsToUpdate = Math.floor(formData.Amount_LC / formData.InstallmentAmount)
-
     let flag = 0
     this.gridDataSource.forEach((item: any, index: any) => {
-      item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0,'THREE')
-      item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(0,'THREE')
-    })
-    this.gridDataSource.forEach((item: any, index: any) => {
-      if(balanceAmount <= 0){
-        this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(formData.Amount_FC,'THREE')
-        this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(formData.Amount_LC,'THREE')
+      if (balanceAmount <= 0) {
+        this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(formData.Amount_FC, 'THREE')
+        this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(formData.Amount_LC, 'THREE')
         flag = 1
       }
-      if(flag == 1) return
-      if(totalRowsToUpdate >= index+1){
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(formData.InstallmentAmount,'THREE')
-        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(formData.InstallmentAmount,'THREE')
-      }else{
-        item.RCVD_AMOUNTFC = parseInt(formData.Amount_FC) - (totalRowsToUpdate*formData.InstallmentAmount)
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC,'THREE')
-        item.RCVD_AMOUNTCC = parseInt(formData.Amount_LC) - (totalRowsToUpdate*formData.InstallmentAmount)
-        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC,'THREE')
+      if (flag == 1) return
+      if (totalRowsToUpdate >= index + 1) {
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(formData.InstallmentAmount, 'THREE')
+        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(formData.InstallmentAmount, 'THREE')
+      } else {
+        item.RCVD_AMOUNTFC = parseInt(formData.Amount_FC) - (totalRowsToUpdate * formData.InstallmentAmount)
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
+        item.RCVD_AMOUNTCC = parseInt(formData.Amount_LC) - (totalRowsToUpdate * formData.InstallmentAmount)
+        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
         flag = 1
       }
-      if(flag == 1) return
+      if (flag == 1) return
     })
   }
   //currency Code Change

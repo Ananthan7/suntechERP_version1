@@ -144,7 +144,7 @@
                     <span class="matlabels">Number
                     </span>
                     <mat-form-field style="width: 55%">
-                        <input type="text" matInput [readonly]="isViewCheckDetail"
+                        <input type="number" matInput [readonly]="isViewCheckDetail"
                             formControlName="ChequeNumber" />
                     </mat-form-field>
                 </div>
@@ -230,8 +230,7 @@
                     <mat-form-field style="width: 50%">
                         <input type="text" matInput [readonly]="isViewCheckDetail"
                             class="text-right"
-                            formControlName="DrawnBank"
-                            (keypress)="isNumeric($event)" />
+                            formControlName="DrawnBank" />
                     </mat-form-field>
                 </div>
             </div>
@@ -261,8 +260,7 @@
                     <mat-form-field style="width: 50%">
                         <input type="text" matInput [readonly]="isViewCheckDetail"
                             class="text-right"
-                            formControlName="DepBank"
-                            (keypress)="isNumeric($event)" />
+                            formControlName="DepBank" />
                     </mat-form-field>
                 </div>
             </div>
