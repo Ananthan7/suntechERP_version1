@@ -234,10 +234,14 @@
                                     class="col-sm-4 col-form-label">Currency *
                                     :</label>
                                 <div class="col-sm-4">
-                                    <mat-form-field style="width: 100%;">
+                                    <mat-form-field style="width: 80%;">
                                         <input  type="text" matInput readonly
                                             formControlName="currency" />
                                     </mat-form-field>
+                                    <master-search *ngIf="!viewMode"
+                                    [MasterSearchData]="currencyCodeData"
+                                    (newRowClick)="currencyDataSelected($event)">
+                                </master-search>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">

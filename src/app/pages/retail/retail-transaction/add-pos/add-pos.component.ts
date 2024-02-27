@@ -279,19 +279,26 @@ export class AddPosComponent implements OnInit {
   itemcodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 14,
-    SEARCH_FIELD: "PREFIX_CODE",
+    LOOKUPID: 51,
+    SEARCH_FIELD: "STOCK_CODE",
+    // LOOKUPID: 14,
+    // SEARCH_FIELD: "PREFIX_CODE",
     SEARCH_HEADING: "Item Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "PREFIX_CODE<> ''",
+    WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
 
   itemcodeSelected(value: any) {
     console.log(value);
-    this.lineItemForm.controls.fcn_li_item_code.setValue(value.PREFIX_CODE);
-    this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION)
+    this.lineItemForm.controls.fcn_li_item_code.setValue(value.STOCK_CODE);
+    this.lineItemForm.controls.fcn_li_item_desc.setValue(value.DESCRIPTION);
+    this.getStockDesc({
+      target: {
+        value: value.STOCK_CODE
+      }
+    });
   }
 
   divisionCodeData: MasterSearchModel = {
@@ -305,10 +312,10 @@ export class AddPosComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  divisionCodeSelected(e:any){
+  divisionCodeSelected(e: any) {
     console.log(e);
     this.lineItemForm.controls.fcn_li_division.setValue(e.DIVISION_CODE);
-  
+
   }
 
   docTypeData: MasterSearchModel =
@@ -731,8 +738,8 @@ export class AddPosComponent implements OnInit {
     this.vocDataForm = this.formBuilder.group({
       fcn_voc_no: ['',],
       // fcn_voc_no: ['', Validators.required],
-      voc_type:['POS'],
-      voc_no:[1],
+      voc_type: ['POS'],
+      voc_no: [1],
       sales_person: ['', [Validators.required, this.autoCompleteValidator(() => this.salesPersonOptions, 'SALESPERSON_CODE')]],
       vocdate: ['', Validators.required],
       txtCurrency: [],
@@ -1697,7 +1704,7 @@ export class AddPosComponent implements OnInit {
     this.userwiseDiscount = this.comFunc.getCompanyParamValue('USERWISEDISCOUNT').toString() == '0' ? false : true;
 
     this.vocDataForm.controls.txtCurrency.setValue(this.comFunc.compCurrency);
-    
+
     this.vocDataForm.controls.txtCurRate.setValue(this.comFunc.getCurrRate(this.comFunc.compCurrency));
   }
   getKaratDetails() {
@@ -5874,8 +5881,8 @@ export class AddPosComponent implements OnInit {
       "STOCKCHECKOTHERBRANCH": false,
 
       // new fields added - 03-02-2024 for posplanet save calculation
-      "GSTVATONMAKING" : data.GSTVATONMAKING,
-      "EXCLUDEGSTVAT" : data.EXCLUDEGSTVAT,
+      "GSTVATONMAKING": data.GSTVATONMAKING,
+      "EXCLUDEGSTVAT": data.EXCLUDEGSTVAT,
 
     };
     console.log(data);
@@ -6654,7 +6661,7 @@ export class AddPosComponent implements OnInit {
                 );
 
                 this.setMetalRate(stockInfos.KARAT_CODE);
-                
+
                 this.manageCalculations();
               } else {
                 this.lineItemForm.controls['fcn_li_rate'].setValue(
@@ -8371,11 +8378,13 @@ export class AddPosComponent implements OnInit {
         }
 
         this.lineItemForm.controls.fcn_li_rate.setValue(dblStockFcCost);
+        this.manageCalculations();
+
         if (!this.newLineItem.LESSTHANCOST) {
 
           // if (blnCheckBulk == false && blnLessThanCost == false) //doubt
           {
-            if (this.comFunc.emptyToZero(this.vocDataForm.value.txtCurRate) < dblStockFcCost) {
+            if (this.comFunc.emptyToZero(value) < this.comFunc.emptyToZero(dblStockFcCost)) {
 
               this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
               this.dialogBox.afterClosed().subscribe((data: any) => {
@@ -9414,7 +9423,7 @@ export class AddPosComponent implements OnInit {
     // return ((percent / 100) * total).toFixed(2);
   }
   setMetalRate(karatCode: any) {
-    
+
     const value: any = this.karatRateDetails.filter(
       (data: any) => data.KARAT_CODE == karatCode
     )[0].KARAT_RATE;
@@ -11358,7 +11367,7 @@ export class AddPosComponent implements OnInit {
     let totalBeforeVat: number = 0;
     let totalVat: number = 0;
 
-    const res = this.nationalityMaster.filter((data: any) => data.CODE == this.customerDetailForm.value.fcn_cust_detail_nationality  )
+    const res = this.nationalityMaster.filter((data: any) => data.CODE == this.customerDetailForm.value.fcn_cust_detail_nationality)
     const natinality = res.length > 0 ? res[0].DESCRIPTION : '';
     const items = this.currentLineItems.filter((data: any) => data.DIVISION != 'X' && data.EXCLUDEGSTVAT == false && data.GSTVATONMAKING == false).map((data: any, i: any) => {
 

@@ -12,6 +12,7 @@ import { PosSalesPaymentComponent } from './pos-sales-payment/pos-sales-payment.
 export class PointOfSalesOrderComponent implements OnInit {
   [x: string]: any;
 
+  @ViewChild('sales_payment_modal') public sales_payment_modal!: NgbModal;
 
   vocMaxDate = new Date();
   currentDate = new Date();

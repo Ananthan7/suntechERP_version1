@@ -133,6 +133,7 @@
                         [dataSource]="metalIssueDetailsData"
                         [showBorders]="true"
                         (onSelectionChanged)="onSelectionChanged($event)"
+                        (onRowClick)="onRowClickHandler($event)"
                         >
                           <dxo-paging [enabled]="false"></dxo-paging>
                           <dxo-editing mode="cell" [allowUpdating]="true">

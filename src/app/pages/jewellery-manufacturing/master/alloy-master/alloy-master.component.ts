@@ -278,6 +278,18 @@ export class AlloyMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
+  currencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -295,6 +307,15 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price.setValue(e.PREFIX_CODE);
   }
+
+  currencyDataSelected(e: any) {
+    console.log(e);
+    if (this.checkStockCode()) return
+    this.alloyMastereForm.controls.currency.setValue(e.CURRENCY_CODE);
+    this.alloyMastereForm.controls.currencyRate.setValue(e.CONV_RATE);
+     
+  }
+
 
   subcategoryCodeSelected(e: any) {
     if (this.checkStockCode()) return

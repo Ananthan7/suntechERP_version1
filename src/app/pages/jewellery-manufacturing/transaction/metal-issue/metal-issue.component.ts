@@ -20,11 +20,12 @@ export class MetalIssueComponent implements OnInit {
   divisionMS: any = 'ID';
   tableData: any[] = [];
   columnhead: any[] = [
+    { title: 'SRNO', field:'SRNO'},
     { title: 'Job Id', field: 'JOB_NUMBER' },
     { title: 'Uniq job Id', field: 'JOB_SO_NUMBER' },
     { title: 'Design', field: 'DESIGN_CODE' },
     { title: 'Stock Code', field: 'STOCK_CODE' },
-    { title: 'Division', field: 'SUB_STOCK_CODE' },
+    { title: 'Division', field: 'DIVCODE' },
     { title: 'Description', field: 'STOCK_DESCRIPTION' },
     { title: 'Carat', field: 'GROSS_WT' },
     { title: 'Process', field: 'PROCESS_CODE' },
@@ -43,6 +44,10 @@ export class MetalIssueComponent implements OnInit {
   selectedIndexes: any = [];
   getdata!: any[];
   private subscriptions: Subscription[] = [];
+  tableRowCount: number = 0;
+  detailData: any[] = [];
+  selectRowIndex: any;
+  selectedKey: number[] = []
  
   constructor(
     private activeModal: NgbActiveModal,
@@ -51,7 +56,7 @@ export class MetalIssueComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
-    
+    private commonService: CommonServiceService,
   ) { }
 
 
@@ -60,6 +65,7 @@ export class MetalIssueComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
 
     this.setvalues()
+    this.setAllInitialValues()
   }
 
   
@@ -67,36 +73,109 @@ export class MetalIssueComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
-  openaddmetalissue() {
-    this.srNo= this.srNo+1;
+  deleteTableData(): void {
+    console.log(this.selectedKey,'data')
+    this.selectedKey.forEach((element: any) => {
+      this.metalIssueDetailsData.splice(element.SRNO-1,1)
+      })
+   
+  }
+  openaddmetalissue(data?: any) {
+    console.log(data)
+    if (data) {
+      data[0] = this.metalIssueForm.value;
+    } else {
+      data = [{ HEADERDETAILS: this.metalIssueForm.value }]
+    }
     const modalRef: NgbModalRef = this.modalService.open(MetalIssueDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+
     modalRef.result.then((postData) => {
-      console.log(postData);      
+      console.log(postData);
       if (postData) {
-        console.log('Data from modal:', postData);    
-        if (postData.reopen= true) {
-          this.openaddmetalissue();    
-        }   
+        console.log('Data from modal:', postData);
         this.metalIssueDetailsData.push(postData);
+        console.log(this.metalIssueDetailsData);
+        this.setValuesToHeaderGrid(postData);
+
       }
     });
-    modalRef.componentInstance.data = this.metalIssueDetailsData;
   }
+  onRowClickHandler(event: any) {
+
+    this.selectRowIndex = (event.dataIndex)
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+    this.openaddmetalissue(selectedData)
+    console.log(selectedData)
+    console.log("fired.")
+    console.log(this.selectRowIndex, event);
+
+  }
+   
+   
+  
+  setValuesToHeaderGrid(detailDataToParent: any) {
+    let PROCESS_FORMDETAILS = detailDataToParent
+    if (PROCESS_FORMDETAILS.SRNO) {
+      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+    } else {
+      this.tableRowCount += 1
+      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+    }
+
+    this.tableData.push(PROCESS_FORMDETAILS)
+
+    if (detailDataToParent) {
+      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+    }
+    //  this.getSequenceDetailData(PROCESS_FORMDETAILS);
+
+  }
+  swapObjects(array1: any, array2: any, index: number) {
+    // Check if the index is valid
+    if (index >= 0 && index < array1.length) {
+      array1[index] = array2[0];
+    } else {
+      console.error('Invalid index');
+    }
+  }
+
+  // openaddmetalissue() {
+  //   this.srNo= this.srNo+1;
+  //   const modalRef: NgbModalRef = this.modalService.open(MetalIssueDetailsComponent, {
+  //     size: 'xl',
+  //     backdrop: true,//'static'
+  //     keyboard: false,
+  //     windowClass: 'modal-full-width',
+  //   });
+  //   modalRef.result.then((postData) => {
+  //     console.log(postData);      
+  //     if (postData) {
+  //       console.log('Data from modal:', postData);    
+  //       if (postData.reopen= true) {
+  //         this.openaddmetalissue();    
+  //       }   
+  //       this.metalIssueDetailsData.push(postData);
+  //     }
+  //   });
+  //   modalRef.componentInstance.data = this.metalIssueDetailsData;
+  // }
+ 
+  
         
   stock_codetemp(data:any,value: any){
     console.log(data);
     this.tableData[value.data.SN - 1].stock_code = data.postData.stockCode;
   }
 
-  deleteTableData(){
-   
-  }
+  // deleteTableData(){
+    
+  // }
   
   removeLineItemsGrid(event: any) {
   }
@@ -162,12 +241,54 @@ export class MetalIssueComponent implements OnInit {
     this.selectedIndexes = indexes;
   }
 
+  setAllInitialValues() {
+    console.log(this.content)
+    if (!this.content) return
+    let API = `JobMetalIssueMasterDJ/GetJobMetalIssueMasterDJWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.metalIssueDetailsData = data.Details
+          data.Details.forEach((element:any) => {
+            this.tableData.push({
+              stockcode: element.STOCK_CODE,
+              process: element.PROCESS_CODE,
+              worker: element.WORKER_CODE,
+              pcs: element.PCS,
+              grossweight: element.GROSS_WT,
+              purity: element.PURITY,
+              pureweight: element.PUREWT,
+              SRNO: element.SRNO,
+              Rate: element.RATE,
+              Amount: element.Amount,
+            
+
+            })
+          });
+          this.metalIssueForm.controls.voctype.setValue(data.VOCTYPE)
+          this.metalIssueForm.controls.vocno.setValue(data.VOCNO)
+          this.metalIssueForm.controls.vocdate.setValue(data.VOCDATE)
+          this.metalIssueForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
+          this.metalIssueForm.controls.workerDes.setValue(data.Details[0].WORKER_NAME)
+
+
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+    
+  }
+
   metalIssueForm: FormGroup = this.formBuilder.group({
     voctype: ['',[Validators.required]],
     time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
     vocdate: ['',[Validators.required]],
     enteredBy: [''],
-    vocno: [''],
+    vocno: [1],
     worker: [''],
     workerDes: [''],
     remarks: [''],   
@@ -181,6 +302,8 @@ export class MetalIssueComponent implements OnInit {
   removedata(){
     this.tableData.pop();
   }
+ 
+
     formSubmit(){
   
       if(this.content && this.content.FLAG == 'EDIT'){
@@ -197,10 +320,10 @@ export class MetalIssueComponent implements OnInit {
         "MID": 0,
   "VOCTYPE": this.metalIssueForm.value.voctype || "",
   "BRANCH_CODE": this.branchCode,
-  "VOCNO": this.metalIssueForm.value.vocno || "",
+  "VOCNO": this.metalIssueForm.value.VOCNO,
   "VOCDATE": this.metalIssueForm.value.vocdate || "",
   "YEARMONTH": this.yearMonth,
-  "DOCTIME": this.metalIssueForm.value.time || "",
+  "DOCTIME": "2024-02-23T14:21:27.753Z",
   "CURRENCY_CODE": "",
   "CURRENCY_RATE": 0,
   "METAL_RATE_TYPE": "",
@@ -230,7 +353,7 @@ export class MetalIssueComponent implements OnInit {
       let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         .subscribe((result) => {
           if (result.response) {
-            if(result.status == "Success"){
+            if (result.status.trim() == "Success"){
               Swal.fire({
                 title: result.message || 'Success',
                 text: '',
@@ -402,4 +525,5 @@ export class MetalIssueComponent implements OnInit {
         this.subscriptions = []; // Clear the array
       }
     }
+    
 }
