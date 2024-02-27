@@ -52,6 +52,7 @@ import { RepairIssueFromWorkshopComponent } from './repair-issue-from-workshop/r
 import { BranchTransferRepairRtnComponent } from './branch-transfer-repair-rtn/branch-transfer-repair-rtn.component';
 import { RepairCustomerDeliveryComponent } from './repair-customer-delivery/repair-customer-delivery.component';
 import { PosSalesPaymentComponent } from './point-of-sales-order/pos-sales-payment/pos-sales-payment.component';
+import { GoldExchangeDetailsComponent } from './gold-exchange/gold-exchange-details/gold-exchange-details.component';
 
 
 @NgModule({
@@ -107,7 +108,7 @@ import { PosSalesPaymentComponent } from './point-of-sales-order/pos-sales-payme
     RepairCustomerDeliveryComponent,
     PosSalesPaymentComponent,
     RepairIssueFromWorkshopComponent,    
-    RepairCustomerDeliveryComponent
+    RepairCustomerDeliveryComponent, GoldExchangeDetailsComponent
     ],
   imports: [
     CommonModule,

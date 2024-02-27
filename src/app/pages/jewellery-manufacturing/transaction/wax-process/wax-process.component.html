@@ -84,10 +84,7 @@
             
           <div class="col-3">
             <div class="p-2 bd-highlight">
-              <button type="button" class="btn btn-primary apporoval-add-btn"
-                  >
-                Posted
-              </button>
+              <h6>Posted</h6>
           </div>
           </div>
 
@@ -189,26 +186,19 @@
                   <div *dxTemplate="let data of 'IssuePcstemp'">
                     <input type="number" (change)="IssuePcstextevent($event,data)"  style="text-align: right;" />
                   </div>
+
+                  <dxo-summary>
+                    <dxi-total-item column="GrossWt">
+                    </dxi-total-item>
+                    <dxi-total-item column="OrdPcs">
+                    </dxi-total-item>
+                    <dxi-total-item column="IssuePcs">
+                    </dxi-total-item>                 
+
+                  </dxo-summary>
                 </dx-data-grid>
 
               </div>
-              <div class="row">
-                <div class="col-6"></div>
-              
-                <div class="col-2"> <mat-form-field>
-                 <input type="text" matInput formControlName="processcode" />
-               </mat-form-field></div>
-                  
-               <div class="col-2"> <mat-form-field>
-                 <input type="text" matInput formControlName="processcode" />
-               </mat-form-field></div>
-               <div class="col-2"> <mat-form-field>
-                 <input type="text" matInput formControlName="processcode" />
-               </mat-form-field></div>
-                
-              
-               </div>
-               
                <div class="col-md-4">
                 <div class="row my-2">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Remarks * :</label>
