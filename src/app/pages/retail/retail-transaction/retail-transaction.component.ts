@@ -157,12 +157,7 @@ export class RetailTransactionComponent implements OnInit {
       'MetalBranchTransferInAutoRepairComponent': MetalBranchTransferInAutoRepairComponent,  
       'DiamondBranchTransferOutRepairComponent': DiamondBranchTransferOutRepairComponent,  
       'DiamondBranchTransferInAutoRepairComponent': DiamondBranchTransferInAutoRepairComponent,  
-      'RepairSaleComponent': RepairSaleComponent,  
-
-      
-      
-
-     
+      'RepairSaleComponent': RepairSaleComponent,      
       
 
       // Add components and update in operationals > menu updation grid form component name
