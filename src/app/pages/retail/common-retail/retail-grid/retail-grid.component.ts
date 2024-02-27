@@ -136,7 +136,7 @@ export class RetailGridComponent implements OnInit {
       return
     }
     let params
-    if (this.vocType != 'SCR') {
+    // if (this.vocType != 'SCR') {
       params = {
         "PAGENO": this.pageIndex,
         "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
@@ -153,18 +153,19 @@ export class RetailGridComponent implements OnInit {
           }
         }
       }
-    }  else {
-      params = {
-        "PAGENO": this.pageIndex,
-        "RECORDS": this.pageSize,
-        "TABLE_NAME": this.tableName,
-        "CUSTOM_PARAM": {
-          "FILTER": {
-            "PAY_BRANCH_CODE": this.branchCode,
-          } 
-        }
-      }
-    }
+    // } 
+    //  else {
+    //   params = {
+    //     "PAGENO": this.pageIndex,
+    //     "RECORDS": this.pageSize,
+    //     "TABLE_NAME": this.tableName,
+    //     "CUSTOM_PARAM": {
+    //       "FILTER": {
+    //         "PAY_BRANCH_CODE": this.branchCode,
+    //       } 
+    //     }
+    //   }
+    // }
 
 
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
