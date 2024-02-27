@@ -46,6 +46,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
 import { CustomDateFormat3, DATE_FORMAT_3 } from './pages/retail/retail-transaction/pos-currency-receipt/pos-currency-receipt-details/cust-dateformats.component';
 
 
+
 const dbConfig: DBConfig = {
   name: 'suntechPos',
   version: 1,

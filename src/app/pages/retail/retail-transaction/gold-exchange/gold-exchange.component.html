@@ -1,5 +1,5 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Purchase Direct</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Gold POS Purchase Direct</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -201,7 +201,7 @@
             <label for="inputPassword" class="col-sm-12 col-form-label">Line Items</label>
             <div class="col-md-3 d-flex mb-2">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                    >
+                (addClick)="opengoldposdirectdetail()"  >
                 </menu-buttons>
             </div>
             <div class="col-md-12">

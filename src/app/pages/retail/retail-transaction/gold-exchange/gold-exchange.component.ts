@@ -7,6 +7,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { GoldExchangeDetailsComponent } from './gold-exchange-details/gold-exchange-details.component';
 
 @Component({
   selector: 'app-gold-exchange',
@@ -164,6 +165,15 @@ export class GoldExchangeComponent implements OnInit {
     this.posPurchaseForm.controls.custName.setValue(e.NAME);
     this.posPurchaseForm.controls.email.setValue(e.EMAIL);
     this.posPurchaseForm.controls.moblie.setValue(e.MOBILE);
+  }
+
+  opengoldposdirectdetail() {
+    const modalRef: NgbModalRef = this.modalService.open(GoldExchangeDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
   }
 
   

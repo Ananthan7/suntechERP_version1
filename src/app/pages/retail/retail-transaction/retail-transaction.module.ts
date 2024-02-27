@@ -52,6 +52,7 @@ import { RepairIssueFromWorkshopComponent } from './repair-issue-from-workshop/r
 import { BranchTransferRepairRtnComponent } from './branch-transfer-repair-rtn/branch-transfer-repair-rtn.component';
 import { RepairCustomerDeliveryComponent } from './repair-customer-delivery/repair-customer-delivery.component';
 import { PosSalesPaymentComponent } from './point-of-sales-order/pos-sales-payment/pos-sales-payment.component';
+import { GoldExchangeDetailsComponent } from './gold-exchange/gold-exchange-details/gold-exchange-details.component';
 import { RepairDetailsComponent } from './repair-jewellery-receipt/repair-details/repair-details.component';
 import { MetalBranchTransferOutRepairComponent } from './metal-branch-transfer-out-repair/metal-branch-transfer-out-repair.component';
 import { MetalBranchTransferInAutoRepairComponent } from './metal-branch-transfer-in-auto-repair/metal-branch-transfer-in-auto-repair.component';
@@ -113,6 +114,8 @@ import { DiamondBranchTransferInAutoRepairDetailsComponent } from './diamond-bra
     BranchTransferRepairRtnComponent, 
     RepairCustomerDeliveryComponent,
     PosSalesPaymentComponent,
+    RepairIssueFromWorkshopComponent,    
+    RepairCustomerDeliveryComponent, GoldExchangeDetailsComponent,
     RepairIssueFromWorkshopComponent,
     RepairCustomerDeliveryComponent,     
     RepairDetailsComponent, 
