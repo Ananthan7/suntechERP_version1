@@ -23,7 +23,7 @@
                                         Type * :</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="voctype"/>
+                                            <input type="text" matInput formControlName="voctype" [readonly]="viewMode"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -53,7 +53,7 @@
                                             <input type="date" matInput  formControlName="vocdate"/>
                                         </mat-form-field> -->
                                           <mat-form-field style="width: 72%;">
-                                            <input matInput [matDatepicker]="vocdate"  formControlName="vocdate"
+                                            <input matInput [matDatepicker]="vocdate"  formControlName="vocdate" [readonly]="viewMode"
                                             placeholder="DD/MM/YYYY"  DateValidation />
                                           <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                                           <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
@@ -67,9 +67,9 @@
                                         By:</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput  formControlName="enteredBy"/>
+                                            <input type="text" matInput  formControlName="enteredBy" [readonly]="viewMode"/>
                                         </mat-form-field>
-                                        <master-search [MasterSearchData]="enteredByCodeData" (newRowClick)="enteredByCodeSelected($event)">
+                                        <master-search [MasterSearchData]="enteredByCodeData" (newRowClick)="enteredByCodeSelected($event)" *ngIf="!viewMode">
                                         </master-search>
                                     </div>
                                 </div>
@@ -93,14 +93,14 @@
                                         :</label>
                                     <div class="col-md-7 d-flex">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput  formControlName="worker"/>
+                                            <input type="text" matInput  formControlName="worker" [readonly]="viewMode"/>
                                         </mat-form-field>
-                                         <master-search [MasterSearchData]="workerCodeData" (newRowClick)="workerCodeSelected($event)">
+                                         <master-search [MasterSearchData]="workerCodeData" (newRowClick)="workerCodeSelected($event)" *ngIf="!viewMode">
                                         </master-search>
                                         
                                         &nbsp;
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput  formControlName="workerDes"/>
+                                            <input type="text" matInput  formControlName="workerDes" [readonly]="viewMode"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -134,10 +134,12 @@
                         [showBorders]="true"
                         (onSelectionChanged)="onSelectionChanged($event)"
                         (onRowClick)="onRowClickHandler($event)"
+                        
                         >
                           <dxo-paging [enabled]="false"></dxo-paging>
-                          <dxo-editing mode="cell" [allowUpdating]="true">
-                          </dxo-editing>
+                          
+                          <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                          </dxo-editing> -->
                           <dxo-selection mode="multiple"></dxo-selection>
         
                           <dxi-column *ngFor="let data of columnhead" dataField="{{ data.field }}" caption="{{ data.title }}"
