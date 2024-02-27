@@ -10,6 +10,8 @@ import { RetailSalesKaratWiseProfitComponent } from './retail-sales-karat-wise-p
 import { PosCrmDashboardComponent } from './pos-crm-dashboard/pos-crm-dashboard.component';
 import { FestivalSalesComparisonComponent } from './festival-sales-comparison/festival-sales-comparison.component';
 import { PosTargetDashboardComponent } from './pos-target-dashboard/pos-target-dashboard.component';
+import { RepairEnquiryComponent } from './repair-enquiry/repair-enquiry.component';
+import { RepairRegisterComponent } from './repair-register/repair-register.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -58,6 +60,10 @@ export class RetailReportsComponent implements OnInit {
       'PosCrmDashboardComponent': PosCrmDashboardComponent,
       'FestivalSalesComparisonComponent': FestivalSalesComparisonComponent,
       'PosTargetDashboardComponent': PosTargetDashboardComponent, 
+      'RepairEnquiryComponent': RepairEnquiryComponent, 
+      'RepairRegisterComponent': RepairRegisterComponent, 
+
+      
       
       
   
