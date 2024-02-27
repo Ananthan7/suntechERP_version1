@@ -53,6 +53,12 @@ import { BranchTransferRepairRtnComponent } from './branch-transfer-repair-rtn/b
 import { RepairCustomerDeliveryComponent } from './repair-customer-delivery/repair-customer-delivery.component';
 import { PosSalesPaymentComponent } from './point-of-sales-order/pos-sales-payment/pos-sales-payment.component';
 import { GoldExchangeDetailsComponent } from './gold-exchange/gold-exchange-details/gold-exchange-details.component';
+import { RepairDetailsComponent } from './repair-jewellery-receipt/repair-details/repair-details.component';
+import { MetalBranchTransferOutRepairComponent } from './metal-branch-transfer-out-repair/metal-branch-transfer-out-repair.component';
+import { MetalBranchTransferInAutoRepairComponent } from './metal-branch-transfer-in-auto-repair/metal-branch-transfer-in-auto-repair.component';
+import { DiamondBranchTransferOutRepairComponent } from './diamond-branch-transfer-out-repair/diamond-branch-transfer-out-repair.component';
+import { DiamondBranchTransferInAutoRepairComponent } from './diamond-branch-transfer-in-auto-repair/diamond-branch-transfer-in-auto-repair.component';
+import { RepairSaleComponent } from './repair-sale/repair-sale.component';
 
 
 @NgModule({
@@ -108,7 +114,16 @@ import { GoldExchangeDetailsComponent } from './gold-exchange/gold-exchange-deta
     RepairCustomerDeliveryComponent,
     PosSalesPaymentComponent,
     RepairIssueFromWorkshopComponent,    
-    RepairCustomerDeliveryComponent, GoldExchangeDetailsComponent
+    RepairCustomerDeliveryComponent, GoldExchangeDetailsComponent,
+    RepairIssueFromWorkshopComponent,
+    RepairCustomerDeliveryComponent,     
+    RepairDetailsComponent, 
+    
+    MetalBranchTransferOutRepairComponent, 
+    MetalBranchTransferInAutoRepairComponent, 
+    DiamondBranchTransferOutRepairComponent, 
+    DiamondBranchTransferInAutoRepairComponent, 
+    RepairSaleComponent
     ],
   imports: [
     CommonModule,

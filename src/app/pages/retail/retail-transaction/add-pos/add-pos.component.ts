@@ -8378,11 +8378,13 @@ export class AddPosComponent implements OnInit {
         }
 
         this.lineItemForm.controls.fcn_li_rate.setValue(dblStockFcCost);
+        this.manageCalculations();
+
         if (!this.newLineItem.LESSTHANCOST) {
 
           // if (blnCheckBulk == false && blnLessThanCost == false) //doubt
           {
-            if (this.comFunc.emptyToZero(this.vocDataForm.value.txtCurRate) < dblStockFcCost) {
+            if (this.comFunc.emptyToZero(value) < this.comFunc.emptyToZero(dblStockFcCost)) {
 
               this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
               this.dialogBox.afterClosed().subscribe((data: any) => {

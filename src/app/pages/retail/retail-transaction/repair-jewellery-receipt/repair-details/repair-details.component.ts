@@ -9,15 +9,13 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { Code } from 'angular-feather/icons';
 import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component';
-import { RepairDetailsComponent } from './repair-details/repair-details.component';
-
 
 @Component({
-  selector: 'app-repair-jewellery-receipt',
-  templateUrl: './repair-jewellery-receipt.component.html',
-  styleUrls: ['./repair-jewellery-receipt.component.scss']
+  selector: 'app-repair-details',
+  templateUrl: './repair-details.component.html',
+  styleUrls: ['./repair-details.component.scss']
 })
-export class RepairJewelleryReceiptComponent implements OnInit {
+export class RepairDetailsComponent implements OnInit {
   @Input() content!: any;
   @Input()
   selectedIndex!: number | null;
@@ -69,7 +67,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     if (this.content) {
       this.setFormValues()
     }
-    this.repairCustomerDeliveryForm.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
+    this.repairDetails.controls.deliveryOnDate = new FormControl({value: '', disabled: this.isdisabled})
   
   }
 
@@ -87,7 +85,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
 
 
-  repairCustomerDeliveryForm: FormGroup = this.formBuilder.group({
+  repairDetails: FormGroup = this.formBuilder.group({
     voctype: [,''],
     vocNo: [''],
     vocDate: [''],
@@ -136,12 +134,12 @@ export class RepairJewelleryReceiptComponent implements OnInit {
 
   setvaluesdata(){
     console.log(this.comService);
-    this.repairCustomerDeliveryForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
-    this.repairCustomerDeliveryForm.controls.vocNo.setValue('1')
-    this.repairCustomerDeliveryForm.controls.vocDate.setValue(this.comService.currentDate)
-    this.repairCustomerDeliveryForm.controls.completed.setValue(this.comService.currentDate)
-    this.repairCustomerDeliveryForm.controls.date.setValue(this.comService.currentDate)
-    this.repairCustomerDeliveryForm.controls.deliveryOnDate.setValue(this.comService.currentDate)
+    this.repairDetails.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.repairDetails.controls.vocNo.setValue('')
+    this.repairDetails.controls.vocDate.setValue(this.comService.currentDate)
+    this.repairDetails.controls.completed.setValue(this.comService.currentDate)
+    this.repairDetails.controls.date.setValue(this.comService.currentDate)
+    this.repairDetails.controls.deliveryOnDate.setValue(this.comService.currentDate)
   }
 
   
@@ -193,15 +191,15 @@ export class RepairJewelleryReceiptComponent implements OnInit {
             
             })
           }); 
-          this.repairCustomerDeliveryForm.controls.vocNo.setValue(data.VOCNO)
-          this.repairCustomerDeliveryForm.controls.voctype.setValue(data.VOCTYPE)
-          this.repairCustomerDeliveryForm.controls.design.setValue(data.DESIGN_CODE)
-          this.repairCustomerDeliveryForm.controls.job.setValue(data.JOB_NUMBER)
-          this.repairCustomerDeliveryForm.controls.toWorker.setValue(data.TO_WORKER_CODE)
-          this.repairCustomerDeliveryForm.controls.toProcess.setValue(data.TO_PROCESS_CODE)
-          this.repairCustomerDeliveryForm.controls.soNumber.setValue(data.JOB_SO_NUMBER)
-          this.repairCustomerDeliveryForm.controls.subJobId.setValue(data.JOB_SO_MID)
-          this.repairCustomerDeliveryForm.controls.narration.setValue(data.REMARKS)
+          this.repairDetails.controls.vocNo.setValue(data.VOCNO)
+          this.repairDetails.controls.voctype.setValue(data.VOCTYPE)
+          this.repairDetails.controls.design.setValue(data.DESIGN_CODE)
+          this.repairDetails.controls.job.setValue(data.JOB_NUMBER)
+          this.repairDetails.controls.toWorker.setValue(data.TO_WORKER_CODE)
+          this.repairDetails.controls.toProcess.setValue(data.TO_PROCESS_CODE)
+          this.repairDetails.controls.soNumber.setValue(data.JOB_SO_NUMBER)
+          this.repairDetails.controls.subJobId.setValue(data.JOB_SO_MID)
+          this.repairDetails.controls.narration.setValue(data.REMARKS)
          
           
         } else {
@@ -228,7 +226,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     const selectedFile = event.target.files[0];
     
     // Assuming you want to display the file path in the input field
-    this.repairCustomerDeliveryForm.get('attachments')?.setValue(selectedFile.name);
+    this.repairDetails.get('attachments')?.setValue(selectedFile.name);
 
     // You can also handle the file in other ways, such as uploading it
   }
@@ -249,8 +247,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    this.repairCustomerDeliveryForm.controls.job_number.setValue(this.content.JOB_NUMBER)
-    this.repairCustomerDeliveryForm.controls.design.setValue(this.content.DESIGN_CODE)
+    this.repairDetails.controls.job_number.setValue(this.content.JOB_NUMBER)
+    this.repairDetails.controls.design.setValue(this.content.DESIGN_CODE)
     this.dataService.getDynamicAPI('/JobCadProcessDJ/GetJobCadProcessDJ/' + this.content.job_number).subscribe((data) => {
       if (data.status == 'Success') {
         this.tableData = data.response.WaxProcessDetails;
@@ -505,7 +503,7 @@ setDetaills(){
       {
         "UNIQUEID": 0,
         "DT_BRANCH_CODE": this.branchCode,
-        "DT_VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
+        "DT_VOCTYPE": this.repairDetails.value.voctype,
         "DT_VOCNO": 0,
         "DT_YEARMONTH": this.yearMonth,
         "SRNO": Element.Srno,
@@ -555,7 +553,7 @@ componentSet(){
           "PCS": this.comService.emptyToZero(item.PCS),
           "REMARKS": item.Remarks,
           "DT_BRANCH_CODE": this.branchCode,
-          "DT_VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
+          "DT_VOCTYPE": this.repairDetails.value.voctype,
           "DT_VOCNO": 0,
           "DT_YEARMONTH": this.yearMonth
         }
@@ -575,7 +573,7 @@ componentSet(){
       return
     }
 
-    if (this.repairCustomerDeliveryForm.invalid) {
+    if (this.repairDetails.invalid) {
       this.toastr.error('select all required fields')
       return
     }
@@ -584,37 +582,37 @@ componentSet(){
     let postData ={
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-      "vocNo": this.repairCustomerDeliveryForm.value.vocNo,
+      "VOCTYPE": this.repairDetails.value.voctype,
+      "vocNo": this.repairDetails.value.vocNo,
       "YEARMONTH": this.yearMonth,
       "SALESPERSON_CODE": "string",
-      "SYSTEM_DATE": this.repairCustomerDeliveryForm.value.date,
+      "SYSTEM_DATE": this.repairDetails.value.date,
       "MACHINEID": "",
       "DOC_REF": "",
-      "REMARKS": this.repairCustomerDeliveryForm.value.remarks,
-      "VOCDATE": this.repairCustomerDeliveryForm.value.vocDate,
+      "REMARKS": this.repairDetails.value.remarks,
+      "VOCDATE": this.repairDetails.value.vocDate,
       "NAVSEQNO": 0,
-      "PROCESS_CODE": this.repairCustomerDeliveryForm.value.process,
-      "WORKER_CODE": this.repairCustomerDeliveryForm.value.worker,
-      "JOB_NUMBER": this.repairCustomerDeliveryForm.value.job,
+      "PROCESS_CODE": this.repairDetails.value.process,
+      "WORKER_CODE": this.repairDetails.value.worker,
+      "JOB_NUMBER": this.repairDetails.value.job,
       "UNQ_JOB_ID": "",
-      "JOB_SO_NUMBER": this.repairCustomerDeliveryForm.value.subJobId,
-      "DESIGN_CODE": this.repairCustomerDeliveryForm.value.design,
+      "JOB_SO_NUMBER": this.repairDetails.value.subJobId,
+      "DESIGN_CODE": this.repairDetails.value.design,
       "UNQ_DESIGN_ID": "",
       "PART_CODE": "",
       "PCS": 0,
-      "TIME_TAKEN": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.TIME_TAKEN),
+      "TIME_TAKEN": this.comService.emptyToZero(this.repairDetails.value.TIME_TAKEN),
       "JOB_SO_MID": 0,
       "CAD_STATUS": "",
       "APPR_CODE": "",
-      "APPR_TYPE": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.type),
+      "APPR_TYPE": this.comService.emptyToZero(this.repairDetails.value.type),
       "TRANS_REF": "",
       "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
-      "TO_PROCESS_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toProcess),
-      "TO_WORKER_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toWorker),
-      "SO_DELIVERY_TYPE": this.repairCustomerDeliveryForm.value.deliveryOn,
-      "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.deliveryOnDays),
-      "SO_DELIVERY_DATE": this.repairCustomerDeliveryForm.value.deliveryOnDate,
+      "TO_PROCESS_CODE": this.comService.nullToString(this.repairDetails.value.toProcess),
+      "TO_WORKER_CODE": this.comService.nullToString(this.repairDetails.value.toWorker),
+      "SO_DELIVERY_TYPE": this.repairDetails.value.deliveryOn,
+      "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.repairDetails.value.deliveryOnDays),
+      "SO_DELIVERY_DATE": this.repairDetails.value.deliveryOnDate,
       "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
       "SO_CR_DAYS": 0,
       "Details":this.setDetaills(),
@@ -635,7 +633,7 @@ componentSet(){
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.repairCustomerDeliveryForm.reset()
+                this.repairDetails.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -650,41 +648,41 @@ componentSet(){
 
   updateMeltingType() {
     console.log(this.branchCode,'working')
-    let API = `JobCadProcessDJ/UpdateJobCadProcessDJ/${this.branchCode}/${this.repairCustomerDeliveryForm.value.voctype}/${this.repairCustomerDeliveryForm.value.vocNo}/${this.comService.yearSelected}` ;
+    let API = `JobCadProcessDJ/UpdateJobCadProcessDJ/${this.branchCode}/${this.repairDetails.value.voctype}/${this.repairDetails.value.vocNo}/${this.comService.yearSelected}` ;
       let postData ={
           "MID": 0,
           "BRANCH_CODE": this.branchCode,
-          "VOCTYPE": this.repairCustomerDeliveryForm.value.voctype,
-          "vocNo": this.repairCustomerDeliveryForm.value.vocNo,
+          "VOCTYPE": this.repairDetails.value.voctype,
+          "vocNo": this.repairDetails.value.vocNo,
           "YEARMONTH": this.yearMonth,
           "SALESPERSON_CODE": "string",
-          "SYSTEM_DATE": this.repairCustomerDeliveryForm.value.date,
+          "SYSTEM_DATE": this.repairDetails.value.date,
           "MACHINEID": "",
           "DOC_REF": "",
-          "REMARKS": this.repairCustomerDeliveryForm.value.narration,
-          "VOCDATE": this.repairCustomerDeliveryForm.value.vocDate,
+          "REMARKS": this.repairDetails.value.narration,
+          "VOCDATE": this.repairDetails.value.vocDate,
           "NAVSEQNO": 0,
-          "PROCESS_CODE": this.repairCustomerDeliveryForm.value.process,
-          "WORKER_CODE": this.repairCustomerDeliveryForm.value.worker,
-          "JOB_NUMBER": this.repairCustomerDeliveryForm.value.job,
+          "PROCESS_CODE": this.repairDetails.value.process,
+          "WORKER_CODE": this.repairDetails.value.worker,
+          "JOB_NUMBER": this.repairDetails.value.job,
           "UNQ_JOB_ID": "",
-          "JOB_SO_NUMBER": this.repairCustomerDeliveryForm.value.subJobId,
-          "DESIGN_CODE": this.repairCustomerDeliveryForm.value.design,
+          "JOB_SO_NUMBER": this.repairDetails.value.subJobId,
+          "DESIGN_CODE": this.repairDetails.value.design,
           "UNQ_DESIGN_ID": "",
           "PART_CODE": "",
           "PCS": 0,
-          "TIME_TAKEN": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.TIME_TAKEN),
+          "TIME_TAKEN": this.comService.emptyToZero(this.repairDetails.value.TIME_TAKEN),
           "JOB_SO_MID": 0,
           "CAD_STATUS": "",
           "APPR_CODE": "",
-          "APPR_TYPE": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.type),
+          "APPR_TYPE": this.comService.emptyToZero(this.repairDetails.value.type),
           "TRANS_REF": "",
           "FINISHED_DATE": "2023-10-05T07:59:51.905Z",
-          "TO_PROCESS_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toProcess),
-          "TO_WORKER_CODE": this.comService.nullToString(this.repairCustomerDeliveryForm.value.toWorker),
-          "SO_DELIVERY_TYPE": this.repairCustomerDeliveryForm.value.deliveryOn,
-          "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.repairCustomerDeliveryForm.value.deliveryOnDays),
-          "SO_DELIVERY_DATE": this.repairCustomerDeliveryForm.value.deliveryOnDate,
+          "TO_PROCESS_CODE": this.comService.nullToString(this.repairDetails.value.toProcess),
+          "TO_WORKER_CODE": this.comService.nullToString(this.repairDetails.value.toWorker),
+          "SO_DELIVERY_TYPE": this.repairDetails.value.deliveryOn,
+          "SO_DELIVERY_DAYS": this.comService.emptyToZero(this.repairDetails.value.deliveryOnDays),
+          "SO_DELIVERY_DATE": this.repairDetails.value.deliveryOnDate,
           "SO_VOCDATE": "2023-10-05T07:59:51.905Z",
           "SO_CR_DAYS": 0,
           "Details":this.setDetaills(),
@@ -706,7 +704,7 @@ componentSet(){
                 confirmButtonText: 'Ok'
               }).then((result: any) => {
                 if (result.value) {
-                  this.repairCustomerDeliveryForm.reset()
+                  this.repairDetails.reset()
                   this.tableData = []
                   this.close('reloadMainGrid')
                 }
@@ -743,7 +741,7 @@ componentSet(){
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = '/JobCadProcessDJ/DeleteJobCadProcessDJ/' + this.repairCustomerDeliveryForm.value.brnachCode + this.repairCustomerDeliveryForm.value.voctype + this.repairCustomerDeliveryForm.value.vocNo + this.repairCustomerDeliveryForm.value.yearMoth;
+        let API = '/JobCadProcessDJ/DeleteJobCadProcessDJ/' + this.repairDetails.value.brnachCode + this.repairDetails.value.voctype + this.repairDetails.value.vocNo + this.repairDetails.value.yearMoth;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -756,7 +754,7 @@ componentSet(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.repairCustomerDeliveryForm.reset()
+                    this.repairDetails.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -770,7 +768,7 @@ componentSet(){
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.repairCustomerDeliveryForm.reset()
+                    this.repairDetails.reset()
                     this.tableData = []
                     this.close()
                   }
@@ -847,7 +845,7 @@ componentSet(){
 
   processSelected(e:any){
     console.log(e);
-    this.repairCustomerDeliveryForm.controls.process.setValue(e.Process_Code);
+    this.repairDetails.controls.process.setValue(e.Process_Code);
   }
   
   toprocessCodeData: MasterSearchModel = {
@@ -863,7 +861,7 @@ componentSet(){
   }
 
   toProcessSelected(e:any){
-    this.repairCustomerDeliveryForm.controls.toProcess.setValue(e.Process_Code);
+    this.repairDetails.controls.toProcess.setValue(e.Process_Code);
   }
 
   workerCodeData: MasterSearchModel = {
@@ -880,12 +878,12 @@ componentSet(){
 
   workedSelected(e:any){
     console.log(e);
-    this.repairCustomerDeliveryForm.controls.worker.setValue(e.WORKER_CODE);
+    this.repairDetails.controls.worker.setValue(e.WORKER_CODE);
   }
   
   toWorkedSelected(e:any){
   console.log(e);
-  this.repairCustomerDeliveryForm.controls.toWorker.setValue(e.WORKER_CODE);
+  this.repairDetails.controls.toWorker.setValue(e.WORKER_CODE);
   }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
   salesManCodeData: MasterSearchModel = {
@@ -902,7 +900,7 @@ componentSet(){
 
   salesManSelected(e:any){
     console.log(e);
-    this.repairCustomerDeliveryForm.controls.worker.setValue(e.WORKER_CODE);
+    this.repairDetails.controls.worker.setValue(e.WORKER_CODE);
   }
 
   customerCodeData: MasterSearchModel = {
@@ -919,7 +917,7 @@ componentSet(){
 
   customerSelected(e:any){
     console.log(e);
-    this.repairCustomerDeliveryForm.controls.worker.setValue(e.WORKER_CODE);
+    this.repairDetails.controls.worker.setValue(e.WORKER_CODE);
   }
 
 
