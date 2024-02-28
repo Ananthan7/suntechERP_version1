@@ -397,19 +397,19 @@
                         caption alignment="center">
                     </dxi-column>
                     <div *dxTemplate="let datas of 'PayStatus'">
-                        <input type="checkbox" [readonly]="viewMode"
+                        <input type="checkbox" [disabled]="viewMode"
                             (change)="PayStatusSelected($event,datas)"
                             [checked]="datas.value" />
                     </div>
                     <div *dxTemplate="let data of 'ReminderSend'">
-                        <input type="checkbox" [readonly]="viewMode"
+                        <input type="checkbox" [disabled]="viewMode"
                             (change)="ReminderSendSelected($event,data)"
                             [checked]="data.value" />
                     </div>
                     <div *dxTemplate="let data of 'files'">
                         <input class="form-control fileAttach" type="file"
                             (change)="onFileChange($event)"
-                            [readonly]="viewMode" />
+                            [disabled]="viewMode" />
                     </div>
                 </dx-data-grid>
             </div>

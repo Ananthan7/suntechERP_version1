@@ -519,7 +519,7 @@ export class AddReceiptComponent implements OnInit {
       this.isViewCheckDetail = false;
       this.isViewTypeCode = false;
       this.accountMasterData.LOAD_ONCLICK = true;
-      this.accountMasterData.WHERECONDITION = "ACCOUNT_MODE='B'"
+      this.accountMasterData.WHERECONDITION = "ACCOUNT_MODE='B' AND Accode <> ''"
     }
   }
   /**USE: branch autocomplete starts*/
