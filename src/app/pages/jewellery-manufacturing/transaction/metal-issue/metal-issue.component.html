@@ -116,7 +116,7 @@
                                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
                                 [viewImportBtn]="false"
                                 (addClick)="openaddmetalissue()"
-                                (deleteClick)="deleteTableData()"
+                                (deleteClick)="deleteClicked()"
                                 >
                             </menu-buttons>
                                 <div>
@@ -134,7 +134,7 @@
                         [showBorders]="true"
                         (onSelectionChanged)="onSelectionChanged($event)"
                         (onRowClick)="onRowClickHandler($event)"
-                        
+                         [selectedRowKeys]="selectedKey"
                         >
                           <dxo-paging [enabled]="false"></dxo-paging>
                           
