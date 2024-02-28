@@ -126,6 +126,7 @@ export class SchemeReceiptComponent implements OnInit {
     SCH_INST_AMOUNT_FC: [0],
     PartyAmount: [''],
     PartyAmtCode: [''],
+    PartyAddress: [''],
     TotalAmount: [0],
     TotalTax: [0],
   });
@@ -241,6 +242,13 @@ export class SchemeReceiptComponent implements OnInit {
             this.orderedItems = result.Details;
             this.orderedItems.forEach((item: any, i: any) => {
               item.SRNO = i + 1;
+              item.Branch = item.BRANCH_CODE
+              item.Type = item.RECPAY_TYPE
+              item.AC_Code = item.ACCODE
+              item.CurrCode = item.CURRENCY_CODE
+              item.AC_Description = item.HDACCOUNT_HEAD
+              item.CurrRate = item.CURRENCY_RATE
+              item.AMOUNT_VAT = item.TOTAL_AMOUNTCC
             });
           }
           this.calculateTotalonView();
@@ -490,6 +498,11 @@ export class SchemeReceiptComponent implements OnInit {
   selectedScheme(data: any) {
     if (this.receiptDetailsForm.value.POSCustomerCode == '') {
       this.commonService.toastErrorByMsgId('please select customer')
+      return
+    }
+    if(this.orderedItems.length>0){
+      this.disableAddBtnGrid = true;
+      this.commonService.toastErrorByMsgId('please delete selected receipt')
       return
     }
     this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE);
@@ -1249,8 +1262,10 @@ export class SchemeReceiptComponent implements OnInit {
     }
   }
   deleteTableData() {
-    this.orderedItems = [];
-    this.disableAddBtnGrid = false;
+    if(!this.content && this.receiptDetailsForm.value.SchemeID != ''){
+      this.orderedItems = [];
+      this.disableAddBtnGrid = false;
+    }
   }
   close(data?: any) {
     //TODO reset forms and data before closing

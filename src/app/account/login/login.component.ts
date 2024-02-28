@@ -280,7 +280,7 @@ export class LoginComponent implements OnInit {
             // localStorage.setItem('currentUser', JSON.stringify(this.userDetails));
             localStorage.setItem('username', this.user_name);
             localStorage.setItem('userbranch', branch);
-            console.log('fired2');
+            localStorage.setItem('CURRENTYEAR', year);
 
             // this.getBranchCurrencyMaster();
             // this.router.navigate(['/']);

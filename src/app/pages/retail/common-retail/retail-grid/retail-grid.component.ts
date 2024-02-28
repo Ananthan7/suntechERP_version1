@@ -26,7 +26,7 @@ export class RetailGridComponent implements OnInit {
   totalDataCount: number = 10000; // Total number of items hardcoded 10k will reassign on API call
   pageSize: number = 10; // Number of items per page
   pageIndex: number = 1; // Current page index
-  yearSelected = this.CommonService.yearSelected
+  yearSelected = localStorage.getItem('CURRENTYEAR');
   branchCode = this.CommonService.branchCode
   nextCall: any = 0
   //subscription variable
