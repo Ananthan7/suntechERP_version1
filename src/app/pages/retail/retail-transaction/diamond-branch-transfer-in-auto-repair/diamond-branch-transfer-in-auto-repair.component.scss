@@ -22,7 +22,7 @@
   
   .add-btn {
     font-size: 12px;
-    padding: 3px 20px !important;
+    padding: 3px 12px !important;
     border-radius: 5px !important;
   }
   
@@ -184,12 +184,15 @@
     background-color: rgb(241, 241, 241);
     border: 1px solid #ddd;
     text-align: center;
-    width: 90%;
-    margin-left: 13px;
+    width: 100%;
   }
 
   .your-box-container {
     border: 1px solid #ccc;
     padding: 10px;
-    margin: 10px; /* Optional margin for spacing */
+   
+}
+
+.AuthorizePost{
+  margin-left:1px
 }

@@ -22,8 +22,6 @@ export class PointOfSalesOrderDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 155,
     SEARCH_FIELD: "location",
-    // LOOKUPID: 14,
-    // SEARCH_FIELD: "PREFIX_CODE",
     SEARCH_HEADING: "Location",
     SEARCH_VALUE: "",
     WHERECONDITION: "",
@@ -31,9 +29,24 @@ export class PointOfSalesOrderDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 41,
+    SEARCH_FIELD: 'Stock_Code',
+    SEARCH_HEADING: 'Stock Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Stock_Code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
   soldItemsDetailsrForm: FormGroup = this.formBuilder.group({
     loaction: [""],
     stockCode: [""],
+    stockCodeItem:[""],
+    stockCodeDesc:[""],
+    pieces:[""],
     deliveryDate:[new Date()],
     grossWeight: [""],
     stoneWeight: [""],
@@ -46,6 +59,7 @@ export class PointOfSalesOrderDetailsComponent implements OnInit {
     StoneAmount:[''],
     StoneRate:[''],
     customerSampleStock:[false],
+    holdforSalesTill:[false],
     net_amount:['']
   });
 
@@ -61,6 +75,13 @@ export class PointOfSalesOrderDetailsComponent implements OnInit {
    console.log(e);
     this.soldItemsDetailsrForm.controls.loaction.setValue(e.STATE_DESCRIPTION);
   
+  }
+
+ stockCodeSelected(e:any){
+    console.log(e);
+    this.soldItemsDetailsrForm.controls.stockCodeItem.setValue(e.Item);
+    this.soldItemsDetailsrForm.controls.stockCode.setValue(e.STOCK_CODE);
+    this.soldItemsDetailsrForm.controls.stockCodeDesc.setValue(e.STOCK_DESCRIPTION);
   }
 
   close(data?: any) {

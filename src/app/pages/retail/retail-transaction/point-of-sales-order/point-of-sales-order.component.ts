@@ -23,13 +23,12 @@ export class PointOfSalesOrderComponent implements OnInit {
   divisionMS: any = 'ID';
   columnheadItems:any[] = ['Item Code','Item Description','Pcs','Weight','Making Amount','Metal Amount','Disc Amount','Net Amount'];
   columnheadsItems:any[]=['Item Code','Item Description','Pcs','Weight','PURITY','PUREWT','MKG_RATEFC','Making Amount','Metal Amount','Stone Amount','WASTAGEPER','WASTAGEQTY','Net Amount','DIVISION CODE','STONEWT','NETWT','CHARGABLEWT','OZWT','METAL RATE GMSFC','STONE RATEFC','PUDIFF','STONEDIFF','STOCK','WASTAGEAMOUNTFC','LOCTYPE CODE','SUPPLIER','SRNO','VOCTYPE','VOCNUMBER'];
+  
   SalesManData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 1,
     SEARCH_FIELD: "salesperson_code",
-    // LOOKUPID: 14,
-    // SEARCH_FIELD: "PREFIX_CODE",
     SEARCH_HEADING: "SalesMan",
     SEARCH_VALUE: "",
     WHERECONDITION: "ACTIVE = 1",
@@ -42,24 +41,21 @@ export class PointOfSalesOrderComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 8,
     SEARCH_FIELD: "currency_code",
-    // LOOKUPID: 14,
-    // SEARCH_FIELD: "PREFIX_CODE",
     SEARCH_HEADING: "Currency",
     SEARCH_VALUE: "",
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+
   CreditData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 214,
     SEARCH_FIELD: "credit_code",
-    // LOOKUPID: 14,
-    // SEARCH_FIELD: "PREFIX_CODE",
     SEARCH_HEADING: "Credit A/C",
     SEARCH_VALUE: "",
-    WHERECONDITION: "MODE=3",
+    WHERECONDITION: "@strbranch=DMCC,@strMode=3",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -69,8 +65,6 @@ export class PointOfSalesOrderComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 2,
     SEARCH_FIELD: "code",
-    // LOOKUPID: 14,
-    // SEARCH_FIELD: "PREFIX_CODE",
     SEARCH_HEADING: "Customer",
     SEARCH_VALUE: "",
     WHERECONDITION: "",
@@ -82,9 +76,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 48,
-    SEARCH_FIELD: "state filed",
-    // LOOKUPID: 14,
-    // SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_FIELD: "state_filed",
     SEARCH_HEADING: "State",
     SEARCH_VALUE: "",
     WHERECONDITION: "",
@@ -97,14 +89,42 @@ export class PointOfSalesOrderComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    // LOOKUPID: 14,
-    // SEARCH_FIELD: "PREFIX_CODE",
     SEARCH_HEADING: "City",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='REGION MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+
+  typeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Type",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='CUSTOMER TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  nationalityData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Nationality",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='NATIONALITY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  customerSelectOptions = [
+    { value: 'Mr', label: 'Mr' },
+    { value: 'Mrs', label: 'Mrs' },
+    { value: 'Ms', label: 'Ms' },
+  ];
 
   posofSalesOrderForm: FormGroup = this.formBuilder.group({
     vocType :[''],
@@ -131,6 +151,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     deliveryDate:[new Date()],
     holdforSalesTill:[false],
     fixMetalRate:[false],
+    checkboxFormControl:[false],
     normalDate:[new Date()],
     invoiceTotal:[''],
     returns:[''],
@@ -158,38 +179,47 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.posofSalesOrderForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
   }
 
+  
+
   salesMancodeSelected(e:any){
-   
     this.posofSalesOrderForm.controls.salesMan.setValue(e.SALESPERSON_CODE);
   }
+
   currencycodeSelected(e:any){
- 
     this.posofSalesOrderForm.controls.currency.setValue(e.CURRENCY_CODE);
     this.posofSalesOrderForm.controls.currencyCode.setValue(e.DESCRIPTION);
   }
 
   creditcodeSelected(e:any){
-  
     this.posofSalesOrderForm.controls.creditAc.setValue(e.CURRENCY_CODE);
-  
   }
   
   customercodeSelected(e:any){
-
+    console.log(e);    
     this.posofSalesOrderForm.controls.customerCode.setValue(e.CODE);
-  
+    this.posofSalesOrderForm.controls.custDesc.setValue(e.NAME);
+    this.posofSalesOrderForm.controls.email.setValue(e.EMAIL);
+    this.posofSalesOrderForm.controls.moblieCountryCode.setValue(e.COUNTRY_CODE);
+    this.posofSalesOrderForm.controls.moblieNo.setValue(e.MOBILE);
+    this.posofSalesOrderForm.controls.landline.setValue(e.TEL1);    
   }
     
-  statecodeSelected(e:any){
-   
+  statecodeSelected(e:any){   
     this.posofSalesOrderForm.controls.state.setValue(e.STATE_DESCRIPTION);
-  
   }
 
   citycodeSelected(e:any){
-
     this.posofSalesOrderForm.controls.city.setValue(e.DESCRIPTION);
-  
+  }
+
+  typeCodeSelected(e:any){
+    console.log(e);
+    this.posofSalesOrderForm.controls.type.setValue(e.CODE);
+  }
+
+  nationalityCodeSelected(e:any){
+    console.log(e);
+    this.posofSalesOrderForm.controls.nationality.setValue(e.CODE);
   }
 
   close(data?: any) {
@@ -211,19 +241,15 @@ export class PointOfSalesOrderComponent implements OnInit {
 
   @ViewChild('mymodal') public mymodal!: NgbModal;
 
-  open(modalname?: any) {
-      
+  open(modalname?: any) {      
       const modalRef: NgbModalRef = this.modalService.open(PosSalesPaymentComponent, {
         size: 'lg',
         backdrop: 'static',
         keyboard: false,
         windowClass: 'modal-full-width'
-      });
-  
-      modalRef.result.then((result) => {
-       
-      }, (reason) => {
-       
+      });  
+      modalRef.result.then((result) => {       
+      }, (reason) => {       
       });
     }
 }

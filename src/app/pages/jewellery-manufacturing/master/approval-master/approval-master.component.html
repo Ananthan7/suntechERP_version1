@@ -6,10 +6,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <!-- content section -->
 <div class="row">
-    <div>
         <form [formGroup]="approvalMasterForm">
             <div class="container-fluid pt-3">
                 <div class="check_radio_btn">
@@ -168,5 +167,4 @@
                 </div>
             </div>
         </form>
-    </div>
 </div>

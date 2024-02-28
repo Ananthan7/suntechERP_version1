@@ -9,15 +9,14 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { Code } from 'angular-feather/icons';
 import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component';
-import { RepairDetailsComponent } from '../repair-jewellery-receipt/repair-details/repair-details.component';
-import { DiamondBranchTransferInAutoRepairDetailsComponent } from './diamond-branch-transfer-in-auto-repair-details/diamond-branch-transfer-in-auto-repair-details.component';
+
 
 @Component({
-  selector: 'app-diamond-branch-transfer-in-auto-repair',
-  templateUrl: './diamond-branch-transfer-in-auto-repair.component.html',
-  styleUrls: ['./diamond-branch-transfer-in-auto-repair.component.scss']
+  selector: 'app-metal-branch-transfer-out-repair-detail',
+  templateUrl: './metal-branch-transfer-out-repair-detail.component.html',
+  styleUrls: ['./metal-branch-transfer-out-repair-detail.component.scss']
 })
-export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
+export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
   @Input() content!: any;
   @Input()
   selectedIndex!: number | null;
@@ -281,12 +280,6 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
 
   adddata() {
 
-    const modalRef: NgbModalRef = this.modalService.open(DiamondBranchTransferInAutoRepairDetailsComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
 
     let length = this.tableData.length;
     let srno = length + 1;
