@@ -8,7 +8,7 @@
 <modal-header (cancelClick)="close()"></modal-header>
 <div class="row">
     <div class="col-md-12">
-        <form [formGroup]="consumbleForm">
+        <form [formGroup]="consumableForm">
             <div class="container-fluid pt-3">
                 <div class="row">
                     <div class="col-md-5">
@@ -391,7 +391,7 @@
                         <div class="row ">
                             <div class="col-9 offset-8">
                                 <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
-                                    [disabled]="consumbleForm.invalid" (click)="enableButtons()">
+                                    [disabled]="consumableForm.invalid" (click)="enableButtons()">
                                     Comments
                                 </button>
                             </div>
@@ -399,7 +399,7 @@
                         <div class="row pt-2">
                             <div class="box-textarea1">
                                 <textarea type="text" formControlName="comment"
-                                    [disabled]="consumbleForm.invalid" (click)="enableButtons()"></textarea>
+                                    [disabled]="consumableForm.invalid" (click)="enableButtons()"></textarea>
                             </div>
                         </div>
                     </div>
@@ -420,7 +420,7 @@
                         <div class="row ">
                             <div class="col-11 t-a2">
                                 <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
-                                    [disabled]="consumbleForm.invalid" (click)="enableButtons()">
+                                    [disabled]="consumableForm.invalid" (click)="enableButtons()">
                                     Tag Details
                                 </button>
                             </div>
@@ -428,7 +428,7 @@
                         <div class="row pt-2">
                             <div class="box-textarea2">
                                 <textarea type="text"  formControlName="tagDetails"
-                                    [disabled]="consumbleForm.invalid" (click)="enableButtons()"></textarea>
+                                    [disabled]="consumableForm.invalid" (click)="enableButtons()"></textarea>
                             </div>
                         </div>
                     </div>
