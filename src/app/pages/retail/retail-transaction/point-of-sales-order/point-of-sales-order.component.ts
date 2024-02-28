@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PointOfSalesOrderDetailsComponent } from './point-of-sales-order-details/point-of-sales-order-details.component';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { PosSalesPaymentComponent } from './pos-sales-payment/pos-sales-payment.component';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 @Component({
   selector: 'app-point-of-sales-order',
   templateUrl: './point-of-sales-order.component.html',
@@ -17,11 +18,93 @@ export class PointOfSalesOrderComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   columnhead:any[] = ['Karat','Rate','Purchase Rate'];
-  columnheadSoldItems:any[] = ['Mode','Currency','Currency','Amount','DTYEARMONTH','IGST ACCODE','IGST PER','IGST AMOUNTFC','IGST AMOUNTCC','HSN CODE','GST CODE','TOTAMTWITHOUTVATFC','TOTAMTWITHOUTVATLC'];
+  columnheadSoldItems:any[] = ['Mode','Currency','Amount','DTYEARMONTH','IGST ACCODE','IGST PER','IGST AMOUNTFC','IGST AMOUNTCC','HSN CODE','GST CODE','TOTAMTWITHOUTVATFC','TOTAMTWITHOUTVATLC'];
   columnheadDetails:any[] = ['Sr','Stock Code','Division','Description','Quantity','Rate','Amount','Disc Amount','Net Amount','Total AmountCC','MKGVALUECC'];
   divisionMS: any = 'ID';
   columnheadItems:any[] = ['Item Code','Item Description','Pcs','Weight','Making Amount','Metal Amount','Disc Amount','Net Amount'];
   columnheadsItems:any[]=['Item Code','Item Description','Pcs','Weight','PURITY','PUREWT','MKG_RATEFC','Making Amount','Metal Amount','Stone Amount','WASTAGEPER','WASTAGEQTY','Net Amount','DIVISION CODE','STONEWT','NETWT','CHARGABLEWT','OZWT','METAL RATE GMSFC','STONE RATEFC','PUDIFF','STONEDIFF','STOCK','WASTAGEAMOUNTFC','LOCTYPE CODE','SUPPLIER','SRNO','VOCTYPE','VOCNUMBER'];
+  SalesManData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: "salesperson_code",
+    // LOOKUPID: 14,
+    // SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_HEADING: "SalesMan",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "ACTIVE = 1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  CurrencyData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: "currency_code",
+    // LOOKUPID: 14,
+    // SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_HEADING: "Currency",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+  CreditData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 214,
+    SEARCH_FIELD: "credit_code",
+    // LOOKUPID: 14,
+    // SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_HEADING: "Credit A/C",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "MODE=3",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  CustomerData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: "code",
+    // LOOKUPID: 14,
+    // SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_HEADING: "Customer",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  StateData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 48,
+    SEARCH_FIELD: "state filed",
+    // LOOKUPID: 14,
+    // SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_HEADING: "State",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  CityData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    // LOOKUPID: 14,
+    // SEARCH_FIELD: "PREFIX_CODE",
+    SEARCH_HEADING: "City",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='REGION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
 
   posofSalesOrderForm: FormGroup = this.formBuilder.group({
     vocType :[''],
@@ -73,6 +156,40 @@ export class PointOfSalesOrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.posofSalesOrderForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
+  }
+
+  salesMancodeSelected(e:any){
+   
+    this.posofSalesOrderForm.controls.salesMan.setValue(e.SALESPERSON_CODE);
+  }
+  currencycodeSelected(e:any){
+ 
+    this.posofSalesOrderForm.controls.currency.setValue(e.CURRENCY_CODE);
+    this.posofSalesOrderForm.controls.currencyCode.setValue(e.DESCRIPTION);
+  }
+
+  creditcodeSelected(e:any){
+  
+    this.posofSalesOrderForm.controls.creditAc.setValue(e.CURRENCY_CODE);
+  
+  }
+  
+  customercodeSelected(e:any){
+
+    this.posofSalesOrderForm.controls.customerCode.setValue(e.CODE);
+  
+  }
+    
+  statecodeSelected(e:any){
+   
+    this.posofSalesOrderForm.controls.state.setValue(e.STATE_DESCRIPTION);
+  
+  }
+
+  citycodeSelected(e:any){
+
+    this.posofSalesOrderForm.controls.city.setValue(e.DESCRIPTION);
+  
   }
 
   close(data?: any) {

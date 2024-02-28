@@ -48,6 +48,7 @@ export class MetalIssueComponent implements OnInit {
   detailData: any[] = [];
   selectRowIndex: any;
   selectedKey: number[] = []
+  viewMode: boolean = false;
  
   constructor(
     private activeModal: NgbActiveModal,
@@ -66,6 +67,9 @@ export class MetalIssueComponent implements OnInit {
 
     this.setvalues()
     this.setAllInitialValues()
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+    }
   }
 
   
@@ -73,13 +77,12 @@ export class MetalIssueComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  deleteTableData(): void {
+  deleteClicked(): void {
     console.log(this.selectedKey,'data')
     this.selectedKey.forEach((element: any) => {
       this.metalIssueDetailsData.splice(element.SRNO-1,1)
       })
-   
-  }
+   }
   openaddmetalissue(data?: any) {
     console.log(data)
     if (data) {
@@ -93,16 +96,20 @@ export class MetalIssueComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-
+    modalRef.componentInstance.content = this.metalIssueDetailsData
     modalRef.result.then((postData) => {
-      console.log(postData);
+      console.log(this.content,'tyty');
       if (postData) {
         console.log('Data from modal:', postData);
-        this.metalIssueDetailsData.push(postData);
+        if(this.content?.FLAG == 'EDIT'){
+        this.setValuesToHeaderGrid(postData);  
+        }
+        else{
+          this.metalIssueDetailsData.push(postData);  
+        }
         console.log(this.metalIssueDetailsData);
-        this.setValuesToHeaderGrid(postData);
 
-      }
+      } 
     });
   }
   onRowClickHandler(event: any) {
@@ -120,15 +127,16 @@ export class MetalIssueComponent implements OnInit {
    
   
   setValuesToHeaderGrid(detailDataToParent: any) {
-    let PROCESS_FORMDETAILS = detailDataToParent
-    if (PROCESS_FORMDETAILS.SRNO) {
-      this.swapObjects(this.tableData, [PROCESS_FORMDETAILS], (PROCESS_FORMDETAILS.SRNO - 1))
+    
+    
+    if (detailDataToParent.SRNO) {
+      this.swapObjects(this.metalIssueDetailsData, [detailDataToParent], (detailDataToParent.SRNO - 1))
     } else {
       this.tableRowCount += 1
-      PROCESS_FORMDETAILS.SRNO = this.tableRowCount
+      detailDataToParent.SRNO = this.tableRowCount
     }
 
-    this.tableData.push(PROCESS_FORMDETAILS)
+    this.tableData.push(detailDataToParent)
 
     if (detailDataToParent) {
       this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
@@ -173,9 +181,11 @@ export class MetalIssueComponent implements OnInit {
     this.tableData[value.data.SN - 1].stock_code = data.postData.stockCode;
   }
 
-  // deleteTableData(){
-    
-  // }
+  deleteTableData(): void{
+    this.tableRowCount = 0;
+    console.log(this.selectRowIndex)
+    this.tableData.splice(this.selectRowIndex, 1) 
+  }
   
   removeLineItemsGrid(event: any) {
   }
@@ -252,16 +262,16 @@ export class MetalIssueComponent implements OnInit {
           this.metalIssueDetailsData = data.Details
           data.Details.forEach((element:any) => {
             this.tableData.push({
-              stockcode: element.STOCK_CODE,
-              process: element.PROCESS_CODE,
-              worker: element.WORKER_CODE,
+              jobNumber: element.JOB_NUMBER,
+              jobNumDes: element.JOB_DESCRIPTION,
+              processCode: element.PROCESS_CODE,
+              processCodeDesc: element.PROCESS_NAME,
+              workerCode: element.WORKER_CODE,
+              workerCodeDes: element.WORKER_NAME,
               pcs: element.PCS,
-              grossweight: element.GROSS_WT,
               purity: element.PURITY,
-              pureweight: element.PUREWT,
-              SRNO: element.SRNO,
-              Rate: element.RATE,
-              Amount: element.Amount,
+              grossWeight: element.GROSS_WT,
+              netWeight: element.NET_WT,
             
 
             })
@@ -271,6 +281,8 @@ export class MetalIssueComponent implements OnInit {
           this.metalIssueForm.controls.vocdate.setValue(data.VOCDATE)
           this.metalIssueForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
           this.metalIssueForm.controls.workerDes.setValue(data.Details[0].WORKER_NAME)
+          this.metalIssueForm.controls.jobNumber.setValue(data.Detail.JOB_NUMBER)
+          this.metalIssueForm.controls.grossWeight.setValue(data.GROSS_WT)
 
 
         } else {
@@ -377,7 +389,7 @@ export class MetalIssueComponent implements OnInit {
   
     setFormValues() {
       if(!this.content) return
-      console.log(this.content);
+      console.log(this.content,'qqq');
       
       this.metalIssueForm.controls.voctype.setValue(this.content.VOCTYPE)
       this.metalIssueForm.controls.vocno.setValue(this.content.VOCNO)
@@ -393,7 +405,7 @@ export class MetalIssueComponent implements OnInit {
         return
       }
     
-      let API = 'JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/'+ this.metalIssueForm.value.branchCode + this.metalIssueForm.value.voctype + this.metalIssueForm.value.vocno + this.metalIssueForm.value.yearMonth
+      let API = `JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/${this.branchCode}/${this.metalIssueForm.value.voctype}/${this.metalIssueForm.value.vocno}/${this.commonService.yearSelected}`
       let postData = {
         "MID": 0,
         "VOCTYPE": this.metalIssueForm.value.voctype || "",
@@ -401,7 +413,7 @@ export class MetalIssueComponent implements OnInit {
         "VOCNO": this.metalIssueForm.value.vocno || "",
         "VOCDATE": this.metalIssueForm.value.vocdate || "",
         "YEARMONTH": this.yearMonth,
-        "DOCTIME": this.metalIssueForm.value.time || "",
+        "DOCTIME":  "2024-02-27T05:14:20.276Z",
         "CURRENCY_CODE": "",
         "CURRENCY_RATE": 0,
         "METAL_RATE_TYPE": "",

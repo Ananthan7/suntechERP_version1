@@ -31,6 +31,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
   isViewContinue!: boolean;
+  viewMode: boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -45,15 +46,18 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     if (this.content) {
+      console.log(this.content,'lool')
       this.setFormValues()
     }
     //console.log(this.data);
     // if (this.data) {
     //   this.jobcontinue()
     // }
-    
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+    } 
   }
-
+ 
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -260,12 +264,29 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    console.log(this.content);
+    console.log(this.content,'ppppp');
+    this.metalIssueDetailsForm.controls.jobNumber.setValue(this.content[0].JOB_NUMBER)
+    this.metalIssueDetailsForm.controls.jobNumDes.setValue(this.content[0].job_description)
+    this.metalIssueDetailsForm.controls.grossWeight.setValue(this.content[0].GROSS_WT)
+    this.metalIssueDetailsForm.controls.processCode.setValue(this.content[0].PROCESS_CODE)
+    this.metalIssueDetailsForm.controls.processCodeDesc.setValue(this.content[0].PROCESS_NAME)
+    this.metalIssueDetailsForm.controls.workerCode.setValue(this.content[0].WORKER_CODE)
+    this.metalIssueDetailsForm.controls.workerCodeDes.setValue(this.content[0].WORKER_NAME)
+    this.metalIssueDetailsForm.controls.designCode.setValue(this.content[0].DIVCODE)
+    this.metalIssueDetailsForm.controls.stoneWeight.setValue(this.content[0].STONE_WT)
+    this.metalIssueDetailsForm.controls.pureWeight.setValue(this.content[0].PURE_WT)
+    this.metalIssueDetailsForm.controls.pcs.setValue(this.content[0].PCS)
+    this.metalIssueDetailsForm.controls.purity.setValue(this.content[0].PURITY)
+    this.metalIssueDetailsForm.controls.subJobNo.setValue(this.content[0].JOB_SO_NUMBER)
+    this.metalIssueDetailsForm.controls.subJobNoDes.setValue(this.content[0].JOB_DESCRIPTION)
+    this.metalIssueDetailsForm.controls.netWeight.setValue(this.content[0].NET_WT)
+    this.metalIssueDetailsForm.controls.stockCode.setValue(this.content[0].STOCK_CODE)
+    this.metalIssueDetailsForm.controls.stockCodeDes.setValue(this.content[0].STOCK_DESCRIPTION)
   };
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT' && this.data) {
-      // this.updateMeltingType()
+       this.updateMeltingType()
       return
     }
 
@@ -345,7 +366,7 @@ export class MetalIssueDetailsComponent implements OnInit {
 
 
   updateMeltingType() {
-    let API = 'JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/'+ this.metalIssueDetailsForm.value.brnachCode + this.metalIssueDetailsForm.value.voctype + this.metalIssueDetailsForm.value.vocNo + this.metalIssueDetailsForm.value.yearMoth ;
+   
     let postData =
     {
       "MID": 0,
