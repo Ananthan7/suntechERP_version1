@@ -17,7 +17,7 @@
                         <mat-form-field style="width: 70%;">
                             <input type="text" matInput formControlName="loaction" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="LocationData" (newRowClick)="locationcodeSelected($event)"></master-search>
                     </div>
                 </div>
             </div>

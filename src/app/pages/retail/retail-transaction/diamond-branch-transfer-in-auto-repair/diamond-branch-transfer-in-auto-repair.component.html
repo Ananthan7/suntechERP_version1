@@ -1,1 +1,440 @@
-<p>diamond-branch-transfer-in-auto-repair works!</p>
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Diamond Branch Transfer in Auto Repair</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<!-- content section -->
+<div class="row">
+    <form [formGroup]="repairCustomerDeliveryForm">
+        <div class="container-fluid pt-3">
+            <div class="row">
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-1">
+
+                </div>
+                <div class="col-md-2">
+                    <h6>Authorized Status</h6>
+                </div>
+                <div class="col-md-1">
+
+                </div>
+                <div class="col-md-1">
+                    <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-outline-primary add-btn">Authorize/Post</button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="boxed-label">
+                        <h6>GST Details</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row mb-1 ">
+                        <h6 class="col-sm-4">Voucher Type </h6>
+                        <div class="col-md-3">
+                            <div class="position-relative d-flex">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="position-relative d-flex">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="vocNo"
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date : </label>
+                        <div class="col-sm-6">
+                            <mat-form-field style="width: 72%;">
+                                <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
+                                    [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
+                                <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">Branch : </label>
+                        <div class="col-sm-6">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput formControlName="salesMan" [readonly]="viewMode" />
+                            </mat-form-field>
+                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
+                                (newRowClick)="salesManSelected($event)"></master-search>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">Entered By : </label>
+                        <div class="col-sm-6">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput formControlName="salesMan" [readonly]="viewMode" />
+                            </mat-form-field>
+                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
+                                (newRowClick)="salesManSelected($event)"></master-search>
+                        </div>
+                    </div>
+                    <div class="row mb-1 ">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">Currency : </label>
+                        <div class="col-md-3">
+                            <div class="position-relative d-flex">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="position-relative d-flex">
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="vocNo"
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="row mb-1">
+                        <h6>Reference </h6>
+                    </div>
+
+                    <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date : </label>
+                        <div class="col-sm-6">
+                            <mat-form-field style="width: 72%;">
+                                <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
+                                    [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
+                                <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <h6>To Branch Name </h6>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-3 col-form-label ">Status : </label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-4 col-form-label ">Credit Days : </label>
+                        <div class="col-sm-3">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-4">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
+                                    [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
+                                <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-2">
+                    <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Location : </label>
+                        <div class="col-sm-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="currency" [readonly]="viewMode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-5 col-form-label"></label>
+                        <div class="col-sm-3">
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Narration : </label>
+                        <div class="col-sm-6">
+                            <mat-form-field style="width: 200%;">
+                                <!-- <input type="text" matInput formControlName="address" [readonly]="viewMode" /> -->
+                                <textarea matInput formControlName="address" [readonly]="viewMode"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-1">
+                    <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-outline-primary add-btn">Verify Stock</button>
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-3">
+                    <div class="your-box-container">
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">State Code : </label>
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="salesMan" [readonly]="viewMode" />
+                                </mat-form-field>
+                                <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
+                                    (newRowClick)="salesManSelected($event)"></master-search>
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-8 col-form-label">State Description </label>
+                        </div>
+
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">TaxCode : </label>
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="taxCode" [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Type : </label>
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 70%;">
+                                    <input type="text" matInput formControlName="type" [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row mb-1 ">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Ref No : </label>
+                        <div class="col-md-10">
+                            <div class="position-relative d-flex">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row mt-3">
+
+                <div class="col-md-12">
+                    <div class="row mt-3">
+
+                        <div class="col-md-12">
+                            <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+                                <mat-tab label="Item Details" id="get">
+                                    <div class="row">
+                                        <div class="col-md-2 d-flex  justify-content-between">
+                                            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                                                [viewImportBtn]="false" (addClick)="adddata()"
+                                                (deleteClick)="removedata()">
+                                            </menu-buttons>
+                                        </div>
+                                        <div class="col-md-2 d-flex">
+                                            <div class="checkbox justify-content-between">
+                                                <mat-checkbox>Full Checked</mat-checkbox>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 d-flex">
+                                                    <mat-form-field style="width: 100%;">
+                                                        <input type="text" matInput formControlName="remarks"
+                                                            [readonly]="viewMode" />
+                                                    </mat-form-field>
+                                        </div>
+                                        <div class="col-md-3 d-flex">
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">DPU Voc No : </label>
+                                            <div class="col-md-3">
+                                                    <mat-form-field style="width: 100%;">
+                                                        <input type="text" matInput formControlName="remarks"
+                                                            [readonly]="viewMode" />
+                                                    </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-2">
+                                        <div class="col-md-12">
+                                            <dx-data-grid id="gridContainer" [dataSource]="tableData"
+                                                [showBorders]="true" [showColumnLines]="true" [showRowLines]="true"
+                                                class="mt-3">
+                                                <dxo-editing mode="cell" [allowUpdating]="!viewMode">
+                                                </dxo-editing>
+                                                <dxi-column *ngFor="let data of columnheadItemDetails"
+                                                    dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+                                                    alignment="center" backgroundcolor="#000">
+                                                </dxi-column>
+
+                                            </dx-data-grid>
+                                        </div>
+                                    </div>
+                                </mat-tab>
+                                <mat-tab label="Other Amounts">
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <dx-resizable id="gridContainer" [width]="firstTableWidth" [height]="280"
+                                                [keepAspectRatio]="false" handles="right">
+                                                <dx-data-grid width="auto" #dataGrid id="gridContainer"
+                                                    [dataSource]="tableDatas" [showBorders]="true"
+                                                    [showColumnLines]="true" [showRowLines]="true" class="mt-3">
+                                                    <dxo-editing mode="cell" [allowUpdating]="!viewMode">
+                                                    </dxo-editing>
+                                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                    <dxo-selection mode="single"></dxo-selection>
+
+                                                    <dxi-column *ngFor="let data of columnheadItemDetails1"
+                                                        dataField="{{ data }}" caption="{{ data }}"
+                                                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                                                    </dxi-column>
+
+                                                </dx-data-grid>
+                                            </dx-resizable>
+                                        </div>
+                                    </div>
+                                </mat-tab>
+                            </mat-tab-group>
+
+
+
+                            <div class="row mt-3">
+
+                                <div class="col-md-4">
+                                    <div class="row mb-1 ">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Total : </label>
+                                        <div class="col-md-3">
+                                            <div class="position-relative d-flex">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="subTotal"
+                                                        [readonly]="viewMode" />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="position-relative d-flex">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="subTotal"
+                                                        [readonly]="viewMode" />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                </div>
+
+                                <div class="col-md-3">
+
+                                    <div class="row mb-1 ">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label"></label>
+                                        <div class="col-md-6">
+                                            <div class="position-relative d-flex">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 ">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label"> Total FC : </label>
+                                        <div class="col-md-6">
+                                            <div class="position-relative d-flex">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="subTotal"
+                                                        [readonly]="viewMode" />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 ">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label">Total CC : </label>
+                                        <div class="col-md-6">
+                                            <div class="position-relative d-flex">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="subTotal"
+                                                        [readonly]="viewMode" />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="row mb-1 ">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label"> Total GST : </label>
+                                        <div class="col-md-6">
+                                            <div class="position-relative d-flex">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="subTotal"
+                                                        [readonly]="viewMode" />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1 ">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label">0th Amt FC : </label>
+                                        <div class="col-md-6">
+                                            <div class="position-relative d-flex">
+                                                <mat-form-field style="width: 100%;">
+                                                    <input type="text" matInput formControlName="subTotal"
+                                                        [readonly]="viewMode" />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1 ">
+                                            <label for="inputPassword" class="col-sm-4 col-form-label">Gross : </label>
+                                            <div class="col-md-3">
+                                                <div class="position-relative d-flex">
+                                                    <mat-form-field style="width: 100%;">
+                                                        <input type="text" matInput formControlName="subTotal"
+                                                            [readonly]="viewMode" />
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="position-relative d-flex">
+                                                    <mat-form-field style="width: 100%;">
+                                                        <input type="text" matInput formControlName="subTotal"
+                                                            [readonly]="viewMode" />
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

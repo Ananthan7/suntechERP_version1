@@ -100,6 +100,7 @@ export class WaxProcessComponent implements OnInit {
   ngOnInit(): void {
     this.waxprocessFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.waxprocessFrom.controls.vocdate.setValue(this.commonService.currentDate)
+    this.waxprocessFrom.controls.vocno.setValue('1')
     console.log(this.branchParmeter);
     let data = this.branchParmeter.split(',');
     this.description = data[4].substring(15);

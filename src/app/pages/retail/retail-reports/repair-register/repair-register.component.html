@@ -1,1 +1,87 @@
-<p>repair-register works!</p>
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Repair Register </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header  (cancelClick)="close()"></modal-header>
+  <div class="row">
+      <div class="col-md-12">
+          <form [formGroup]="karatmasterFrom">
+              <div class="container-fluid pt-3">
+                  <div class="row justify-content-between">
+
+                    <div class="col-md-6">
+                        <div class="p-2 bd-highlight">
+                            <button type="button" class="btn btn-primary apporoval-add-btn">
+                              Select Branch
+                            </button>
+                          </div>
+                    </div>
+
+                      <div class="col-md-8">
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Repair From :</label>
+                          <div class="col-md-3">
+                            <mat-form-field style="width: 100%">
+                                <input matInput DateValidation 
+                                    [matDatepicker]="date" formControlName="date"
+                                    placeholder="DD/MM/YYYY" />
+                                <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                                <mat-datepicker #date></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Party Code :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 80%;">
+                              <input type="text" matInput  />
+                            </mat-form-field>
+                            <master-search>
+                            </master-search>
+                          </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Repair To :</label>
+                          <div class="col-md-3">
+                            <mat-form-field style="width: 100%">
+                                <input matInput DateValidation 
+                                    [matDatepicker]="date" formControlName="date"
+                                    placeholder="DD/MM/YYYY" />
+                                <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                                <mat-datepicker #date></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Party Name :</label>
+                          <div class="col-md-5">
+                            <mat-form-field style="width: 100%;">
+                              <input type="text" matInput  />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Repair Status :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                                <mat-select>
+                                    <mat-option value="1"></mat-option>
+                                  </mat-select>
+                            </mat-form-field>
+                          </div>
+                         
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Output Type :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                                <mat-select>
+                                    <mat-option value="1"></mat-option>
+                                  </mat-select>
+                            </mat-form-field>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+  

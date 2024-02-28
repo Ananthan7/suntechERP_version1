@@ -52,12 +52,12 @@ export class ComponentSizeSetComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getComponentSizeTypeOptions();
+
     console.log(this.content);
     if (this.content) {
       this.setFormValues()
     }
-
+    this.getComponentSizeTypeOptions();
   }
 
   getComponentSizeTypeOptions() {
@@ -68,33 +68,32 @@ export class ComponentSizeSetComponent implements OnInit {
         this.componentSizeType = result.response;
         this.componentSizeType.sort((a, b) => a.COMPSIZE_CODE - b.COMPSIZE_CODE);
         console.log(this.componentSizeType); // Log here to check the data
+        this.setFormValues();
       }
     });
     this.subscriptions.push(Sub);
-    this.cdRef.detectChanges()
   }
 
 
   setFormValues() {
-    this.getComponentSizeTypeOptions()
     if (!this.content) return
     this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE)
     this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION)
-
   }
 
   componentsizesetmasterForm: FormGroup = this.formBuilder.group({
     code: ['', [Validators.required]],
     description: ['', [Validators.required]],
-    COMPSIZE_CODE: [''],
 
   });
 
-  addTableData() {
-    this.getComponentSizeTypeOptions()
 
-      // Get the default value or select the first option from your dropdown options
-  //let defaultCompSizeCode = this.componentSizeType.length > 0 ? this.componentSizeType[0].COMPSIZE_CODE : "";
+  getSelectedCompSize(): string {
+    return this.componentsizesetmasterForm.value.COMPSIZE_CODE;
+  }
+
+
+  addTableData() {
 
     let length = this.tableData.length;
     let sn = length + 1;
@@ -105,9 +104,11 @@ export class ComponentSizeSetComponent implements OnInit {
       "COMPONENT_DESCRIPTION": "",
       "COMPSET_CODE": this.componentsizesetmasterForm.value.code
     };
+
     this.tableData.push(data);
   }
-  
+
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
