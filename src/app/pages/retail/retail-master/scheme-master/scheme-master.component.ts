@@ -95,7 +95,7 @@ export class SchemeMasterComponent implements OnInit {
         this.frequencyList = resp.response
       }
     });
-    
+
     let depositinAPI = 'ComboFilter/scheme%20type';
     let subs: Subscription = this.dataService.getDynamicAPI(depositinAPI).subscribe((resp: any) => {
       if (resp.status == 'Success') {
@@ -121,6 +121,7 @@ export class SchemeMasterComponent implements OnInit {
     });
 
   }
+
   getSchemeMasterList() {
     let API = 'SchemeMaster/GetSchemeMasterDetails/' + this.comService.branchCode + '/' + this.schemeMasterForm.value.code
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -128,7 +129,7 @@ export class SchemeMasterComponent implements OnInit {
         if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
           let data = resp.response
           this.schemeMasterForm.controls.startDate.setValue(data.START_DATE)
-        }else{
+        } else {
           if (resp.status == 'Success') {
             this.comService.showSnackBarMsg('Scheme Already Exists')
             this.schemeMasterForm.controls.code.setValue('')
@@ -242,12 +243,25 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.receiptModeone.setValue(this.content.INST_RECTYPE);
     this.schemeMasterForm.controls.bonusInstallment.setValue(this.content.SCHEME_BONUS);
     this.schemeMasterForm.controls.tenurePeriod.setValue(this.content.SCHEME_PERIOD);
-    this.schemeMasterForm.controls.schemeStatus.setValue(this.content.STATUS == 'Y'? true : false);
-    this.schemeMasterForm.controls.SCHEMEFIXEDAMT.setValue(this.content.SCHEME_FIXEDAMT == 'Y'? true : false);
+    this.schemeMasterForm.controls.schemeStatus.setValue(this.content.STATUS == 'Y' ? true : false);
+    this.schemeMasterForm.controls.SCHEMEFIXEDAMT.setValue(this.content.SCHEME_FIXEDAMT == 'Y' ? true : false);
     this.schemeMasterForm.controls.branch.setValue(this.content.BRANCH_CODE);
     this.schemeMasterForm.controls.depositIn.setValue(this.content.DEPOSIT_IN);
     this.getSchemeMasterList()
-    }
+    this.getSchemeWithCustomerCode()
+  }
+  getSchemeWithCustomerCode() {
+    let API = 'SchemeRegistration/GetSchemeWithCustomerCode/' + this.schemeMasterForm.value.code
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((resp: any) => {
+        if (resp.status == 'Success') {
+          this.comService.toastErrorByMsgId('Cannot Edit Registered Scheme')
+          this.viewMode = true
+          return
+        }
+      });
+    this.subscriptions.push(Sub);
+  }
   prefixCodeValidate() {
     let API = 'PrefixMaster/GetPrefixMasterDetail/' + this.schemeMasterForm.value.prefix
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -318,7 +332,7 @@ export class SchemeMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'SchemeMaster/DeleteSchemeMaster/' + this.schemeMasterForm.value.branch +'/'+ this.schemeMasterForm.value.code;
+        let API = 'SchemeMaster/DeleteSchemeMaster/' + this.schemeMasterForm.value.branch + '/' + this.schemeMasterForm.value.code;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
