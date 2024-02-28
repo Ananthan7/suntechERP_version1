@@ -245,6 +245,7 @@ export class AddReceiptComponent implements OnInit {
 
   //Account master
   getAccountMaster(accountCode: string) {
+    this.commonService.toastInfoByMsgId('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(`AccountMaster/${accountCode}`)
       .subscribe((result) => {
         if (result.response) {
@@ -263,30 +264,30 @@ export class AddReceiptComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  accountMasterChanged(event: any) {
-    let Sub: Subscription = this.dataService.getDynamicAPI('Scheme/AccountMaster?ACCODE=' + event.target.value)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
+  // accountMasterChanged(event: any) {
+  //   let Sub: Subscription = this.dataService.getDynamicAPI('Scheme/AccountMaster?ACCODE=' + event.target.value)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         let data = result.response
 
-          this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE);
-          this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
-          if (data.CURRENCY_CODE) {
-            this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
-            this.currencyCodeChange(data.CURRENCY_CODE);
-          } else {
-            this.toastr.error('Account Code not found')
-            this.receiptEntryForm.controls.AC_Code.setValue('');
-            this.receiptEntryForm.controls.AC_Description.setValue('');
-          }
-        } else {
-          this.toastr.error('Account Code not found')
-          this.receiptEntryForm.controls.AC_Code.setValue('');
-          this.receiptEntryForm.controls.AC_Description.setValue('');
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
+  //         this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE);
+  //         this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
+  //         if (data.CURRENCY_CODE) {
+  //           this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
+  //           this.currencyCodeChange(data.CURRENCY_CODE);
+  //         } else {
+  //           this.toastr.error('Account Code not found')
+  //           this.receiptEntryForm.controls.AC_Code.setValue('');
+  //           this.receiptEntryForm.controls.AC_Description.setValue('');
+  //         }
+  //       } else {
+  //         this.toastr.error('Account Code not found')
+  //         this.receiptEntryForm.controls.AC_Code.setValue('');
+  //         this.receiptEntryForm.controls.AC_Description.setValue('');
+  //       }
+  //     }, err => alert(err))
+  //   this.subscriptions.push(Sub)
+  // }
   //USE to get HSN and VAT and calculations
   getTaxDetails() {
     let date = this.commonService.formatDate(new Date())
@@ -415,11 +416,9 @@ export class AddReceiptComponent implements OnInit {
   //currency Code Change
   currencyCodeChange(value: string) {
     if (value == '') return
-    this.commonService.toastInfoByMsgId('MSG81447');
     let API = `CurrencyMaster/GetCurrencyMasterDetail/${value}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg();
         if (result.response) {
           let data = result.response
           if (data.CONV_RATE) {
@@ -433,7 +432,6 @@ export class AddReceiptComponent implements OnInit {
           this.commonService.toastErrorByMsgId('Currency rate not Found')
         }
       }, err => {
-        this.commonService.closeSnackBarMsg();
         this.commonService.toastErrorByMsgId('Currency rate not Found')
       })
     this.subscriptions.push(Sub)

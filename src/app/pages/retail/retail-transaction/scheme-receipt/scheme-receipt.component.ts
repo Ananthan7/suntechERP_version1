@@ -149,14 +149,15 @@ export class SchemeReceiptComponent implements OnInit {
       this.setCompanyCurrency();
     }
     this.setInitialValues()
-    // this.getSalesmanList();
-
+    this.getSalesmanList();
     if (this.inputElement) {
       this.renderer.selectRootElement(this.inputElement.nativeElement).focus();
     }
   }
   /**USE: set values for view and edit */
   setInitialValues() {
+    console.log(this.content,'this.content');
+    
     if (!this.content) {
       this.branchName = this.branchName?.BRANCH_NAME;
       this.receiptDetailsForm.controls.Branch.setValue(this.commonService.branchCode);
@@ -332,12 +333,13 @@ export class SchemeReceiptComponent implements OnInit {
     if (event.target.value == "") return;
     let inputValue = event.target.value;
     inputValue = inputValue.toUpperCase();
-    let data = this.salesmanArray.filter(
-      (item: any) => item.SALESPERSON_CODE == inputValue
-    );
+    let data = this.salesmanArray.filter((item: any) => item.SALESPERSON_CODE == inputValue);
     if (data.length > 0) {
       this.receiptDetailsForm.controls.Salesman.setValue(
         data[0].SALESPERSON_CODE
+      );
+      this.receiptDetailsForm.controls.SalesmanName.setValue(
+        data[0].DESCRIPTION
       );
     } else {
       this.toastr.error("Invalid Salesperson Code, try search!");
@@ -1133,9 +1135,9 @@ export class SchemeReceiptComponent implements OnInit {
       this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
       this.receiptDetailsForm.controls.TotalAmount.setValue(this.totalAmount_FC.toFixed(2))
       this.receiptDetailsForm.controls.PartyAmount.setValue(
-        (Number(this.receiptDetailsForm.value.PartyDescription)*this.totalAmount_FC).toFixed(2))
+        (Number(this.receiptDetailsForm.value.CurrRate)*this.totalAmount_FC).toFixed(2))
       this.receiptDetailsForm.controls.PartyAmtCode.setValue(
-        this.receiptDetailsForm.value.PartyCode
+        this.receiptDetailsForm.value.CurrCode
       )
       this.totalValue = this.totalAmount_LC + this.VATAmount;
       this.totalValue_FC = this.totalAmount_FC + this.VATAmount_FC;
