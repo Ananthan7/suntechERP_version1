@@ -181,7 +181,6 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.SchemeID.setValue(this.content.SCH_SCHEME_CODE);
     this.receiptDetailsForm.controls.Narration.setValue(this.content.REMARKS);
     this.receiptDetailsForm.controls.PartyCode.setValue(this.content.PARTYCODE);
-    this.receiptDetailsForm.controls.PartyAmtCode.setValue(this.content.CurrCode)
     this.getDetailsForEdit(this.content.MID)
   }
   VIEWEDITFLAG: string = '';
@@ -218,7 +217,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(`SchemeCurrencyReceipt/${MID}`)
       .subscribe((resp: any) => {
-        this.commonService.closeSnackBarMsg;
+        this.commonService.closeSnackBarMsg();
         if (resp.response) {
           if (resp.response) {
             let result = resp.response;
@@ -241,7 +240,7 @@ export class SchemeReceiptComponent implements OnInit {
           );
         }
       }, (err) => {
-        this.commonService.closeSnackBarMsg;
+        this.commonService.closeSnackBarMsg();
       }
       );
     this.subscriptions.push(Sub);
@@ -499,7 +498,7 @@ export class SchemeReceiptComponent implements OnInit {
     if (event.target.value == "") return;
     this.VocNumberMain = "";
     this.commonService.showSnackBarMsg('Loading ...')
-    let API = `PosCustomerMaster/GetCustomerMaster/${searchFlag}=${event.target.value}`;
+    let API = `${searchFlag}=${event.target.value}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
         this.commonService.closeSnackBarMsg();
@@ -514,6 +513,9 @@ export class SchemeReceiptComponent implements OnInit {
             );
             this.receiptDetailsForm.controls.POSCustomerCode.setValue(
               data.CODE
+            );
+            this.receiptDetailsForm.controls.POSCustomerEmail.setValue(
+              data.EMAIL
             );
             this.fetchSchemeWithCustCode(data.CODE);
           }
@@ -1083,6 +1085,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   /**use: add new row to grid */
   addNewRow(data: any) {
+    console.log(data,'data');
     this.disableAddBtnGrid = true;
     if (data.SRNO) {
       this.orderedItems = this.orderedItems.filter(
@@ -1091,7 +1094,6 @@ export class SchemeReceiptComponent implements OnInit {
     }
     this.orderedItems.push(data);
     this.orderedItems.map((s: any, i: any) => (s.id = i + 1));
-    //TRN_Per
     this.orderedItems.forEach((item: any, i: any) => {
       item.VAT_AMT = parseInt(item.TRN_Per)
       item.Id = i + 1;
@@ -1100,10 +1102,7 @@ export class SchemeReceiptComponent implements OnInit {
         item.TRN_Inv_Date = item.TRN_Inv_Date.toISOString();
     });
 
-    console.log(this.orderedItems,'///////////');
-
     this.calculateTotalValues();
-    // this.closeModal();
   }
   /**use: caluculate the total values for printing */
   private calculateTotalValues(): void {
@@ -1133,8 +1132,11 @@ export class SchemeReceiptComponent implements OnInit {
       });
       this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
       this.receiptDetailsForm.controls.TotalAmount.setValue(this.totalAmount_FC.toFixed(2))
-      this.receiptDetailsForm.controls.PartyAmount.setValue(this.totalAmount_FC.toFixed(2))
-
+      this.receiptDetailsForm.controls.PartyAmount.setValue(
+        (Number(this.receiptDetailsForm.value.PartyDescription)*this.totalAmount_FC).toFixed(2))
+      this.receiptDetailsForm.controls.PartyAmtCode.setValue(
+        this.receiptDetailsForm.value.PartyCode
+      )
       this.totalValue = this.totalAmount_LC + this.VATAmount;
       this.totalValue_FC = this.totalAmount_FC + this.VATAmount_FC;
       this.totalPartyValue = this.totalAmount_LC + this.VATAmount;
@@ -1230,7 +1232,8 @@ export class SchemeReceiptComponent implements OnInit {
     }
   }
   deleteTableData() { 
-    this.orderedItems = []
+    this.orderedItems = [];
+    this.disableAddBtnGrid = false;
   }
   close(data?: any) {
     //TODO reset forms and data before closing

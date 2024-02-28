@@ -119,15 +119,14 @@
                                         <span>
                                             <mat-form-field style="width: 25%">
                                                 <input type="text" matInput
-                                                    (focusout)="customerChange($event,'CODE')"
+                                                    (focusout)="customerChange($event,'PosCustomerMaster/GetCustomerByCode/Code')"
                                                     placeholder="Code"
                                                     formControlName="POSCustomerCode" />
                                             </mat-form-field>
                                             <mat-form-field
                                                 style="width: 40%; margin-left: 7px;">
                                                 <input type="text" matInput
-                                                    placeholder="Name"
-                                                    (focusout)="customerChange($event,'NAME')"
+                                                    placeholder="Name" readonly
                                                     formControlName="POSCustomerName" />
                                             </mat-form-field>
                                             <master-search
@@ -147,8 +146,7 @@
                                                     style="width: 25%">
                                                     <input type="text" matInput
                                                         formControlName="PartyCode"
-                                                        maxlength="6"
-                                                        (focusout)="partyCodeChange($event,'ACCODE')" />
+                                                        maxlength="6" readonly/>
                                                 </mat-form-field>
                                                 <mat-form-field
                                                     style="width: 35%;margin-left: 4px;">
@@ -170,7 +168,7 @@
                                         <span>
                                             <mat-form-field>
                                                 <input type="text" matInput
-                                                    (focusout)="customerChange($event,'MOBILE')"
+                                                    (focusout)="customerChange($event,'PosCustomerMaster/GetCustomerMaster/Mobile')"
                                                     formControlName="POSCustomerMobile" />
                                             </mat-form-field>
                                         </span>

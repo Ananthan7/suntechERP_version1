@@ -82,7 +82,7 @@ export class AddReceiptComponent implements OnInit {
     Amount_FC: [''],
     Amount_LC: [''],
     Header_Amount: [''],
-    TRN_Per: [''],
+    TRN_Per: ['',[Validators.required]],
     TRN_Amount_FC: [''],
     TRN_Amount_LC: [''],
     AmountWithTRN: [''],
@@ -415,9 +415,11 @@ export class AddReceiptComponent implements OnInit {
   //currency Code Change
   currencyCodeChange(value: string) {
     if (value == '') return
+    this.commonService.toastInfoByMsgId('MSG81447');
     let API = `CurrencyMaster/GetCurrencyMasterDetail/${value}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
+        this.commonService.closeSnackBarMsg();
         if (result.response) {
           let data = result.response
           if (data.CONV_RATE) {
@@ -428,9 +430,12 @@ export class AddReceiptComponent implements OnInit {
             this.currencyRate = data.CONV_RATE
           }
         } else {
-          this.toastr.error('Currency rate not Found')
+          this.commonService.toastErrorByMsgId('Currency rate not Found')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.closeSnackBarMsg();
+        this.commonService.toastErrorByMsgId('Currency rate not Found')
+      })
     this.subscriptions.push(Sub)
   }
   /**USE: get CreditCardMaster */
@@ -481,6 +486,7 @@ export class AddReceiptComponent implements OnInit {
   }
   //type change
   paymentTypeChange(event: any) {
+    this.accountMasterData.WHERECONDITION = "ACCODE<>''"
     this.isViewCheckDetail = true;
     this.isViewTypeCode = true;
     this.receiptEntryForm.controls.AC_Code.setValue('');
@@ -501,6 +507,9 @@ export class AddReceiptComponent implements OnInit {
       this.getBranchMasterList()
     } else if (event.ENGLISH == 'Cheque') {
       this.isViewCheckDetail = false;
+      this.isViewTypeCode = false;
+      this.accountMasterData.LOAD_ONCLICK = true;
+      this.accountMasterData.WHERECONDITION = "ACCOUNT_MODE='B'"
     } 
   }
   /**USE: branch autocomplete starts*/
