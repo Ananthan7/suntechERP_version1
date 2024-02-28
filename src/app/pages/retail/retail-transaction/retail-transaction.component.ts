@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subscription } from 'rxjs';
@@ -40,6 +40,8 @@ import { MetalBranchTransferInAutoRepairComponent } from './metal-branch-transfe
 import { DiamondBranchTransferOutRepairComponent } from './diamond-branch-transfer-out-repair/diamond-branch-transfer-out-repair.component';
 import { DiamondBranchTransferInAutoRepairComponent } from './diamond-branch-transfer-in-auto-repair/diamond-branch-transfer-in-auto-repair.component';
 import { RepairSaleComponent } from './repair-sale/repair-sale.component';
+import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -56,6 +58,12 @@ export class RetailTransactionComponent implements OnInit {
   componentSelected: any;
   private componentDbList: any = {}
   componentName: any;
+
+  // Dialog box
+  dialogBox: any;
+  dialogBoxResult: any;
+
+  modalRef!: NgbModalRef;
 
   //   reasonLookup: MasterSearchModel =
   //   {
@@ -91,6 +99,8 @@ export class RetailTransactionComponent implements OnInit {
     private snackBar: MatSnackBar,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
+    public dialog: MatDialog,
+
 
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
@@ -140,30 +150,30 @@ export class RetailTransactionComponent implements OnInit {
       'SchemeReceiptComponent': SchemeReceiptComponent,
       'OrderLockUnlockComponent': OrderLockUnlockComponent,
       'PosSalesmanTargetAnalysisComponent': PosSalesmanTargetAnalysisComponent,
-      'GoldExchangeComponent': GoldExchangeComponent,      
+      'GoldExchangeComponent': GoldExchangeComponent,
       'RepairMetalPurchaseComponent': RepairMetalPurchaseComponent,
       'RepairDiamondPurchaseComponent': RepairDiamondPurchaseComponent,
       'RepairJewelleryReceiptComponent': RepairJewelleryReceiptComponent,
       'RepairIssueToWorkshopComponent': RepairIssueToWorkshopComponent,
       'RepairIssueFromWorkshopComponent': RepairIssueFromWorkshopComponent,
-      'RepairCustomerDeliveryComponent': RepairCustomerDeliveryComponent, 
+      'RepairCustomerDeliveryComponent': RepairCustomerDeliveryComponent,
       'LoyaltyRegisterComponent': LoyaltyRegisterComponent,
       'PosSalesmanCommissionComponent': PosSalesmanCommissionComponent,
       'PosCreditSaleReciptComponent': PosCreditSaleReciptComponent,
       'BranchTransferRepairOutComponent': BranchTransferRepairOutComponent,
-      'BranchTransferRepairRtnComponent': BranchTransferRepairRtnComponent,  
+      'BranchTransferRepairRtnComponent': BranchTransferRepairRtnComponent,
 
-      'MetalBranchTransferOutRepairComponent': MetalBranchTransferOutRepairComponent,  
-      'MetalBranchTransferInAutoRepairComponent': MetalBranchTransferInAutoRepairComponent,  
-      'DiamondBranchTransferOutRepairComponent': DiamondBranchTransferOutRepairComponent,  
-      'DiamondBranchTransferInAutoRepairComponent': DiamondBranchTransferInAutoRepairComponent,  
-      'RepairSaleComponent': RepairSaleComponent,  
+      'MetalBranchTransferOutRepairComponent': MetalBranchTransferOutRepairComponent,
+      'MetalBranchTransferInAutoRepairComponent': MetalBranchTransferInAutoRepairComponent,
+      'DiamondBranchTransferOutRepairComponent': DiamondBranchTransferOutRepairComponent,
+      'DiamondBranchTransferInAutoRepairComponent': DiamondBranchTransferInAutoRepairComponent,
+      'RepairSaleComponent': RepairSaleComponent,
 
-      
-      
 
-     
-      
+
+
+
+
 
       // Add components and update in operationals > menu updation grid form component name
     }
@@ -172,16 +182,16 @@ export class RetailTransactionComponent implements OnInit {
     } else {
       this.CommonService.showSnackBarMsg('Module Not Created')
     }
-    const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
+    this.modalRef = this.modalService.open(this.componentSelected, {
       size: 'xl',
       backdrop: 'static',
       keyboard: true,
       windowClass: 'modal-full-width'
     });
 
-    modalRef.componentInstance.content = data;
+    this.modalRef.componentInstance.content = data;
 
-    modalRef.result.then((result) => {
+    this.modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
       } else if (result == 'OpenModal') {
@@ -195,7 +205,40 @@ export class RetailTransactionComponent implements OnInit {
       }
       // Handle modal dismissal (if needed)
     });
+
+
   }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscape(event: KeyboardEvent) {
+    if (this.modalRef && this.modalService.hasOpenModals()) {
+
+      // this.openDialog('Warning', 'Are you sure want to remove this record?', false, true);
+      // this.dialogBox.afterClosed().subscribe((data: any) => {
+      //   if (data != 'No') {
+          
+      //   }else{
+      //     this.modalRef.close();
+      //   }
+      // });
+
+      const shouldCloseModal = confirm('Are you sure you want to close the modal?');
+      if (shouldCloseModal) {
+        this.modalRef.close();
+      } else {
+        this.modalRef.shown;
+      }
+    }
+  }
+
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(DialogboxComponent, {
+      width: '40%',
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
+
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     if (data) {
@@ -212,8 +255,8 @@ export class RetailTransactionComponent implements OnInit {
       }
       this.PERMISSIONS = data.PERMISSION;
     }
-  
-      this.masterGridComponent?.getMasterGridData(data)
+
+    this.masterGridComponent?.getMasterGridData(data)
   }
 
 
