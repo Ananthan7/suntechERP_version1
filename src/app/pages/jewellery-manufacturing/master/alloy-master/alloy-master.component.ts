@@ -278,6 +278,18 @@ export class AlloyMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
+  currencyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'Currency type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -295,6 +307,15 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price.setValue(e.PREFIX_CODE);
   }
+
+  currencyDataSelected(e: any) {
+    console.log(e);
+    if (this.checkStockCode()) return
+    this.alloyMastereForm.controls.currency.setValue(e.CURRENCY_CODE);
+    this.alloyMastereForm.controls.currencyRate.setValue(e.CONV_RATE);
+     
+  }
+
 
   subcategoryCodeSelected(e: any) {
     if (this.checkStockCode()) return
@@ -456,7 +477,7 @@ export class AlloyMasterComponent implements OnInit {
   }
   setPostData() {
     let postData = {
-      ITEM: this.commonService.nullToString(this.alloyMastereForm.value.itemcode),
+      ITEM: 'Y',
       STOCK_CODE: this.commonService.nullToString(this.alloyMastereForm.value.code),
       STOCK_DESCRIPTION: this.commonService.nullToString(this.alloyMastereForm.value.description),
       CURRENCY_CODE: this.commonService.nullToString(this.alloyMastereForm.value.currency),
@@ -533,7 +554,7 @@ export class AlloyMasterComponent implements OnInit {
       OPENED_BY: "",
       FIRST_TRN: this.commonService.nullToString(this.alloyMastereForm.value.fristtransaction),
       LAST_TRN: this.commonService.nullToString(this.alloyMastereForm.value.lasttransaction),
-      MID: this.content.MID || 0,
+      MID: this.content?.MID || 0,
       PRINTED: true,
       PURVOCTYPE_NO: "",
       PURPARTY: "",
@@ -878,14 +899,10 @@ export class AlloyMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
     let postData
-    try {
-      postData = this.setPostData()
-    } catch (error: any) {
-      this.commonService.toastErrorByMsgId(error)
-    }
+    postData = this.setPostData()
+    
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.status == "Success") {

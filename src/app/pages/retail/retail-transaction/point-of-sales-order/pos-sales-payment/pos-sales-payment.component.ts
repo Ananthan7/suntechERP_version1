@@ -7,7 +7,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./pos-sales-payment.component.scss']
 })
 export class PosSalesPaymentComponent implements OnInit {
-
+  
   constructor( private activeModal: NgbActiveModal) { }
 
   ngOnInit(): void {

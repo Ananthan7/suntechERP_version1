@@ -19,7 +19,7 @@
                                 <label for="input" class="col-sm-1 col-form-label">Code * :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%">
-                                        <input type="text" maxlength="15" [readonly]="viewMode" matInput
+                                        <input type="text" maxlength="15" [readonly]="editCode" matInput
                                             formControlName="code" oninput="this.value = this.value.toUpperCase()" />
                                     </mat-form-field>
                                 </div>
@@ -145,7 +145,7 @@
                                 <dxi-column dataField="SRNO" caption="SR No" class="tab"> </dxi-column>
                                 <dxi-column dataField="MELTYPE_CODE" caption="Division" cellTemplate="division">
                                 </dxi-column>
-                                <dxi-column dataField="STOCK_CODE" caption="Default Alloy" cellTemplate="defaultAlloy">
+                                <dxi-column dataField="DEF_ALLOY_STOCK" caption="Default Alloy" cellTemplate="defaultAlloy">
                                 </dxi-column>
                                 <dxi-column dataField="MELTYPE_DESCRIPTION" caption="Description"> </dxi-column>
                                 <dxi-column dataField="ALLOY_PER" caption="Alloy %" cellTemplate="alloyper">
@@ -166,7 +166,7 @@
                                 </div>
 
                                 <div *dxTemplate="let data of 'alloyper'">
-                                    <input type="text" (change)="alloyPer($event,data)" [value]="data.value"
+                                    <input type="number" (change)="alloyPer($event,data)" [value]="data.value"
                                         AmountDecimalInput style="width: 100%;" required [readonly]="viewMode" />
                                 </div>
 

@@ -35,6 +35,11 @@ import { RepairIssueToWorkshopComponent } from './repair-issue-to-workshop/repai
 import { RepairIssueFromWorkshopComponent } from './repair-issue-from-workshop/repair-issue-from-workshop.component';
 import { BranchTransferRepairRtnComponent } from './branch-transfer-repair-rtn/branch-transfer-repair-rtn.component';
 import { RepairCustomerDeliveryComponent } from './repair-customer-delivery/repair-customer-delivery.component';
+import { MetalBranchTransferOutRepairComponent } from './metal-branch-transfer-out-repair/metal-branch-transfer-out-repair.component';
+import { MetalBranchTransferInAutoRepairComponent } from './metal-branch-transfer-in-auto-repair/metal-branch-transfer-in-auto-repair.component';
+import { DiamondBranchTransferOutRepairComponent } from './diamond-branch-transfer-out-repair/diamond-branch-transfer-out-repair.component';
+import { DiamondBranchTransferInAutoRepairComponent } from './diamond-branch-transfer-in-auto-repair/diamond-branch-transfer-in-auto-repair.component';
+import { RepairSaleComponent } from './repair-sale/repair-sale.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -146,7 +151,19 @@ export class RetailTransactionComponent implements OnInit {
       'PosSalesmanCommissionComponent': PosSalesmanCommissionComponent,
       'PosCreditSaleReciptComponent': PosCreditSaleReciptComponent,
       'BranchTransferRepairOutComponent': BranchTransferRepairOutComponent,
-      'BranchTransferRepairRtnComponent': BranchTransferRepairRtnComponent,      
+      'BranchTransferRepairRtnComponent': BranchTransferRepairRtnComponent,  
+
+      'MetalBranchTransferOutRepairComponent': MetalBranchTransferOutRepairComponent,  
+      'MetalBranchTransferInAutoRepairComponent': MetalBranchTransferInAutoRepairComponent,  
+      'DiamondBranchTransferOutRepairComponent': DiamondBranchTransferOutRepairComponent,  
+      'DiamondBranchTransferInAutoRepairComponent': DiamondBranchTransferInAutoRepairComponent,  
+      'RepairSaleComponent': RepairSaleComponent,  
+
+      
+      
+
+     
+      
 
       // Add components and update in operationals > menu updation grid form component name
     }

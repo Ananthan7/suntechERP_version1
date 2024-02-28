@@ -32,6 +32,8 @@ export class MeltingTypeComponent implements OnInit {
   viewMode: boolean = false;
   viewModeField: boolean = true;
   SearchDisable: boolean = false;
+  editCode: boolean = false;
+
 
 
   constructor(
@@ -47,8 +49,10 @@ export class MeltingTypeComponent implements OnInit {
     this.viewModeField = true;
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
+      this.editCode = true;
       this.setFormValues();
     } else if (this.content.FLAG == 'EDIT') {
+      this.editCode = true;
       this.viewMode = false;
       this.setFormValues();
     }
@@ -90,7 +94,7 @@ export class MeltingTypeComponent implements OnInit {
       return;
     }
 
-    if (this.meltingTypeForm.value.code != '' && this.meltingTypeForm.value.description != '' && this.meltingTypeForm.value.color != '' && this.tableData.length > 0 ) {
+    if (this.meltingTypeForm.value.code != '' && this.meltingTypeForm.value.description != '' && this.meltingTypeForm.value.color != '' && this.tableData.length > 0) {
       let API = 'MeltingType/InsertMeltingType';
       let postData = {
         "MID": 0,
@@ -242,9 +246,54 @@ export class MeltingTypeComponent implements OnInit {
 
   });
 
+  // addTableData() {
+  //   if (
+  //     this.meltingTypeForm.value.code !== "" &&
+  //     this.meltingTypeForm.value.description !== "" &&
+  //     this.meltingTypeForm.value.alloy !== "" &&
+  //     this.meltingTypeForm.value.color !== ""
+  //   )
+
+  //   {
+
+
+
+  //     if {
+  //       const length = this.tableData.length;
+  //       this.slNo = length + 1;
+
+  //       const data = {
+  //         UNIQUEID: 0,
+  //         SRNO: this.slNo,
+  //         MELTYPE_CODE: 'Y',
+  //         MELTYPE_DESCRIPTION: "",
+  //         KARAT_CODE: this.meltingTypeForm.value.karat,
+  //         PURITY: this.commonService.transformDecimalVB(
+  //           6,
+  //           this.meltingTypeForm.value.purity
+  //         ),
+  //         DIVISION_CODE: this.meltingTypeForm.value.divCode,
+  //         DEF_ALLOY_STOCK: "",
+  //         DEF_ALLOY_DESCRIPTION: "",
+  //         ALLOY_PER: "",
+  //       };
+
+  //       this.tableData.push(data);
+  //       console.log(data);
+  //     } else {
+  //       this.toastr.error('DEF_ALLOY_STOCK already exists. Cannot add duplicate entry.');
+  //     }
+  //   } else {
+  //     this.toastr.error('Please fill all mandatory fields');
+  //   }
+  // }
+
+
   addTableData() {
 
-    if (this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "") {
+
+
+    if (this.meltingTypeForm.value.code != "" && this.meltingTypeForm.value.description != "" && this.meltingTypeForm.value.alloy != "" && this.meltingTypeForm.value.color != "") {
       let length = this.tableData.length;
       this.slNo = length + 1;
       let data = {
@@ -255,9 +304,9 @@ export class MeltingTypeComponent implements OnInit {
         "KARAT_CODE": this.meltingTypeForm.value.karat,
         "PURITY": this.commonService.transformDecimalVB(6, this.meltingTypeForm.value.purity),
         "DIVISION_CODE": this.meltingTypeForm.value.divCode,
-        "DEF_ALLOY_STOCK": this.meltingTypeForm.value.stockCode,
-        "DEF_ALLOY_DESCRIPTION": this.meltingTypeForm.value.stockCodeDes,
-        "ALLOY_PER": "",
+        "DEF_ALLOY_STOCK": "",
+        "DEF_ALLOY_DESCRIPTION": "",
+        "ALLOY_PER": 100 || "",
       };
       this.tableData.push(data);
       console.log(data);
@@ -429,41 +478,32 @@ export class MeltingTypeComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Default Alloy Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "item = 'Y' ",
+    WHERECONDITION: "item = 'D' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
 
   defaultAlloySelected(data: any, value: any, controlName: string) {
-
-    // if(controlName == 'usertemp'){
-    //    this.userCodeEnable = true;
-    //  }
-
-    console.log(value);
-    console.log(data);
-    this.tableData[value.data.SRNO - 1].STOCK_CODE = data.STOCK_CODE;
-    this.tableData[value.data.SRNO - 1].MELTYPE_DESCRIPTION = data.DESCRIPTION;
+    let stockData = [];
+    stockData = this.tableData.filter((item: any) => item.DEF_ALLOY_STOCK == data.STOCK_CODE)
+    if (stockData.length > 0) {
+      this.toastr.error('Same Alloy code cannot be added.')
+    }
+    else {
+      console.log(value);
+      console.log(data);
+      this.tableData[value.data.SRNO - 1].DEF_ALLOY_STOCK = data.STOCK_CODE;
+      this.tableData[value.data.SRNO - 1].MELTYPE_DESCRIPTION = data.STOCK_DESCRIPTION;
+    }
   }
 
-
   division(data: any, value: any) {
-    // if (!this.commonService.validateEmail(data.target.value)) {
-    //   this.commonService.toastErrorByMsgId('Invalid Email Address')
-    //   // this.tableData[value.data.SRNO - 1].EMAIL_ID = ''
-    //   return
-    // }
 
     this.tableData[value.data.SRNO - 1].MELTYPE_CODE = data.target.value;
   }
 
   alloyPer(data: any, value: any) {
-    // if (!this.commonService.validateEmail(data.target.value)) {
-    //   this.commonService.toastErrorByMsgId('Invalid Email Address')
-    //   // this.tableData[value.data.SRNO - 1].EMAIL_ID = ''
-    //   return
-    // }
 
     this.tableData[value.data.SRNO - 1].ALLOY_PER = data.target.value;
   }

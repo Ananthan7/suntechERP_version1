@@ -9,6 +9,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { Code } from 'angular-feather/icons';
 import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component';
+import { RepairDetailsComponent } from './repair-details/repair-details.component';
 
 
 @Component({
@@ -279,6 +280,14 @@ export class RepairJewelleryReceiptComponent implements OnInit {
  
 
   adddata() {
+
+    const modalRef: NgbModalRef = this.modalService.open(RepairDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+
     let length = this.tableData.length;
     let srno = length + 1;
     let data =  {
