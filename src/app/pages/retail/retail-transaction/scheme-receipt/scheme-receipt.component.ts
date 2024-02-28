@@ -156,8 +156,8 @@ export class SchemeReceiptComponent implements OnInit {
   }
   /**USE: set values for view and edit */
   setInitialValues() {
-    console.log(this.content,'this.content');
-    
+    console.log(this.content, 'this.content');
+
     if (!this.content) {
       this.branchName = this.branchName?.BRANCH_NAME;
       this.receiptDetailsForm.controls.Branch.setValue(this.commonService.branchCode);
@@ -169,20 +169,35 @@ export class SchemeReceiptComponent implements OnInit {
     }
     this.receiptDetailsForm.controls.Branch.setValue(this.commonService.nullToString(this.content.BRANCH_CODE));
     this.receiptDetailsForm.controls.VocType.setValue(this.commonService.nullToString(this.content.VOCTYPE));
-    this.receiptDetailsForm.controls.VocDate.setValue(this.content.VOCDATE);
+    this.receiptDetailsForm.controls.VocDate.setValue(new Date(this.content.VOCDATE));
     this.receiptDetailsForm.controls.PostedDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.RefDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.Salesman.setValue(this.content.SALESPERSON_CODE);
+    
     this.receiptDetailsForm.controls.VocNo.setValue(this.content.VOCNO);
-    this.receiptDetailsForm.controls.CurrCode.setValue(this.content.BASE_CURRENCY);
-    this.receiptDetailsForm.controls.CurrRate.setValue(this.content.BASE_CURR_RATE);
-    this.receiptDetailsForm.controls.RefNo.setValue(this.content.REFDOCNO);
+    this.receiptDetailsForm.controls.CurrCode.setValue(this.content.PARTY_CURRENCY);
+    this.receiptDetailsForm.controls.CurrRate.setValue(
+      this.commonService.decimalQuantityFormat(this.content.PARTY_CURR_RATE,'RATE')
+    );
+    this.receiptDetailsForm.controls.POSCustomerEmail.setValue(this.content.CUSTOMER_EMAIL);
     this.receiptDetailsForm.controls.POSCustomerCode.setValue(this.content.POSCUSTOMERCODE);
     this.receiptDetailsForm.controls.POSCustomerName.setValue(this.content.CUSTOMER_NAME);
-    this.receiptDetailsForm.controls.SchemeID.setValue(this.content.SCH_SCHEME_CODE);
+    this.receiptDetailsForm.controls.SchemeCode.setValue(this.content.SCH_SCHEME_CODE);
+    this.receiptDetailsForm.controls.SchemeID.setValue(this.content.SCH_CUSTOMER_ID);
     this.receiptDetailsForm.controls.Narration.setValue(this.content.REMARKS);
     this.receiptDetailsForm.controls.PartyCode.setValue(this.content.PARTYCODE);
+    this.receiptDetailsForm.controls.PartyAddress.setValue(this.content.PARTY_ADDRESS);
+    this.receiptDetailsForm.controls.PartyAmtCode.setValue(this.content.PARTY_CURRENCY);
+    this.receiptDetailsForm.controls.PartyAmount.setValue(this.content.TOTAL_AMOUNTFC);
+    this.receiptDetailsForm.controls.TotalAmount.setValue(this.content.TOTAL_AMOUNTFC);
+    this.receiptDetailsForm.controls.TotalTax.setValue(this.content.TDS_TOTALFC);
     this.getDetailsForEdit(this.content.MID)
+    let data = this.salesmanArray.filter((item: any) => item.SALESPERSON_CODE == this.content.SALESPERSON_CODE);
+    if (data?.length > 0) {
+      this.receiptDetailsForm.controls.SalesmanName.setValue(
+        data[0].DESCRIPTION
+      );
+    }
   }
   VIEWEDITFLAG: string = '';
   dataIndex: any;
@@ -388,9 +403,9 @@ export class SchemeReceiptComponent implements OnInit {
           this.commonService.toastErrorByMsgId(result.Message ? result.Message : "Scheme Not found");
         }
       },
-      (err) => { 
+      (err) => {
         this.commonService.closeSnackBarMsg();
-        this.commonService.toastErrorByMsgId("Server Error") 
+        this.commonService.toastErrorByMsgId("Server Error")
       }
     );
     this.subscriptions.push(Sub);
@@ -905,7 +920,7 @@ export class SchemeReceiptComponent implements OnInit {
     });
     return detailsArray
   }
-  setPostDateToSave(){
+  setPostDateToSave() {
     return {
       "MID": 1,
       "BRANCH_CODE": this.receiptDetailsForm.value.Branch || "",
@@ -962,8 +977,8 @@ export class SchemeReceiptComponent implements OnInit {
       "CUSTOMER_EMAIL": this.commonService.nullToString(this.receiptDetailsForm.value.POSCustomerEmail),
       "TDS_CODE": "",
       "TDS_APPLICABLE": true,
-      "TDS_TOTALFC": 0,
-      "TDS_TOTALCC": 0,
+      "TDS_TOTALFC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
+      "TDS_TOTALCC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
       "ADRRETURNREF": "",
       "ADVRETURN": false,
       "SCH_SCHEME_CODE": this.receiptDetailsForm.value.SchemeCode,
@@ -1087,7 +1102,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   /**use: add new row to grid */
   addNewRow(data: any) {
-    console.log(data,'data');
+    console.log(data, 'data');
     this.disableAddBtnGrid = true;
     if (data.SRNO) {
       this.orderedItems = this.orderedItems.filter(
@@ -1122,7 +1137,7 @@ export class SchemeReceiptComponent implements OnInit {
       let vatTotal = 0
 
       this.orderedItems.forEach((item: any) => {
-        item.AMOUNT_VAT = ((parseInt(item.Amount_FC)/(100 + item.VAT_AMT)) * 100).toFixed(2)
+        item.AMOUNT_VAT = ((parseInt(item.Amount_FC) / (100 + item.VAT_AMT)) * 100).toFixed(2)
         item.VAT_AMT = parseInt(item.Amount_FC) - item.AMOUNT_VAT
         vatTotal += item.VAT_AMT;
         this.totalAmount_LC += parseInt(item.Amount_LC);
@@ -1135,7 +1150,7 @@ export class SchemeReceiptComponent implements OnInit {
       this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
       this.receiptDetailsForm.controls.TotalAmount.setValue(this.totalAmount_FC.toFixed(2))
       this.receiptDetailsForm.controls.PartyAmount.setValue(
-        (Number(this.receiptDetailsForm.value.CurrRate)*this.totalAmount_FC).toFixed(2))
+        (Number(this.receiptDetailsForm.value.CurrRate) * this.totalAmount_FC).toFixed(2))
       this.receiptDetailsForm.controls.PartyAmtCode.setValue(
         this.receiptDetailsForm.value.CurrCode
       )
@@ -1233,7 +1248,7 @@ export class SchemeReceiptComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  deleteTableData() { 
+  deleteTableData() {
     this.orderedItems = [];
     this.disableAddBtnGrid = false;
   }

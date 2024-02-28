@@ -82,7 +82,7 @@ export class AddReceiptComponent implements OnInit {
     Amount_FC: [''],
     Amount_LC: [''],
     Header_Amount: [''],
-    TRN_Per: ['',[Validators.required]],
+    TRN_Per: ['', [Validators.required]],
     TRN_Amount_FC: [''],
     TRN_Amount_LC: [''],
     AmountWithTRN: [''],
@@ -115,36 +115,38 @@ export class AddReceiptComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.content.details && this.content.details.length > 0) {
-      this.setInitialValues()
-    } else {
-      // this.getBranchMasterList()
-      this.getPaymentType('Credit Card')
-      this.getCreditCardMaster()
-      this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
-      this.receiptEntryForm.controls.ChequeDate.setValue(this.commonService.currentDate)
-    }
+    // if (this.content.details && this.content.details.length > 0) {
+    //   this.setInitialValues()
+    // } else {
+    // this.getBranchMasterList()
+    this.getPaymentType('')
+    this.getCreditCardMaster()
+    this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
+    this.receiptEntryForm.controls.ChequeDate.setValue(this.commonService.currentDate)
+    // }
     if (this.content) {
-      this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
-      this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
-      this.receiptEntryForm.controls.InstallmentAmount.setValue(
-        this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
-      )
-      this.receiptEntryForm.controls.Header_Amount.setValue(
-        this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
-      )
-      this.receiptEntryForm.controls.Amount_LC.setValue(
-        this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
-      )
-      this.receiptEntryForm.controls.Amount_FC.setValue(
-        this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
-      )
-      this.setGridData()
-      this.receiptEntryForm.controls.SchemeTotalAmount.setValue(this.content.SCHEME_AMOUNT)
+      this.setFormValues()
     }
     this.paymentTypeChange({ ENGLISH: 'Cash' })
   }
-
+  setFormValues() {
+    this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
+    this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
+    this.receiptEntryForm.controls.InstallmentAmount.setValue(
+      this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+    )
+    this.receiptEntryForm.controls.Header_Amount.setValue(
+      this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+    )
+    this.receiptEntryForm.controls.Amount_LC.setValue(
+      this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+    )
+    this.receiptEntryForm.controls.Amount_FC.setValue(
+      this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+    )
+    this.setGridData()
+    this.receiptEntryForm.controls.SchemeTotalAmount.setValue(this.content.SCHEME_AMOUNT)
+  }
   setInitialValues() {
     let data = this.content.details[0]
     this.getPaymentType(data.RECPAY_TYPE || data.Type)
@@ -311,7 +313,7 @@ export class AddReceiptComponent implements OnInit {
           // this.receiptEntryForm.controls.Header_Amount.setValue(this.content.SCH_INST_AMOUNT_FC)
           // this.receiptEntryForm.controls.Amount_LC.setValue(this.content.SCH_INST_AMOUNT_FC)
           // this.receiptEntryForm.controls.Amount_FC.setValue(this.content.SCH_INST_AMOUNT_FC)
-        
+
           let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
 
           amount_LC = Number(amount_LC.toFixed(2))
@@ -367,8 +369,8 @@ export class AddReceiptComponent implements OnInit {
   /**calculate amount and split to rows */
   calculateGridAmount() {
     let formData = this.receiptEntryForm.value
-    
-    let payAmountSum:number = 0
+
+    let payAmountSum: number = 0
     this.gridDataSource.forEach((item: any, index: any) => {
       payAmountSum += parseInt(item.PAY_AMOUNT_FC)
       item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0, 'THREE')
@@ -377,7 +379,7 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.SchemeBalance.setValue(
       this.commonService.decimalQuantityFormat((payAmountSum), 'AMOUNT')
     )
-    if(formData.Amount_LC>payAmountSum || formData.Amount_FC>payAmountSum){
+    if (formData.Amount_LC > payAmountSum || formData.Amount_FC > payAmountSum) {
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than ' + this.receiptEntryForm.value.SchemeBalance)
       this.receiptEntryForm.controls.Amount_LC.setValue(
         this.commonService.decimalQuantityFormat(0, 'AMOUNT')
@@ -412,6 +414,16 @@ export class AddReceiptComponent implements OnInit {
       }
       if (flag == 1) return
     })
+    this.setNarrationString() //narration add
+  }
+  setNarrationString(){
+    let narrationStr: string = ''
+    this.gridDataSource.forEach((item: any, index: any) => {
+      if(Number(item.RCVD_AMOUNTFC) != 0){
+        narrationStr +=  `${item.PAY_DATE} : ${item.RCVD_AMOUNTFC} #`
+      }
+    })
+    this.receiptEntryForm.controls.Narration.setValue(narrationStr)
   }
   //currency Code Change
   currencyCodeChange(value: string) {
@@ -461,26 +473,26 @@ export class AddReceiptComponent implements OnInit {
   }
   /**USE:  get PaymentType*/
   getPaymentType(value: string) {
-    let Sub: Subscription = this.dataService.getDynamicAPI('ComboFilter')
-      .subscribe((result: any) => {
-        if (result.response) {
-          let data = result.response
-          // this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode')
+    // let Sub: Subscription = this.dataService.getDynamicAPI('ComboFilter')
+    //   .subscribe((result: any) => {
+    //     if (result.response) {
+    //       let data = result.response
+    // this.payTypeArray = data.filter((value: any) => value.COMBO_TYPE == 'Receipt Mode')
 
-          this.payTypeArray = [
-            { ENGLISH: 'Cash' },
-            { ENGLISH: 'Credit Card' },
-            { ENGLISH: 'Cheque' },
-            { ENGLISH: 'TT' },
-            { ENGLISH: 'Others' },
-            { ENGLISH: 'VAT' },
-          ]
-          this.receiptEntryForm.controls.Type.setValue('Cash')
-        } else {
-          this.toastr.error('Receipt Mode not found')
-        }
-      }, (err: any) => alert(err))
-    this.subscriptions.push(Sub)
+    this.payTypeArray = [
+      { ENGLISH: 'Cash' },
+      { ENGLISH: 'Credit Card' },
+      { ENGLISH: 'Cheque' },
+      { ENGLISH: 'TT' },
+      { ENGLISH: 'Others' },
+      { ENGLISH: 'VAT' },
+    ]
+    this.receiptEntryForm.controls.Type.setValue('Cash')
+    //     } else {
+    //       this.toastr.error('Receipt Mode not found')
+    //     }
+    //   }, (err: any) => alert(err))
+    // this.subscriptions.push(Sub)
   }
   //type change
   paymentTypeChange(event: any) {
@@ -508,7 +520,7 @@ export class AddReceiptComponent implements OnInit {
       this.isViewTypeCode = false;
       this.accountMasterData.LOAD_ONCLICK = true;
       this.accountMasterData.WHERECONDITION = "ACCOUNT_MODE='B'"
-    } 
+    }
   }
   /**USE: branch autocomplete starts*/
   getBranchMasterList() {
