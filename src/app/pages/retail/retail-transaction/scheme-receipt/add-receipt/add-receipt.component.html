@@ -100,22 +100,6 @@
                     (newRowClick)="creditCardSelect($event)">
                 </master-search>
             </div>
-            <!-- <mat-form-field style="width: 35%;"
-                        class="example-full-width" style="width: 30%">
-                        <input type="text" placeholder="select" matInput
-                            [readonly]="isViewTypeCode"
-                            formControlName="TypeCode"
-                            [matAutocomplete]="TypeCodes">
-                        <mat-autocomplete #TypeCodes="matAutocomplete"
-                            (optionSelected)="changeTypeCode($event)">
-                            <mat-option
-                                *ngFor="let option of typeCodeFilteredOptions | async"
-                                [value]="option.CREDIT_CODE">
-                                {{ option.CREDIT_CODE }} -
-                                {{ option.DESCRIPTION }}
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field> -->
             <div class="col-lg-3 col-md-5 col-sm-12 mt-3">
                 <b>Cheque Details</b>
             </div>
@@ -229,7 +213,6 @@
                     </span>
                     <mat-form-field style="width: 50%">
                         <input type="text" matInput [readonly]="isViewCheckDetail"
-                            class="text-right"
                             formControlName="DrawnBank" />
                     </mat-form-field>
                 </div>
@@ -259,7 +242,6 @@
                     </span>
                     <mat-form-field style="width: 50%">
                         <input type="text" matInput [readonly]="isViewCheckDetail"
-                            class="text-right"
                             formControlName="DepBank" />
                     </mat-form-field>
                 </div>

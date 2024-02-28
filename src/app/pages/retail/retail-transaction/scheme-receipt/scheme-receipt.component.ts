@@ -54,6 +54,7 @@ export class SchemeReceiptComponent implements OnInit {
   schemeIdEdit: string = "";
   branchName: any = localStorage.getItem("BRANCH_PARAMETER");
   schemeDataFlag: boolean = false;
+  disableAddBtnGrid: boolean = true;
   customerMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -124,6 +125,7 @@ export class SchemeReceiptComponent implements OnInit {
     SCH_CUSTOMER_CODE: [0],
     SCH_INST_AMOUNT_FC: [0],
     PartyAmount: [''],
+    PartyAmtCode: [''],
     TotalAmount: [0],
     TotalTax: [0],
   });
@@ -179,6 +181,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.SchemeID.setValue(this.content.SCH_SCHEME_CODE);
     this.receiptDetailsForm.controls.Narration.setValue(this.content.REMARKS);
     this.receiptDetailsForm.controls.PartyCode.setValue(this.content.PARTYCODE);
+    this.receiptDetailsForm.controls.PartyAmtCode.setValue(this.content.CurrCode)
     this.getDetailsForEdit(this.content.MID)
   }
   VIEWEDITFLAG: string = '';
@@ -369,6 +372,7 @@ export class SchemeReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID)
+          this.disableAddBtnGrid = false;
           this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE)
           this.receiptDetailsForm.controls.SCH_CUSTOMER_CODE.setValue(data.SCH_CUSTOMER_CODE)
           this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data.SCH_CUSTOMER_ID)
@@ -1079,8 +1083,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   /**use: add new row to grid */
   addNewRow(data: any) {
-    console.log(data,'data');
-    
+    this.disableAddBtnGrid = true;
     if (data.SRNO) {
       this.orderedItems = this.orderedItems.filter(
         (item: any) => item.SRNO != data.SRNO
@@ -1226,7 +1229,9 @@ export class SchemeReceiptComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  deleteTableData() { }
+  deleteTableData() { 
+    this.orderedItems = []
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);

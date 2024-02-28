@@ -312,7 +312,14 @@
                                                 Party Amount
                                             </span>
                                             <span style="width: 70%">
-                                                <mat-form-field>
+                                                <mat-form-field style="width: 20%">
+                                                    <input type="number"
+                                                        readonly
+                                                        matInput
+                                                        class="text-right"
+                                                        formControlName="PartyAmtCode" />
+                                                </mat-form-field>
+                                                <mat-form-field style="width:40%;margin-left: 4px;">
                                                     <input type="number"
                                                         readonly
                                                         matInput
@@ -329,7 +336,7 @@
                         </div>
 
                         <div class="row border-top">
-                            <menu-buttons [viewAddBtn]="true"
+                            <menu-buttons [viewAddBtn]="true" [disableAddBtn]="disableAddBtnGrid"
                                 [viewDeleteBtn]="true"
                                 [viewImportBtn]="false"
                                 (addClick)="openNewReceiptDetails()"
@@ -415,7 +422,8 @@
                                     </span>
                                     <span style="width: 65%">
                                         <mat-form-field style="width: 100%">
-                                            <input type="text" matInput
+                                            <input type="text" matInput readonly
+                                                class="text-right"
                                                 formControlName="TotalTax" />
                                         </mat-form-field>
                                     </span>
@@ -425,7 +433,8 @@
                                     </span>
                                     <span style="width: 65%">
                                         <mat-form-field style="width: 100%">
-                                            <input type="text" matInput
+                                            <input type="text" matInput readonly
+                                                class="text-right"
                                                 formControlName="TotalAmount" />
                                         </mat-form-field>
                                     </span>

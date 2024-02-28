@@ -130,7 +130,16 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.InstallmentAmount.setValue(
         this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
       )
-
+      this.receiptEntryForm.controls.Header_Amount.setValue(
+        this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+      )
+      this.receiptEntryForm.controls.Amount_LC.setValue(
+        this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+      )
+      this.receiptEntryForm.controls.Amount_FC.setValue(
+        this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+      )
+      this.setGridData()
       this.receiptEntryForm.controls.SchemeTotalAmount.setValue(this.content.SCHEME_AMOUNT)
     }
     this.paymentTypeChange({ ENGLISH: 'Cash' })
@@ -141,7 +150,7 @@ export class AddReceiptComponent implements OnInit {
     this.getPaymentType(data.RECPAY_TYPE || data.Type)
     this.receiptEntryForm.controls.Branch.setValue(this.commonService.branchCode)
     this.receiptEntryForm.controls.SchemeCode.setValue(data.SchemeID)
-    // this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE || data.AC_Code)
+    // this.receiptEntryForm.controls.AC_Code.setValue(data.CurrCode)
     this.receiptEntryForm.controls.AC_Description.setValue(data.AC_Description)
     this.receiptEntryForm.controls.CurrRate.setValue(data.CURRENCY_RATE || data.CurrRate)
     this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE || data.CurrCode)
@@ -301,15 +310,7 @@ export class AddReceiptComponent implements OnInit {
           // this.receiptEntryForm.controls.Header_Amount.setValue(this.content.SCH_INST_AMOUNT_FC)
           // this.receiptEntryForm.controls.Amount_LC.setValue(this.content.SCH_INST_AMOUNT_FC)
           // this.receiptEntryForm.controls.Amount_FC.setValue(this.content.SCH_INST_AMOUNT_FC)
-          this.receiptEntryForm.controls.Header_Amount.setValue(
-            this.commonService.decimalQuantityFormat(0, 'AMOUNT')
-          )
-          this.receiptEntryForm.controls.Amount_LC.setValue(
-            this.commonService.decimalQuantityFormat(0, 'AMOUNT')
-          )
-          this.receiptEntryForm.controls.Amount_FC.setValue(
-            this.commonService.decimalQuantityFormat(0, 'AMOUNT')
-          )
+        
           let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
 
           amount_LC = Number(amount_LC.toFixed(2))
@@ -334,9 +335,9 @@ export class AddReceiptComponent implements OnInit {
           // "EXPENSE_ACCODE": "225004",
           // "VAT_DATE": "8/26/2023 12:00:00 AM"
         } else {
-          this.toastr.error('Accode not found in credit master')
+          this.commonService.toastErrorByMsgId('Accode not found in credit master')
         }
-      }, err => this.toastr.error(err))
+      }, err => this.commonService.toastErrorByMsgId(err))
     this.subscriptions.push(Sub)
   }
   private calculateVAT(VAT: number, AMOUNT: number): number {
@@ -480,25 +481,27 @@ export class AddReceiptComponent implements OnInit {
   }
   //type change
   paymentTypeChange(event: any) {
+    this.isViewCheckDetail = true;
+    this.isViewTypeCode = true;
+    this.receiptEntryForm.controls.AC_Code.setValue('');
+    this.receiptEntryForm.controls.AC_Description.setValue('');
+    this.receiptEntryForm.controls.TypeCode.setValue(null);
+    this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
+    this.receiptEntryForm.controls.ChequeNumber.setValue('');
+    this.receiptEntryForm.controls.DrawnBank.setValue('');
+    this.receiptEntryForm.controls.DepBank.setValue('');
+    this.receiptEntryForm.controls.ChequeDate.setValue(this.commonService.currentDate);
     if (event.ENGLISH == 'Credit Card') {
-      this.isViewTypeCode = true;
       this.receiptEntryForm.controls.AC_Code.setValue('');
       this.receiptEntryForm.controls.AC_Description.setValue('');
     } else if (event.ENGLISH == 'Cash') {
+      this.isViewTypeCode = false;
       this.receiptEntryForm.controls.TypeCode.setValue(null);
       this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
-      this.isViewTypeCode = false;
       this.getBranchMasterList()
     } else if (event.ENGLISH == 'Cheque') {
       this.isViewCheckDetail = false;
-    } else {
-      this.receiptEntryForm.controls.AC_Code.setValue('');
-      this.receiptEntryForm.controls.AC_Description.setValue('');
-      this.receiptEntryForm.controls.TypeCode.setValue(null);
-      this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
-      this.isViewTypeCode = false;
-      this.isViewCheckDetail = true;
-    }
+    } 
   }
   /**USE: branch autocomplete starts*/
   getBranchMasterList() {
