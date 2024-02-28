@@ -28,21 +28,20 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Stock Code</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="stockCode" />
+                            <input type="text" matInput formControlName="stockCodeItem" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"></master-search>
                     </div>
                     <div class="col-md-3">
-                        <mat-form-field style="width: 70%;">
+                        <mat-form-field style="width: 100%;">
                             <input type="text" matInput formControlName="stockCode" />
                         </mat-form-field>
-                        <master-search></master-search>
+                        <!-- <master-search></master-search> -->
                     </div>
                     <div class="col-md-5">
-                        <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="stockCode" />
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput formControlName="stockCodeDesc" />
                         </mat-form-field>
-                        <master-search></master-search>
                     </div>
                 </div>
             </div>
