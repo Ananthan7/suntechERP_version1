@@ -46,7 +46,6 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     if (this.content) {
-      console.log(this.content,'lool')
       this.setFormValues()
     }
     //console.log(this.data);
@@ -264,7 +263,6 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    console.log(this.content,'ppppp');
     this.metalIssueDetailsForm.controls.jobNumber.setValue(this.content[0].JOB_NUMBER)
     this.metalIssueDetailsForm.controls.jobNumDes.setValue(this.content[0].job_description)
     this.metalIssueDetailsForm.controls.grossWeight.setValue(this.content[0].GROSS_WT)

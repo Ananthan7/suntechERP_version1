@@ -48,7 +48,7 @@ export class MetalIssueComponent implements OnInit {
   detailData: any[] = [];
   selectRowIndex: any;
   selectedKey: number[] = []
-  viewMode: boolean = false;
+    viewMode: boolean = false;
  
   constructor(
     private activeModal: NgbActiveModal,
@@ -67,9 +67,6 @@ export class MetalIssueComponent implements OnInit {
 
     this.setvalues()
     this.setAllInitialValues()
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-    }
   }
 
   
@@ -98,18 +95,13 @@ export class MetalIssueComponent implements OnInit {
     });
     modalRef.componentInstance.content = this.metalIssueDetailsData
     modalRef.result.then((postData) => {
-      console.log(this.content,'tyty');
       if (postData) {
         console.log('Data from modal:', postData);
-        if(this.content?.FLAG == 'EDIT'){
-        this.setValuesToHeaderGrid(postData);  
-        }
-        else{
-          this.metalIssueDetailsData.push(postData);  
-        }
+        this.metalIssueDetailsData.push(postData);
         console.log(this.metalIssueDetailsData);
+        this.setValuesToHeaderGrid(postData);
 
-      } 
+      }
     });
   }
   onRowClickHandler(event: any) {
@@ -181,11 +173,11 @@ export class MetalIssueComponent implements OnInit {
     this.tableData[value.data.SN - 1].stock_code = data.postData.stockCode;
   }
 
-  deleteTableData(): void{
-    this.tableRowCount = 0;
-    console.log(this.selectRowIndex)
-    this.tableData.splice(this.selectRowIndex, 1) 
-  }
+  // deleteTableData(): void{
+  //   this.tableRowCount = 0;
+  //   console.log(this.selectRowIndex)
+  //   this.tableData.splice(this.selectRowIndex, 1) 
+  // }
   
   removeLineItemsGrid(event: any) {
   }
