@@ -167,11 +167,7 @@ export class RetailTransactionComponent implements OnInit {
       'MetalBranchTransferInAutoRepairComponent': MetalBranchTransferInAutoRepairComponent,
       'DiamondBranchTransferOutRepairComponent': DiamondBranchTransferOutRepairComponent,
       'DiamondBranchTransferInAutoRepairComponent': DiamondBranchTransferInAutoRepairComponent,
-      'RepairSaleComponent': RepairSaleComponent,
-
-
-
-
+      'RepairSaleComponent': RepairSaleComponent,     
 
 
 
