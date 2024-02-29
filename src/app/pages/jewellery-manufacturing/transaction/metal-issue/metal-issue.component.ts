@@ -20,7 +20,7 @@ export class MetalIssueComponent implements OnInit {
   divisionMS: any = 'ID';
   tableData: any[] = [];
   columnhead: any[] = [
-    { title: 'SRNO', field:'SRNO'},
+    { title: 'SRNO', field: 'SRNO' },
     { title: 'Job Id', field: 'JOB_NUMBER' },
     { title: 'Uniq job Id', field: 'JOB_SO_NUMBER' },
     { title: 'Design', field: 'DESIGN_CODE' },
@@ -31,12 +31,12 @@ export class MetalIssueComponent implements OnInit {
     { title: 'Process', field: 'PROCESS_CODE' },
     { title: 'Worker', field: 'WORKER_CODE' },
     { title: 'Amount.', field: 'AMOUNTFC' },];
-  metalIssueDetailsData : any[] = [];
-  @Input() content!: any; 
+  metalIssueDetailsData: any[] = [];
+  @Input() content!: any;
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
-  srNo:any=0;
+  srNo: any = 0;
   vocMaxDate = new Date();
   currentDate = new Date();
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
@@ -48,8 +48,20 @@ export class MetalIssueComponent implements OnInit {
   detailData: any[] = [];
   selectRowIndex: any;
   selectedKey: number[] = []
-    viewMode: boolean = false;
- 
+  viewMode: boolean = false;
+
+  metalIssueForm: FormGroup = this.formBuilder.group({
+    voctype: ['', [Validators.required]],
+    time: [new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds()],
+    vocdate: ['', [Validators.required]],
+    enteredBy: [''],
+    vocno: [1],
+    worker: [''],
+    workerDes: [''],
+    remarks: [''],
+    FLAG: [null]
+  });
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -67,19 +79,25 @@ export class MetalIssueComponent implements OnInit {
 
     this.setvalues()
     this.setAllInitialValues()
+    if(this.content?.FLAG){
+      this.metalIssueForm.controls.FLAG.setValue(this.content.FLAG)
+    }
+       if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      }
   }
 
-  
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
   deleteClicked(): void {
-    console.log(this.selectedKey,'data')
+    console.log(this.selectedKey, 'data')
     this.selectedKey.forEach((element: any) => {
-      this.metalIssueDetailsData.splice(element.SRNO-1,1)
-      })
-   }
+      this.metalIssueDetailsData.splice(element - 1, 1)
+    })
+  }
   openaddmetalissue(data?: any) {
     console.log(data)
     if (data) {
@@ -115,12 +133,12 @@ export class MetalIssueComponent implements OnInit {
     console.log(this.selectRowIndex, event);
 
   }
-   
-   
-  
+
+
+
   setValuesToHeaderGrid(detailDataToParent: any) {
-    
-    
+
+
     if (detailDataToParent.SRNO) {
       this.swapObjects(this.metalIssueDetailsData, [detailDataToParent], (detailDataToParent.SRNO - 1))
     } else {
@@ -165,10 +183,10 @@ export class MetalIssueComponent implements OnInit {
   //   });
   //   modalRef.componentInstance.data = this.metalIssueDetailsData;
   // }
- 
-  
-        
-  stock_codetemp(data:any,value: any){
+
+
+
+  stock_codetemp(data: any, value: any) {
     console.log(data);
     this.tableData[value.data.SN - 1].stock_code = data.postData.stockCode;
   }
@@ -178,7 +196,7 @@ export class MetalIssueComponent implements OnInit {
   //   console.log(this.selectRowIndex)
   //   this.tableData.splice(this.selectRowIndex, 1) 
   // }
-  
+
   removeLineItemsGrid(event: any) {
   }
   editTable(event: any) {
@@ -194,7 +212,7 @@ export class MetalIssueComponent implements OnInit {
     // return "First: " + new DatePipe("en-US").transform(data.value, 'MMM dd, yyyy');
   }
 
-  
+
   enteredByCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -207,7 +225,7 @@ export class MetalIssueComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  enteredByCodeSelected(e:any){
+  enteredByCodeSelected(e: any) {
     console.log(e);
     this.metalIssueForm.controls.enteredBy.setValue(e.SALESPERSON_CODE);
   }
@@ -224,18 +242,21 @@ export class MetalIssueComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  workerCodeSelected(e:any){
+  workerCodeSelected(e: any) {
     console.log(e);
     this.metalIssueForm.controls.worker.setValue(e.WORKER_CODE);
     this.metalIssueForm.controls.workerDes.setValue(e.DESCRIPTION);
   }
 
-  
+
   onSelectionChanged(event: any) {
-    const values = event.selectedRowKeys;
+
+
+    this.selectedKey = event.selectedRowKeys;
+    console.log(this.selectedKey, 'srno')
     let indexes: Number[] = [];
     this.metalIssueDetailsData.reduce((acc, value, index) => {
-      if (values.includes(parseFloat(value.SRNO))) {
+      if (this.selectedKey.includes(parseFloat(value.SRNO))) {
         acc.push(index);
       }
       return acc;
@@ -252,7 +273,7 @@ export class MetalIssueComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.metalIssueDetailsData = data.Details
-          data.Details.forEach((element:any) => {
+          data.Details.forEach((element: any) => {
             this.tableData.push({
               jobNumber: element.JOB_NUMBER,
               jobNumDes: element.JOB_DESCRIPTION,
@@ -264,7 +285,7 @@ export class MetalIssueComponent implements OnInit {
               purity: element.PURITY,
               grossWeight: element.GROSS_WT,
               netWeight: element.NET_WT,
-            
+
 
             })
           });
@@ -273,8 +294,7 @@ export class MetalIssueComponent implements OnInit {
           this.metalIssueForm.controls.vocdate.setValue(data.VOCDATE)
           this.metalIssueForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
           this.metalIssueForm.controls.workerDes.setValue(data.Details[0].WORKER_NAME)
-          this.metalIssueForm.controls.jobNumber.setValue(data.Detail.JOB_NUMBER)
-          this.metalIssueForm.controls.grossWeight.setValue(data.GROSS_WT)
+          
 
 
         } else {
@@ -284,250 +304,241 @@ export class MetalIssueComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
-    
+
   }
 
-  metalIssueForm: FormGroup = this.formBuilder.group({
-    voctype: ['',[Validators.required]],
-    time: [new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()],
-    vocdate: ['',[Validators.required]],
-    enteredBy: [''],
-    vocno: [1],
-    worker: [''],
-    workerDes: [''],
-    remarks: [''],   
-  });
 
-  setvalues(){
+
+  setvalues() {
     this.metalIssueForm.controls.voctype.setValue(this.comService.getqueryParamVocType())
     this.metalIssueForm.controls.vocdate.setValue(this.comService.currentDate)
   }
 
-  removedata(){
+  removedata() {
     this.tableData.pop();
   }
- 
 
-    formSubmit(){
-  
-      if(this.content && this.content.FLAG == 'EDIT'){
-        this.update()
-        return
-      }
-      if (this.metalIssueForm.invalid) {
-        this.toastr.error('select all required fields')
-        return
-      }
-    
-      let API = 'JobMetalIssueMasterDJ/InsertJobMetalIssueMasterDJ'
-      let postData = {
-        "MID": 0,
-  "VOCTYPE": this.metalIssueForm.value.voctype || "",
-  "BRANCH_CODE": this.branchCode,
-  "VOCNO": this.metalIssueForm.value.VOCNO,
-  "VOCDATE": this.metalIssueForm.value.vocdate || "",
-  "YEARMONTH": this.yearMonth,
-  "DOCTIME": "2024-02-23T14:21:27.753Z",
-  "CURRENCY_CODE": "",
-  "CURRENCY_RATE": 0,
-  "METAL_RATE_TYPE": "",
-  "METAL_RATE": 0,
-  "TOTAL_AMOUNTFC_METAL": 0,
-  "TOTAL_AMOUNTLC_METAL": 0,
-  "TOTAL_AMOUNTFC_MAKING": 0,
-  "TOTAL_AMOUNTLC_MAKING": 0,
-  "TOTAL_AMOUNTFC": 0,
-  "TOTAL_AMOUNTLC": 0,
-  "TOTAL_PCS": 0,
-  "TOTAL_GROSS_WT": 0,
-  "TOTAL_PURE_WT": 0,
-  "SMAN": "string",
-  "REMARKS": this.metalIssueForm.value.remarks || "",
-  "NAVSEQNO": 0,
-  "FIX_UNFIX": true,
-  "AUTOPOSTING": true,
-  "POSTDATE": "",
-  "SYSTEM_DATE": "2023-10-20T11:14:53.662Z",
-  "PRINT_COUNT": 0,
-  "PRINT_COUNT_ACCOPY": 0,
-  "PRINT_COUNT_CNTLCOPY": 0,
-  "Details": this.metalIssueDetailsData
-      }
-    
-      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.response) {
-            if (result.status.trim() == "Success"){
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.metalIssueForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
-          }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
+
+  formSubmit() {
+
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.update()
+      return
     }
-  
-    setFormValues() {
-      if(!this.content) return
-      console.log(this.content,'qqq');
-      
-      this.metalIssueForm.controls.voctype.setValue(this.content.VOCTYPE)
-      this.metalIssueForm.controls.vocno.setValue(this.content.VOCNO)
-      this.metalIssueForm.controls.vocdate.setValue(this.content.VOCDATE)
-      this.metalIssueForm.controls.time.setValue(this.content.DOCTIME)
-      this.metalIssueForm.controls.remarks.setValue(this.content.REMARKS)
+    if (this.metalIssueForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
     }
-  
-  
-    update(){
-      if (this.metalIssueForm.invalid) {
-        this.toastr.error('select all required fields')
-        return
-      }
-    
-      let API = `JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/${this.branchCode}/${this.metalIssueForm.value.voctype}/${this.metalIssueForm.value.vocno}/${this.commonService.yearSelected}`
-      let postData = {
-        "MID": 0,
-        "VOCTYPE": this.metalIssueForm.value.voctype || "",
-        "BRANCH_CODE": this.branchCode,
-        "VOCNO": this.metalIssueForm.value.vocno || "",
-        "VOCDATE": this.metalIssueForm.value.vocdate || "",
-        "YEARMONTH": this.yearMonth,
-        "DOCTIME":  "2024-02-27T05:14:20.276Z",
-        "CURRENCY_CODE": "",
-        "CURRENCY_RATE": 0,
-        "METAL_RATE_TYPE": "",
-        "METAL_RATE": 0,
-        "TOTAL_AMOUNTFC_METAL": 0,
-        "TOTAL_AMOUNTLC_METAL": 0,
-        "TOTAL_AMOUNTFC_MAKING": 0,
-        "TOTAL_AMOUNTLC_MAKING": 0,
-        "TOTAL_AMOUNTFC": 0,
-        "TOTAL_AMOUNTLC": 0,
-        "TOTAL_PCS": 0,
-        "TOTAL_GROSS_WT": 0,
-        "TOTAL_PURE_WT": 0,
-        "SMAN": "",
-        "REMARKS": this.metalIssueForm.value.remarks || "",
-        "NAVSEQNO": 0,
-        "FIX_UNFIX": true,
-        "AUTOPOSTING": true,
-        "POSTDATE": "",
-        "SYSTEM_DATE": "2023-10-20T11:14:53.662Z",
-        "PRINT_COUNT": 0,
-        "PRINT_COUNT_ACCOPY": 0,
-        "PRINT_COUNT_CNTLCOPY": 0,
-        "Details":this.metalIssueDetailsData
-      }
-    
-      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.response) {
-            if(result.status == "Success"){
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.metalIssueForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
-          }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
+
+    let API = 'JobMetalIssueMasterDJ/InsertJobMetalIssueMasterDJ'
+    let postData = {
+      "MID": 0,
+      "VOCTYPE": this.metalIssueForm.value.voctype || "",
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.metalIssueForm.value.VOCNO,
+      "VOCDATE": this.metalIssueForm.value.vocdate || "",
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2024-02-23T14:21:27.753Z",
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
+      "METAL_RATE_TYPE": "",
+      "METAL_RATE": 0,
+      "TOTAL_AMOUNTFC_METAL": 0,
+      "TOTAL_AMOUNTLC_METAL": 0,
+      "TOTAL_AMOUNTFC_MAKING": 0,
+      "TOTAL_AMOUNTLC_MAKING": 0,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_GROSS_WT": 0,
+      "TOTAL_PURE_WT": 0,
+      "SMAN": "string",
+      "REMARKS": this.metalIssueForm.value.remarks || "",
+      "NAVSEQNO": 0,
+      "FIX_UNFIX": true,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "SYSTEM_DATE": "2023-10-20T11:14:53.662Z",
+      "PRINT_COUNT": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "Details": this.metalIssueDetailsData
     }
-    
-    deleteRecord() {
-      if (!this.content.VOCTYPE) {
-        Swal.fire({
-          title: '',
-          text: 'Please Select data to delete!',
-          icon: 'error',
-          confirmButtonColor: '#336699',
-          confirmButtonText: 'Ok'
-        }).then((result: any) => {
-          if (result.value) {
-          }
-        });
-        return
-      }
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + this.metalIssueForm.value.branchCode +  this.metalIssueForm.value.voctype + this.metalIssueForm.value.vocno + this.metalIssueForm.value.yearMonth
-          let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-            .subscribe((result) => {
-              if (result) {
-                if (result.status == "Success") {
-                  Swal.fire({
-                    title: result.message || 'Success',
-                    text: '',
-                    icon: 'success',
-                    confirmButtonColor: '#336699',
-                    confirmButtonText: 'Ok'
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.metalIssueForm.reset()
-                      this.tableData = []
-                      this.close('reloadMainGrid')
-                    }
-                  });
-                } else {
-                  Swal.fire({
-                    title: result.message || 'Error please try again',
-                    text: '',
-                    icon: 'error',
-                    confirmButtonColor: '#336699',
-                    confirmButtonText: 'Ok'
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.metalIssueForm.reset()
-                      this.tableData = []
-                      this.close()
-                    }
-                  });
-                }
-              } else {
-                this.toastr.error('Not deleted')
+
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status.trim() == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.metalIssueForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
               }
-            }, err => alert(err))
-          this.subscriptions.push(Sub)
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+  setFormValues() {
+    if (!this.content) return
+    console.log(this.content, 'qqq');
+
+    this.metalIssueForm.controls.voctype.setValue(this.content.VOCTYPE)
+    this.metalIssueForm.controls.vocno.setValue(this.content.VOCNO)
+    this.metalIssueForm.controls.vocdate.setValue(this.content.VOCDATE)
+    this.metalIssueForm.controls.time.setValue(this.content.DOCTIME)
+    this.metalIssueForm.controls.remarks.setValue(this.content.REMARKS)
+  }
+
+
+  update() {
+    if (this.metalIssueForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = `JobMetalIssueMasterDJ/UpdateJobMetalIssueMasterDJ/${this.branchCode}/${this.metalIssueForm.value.voctype}/${this.metalIssueForm.value.vocno}/${this.commonService.yearSelected}`
+    let postData = {
+      "MID": 0,
+      "VOCTYPE": this.metalIssueForm.value.voctype || "",
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.metalIssueForm.value.vocno || "",
+      "VOCDATE": this.metalIssueForm.value.vocdate || "",
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2024-02-27T05:14:20.276Z",
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
+      "METAL_RATE_TYPE": "",
+      "METAL_RATE": 0,
+      "TOTAL_AMOUNTFC_METAL": 0,
+      "TOTAL_AMOUNTLC_METAL": 0,
+      "TOTAL_AMOUNTFC_MAKING": 0,
+      "TOTAL_AMOUNTLC_MAKING": 0,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_GROSS_WT": 0,
+      "TOTAL_PURE_WT": 0,
+      "SMAN": "",
+      "REMARKS": this.metalIssueForm.value.remarks || "",
+      "NAVSEQNO": 0,
+      "FIX_UNFIX": true,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "SYSTEM_DATE": "2023-10-20T11:14:53.662Z",
+      "PRINT_COUNT": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "Details": this.metalIssueDetailsData
+    }
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.metalIssueForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+
+  deleteRecord() {
+    if (!this.content.VOCTYPE) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
         }
       });
+      return
     }
-    
-    ngOnDestroy() {
-      if (this.subscriptions.length > 0) {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
-        this.subscriptions = []; // Clear the array
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'JobMetalIssueMasterDJ/DeleteJobMetalIssueMasterDJ/' + this.metalIssueForm.value.branchCode + this.metalIssueForm.value.voctype + this.metalIssueForm.value.vocno + this.metalIssueForm.value.yearMonth
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.metalIssueForm.reset()
+                    this.tableData = []
+                    this.close('reloadMainGrid')
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.metalIssueForm.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
       }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
     }
-    
+  }
+
 }
