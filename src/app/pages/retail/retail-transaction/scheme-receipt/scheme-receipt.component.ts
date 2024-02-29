@@ -36,7 +36,8 @@ export class SchemeReceiptComponent implements OnInit {
   isSaved: boolean = false;
   editFlag: boolean = false;
   isViewAddbtn: boolean = true;
-
+  viewMode: boolean = false;
+  
   totalValue: number = 0;
   totalValue_FC: number = 0;
   totalAmount_LC: number = 0;
@@ -148,6 +149,10 @@ export class SchemeReceiptComponent implements OnInit {
     if (!this.content) {
       this.fetchPartyCode();
       this.setCompanyCurrency();
+    }else{
+      if(this.content.FLAG=='VIEW'){
+        this.viewMode = true;
+      }
     }
     this.setInitialValues()
     this.getSalesmanList();
@@ -170,7 +175,10 @@ export class SchemeReceiptComponent implements OnInit {
     }
     this.receiptDetailsForm.controls.Branch.setValue(this.commonService.nullToString(this.content.BRANCH_CODE));
     this.receiptDetailsForm.controls.VocType.setValue(this.commonService.nullToString(this.content.VOCTYPE));
-    this.receiptDetailsForm.controls.VocDate.setValue(new Date(this.content.VOCDATE));
+    let date = new Date(this.content.VOCDATE.replace(/-/g, "/"))
+    console.log(date,'date');
+    
+    this.receiptDetailsForm.controls.VocDate.setValue(date);
     this.receiptDetailsForm.controls.PostedDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.RefDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.Salesman.setValue(this.content.SALESPERSON_CODE);
@@ -353,7 +361,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.SalesmanName.setValue(data.DESCRIPTION);
   }
   salesmanChange(event: any) {
-    if (event.target.value == "") return;
+    if (event.target.value == "" || this.content?.FLAG == 'VIEW') return;
     let inputValue = event.target.value;
     inputValue = inputValue.toUpperCase();
     let data = this.salesmanArray.filter((item: any) => item.SALESPERSON_CODE == inputValue);
@@ -525,7 +533,7 @@ export class SchemeReceiptComponent implements OnInit {
   }
   //party Code Change
   customerChange(event: any, searchFlag: string) {
-    if (event.target.value == "") return;
+    if (event.target.value == "" || this.content?.FLAG == 'VIEW') return;
     this.VocNumberMain = "";
     this.commonService.showSnackBarMsg('Loading ...')
     let API = `${searchFlag}=${event.target.value}`;

@@ -86,16 +86,17 @@
                                                 <mat-form-field>
                                                     <input matInput
                                                         DateValidation
-                                                        name="VocDate"
+                                                        [readonly]="viewMode"
                                                         (dateChange)="dateChange($event,'VocDate')"
-                                                        [matDatepicker]="VocDate"
+                                                        [matDatepicker]="VocDates"
                                                         formControlName="VocDate"
                                                         placeholder="DD/MM/YYYY" />
                                                     <mat-datepicker-toggle
                                                         matSuffix
-                                                        [for]="VocDate"></mat-datepicker-toggle>
+                                                        [for]="VocDates"></mat-datepicker-toggle>
                                                     <mat-datepicker
-                                                        #VocDate></mat-datepicker>
+                                                        [disabled]="viewMode"
+                                                        #VocDates></mat-datepicker>
                                                     <!-- <mat-error
                                                             *ngIf="receiptDetailsForm.get('VocDate')?.hasError('invalidDate')">
                                                             Invalid date format
@@ -114,13 +115,14 @@
                                     <div
                                         class="col-lg-6 col-md-12 col-sm-12 d-flex">
                                         <label class="matlabels"
-                                            style="width: 20%;">Customer Code
+                                            style="width: 20%;">Customer Code*
                                         </label>
                                         <span>
                                             <mat-form-field style="width: 25%">
                                                 <input type="text" matInput
                                                     (focusout)="customerChange($event,'PosCustomerMaster/GetCustomerByCode/Code')"
                                                     placeholder="Code"
+                                                    [readonly]="viewMode"
                                                     formControlName="POSCustomerCode" />
                                             </mat-form-field>
                                             <mat-form-field
@@ -129,7 +131,7 @@
                                                     placeholder="Name" readonly
                                                     formControlName="POSCustomerName" />
                                             </mat-form-field>
-                                            <master-search
+                                            <master-search *ngIf="!viewMode"
                                                 [MasterSearchData]="customerMasterData"
                                                 (newRowClick)="selectedCustomer($event)">
                                             </master-search>
@@ -146,7 +148,8 @@
                                                     style="width: 25%">
                                                     <input type="text" matInput
                                                         formControlName="PartyCode"
-                                                        maxlength="6" readonly/>
+                                                        maxlength="6"
+                                                        readonly />
                                                 </mat-form-field>
                                                 <mat-form-field
                                                     style="width: 35%;margin-left: 4px;">
@@ -154,7 +157,7 @@
                                                         readonly
                                                         formControlName="PartyDescription" />
                                                 </mat-form-field>
-                                                <master-search
+                                                <master-search *ngIf="!viewMode"
                                                     [MasterSearchData]="partyCodeMasterData"
                                                     (newRowClick)="selectedParty($event)">
                                                 </master-search>
@@ -180,7 +183,8 @@
                                             </span>
                                             <span style="width: 70%">
                                                 <mat-form-field>
-                                                    <input type="text" matInput readonly
+                                                    <input type="text" matInput
+                                                        readonly
                                                         formControlName="POSCustomerEmail" />
                                                 </mat-form-field>
                                             </span>
@@ -218,7 +222,8 @@
                                             <span style="width: 65%">
                                                 <mat-form-field>
                                                     <input type="text" matInput
-                                                        class="text-right" readonly
+                                                        class="text-right"
+                                                        readonly
                                                         formControlName="PartyAddress" />
                                                 </mat-form-field>
                                             </span>
@@ -243,7 +248,7 @@
                                                         readonly
                                                         formControlName="SalesmanName" />
                                                 </mat-form-field>
-                                                <master-search
+                                                <master-search *ngIf="!viewMode"
                                                     [MasterSearchData]="salesPersonMasterData"
                                                     (newRowClick)="selectedSalesman($event)">
                                                 </master-search>
@@ -261,7 +266,7 @@
                                                         formControlName="Salesman"
                                                         (focusout)="salesmanChange($event)" />
                                                 </mat-form-field>
-                                                <master-search
+                                                <master-search *ngIf="!viewMode"
                                                     [MasterSearchData]="salesPersonMasterData"
                                                     (newRowClick)="selectedSalesman($event)">
                                                 </master-search>
@@ -273,7 +278,7 @@
                                     <div class="col-lg-4 col-md-6 col-sm-12">
                                         <div class="row">
                                             <span class="matlabels">
-                                                Scheme Code
+                                                Scheme Code*
                                             </span>
                                             <span style="width: 70%">
                                                 <mat-form-field>
@@ -283,7 +288,7 @@
                                                         maxlength="20" />
                                                 </mat-form-field>
                                                 <master-search
-                                                    *ngIf="schemeDataFlag"
+                                                    *ngIf="schemeDataFlag && !viewMode"
                                                     [MasterSearchData]="SchemeMasterFindData"
                                                     (newRowClick)="selectedScheme($event)">
                                                 </master-search>
@@ -310,11 +315,13 @@
                                                 Party Amount
                                             </span>
                                             <span style="width: 70%">
-                                                <mat-form-field style="width: 20%">
-                                                    <input readonly matInput 
+                                                <mat-form-field
+                                                    style="width: 20%">
+                                                    <input readonly matInput
                                                         formControlName="PartyAmtCode" />
                                                 </mat-form-field>
-                                                <mat-form-field style="width:40%;margin-left: 4px;">
+                                                <mat-form-field
+                                                    style="width:40%;margin-left: 4px;">
                                                     <input type="number"
                                                         readonly
                                                         matInput
@@ -331,7 +338,8 @@
                         </div>
 
                         <div class="row border-top">
-                            <menu-buttons [viewAddBtn]="true" [disableAddBtn]="disableAddBtnGrid"
+                            <menu-buttons *ngIf="!viewMode" [viewAddBtn]="true"
+                                [disableAddBtn]="disableAddBtnGrid"
                                 [viewDeleteBtn]="true"
                                 [viewImportBtn]="false"
                                 (addClick)="openNewReceiptDetails()"
@@ -407,7 +415,7 @@
                                 <span class="matlabels">Narration
                                 </span>
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput
+                                    <input type="text" matInput [readonly]="viewMode"
                                         formControlName="Narration" />
                                 </mat-form-field>
                             </div>

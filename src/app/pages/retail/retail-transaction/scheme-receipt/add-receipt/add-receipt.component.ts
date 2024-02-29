@@ -519,6 +519,7 @@ export class AddReceiptComponent implements OnInit {
       this.isViewCheckDetail = false;
       this.isViewTypeCode = false;
       this.accountMasterData.LOAD_ONCLICK = true;
+      this.accountMasterData.PAGENO = 1;
       this.accountMasterData.WHERECONDITION = "ACCOUNT_MODE='B' AND Accode <> ''"
     }
   }
