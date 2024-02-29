@@ -28,6 +28,8 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewPost: boolean = false;
   @Input() isViewPreview: boolean = false;
   @Input() isViewExport: boolean = false;
+  @Input() disableSaveBtn: boolean = false;
+  @Input() disableDeleteBtn: boolean = false;
   @Input() editSaveBtnText?: string = '';
 
   branchCode: any = localStorage.getItem('userbranch')

@@ -695,11 +695,11 @@ export class SchemeRegisterComponent implements OnInit {
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].DT_BRANCH_CODE`, this.commonService.branchCode);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_DATE`, this.commonService.formatDate(new Date(item.RCVD_DATE)));
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_BRANCH_CODE`, item.RCVD_BRANCH_CODE);
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCTYPE`, 'SRC');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCTYPE`, item.RCVD_VOCTYPE);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_VOCNO`, '0');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_YEARMONTH`, this.commonService.yearSelected);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTFC`, '0');
-        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTCC`, '0');
+        this.formdata.append(`Model.model[0].schemeData.Details[${index}].RCVD_AMOUNTCC`, item.RCVD_AMOUNTCC);
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCHBAL_AMOUNTFC`, '0');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCHBAL_AMOUNTCC`, '0');
         this.formdata.append(`Model.model[0].schemeData.Details[${index}].SCH_PARTIALLY_PAID`, formValue.SCH_PARTIALLY_PAID);

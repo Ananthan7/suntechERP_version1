@@ -485,7 +485,7 @@ export class AddReceiptComponent implements OnInit {
       { ENGLISH: 'Cheque' },
       { ENGLISH: 'TT' },
       { ENGLISH: 'Others' },
-      { ENGLISH: 'VAT' },
+      // { ENGLISH: 'VAT' },
     ]
     this.receiptEntryForm.controls.Type.setValue('Cash')
     //     } else {
@@ -496,6 +496,7 @@ export class AddReceiptComponent implements OnInit {
   }
   //type change
   paymentTypeChange(event: any) {
+    this.accountMasterData.API_VALUE = ""
     this.accountMasterData.WHERECONDITION = "ACCODE<>''"
     this.isViewCheckDetail = true;
     this.isViewTypeCode = true;
@@ -514,6 +515,9 @@ export class AddReceiptComponent implements OnInit {
       this.isViewTypeCode = false;
       this.receiptEntryForm.controls.TypeCode.setValue(null);
       this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
+      this.accountMasterData.LOAD_ONCLICK = true;
+      this.accountMasterData.PAGENO = 1;
+      this.accountMasterData.API_VALUE = 'SchemeReceipt/GetCashAccode/'+this.commonService.branchCode
       this.getBranchMasterList()
     } else if (event.ENGLISH == 'Cheque') {
       this.isViewCheckDetail = false;
@@ -521,6 +525,13 @@ export class AddReceiptComponent implements OnInit {
       this.accountMasterData.LOAD_ONCLICK = true;
       this.accountMasterData.PAGENO = 1;
       this.accountMasterData.WHERECONDITION = "ACCOUNT_MODE='B' AND Accode <> ''"
+    } else if (event.ENGLISH == 'TT') {
+      this.isViewTypeCode = false;
+      this.accountMasterData.LOAD_ONCLICK = true;
+      this.accountMasterData.PAGENO = 1;
+      this.accountMasterData.WHERECONDITION = "ACCOUNT_MODE in ('G','L') AND Accode <> ''"
+    } else if (event.ENGLISH == 'Others') {
+      this.isViewTypeCode = false;
     }
   }
   /**USE: branch autocomplete starts*/

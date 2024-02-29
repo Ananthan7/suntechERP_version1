@@ -162,8 +162,6 @@ export class SchemeReceiptComponent implements OnInit {
   }
   /**USE: set values for view and edit */
   setInitialValues() {
-    console.log(this.content, 'this.content');
-
     if (!this.content) {
       this.branchName = this.branchName?.BRANCH_NAME;
       this.receiptDetailsForm.controls.Branch.setValue(this.commonService.branchCode);
@@ -175,10 +173,8 @@ export class SchemeReceiptComponent implements OnInit {
     }
     this.receiptDetailsForm.controls.Branch.setValue(this.commonService.nullToString(this.content.BRANCH_CODE));
     this.receiptDetailsForm.controls.VocType.setValue(this.commonService.nullToString(this.content.VOCTYPE));
-    let date = new Date(this.content.VOCDATE.replace(/-/g, "/"))
-    console.log(date,'date');
     
-    this.receiptDetailsForm.controls.VocDate.setValue(date);
+    this.receiptDetailsForm.controls.VocDate.setValue(this.content.VOCDATE);
     this.receiptDetailsForm.controls.PostedDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.RefDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.Salesman.setValue(this.content.SALESPERSON_CODE);

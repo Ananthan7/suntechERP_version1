@@ -10,7 +10,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmitWithAttachment()" [isViewDelete]="false"
+<modal-header (saveClick)="formSubmitWithAttachment()" 
+    [isViewDelete]="false" [disableSaveBtn]="viewMode"
     (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="row">

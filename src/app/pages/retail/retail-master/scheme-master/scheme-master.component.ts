@@ -75,10 +75,13 @@ export class SchemeMasterComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.getAllSelectOptions()
-    if (this.content && this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-    }
     if (this.content) {
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      }
+      if(this.content.FLAG == 'EDIT'){
+        this.schemeRegistrationWithParameter()
+      }
       this.setInitialValues()
     } else {
       this.setFormValues()
@@ -248,11 +251,13 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.branch.setValue(this.content.BRANCH_CODE);
     this.schemeMasterForm.controls.depositIn.setValue(this.content.DEPOSIT_IN);
     this.getSchemeMasterList()
-    this.getSchemeWithCustomerCode()
   }
-  getSchemeWithCustomerCode() {
-    let API = 'SchemeRegistration/GetSchemeWithCustomerCode/' + this.schemeMasterForm.value.code
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  schemeRegistrationWithParameter() {
+    let API = 'SchemeRegistration/GetSchemeWithParameter'
+    let data = {
+      "SCH_SCHEME_CODE": this.content.SCHEME_CODE
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,data)
       .subscribe((resp: any) => {
         if (resp.status == 'Success') {
           this.comService.toastErrorByMsgId('Cannot Edit Registered Scheme')
