@@ -1,7 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { ToastrService } from 'ngx-toastr';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-design-sequence',
@@ -9,6 +17,8 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
   styleUrls: ['./design-sequence.component.scss']
 })
 export class DesignSequenceComponent implements OnInit {
+
+  tableDataProcess: any[] = [];
 
   columnhead:any[]=['SRNO','PROCESS_CODE','POINTS','STD_LOSS','MAX_LOSS','STD_TIME','LOSS_ACCODE','WIP_ACCODE','TIMEON_P']
   designSequenceForm: FormGroup = this.formBuilder.group({
@@ -18,10 +28,30 @@ export class DesignSequenceComponent implements OnInit {
 
   constructor(
     private activeModal: NgbActiveModal,
+    private modalService: NgbModal,
     private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
+
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API = 'ProcessMasterDj/GetProcessMasterDJList'
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response;
+          data.forEach((item: any, i: any) => {
+            item.SELECT1 = false
+            item.SRNO = i + 1;
+          });
+          this.tableDataProcess = data
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
   }
 
   processCodeData: MasterSearchModel = {

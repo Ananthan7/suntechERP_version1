@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
@@ -147,11 +148,11 @@ export class StonePricingMasterComponent implements OnInit {
   currencyData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 176,
+    LOOKUPID: 8,
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: " CMBRANCH_CODE = '' + strBranchCode + '' ",
+    WHERECONDITION: "CURRENCY_CODE<>'' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -184,6 +185,7 @@ export class StonePricingMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
@@ -236,9 +238,18 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.WEIGHT_TO)
     this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
     this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
-    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
+     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
+
   
   }
+  // private initializeForm() {
+  //   try {
+  //     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.commonService.commaSeperation(this.content.SELLING_RATE))
+     
+  //   } catch (error) {
+  //     console.error('Error in initializeForm:', error);
+  //   }
+  // }
 
   viewFormValues() {
     if (!this.content) return
@@ -512,12 +523,20 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.currency.setValue(data.CURRENCY_CODE)
   }
 
+
+
   onInputChange(event: any, controlName: string, maxLength: number) {
     const inputValue = event.target.value;
 
     if (inputValue.length > maxLength) {
       this.stonePrizeMasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
     }
+  }
+
+  commaSeperation(data: any){
+    console.log(data);
+    if (!Number(data.value)) return data.value
+    return Number(data.value).toLocaleString('en-US', { style: 'decimal' })
   }
 
   ngOnDestroy() {

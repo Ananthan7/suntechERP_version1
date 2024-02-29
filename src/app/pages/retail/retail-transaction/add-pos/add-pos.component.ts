@@ -1305,12 +1305,12 @@ export class AddPosComponent implements OnInit {
         this.customerDetails = posCustomer;
 
         if (this.amlNameValidation)
-          if (!posCustomer.AMLNAMEVALIDATION && posCustomer.DIGISCREENED) {
-            this.amlNameValidationData = false;
-          } else {
-            this.amlNameValidationData = true;
-            this.openDialog('Warning', 'Pending for approval', true);
-          }
+          // if (!posCustomer.AMLNAMEVALIDATION && posCustomer.DIGISCREENED) {
+          //   this.amlNameValidationData = false;
+          // } else {
+          //   this.amlNameValidationData = true;
+          //   this.openDialog('Warning', 'Pending for approval', true);
+          // }
         /**end set customer data */
 
         this.boardingPassForm.controls.passDetails.setValue(retailSaleData.BOARDINGPASS);
