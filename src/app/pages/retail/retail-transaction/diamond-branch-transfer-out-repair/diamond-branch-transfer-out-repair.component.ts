@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DiamonBranchTransferOutDetailsComponent } from './diamon-branch-transfer-out-details/diamon-branch-transfer-out-details.component';
 
 @Component({
   selector: 'app-diamond-branch-transfer-out-repair',
@@ -41,6 +42,16 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+
+  
+  opendiabranchtrancoutdetails() {
+    const modalRef: NgbModalRef = this.modalService.open(DiamonBranchTransferOutDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
   }
 
 }

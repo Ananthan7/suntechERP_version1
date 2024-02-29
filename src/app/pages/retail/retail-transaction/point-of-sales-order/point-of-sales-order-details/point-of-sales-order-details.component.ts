@@ -32,16 +32,16 @@ export class PointOfSalesOrderDetailsComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 41,
-    SEARCH_FIELD: 'Stock_Code',
-    SEARCH_HEADING: 'Stock Search',
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Stock_Code<> ''",
+    WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
 
-  soldItemsDetailsrForm: FormGroup = this.formBuilder.group({
+  posOrderDetailsForm: FormGroup = this.formBuilder.group({
     loaction: [""],
     stockCode: [""],
     stockCodeItem:[""],
@@ -73,15 +73,15 @@ export class PointOfSalesOrderDetailsComponent implements OnInit {
 
   locationcodeSelected(e:any){
    console.log(e);
-    this.soldItemsDetailsrForm.controls.loaction.setValue(e.STATE_DESCRIPTION);
+    this.posOrderDetailsForm.controls.loaction.setValue(e.STATE_DESCRIPTION);
   
   }
 
  stockCodeSelected(e:any){
     console.log(e);
-    this.soldItemsDetailsrForm.controls.stockCodeItem.setValue(e.Item);
-    this.soldItemsDetailsrForm.controls.stockCode.setValue(e.STOCK_CODE);
-    this.soldItemsDetailsrForm.controls.stockCodeDesc.setValue(e.STOCK_DESCRIPTION);
+    this.posOrderDetailsForm.controls.stockCodeItem.setValue(e.DIVISION_CODE);
+    this.posOrderDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
+    this.posOrderDetailsForm.controls.stockCodeDesc.setValue(e.DESCRIPTION);
   }
 
   close(data?: any) {

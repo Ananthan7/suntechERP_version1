@@ -1,1 +1,95 @@
-<p>repair-enquiry works!</p>
+
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Repair Item Search </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <!-- <modal-header ></modal-header> -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <form>
+            <div class="row"> 
+                <div class="col-md-4 mt-3">
+                    <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                    >Select Branches</button>
+                </div> 
+            </div>
+          <div class="row">
+            <div class="col-md-11 mt-3">
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-3 col-form-label">Select Repair Item Status</label>
+                    <div class="col-sm-2">
+                        <mat-form-field style="width: 100%;">
+                            <mat-select>
+                                <mat-option value="1"></mat-option>
+                              </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <label for="input" class="col-sm-2 col-form-label">Enter Search Text Here</label>
+                    <div class="col-sm-2">
+                        <mat-form-field style="width: 100%;">
+                            <input type="text" matInput  />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                        >Search</button>
+                
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                        > Excel Export</button>
+                
+                    </div>
+                </div>
+                
+            </div>
+          </div>
+
+          <div class="row">
+            <dx-data-grid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
+                            [showRowLines]="true"
+                            [allowColumnReordering]="true" height="200" [dataSource]="tableData">
+                         
+                            <dxi-column caption>
+                                <dxi-column >
+                                    <dxo-selection mode="multiple"></dxo-selection> 
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Rcvd Date" dataField="Rcvd Date">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Rcvd Branch" dataField="Rcvd Branch">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Customer" dataField="Customer">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Bag No" dataField="Bag No">
+                                </dxi-column>
+                                <dxi-column alignment="center" caption="Item" dataField="Item">
+                                </dxi-column>
+                                
+                            </dxi-column>
+                        </dx-data-grid>
+          </div>
+
+
+          <div class="col-md-12 pt-2">
+            <div class="row">
+                <div class="col-md-5">
+                    <label for="input" class="col-sm-4 col-form-label">Total Records</label>
+                </div>
+                <div class="col-md-1 offset-6">
+                    <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                    >Cancel</button>
+                </div>
+
+            </div>
+
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>

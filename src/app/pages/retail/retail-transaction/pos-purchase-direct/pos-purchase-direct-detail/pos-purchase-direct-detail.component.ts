@@ -1,11 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  NgbActiveModal,
-  NgbModal,
-  NgbModalRef,
-} from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal,} from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import { CommonServiceService } from "src/app/services/common-service.service";
 
 @Component({
   selector: "app-pos-purchase-direct-detail",
@@ -13,6 +10,9 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
   styleUrls: ["./pos-purchase-direct-detail.component.scss"],
 })
 export class PosPurchaseDirectDetailComponent implements OnInit {
+  branchCode?: String;
+  userName = localStorage.getItem('username');
+  userbranch = localStorage.getItem('userbranch');
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -25,21 +25,47 @@ export class PosPurchaseDirectDetailComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  clarityCodeData: MasterSearchModel = {
+  outSideGoldCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 37,
+    LOOKUPID: 30,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Supplier type',
+    SEARCH_HEADING: 'Outside Gold',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'CLARITY MASTER'",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+  SupplierData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "Supplier",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "BRANCH_CODE = '"+ this.userbranch+"' AND AC_OnHold = 0",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+
+  locCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 155,
+    SEARCH_FIELD: "Location",
+    SEARCH_HEADING: "Loc Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "@Strbranch='"+ this.userbranch+"',@strUsercode='"+this.userName+"',@stravoidforsales= 0",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
   posPurchaseDirectDetailForm: FormGroup = this.formBuilder.group({
     stockCode: [""],
     stockType: [""],
-    fixMetalRate: [""],
+    fixMetalRate: [true],
     goldType: [""],
     description: [""],
     supplier: [""],
@@ -78,14 +104,44 @@ export class PosPurchaseDirectDetailComponent implements OnInit {
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal
+    private comService: CommonServiceService,
+
+
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.branchCode = this.comService.branchCode;
+
+  } 
+
+ 
+
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
   
+  stockCodeSelected(e:any){
+    console.log(e);    
+    this.posPurchaseDirectDetailForm.controls.stockCode.setValue(e.STOCK_CODE);
+    this.posPurchaseDirectDetailForm.controls.stockType.setValue(e.DESCRIPTION);
+  }
 
+  outSideGoldSelected(e:any){
+    console.log(e);
+    this.posPurchaseDirectDetailForm.controls.goldType.setValue(e.CODE);
+    
+  }
+
+  supplierSelected(e:any){
+    console.log(e);
+    this.posPurchaseDirectDetailForm.controls.supplier.setValue(e.ACCODE);
+
+  }
+
+  locCodeSelected(e:any){
+    console.log(e);
+    this.posPurchaseDirectDetailForm.controls.locCode.setValue(e);
+  }
 }
