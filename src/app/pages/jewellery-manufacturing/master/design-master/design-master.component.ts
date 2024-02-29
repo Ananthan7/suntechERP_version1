@@ -24,6 +24,7 @@ export class DesignMasterComponent implements OnInit {
   url: any;
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
+  strPrefix: string = "";
 
   tableData: any[] = [];
   tableDatas: any[] = [];
@@ -59,7 +60,7 @@ export class DesignMasterComponent implements OnInit {
   columnhead2:any[] = ['DESIGN_C','PART_CODE','PART_DESCRIPTION','METAL_WT', 'LS_PCS','LS_WT','CS_PCS','CS_WT','PL_PCS','PL_WT','OTH_PCS','OTH_WT','TOTAL_PCS'];
 
   seasons: string[] = ['Customer Exclusive', 'Keep on Hold', 'Add Steel'];
-
+  designPartDetails: any[] = [];
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -75,8 +76,11 @@ export class DesignMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+   
     this.setAllInitialValues()
   }
+
+  
   setAllInitialValues() {
     console.log(this.content)
     if (!this.content) return
@@ -163,6 +167,9 @@ export class DesignMasterComponent implements OnInit {
     subCollection : [''],
     collection : [''],
     parentDesign : [''],
+    select : ['1'],
+    noOfSubItems: ['1'],
+
   });
 
   openaddDesignSequence() {
@@ -667,13 +674,14 @@ removedatas(){
   designCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 56,
+    LOOKUPID: 14,
     SEARCH_FIELD: 'DESIGN_CODE',
     SEARCH_HEADING: 'Design Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DESIGN_CODE<> ''",
+    WHERECONDITION: "DIVISION = '' +  strPrefix + '' AND DESIGN_PREFIX = '1'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
   designCodeSelected(e:any){
     console.log(e);
@@ -2038,4 +2046,21 @@ removedatas(){
       }
     });
   }
+
+
+  
+  noOfSubItems(){
+
+    let count = this.designmasterForm.value.noOfSubItems;
+    console.log(count);
+    for(let i = 0 ; i< count ; i++){
+      let obj4 = {};
+
+      this.designPartDetails.push(obj4);
+    }
+    console.log(this.designPartDetails);
+   
+
+  }
+
 }

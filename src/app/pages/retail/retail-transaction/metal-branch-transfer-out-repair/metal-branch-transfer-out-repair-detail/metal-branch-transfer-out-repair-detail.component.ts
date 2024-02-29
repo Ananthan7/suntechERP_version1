@@ -27,7 +27,7 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
   columnheadItemDetails:any[] = ['Sr.No','Div','Description','Remarks','Pcs','Gr.Wt','Repair Type','Type'];
   columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
   divisionMS: any = 'ID';
-  columnheadItemDetails2:any[] = ['Repair Narration']
+  columnheadItemDetails2:any[] = ['SI.No' , 'Tax%' , 'Tax Amount'];
   branchCode?: String;
   yearMonth?: String;
   currentDate = new FormControl(new Date());
