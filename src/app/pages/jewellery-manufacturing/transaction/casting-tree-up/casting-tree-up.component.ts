@@ -129,7 +129,6 @@ export class CastingTreeUpComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-    private comService: CommonServiceService,
   ) { 
    this.setInitialValues()
   }
@@ -157,7 +156,7 @@ export class CastingTreeUpComponent implements OnInit {
   this.castingTreeUpFrom.controls.waxWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   this.castingTreeUpFrom.controls.reqMetal.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   this.castingTreeUpFrom.controls.base.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-  this.castingTreeUpFrom.controls.vocDate.setValue(this.comService.currentDate)
+  this.castingTreeUpFrom.controls.vocDate.setValue(this.commonService.currentDate)
   }
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -424,8 +423,8 @@ export class CastingTreeUpComponent implements OnInit {
           "DT_VOCNO": 0,
           "DT_YEARMONTH": this.yearMonth,
           "SRNO": Element.SRNO,
-          "JOB_NUMBER": this.comService.nullToString(Element.Job_Code),
-          "UNQ_JOB_ID": this.comService.nullToString(Element.Unique_job_ID),
+          "JOB_NUMBER": this.commonService.nullToString(Element.Job_Code),
+          "UNQ_JOB_ID": this.commonService.nullToString(Element.Unique_job_ID),
           "UNQ_DESIGN_ID": Element.Design_Code,
           "GROSS_WT": Element.Gross_Weight,
           "METAL_WT": Element.Metal_Weight,
@@ -437,7 +436,7 @@ export class CastingTreeUpComponent implements OnInit {
           "PURE_WT": Element.Pure_Weight,
           "COLOR": Element.Metal_Color,
           "PCS": 0,
-          "STOCK_CODE": this.comService.nullToString(Element.Stock_Code),
+          "STOCK_CODE": this.commonService.nullToString(Element.Stock_Code),
           "DESIGN_CODE": "",
           "RCVD_PURE_WT": 0,
           "SIZE_CODE": "",
@@ -511,11 +510,11 @@ export class CastingTreeUpComponent implements OnInit {
     let API = 'JobTreeMasterDJ/InsertJobTreeMasterDJ'
     let postData = {
       "MID": 0,
-      "VOCTYPE": this.comService.nullToString(this.castingTreeUpFrom.value.vocType),
+      "VOCTYPE": this.commonService.nullToString(this.castingTreeUpFrom.value.vocType),
       "BRANCH_CODE": this.branchCode,
       "VOCNO": 0,
       "YEARMONTH": this.yearMonth,
-      "VOCDATE": this.comService.formatDateTime(this.currentDate),
+      "VOCDATE": this.commonService.formatDateTime(this.currentDate),
       "DOCTIME": "2023-10-21T07:22:12.302Z",
       "SMAN": this.castingTreeUpFrom.value.enteredBy,
       "REMARKS": "",
@@ -525,11 +524,11 @@ export class CastingTreeUpComponent implements OnInit {
       "METAL_WT": 0,
       "STONE_WT": this.castingTreeUpFrom.value.stoneWt,
       "BASE_WT": 0,
-      "TREE_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.tree),
-      "WAX_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.waxWt),
+      "TREE_WT": this.commonService.emptyToZero(this.castingTreeUpFrom.value.tree),
+      "WAX_WT": this.commonService.emptyToZero(this.castingTreeUpFrom.value.waxWt),
       "WORKER_CODE": this.castingTreeUpFrom.value.worker,
       "PROCESS_CODE": this.castingTreeUpFrom.value.processCode,
-      "CONV_FACT": this.comService.emptyToZero(this.castingTreeUpFrom.value.CONV_FACT),
+      "CONV_FACT": this.commonService.emptyToZero(this.castingTreeUpFrom.value.CONV_FACT),
       "STOCK_CODE": "",
       "RCVD_MET_WT": this.castingTreeUpFrom.value.recMetal,
       "PRINT_COUNT": 0,
@@ -585,14 +584,14 @@ export class CastingTreeUpComponent implements OnInit {
       return
     }
 
-    let API = `JobTreeMasterDJ/UpdateJobTreeMasterDJ/${this.branchCode}/${this.castingTreeUpFrom.value.vocType}/${this.castingTreeUpFrom.value.vocNo}/${this.comService.yearSelected}`;
+    let API = `JobTreeMasterDJ/UpdateJobTreeMasterDJ/${this.branchCode}/${this.castingTreeUpFrom.value.vocType}/${this.castingTreeUpFrom.value.vocNo}/${this.commonService.yearSelected}`;
     let postData = {
       "MID": 0,
       "VOCTYPE": this.castingTreeUpFrom.value.vocType,
       "BRANCH_CODE": this.branchCode,
       "VOCNO": this.castingTreeUpFrom.value.vocNo,
       "YEARMONTH": this.yearMonth,
-      "VOCDATE": this.comService.formatDateTime(this.currentDate),
+      "VOCDATE": this.commonService.formatDateTime(this.currentDate),
       "DOCTIME": "2023-10-21T07:22:12.302Z",
       "SMAN": this.castingTreeUpFrom.value.enteredBy,
       "REMARKS": "",
@@ -600,15 +599,15 @@ export class CastingTreeUpComponent implements OnInit {
       "KARAT_CODE": this.castingTreeUpFrom.value.karatCode,
       "COLOR": this.castingTreeUpFrom.value.color,
       "METAL_WT": 0,
-      "STONE_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.stoneWt),
+      "STONE_WT": this.commonService.emptyToZero(this.castingTreeUpFrom.value.stoneWt),
       "BASE_WT": this.castingTreeUpFrom.value.base,
-      "TREE_WT": this.comService.emptyToZero(this.castingTreeUpFrom.value.tree),
+      "TREE_WT": this.commonService.emptyToZero(this.castingTreeUpFrom.value.tree),
       "WAX_WT": this.castingTreeUpFrom.value.waxWt,
       "WORKER_CODE": this.castingTreeUpFrom.value.worker,
       "PROCESS_CODE": this.castingTreeUpFrom.value.processCode,
       "CONV_FACT": this.castingTreeUpFrom.value.convFact,
       "STOCK_CODE": "",
-      "RCVD_MET_WT": this.comService.nullToString(this.castingTreeUpFrom.value.reqMetal),
+      "RCVD_MET_WT": this.commonService.nullToString(this.castingTreeUpFrom.value.reqMetal),
       "PRINT_COUNT": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",

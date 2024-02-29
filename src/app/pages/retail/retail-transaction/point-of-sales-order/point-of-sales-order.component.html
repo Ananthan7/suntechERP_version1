@@ -1,731 +1,740 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Point Of Sales Order</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Point Of Sales Order</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (continueClick)="continueClick()"
-[isViewContinue]="true"></modal-header>
+<modal-header (cancelClick)="close()" (continueClick)="continueClick()" [isViewContinue]="true"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
-    <form [formGroup]="posofSalesOrderForm">
+  <form [formGroup]="posofSalesOrderForm">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Type</label>
+          <div class="col-md-4">
+            <mat-form-field style="width: 100%;">
+              <input type="text" matInput formControlName="vocType" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field style="width: 100%;text-align: right;">
+              <input type="text" matInput formControlName="vocTypeDescription" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date</label>
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%;">
+              <input matInput [matDatepicker]="vocDate" [max]="vocDate" formControlName="vocDate"
+                placeholder="DD/MM/YYYY" DateValidation />
+              <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+              <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-4 col-form-label">Salesman</label>
+          <div class="col-md-8">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="salesMan" />
+            </mat-form-field>
+            <master-search [MasterSearchData]="SalesManData"
+              (newRowClick)="salesMancodeSelected($event)"></master-search>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-4 col-form-label">Currency</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%;">
+              <input type="text" matInput formControlName="currency" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-5">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="currencyCode" />
+            </mat-form-field>
+            <master-search [MasterSearchData]="CurrencyData"
+              (newRowClick)="currencycodeSelected($event)"></master-search>
+          </div>
+
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-4 col-form-label">Credit A/C</label>
+          <div class="col-md-8">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="creditAc" />
+            </mat-form-field>
+            <master-search [MasterSearchData]="CreditData" (newRowClick)="creditcodeSelected($event)"></master-search>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-3 col-form-label">Moblie No</label>
+          <div class="col-md-1">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" formControlName="moblieCountryCode" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" formControlName="moblieNo" />
+            </mat-form-field>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Landline</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" formControlName="landline" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-3 col-form-label">Customer Code</label>
+          <div class="col-md-4">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="customerCode" />
+            </mat-form-field>
+            <master-search [MasterSearchData]="CustomerData"
+              (newRowClick)="customercodeSelected($event)"></master-search>
+          </div>
+          <div class="col-md-2">
+            <mat-form-field style="width: 100%;">
+              <mat-select formControlName="customerSelect">
+                <mat-option *ngFor="let option of customerSelectOptions" [value]="option.value">{{ option.label
+                  }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%;">
+              <input type="text" matInput formControlName="custDesc" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-3 col-form-label">Email</label>
+          <div class="col-md-5">
+            <mat-form-field style="width: 100%;">
+              <input type="text" matInput formControlName="email" />
+            </mat-form-field>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">P.O.Box</label>
+          <div class="col-md-2">
+            <mat-form-field style="width: 100%;">
+              <input type="text" matInput formControlName="poBox" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-2 col-form-label">ID Proof</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%;">
+              <input type="text" matInput formControlName="idProof" />
+            </mat-form-field>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">Type</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="type" />
+            </mat-form-field>
+            <master-search [MasterSearchData]="typeData" (newRowClick)="typeCodeSelected($event)"></master-search>
+          </div>
+          <div class="col-md-2 py-3">
+            <mat-checkbox formControlName="checkboxFormControl">Components Wise Invoice</mat-checkbox>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Nationality</label>
+          <div class="col-md-2">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="nationality" />
+            </mat-form-field>
+            <master-search [MasterSearchData]="nationalityData"
+              (newRowClick)="nationalityCodeSelected($event)"></master-search>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">City</label>
+          <div class="col-md-2">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="city" />
+            </mat-form-field>
+            <master-search [MasterSearchData]="CityData" (newRowClick)="citycodeSelected($event)"></master-search>
+          </div>
+          <label for="inputPassword" class="col-sm-2 col-form-label">State</label>
+          <div class="col-md-2">
+            <mat-form-field style="width: 70%;">
+              <input type="text" matInput formControlName="state" />
+            </mat-form-field>
+            <master-search [MasterSearchData]="StateData" (newRowClick)="statecodeSelected($event)"></master-search>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="p-2">
+          <button type="button" class="btn btn-primary add-btn w-100">
+            Load Metal Rates
+          </button>
+        </div>
+        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-editing mode="cell" [allowUpdating]="true">
+          </dxo-editing>
+          <dxo-selection mode="multiple"></dxo-selection>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+          <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
+            alignment="center" backgroundcolor="#000">
+          </dxi-column>
+        </dx-data-grid>
+      </div>
+      <div class="col-md-12">
         <div class="row">
-            <div class="col-md-3">
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Type</label>
-                    <div class="col-md-4">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="vocType" />
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-4">
-                        <mat-form-field style="width: 100%;text-align: right;" >
-                            <input type="text" matInput formControlName="vocTypeDescription" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date</label>
-                    <div class="col-md-8">
-                        <mat-form-field style="width: 100%;">
-                            <input matInput [matDatepicker]="vocDate" [max]="vocDate" formControlName="vocDate"
-                                placeholder="DD/MM/YYYY" DateValidation />
-                            <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                            <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Salesman</label>
-                    <div class="col-md-8">
-                        <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="salesMan" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="SalesManData" (newRowClick)="salesMancodeSelected($event)"></master-search>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Currency</label>
-                    <div class="col-md-4">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="currency" />
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-4">
-                        <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="currencyCode" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="CurrencyData" (newRowClick)="currencycodeSelected($event)"></master-search>
-                    </div>
-                 
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Credit A/C</label>
-                    <div class="col-md-8">
-                        <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="creditAc" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="CreditData" (newRowClick)="creditcodeSelected($event)"></master-search>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Moblie No</label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" formControlName="moblieCountryCode" />
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" formControlName="moblieNo" />
-                        </mat-form-field>
-                    </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Landline</label>
-                    <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" formControlName="landline" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">Customer Code</label>
-                    <div class="col-md-4">
-                        <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="customerCode" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="CustomerData" (newRowClick)="customercodeSelected($event)"></master-search>
-                    </div>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
-                            <mat-select formControlName="customerSelect">
-                                <mat-option *ngFor="let option of customerSelectOptions" [value]="option.value">{{ option.label
-                                }}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="custDesc" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Email</label>
-                    <div class="col-md-6">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="email" />
-                        </mat-form-field>
-                    </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">P.O.Box</label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="poBox" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">ID Proof</label>
-                    <div class="col-md-4">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="idProof" />
-                        </mat-form-field>
-                    </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Type</label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="type" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="typeData" (newRowClick)="typeCodeSelected($event)"></master-search>
-                    </div>
-                    <div class="col-md-2 py-3">
-                        <mat-checkbox formControlName="checkboxFormControl">Components Wise Invoice</mat-checkbox>
-                      </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Nationality</label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="nationality" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="nationalityData" (newRowClick)="nationalityCodeSelected($event)"></master-search>
-                    </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">City</label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="city" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="CityData" (newRowClick)="citycodeSelected($event)"></master-search>
-                    </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">State</label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="state" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="StateData" (newRowClick)="statecodeSelected($event)"></master-search>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="p-2">
-                    <button type="button" class="btn btn-primary add-btn w-100">
-                        Load Metal Rates
-                    </button>
-                </div>
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
-                    <dxo-selection mode="multiple"></dxo-selection>
-                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                    </dxi-column>
-                </dx-data-grid>
-            </div>
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Remarks</label>
-                            <div class="col-md-5">
-                                <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="remarks" />
-                                </mat-form-field>
-                            </div>
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Delivery Date</label>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input matInput [matDatepicker]="deliveryDate" [max]="deliveryDate"
-                                        formControlName="deliveryDate" placeholder="DD/MM/YYYY" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="deliveryDate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #deliveryDate></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="row mb-1 align-items-center">
-                            <div class="col-md-4">
-                                <mat-checkbox class="example-margin" formControlName="fixMetalRate">Fix Metal
-                                    Rate</mat-checkbox>
-                            </div>
-                            <div class="col-md-4">
-                                <mat-checkbox class="example-margin" formControlName="holdforSalesTill">hold for Sales
-                                    Till</mat-checkbox>
-                            </div>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 100%;">
-                                    <input matInput [matDatepicker]="normalDate" [max]="normalDate"
-                                        formControlName="normalDate" placeholder="DD/MM/YYYY" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="normalDate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #normalDate></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1" headerPosition="below">
-            <mat-tab label="Sold Items">
-                <div class="row my-3">
-                    <div class="col-md-3 d-flex mb-2">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"(addClick)="openaddalloyallocation()">                        </menu-buttons>
-                    </div>
-                    <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                            <dxo-paging [enabled]="false"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>        
-                            <dxi-column *ngFor="let data of columnheadDetails" dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>                          
-                        </dx-data-grid>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-5"> <mat-form-field style="width: 30%;">
-                            <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;" formControlName="s_total" />
-                        </mat-form-field></div>
-                        <div class="col-sm-2"> <mat-form-field style="width: 50%;">
-                            <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;" formControlName="Qty_total" />
-                        </mat-form-field></div>
-                        <div class="col-sm-1"> <mat-form-field style="width: 100%;">
-                            <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;" formControlName="amt_total" />
-                        </mat-form-field></div>
-                        <div class="col-sm-1"> <mat-form-field style="width: 100%;">
-                            <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;" formControlName="disc_total" />
-                        </mat-form-field></div>
-                        <div class="col-sm-1"> <mat-form-field style="width: 100%;">
-                            <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;" formControlName="net_total" />
-                        </mat-form-field></div>
-                    </div>
-                   
-                </div>
-            </mat-tab>
-            <mat-tab label="Returns">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
-                    <dxo-selection mode="multiple"></dxo-selection>
-                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                    <dxi-column *ngFor="let data of columnheadItems" dataField="{{ data }}" caption="{{ data }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                    </dxi-column>
-                </dx-data-grid>
-            </mat-tab>
-            <mat-tab label="Exchanges">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
-                    <dxo-selection mode="multiple"></dxo-selection>
-                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                    <dxi-column *ngFor="let data of columnheadsItems" dataField="{{ data }}" caption="{{ data }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                    </dxi-column>
-                </dx-data-grid>
-            </mat-tab>
-        </mat-tab-group>
-        <div class="row mt-3">
-            <div class="col-md-4">
-                <label for="inputPassword" class="text-center col-form-label table_header">Receipts</label>
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
-                    <dxo-selection mode="multiple"></dxo-selection>
-                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                    <dxi-column *ngFor="let data of columnheadSoldItems" dataField="{{ data }}" [width]="100"
-                        caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                    </dxi-column>
-                </dx-data-grid>
-                <div class="mt-2">
-                    <menu-buttons (click)="open(sales_payment_modal)" [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false">
-                    </menu-buttons>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Invoice Total</label>
-                    <div class="col-md-7">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" matInput formControlName="invoiceTotal" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Returns</label>
-                    <div class="col-md-7">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" matInput formControlName="returns" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Exchanges</label>
-                    <div class="col-md-7">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" matInput formControlName="exchanges" />
-                        </mat-form-field>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Advance Received</label>
-                    <div class="col-md-7">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" formControlName="advanceReceived" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Round Off Amount</label>
-                    <div class="col-md-7">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" matInput formControlName="roundOffAmount" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Net Total</label>
-                    <div class="col-md-7">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" matInput formControlName="netTotal" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Receipt Total</label>
-                    <div class="col-md-7">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" formControlName="receiptTotal" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Refund / Due</label>
-                    <div class="col-md-7">
-                        <mat-form-field style="width: 100%;">
-                            <input type="number" matInput style="text-align: right;" formControlName="refundDue" />
-                        </mat-form-field>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-<ng-template #sales_payment_modal let-modal modal-lg>
-    <div class="modal-header" style="padding: 10px 20px">
-      <h4 class="modal-title" id="modal-pos-metal">Pos Sales Payment</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">×</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="setTabByIndex($event.index)">
-        <mat-tab label="CASH RECEIPT" [disabled]="!this.receiptModesList?.BTN_CASH || viewOnly">
-          <form [formGroup]="cashreceiptForm" novalidate>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-              <div class="form-group row">
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
-                    <input type="text" matInput formControlName="paymentsCash" [matAutocomplete]="receiptmode"
-                      [readonly]="viewOnly" />
-                    <mat-autocomplete #receiptmode="matAutocomplete" autoActiveFirstOption>
-                      <mat-option *ngFor="let option of receiptModeOptions_Cash | async" [value]="option">
-                        {{ option }}
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="
-                        cashreceiptForm.controls.paymentsCash.hasError('required')
-                      ">
-                      Receipt Mode is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount LC</mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="cashAmtLC" id="cashAmtLC"
-                      placeholder="0.00" readonly />
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount FC</mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="cashAmtFC" id="cashAmtFC"
-                      (focusout)="
-                        changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')
-                      " placeholder="0.00" [readonly]="viewOnly" />
-                    <mat-error *ngIf="
-                        cashreceiptForm.controls.cashAmtFC.hasError('required')
-                      ">
-                      Amount FC is <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="cashreceiptForm.controls.cashAmtFC.hasError('min')">
-                      Amount FC is should Not Be Zero
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+          <div class="col-md-7">
+            <div class="row mb-1 ">
+              <label for="inputPassword" class="col-sm-2 col-form-label">Remarks</label>
+              <div class="col-md-5">
+                <mat-form-field style="width: 100%;">
+                  <input type="text" matInput formControlName="remarks" />
+                </mat-form-field>
+              </div>
+              <label for="inputPassword" class="col-sm-2 col-form-label">Delivery Date</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%;">
+                  <input matInput [matDatepicker]="deliveryDate" [max]="deliveryDate" formControlName="deliveryDate"
+                    placeholder="DD/MM/YYYY" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="deliveryDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #deliveryDate></mat-datepicker>
+                </mat-form-field>
               </div>
             </div>
-      
-          </form>
-        </mat-tab>
-  
-        <mat-tab label="CREDIT CARD" [disabled]="!this.receiptModesList?.BTN_CREDITCARD || viewOnly">
-          <form [formGroup]="creditCardReceiptForm" novalidate>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-              <div class="form-group row">
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
-                    <input type="text" matInput formControlName="paymentsCreditCard" [matAutocomplete]="receiptmodecc"
-                      [readonly]="viewOnly" />
-                    <mat-autocomplete #receiptmodecc="matAutocomplete" autoActiveFirstOption>
-                      <mat-option *ngFor="let option of receiptModeOptions_CC | async" [value]="option">
-                        {{ option }}
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="
+          </div>
+          <div class="col-md-5">
+            <div class="row mb-1 align-items-center">
+              <div class="col-md-4">
+                <mat-checkbox class="example-margin" formControlName="fixMetalRate">Fix Metal
+                  Rate</mat-checkbox>
+              </div>
+              <div class="col-md-4">
+                <mat-checkbox class="example-margin" formControlName="holdforSalesTill">hold for Sales
+                  Till</mat-checkbox>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%;">
+                  <input matInput [matDatepicker]="normalDate" [max]="normalDate" formControlName="normalDate"
+                    placeholder="DD/MM/YYYY" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="normalDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #normalDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1" headerPosition="below">
+      <mat-tab label="Sold Items">
+        <div class="row my-3">
+          <div class="col-md-3 d-flex mb-2">
+            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+              (addClick)="openaddalloyallocation()"> </menu-buttons>
+          </div>
+          <div class="col-md-12">
+            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+              <dxo-paging [enabled]="false"></dxo-paging>
+              <dxo-editing mode="cell" [allowUpdating]="true">
+              </dxo-editing>
+              <dxo-selection mode="multiple"></dxo-selection>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              <dxi-column *ngFor="let data of columnheadDetails" dataField="{{ data }}" caption="{{ data }}"
+                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+          <div class="row">
+            <div class="col-sm-5"> <mat-form-field style="width: 30%;">
+                <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;"
+                  formControlName="s_total" />
+              </mat-form-field></div>
+            <div class="col-sm-2"> <mat-form-field style="width: 50%;">
+                <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;"
+                  formControlName="Qty_total" />
+              </mat-form-field></div>
+            <div class="col-sm-1"> <mat-form-field style="width: 100%;">
+                <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;"
+                  formControlName="amt_total" />
+              </mat-form-field></div>
+            <div class="col-sm-1"> <mat-form-field style="width: 100%;">
+                <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;"
+                  formControlName="disc_total" />
+              </mat-form-field></div>
+            <div class="col-sm-1"> <mat-form-field style="width: 100%;">
+                <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;"
+                  formControlName="net_total" />
+              </mat-form-field></div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Returns">
+        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-editing mode="cell" [allowUpdating]="true">
+          </dxo-editing>
+          <dxo-selection mode="multiple"></dxo-selection>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+          <dxi-column *ngFor="let data of columnheadItems" dataField="{{ data }}" caption="{{ data }}"
+            [allowEditing]="true" alignment="center" backgroundcolor="#000">
+          </dxi-column>
+        </dx-data-grid>
+      </mat-tab>
+      <mat-tab label="Exchanges">
+        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-editing mode="cell" [allowUpdating]="true">
+          </dxo-editing>
+          <dxo-selection mode="multiple"></dxo-selection>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+          <dxi-column *ngFor="let data of columnheadsItems" dataField="{{ data }}" caption="{{ data }}"
+            [allowEditing]="true" alignment="center" backgroundcolor="#000">
+          </dxi-column>
+        </dx-data-grid>
+      </mat-tab>
+    </mat-tab-group>
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <label for="inputPassword" class="text-center col-form-label table_header">Receipts</label>
+        <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-editing mode="cell" [allowUpdating]="true">
+          </dxo-editing>
+          <dxo-selection mode="multiple"></dxo-selection>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+          <dxi-column *ngFor="let data of columnheadSoldItems" dataField="{{ data }}" [width]="100" caption="{{ data }}"
+            [allowEditing]="true" alignment="center" backgroundcolor="#000">
+          </dxi-column>
+        </dx-data-grid>
+        <div class="mt-2">
+          <menu-buttons (click)="open(sales_payment_modal)" [viewAddBtn]="true" [viewDeleteBtn]="true"
+            [viewImportBtn]="false">
+          </menu-buttons>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-5 col-form-label">Invoice Total</label>
+          <div class="col-md-7">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" matInput formControlName="invoiceTotal" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-5 col-form-label">Returns</label>
+          <div class="col-md-7">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" matInput formControlName="returns" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-5 col-form-label">Exchanges</label>
+          <div class="col-md-7">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" matInput formControlName="exchanges" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-5 col-form-label">Advance Received</label>
+          <div class="col-md-7">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" formControlName="advanceReceived" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-5 col-form-label">Round Off Amount</label>
+          <div class="col-md-7">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" matInput formControlName="roundOffAmount" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-5 col-form-label">Net Total</label>
+          <div class="col-md-7">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" matInput formControlName="netTotal" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-5 col-form-label">Receipt Total</label>
+          <div class="col-md-7">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" formControlName="receiptTotal" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1 ">
+          <label for="inputPassword" class="col-sm-5 col-form-label">Refund / Due</label>
+          <div class="col-md-7">
+            <mat-form-field style="width: 100%;">
+              <input type="number" matInput style="text-align: right;" formControlName="refundDue" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<ng-template #sales_payment_modal let-modal modal-lg>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Pos Sales Payment</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="setTabByIndex($event.index)">
+      <mat-tab label="CASH RECEIPT" [disabled]="!this.receiptModesList?.BTN_CASH || viewOnly">
+        <form [formGroup]="cashreceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput formControlName="paymentsCash" [matAutocomplete]="receiptmode"
+                    [readonly]="viewOnly" />
+                  <mat-autocomplete #receiptmode="matAutocomplete" autoActiveFirstOption>
+                    <mat-option *ngFor="let option of receiptModeOptions_Cash | async" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                        cashreceiptForm.controls.paymentsCash.hasError('required')
+                      ">
+                    Receipt Mode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount LC</mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="cashAmtLC" id="cashAmtLC"
+                    placeholder="0.00" readonly />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount FC</mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="cashAmtFC" id="cashAmtFC"
+                    (focusout)="
+                        changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')
+                      " placeholder="0.00" [readonly]="viewOnly" />
+                  <mat-error *ngIf="
+                        cashreceiptForm.controls.cashAmtFC.hasError('required')
+                      ">
+                    Amount FC is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="cashreceiptForm.controls.cashAmtFC.hasError('min')">
+                    Amount FC is should Not Be Zero
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </mat-tab>
+
+      <mat-tab label="CREDIT CARD" [disabled]="!this.receiptModesList?.BTN_CREDITCARD || viewOnly">
+        <form [formGroup]="creditCardReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput formControlName="paymentsCreditCard" [matAutocomplete]="receiptmodecc"
+                    [readonly]="viewOnly" />
+                  <mat-autocomplete #receiptmodecc="matAutocomplete" autoActiveFirstOption>
+                    <mat-option *ngFor="let option of receiptModeOptions_CC | async" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
                         creditCardReceiptForm.controls.paymentsCreditCard.hasError(
                           'required'
                         )
                       ">
-                      Receipt Mode is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>CC No.</mat-label>
-                    <input type="number" matInput formControlName="cardCCNo" id="cardCCNo" maxlength="19"
-                      [readonly]="viewOnly" />
-                    <mat-error *ngIf="
+                    Receipt Mode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>CC No.</mat-label>
+                  <input type="number" matInput formControlName="cardCCNo" id="cardCCNo" maxlength="19"
+                    [readonly]="viewOnly" />
+                  <mat-error *ngIf="
                         creditCardReceiptForm.controls.cardCCNo.hasError(
                           'required'
                         )
                       ">
-                      CC No. is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount </mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="cardAmtFC" id="cardAmtFC"
-                      placeholder="0.00" [readonly]="viewOnly" />
-                    <mat-error *ngIf="
+                    CC No. is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount </mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="cardAmtFC" id="cardAmtFC"
+                    placeholder="0.00" [readonly]="viewOnly" />
+                  <mat-error *ngIf="
                         creditCardReceiptForm.controls.cardAmtFC.hasError(
                           'required'
                         )
                       ">
-                      Amount is <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="
+                    Amount is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="
                         creditCardReceiptForm.controls.cardAmtFC.hasError('min')
                       ">
-                      Amount is should Not Be Zero
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                    Amount is should Not Be Zero
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
-          </form>
-        </mat-tab>
-  
-        <mat-tab label="ADVANCE" [disabled]="!this.receiptModesList?.BTN_ADVANCE || viewOnly">
-          <form [formGroup]="advanceReceiptForm" novalidate>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-              <div class="form-group row">
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
-                    <input type="text" matInput formControlName="paymentsAdvance" id="paymentsAdvance"
-                      [matAutocomplete]="paymentsAdvance" [readonly]="viewOnly" />
-                    <mat-autocomplete #paymentsAdvance="matAutocomplete" autoActiveFirstOption
-                      (optionSelected)="changeAdvanceVocNo($event)">
-                      <mat-option *ngFor="let option of receiptModeAdvanceOthers | async" [value]="option">
-                        {{ option }}
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="
+          </div>
+        </form>
+      </mat-tab>
+
+      <mat-tab label="ADVANCE" [disabled]="!this.receiptModesList?.BTN_ADVANCE || viewOnly">
+        <form [formGroup]="advanceReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput formControlName="paymentsAdvance" id="paymentsAdvance"
+                    [matAutocomplete]="paymentsAdvance" [readonly]="viewOnly" />
+                  <mat-autocomplete #paymentsAdvance="matAutocomplete" autoActiveFirstOption
+                    (optionSelected)="changeAdvanceVocNo($event)">
+                    <mat-option *ngFor="let option of receiptModeAdvanceOthers | async" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
                         advanceReceiptForm.controls.paymentsAdvance.hasError(
                           'required'
                         )
                       ">
-                      Receipt Mode is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Branch</mat-label>
-                    <input type="text" matInput formControlName="advanceBranch" [matAutocomplete]="advanceBranch"
-                      id="advanceBranch" (focusout)="changeBranch($event)" [readonly]="viewOnly" />
-                    <mat-autocomplete #advanceBranch="matAutocomplete" autoActiveFirstOption
-                      (optionSelected)="changeAdvanceVocNo($event)">
-                      <mat-option *ngFor="
+                    Receipt Mode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Branch</mat-label>
+                  <input type="text" matInput formControlName="advanceBranch" [matAutocomplete]="advanceBranch"
+                    id="advanceBranch" (focusout)="changeBranch($event)" [readonly]="viewOnly" />
+                  <mat-autocomplete #advanceBranch="matAutocomplete" autoActiveFirstOption
+                    (optionSelected)="changeAdvanceVocNo($event)">
+                    <mat-option *ngFor="
                           let option of filteredAdvanceBranchOptions | async
                         " [value]="option">
-                        {{ option }}
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
                         advanceReceiptForm.controls.advanceBranch.hasError(
                           'required'
                         )
                       ">
-                      Branch is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Year</mat-label>
-                    <input matInput type="text" id="advanceYear" formControlName="advanceYear" id="advanceYear"
-                      [matAutocomplete]="advanceYear" [readonly]="viewOnly" />
-                    <mat-autocomplete #advanceYear="matAutocomplete" autoActiveFirstOption
-                      (optionSelected)="changeAdvanceVocNo($event)">
-                      <mat-option *ngFor="let option of filteredadvanceYear | async" [value]="option">
-                        {{ option }}
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="
+                    Branch is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Year</mat-label>
+                  <input matInput type="text" id="advanceYear" formControlName="advanceYear" id="advanceYear"
+                    [matAutocomplete]="advanceYear" [readonly]="viewOnly" />
+                  <mat-autocomplete #advanceYear="matAutocomplete" autoActiveFirstOption
+                    (optionSelected)="changeAdvanceVocNo($event)">
+                    <mat-option *ngFor="let option of filteredadvanceYear | async" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
                         advanceReceiptForm.controls.advanceYear.hasError(
                           'required'
                         )
                       ">
-                      Year is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                    Year is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-              <div class="form-group row">
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Rec No.</mat-label>
-                    <input type="text" matInput formControlName="advanceRecNo" value id="advanceRecNo"
-                      (change)="changeAdvanceVocNo($event)" [readonly]="viewOnly" />
-  
-                    <mat-error *ngIf="
+          </div>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Rec No.</mat-label>
+                  <input type="text" matInput formControlName="advanceRecNo" value id="advanceRecNo"
+                    (change)="changeAdvanceVocNo($event)" [readonly]="viewOnly" />
+
+                  <mat-error *ngIf="
                         advanceReceiptForm.controls.advanceRecNo.hasError(
                           'required'
                         )
                       ">
-                      Rec No. is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Customer Code</mat-label>
-                    <input type="text" matInput formControlName="advanceCustCode" value id="advanceCustCode"
-                      (change)="changeAdvanceVocNo($event)" [readonly]="viewOnly" />
-  
-                    <mat-error *ngIf="
+                    Rec No. is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Customer Code</mat-label>
+                  <input type="text" matInput formControlName="advanceCustCode" value id="advanceCustCode"
+                    (change)="changeAdvanceVocNo($event)" [readonly]="viewOnly" />
+
+                  <mat-error *ngIf="
                         advanceReceiptForm.controls.advanceCustCode.hasError(
                           'required'
                         )
                       ">
-                      Customer Code is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount</mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="advanceAmount" id="advanceAmount"
-                      [readonly]="viewOnly" />
-                    <mat-error *ngIf="
+                    Customer Code is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount</mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="advanceAmount" id="advanceAmount"
+                    [readonly]="viewOnly" />
+                  <mat-error *ngIf="
                         advanceReceiptForm.controls.advanceAmount.hasError(
                           'required'
                         )
                       ">
-                      Amount is <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="
+                    Amount is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="
                         advanceReceiptForm.controls.advanceAmount.hasError('min')
                       ">
-                      Amount is should Not Be Zero
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                    Amount is should Not Be Zero
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-              <div class="form-group row">
-                <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Vat Amount Paid LC</mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="advanceVatAmountLC"
-                      id="advanceVatAmountLC" placeholder="0.00" readonly />
-                  </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Vat Amount Paid FC</mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="advanceVatAmountFC"
-                      id="advanceVatAmountFC" placeholder="0.00" readonly />
-                    <!-- (focusout)="changeReceiptAmtFC($event)" -->
-                  </mat-form-field>
-                </div>
+          </div>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Vat Amount Paid LC</mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="advanceVatAmountLC"
+                    id="advanceVatAmountLC" placeholder="0.00" readonly />
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Vat Amount Paid FC</mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="advanceVatAmountFC"
+                    id="advanceVatAmountFC" placeholder="0.00" readonly />
+                  <!-- (focusout)="changeReceiptAmtFC($event)" -->
+                </mat-form-field>
               </div>
             </div>
-          </form>
-        </mat-tab>
-  
-        <mat-tab label="OTHERS" [disabled]="!this.receiptModesList?.BTN_OTHERS || viewOnly">
-          <form [formGroup]="othersReceiptForm" novalidate>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-              <div class="form-group row">
-                <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
-                    <input type="text" matInput formControlName="paymentsOthers" id="paymentsOthers"
-                      [matAutocomplete]="receiptmodeOthers" [readonly]="viewOnly" />
-                    <mat-autocomplete #receiptmodeOthers="matAutocomplete" autoActiveFirstOption>
-                      <mat-option *ngFor="let option of receiptModeOptionsOthers | async" [value]="option">
-                        {{ option }}
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="
+          </div>
+        </form>
+      </mat-tab>
+
+      <mat-tab label="OTHERS" [disabled]="!this.receiptModesList?.BTN_OTHERS || viewOnly">
+        <form [formGroup]="othersReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput formControlName="paymentsOthers" id="paymentsOthers"
+                    [matAutocomplete]="receiptmodeOthers" [readonly]="viewOnly" />
+                  <mat-autocomplete #receiptmodeOthers="matAutocomplete" autoActiveFirstOption>
+                    <mat-option *ngFor="let option of receiptModeOptionsOthers | async" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
                         othersReceiptForm.controls.paymentsOthers.hasError(
                           'required'
                         )
                       ">
-                      Receipt Mode is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Amount</mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="othersAmtFC" id="othersAmtFC"
-                      placeholder="0.00" [readonly]="viewOnly" />
-                    <mat-error *ngIf="
+                    Receipt Mode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Amount</mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="othersAmtFC" id="othersAmtFC"
+                    placeholder="0.00" [readonly]="viewOnly" />
+                  <mat-error *ngIf="
                         othersReceiptForm.controls.othersAmtFC.hasError(
                           'required'
                         )
                       ">
-                      Amount is <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="
+                    Amount is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="
                         othersReceiptForm.controls.othersAmtFC.hasError('min')
                       ">
-                      Amount is should be Greater than Zero
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                    Amount is should be Greater than Zero
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
-          </form>
-        </mat-tab>
-        <mat-tab label="GIFT. VOC" [disabled]="!this.receiptModesList?.BTN_GIFT || viewOnly">
-          <form [formGroup]="giftReceiptForm" novalidate>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-              <div class="form-group row">
-                <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
-                    <input type="text" matInput formControlName="paymentsCreditGIftVoc" id="paymentsCreditGIftVoc"
-                      [matAutocomplete]="paymentsCreditGIftVoc" [readonly]="viewOnly" />
-                    <mat-autocomplete #paymentsCreditGIftVoc="matAutocomplete" autoActiveFirstOption>
-                      <mat-option *ngFor="let option of receiptModeGiftOptions | async" [value]="option">
-                        {{ option }}
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="GIFT. VOC" [disabled]="!this.receiptModesList?.BTN_GIFT || viewOnly">
+        <form [formGroup]="giftReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Receipt Mode </mat-label>
+                  <input type="text" matInput formControlName="paymentsCreditGIftVoc" id="paymentsCreditGIftVoc"
+                    [matAutocomplete]="paymentsCreditGIftVoc" [readonly]="viewOnly" />
+                  <mat-autocomplete #paymentsCreditGIftVoc="matAutocomplete" autoActiveFirstOption>
+                    <mat-option *ngFor="let option of receiptModeGiftOptions | async" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
                         giftReceiptForm.controls.paymentsCreditGIftVoc.hasError(
                           'required'
                         )
                       ">
-                      Receipt Mode <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Branch</mat-label>
-                    <input type="text" matInput formControlName="giftBranch" id="giftBranch"
-                      (focusout)="changeBranch($event)" [readonly]="viewOnly" />
-                    <!-- [matAutocomplete]="giftBranch" -->
-                    <!-- <mat-autocomplete
+                    Receipt Mode <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Branch</mat-label>
+                  <input type="text" matInput formControlName="giftBranch" id="giftBranch"
+                    (focusout)="changeBranch($event)" [readonly]="viewOnly" />
+                  <!-- [matAutocomplete]="giftBranch" -->
+                  <!-- <mat-autocomplete
                       #giftBranch="matAutocomplete"
                       autoActiveFirstOption
                     >
@@ -738,134 +747,134 @@
                         {{ option }}
                       </mat-option>
                     </mat-autocomplete> -->
-  
-                    <mat-error *ngIf="
+
+                  <mat-error *ngIf="
                         giftReceiptForm.controls.giftBranch.hasError('required')
                       ">
-                      Branch is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                    Branch is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-              <div class="form-group row">
-                <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Voc No.</mat-label>
-                    <input type="text" matInput formControlName="giftVocNo" id="giftVocNo"
-                      (change)="changeGiftVocNo($event)" [readonly]="viewOnly" />
-                    <mat-error *ngIf="
+          </div>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Voc No.</mat-label>
+                  <input type="text" matInput formControlName="giftVocNo" id="giftVocNo"
+                    (change)="changeGiftVocNo($event)" [readonly]="viewOnly" />
+                  <mat-error *ngIf="
                         giftReceiptForm.controls.giftVocNo.hasError('required')
                       ">
-                      Voc No. is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Amount</mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="giftAmtFC" id="giftAmtFC"
-                      placeholder="0.00" [readonly]="viewOnly" />
-                    <mat-error *ngIf="
+                    Voc No. is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Amount</mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="giftAmtFC" id="giftAmtFC"
+                    placeholder="0.00" [readonly]="viewOnly" />
+                  <mat-error *ngIf="
                         giftReceiptForm.controls.giftAmtFC.hasError('required')
                       ">
-                      Amount is <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="giftReceiptForm.controls.giftAmtFC.hasError('min')">
-                      Amount is should be Greater than Zero
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                    Amount is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="giftReceiptForm.controls.giftAmtFC.hasError('min')">
+                    Amount is should be Greater than Zero
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
-          </form>
-        </mat-tab>
-        <mat-tab label="CUSTOMERS" [disabled]="!this.receiptModesList?.BTN_CUSTOMER || viewOnly">
-          <form [formGroup]="customerReceiptForm" novalidate>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-              <div class="form-group row">
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Select Accode</mat-label>
-                    <input type="text" matInput formControlName="customAcCodeList" [matAutocomplete]="customAcCodeList"
-                      id="customAcCodeList" [readonly]="viewOnly" />
-                    <mat-autocomplete panelWidth="50%" #customAcCodeList="matAutocomplete" autoActiveFirstOption
-                      (optionSelected)="changeCustAcCode($event.option.value)">
-                      <mat-option *ngFor="let option of customAcCodeListOptions | async" [value]="option.ACCODE">
-                        {{ option.ACCODE + " - " + option.ACCOUNT_HEAD }}
-                        <!-- {{ option.CODE + " - " + option.DESCRIPTION }} -->
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="CUSTOMERS" [disabled]="!this.receiptModesList?.BTN_CUSTOMER || viewOnly">
+        <form [formGroup]="customerReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Select Accode</mat-label>
+                  <input type="text" matInput formControlName="customAcCodeList" [matAutocomplete]="customAcCodeList"
+                    id="customAcCodeList" [readonly]="viewOnly" />
+                  <mat-autocomplete panelWidth="50%" #customAcCodeList="matAutocomplete" autoActiveFirstOption
+                    (optionSelected)="changeCustAcCode($event.option.value)">
+                    <mat-option *ngFor="let option of customAcCodeListOptions | async" [value]="option.ACCODE">
+                      {{ option.ACCODE + " - " + option.ACCOUNT_HEAD }}
+                      <!-- {{ option.CODE + " - " + option.DESCRIPTION }} -->
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
                         customerReceiptForm.controls.customAcCodeList.hasError(
                           'required'
                         )
                       ">
-                      Accode is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount LC</mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="customerAmtLC" id="customerAmtLC"
-                      placeholder="0.00" readonly />
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount FC</mat-label>
-                    <input type="number" class="st_txt_right" matInput formControlName="customerAmtFC" id="customerAmtFC"
-                      (focusout)="
+                    Accode is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount LC</mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="customerAmtLC" id="customerAmtLC"
+                    placeholder="0.00" readonly />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Amount FC</mat-label>
+                  <input type="number" class="st_txt_right" matInput formControlName="customerAmtFC" id="customerAmtFC"
+                    (focusout)="
                         changeReceiptAmtFC(
                           $event,
                           'customerReceiptForm',
                           'customerAmtLC'
                         )
                       " placeholder="0.00" [readonly]="viewOnly" />
-  
-                    <mat-error *ngIf="
+
+                  <mat-error *ngIf="
                         customerReceiptForm.controls.customerAmtFC.hasError(
                           'required'
                         )
                       ">
-                      Amount FC is <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="
+                    Amount FC is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="
                         customerReceiptForm.controls.customerAmtFC.hasError('min')
                       ">
-                      Amount FC is should be Greater than Zero
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <!-- <div class="col">
+                    Amount FC is should be Greater than Zero
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <!-- <div class="col">
                     <mat-form-field>
                       <mat-label>Accode</mat-label>
                       <input type="text" matInput formControlName="customerAccode" id="customerAccode" readonly />
                     </mat-form-field>
                   </div> -->
-              </div>
             </div>
-          </form>
-        </mat-tab>
-      </mat-tab-group>
-  
-      <div style="padding-bottom: 20px">
-        <div style="text-align: right; padding: 10px">
-          <button mat-flat-button color="accent" *ngIf="!viewOnly" class="btn-m-r-10" [disabled]="viewOnly"
-            (click)="saveReceipt('Continue')">
-            Continue
-          </button>
-          <button mat-flat-button color="primary" *ngIf="!viewOnly" class="btn-m-r-10" [disabled]="viewOnly"
-            (click)="saveReceipt()">
-            SAVE
-          </button>
-          <button mat-flat-button color="warn" #closeModalButton (click)="modal.dismiss('Cross click')">
-            CLOSE
-          </button>
-          &nbsp;
-        </div>
+          </div>
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div style="padding-bottom: 20px">
+      <div style="text-align: right; padding: 10px">
+        <button mat-flat-button color="accent" *ngIf="!viewOnly" class="btn-m-r-10" [disabled]="viewOnly"
+          (click)="saveReceipt('Continue')">
+          Continue
+        </button>
+        <button mat-flat-button color="primary" *ngIf="!viewOnly" class="btn-m-r-10" [disabled]="viewOnly"
+          (click)="saveReceipt()">
+          SAVE
+        </button>
+        <button mat-flat-button color="warn" #closeModalButton (click)="modal.dismiss('Cross click')">
+          CLOSE
+        </button>
+        &nbsp;
       </div>
     </div>
-  </ng-template>
+  </div>
+</ng-template>
