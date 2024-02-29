@@ -11474,4 +11474,36 @@ export class AddPosComponent implements OnInit {
     // });
 
   }
+
+
+  getData() {
+    // http://185.56.89.191:181/POSPlanetFile/CheckPlanetTag/{strBranchCode}/{strVocType}/{strYearMonth}/{intVocNo}
+    // http://185.56.89.191:181/POSPlanetFile/CreatePlanetPOSVoidFile/{strBranchCode}/{strVocType}/{strYearMonth}/{intVocNo}
+    // http://185.56.89.191:181/POSPlanetFile/CreatePOSPlanetFile/{strBranchCode}/{strVocType}/{strYearMonth}/{intVocNo}
+  }
+
+  checkPlanetTag() {
+    const API = `POSPlanetFile/CheckPlanetTag/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
+    this.suntechApi.getDynamicAPI(API)
+      .subscribe((res: any) => {
+        if (res.status == "Success") {
+        }
+      });
+  }
+  createPlanetPOSVoidFile(){
+    const API = `POSPlanetFile/CreatePlanetPOSVoidFile/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
+    this.suntechApi.postDynamicAPI(API, {})
+      .subscribe((res: any) => {
+        if (res.status == "Success") {
+        }
+      });
+  }
+  createPOSPlanetFile(){
+    const API = `POSPlanetFile/CreatePOSPlanetFile/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
+    this.suntechApi.postDynamicAPI(API, {})
+      .subscribe((res: any) => {
+        if (res.status == "Success") {
+        }
+      });
+  }
 }

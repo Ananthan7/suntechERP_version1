@@ -21,7 +21,7 @@ import { ToastrService } from "ngx-toastr";
 export class AdvanceReturnComponent implements OnInit {
   @Input() content!: any;
   branchCode?: String;
-  
+
   vocMaxDate = new Date();
   currentDate = new Date();
   columnhead: any[] = [
@@ -120,7 +120,7 @@ export class AdvanceReturnComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -130,7 +130,7 @@ export class AdvanceReturnComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
 
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -138,7 +138,7 @@ export class AdvanceReturnComponent implements OnInit {
     this.advanceReturnForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
     this.advanceReturnForm.controls.baseCurrency.setValue(this.comService.compCurrency);
     this.advanceReturnForm.controls.baseCurrencyRate.setValue(this.comService.getCurrRate(this.comService.compCurrency));
-    
+
   }
 
   openaddposdetails() {
@@ -151,7 +151,8 @@ export class AdvanceReturnComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
-
+    modalRef.componentInstance.customerCode = this.advanceReturnForm.value.customerCode;
+    
     modalRef.result.then((postData) => {
       if (postData) {
         console.log("Data from modal:", postData);
@@ -199,10 +200,10 @@ export class AdvanceReturnComponent implements OnInit {
               this.advanceReturnForm.controls.partyCurrencyRate.setValue(data[0].CONV_RATE)
               this.advanceReturnForm.controls.partyAddress.setValue(data[0].ADDRESS)
               this.advanceReturnForm.controls.advanceFromCustomers.setValue(data[0].ACCOUNT_HEAD)
-              
+
               // this.advanceReturnForm.controls.baseCurrency.setValue(data[0].CURRENCY_CODE)
               // this.advanceReturnForm.controls.baseCurrencyRate.setValue(data[0].CONV_RATE)
-           }
+            }
           }
 
         } else {
