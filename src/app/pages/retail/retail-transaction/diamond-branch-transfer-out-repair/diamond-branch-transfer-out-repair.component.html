@@ -1,1 +1,432 @@
-<p>diamond-branch-transfer-out-repair works!</p>
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Diamond Branch Trans Out</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header  (cancelClick)="close()"></modal-header>
+  
+  <div class="container-fluid">
+    <form>
+        <div class="col-md-12">
+          <div class="row">
+            <div>
+                <h5 for="inputPassword" class="col-sm-2">Invoice Details </h5>
+            </div>
+
+            <div class="col-6 ">
+
+              <div class="row mb-1 pt-2">
+                <label for="inputPassword" class="col-sm-2">Voucher Type :</label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                  <mat-form-field style="width: 80%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <label for="inputPassword" class="col-sm-5 pt-3">Doc Ref</label>
+                  </div>
+              </div>
+
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-2">Voucher Date :</label>
+                <div class="col-sm-4">
+                  <mat-form-field style="width: 80%">
+                    <input matInput  name="vocdate" 
+                      placeholder="DD/MM/YYYY" DateValidation />
+                    <mat-datepicker-toggle matSuffix ></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate"></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <label for="inputPassword" class="col-sm-2">Delivery Date :</label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%">
+                    <input matInput  name="vocdate" 
+                      placeholder="DD/MM/YYYY" DateValidation />
+                    <mat-datepicker-toggle matSuffix ></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" ></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-2">Branch To : </label>
+                <div class="col-sm-4">
+                  <mat-form-field style="width: 85%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                  <master-search>
+                  </master-search>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field style="width: 85%;">
+                      <input type="text" matInput  />
+                    </mat-form-field>
+                  </div>
+              </div>
+
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-2">Entered By : </label>
+                <div class="col-sm-4">
+                  <mat-form-field style="width: 85%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                  <master-search>
+                  </master-search>
+                </div>
+                <label for="inputPassword" class="col-sm-2">Status : </label>
+                <div class="col-sm-4">
+                  <mat-form-field style="width: 85%;">
+                    <mat-select>
+                        <mat-option value="1"></mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                </div> 
+              </div>
+
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-2">Item Currency : </label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 85%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field style="width: 85%;">
+                      <input type="text" matInput  />
+                    </mat-form-field>
+                  </div>
+                <label for="inputPassword" class="col-sm-2">Credit Days : </label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 85%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field style="width: 100%">
+                        <input matInput 
+                          placeholder="DD/MM/YYYY" DateValidation />
+                        <mat-datepicker-toggle matSuffix ></mat-datepicker-toggle>
+                        <mat-datepicker [startAt]="currentDate" ></mat-datepicker>
+                      </mat-form-field>
+                  </div>
+              </div>
+
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-2">Ref No : </label>
+                <div class="col-sm-10">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <mat-checkbox class="example-margin offset-2">Apply TCS </mat-checkbox>
+              </div>
+  
+            </div>
+
+            <div class="col-4">
+
+              <div class="row mb-1 pt-5">
+                <label for="inputPassword" class="col-sm-4">Branch Currency : </label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-3">Location From: </label>
+                <div class="col-sm-4">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                  <master-search>
+                </master-search>
+                </div>
+                <label for="inputPassword" class="col-sm-1">To: </label>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 70%;">
+                    <input type="text" matInput  />
+                  </mat-form-field>
+                  <master-search>
+                </master-search>
+                </div>
+              </div>
+
+                <div class="row mb-2">
+                    <label for="input" class="col-sm-3 col-form-label">Narration
+                    </label>
+                </div>
+
+              <div class="row mb-2">
+                <div class="col-sm-8">
+                    <textarea  rows="4" cols="56" class="tx-1"></textarea>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <h5 class="pt-5 offset-4">Reference</h5>
+                
+            </div>
+
+            </div>
+
+            <div class="col-2 pt-3">
+
+                <div class="row mb-3 border">
+                    <div class="row mb-3 text-center">
+                        <label for="inputPassword" class="col-sm-12 col-form-label">GST Details</label>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-6 col-form-label">Stock Code :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 70%;">
+                                <input type="text" matInput formControlName="metalRate" />
+                            </mat-form-field>
+                            <master-search>
+                            </master-search>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-6 col-form-label">State Desc</label>
+                        <div class="col-md-6">
+                           
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-6 col-form-label">TaxCode :</label>
+                        <div class="col-md-6">
+                            <label for="inputPassword" class="col-sm-6 col-form-label">TAXCODE</label>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-6 col-form-label">Type :</label>
+                        <div class="col-md-6">
+                            <label for="inputPassword" class="col-sm-6 col-form-label">IGST</label> 
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+           
+          </div>
+
+          
+            <div class="col-md-12">
+              <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+                <mat-tab label="Item Details">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-3 pt-3">
+                                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                                [viewImportBtn]="false"></menu-buttons>
+                            </div>
+                            <div class="col-md-8">
+
+                                  <div class="row mb-1">
+                                    <div class="col-sm-2">
+                                        <mat-checkbox class="example-margin pt-3">Full Checked </mat-checkbox>
+                                    </div>
+                                   
+                                    <div class="col-sm-2">
+                                      <mat-form-field style="width: 85%;">
+                                        <input type="text" matInput  />
+                                      </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-1 pt-3">
+                                        <label for="inputPassword" class="col-sm-2">Year </label>
+                                      </div>
+                                      
+                                    <div class="col-sm-2">
+                                      <mat-form-field style="width: 85%;">
+                                        <mat-select>
+                                            <mat-option value="1"></mat-option>
+                                          </mat-select>
+                                      </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="inputPassword" class="col-sm-4 col-form-label">DPU Voc No:</label>
+                                        <mat-form-field style="width: 65%;">
+                                            <input type="text" matInput  />
+                                          </mat-form-field>
+                                      </div>
+                                  </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                      [allowColumnReordering]="true"
+                      [allowColumnResizing]="true"
+                      [columnAutoWidth]="true">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="true">
+                        </dxo-editing>
+                        <dxo-selection mode="multiple"></dxo-selection>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                        <dxi-column *ngFor="let data of columnheads" dataField="{{ data }}" caption="{{ data }}"
+                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        </dxi-column>
+                      </dx-data-grid>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="row mb-1 pt-5">
+                                <label for="inputPassword" class="col-sm-2 pt-3">Total : </label>
+                                <div class="col-sm-3">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-sm-3">
+                                    <mat-form-field style="width: 85%;">
+                                      <input type="text" matInput  />
+                                    </mat-form-field>
+                                  </div>
+                                <div class="col-sm-3">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                              </div>
+    
+                        </div>
+                        <div class="col-md-4">
+    
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-3 pt-3">TCS Amount : </label>
+                                <div class="col-sm-4">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                               
+                                <label for="inputPassword" class="col-sm-2 pt-3">Total : </label>
+                                <div class="col-sm-3">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-3 pt-3">Total GST : </label>
+                                <div class="col-sm-4">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                               
+                                <label for="inputPassword" class="col-sm-2 pt-3">Total : </label>
+                                <div class="col-sm-3">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                              </div>
+    
+                        </div>
+                        <div class="col-md-3">
+    
+                            <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-4 pt-3">Oth Amount : </label>
+                                <div class="col-sm-3">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-sm-5">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                              </div>
+    
+                              <div class="row mb-1">
+                                <label for="inputPassword" class="col-sm-4 pt-3">Gross Total : </label>
+                                <div class="col-sm-3">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-sm-5">
+                                  <mat-form-field style="width: 85%;">
+                                    <input type="text" matInput  />
+                                  </mat-form-field>
+                                </div>
+                              </div>
+    
+                        </div>
+    
+                    </div>
+                </div>
+
+                </mat-tab>
+                <mat-tab label="Other Amount"></mat-tab>
+                <mat-tab label="Consignment Items"></mat-tab>
+              </mat-tab-group>
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="row">
+
+                    <div class="col-md-3">
+
+                        <div class="row mb-1">
+                            <label for="inputPassword" class="col-sm-2 pt-3">Driver: </label>
+                            <div class="col-sm-4">
+                              <mat-form-field style="width: 70%;">
+                                <input type="text" matInput  />
+                              </mat-form-field>
+                              <master-search>
+                            </master-search>
+                            </div>
+                            <div class="col-sm-5">
+                              <mat-form-field style="width: 100%;">
+                                <input type="text" matInput  />
+                              </mat-form-field>
+                            </div>
+                          </div>
+
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <div class="col-sm-6 pt-3"> <button type="button" class="btn btn-primary apporoval-add-btn">
+                           Process / Delivered To Driver
+                          </button></div>
+                          <div class="col-sm-3 pt-3"> <button type="button" class="btn btn-primary apporoval-add-btn">
+                            Print Barcode
+                          </button></div>
+                         
+                    </div>
+
+                  
+                </div>
+            </div>
+           
+          
+        </div>
+     
+    </form>
+  </div>

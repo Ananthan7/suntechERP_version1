@@ -14,7 +14,30 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./consumable-master.component.scss']
 })
 export class ConsumableMasterComponent implements OnInit {
-  consumbleForm!: FormGroup;
+
+
+
+  consumableForm: FormGroup = this.formBuilder.group({
+    code: ['', Validators.required],
+    description: [''],
+    costcenter: [''],
+    type: [''],
+    category: [''],
+    subcategory: [''],
+    brand: [''],
+    color: [''],
+    size: [''],
+    vendor: [''],
+    country: [''],
+    hsn: [''],
+    pricescheme: [''],
+    priceschemeCovRate: [''],
+    price1: [''],
+    price2: [''],
+    price3: [''],
+    price4: [''],
+    price5: [''],
+  })
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -26,39 +49,17 @@ export class ConsumableMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.consumbleForm = this.formBuilder.group({
-      code: ['', Validators.required],
-      description: [''],
-      costcenter: [''],
-      type: [''],
-      category: [''],
-      subcategory: [''],
-      brand: [''],
-      color: [''],
-      size: [''],
-      vendor: [''],
-      country: [''],
-      hsn: [''],
-      pricescheme: [''],
-      priceschemeCovRate: [''],
-      price1: [''],
-      price2: [''],
-      price3: [''],
-      price4: [''],
-      price5: [''],
-
-    });
     this.disableButtons();
-    this.consumbleForm.controls['comment'].disable();
-    this.consumbleForm.controls['tagDetails'].disable();
+    this.consumableForm.controls['comment'].disable();
+    this.consumableForm.controls['tagDetails'].disable();
   }
 
   disableButtons() {
-    this.consumbleForm.controls['code'].enable();
+    this.consumableForm.controls['code'].enable();
   }
 
   enableButtons() {
-    this.consumbleForm.controls['code'].enable();
+    this.consumableForm.controls['code'].enable();
   }
 
   // consumbleForm: FormGroup = this.formBuilder.group({
@@ -217,64 +218,64 @@ export class ConsumableMasterComponent implements OnInit {
 
   subcategoryCodeSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.subcategory.setValue(e.CODE);
+    this.consumableForm.controls.subcategory.setValue(e.CODE);
   }
 
   codeCodeSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.code.setValue(e.PREFIX_CODE);
-    this.consumbleForm.controls.description.setValue(e.DESCRIPTION);
+    this.consumableForm.controls.code.setValue(e.PREFIX_CODE);
+    this.consumableForm.controls.description.setValue(e.DESCRIPTION);
   }
 
 
   brandCodeSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.brand.setValue(e.CODE);
+    this.consumableForm.controls.brand.setValue(e.CODE);
   }
 
   colorDataSelected(data: any) {
-    this.consumbleForm.controls.color.setValue(data.CODE)
+    this.consumableForm.controls.color.setValue(data.CODE)
   }
 
   vendorCodeSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.vendor.setValue(e.CODE);
+    this.consumableForm.controls.vendor.setValue(e.CODE);
   }
 
   typeCodeSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.type.setValue(e.CODE);
+    this.consumableForm.controls.type.setValue(e.CODE);
   }
 
   categoryCodeSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.category.setValue(e.CODE);
+    this.consumableForm.controls.category.setValue(e.CODE);
   }
 
   countryCodeSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.country.setValue(e.CODE);
+    this.consumableForm.controls.country.setValue(e.CODE);
   }
 
   costCenterSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.costcenter.setValue(e.COST_CODE);
+    this.consumableForm.controls.costcenter.setValue(e.COST_CODE);
   }
 
   sizeCenterSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.size.setValue(e.CODE);
+    this.consumableForm.controls.size.setValue(e.CODE);
   }
 
   HSNCenterSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.hsn.setValue(e.CODE);
+    this.consumableForm.controls.hsn.setValue(e.CODE);
   }
 
   priceschemeSelected(e: any) {
     console.log(e);
-    this.consumbleForm.controls.pricescheme.setValue(e.CURRENCY_CODE);
-    this.consumbleForm.controls.priceschemeCovRate.setValue(e.CONV_RATE);
+    this.consumableForm.controls.pricescheme.setValue(e.CURRENCY_CODE);
+    this.consumableForm.controls.priceschemeCovRate.setValue(e.CONV_RATE);
   }
 
   close(data?: any) {

@@ -248,9 +248,21 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   removedata() {
+
     console.log(this.selectedIndexes);
     if (this.selectedIndexes.length > 0) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
+
       this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+      })
     } else {
       this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
     }
@@ -264,6 +276,8 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   formSubmit() {
+
+    
     let conditionMet = false;
 
     this.tableData.forEach((item: any, index: number) => {
@@ -279,7 +293,7 @@ export class ApprovalMasterComponent implements OnInit {
       console.log('mobileNo:', mobileNo);
       console.log('emailId:', emailId);
     
-      if ((orgMessageChecked || emailChecked) && (!mobileNo.trim() || !emailId.trim())) {
+      if ((orgMessageChecked  == true  && emailChecked  == true )  && (!mobileNo.trim() || !emailId.trim())) {
         console.log("Condition met: selected fields cannot be empty");
         this.toastr.error("selected fields cannot be empty")
         conditionMet = true;
@@ -310,7 +324,9 @@ export class ApprovalMasterComponent implements OnInit {
         "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
         "approvalDetails": this.tableData,
       };
-    
+
+      console.log(postData);
+
       let API = 'ApprovalMaster/InsertApprovalMaster';
     
       let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)

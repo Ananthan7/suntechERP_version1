@@ -2625,6 +2625,8 @@ export class SalesEstimationComponent implements OnInit {
                 control.markAsTouched();
             });
 
+            console.log(this.customerDetailForm.errors);
+            
             if (!this.customerDetailForm.invalid) {
 
                 const posCustomer = {
