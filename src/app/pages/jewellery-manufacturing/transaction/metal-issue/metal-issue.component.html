@@ -82,7 +82,7 @@
                                         No * :</label>
                                     <div class="col-md-7">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput  formControlName="vocno"/>
+                                            <input type="number" matInput  formControlName="vocno" [readonly]="viewMode"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -134,7 +134,6 @@
                         [showBorders]="true"
                         (onSelectionChanged)="onSelectionChanged($event)"
                         (onRowClick)="onRowClickHandler($event)"
-                         [selectedRowKeys]="selectedKey"
                         >
                           <dxo-paging [enabled]="false"></dxo-paging>
                           

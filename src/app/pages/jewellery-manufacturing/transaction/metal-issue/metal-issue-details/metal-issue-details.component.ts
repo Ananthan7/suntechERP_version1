@@ -48,13 +48,15 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (this.content) {
       this.setFormValues()
     }
+    console.log(this.content.FLAG,'viewMode is true');
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+    }
     //console.log(this.data);
     // if (this.data) {
     //   this.jobcontinue()
     // }
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-    } 
+    
   }
  
   locationCodeData: MasterSearchModel = {
