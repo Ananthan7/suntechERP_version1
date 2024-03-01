@@ -723,7 +723,8 @@ export class SalesEstimationComponent implements OnInit {
             fcn_cust_detail_occupation: [''],
             fcn_cust_detail_company: [''],
             fcn_cust_detail_state: [''],
-            fcn_cust_type: ['', Validators.required],
+            fcn_cust_type: ['', ],
+            // fcn_cust_type: ['', Validators.required],
             fcn_cust_desg: ['', Validators.required],
             fcn_mob_code: ['', Validators.required],
          
@@ -2626,6 +2627,7 @@ export class SalesEstimationComponent implements OnInit {
             });
 
             console.log(this.customerDetailForm.errors);
+            console.log(this.customerDetailForm.value);
             
             if (!this.customerDetailForm.invalid) {
 
