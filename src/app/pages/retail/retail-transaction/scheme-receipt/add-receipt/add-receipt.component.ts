@@ -66,7 +66,7 @@ export class AddReceiptComponent implements OnInit {
   /**form group data */
   receiptEntryForm: FormGroup = this.formBuilder.group({
     Branch: [''],
-    AC_Code: [''],
+    AC_Code: ['', [Validators.required]],
     AC_Description: [''],
     Type: [null],
     TypeCode: ['',],
@@ -79,9 +79,9 @@ export class AddReceiptComponent implements OnInit {
     TRN_Ref: ['',],
     Exp: ['',],
     HSN_AC: [''],
-    Amount_FC: [''],
-    Amount_LC: [''],
-    Header_Amount: [''],
+    Amount_FC: ['', [Validators.required]],
+    Amount_LC: ['', [Validators.required]],
+    Header_Amount: ['', [Validators.required]],
     TRN_Per: ['', [Validators.required]],
     TRN_Amount_FC: [''],
     TRN_Amount_LC: [''],
@@ -236,12 +236,32 @@ export class AddReceiptComponent implements OnInit {
   }
   //use: form submit
   onSubmit() {
+    let formValue = this.receiptEntryForm.value
+    if(formValue.Type == 'Cheque' && formValue.ChequeDate == ''){
+      this.commonService.toastErrorByMsgId('Cheque Date Required')
+      return
+    }
+    if(formValue.Type == 'Cheque' && formValue.ChequeNumber == ''){
+      this.commonService.toastErrorByMsgId('Cheque Number Required')
+      return
+    }
+    if(Number(formValue.Amount_FC) == 0 || Number(formValue.Amount_LC) == 0){
+      this.commonService.toastErrorByMsgId('Amount cannot be zero')
+      return
+    }
+    if(formValue.TRN_Per == ''){
+      this.commonService.toastErrorByMsgId('Issue while loading tax details, try again')
+      return
+    }
+    if(formValue.AC_Code == ''){
+      this.commonService.toastErrorByMsgId('A/C Code Required')
+      return
+    }
     if (this.receiptEntryForm.invalid) {
       this.toastr.error('select all required details!');
       return;
     } else {
       this.close(this.receiptEntryForm.value)
-      // this.newRowSaveClick.emit(this.receiptEntryForm.value)
     }
   }
 
@@ -357,7 +377,7 @@ export class AddReceiptComponent implements OnInit {
     this.setGridData()
   }
   calculateAmountFC() {
-    if (this.receiptEntryForm.value.SchemeTotalAmount < this.receiptEntryForm.value.Amount_FC) {
+    if (this.receiptEntryForm.value.SchemeBalance < this.receiptEntryForm.value.Amount_FC) {
       this.receiptEntryForm.controls.Amount_FC.setValue(0)
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance' + this.receiptEntryForm.value.SchemeBalance)
       return

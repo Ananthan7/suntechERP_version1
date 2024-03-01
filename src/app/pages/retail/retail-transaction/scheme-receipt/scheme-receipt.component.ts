@@ -1267,8 +1267,20 @@ export class SchemeReceiptComponent implements OnInit {
   }
   deleteTableData() {
     if(!this.content && this.receiptDetailsForm.value.SchemeID != ''){
-      this.orderedItems = [];
-      this.disableAddBtnGrid = false;
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.orderedItems = [];
+          this.disableAddBtnGrid = false;
+        }
+      })
     }
   }
   close(data?: any) {

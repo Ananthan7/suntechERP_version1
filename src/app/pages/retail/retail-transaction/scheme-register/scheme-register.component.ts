@@ -79,7 +79,7 @@ export class SchemeRegisterComponent implements OnInit {
     SEARCH_FIELD: 'SCHEME_CODE',
     SEARCH_HEADING: 'Scheme Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "status = 1",
+    WHERECONDITION: "STATUS = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -360,6 +360,11 @@ export class SchemeRegisterComponent implements OnInit {
       .subscribe((result: any) => {
         if (result.response) {
           let data = result.response
+          if(data.STATUS == false){
+            this.commonService.toastErrorByMsgId('Selected Scheme is InActive')
+            this.schemeRegistrationForm.controls.SchemeId.setValue('')
+            return
+          }
           this.schemeRegistrationForm.controls.Branch.setValue(data.BRANCH_CODE)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCHEME_FREQUENCY)
           // this.schemeRegistrationForm.controls.Units.setValue(data.SCHEME_UNIT)
