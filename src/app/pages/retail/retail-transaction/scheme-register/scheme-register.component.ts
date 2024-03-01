@@ -121,7 +121,7 @@ export class SchemeRegisterComponent implements OnInit {
     CancellationCharge: [''],
     TenurePeriod: [''],
     MaturingDate: [''],
-    InstallmentAmount: [0],
+    InstallmentAmount: [''],
     BonusInstallment: [''],
     Units: [1],
     Frequency: [''],
@@ -372,19 +372,19 @@ export class SchemeRegisterComponent implements OnInit {
           // this.schemeRegistrationForm.controls.MaturingDate.setValue(data.START_DATE)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCHEME_PERIOD)
           this.schemeRegistrationForm.controls.BonusInstallment.setValue(
-            this.commonService.decimalQuantityFormat(data.SCHEME_BONUS, 'THREE')
+            this.commonService.commaSeperation(data.SCHEME_BONUS)+ '.000'
           )
           this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
-            this.commonService.decimalQuantityFormat(data.SCHEME_AMOUNT * data.SCHEME_PERIOD, 'THREE')
+            this.commonService.commaSeperation(data.SCHEME_AMOUNT * data.SCHEME_PERIOD)+'.000'
           )
           this.schemeRegistrationForm.controls.SumAssured.setValue(
-            (data.SCHEME_AMOUNT * data.SCHEME_PERIOD) + data.SCHEME_BONUS
+            this.commonService.commaSeperation((data.SCHEME_AMOUNT * data.SCHEME_PERIOD) + data.SCHEME_BONUS)
           )
           this.schemeRegistrationForm.controls.CancellationCharge.setValue(
-            this.commonService.decimalQuantityFormat(data.CANCEL_CHARGE, 'THREE')
+            this.commonService.commaSeperation(data.CANCEL_CHARGE)+'.000'
           )
           this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
-            this.commonService.decimalQuantityFormat(data.SCHEME_AMOUNT, 'THREE')
+              this.commonService.commaSeperation(data.SCHEME_AMOUNT)+'.000'
           )
           let maturingdate
           if (data.SCHEME_FREQUENCY.toUpperCase() == 'WEEKLY') {

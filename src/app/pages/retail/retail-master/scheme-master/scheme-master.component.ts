@@ -91,6 +91,7 @@ export class SchemeMasterComponent implements OnInit {
   isNumeric(event: any) {
     return this.comService.isNumeric(event);
   }
+ 
   getAllSelectOptions() {
     let frequencyAPI = 'ComboFilter/scheme%20frequency';
     let sub: Subscription = this.dataService.getDynamicAPI(frequencyAPI).subscribe((resp: any) => {
@@ -199,9 +200,11 @@ export class SchemeMasterComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.toastr.error(result.message)
           }
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error(result.message)
         }
       }, err => this.toastr.error(err))
     this.subscriptions.push(Sub);
@@ -239,12 +242,14 @@ export class SchemeMasterComponent implements OnInit {
     this.schemeMasterForm.controls.remarks.setValue(this.content.SCHEME_REMARKS);
     this.schemeMasterForm.controls.frequency.setValue(this.content.SCHEME_FREQUENCY);
     this.schemeMasterForm.controls.prefix.setValue(this.content.PREFIX_CODE);
-    this.schemeMasterForm.controls.installmentAmount.setValue(this.content.SCHEME_AMOUNT);
-    this.schemeMasterForm.controls.cancelCharges.setValue(this.content.CANCEL_CHARGE);
+    this.schemeMasterForm.controls.installmentAmount.setValue(
+      this.comService.commaSeperation(this.content.SCHEME_AMOUNT)
+    );
+    this.schemeMasterForm.controls.cancelCharges.setValue(this.comService.commaSeperation(this.content.CANCEL_CHARGE));
     this.schemeMasterForm.controls.receiptModeTwo.setValue(this.content.BONUS_RECTYPE);
     this.schemeMasterForm.controls.receiptModeThree.setValue(this.content.CANCEL_RECTYPE);
     this.schemeMasterForm.controls.receiptModeone.setValue(this.content.INST_RECTYPE);
-    this.schemeMasterForm.controls.bonusInstallment.setValue(this.content.SCHEME_BONUS);
+    this.schemeMasterForm.controls.bonusInstallment.setValue(this.comService.commaSeperation(this.content.SCHEME_BONUS));
     this.schemeMasterForm.controls.tenurePeriod.setValue(this.content.SCHEME_PERIOD);
     this.schemeMasterForm.controls.schemeStatus.setValue(this.content.STATUS == 'Y' ? true : false);
     this.schemeMasterForm.controls.SCHEMEFIXEDAMT.setValue(this.content.SCHEME_FIXEDAMT == 'Y' ? true : false);
@@ -302,9 +307,11 @@ export class SchemeMasterComponent implements OnInit {
                 this.close('reloadMainGrid')
               }
             });
+          }else {
+            this.toastr.error(result.message)
           }
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error(result.message)
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)

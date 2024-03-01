@@ -103,7 +103,7 @@
                         <label class="matlabels">Installment Amount:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput ThreeDecimalInput
+                            <input type="text" matInput
                                 formControlName="InstallmentAmount"
                                 class="text-right"
                                 [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''" />
@@ -197,7 +197,7 @@
                         <label class="matlabels">Cancellation Charge:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput ThreeDecimalInput
+                            <input type="text" matInput
                                 formControlName="CancellationCharge"
                                 class="text-right"
                                 [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''" />
@@ -245,7 +245,7 @@
                         <label class="matlabels">Bonus Installment:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput
+                            <input type="text" matInput
                                 class="text-right"
                                 [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
                                 formControlName="BonusInstallment" />
@@ -264,8 +264,7 @@
                         <label class="matlabels">Total Amount To Pay:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput class="text-right"
-                                ThreeDecimalInput
+                            <input type="text" matInput class="text-right"
                                 [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
                                 formControlName="TotalAmountToPay" />
                         </mat-form-field>
@@ -302,10 +301,10 @@
                         <label class="matlabels">Sum Assured:
                         </label>
                         <mat-form-field style="width: 50%;">
-                            <input type="number" matInput
+                            <input type="text" matInput
                                 [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
                                 formControlName="SumAssured"
-                                class="text-right" ThreeDecimalInput />
+                                class="text-right" />
                         </mat-form-field>
                     </div>
                 </div>

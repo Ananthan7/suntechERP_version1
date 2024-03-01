@@ -77,7 +77,7 @@
                         class="col-sm-2 col-form-label">Tenure/Period*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput maxlength="6" 
+                            <input type="text" matInput maxlength="5" 
                                 (keypress)="isNumeric($event)"
                                 class="text-right" [readonly]="viewMode"
                                 formControlName="tenurePeriod" />
@@ -92,7 +92,7 @@
                         <mat-form-field style="width: 100%;">
                             <input type="text" [readonly]="viewMode"
                                 style="text-align: right;" maxlength="15" 
-                                (keypress)="isNumeric($event)"
+                                (keypress)="isNumeric($event)" CommaSeparatedNumber
                                 matInput formControlName="installmentAmount" />
                         </mat-form-field>
                     </div>
@@ -119,8 +119,8 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" style="text-align: right;"
-                                [readonly]="viewMode" maxlength="15" 
-                                (keypress)="isNumeric($event)"
+                                [readonly]="viewMode" maxlength="5" 
+                                (keypress)="isNumeric($event)" CommaSeparatedNumber
                                 matInput formControlName="bonusInstallment" />
                         </mat-form-field>
                     </div>
@@ -148,7 +148,7 @@
                             <input type="text" maxlength="15" 
                                 (keypress)="isNumeric($event)"
                                 style="text-align: right;"
-                                [readonly]="viewMode" 
+                                [readonly]="viewMode" CommaSeparatedNumber
                                 matInput formControlName="cancelCharges" />
                         </mat-form-field>
                     </div>

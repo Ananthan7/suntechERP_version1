@@ -531,7 +531,8 @@ export class CommonServiceService {
   }
 
   emptyToZero(value: any) {
-    value = typeof (value) == 'number' || value == undefined ? value : value.toString().trim();
+    value = value.toString().replace(/,/g, '');
+    value = typeof (value) == 'number' || !value  ? value : value.toString().trim();
     // if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
     if (value == '' || !value) {
       return 0;
@@ -900,7 +901,7 @@ export class CommonServiceService {
     return endDate;
   }
   commaSeperation(data: any) {
-    if (!Number(data)) return data
+    if (!Number(data))  data
     return Number(data).toLocaleString('en-US', { style: 'decimal' })
   }
   calculateDateDifference(userDateValue: any) {
