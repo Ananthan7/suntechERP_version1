@@ -62,6 +62,7 @@ import { RepairSaleComponent } from './repair-sale/repair-sale.component';
 import { DiamondBranchTransferInAutoRepairDetailsComponent } from './diamond-branch-transfer-in-auto-repair/diamond-branch-transfer-in-auto-repair-details/diamond-branch-transfer-in-auto-repair-details.component';
 import { MetalBranchTransferOutRepairDetailComponent } from './metal-branch-transfer-out-repair/metal-branch-transfer-out-repair-detail/metal-branch-transfer-out-repair-detail.component';
 import { DiamonBranchTransferOutDetailsComponent } from './diamond-branch-transfer-out-repair/diamon-branch-transfer-out-details/diamon-branch-transfer-out-details.component';
+import { PosSalesDiaDetailsIGSTComponent } from './pos-credit-sale-recipt/pos-sales-dia-details-i-gst/pos-sales-dia-details-i-gst.component';
 
 
 @NgModule({
@@ -126,7 +127,7 @@ import { DiamonBranchTransferOutDetailsComponent } from './diamond-branch-transf
     MetalBranchTransferInAutoRepairComponent, 
     DiamondBranchTransferOutRepairComponent, 
     DiamondBranchTransferInAutoRepairComponent, 
-    RepairSaleComponent, DiamondBranchTransferInAutoRepairDetailsComponent, MetalBranchTransferOutRepairDetailComponent, DiamonBranchTransferOutDetailsComponent
+    RepairSaleComponent, DiamondBranchTransferInAutoRepairDetailsComponent, MetalBranchTransferOutRepairDetailComponent, DiamonBranchTransferOutDetailsComponent, PosSalesDiaDetailsIGSTComponent
     ],
   imports: [
     CommonModule,

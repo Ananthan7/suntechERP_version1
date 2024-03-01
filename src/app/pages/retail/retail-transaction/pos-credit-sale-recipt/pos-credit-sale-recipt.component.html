@@ -1,1 +1,436 @@
-<p>pos-credit-sale-recipt works!</p>
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Sales
+    </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<div class="container-fluid pt-3">
+    <form >
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-9">
+
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="row">
+
+                                <div class="row mb-3">
+                                    <div class="col-md-1">
+                                        <label for="inputPassword" class="col-sm-3 col-form-label">Voucher:</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 80%;">
+                                            <input type="text" matInput formControlName="stockCode" />
+                                        </mat-form-field>
+                                     
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="stockType" />
+                                        </mat-form-field>
+                                     
+                                    </div>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">GST No:</label>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 90%;">
+                                            <input type="text" matInput formControlName="goldType" />
+                                        </mat-form-field>
+                                      
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-1">
+                                        <label for="inputPassword" class="col-sm-3 col-form-label">Date:</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 80%;">
+                                            <input type="text" matInput formControlName="stockCode" />
+                                        </mat-form-field>
+                                     
+                                    </div>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">State Code:</label>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="stockType" />
+                                        </mat-form-field>
+                                     
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-checkbox class="example-margin offset-2">Unfix Metal </mat-checkbox>
+                                    </div>
+                                </div>
+                              
+                                <div class="row mb-3">
+                                    <div class="col-md-2">
+                                        <label for="inputPassword" class="col-sm-3 col-form-label">Currency:</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 80%;">
+                                            <input type="text" matInput formControlName="stockCode" />
+                                        </mat-form-field>
+                                     
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="stockType" />
+                                        </mat-form-field>
+                                     
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-checkbox class="example-margin offset-2">Exclude Tax </mat-checkbox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-checkbox class="example-margin offset-2">Componemnt Wise Invoice </mat-checkbox>
+                                    </div>
+                                </div>
+                              
+                                <div class="row mb-3">
+                                    <div class="col-md-2">
+                                        <label for="inputPassword" class="col-sm-3 col-form-label">salesMan:</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <mat-form-field style="width: 80%;">
+                                            <input type="text" matInput formControlName="stockCode" />
+                                        </mat-form-field>
+                                     
+                                    </div>
+                                    <div class="col-md-8">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput formControlName="stockType" />
+                                        </mat-form-field>
+                                     
+                                    </div>
+                                    
+                                </div>
+                              
+                              
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="row justify-content-end mt-2">
+                                <div class="col-md-12">
+                                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                        <dxo-paging [enabled]="false"></dxo-paging>
+                                        <dxo-editing mode="cell" [allowUpdating]="true">
+                                        </dxo-editing>
+                                        <dxo-selection mode="multiple"></dxo-selection>
+                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+            
+                                        <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                                            [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                                        </dxi-column>
+                                    </dx-data-grid>
+                                  
+                                </div>
+                                <!-- <div class="col-md-6 text-right mt-2">
+                                    <button type="button" mat-flat-button color="primary">Select
+                                    </button>
+                                </div> -->
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div  class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                                    [viewImportBtn]="false"></menu-buttons>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="stockCode" />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="stockType" />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="stockType" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-8">
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-2">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="stockCode" />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="stockType" />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="stockType" />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="stockType" />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="stockType" />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <mat-form-field style="width: 190%;">
+                                                <input type="text" matInput formControlName="stockType" />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <mat-form-field style="width: 100%;">
+                                                <input type="text" matInput formControlName="stockType" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+            
+                                    <div class="row mt-2">
+                                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                                                <dxo-paging [enabled]="false"></dxo-paging>
+                                                <dxo-editing mode="cell">
+                                                </dxo-editing>
+                                                <dxo-selection mode="multiple"></dxo-selection>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                     
+                                               
+                                                <dxi-column *ngFor="let data of columnheadSummary" dataField="{{ data }}" 
+                                                  caption="{{ data }}" [width]="100" [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                                                </dxi-column>
+                                              </dx-data-grid>
+                                    </div>
+                              
+                        </div>
+
+                        <div class="col-md-12 pt-3">
+                            <div class="row">
+
+                                <div class="col-md-4 d-flex">
+                                    <button type="button" mat-flat-button color="primary" (click)="openpossalesdiadetail()">Sold Items
+                                    </button>
+                                    <div class="div_1">
+                                        <button type="button" mat-flat-button color="primary">Return
+                                         </button>
+                                    </div>
+                                    <div class="div_1">
+                                        <button type="button" mat-flat-button color="primary">Exchanges
+                                        </button>
+                                    </div>
+                                
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">ITEM TOTAL :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">CESS TOTAL :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">GST TOTAL :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">GROSS TOTAL :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Returns :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Exchange :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Redeem :</label>
+                        <div class="col-md-3">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Advance Received :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Round Of Amount :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Net Total :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Receipt Total :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Refund / Due :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Loyalty Points :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Vat Round Off :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" matInput formControlName="stockCode" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-8">
+
+                </div>
+                <div class="col-md-4">
+                    <div><h5 class="offset-5">Receipts Details</h5></div>
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell">
+                        </dxo-editing>
+                        <dxo-selection mode="multiple"></dxo-selection>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+             
+                       
+                        <dxi-column *ngFor="let data of columnheadSummaryLabour" dataField="{{ data }}" 
+                          caption="{{ data }}" [width]="100" [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                        </dxi-column>
+                      </dx-data-grid>
+                      <div><label for="inputPassword" class="col-sm-5 col-form-label">Total </label></div>
+                      <div class="d-flex offset-8">
+                        <div class="div_1">
+                            <button type="button" mat-flat-button color="primary">Add
+                             </button>
+                        </div>
+                        <div class="div_1">
+                            <button type="button" mat-flat-button color="primary">Delete
+                            </button>
+                        </div>
+                    
+                      </div>
+                </div>
+
+            </div>
+
+        </div>
+      
+    </form>
+</div>
