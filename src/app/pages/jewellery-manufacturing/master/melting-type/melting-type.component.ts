@@ -478,7 +478,7 @@ export class MeltingTypeComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Default Alloy Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "item = 'D' ",
+    WHERECONDITION: "item = 'y' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,

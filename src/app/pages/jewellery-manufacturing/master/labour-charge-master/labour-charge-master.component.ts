@@ -8,6 +8,8 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
+
+
 @Component({
   selector: 'app-labour-charge-master',
   templateUrl: './labour-charge-master.component.html',
@@ -36,7 +38,7 @@ export class LabourChargeMasterComponent implements OnInit {
     mid: [],
     divisions: ['', [Validators.required]],
     labour_code: ['', [Validators.required]],
-    labour_description: ['', [Validators.required]],
+    labour_description:['', [Validators.required]],
     shape: ['', [Validators.required]],
     process: ['', [Validators.required]],
     size_from: ['', [Validators.required]],
@@ -192,12 +194,11 @@ export class LabourChargeMasterComponent implements OnInit {
   currencyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 176,
-    ORDER_TYPE: 0,
+    LOOKUPID: 8,
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: `CMBRANCH_CODE = ${this.commonService.branchCode}`,
+    WHERECONDITION: " CURRENCY_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -210,7 +211,7 @@ export class LabourChargeMasterComponent implements OnInit {
     SEARCH_FIELD: 'KARAT_CODE',
     SEARCH_HEADING: 'Karat',
     SEARCH_VALUE: '',
-    WHERECONDITION: " where ATTR_TYPE='KARAT' AND DESIGN_CODE = '+ txtDesign_Code.Text  +'",
+    WHERECONDITION: "KARAT_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

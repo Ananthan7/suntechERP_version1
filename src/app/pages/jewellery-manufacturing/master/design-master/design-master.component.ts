@@ -37,7 +37,7 @@ export class DesignMasterComponent implements OnInit {
 
   columnhead:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
   columnheader:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
-  columnheader1:any[] = ['Srno','Division','Stone Type', 'Stock Code','Karat','Shape','Color','Ext.Color','Clarity','Ext.Clarity','Sieve Std.','Description','Sieve From'];
+  // columnheader1:any[] = ['Srno','Division','Stone Type', 'Stock Code','Karat','Shape','Color','Ext.Color','Clarity','Ext.Clarity','Sieve Std.','Description','Sieve From'];
   columnheader2:any[] = ['Comp. Code','Sr no','Division','Stone Type', 'Stock Code','Karat','Int. Color','Ext. Color','Shape','Int. Clarity','Ext. Clarity'];
   columnheader3:any[] = ['',];
   columnheader4:any[] = ['SINO','Size Code','Description','Default'];
@@ -58,7 +58,7 @@ export class DesignMasterComponent implements OnInit {
   column15:any[] = ['Size','Pcs'];
   columnhead1:any[] = ['Srno','Comp.Code','Description','Pcs', 'Size Set Code','Size Code','Type','Category','Shape','Height','Width','Length','Radius'];
   columnhead2:any[] = ['DESIGN_C','PART_CODE','PART_DESCRIPTION','METAL_WT', 'LS_PCS','LS_WT','CS_PCS','CS_WT','PL_PCS','PL_WT','OTH_PCS','OTH_WT','TOTAL_PCS'];
-
+ 
   seasons: string[] = ['Customer Exclusive', 'Keep on Hold', 'Add Steel'];
   designPartDetails: any[] = [];
   constructor(
@@ -114,6 +114,8 @@ export class DesignMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
+
   designmasterForm: FormGroup = this.formBuilder.group({
     mid:[],
     code: ['',[Validators.required]],
@@ -204,18 +206,18 @@ export class DesignMasterComponent implements OnInit {
     let srno = length + 1;
     let data =  {
       "Srno": srno,
-      "Division": "string",
-      "StoneType": "string",
-      "StockCode": "string",
-      "Karat": "string",
-      "Shape": "string",
-      "Color": "string",
-      "ExtColor": "string",
+      "Division": "",
+      "Stone_Type": "",
+      "Stock_Code": "",
+      "Karat": "",
+      "Shape": "",
+      "Color": "",
+      "Ext_Color": "",
       "Clarity": 0,
-      "ExtClarity": 0,
-      "SieveStd": 0,
-      "Description": 'string',
-      "SieveFrom": 0,
+      "Ext_Clarity": 0,
+      "Sieve_Std": 0,
+      "Description": "",
+      "Sieve_From": 0,
 
     };
   
@@ -223,52 +225,52 @@ export class DesignMasterComponent implements OnInit {
    
 }
 
-divisiontemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Division = data.target.value;
-}
+// divisiontemp(data:any,value: any){
+//   this.tableData[value.data.Srno - 1].Division = data.target.value;
+// }
 
 stoneTypetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].StoneType = data.target.value;
+  this.tableData[value.data.Srno - 1].StoneType = data.target.value;
 }
 
-stockCodetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].StockCode = data.target.value;
-}
+// stockCodetemp(data:any,value: any){
+//   this.tableData[value.data.Srno - 1].StockCode = data.target.value;
+// }
 
 karattemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Karat = data.target.value;
+  this.tableData[value.data.Srno - 1].Karat = data.target.value;
 }
 
 shapetemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Shape = data.target.value;
+  this.tableData[value.data.Srno - 1].Shape = data.target.value;
 }
 
 colortemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Color = data.target.value;
+  this.tableData[value.data.Srno - 1].Color = data.target.value;
 }
 
 extColortemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].ExtColor = data.target.value;
+  this.tableData[value.data.Srno - 1].ExtColor = data.target.value;
 }
 
 claritytemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Clarity = data.target.value;
+  this.tableData[value.data.Srno - 1].Clarity = data.target.value;
 }
 
 extClaritytemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].ExtClarity = data.target.value;
+  this.tableData[value.data.Srno - 1].ExtClarity = data.target.value;
 }
 
 sieveStdtemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].SieveStd = data.target.value;
+  this.tableData[value.data.Srno - 1].SieveStd = data.target.value;
 }
 
 descriptiontemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].Description = data.target.value;
+  this.tableData[value.data.Srno - 1].Description = data.target.value;
 }
 
 sieveFromtemp(data:any,value: any){
-  this.tableData[value.data.SRNO - 1].SieveFrom = data.target.value;
+  this.tableData[value.data.Srno - 1].SieveFrom = data.target.value;
 }
 
 adddatas(){
@@ -276,68 +278,68 @@ adddatas(){
   let srno = length + 1;
   let datas =  {
     "Srno": srno,
-    "Division": "string",
-    "StoneType": "string",
-    "StockCode": "string",
-    "Karat": "string",
-    "Shape": "string",
-    "Color": "string",
-    "ExtColor": "string",
+    "Division": "",
+    "StoneType": "",
+    "StockCode": "",
+    "Karat": "",
+    "Shape": "",
+    "Color": "",
+    "ExtColor": "",
     "Clarity": 0,
     "ExtClarity": 0,
     "SieveStd": 0,
-    "Description": 'string',
+    "Description": '',
     "SieveFrom": 0,
 }
 this.tableDatas.push(datas);
 }
 
 compCodetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].CompCode = data.target.value;
+  this.tableDatas[value.data.Srno - 1].CompCode = data.target.value;
 }
 
 Descriptiontemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Description = data.target.value;
+  this.tableDatas[value.data.Srno - 1].Description = data.target.value;
 }
 
 Pcstemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Pcs = data.target.value;
+  this.tableDatas[value.data.Srno - 1].Pcs = data.target.value;
 }
 
 sizeSetCodetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].SizeSetCode = data.target.value;
+  this.tableDatas[value.data.Srno - 1].SizeSetCode = data.target.value;
 }
 
 sizeCodetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].SizeCode = data.target.value;
+  this.tableDatas[value.data.Srno - 1].SizeCode = data.target.value;
 }
 
 typetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Type = data.target.value;
+  this.tableDatas[value.data.Srno - 1].Type = data.target.value;
 }
 
 categorytemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Category = data.target.value;
+  this.tableDatas[value.data.Srno - 1].Category = data.target.value;
 }
 
 Shapetemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Shape = data.target.value;
+  this.tableDatas[value.data.Srno - 1].Shape = data.target.value;
 }
 
 heighttemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Height = data.target.value;
+  this.tableDatas[value.data.Srno - 1].Height = data.target.value;
 }
 
 widthtemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Width = data.target.value;
+  this.tableDatas[value.data.Srno - 1].Width = data.target.value;
 }
 
 lengthtemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Length = data.target.value;
+  this.tableDatas[value.data.Srno - 1].Length = data.target.value;
 }
 
 radiustemp(data:any,value: any){
-  this.tableDatas[value.data.SRNO - 1].Radius = data.target.value;
+  this.tableDatas[value.data.Srno - 1].Radius = data.target.value;
 }
 
 
@@ -363,22 +365,6 @@ removedatas(){
   costCenterSelected(e:any){
     console.log(e);
     this.designmasterForm.controls.costcenter.setValue(e.COST_CODE);
-  }
-
-  karatCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 17,
-    SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Karat Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "KARAT_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  karatCodeSelected(e:any){
-    console.log(e);
-    this.designmasterForm.controls.karat.setValue(e.KARAT_CODE);
   }
 
   typeCodeData: MasterSearchModel = {
@@ -678,7 +664,7 @@ removedatas(){
     SEARCH_FIELD: 'DESIGN_CODE',
     SEARCH_HEADING: 'Design Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION = '' +  strPrefix + '' AND DESIGN_PREFIX = '1'",
+    WHERECONDITION: "DIVISION = ''  + strPrefix + '' AND DESIGN_PREFIX = 1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -801,7 +787,60 @@ removedatas(){
     this.designmasterForm.controls.price5.setValue(e.PRICE_CODE);
   }
 
+  divisionCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  divisionCodeSelected(value:any,data:any){
+    this.tableData[value.data.Srno - 1].Division = data.DIVISION_CODE;
+    // console.log(data);
+    console.log(value);
+  }
 
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 17,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  karatCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.karat.setValue(e.KARAT_CODE);
+  }
+
+  // karatCodeSelected1(value:any,data:any){
+  //   this.tableData[value.data.Srno - 1].Karat = data.KARAT_CODE;
+  // }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'STOCK Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  stockCodeDataSelected(value:any,data:any){
+    this.tableData[value.data.Srno - 1].Stock_Code = data.STOCK_CODE;
+  }
+  
+  
   onFileChangedimage(event:any) {
     this.imageurl = event.target.files[0]
     console.log(this.imageurl)
@@ -1284,7 +1323,7 @@ removedatas(){
       "DESIGN_STNMTL_DETAIL": [
         {
           "UNIQUEID": 0,
-          "SRNO": 0,
+          "Srno": 0,
           "METALSTONE": "",
           "DIVCODE": "",
           "KARAT_CODE": "",
@@ -1404,7 +1443,7 @@ removedatas(){
       "METAL_STOCK_MASTER_VENDOR": [
         {
           "UNIQUEID": 0,
-          "SRNO": 0,
+          "Srno": 0,
           "STOCK_CODE": "",
           "ACCODE": "",
           "DEL_DAYS": 0,
@@ -1780,7 +1819,7 @@ removedatas(){
       "DESIGN_STNMTL_DETAIL": [
         {
           "UNIQUEID": 0,
-          "SRNO": 0,
+          "Srno": 0,
           "METALSTONE": "",
           "DIVCODE": "",
           "KARAT_CODE": "",
@@ -1900,7 +1939,7 @@ removedatas(){
       "METAL_STOCK_MASTER_VENDOR": [
         {
           "UNIQUEID": 0,
-          "SRNO": 0,
+          "Srno": 0,
           "STOCK_CODE": "",
           "ACCODE": "",
           "DEL_DAYS": 0,
@@ -2063,4 +2102,11 @@ removedatas(){
 
   }
 
+  adddataAttributes(){
+
+  }
+
+  removedataAttributes(){
+
+  }
 }

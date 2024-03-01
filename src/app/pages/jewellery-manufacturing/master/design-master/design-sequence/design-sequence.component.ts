@@ -37,21 +37,6 @@ export class DesignSequenceComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.commonService.toastSuccessByMsgId('MSG81447');
-    let API = 'ProcessMasterDj/GetProcessMasterDJList'
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response;
-          data.forEach((item: any, i: any) => {
-            item.SELECT1 = false
-            item.SRNO = i + 1;
-          });
-          this.tableDataProcess = data
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
   }
 
   processCodeData: MasterSearchModel = {
@@ -82,5 +67,29 @@ export class DesignSequenceComponent implements OnInit {
 
   deleteRecord(){
 
+  }
+
+  sequenceSearch(){
+   let secCode =  this.designSequenceForm.value.processCode;
+    
+
+    this.commonService.toastSuccessByMsgId('MSG81447');
+    let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/'+ secCode;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response;
+          this.tableDataProcess.push(data);
+          let i = 0;
+          this.tableDataProcess.forEach((item: any) => {
+            item.SELECT1 = false
+            item.SRNO = i + 1;
+          });
+          
+          console.log(this.tableDataProcess);
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
   }
 }

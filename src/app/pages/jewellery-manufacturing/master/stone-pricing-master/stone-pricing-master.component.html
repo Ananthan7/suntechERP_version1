@@ -231,9 +231,8 @@
                                         Rate * : </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%; margin-left: 7px;">
-                                            <input type="number" [readonly]="viewModeAll" (keypress)="commaSeperation($event)"  matInput maxlength="15"
-                                                class="text-right" formControlName="selling_rate" AmountDecimalInput
-                                                (input)="onInputChange($event,'selling_rate', 7)" />
+                                            <input type="number" [readonly]="viewModeAll"  (keyup)="onInputChange1($event)"  [value]="myNumber ? myNumber.toLocaleString() : ''"  matInput 
+                                                class="text-right" formControlName="selling_rate" />
                                         </mat-form-field>
                                     </div>
                                 </div>
