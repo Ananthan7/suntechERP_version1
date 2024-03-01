@@ -111,9 +111,12 @@ export class MetalIssueComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.content = this.metalIssueDetailsData
+    console.log(data,'data')
+    modalRef.componentInstance.content = data
     modalRef.result.then((postData) => {
+     
       if (postData) {
+     
         console.log('Data from modal:', postData);
         this.metalIssueDetailsData.push(postData);
         console.log(this.metalIssueDetailsData);
