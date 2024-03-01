@@ -1,0 +1,88 @@
+<!-- menu section -->
+<app-menubar [menuTitle]="menuTitle" (subMenuChange)="getMasterGridData()"></app-menubar>
+<!-- content section starts -->
+<div class="row d-flex justify-content-between"
+    style="min-height: 100vh !important;">
+    <div class="col-md-2 col-sm-12">
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Cycle Time</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Yield %</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Through Out</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap h-100">
+                <h5>Defect Analysis</h5>
+                <img
+                    src="../../assets/images/chats/chat-7.png"
+                    alt="chat"
+                    width="100%" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 col-sm-12">
+        <div class="card p-3">
+            <div class="col-md-12">
+                <div class="card_wrap">
+                    <h5>{{menuTitle}}</h5>
+                        <div class="module_form">
+                            <div class="row">
+                                <div class="col-md-12" style="min-height: 30vh;">
+                                    <app-retail-grid (AddBtnClick)="openModalView()" (editRowClick)="editRowDetails($event)"
+                                        (viewRowClick)="viewRowDetails($event)">
+                                    </app-retail-grid>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="col-md-6">
+                <div class="card_wrap">
+                    <h5>Avg Working Hours</h5>
+                    <img
+                        src="../../assets/images/chats/chat-5.png"
+                        alt="chat"
+                        width="100%"
+                        height=" 165px" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 col-sm-12">
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Quantity Produced</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Overall</h5>
+                <img
+                    src="../../assets/images/chats/chat-2.png"
+                    alt="chat"
+                    width="100%" />
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Quantity Produced</h5>
+                <h3>32</h3>
+            </div>
+        </div>
+    </div>
+</div>
