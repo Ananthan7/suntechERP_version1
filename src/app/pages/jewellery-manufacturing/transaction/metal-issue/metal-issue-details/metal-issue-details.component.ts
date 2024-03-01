@@ -45,12 +45,14 @@ export class MetalIssueDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    if (this.content) {
-      this.setFormValues()
+    this.setFormValues()
+    if(this.content){
+      this.metalIssueDetailsForm.controls.FLAG.setValue(this.content[0].FLAG)
     }
     console.log(this.content.FLAG,'viewMode is true');
-    if (this.content.FLAG == 'VIEW') {
+    if (this.content[0].FLAG == 'VIEW') {
       this.viewMode = true;
+      
     }
     //console.log(this.data);
     // if (this.data) {
@@ -258,30 +260,32 @@ export class MetalIssueDetailsComponent implements OnInit {
     amountFc: [''],
     jobPcs: ['1'],
     amountLc: [''],
-    masterMetal:[false]
+    masterMetal:[false],
+    FLAG:[null]
   });
 
   
 
   setFormValues() {
     if (!this.content) return
-    this.metalIssueDetailsForm.controls.jobNumber.setValue(this.content[0].JOB_NUMBER)
-    this.metalIssueDetailsForm.controls.jobNumDes.setValue(this.content[0].job_description)
-    this.metalIssueDetailsForm.controls.grossWeight.setValue(this.content[0].GROSS_WT)
-    this.metalIssueDetailsForm.controls.processCode.setValue(this.content[0].PROCESS_CODE)
-    this.metalIssueDetailsForm.controls.processCodeDesc.setValue(this.content[0].PROCESS_NAME)
-    this.metalIssueDetailsForm.controls.workerCode.setValue(this.content[0].WORKER_CODE)
-    this.metalIssueDetailsForm.controls.workerCodeDes.setValue(this.content[0].WORKER_NAME)
-    this.metalIssueDetailsForm.controls.designCode.setValue(this.content[0].DIVCODE)
-    this.metalIssueDetailsForm.controls.stoneWeight.setValue(this.content[0].STONE_WT)
-    this.metalIssueDetailsForm.controls.pureWeight.setValue(this.content[0].PURE_WT)
-    this.metalIssueDetailsForm.controls.pcs.setValue(this.content[0].PCS)
-    this.metalIssueDetailsForm.controls.purity.setValue(this.content[0].PURITY)
-    this.metalIssueDetailsForm.controls.subJobNo.setValue(this.content[0].JOB_SO_NUMBER)
-    this.metalIssueDetailsForm.controls.subJobNoDes.setValue(this.content[0].JOB_DESCRIPTION)
-    this.metalIssueDetailsForm.controls.netWeight.setValue(this.content[0].NET_WT)
-    this.metalIssueDetailsForm.controls.stockCode.setValue(this.content[0].STOCK_CODE)
-    this.metalIssueDetailsForm.controls.stockCodeDes.setValue(this.content[0].STOCK_DESCRIPTION)
+    this.metalIssueDetailsForm.controls.jobNumber.setValue(this.content.JOB_NUMBER)
+    this.metalIssueDetailsForm.controls.jobNumDes.setValue(this.content.JOB_DESCRIPTION)
+    this.metalIssueDetailsForm.controls.grossWeight.setValue(this.content.GROSS_WT)
+    this.metalIssueDetailsForm.controls.processCode.setValue(this.content.PROCESS_CODE)
+    this.metalIssueDetailsForm.controls.processCodeDesc.setValue(this.content.PROCESS_NAME)
+    this.metalIssueDetailsForm.controls.workerCode.setValue(this.content.WORKER_CODE)
+    this.metalIssueDetailsForm.controls.workerCodeDes.setValue(this.content.WORKER_NAME)
+    this.metalIssueDetailsForm.controls.designCode.setValue(this.content.DIVCODE)
+    this.metalIssueDetailsForm.controls.stoneWeight.setValue(this.content.STONE_WT)
+    this.metalIssueDetailsForm.controls.pureWeight.setValue(this.content.PURE_WT)
+    this.metalIssueDetailsForm.controls.pcs.setValue(this.content.PCS)
+    this.metalIssueDetailsForm.controls.purity.setValue(this.content.PURITY)
+    this.metalIssueDetailsForm.controls.subJobNo.setValue(this.content.JOB_SO_NUMBER)
+    this.metalIssueDetailsForm.controls.subJobNoDes.setValue(this.content.JOB_DESCRIPTION)
+    this.metalIssueDetailsForm.controls.netWeight.setValue(this.content.NET_WT)
+    this.metalIssueDetailsForm.controls.stockCode.setValue(this.content.STOCK_CODE)
+    this.metalIssueDetailsForm.controls.stockCodeDes.setValue(this.content.STOCK_DESCRIPTION)
+   
   };
 
   formSubmit() {

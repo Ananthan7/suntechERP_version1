@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="subJobNoDes" />
+                                            <input type="text" matInput formControlName="subJobNoDes"  [readonly]="viewMode"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="processCodeDesc">
+                                            <input type="text" matInput formControlName="processCodeDesc"  [readonly]="viewMode">
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput formControlName="workerCodeDes" />
+                                            <input type="text" matInput formControlName="workerCodeDes"  [readonly]="viewMode"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
