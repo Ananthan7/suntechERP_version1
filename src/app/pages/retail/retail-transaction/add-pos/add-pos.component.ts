@@ -7591,10 +7591,8 @@ export class AddPosComponent implements OnInit {
                   this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
                   // this.close('reloadMainGrid');
-                  if (this.posPlanetIssuing){
+                  if (this.posPlanetIssuing)
                     this.posPlanetFileInsert();
-                    this.createPlanetPOSVoidFile(); // need to check
-                  }
 
                   this.submitAttachment();
 
@@ -11477,7 +11475,21 @@ export class AddPosComponent implements OnInit {
 
   }
 
-  // call after edit save
+
+  getData() {
+    // http://185.56.89.191:181/POSPlanetFile/CheckPlanetTag/{strBranchCode}/{strVocType}/{strYearMonth}/{intVocNo}
+    // http://185.56.89.191:181/POSPlanetFile/CreatePlanetPOSVoidFile/{strBranchCode}/{strVocType}/{strYearMonth}/{intVocNo}
+    // http://185.56.89.191:181/POSPlanetFile/CreatePOSPlanetFile/{strBranchCode}/{strVocType}/{strYearMonth}/{intVocNo}
+  }
+
+  checkPlanetTag() {
+    const API = `POSPlanetFile/CheckPlanetTag/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
+    this.suntechApi.getDynamicAPI(API)
+      .subscribe((res: any) => {
+        if (res.status == "Success") {
+        }
+      });
+  }
   createPlanetPOSVoidFile(){
     const API = `POSPlanetFile/CreatePlanetPOSVoidFile/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
     this.suntechApi.postDynamicAPI(API, {})
@@ -11486,5 +11498,12 @@ export class AddPosComponent implements OnInit {
         }
       });
   }
- 
+  createPOSPlanetFile(){
+    const API = `POSPlanetFile/CreatePOSPlanetFile/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
+    this.suntechApi.postDynamicAPI(API, {})
+      .subscribe((res: any) => {
+        if (res.status == "Success") {
+        }
+      });
+  }
 }

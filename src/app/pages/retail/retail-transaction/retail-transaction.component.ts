@@ -128,22 +128,11 @@ export class RetailTransactionComponent implements OnInit {
   async editRowDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
-
-
-    let posPlanetFile: any = await this.createPlanetPOSFindFile(str);
-    console.log(posPlanetFile);
-
-    if (posPlanetFile.value) {
-    } else {
-      this.snackBar.open(posPlanetFile.data.message, 'OK');
-      return;
-    }
     let isAuth = await this.openAuthModal();
     if (isAuth)
       this.openModalView(str)
     else
       this.snackBar.open('Authentication Failed', 'OK');
-
 
   }
   /**USE: open form components in modal*/
@@ -178,7 +167,7 @@ export class RetailTransactionComponent implements OnInit {
       'MetalBranchTransferInAutoRepairComponent': MetalBranchTransferInAutoRepairComponent,
       'DiamondBranchTransferOutRepairComponent': DiamondBranchTransferOutRepairComponent,
       'DiamondBranchTransferInAutoRepairComponent': DiamondBranchTransferInAutoRepairComponent,
-      'RepairSaleComponent': RepairSaleComponent,
+      'RepairSaleComponent': RepairSaleComponent,     
 
 
 
@@ -223,7 +212,7 @@ export class RetailTransactionComponent implements OnInit {
       // this.openDialog('Warning', 'Are you sure want to remove this record?', false, true);
       // this.dialogBox.afterClosed().subscribe((data: any) => {
       //   if (data != 'No') {
-
+          
       //   }else{
       //     this.modalRef.close();
       //   }
@@ -266,47 +255,7 @@ export class RetailTransactionComponent implements OnInit {
     this.masterGridComponent?.getMasterGridData(data)
   }
 
-  checkPlanetTag(data: any): Promise<any> {
-    const API = `POSPlanetFile/CheckPlanetTag/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}`;
 
-    return new Promise((resolve) => {
-      this.dataService.getDynamicAPI(API).subscribe((res: any) => {
-        if (res.status === 'Success') {
-          if (res.planetResponseData.StatusCode === 6) {
-            resolve({ value: true, data: res });
-          } else {
-            resolve({ value: false, data: res });
-          }
-        } else {
-          resolve({ value: false, data: res });
-        }
-      });
-    });
-  }
-
-
-  createPlanetPOSFindFile(data: any) {
-    return new Promise((resolve) => {
-      this.snackBar.open('loading...');
-      const API = `POSPlanetFile/CreatePlanetPOSFindFile/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}`;
-      this.dataService.postDynamicAPI(API, {})
-        .subscribe((res: any) => {
-
-          if (res.status == "Success") {
-            // const isPlanetTagValid = await this.checkPlanetTag(data);
-            this.checkPlanetTag(data).then((isPlanetTagRes) => {
-              this.snackBar.dismiss();
-
-              resolve(isPlanetTagRes);
-            });
-          } else {
-            resolve({ value: false, data: res });
-          }
-        });
-
-    });
-
-  }
 
   openAuthModal() {
 
