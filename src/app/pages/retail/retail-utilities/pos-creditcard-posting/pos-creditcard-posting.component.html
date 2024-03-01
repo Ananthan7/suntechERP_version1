@@ -14,8 +14,30 @@
             <form >
                 <!-- search section -->
                 <div class="row">
-                </div>
+                    <form [formGroup]="creditCardPostingFrom">
+                        <div class="row mb-3">
+                          <div class="col-md-3">
+                            <div class="row md-4">
+                              <label for="inputPassword" class="col-md-4 col-form-label">Voucher Type:</label>
+                              <div class="col-md-4">
+                                <mat-form-field style="width: 110%;">
+                                  <input type="text" matInput formControlName="vocType" />
+                                </mat-form-field>
+                              </div>
+                              <div class="col-md-4">
+                                <mat-form-field style="width: 110%;">
+                                  <input type="text" matInput formControlName="vocNo" style="text-align: right;" />
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-3 pt-3">
+                            <div class="d-flex justify-content-center">
+                              <!-- <h6>Transfer</h6> -->
+                            </div>
+                          </div>
+                        
+                        </div>
+                
             </form>
         </div>
-    </div>
-</div>
