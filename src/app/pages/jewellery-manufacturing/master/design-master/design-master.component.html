@@ -19,14 +19,11 @@
             <div class="card-body sales-card-body p-2">
               <div class="col-md-12">
                 <div>
-                  <mat-radio-group aria-label="Select an option"
-                      formControlName="select">
-                      <mat-radio-button value="1"
-                          class="mx-2">Diamond</mat-radio-button>
-                      <mat-radio-button value="2"
-                          class="mx-2">Metal</mat-radio-button>
+                  <mat-radio-group aria-label="Select an option" formControlName="select">
+                    <mat-radio-button value="1" class="mx-2">Diamond</mat-radio-button>
+                    <mat-radio-button value="2" class="mx-2">Metal</mat-radio-button>
                   </mat-radio-group>
-              </div>
+                </div>
               </div>
               <div class="row">
                 <div class="col-md-5">
@@ -53,7 +50,7 @@
                         <input type="text" matInput formControlName="prefix" />
                       </mat-form-field>
                       <master-search [MasterSearchData]="prefixCodeData"
-                      (newRowClick)="prefixCodeSelected($event)"></master-search>
+                        (newRowClick)="prefixCodeSelected($event)"></master-search>
                     </div>
                     <label for="inputPassword" class="col-sm-3 col-form-label">Parent Design:</label>
                     <div class="col-md-3">
@@ -61,7 +58,7 @@
                         <input type="text" matInput formControlName="parentDesign" />
                       </mat-form-field>
                       <master-search [MasterSearchData]="parentDesignCodeData"
-                      (newRowClick)="parentDesignCodeSelected($event)"></master-search>
+                        (newRowClick)="parentDesignCodeSelected($event)"></master-search>
 
                     </div>
                   </div>
@@ -75,7 +72,8 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">No Sub Items:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;">
-                        <input type="number" style="text-align: right;" (keyup)="noOfSubItems()" matInput formControlName="noOfSubItems"/>
+                        <input type="number" style="text-align: right;" (keyup)="noOfSubItems()" matInput
+                          formControlName="noOfSubItems" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -196,7 +194,7 @@
                         <input type="text" matInput formControlName="vendCust" />
                       </mat-form-field>
                       <master-search [MasterSearchData]="vendCustCodeData"
-                      (newRowClick)="vendCustCodeSelected($event)"></master-search>
+                        (newRowClick)="vendCustCodeSelected($event)"></master-search>
 
                     </div>
                   </div>
@@ -286,7 +284,7 @@
                                 <input type="text" matInput formControlName="currency" />
                               </mat-form-field>
                               <master-search [MasterSearchData]="currencyCodeData"
-                        (newRowClick)="currencyCodeSelected($event)"></master-search>
+                                (newRowClick)="currencyCodeSelected($event)"></master-search>
                             </div>
                           </div>
                           <div class="row align-items-center mb-1">
@@ -350,10 +348,10 @@
                           <label for="inputPassword" class="col-sm-3 col-form-label">Price 1</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
-                              <input type="text" matInput formControlName="price1"/>
+                              <input type="text" matInput formControlName="price1" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="price1CodeData"
-                            (newRowClick)="price1CodeSelected($event)"></master-search>
+                              (newRowClick)="price1CodeSelected($event)"></master-search>
                           </div>
 
                         </div>
@@ -361,10 +359,10 @@
                           <label for="inputPassword" class="col-sm-3 col-form-label">Price 2:</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
-                              <input type="text" matInput formControlName="price2"/>
+                              <input type="text" matInput formControlName="price2" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="price2CodeData"
-                            (newRowClick)="price2CodeSelected($event)"></master-search>
+                              (newRowClick)="price2CodeSelected($event)"></master-search>
                           </div>
 
                         </div>
@@ -372,10 +370,10 @@
                           <label for="inputPassword" class="col-sm-3 col-form-label">Price 3:</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
-                              <input type="text" matInput formControlName="price3"/>
+                              <input type="text" matInput formControlName="price3" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="price3CodeData"
-                            (newRowClick)="price3CodeSelected($event)"></master-search>
+                              (newRowClick)="price3CodeSelected($event)"></master-search>
                           </div>
 
                         </div>
@@ -383,10 +381,10 @@
                           <label for="inputPassword" class="col-sm-3 col-form-label">Price 4</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
-                              <input type="text" matInput formControlName="price4"/>
+                              <input type="text" matInput formControlName="price4" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="price4CodeData"
-                            (newRowClick)="price4CodeSelected($event)"></master-search>
+                              (newRowClick)="price4CodeSelected($event)"></master-search>
                           </div>
 
                         </div>
@@ -394,10 +392,10 @@
                           <label for="inputPassword" class="col-sm-3 col-form-label">Price 5</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 80%;">
-                              <input type="text" matInput formControlName="price5"/>
+                              <input type="text" matInput formControlName="price5" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="price5CodeData"
-                            (newRowClick)="price5CodeSelected($event)"></master-search>
+                              (newRowClick)="price5CodeSelected($event)"></master-search>
                           </div>
                         </div>
 
@@ -438,8 +436,7 @@
                     <div class="col-md-5">
                       <div class="p-1 bd-highlight">
                         <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 25px;
-                        padding-right: 25px;"
-                          (click)="openaddDesignSequence()">
+                        padding-right: 25px;" (click)="openaddDesignSequence()">
                           Sequence
                         </button>
                       </div>
@@ -450,9 +447,8 @@
                         </button>
                       </div>
                       <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn"style="padding-left: 21px;
-                        padding-right: 21px;"
-                          (click)="openaddDesignTransaction()">
+                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 21px;
+                        padding-right: 21px;" (click)="openaddDesignTransaction()">
                           Transaction
                         </button>
                       </div>
@@ -569,14 +565,117 @@
               <mat-tab label="BOM Details">
                 <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
                   [showRowLines]="true" class="mt-3">
-                  <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-editing mode="cell" [allowUpdating]="true">
-                  </dxo-editing>
-                  <dxo-selection mode="multiple"></dxo-selection>
+
+                  <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing> -->
+
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
-                  <dxi-column *ngFor="let data of columnheader1" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+                  <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                  <dxi-column dataField="Division" caption="Division" cellTemplate="divisiontemp">
                   </dxi-column>
+                  <dxi-column dataField="Stone_Type" caption="Stone Type">
+                  </dxi-column>
+                  <dxi-column dataField="Stock_Code" caption="Stock Code" cellTemplate="stockCodetemp">
+                  </dxi-column>
+                  <dxi-column dataField="Karat" caption="Karat">
+                  </dxi-column>
+                  <dxi-column dataField="Shape" caption="Shape">
+                  </dxi-column>
+                  <dxi-column dataField="Color" caption="Color">
+                  </dxi-column>
+                  <dxi-column dataField="Ext_Color" caption="Email">
+                  </dxi-column>
+                  <dxi-column dataField="Clarity" caption="Clarity">
+                  </dxi-column>
+                  <dxi-column dataField="Ext_Clarity" caption="Ext Clarity">
+                  </dxi-column>
+                  <dxi-column dataField="Sieve_Std" caption="Sieve Std">
+                  </dxi-column>
+                  <dxi-column dataField="Description" caption="Description">
+                  </dxi-column>
+                  <dxi-column dataField="Sieve_From" caption="Sieve From">
+                  </dxi-column>
+
+                  <div *dxTemplate="let data of 'divisiontemp'">
+                    <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                    <master-search [MasterSearchData]="divisionCode" (newRowClick)="divisionCodeSelected($event,data)">
+                    </master-search>
+                  </div>
+
+                  <div *dxTemplate="let data of 'stoneTypetemp'">
+                    <input type="text" (change)="stoneTypetemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+                  <div *dxTemplate="let data of 'stockCodetemp'">
+                    <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                    <master-search [MasterSearchData]="divisionCode" (newRowClick)="stockCodeDataSelected($event,data)">
+                    </master-search>
+                  </div>
+
+                  <div *dxTemplate="let data of 'karattemp'">
+                    <input type="text" (change)="karattemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+
+                  <div *dxTemplate="let data of 'shapetemp'">
+                    <input type="text" (change)="shapetemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+                  <div *dxTemplate="let data of 'colortemp'">
+                    <input type="text" (change)="colortemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+                  <div *dxTemplate="let data of 'extColortemp'">
+                    <input type="text" (change)="extColortemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+                  <div *dxTemplate="let data of 'claritytemp'">
+                    <input type="text" (change)="claritytemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+                  <div *dxTemplate="let data of 'extClaritytemp'">
+                    <input type="text" (change)="extClaritytemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+                  <div *dxTemplate="let data of 'sieveStdtemp'">
+                    <input type="text" (change)="sieveStdtemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+                  <div *dxTemplate="let data of 'descriptiontemp'">
+                    <input type="text" (change)="descriptiontemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+                  <div *dxTemplate="let data of 'sieveFromtemp'">
+                    <input type="text" (change)="sieveFromtemp($event,data)" [value]="data.value"
+                      [disabled]="data.value == ''" style="width: 100%;" required
+                      oninput="this.value = this.value.toUpperCase()" />
+                  </div>
+
+
+
+
+                  <!-- <dxi-column *ngFor="let data of columnheader1" caption="{{ data }}"
+                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  </dxi-column> -->
 
                   <!-- <div *dxTemplate="let data of 'divisiontemp'">
                     <input type="text" (change)="divisiontemp($event,data)" style="width: 100%;" />
@@ -624,7 +723,7 @@
 
                   <div *dxTemplate="let data of 'sieveFromtemp'">
                     <input type="text" (change)="sieveFromtemp($event,data)" style="width: 100%;" />
-                  </div> -->
+                  </div>  -->
 
                 </dx-data-grid>
 
@@ -705,13 +804,13 @@
                 </dx-data-grid>
               </mat-tab>
               <mat-tab label="Design Parts Details">
-                <dx-data-grid id="gridContainer" [dataSource]="designPartDetails" [showBorders]="true" >
+                <dx-data-grid id="gridContainer" [dataSource]="designPartDetails" [showBorders]="true">
                   <!-- <dxo-selection mode="single"></dxo-selection> -->
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
-                    <dxo-selection mode="multiple"></dxo-selection>
-                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing>
+                  <dxo-selection mode="multiple"></dxo-selection>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                   <dxi-column dataField="SRNO" dataType="SR_NO"></dxi-column>
                   <dxi-column dataField="DESIGN_C" caption="DESIGNCODE"></dxi-column>
@@ -768,6 +867,13 @@
         <mat-tab label="Attributes">
           <div class="row">
             <div class="col-md-12">
+              <div class="row pl-4">
+                <div class="col-md-3 d-flex mb-2">
+                  <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                    (addClick)=" adddataAttributes()" (deleteClick)="removedataAttributes()">
+                  </menu-buttons>
+                </div>
+              </div>
               <mat-tab-group>
                 <mat-tab label="Cut Range">
                   <div class="col-md-12 pt-2">

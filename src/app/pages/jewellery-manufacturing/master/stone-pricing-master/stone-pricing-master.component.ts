@@ -18,12 +18,15 @@ export class StonePricingMasterComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   tableData: any[] = [];
-  isReadOnly:any
+  isReadOnly: any
   viewMode: boolean = false;
   viewModeAll: boolean = false;
-  viewDisable:boolean = false;
-  editPrice:boolean = false;
+  viewDisable: boolean = false;
+  editPrice: boolean = false;
+  myNumber: any;
+  branchCode?: String;
 
+ branchCodeCondition = this.branchCode ? `CMBRANCH_CODE = ${this.branchCode}` : '1 <> 1';
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -146,15 +149,17 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   currencyData: MasterSearchModel = {
+    
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 8,
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<>'' ",
+    WHERECONDITION: this.branchCodeCondition,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK:true,
   }
 
 
@@ -172,8 +177,8 @@ export class StonePricingMasterComponent implements OnInit {
     carat_wt: ['', [Validators.required]],
     sieve_from_desc: [''],
     sieve_to_desc: [''],
-    wt_from:  ['', [Validators.required]],
-    wt_to:  ['', [Validators.required]],
+    wt_from: ['', [Validators.required]],
+    wt_to: ['', [Validators.required]],
     size_to: [''],
     size_from: [''],
     issue_rate: ['', [Validators.required]],
@@ -186,9 +191,12 @@ export class StonePricingMasterComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
-  ) { }
+  ) {
+    this.branchCode = this.commonService.branchCode;
+   }
 
   ngOnInit(): void {
+
     this.viewMode = true;
     console.log(this.content.FLAG);
     if (this.content.FLAG == 'VIEW') {
@@ -197,7 +205,7 @@ export class StonePricingMasterComponent implements OnInit {
       this.viewModeAll = true;
       this.viewDisable = true;
     }
-    else(this.content.FLAG == 'EDIT')
+    else (this.content.FLAG == 'EDIT')
     {
       this.editPrice = true;
       this.setFormValues();
@@ -238,14 +246,14 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.wt_to.setValue(this.content.WEIGHT_TO)
     this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
     this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
-     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
+    this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
 
-  
+
   }
   // private initializeForm() {
   //   try {
   //     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.commonService.commaSeperation(this.content.SELLING_RATE))
-     
+
   //   } catch (error) {
   //     console.error('Error in initializeForm:', error);
   //   }
@@ -271,7 +279,7 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.issue_rate.setValue(this.content.ISSUE_RATE)
     this.stonePrizeMasterForm.controls.selling.setValue(this.content.SELLING_PER)
     this.stonePrizeMasterForm.controls.selling_rate.setValue(this.content.SELLING_RATE)
-   
+
 
   }
   formSubmit() {
@@ -289,61 +297,61 @@ export class StonePricingMasterComponent implements OnInit {
       this.toastr.error('Enter values either Selling % or Selling Rate');
       return;
     }
-    else{
+    else {
 
-    let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
-    let postData = {
-      "MID": 0,
-      "SRNO": 0,
-      "CODE": this.stonePrizeMasterForm.value.price_code || "",
-      "DESCRIPTION": "",
-      "SHAPE": this.stonePrizeMasterForm.value.shape || "",
-      "COLOR": this.stonePrizeMasterForm.value.color || "",
-      "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
-      "SIZE_FROM": this.stonePrizeMasterForm.value.size_from || "",
-      "SIZE_TO": this.stonePrizeMasterForm.value.size_to || "",
-      "CURRENCYCODE": this.stonePrizeMasterForm.value.currency || "",
-      "ISSUE_RATE": this.stonePrizeMasterForm.value.issue_rate || 0,
-      "SELLING_RATE": this.stonePrizeMasterForm.value.selling_rate || 0,
-      "LAST_ISSUE_RATE": 0,
-      "LAST_SELLING_RATE": 0,
-      "SELLING_PER": this.stonePrizeMasterForm.value.selling || 0,
-      "CARAT_WT": this.stonePrizeMasterForm.value.carat_wt || 0,
-      "SIEVE": this.stonePrizeMasterForm.value.sieve_form || "",
-      "SIEVE_SET": this.stonePrizeMasterForm.value.sieve_set || "",
-      "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
-      "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
-      "SIEVE_TO": this.stonePrizeMasterForm.value.sieve_to || "",
-      "SIEVEFROM_DESC": this.stonePrizeMasterForm.value.sieve_from_desc || "",
-      "SIEVETO_DESC": this.stonePrizeMasterForm.value.sieve_to_desc || "",
-      "LAST_UPDATE": new Date().toISOString()
-    }
+      let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
+      let postData = {
+        "MID": 0,
+        "SRNO": 0,
+        "CODE": this.stonePrizeMasterForm.value.price_code || "",
+        "DESCRIPTION": "",
+        "SHAPE": this.stonePrizeMasterForm.value.shape || "",
+        "COLOR": this.stonePrizeMasterForm.value.color || "",
+        "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
+        "SIZE_FROM": this.stonePrizeMasterForm.value.size_from || "",
+        "SIZE_TO": this.stonePrizeMasterForm.value.size_to || "",
+        "CURRENCYCODE": this.stonePrizeMasterForm.value.currency || "",
+        "ISSUE_RATE": this.stonePrizeMasterForm.value.issue_rate || 0,
+        "SELLING_RATE": this.stonePrizeMasterForm.value.selling_rate || 0,
+        "LAST_ISSUE_RATE": 0,
+        "LAST_SELLING_RATE": 0,
+        "SELLING_PER": this.stonePrizeMasterForm.value.selling || 0,
+        "CARAT_WT": this.stonePrizeMasterForm.value.carat_wt || 0,
+        "SIEVE": this.stonePrizeMasterForm.value.sieve_form || "",
+        "SIEVE_SET": this.stonePrizeMasterForm.value.sieve_set || "",
+        "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
+        "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
+        "SIEVE_TO": this.stonePrizeMasterForm.value.sieve_to || "",
+        "SIEVEFROM_DESC": this.stonePrizeMasterForm.value.sieve_from_desc || "",
+        "SIEVETO_DESC": this.stonePrizeMasterForm.value.sieve_to_desc || "",
+        "LAST_UPDATE": new Date().toISOString()
+      }
 
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.stonePrizeMasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
+      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+        .subscribe((result) => {
+          if (result.response) {
+            if (result.status == "Success") {
+              Swal.fire({
+                title: result.message || 'Success',
+                text: '',
+                icon: 'success',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then((result: any) => {
+                if (result.value) {
+                  this.stonePrizeMasterForm.reset()
+                  this.tableData = []
+                  this.close('reloadMainGrid')
+                }
+              });
+            }
+          } else {
+            this.toastr.error('Not saved')
           }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
+        }, err => alert(err))
+      this.subscriptions.push(Sub)
+    }
   }
-}
 
   update() {
     console.log(this.stonePrizeMasterForm.value);
@@ -352,10 +360,10 @@ export class StonePricingMasterComponent implements OnInit {
       return
     }
 
-    let API = 'StonePriceMasterDJ/UpdateStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code 
+    let API = 'StonePriceMasterDJ/UpdateStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code
 
     let postData = {
-      
+
       "MID": this.content.MID,
       "SRNO": 0,
       "CODE": this.stonePrizeMasterForm.value.price_code || "",
@@ -533,10 +541,23 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
-  commaSeperation(data: any){
-    console.log(data);
-    if (!Number(data.value)) return data.value
-    return Number(data.value).toLocaleString('en-US', { style: 'decimal' })
+  //   commaSeperation(data: any) {
+  //     console.log(data);
+  //     if (!Number(data)) return data; // Use data directly
+  //     return Number(data).toLocaleString('en-US', { style: 'decimal' });
+  // }
+  commaSeperation(data: any) {
+    this.myNumber = parseFloat(this.myNumber.toString().replace(/,/g, '')).toLocaleString();
+  }
+
+  onInputChange1(event: any): void {
+    const inputValue = event.target.value;
+
+    // Remove non-numeric characters and format with commas
+    const formattedValue = inputValue.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    // Update the component variable
+    this.myNumber = parseInt(formattedValue.replace(/,/g, ''), 10);
   }
 
   ngOnDestroy() {

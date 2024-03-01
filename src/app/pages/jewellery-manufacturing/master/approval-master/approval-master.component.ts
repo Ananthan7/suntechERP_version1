@@ -121,11 +121,17 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   userDataSelected(data: any, value: any, controlName: string) {
-
+    let userData = [];
+    userData = this.tableData.filter((item: any) => item.USER_CODE == data.UsersName)
+    if (userData.length > 0) {
+      this.toastr.error('Same User cannot be added.')
+    }
+    else {
     console.log(value);
     console.log(data);
     this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
   }
+}
 
   typedataselected(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].APPR_TYPE = data.target.value;
