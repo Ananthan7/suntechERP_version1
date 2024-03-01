@@ -7,13 +7,13 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { PosSalesDiaDetailsIGSTComponent } from './pos-sales-dia-details-i-gst/pos-sales-dia-details-i-gst.component';
+
 @Component({
-  selector: 'app-pos-credit-sale-recipt',
-  templateUrl: './pos-credit-sale-recipt.component.html',
-  styleUrls: ['./pos-credit-sale-recipt.component.scss']
+  selector: 'app-pos-sales-dia-details-i-gst',
+  templateUrl: './pos-sales-dia-details-i-gst.component.html',
+  styleUrls: ['./pos-sales-dia-details-i-gst.component.scss']
 })
-export class PosCreditSaleReciptComponent implements OnInit {
+export class PosSalesDiaDetailsIGSTComponent implements OnInit {
 
   @Input() content!: any;
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
@@ -78,17 +78,7 @@ export class PosCreditSaleReciptComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  openpossalesdiadetail() {
-    const modalRef: NgbModalRef = this.modalService.open(PosSalesDiaDetailsIGSTComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
-  }
-
   formSubmit(){
     
   }
-
 }
