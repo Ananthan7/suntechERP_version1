@@ -172,6 +172,7 @@
                                         <span>
                                             <mat-form-field>
                                                 <input type="text" matInput
+                                                    [readonly]="viewMode"
                                                     (focusout)="customerChange($event,'PosCustomerMaster/GetCustomerMaster/Mobile')"
                                                     formControlName="POSCustomerMobile" />
                                             </mat-form-field>
@@ -241,6 +242,7 @@
                                                     style="width: 25%">
                                                     <input type="text" matInput
                                                         formControlName="Salesman"
+                                                        [readonly]="viewMode"
                                                         (focusout)="salesmanChange($event)" />
                                                 </mat-form-field>
                                                 <mat-form-field
@@ -256,24 +258,6 @@
                                             </span>
                                         </div>
                                     </div>
-
-                                    <!-- <div class="col-lg-4 col-md-6 col-sm-12">
-                                        <div class="row">
-                                            <span class="matlabels">Entered by
-                                            </span>
-                                            <span style="width: 70%">
-                                                <mat-form-field style="width: 50%">
-                                                    <input type="text" matInput
-                                                        formControlName="Salesman"
-                                                        (focusout)="salesmanChange($event)" />
-                                                </mat-form-field>
-                                                <master-search *ngIf="!viewMode"
-                                                    [MasterSearchData]="salesPersonMasterData"
-                                                    (newRowClick)="selectedSalesman($event)">
-                                                </master-search>
-                                            </span>
-                                        </div>
-                                    </div> -->
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-6 col-sm-12">

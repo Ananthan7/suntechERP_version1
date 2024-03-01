@@ -11,10 +11,10 @@ const routes: Routes = [
     path: 'general-master-grid',
     loadChildren: () => import('../general/general-master/general-master.module').then(m => m.GeneralMasterModule)
   },
-  // {
-  //   path: 'general-transaction-grid',
-  //   loadChildren: () => import('../general/transaction/transaction.module').then(m => m.TransactionModule)
-  // },
+  {
+    path: 'general-transaction',
+    loadChildren: () => import('../general/general-transaction/general-transaction.module').then(m => m.GeneralTransactionModule)
+  },
 ];
 
 @NgModule({
