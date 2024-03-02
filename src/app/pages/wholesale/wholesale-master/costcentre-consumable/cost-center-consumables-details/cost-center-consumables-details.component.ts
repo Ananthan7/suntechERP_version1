@@ -19,6 +19,7 @@ export class CostCenterConsumablesDetailsComponent implements OnInit {
   tableData: any[] = [];
   private subscriptions: Subscription[] = [];
   branchCode?: String;
+  userbranch = localStorage.getItem('userbranch');
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -76,7 +77,7 @@ export class CostCenterConsumablesDetailsComponent implements OnInit {
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'ACCODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "BRANCH_CODE = 'dcc' AND  AC_OnHold = 0 and ACCOUNT_MODE in('G','L')",
+    WHERECONDITION: "BRANCH_CODE = '"+ this.userbranch+"' AND  AC_OnHold = 0 and ACCOUNT_MODE in('G','L')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

@@ -9,11 +9,11 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-pos-sales-dia-details-i-gst',
-  templateUrl: './pos-sales-dia-details-i-gst.component.html',
-  styleUrls: ['./pos-sales-dia-details-i-gst.component.scss']
+  selector: 'app-pos-sales-dia-details-i-gst-ind',
+  templateUrl: './pos-sales-dia-details-i-gst-ind.component.html',
+  styleUrls: ['./pos-sales-dia-details-i-gst-ind.component.scss']
 })
-export class PosSalesDiaDetailsIGSTComponent implements OnInit {
+export class PosSalesDiaDetailsIGSTIndComponent implements OnInit {
 
   @Input() content!: any;
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
@@ -52,8 +52,6 @@ export class PosSalesDiaDetailsIGSTComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-
-
  
 
   constructor(
@@ -76,4 +74,5 @@ export class PosSalesDiaDetailsIGSTComponent implements OnInit {
   formSubmit(){
     
   }
+
 }

@@ -50,7 +50,7 @@ export class JobcardComponent implements OnInit {
     SEARCH_FIELD: 'DESCRIPTION',
     SEARCH_HEADING: 'Length Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DESCRIPTION<> ''",
+    WHERECONDITION: "TYPES = 'LENGTH MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -62,7 +62,7 @@ export class JobcardComponent implements OnInit {
     SEARCH_FIELD: 'DESCRIPTION',
     SEARCH_HEADING: 'Order type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DESCRIPTION<> ''",
+    WHERECONDITION: "TYPES = 'ORDERTYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -558,8 +558,7 @@ export class JobcardComponent implements OnInit {
   ordertypeCodeSelected(e:any){
     console.log(e);
     this.jobCardFrom.controls.orderType.setValue(e.DESCRIPTION);
-    this.JobNo=`5/${this.serialNo}`;
-    this.jobCardFrom.controls.jobno.setValue(this.JobNo);
+    this.jobCardFrom.controls.jobno.setValue(e.CODE);
   }
 
   subcatCodeSelected(e:any){
