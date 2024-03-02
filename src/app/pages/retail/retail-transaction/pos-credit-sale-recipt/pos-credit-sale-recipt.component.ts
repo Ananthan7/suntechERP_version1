@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PosSalesDiaDetailsIGSTComponent } from './pos-sales-dia-details-i-gst/pos-sales-dia-details-i-gst.component';
+import { PosSalesDiaDetailsIGSTIndComponent } from './pos-sales-dia-details-i-gst-ind/pos-sales-dia-details-i-gst-ind.component';
+import { PosSalesDiaUnfixDetailsGSTComponent } from './pos-sales-dia-unfix-details-gst/pos-sales-dia-unfix-details-gst.component';
 @Component({
   selector: 'app-pos-credit-sale-recipt',
   templateUrl: './pos-credit-sale-recipt.component.html',
@@ -80,6 +82,24 @@ export class PosCreditSaleReciptComponent implements OnInit {
 
   openpossalesdiadetail() {
     const modalRef: NgbModalRef = this.modalService.open(PosSalesDiaDetailsIGSTComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openpossalesdiadetailind() {
+    const modalRef: NgbModalRef = this.modalService.open(PosSalesDiaDetailsIGSTIndComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openpossalesdiaunfixdetailgst() {
+    const modalRef: NgbModalRef = this.modalService.open(PosSalesDiaUnfixDetailsGSTComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
