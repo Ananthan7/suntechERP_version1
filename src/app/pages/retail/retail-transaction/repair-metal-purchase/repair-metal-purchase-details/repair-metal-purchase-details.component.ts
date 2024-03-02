@@ -9,17 +9,14 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { Code } from 'angular-feather/icons';
 import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component';
-import { RepairMetalPurchaseDetailsComponent } from './repair-metal-purchase-details/repair-metal-purchase-details.component';
-
-
 
 
 @Component({
-  selector: 'app-repair-metal-purchase',
-  templateUrl: './repair-metal-purchase.component.html',
-  styleUrls: ['./repair-metal-purchase.component.scss']
+  selector: 'app-repair-metal-purchase-details',
+  templateUrl: './repair-metal-purchase-details.component.html',
+  styleUrls: ['./repair-metal-purchase-details.component.scss']
 })
-export class RepairMetalPurchaseComponent implements OnInit {
+export class RepairMetalPurchaseDetailsComponent implements OnInit {
   @Input() content!: any;
   @Input()
   selectedIndex!: number | null;
@@ -30,7 +27,7 @@ export class RepairMetalPurchaseComponent implements OnInit {
   columnheadItemDetails:any[] = ['Sr.No','Div','Description','Remarks','Pcs','Gr.Wt','Repair Type','Type'];
   columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
   divisionMS: any = 'ID';
-  columnheadItemDetails2:any[] = ['Repair Narration']
+  columnheadItemDetails2:any[] = ['SI.No' , 'GST_Type%' , 'GST_Type', 'Total GST'];
   branchCode?: String;
   yearMonth?: String;
   currentDate = new FormControl(new Date());
@@ -99,7 +96,7 @@ export class RepairMetalPurchaseComponent implements OnInit {
     tel: [''],
     mobile: [''],
     nationality: [''],
-    type:[''],
+    type:['IGST'],
     remarks:[''],
     currency:[''],
     currencyDesc:[''],
@@ -112,7 +109,7 @@ export class RepairMetalPurchaseComponent implements OnInit {
     subTotal:[''],
     roundOffAmount:[''],
     netTotal:[''],
-
+    taxCode: ['TAXCODE'],
     process: ['',''],
     worker: ['PARIMA',''],
     narration: [''],
@@ -283,12 +280,6 @@ export class RepairMetalPurchaseComponent implements OnInit {
 
   adddata() {
 
-    const modalRef: NgbModalRef = this.modalService.open(RepairMetalPurchaseDetailsComponent, {
-      size: 'xl',
-      backdrop: true,//'static'
-      keyboard: false,
-      windowClass: 'modal-full-width',
-    });
 
     let length = this.tableData.length;
     let srno = length + 1;
