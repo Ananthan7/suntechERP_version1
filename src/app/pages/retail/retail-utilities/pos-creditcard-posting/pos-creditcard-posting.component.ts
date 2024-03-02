@@ -8,7 +8,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./pos-creditcard-posting.component.scss']
 })
 export class PosCreditcardPostingComponent implements OnInit {
-
+ 
+  viewMode: boolean = false;
+  tableData: any[] = [];
+  branchList: any[] = []
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -16,14 +19,34 @@ export class PosCreditcardPostingComponent implements OnInit {
   ) { }
   ngOnInit(): void {
    
-  }
+      this.viewMode = true;
+    }
+  
+  
 
   creditCardPostingFrom: FormGroup = this.formBuilder.group({
-    vocType: [''],
-    vocNo: ['1', []],
-    vocDate: [''],
-    processCode: [''],
+    branch: [''],
+    From: [''],
+    To: [''],
+    orderedBy: [''],
+    trans:[''],
+    FilterBy:[''],
+    vocdate:[''],
+    all:[''],
+    bank:[''],
   });
+
+  dateChange(event: any, flag?: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue);
+    let yr = date.getFullYear();
+    let dt = date.getDate();
+    let dy = date.getMonth();
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.creditCardPostingFrom.controls.VocDate.setValue(new Date(date));
+    }
+  }
 
 
 
