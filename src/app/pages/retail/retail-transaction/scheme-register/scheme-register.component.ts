@@ -57,7 +57,7 @@ export class SchemeRegisterComponent implements OnInit {
     SEARCH_FIELD: 'NAME',
     SEARCH_HEADING: 'Pos Customer Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "EMAIL<>''",
+    WHERECONDITION: "CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
