@@ -1145,6 +1145,13 @@
               </div>
             </div>
           </div>
+          <div class="col-md-6 col-xl-6" (click)="viewOnly || isSaved ? '' : saveOrder('continue')" *ngIf="!viewOnly">
+            <div class="touch-big-button touch-big-button-black">
+              <div class="touch-big-button-inner">
+                <i class="fa fa-save"></i> <span> Save & Continue</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="row mt-2" *ngIf="!viewOnly">

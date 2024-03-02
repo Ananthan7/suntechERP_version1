@@ -1584,6 +1584,9 @@ export class AddPosComponent implements OnInit {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
     if (this.viewOnly) this.setReadOnlyForViewMode();
+
+    this.open(this.mymodal);
+
   }
 
   ngOnInit(): void {
@@ -1706,6 +1709,7 @@ export class AddPosComponent implements OnInit {
     this.vocDataForm.controls.txtCurrency.setValue(this.comFunc.compCurrency);
 
     this.vocDataForm.controls.txtCurRate.setValue(this.comFunc.getCurrRate(this.comFunc.compCurrency));
+
   }
   getKaratDetails() {
     if (!this.editOnly && !this.viewOnly) {
@@ -7102,7 +7106,7 @@ export class AddPosComponent implements OnInit {
     return _status;
   }
 
-  saveOrder() {
+  saveOrder(type?: any) {
     Object.values(this.vocDataForm.controls).forEach(control => {
       control.markAsTouched();
     });
@@ -7120,7 +7124,7 @@ export class AddPosComponent implements OnInit {
       // this.rs_WithReturnExchangeReceipt._metalPurchase = this.metalPurchaseMain;
       // console.log(this.rs_WithReturnExchangeReceipt);
       // alert('Bill Saved');
-      this.postRetailSalesMaster();
+      this.postRetailSalesMaster(type);
       // this.snackBar.open('Bill Saved', 'OK');
     } else {
       // alert(_validate[1]);
@@ -7146,7 +7150,12 @@ export class AddPosComponent implements OnInit {
     console.log('====================================');
   }
 
-  postRetailSalesMaster() {
+  saveAndContinue(type: any){
+    if(type =='continue'){
+      this.addNew();
+    }
+  }
+  postRetailSalesMaster(type: any) {
     console.log('====================this.karatRateDetails================');
     console.log(this.karatRateDetails);
     console.log('====================================');
@@ -7596,6 +7605,8 @@ export class AddPosComponent implements OnInit {
 
                   this.submitAttachment();
 
+                  this.saveAndContinue(type);
+
                 } else {
                   this.isSaved = false;
                   this.snackBar.open(res.message, 'OK');
@@ -7627,6 +7638,10 @@ export class AddPosComponent implements OnInit {
                 this.submitAttachment();
 
                 this.snackBar.open('POS Saved', 'OK');
+
+                this.saveAndContinue(type);
+
+                
                 setTimeout(() => {
                   // location.reload();
                   // this.router.navigateByUrl('/pos');
