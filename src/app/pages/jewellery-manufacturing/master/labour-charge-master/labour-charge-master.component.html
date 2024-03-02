@@ -31,12 +31,12 @@
               <label for="input" class="col-sm-2 col-form-label">Labour Code * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="text" matInput formControlName="labour_code" #code (input)="code.value = code.value.toUpperCase()" />
+                  <input type="text" matInput  maxlength="15"  formControlName="labour_code" #code (input)="code.value = code.value.toUpperCase()" />
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
                 <mat-form-field>
-                  <input type="text" matInput formControlName="labour_description" #description (input)="description.value = description.value.toUpperCase()"/>
+                  <input type="text" matInput  maxlength="75"  formControlName="labour_description" #description (input)="description.value = description.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
             </div>
