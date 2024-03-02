@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Credit Card Posting</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Journal Voucher</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -11,9 +11,201 @@
 <div class="row">
     <div class="col-md-12 col-sm-12">
         <div class="card p-3">
-            <form >
+            <form [formGroup]="journalVoucherForm">
                 <!-- search section -->
                 <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 border-right">
+
+                        <!-- form fields start  -->
+                        <div class="row">
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Voc Type * :</label>
+                                <div class="col-md-4">
+                                    <mat-form-field style="width: 100%;">
+                                        <input type="text" matInput formControlName="voctype" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field style="width:60%;">
+                                        <input type="number" matInput formControlName="vocno" style="text-align: right;" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                             
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="row">
+                                    <span class="matlabels">
+                                        Voc Date*
+                                    </span>
+                                    <span style="width: 65%">
+                                        <mat-form-field>
+                                            <input matInput DateValidation (dateChange)="dateChange($event,'VocDate')"
+                                                [matDatepicker]="VocDates" formControlName="VocDate"
+                                                placeholder="DD/MM/YYYY" />
+                                            <mat-datepicker-toggle matSuffix [for]="VocDates"></mat-datepicker-toggle>
+                                            <mat-datepicker [disabled]="viewMode" #VocDates></mat-datepicker>
+
+                                            <!-- <mat-error
+                                                *ngIf="receiptDetailsForm.controls.VocDate.touched 
+                                                                    && receiptDetailsForm.controls.VocDate.hasError('pattern')">
+                                                Invalid date format
+                                                (dd/mm/yyyy)
+                                            </mat-error> -->
+                                        </mat-form-field>
+
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-12 col-sm-12 d-flex">
+                                <label class="matlabels" style="width: 20%;">Metal*
+                                </label>
+                                <span>
+                                    <mat-form-field style="width: 78%">
+                                        <input type="text" matInput="Code" [readonly]="viewMode"
+                                            formControlName="metal" />
+                                    </mat-form-field>
+                                    <master-search>
+                                    </master-search>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <span class="matlabels">Base Currency*
+                                        </span>
+                                        <span style="width: 70%">
+                                            <mat-form-field style="width: 60%">
+                                                <input type="text" matInput formControlName="baseCurrency" maxlength="6" />
+                                            </mat-form-field>
+    
+                                            <master-search>
+                                            </master-search>
+                                        </span>
+                                    </div>
+                                </div>
+                            
+                            <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+                                <span class="matlabels">Reference
+                                </span>
+                                <span>
+                                    <mat-form-field>
+                                        <input type="text" matInput [readonly]="viewMode" formControlName="reference" />
+                                    </mat-form-field>
+                                </span>
+                            </div>
+                            <!-- <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="row">
+                                    <span class="matlabels">
+                                        Email
+                                    </span>
+                                    <span style="width: 70%">
+                                        <mat-form-field>
+                                            <input type="text" matInput readonly formControlName="POSCustomerEmail" />
+                                        </mat-form-field>
+                                    </span>
+                                </div>
+                            </div> -->
+                        </div>
+                      
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="row">
+                                    <span class="matlabels">Entered by
+                                    </span>
+                                    <span style="width: 70%">
+                                        <mat-form-field style="width: 60%">
+                                            <input type="text" matInput formControlName="enteredby" />
+                                        </mat-form-field>
+
+                                        <master-search>
+                                        </master-search>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <dx-data-grid width="100%" [loadPanel]="{ enabled: true, text: 'Loading...' }"
+                                [dataSource]="tableData" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true"
+                                [columnAutoWidth]="true">
+                                <!-- <dxo-filter-row visible="true" (onRowClick)="onRowClickHandler($event)"></dxo-filter-row> keyExpr="Id"-->
+                                <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
+                                <dxo-paging [enabled]="true" [pageSize]="10" [pageIndex]="1"></dxo-paging>
+                                <dxo-selection mode="single"></dxo-selection>
+                                <!-- <dxi-column type="buttons" caption [visible]="disableDelete" [fixed]="true"
+                                            fixedPosition="right">
+                                            <dxi-button [onClick]="editRowDetails"
+                                            icon="fa fa-edit"></dxi-button>
+                                        </dxi-column> -->
+                                <!-- <dxi-button [onClick]="deleteRow" icon="fa fa-trash"></dxi-button> -->
+                                <dxi-column dataField="SRNO" caption="SRNO" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="Branch" caption="Branch" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="AC_Code" caption="AC_Code" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="Account Head" caption="Account Head" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="AC_Code" caption="AC_Code" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="Amount" caption="Amount" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="Dr/Credit" caption="Dr/Credit" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="VAT_E" caption="VAT_E" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="FA_Code" caption="FA_Code" alignment="center">
+                                </dxi-column>
+                              
+                                <dxo-summary>
+                                    <dxi-total-item column="SRNO" summaryType="count" displayFormat="{0}">
+                                    </dxi-total-item>
+                                    <dxi-total-item column="AMOUNT_VAT" summaryType="sum" displayFormat="{0}">
+                                    </dxi-total-item>
+                                </dxo-summary>
+                            </dx-data-grid>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="row">
+                                <span class="matlabels"> Narration
+                                </span>
+                                <span style="width: 65%">
+                                    <mat-form-field style="width: 80%">
+                                        <input type="text" matInput readonly class="text-right"
+                                            formControlName="Narration" />
+                                    </mat-form-field>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <dx-data-grid width="100%" [loadPanel]="{ enabled: true, text: 'Loading...' }"
+                                [dataSource]="tableData" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true"
+                                [columnAutoWidth]="true">
+                                <!-- <dxo-filter-row visible="true" (onRowClick)="onRowClickHandler($event)"></dxo-filter-row> keyExpr="Id"-->
+                                <!-- <dxi-column allowFiltering="false" ></dxi-column> -->
+                                <dxo-paging [enabled]="true" [pageSize]="10" [pageIndex]="1"></dxo-paging>
+                                <dxo-selection mode="single"></dxo-selection>
+                                <dxi-column dataField="Total Amount" caption="Total Amount" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="TRN Total" caption="TRN Total" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField="Difference" caption="Difference" alignment="center">
+                                </dxi-column>
+                            </dx-data-grid>
+    
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

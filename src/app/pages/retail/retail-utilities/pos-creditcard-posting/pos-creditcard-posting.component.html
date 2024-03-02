@@ -197,6 +197,7 @@
                                     </span>
                                 </div>
                             </div>
+
                             <!-- <div class="col-lg-4 col-md-6 col-sm-12">
                                 <div class="row">
                                     <span class="matlabels">
@@ -209,26 +210,25 @@
                                     </span>
                                 </div>
                             </div> -->
-                            <!-- <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
                                 <div class="row">
-                                    <span class="matlabels">
-                                        Party Amount
-                                    </span>
-                                    <span style="width: 70%">
-                                        <mat-form-field style="width: 20%">
-                                            <input readonly matInput formControlName="PartyAmtCode" />
-                                        </mat-form-field>
-                                        <mat-form-field style="width:40%;margin-left: 4px;">
-                                            <input type="number" readonly matInput class="text-right"
-                                                formControlName="PartyAmount" />
-                                        </mat-form-field>
-                                    </span>
+                                    <div class="form-check mt-1">
+                                        <input class="form-check-input" type="checkbox" value
+                                            formControlName="Selection" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Selection
+                                        </label>
+                                        <div class="form-check mt-1"></div>
+                                        <input class="form-check-input" type="checkbox" value formControlName="Range"
+                                            id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Range
+                                        </label>
+                                    </div>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
-
                     </div>
-
                 </div>
 
                 <div class="row border-top">
@@ -289,12 +289,12 @@
                             </dxi-column>
                             <dxi-column dataField="Grid Cloumns" caption="Grid Cloumns" alignment="center">
                             </dxi-column>
-                            <dxo-summary>
+                            <!-- <dxo-summary>
                                 <dxi-total-item column="SRNO" summaryType="count" displayFormat="{0}">
                                 </dxi-total-item>
                                 <dxi-total-item column="AMOUNT_VAT" summaryType="sum" displayFormat="{0}">
                                 </dxi-total-item>
-                            </dxo-summary>
+                            </dxo-summary> -->
                         </dx-data-grid>
                     </div>
                 </div>
