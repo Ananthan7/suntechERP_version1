@@ -203,19 +203,26 @@ export class SchemeRegisterComponent implements OnInit {
           this.schemeRegistrationForm.controls.Branch.setValue(data.PAY_BRANCH_CODE)
           this.schemeRegistrationForm.controls.Salesman.setValue(data.SALESPERSON_CODE)
           this.schemeRegistrationForm.controls.SalesmanName.setValue(data.SALESMAN_NAME)
-          this.schemeRegistrationForm.controls.TotalAmountToPay.setValue((data.SCH_INST_AMOUNT_FC * data.SCH_SCHEME_PERIOD))
+          this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
+            this.commonService.commaSeperation(data.SCH_INST_AMOUNT_FC * data.SCH_SCHEME_PERIOD)
+          )
           this.schemeRegistrationForm.controls.SCHEME_CODE.setValue(data.SCH_SCHEME_CODE)
           this.schemeRegistrationForm.controls.SchemeId.setValue(data.SCH_SCHEME_CODE)
           this.schemeRegistrationForm.controls.Units.setValue(data.SCH_UNITS)
           this.schemeRegistrationForm.controls.SendAlert.setValue(data.SCH_SEND_ALERT)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCH_SCHEME_PERIOD)
           this.schemeRegistrationForm.controls.Frequency.setValue(data.SCH_FREQUENCY)
-          this.schemeRegistrationForm.controls.InstallmentAmount.setValue(data.SCH_INST_AMOUNT_CC)
-          this.schemeRegistrationForm.controls.CancellationCharge.setValue(data.SCH_CANCEL_AMT)
-          this.schemeRegistrationForm.controls.SumAssured.setValue(data.SCH_ASSURED_AMT_FC)
+          this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
+            this.commonService.commaSeperation(data.SCH_INST_AMOUNT_CC)
+          )
+          this.schemeRegistrationForm.controls.CancellationCharge.setValue(
+            this.commonService.commaSeperation(data.SCH_CANCEL_AMT))
+          this.schemeRegistrationForm.controls.SumAssured.setValue(
+            this.commonService.commaSeperation(data.SCH_ASSURED_AMT_FC))
           this.schemeRegistrationForm.controls.MobileNo.setValue(data.SCH_ALERT_MOBILE)
           this.schemeRegistrationForm.controls.Email.setValue(data.SCH_ALERT_EMAIL)
-          this.schemeRegistrationForm.controls.BonusInstallment.setValue(data.SCHEME_BONUS)
+          this.schemeRegistrationForm.controls.BonusInstallment.setValue(
+            this.commonService.commaSeperation(data.SCHEME_BONUS))
           this.schemeRegistrationForm.controls.Remarks.setValue(data.REMARKS)
           this.schemeRegistrationForm.controls.PanNo.setValue(data.PAN_NUMBER)
           this.schemeRegistrationForm.controls.DateOfJoining.setValue(data.SCH_JOIN_DATE)
@@ -361,7 +368,7 @@ export class SchemeRegisterComponent implements OnInit {
         if (result.response) {
           let data = result.response
           if(data.STATUS == false){
-            this.commonService.toastErrorByMsgId('Selected Scheme is InActive')
+            this.commonService.toastErrorByMsgId('Selected Scheme is Inactive')
             this.schemeRegistrationForm.controls.SchemeId.setValue('')
             return
           }
@@ -372,19 +379,19 @@ export class SchemeRegisterComponent implements OnInit {
           // this.schemeRegistrationForm.controls.MaturingDate.setValue(data.START_DATE)
           this.schemeRegistrationForm.controls.TenurePeriod.setValue(data.SCHEME_PERIOD)
           this.schemeRegistrationForm.controls.BonusInstallment.setValue(
-            this.commonService.commaSeperation(data.SCHEME_BONUS)+ '.000'
+            this.commonService.commaSeperation(data.SCHEME_BONUS)
           )
           this.schemeRegistrationForm.controls.TotalAmountToPay.setValue(
-            this.commonService.commaSeperation(data.SCHEME_AMOUNT * data.SCHEME_PERIOD)+'.000'
+            this.commonService.commaSeperation(data.SCHEME_AMOUNT * data.SCHEME_PERIOD)
           )
           this.schemeRegistrationForm.controls.SumAssured.setValue(
             this.commonService.commaSeperation((data.SCHEME_AMOUNT * data.SCHEME_PERIOD) + data.SCHEME_BONUS)
           )
           this.schemeRegistrationForm.controls.CancellationCharge.setValue(
-            this.commonService.commaSeperation(data.CANCEL_CHARGE)+'.000'
+            this.commonService.commaSeperation(data.CANCEL_CHARGE)
           )
           this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
-              this.commonService.commaSeperation(data.SCHEME_AMOUNT)+'.000'
+              this.commonService.commaSeperation(data.SCHEME_AMOUNT)
           )
           let maturingdate
           if (data.SCHEME_FREQUENCY.toUpperCase() == 'WEEKLY') {
@@ -441,41 +448,7 @@ export class SchemeRegisterComponent implements OnInit {
       });
     this.subscriptions.push(sub)
   }
-  // addRowsToGridFrontend(period?: any) {
-  //   this.SchemeMasterDetails = []
-  //   let noOFInstallment = Number(this.schemeRegistrationForm.value.TenurePeriod) || period
-  //   for (let index = 0; index < noOFInstallment; index++) {
-  //     this.SchemeMasterDetails.push(
-  //       {
-  //         UNIQUEID: 0,
-  //         SCH_CUSTOMER_CODE: this.schemeRegistrationForm.value.code,
-  //         SCH_CUSTOMER_ID: "",
-  //         SRNO: index + 1,
-  //         PAY_DATE: this.schemeRegistrationForm.value.DateOfJoining,
-  //         PAY_AMOUNT_FC: this.schemeRegistrationForm.value.installmentAmount,
-  //         PAY_AMOUNT_CC: this.schemeRegistrationForm.value.installmentAmount,
-  //         PAY_STATUS: this.schemeRegistrationForm.value.PAY_STATUS,
-  //         REMAINDER_DATE: this.schemeRegistrationForm.value.DateOfJoining,
-  //         REMAINDER_SEND: 0,
-  //         DT_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
-  //         RCVD_DATE: this.schemeRegistrationForm.value.DateOfJoining,
-  //         RCVD_BRANCH_CODE: this.schemeRegistrationForm.value.Branch,
-  //         RCVD_VOCTYPE: this.schemeRegistrationForm.value.VOCTYPE,
-  //         RCVD_VOCNO: 0,
-  //         RCVD_YEARMONTH: 0,
-  //         RCVD_AMOUNTFC: 0,
-  //         RCVD_AMOUNTCC: 0,
-  //         SCHBAL_AMOUNTFC: 0,
-  //         SCHBAL_AMOUNTCC: 0,
-  //         SCH_PARTIALLY_PAID: true,
-  //         RECEIPT_REF: "",
-  //         RECEIPT_MID: 0,
-  //         Images: []
-  //       }
-  //     )
 
-  //   }
-  // }
   exportToExcel() {
     this.commonService.exportExcel(this.schemeReceiptList, 'Scheme Details')
   }
@@ -654,17 +627,17 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${i}].schemeData.SCH_JOIN_DATE`, this.commonService.formatDate(new Date(formValue.DateOfJoining)));
       this.formdata.append(`Model.model[${i}].schemeData.SCH_SCHEME_PERIOD`, formValue.TenurePeriod || 0);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_FREQUENCY`, formValue.Frequency);
-      this.formdata.append(`Model.model[${i}].schemeData.SCH_INST_AMOUNT_FC`, formValue.InstallmentAmount);
-      this.formdata.append(`Model.model[${i}].schemeData.SCH_INST_AMOUNT_CC`, formValue.InstallmentAmount);
-      this.formdata.append(`Model.model[${i}].schemeData.SCH_ASSURED_AMT_FC`, formValue.SumAssured || 0);
-      this.formdata.append(`Model.model[${i}].schemeData.SCH_ASSURED_AMT_CC`, formValue.SumAssured || 0);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_INST_AMOUNT_FC`, item.SCH_INST_AMOUNT_FC);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_INST_AMOUNT_CC`, item.SCH_INST_AMOUNT_CC);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_ASSURED_AMT_FC`, item.SCH_ASSURED_AMT_FC || 0);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_ASSURED_AMT_CC`, item.SCH_ASSURED_AMT_CC || 0);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_EXPIRE_DATE`, this.commonService.formatDate(new Date(formValue.MaturingDate)));
       this.formdata.append(`Model.model[${i}].schemeData.SCH_REMINDER_DAYS`, formValue.AlertBeforeDays || 0);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_REMINDER_MODE`, formValue.Frequency);
-      this.formdata.append(`Model.model[${i}].schemeData.SCHEME_BONUS`, formValue.BonusInstallment);
+      this.formdata.append(`Model.model[${i}].schemeData.SCHEME_BONUS`, item.SCHEME_BONUS);
       this.formdata.append(`Model.model[${i}].schemeData.REMARKS`, 'REMARKS');
       this.formdata.append(`Model.model[${i}].schemeData.SCH_UNITS`, formValue.Units);
-      this.formdata.append(`Model.model[${i}].schemeData.SCH_CANCEL_AMT`, formValue.CancellationCharge);
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_CANCEL_AMT`, item.SCH_CANCEL_AMT);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_STATUS`, '1');
       this.formdata.append(`Model.model[${i}].schemeData.PAY_DATE`, this.commonService.formatDate(new Date(formValue.DateOfJoining)));
       this.formdata.append(`Model.model[${i}].schemeData.PAY_BRANCH_CODE`, this.commonService.nullToString(this.commonService.branchCode));
@@ -889,7 +862,7 @@ export class SchemeRegisterComponent implements OnInit {
         this.commonService.compCurrency,
         this.commonService.emptyToZero(formValue.SumAssured)
       ) || 0,
-      "SCH_ASSURED_AMT_CC": formValue.SumAssured || 0,
+      "SCH_ASSURED_AMT_CC": this.commonService.emptyToZero(formValue.SumAssured),
       "SCH_EXPIRE_DATE": this.commonService.formatDateTime(new Date(formValue.MaturingDate)),
       "SCH_REMINDER_DAYS": this.commonService.emptyToZero(formValue.AlertBeforeDays),
       "SCH_REMINDER_MODE": formValue.Frequency,
@@ -903,8 +876,8 @@ export class SchemeRegisterComponent implements OnInit {
       "PAY_VOCTYPE": formValue.VOCTYPE,
       "PAY_VOCNO": 0,
       "PAY_YEARMONTH": this.commonService.yearSelected,
-      "PAY_AMOUNTFC": formValue.InstallmentAmount * formValue.TenurePeriod || 0,
-      "PAY_AMOUNTCC": formValue.InstallmentAmount * formValue.TenurePeriod || 0,
+      "PAY_AMOUNTFC": this.commonService.emptyToZero(formValue.InstallmentAmount * formValue.TenurePeriod),
+      "PAY_AMOUNTCC": this.commonService.emptyToZero(formValue.InstallmentAmount * formValue.TenurePeriod),
       "SCH_ALERT_EMAIL": formValue.Email,
       "SCH_ALERT_MOBILE": formValue.MobileNo,
       "SCH_SEND_ALERT": formValue.SendAlert,

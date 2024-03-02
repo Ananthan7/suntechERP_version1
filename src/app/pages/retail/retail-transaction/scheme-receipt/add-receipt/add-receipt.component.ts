@@ -367,7 +367,7 @@ export class AddReceiptComponent implements OnInit {
     return (AMOUNT / (100 + VAT)) * 100
   }
   calculateAmountLC() {
-    if (this.receiptEntryForm.value.SchemeTotalAmount < this.receiptEntryForm.value.Amount_LC) {
+    if (this.receiptEntryForm.value.SchemeBalance < this.receiptEntryForm.value.Amount_LC) {
       this.receiptEntryForm.controls.Amount_LC.setValue(0)
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance' + this.receiptEntryForm.value.SchemeBalance)
       return
