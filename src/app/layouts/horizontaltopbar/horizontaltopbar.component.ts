@@ -247,30 +247,18 @@ export class HorizontaltopbarComponent implements OnInit {
     }
   }
 
-  /**
-  * Logout the user
-  */
-  logout() {
-    // if (environment.defaultauth === 'firebase') {
-    //   this.authService.logout();
-    // } else {
-    this.authFackservice.logout();
-    // }
-    this.inDb.onDeleteIndexedDB()
-    // localStorage.clear();
-
- 
-    const keysToKeep = ['keepLog', 'username', 'password'];
-
-    for (const key in localStorage) {
-      console.log(localStorage.hasOwnProperty(key));
-
-      if (localStorage.hasOwnProperty(key) && !keysToKeep.includes(key)) {
-          localStorage.removeItem(key);
-      }
-  }
-
-    this.router.navigate(['/account/login']);
-  }
+   /**
+   * Logout the user
+   */
+    logout() {
+      // if (environment.defaultauth === 'firebase') {
+      //   this.authService.logout();
+      // } else {
+        this.authFackservice.logout();
+      // }
+      this.inDb.onDeleteIndexedDB()
+      localStorage.clear();
+      this.router.navigate(['/account/login']);
+    }
 
 }
