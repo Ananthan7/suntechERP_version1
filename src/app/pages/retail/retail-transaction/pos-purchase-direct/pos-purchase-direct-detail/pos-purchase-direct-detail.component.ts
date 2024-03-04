@@ -13,6 +13,8 @@ export class PosPurchaseDirectDetailComponent implements OnInit {
   branchCode?: String;
   userName = localStorage.getItem('username');
   userbranch = localStorage.getItem('userbranch');
+  selected = 'gms';
+
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -54,7 +56,7 @@ export class PosPurchaseDirectDetailComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 155,
-    SEARCH_FIELD: "Location",
+    SEARCH_FIELD: "LOCATION",
     SEARCH_HEADING: "Loc Code",
     SEARCH_VALUE: "",
     WHERECONDITION: "@Strbranch='"+ this.userbranch+"',@strUsercode='"+this.userName+"',@stravoidforsales= 0",
@@ -67,7 +69,7 @@ export class PosPurchaseDirectDetailComponent implements OnInit {
     stockType: [""],
     fixMetalRate: [true],
     goldType: [""],
-    description: [""],
+    stockCodeDescription: [""],
     supplier: [""],
     locCode: [""],
     pieces: [""],
@@ -81,7 +83,7 @@ export class PosPurchaseDirectDetailComponent implements OnInit {
     purityDiffer: [""],
     stoneDiffer: [""],
     ozWeight: [""],
-    unitCode: [""],
+    unitCode: [this.selected],
     unitValue: [""],
     unitRate: [""],
     unitAmount: [""],
@@ -124,8 +126,9 @@ export class PosPurchaseDirectDetailComponent implements OnInit {
   
   stockCodeSelected(e:any){
     console.log(e);    
-    this.posPurchaseDirectDetailForm.controls.stockCode.setValue(e.STOCK_CODE);
-    this.posPurchaseDirectDetailForm.controls.stockType.setValue(e.DESCRIPTION);
+    this.posPurchaseDirectDetailForm.controls.stockCode.setValue(e.DIVISION_CODE);
+    this.posPurchaseDirectDetailForm.controls.stockType.setValue(e.STOCK_CODE);
+    this.posPurchaseDirectDetailForm.controls.stockCodeDescription.setValue(e.DESCRIPTION);
   }
 
   outSideGoldSelected(e:any){
