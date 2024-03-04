@@ -6,18 +6,15 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="deleteRecord()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="row">
     <div class="col-md-12 col-sm-12">
         <div class="card p-3">
-
             <!-- search section -->
             <form [formGroup]="creditCardPostingFrom">
-
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 border-right">
-
                         <!-- form fields start  -->
                         <div class="row">
                             <div class="col-lg-4 col-md-12 col-sm-12">
@@ -26,12 +23,22 @@
                                     </span>
                                     <span style="width: 65%">
                                         <ng-select [items]="branchList" bindLabel="ENGLISH" bindValue="ENGLISH"
-                                            [readonly]="viewMode" formControlName="depositIn"
+                                            [readonly]="viewMode" formControlName="branch"
                                             style="width: 65%"></ng-select>
                                     </span>
                                 </div>
                             </div>
-
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="row">
+                                    <span class="matlabels">Filter
+                                    </span>
+                                    <span style="width: 65%">
+                                        <ng-select [items]="branchList" bindLabel="ENGLISH" bindValue="ENGLISH"
+                                            [readonly]="viewMode" formControlName="filter"
+                                            style="width: 65%"></ng-select>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-4 col-md-12 col-sm-12">
@@ -40,13 +47,12 @@
                                         From Date*
                                     </span>
                                     <span style="width: 65%">
-                                        <mat-form-field>
+                                        <mat-form-field style="width: 35%">
                                             <input matInput DateValidation (dateChange)="dateChange($event,'VocDate')"
-                                                [matDatepicker]="VocDates" formControlName="VocDate"
+                                                [matDatepicker]="VocDates" formControlName="fromdate"
                                                 placeholder="DD/MM/YYYY" />
                                             <mat-datepicker-toggle matSuffix [for]="VocDates"></mat-datepicker-toggle>
                                             <mat-datepicker [disabled]="viewMode" #VocDates></mat-datepicker>
-
                                             <!-- <mat-error
                                                 *ngIf="receiptDetailsForm.controls.VocDate.touched 
                                                                     && receiptDetailsForm.controls.VocDate.hasError('pattern')">
@@ -54,24 +60,26 @@
                                                 (dd/mm/yyyy)
                                             </mat-error> -->
                                         </mat-form-field>
-
+                                        <mat-form-field style="width: 30%; margin-left:4px">
+                                            <input type="text" matInput maxlength="6" />
+                                        </mat-form-field>
+                                        <master-search>
+                                        </master-search>
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-12 col-sm-12 d-flex">
-                                <label class="matlabels" style="width: 20%;">Filter By*
-                                </label>
-                                <span>
-                                    <mat-form-field style="width: 78%">
-                                        <input type="text" matInput="Code" [readonly]="viewMode"
-                                            formControlName="FilterBy" />
-                                    </mat-form-field>
-                                    <master-search>
-                                    </master-search>
-                                </span>
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="row">
+                                    <span class="matlabels">Ordered By
+                                    </span>
+                                    <span style="width: 65%">
+                                        <ng-select [items]="branchList" bindLabel="ENGLISH" bindValue="ENGLISH"
+                                            [readonly]="viewMode" formControlName="orderedby"
+                                            style="width: 65%"></ng-select>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-lg-4 col-md-12 col-sm-12">
                                 <div class="row">
@@ -79,13 +87,12 @@
                                         To Date*
                                     </span>
                                     <span style="width: 65%">
-                                        <mat-form-field>
+                                        <mat-form-field style="width: 35% ">
                                             <input matInput DateValidation (dateChange)="dateChange($event,'VocDate')"
-                                                [matDatepicker]="VocDates" formControlName="VocDate"
+                                                [matDatepicker]="VocDates" formControlName="todate"
                                                 placeholder="DD/MM/YYYY" />
                                             <mat-datepicker-toggle matSuffix [for]="VocDates"></mat-datepicker-toggle>
                                             <mat-datepicker [disabled]="viewMode" #VocDates></mat-datepicker>
-
                                             <!-- <mat-error
                                                 *ngIf="receiptDetailsForm.controls.VocDate.touched 
                                                                     && receiptDetailsForm.controls.VocDate.hasError('pattern')">
@@ -93,18 +100,24 @@
                                                 (dd/mm/yyyy)
                                             </mat-error> -->
                                         </mat-form-field>
-
+                                        <mat-form-field style="width: 30%; margin-left:4px">
+                                            <input type="text" matInput maxlength="6" />
+                                        </mat-form-field>
+                                        <master-search>
+                                        </master-search>
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
-                                <span class="matlabels">All
-                                </span>
-                                <span>
-                                    <mat-form-field>
-                                        <input type="text" matInput [readonly]="viewMode" formControlName="all" />
-                                    </mat-form-field>
-                                </span>
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="row">
+                                    <span class="matlabels">Trans
+                                    </span>
+                                    <span style="width: 65%">
+                                        <ng-select [items]="branchList" bindLabel="ENGLISH" bindValue="ENGLISH"
+                                            [readonly]="viewMode" formControlName="trans"
+                                            style="width: 65%"></ng-select>
+                                    </span>
+                                </div>
                             </div>
                             <div class="col-4">
                                 <div class="d-flex justify-content-end text-end">
@@ -118,120 +131,34 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <span class="matlabels">
-                                        Email
-                                    </span>
-                                    <span style="width: 70%">
-                                        <mat-form-field>
-                                            <input type="text" matInput readonly formControlName="POSCustomerEmail" />
-                                        </mat-form-field>
-                                    </span>
-                                </div>
-                            </div> -->
                         </div>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <span class="matlabels">Party Code*
-                                    </span>
-                                    <span style="width: 70%">
-                                        <mat-form-field style="width: 60%">
-                                            <input type="text" matInput formControlName="PartyCode" maxlength="6" />
-                                        </mat-form-field>
-
-                                        <master-search>
-                                        </master-search>
-                                    </span>
+                    
+                        <div class="col-sm-6 col-md-1 col-sm-3">
+                            <div class="row">
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" value formControlName="Selection"
+                                        id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Selection
+                                    </label>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <span class="matlabels">Bank
-
-                                    </span>
-                                    <span style="width: 65%">
-                                        <mat-form-field>
-                                            <input type="text" matInput class="text-right" readonly
-                                                formControlName="bank" />
-                                        </mat-form-field>
-                                        <master-search>
-
-                                        </master-search>
-                                    </span>
-                                </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <span class="matlabels">Ordered by
-                                    </span>
-                                    <span style="width: 70%">
-                                        <mat-form-field style="width: 60%">
-                                            <input type="text" matInput formControlName="orderedBy" />
-                                        </mat-form-field>
-
-                                        <master-search>
-                                        </master-search>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <span class="matlabels">
-                                        Trans
-                                    </span>
-                                    <span style="width: 70%">
-                                        <mat-form-field>
-                                            <input type="text" readonly matInput formControlName="trans"
-                                                maxlength="20" />
-                                        </mat-form-field>
-                                        <master-search *ngIf="!viewMode">
-                                        </master-search>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <span class="matlabels">
-                                        Scheme ID
-                                    </span>
-                                    <span style="width: 70%">
-                                        <mat-form-field>
-                                            <input type="text" readonly matInput formControlName="SchemeID" />
-                                        </mat-form-field>
-                                    </span>
-                                </div>
-                            </div> -->
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="row">
-                                    <div class="form-check mt-1">
-                                        <input class="form-check-input" type="checkbox" value
-                                            formControlName="Selection" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Selection
-                                        </label>
-                                        <div class="form-check mt-1"></div>
-                                        <input class="form-check-input" type="checkbox" value formControlName="Range"
-                                            id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Range
-                                        </label>
-                                    </div>
+                            <div class="col-sm-6 col-md-1 col-sm-3">
+                                <div class="row" style="margin-top: -26px; margin-left: 88px;">
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" value formControlName="Range"
+                                        id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Range
+                                    </label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row border-top">
+                <div class="row border-top" style="margin-top: 20px;">
                     <div>
                         <b style="font-weight: bold;">Drag a column header to group by that column</b>.
                     </div>
@@ -316,7 +243,6 @@
                             <dxi-column dataField="Common Amount" caption="Grid Cloumns" alignment="center">
                             </dxi-column>
                         </dx-data-grid>
-
                     </div>
                     <div class="col-lg-4 col-md-12 col-sm-12">
                         <div class="row">
