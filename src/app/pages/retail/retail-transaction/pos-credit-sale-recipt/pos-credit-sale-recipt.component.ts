@@ -10,6 +10,9 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { PosSalesDiaDetailsIGSTComponent } from './pos-sales-dia-details-i-gst/pos-sales-dia-details-i-gst.component';
 import { PosSalesDiaDetailsIGSTIndComponent } from './pos-sales-dia-details-i-gst-ind/pos-sales-dia-details-i-gst-ind.component';
 import { PosSalesDiaUnfixDetailsGSTComponent } from './pos-sales-dia-unfix-details-gst/pos-sales-dia-unfix-details-gst.component';
+import { PosCreditSaleReciptDetailsComponent } from './pos-credit-sale-recipt-details/pos-credit-sale-recipt-details.component';
+import { PullPOSComponent } from './pull-pos/pull-pos.component';
+import { VoucherRedeemComponent } from './voucher-redeem/voucher-redeem.component';
 @Component({
   selector: 'app-pos-credit-sale-recipt',
   templateUrl: './pos-credit-sale-recipt.component.html',
@@ -106,6 +109,36 @@ export class PosCreditSaleReciptComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
   }
+
+  
+  openpossalesdetails() {
+    const modalRef: NgbModalRef = this.modalService.open(PosCreditSaleReciptDetailsComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  openpullpos() {
+    const modalRef: NgbModalRef = this.modalService.open(PullPOSComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
+  
+  openvoucherredeem() {
+    const modalRef: NgbModalRef = this.modalService.open(VoucherRedeemComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+
 
   formSubmit(){
     

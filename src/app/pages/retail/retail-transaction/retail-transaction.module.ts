@@ -67,6 +67,12 @@ import { RepairMetalPurchaseDetailsComponent } from './repair-metal-purchase/rep
 import { RepairDiamondPurchaseDetailComponent } from './repair-diamond-purchase/repair-diamond-purchase-detail/repair-diamond-purchase-detail.component';
 import { PosSalesDiaDetailsIGSTIndComponent } from './pos-credit-sale-recipt/pos-sales-dia-details-i-gst-ind/pos-sales-dia-details-i-gst-ind.component';
 import { PosSalesDiaUnfixDetailsGSTComponent } from './pos-credit-sale-recipt/pos-sales-dia-unfix-details-gst/pos-sales-dia-unfix-details-gst.component';
+import { PosReturnSalesDiaDetailsIGSTComponent } from './pos-return/pos-return-sales-dia-details-i-gst/pos-return-sales-dia-details-i-gst.component';
+import { PosReturnSalesDiaDetailsIGSTIndComponent } from './pos-return/pos-return-sales-dia-details-i-gst-ind/pos-return-sales-dia-details-i-gst-ind.component';
+import { PosReturnSalesDiaUnfixDetailsGSTComponent } from './pos-return/pos-return-sales-dia-unfix-details-gst/pos-return-sales-dia-unfix-details-gst.component';
+import { PosCreditSaleReciptDetailsComponent } from './pos-credit-sale-recipt/pos-credit-sale-recipt-details/pos-credit-sale-recipt-details.component';
+import { PullPOSComponent } from './pos-credit-sale-recipt/pull-pos/pull-pos.component';
+import { VoucherRedeemComponent } from './pos-credit-sale-recipt/voucher-redeem/voucher-redeem.component';
 
 
 @NgModule({
@@ -124,22 +130,28 @@ import { PosSalesDiaUnfixDetailsGSTComponent } from './pos-credit-sale-recipt/po
     RepairIssueFromWorkshopComponent,
     RepairCustomerDeliveryComponent, GoldExchangeDetailsComponent,
     RepairIssueFromWorkshopComponent,
-    RepairCustomerDeliveryComponent,
-    RepairDetailsComponent,
-
-    MetalBranchTransferOutRepairComponent,
-    MetalBranchTransferInAutoRepairComponent,
-    DiamondBranchTransferOutRepairComponent,
-    DiamondBranchTransferInAutoRepairComponent,
-    RepairSaleComponent,
-    DiamondBranchTransferInAutoRepairDetailsComponent,
-    MetalBranchTransferOutRepairDetailComponent,
-    DiamonBranchTransferOutDetailsComponent,
-    PosSalesDiaDetailsIGSTComponent,
+    RepairCustomerDeliveryComponent,     
+    RepairDetailsComponent, 
+    
+    MetalBranchTransferOutRepairComponent, 
+    MetalBranchTransferInAutoRepairComponent, 
+    DiamondBranchTransferOutRepairComponent, 
+    DiamondBranchTransferInAutoRepairComponent, 
+    RepairSaleComponent, 
+    DiamondBranchTransferInAutoRepairDetailsComponent, 
+    MetalBranchTransferOutRepairDetailComponent, 
+    DiamonBranchTransferOutDetailsComponent, 
+    PosSalesDiaDetailsIGSTComponent, 
+    PosSalesDiaDetailsIGSTIndComponent, 
+    PosSalesDiaUnfixDetailsGSTComponent, 
+    PosReturnSalesDiaDetailsIGSTComponent, 
+    PosReturnSalesDiaDetailsIGSTIndComponent, 
+    PosReturnSalesDiaUnfixDetailsGSTComponent,
     RepairMetalPurchaseDetailsComponent,
     RepairDiamondPurchaseDetailComponent,
-    PosSalesDiaUnfixDetailsGSTComponent,
-    PosSalesDiaDetailsIGSTIndComponent
+    PosCreditSaleReciptDetailsComponent,
+    PullPOSComponent,
+    VoucherRedeemComponent
   ],
   imports: [
     CommonModule,
