@@ -91,11 +91,12 @@
                                                         (dateChange)="dateChange($event,'VocDate')"
                                                         [matDatepicker]="VocDates"
                                                         formControlName="VocDate"
-                                                        placeholder="DD/MM/YYYY" />
+                                                        placeholder="DD/MM/YYYY"
+                                                        (dateInput)="addEvent('input', $event)" />
                                                     <mat-datepicker-toggle
                                                         matSuffix
                                                         [for]="VocDates"></mat-datepicker-toggle>
-                                                    <mat-datepicker
+                                                    <mat-datepicker startView="month"
                                                         [disabled]="viewMode"
                                                         #VocDates></mat-datepicker>
                                                     <!-- <mat-error
@@ -307,7 +308,7 @@
                                                 </mat-form-field>
                                                 <mat-form-field
                                                     style="width:40%;margin-left: 4px;">
-                                                    <input type="number"
+                                                    <input type="text"
                                                         readonly
                                                         matInput
                                                         class="text-right"

@@ -10,11 +10,28 @@ import Swal from "sweetalert2";
 import * as convert from "xml-js";
 import { AddReceiptComponent } from "./add-receipt/add-receipt.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
+// Custom date formats
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 @Component({
   selector: "app-scheme-receipt",
   templateUrl: "./scheme-receipt.component.html",
   styleUrls: ["./scheme-receipt.component.scss"],
+  providers: [
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+  ]
 })
 export class SchemeReceiptComponent implements OnInit {
   @Input() content!: any;
@@ -140,8 +157,10 @@ export class SchemeReceiptComponent implements OnInit {
     private commonService: CommonServiceService,
     private renderer: Renderer2,
     private snackBar: MatSnackBar,
-    private activeModal: NgbActiveModal
+    private activeModal: NgbActiveModal,
+    private _adapter: DateAdapter<Date>
   ) {
+    this._adapter.setLocale('en');
     this.deleteRow = this.deleteRow.bind(this);
   }
 
@@ -159,6 +178,13 @@ export class SchemeReceiptComponent implements OnInit {
     if (this.inputElement) {
       this.renderer.selectRootElement(this.inputElement.nativeElement).focus();
     }
+  }
+  chosenDate: any;
+
+  addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
+    this.chosenDate = event.value;
+    console.log(this.chosenDate,'this.chosenDate');
+    
   }
   /**USE: set values for view and edit */
   setInitialValues() {
@@ -193,7 +219,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.PartyCode.setValue(this.content.PARTYCODE);
     this.receiptDetailsForm.controls.PartyAddress.setValue(this.content.PARTY_ADDRESS);
     this.receiptDetailsForm.controls.PartyAmtCode.setValue(this.content.PARTY_CURRENCY);
-    this.receiptDetailsForm.controls.PartyAmount.setValue(this.content.TOTAL_AMOUNTFC);
+    // this.receiptDetailsForm.controls.PartyAmount.setValue(this.content.TOTAL_AMOUNTFC);
     this.receiptDetailsForm.controls.TotalAmount.setValue(this.content.TOTAL_AMOUNTFC);
     this.receiptDetailsForm.controls.TotalTax.setValue(this.content.TDS_TOTALFC);
     this.getDetailsForEdit(this.content.MID)
@@ -1154,6 +1180,8 @@ export class SchemeReceiptComponent implements OnInit {
       let vatTotal = 0
 
       this.orderedItems.forEach((item: any) => {
+        item.Amount_FC = this.commonService.emptyToZero(item.Amount_FC)
+        item.Amount_LC = this.commonService.emptyToZero(item.Amount_LC)
         item.AMOUNT_VAT = ((parseInt(item.Amount_FC) / (100 + item.VAT_AMT)) * 100).toFixed(2)
         item.VAT_AMT = parseInt(item.Amount_FC) - item.AMOUNT_VAT
         vatTotal += item.VAT_AMT;
@@ -1165,9 +1193,14 @@ export class SchemeReceiptComponent implements OnInit {
         this.TOTAL_AMOUNTLC += parseInt(item.Amount_LC);
       });
       this.receiptDetailsForm.controls.TotalTax.setValue(vatTotal.toFixed(2))
-      this.receiptDetailsForm.controls.TotalAmount.setValue(this.totalAmount_FC.toFixed(2))
-      this.receiptDetailsForm.controls.PartyAmount.setValue(
-        (Number(this.receiptDetailsForm.value.CurrRate) * this.totalAmount_FC).toFixed(2))
+      this.receiptDetailsForm.controls.TotalAmount.setValue(
+        this.commonService.commaSeperation(this.totalAmount_FC.toFixed(2))
+      )
+      let PartyAmount = (Number(this.receiptDetailsForm.value.CurrRate) * this.totalAmount_FC).toFixed(2)
+      this.receiptDetailsForm.controls.PartyAmount.setValue( 
+        this.commonService.commaSeperation(PartyAmount))
+        console.log(this.receiptDetailsForm.value.PartyAmount,'party');
+        
       this.receiptDetailsForm.controls.PartyAmtCode.setValue(
         this.receiptDetailsForm.value.CurrCode
       )
@@ -1279,6 +1312,10 @@ export class SchemeReceiptComponent implements OnInit {
         if (result.isConfirmed) {
           this.orderedItems = [];
           this.disableAddBtnGrid = false;
+          this.receiptDetailsForm.controls.PartyAmtCode.setValue('')
+          this.receiptDetailsForm.controls.PartyAmount.setValue('')
+          this.receiptDetailsForm.controls.TotalTax.setValue('')
+          this.receiptDetailsForm.controls.TotalAmount.setValue('')
         }
       })
     }

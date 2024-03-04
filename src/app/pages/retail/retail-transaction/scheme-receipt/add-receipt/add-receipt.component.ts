@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, Subscription } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -132,17 +131,21 @@ export class AddReceiptComponent implements OnInit {
   setFormValues() {
     this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
     this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
+    let InstallmentAmount = this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
     this.receiptEntryForm.controls.InstallmentAmount.setValue(
-      this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+      this.commonService.commaSeperation(InstallmentAmount)
     )
+    let Header_Amount =  this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
     this.receiptEntryForm.controls.Header_Amount.setValue(
-      this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+      this.commonService.commaSeperation(Header_Amount)
     )
+    let Amount_LC = this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
     this.receiptEntryForm.controls.Amount_LC.setValue(
-      this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+      this.commonService.commaSeperation(Amount_LC)
     )
+    let Amount_FC = this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
     this.receiptEntryForm.controls.Amount_FC.setValue(
-      this.commonService.decimalQuantityFormat(this.content.SCH_INST_AMOUNT_FC, 'AMOUNT')
+      this.commonService.commaSeperation(Amount_FC)
     )
     this.setGridData()
     this.receiptEntryForm.controls.SchemeTotalAmount.setValue(this.content.SCHEME_AMOUNT)
@@ -158,7 +161,8 @@ export class AddReceiptComponent implements OnInit {
     this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE || data.CurrCode)
     this.receiptEntryForm.controls.Amount_FC.setValue(data.AMOUNTFC || data.Amount_FC)
     this.receiptEntryForm.controls.Amount_LC.setValue(data.AMOUNTCC || data.Amount_LC)
-    this.receiptEntryForm.controls.Header_Amount.setValue(data.HEADER_AMOUNT || data.Header_Amount)
+    this.receiptEntryForm.controls.Header_Amount.setValue(
+      this.commonService.commaSeperation(data.HEADER_AMOUNT) || data.Header_Amount)
     this.receiptEntryForm.controls.AmountWithTRN.setValue(data.HEADER_AMOUNTWITHVAT || data.AmountWithTRN)
     this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(data.HEADER_AMOUNTWITHVAT || data.HeaderAmountWithTRN)
     this.receiptEntryForm.controls.TRN_Amount_FC.setValue(data.VAT_AMOUNTFC || data.TRN_Amount_FC)
@@ -330,9 +334,6 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
 
-          // this.receiptEntryForm.controls.Header_Amount.setValue(this.content.SCH_INST_AMOUNT_FC)
-          // this.receiptEntryForm.controls.Amount_LC.setValue(this.content.SCH_INST_AMOUNT_FC)
-          // this.receiptEntryForm.controls.Amount_FC.setValue(this.content.SCH_INST_AMOUNT_FC)
 
           let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
 
@@ -372,6 +373,10 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance' + this.receiptEntryForm.value.SchemeBalance)
       return
     }
+    this.receiptEntryForm.controls.Amount_LC.setValue(
+      this.commonService.commaSeperation(this.receiptEntryForm.value.Amount_LC)
+    )
+
     this.receiptEntryForm.controls.Header_Amount.setValue(this.receiptEntryForm.value.Amount_LC)
     this.receiptEntryForm.controls.Amount_FC.setValue(this.receiptEntryForm.value.Amount_LC)
     this.setGridData()
@@ -382,6 +387,9 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance' + this.receiptEntryForm.value.SchemeBalance)
       return
     }
+    this.receiptEntryForm.controls.Amount_FC.setValue(
+      this.commonService.commaSeperation(this.receiptEntryForm.value.Amount_FC)
+    )
     this.receiptEntryForm.controls.Header_Amount.setValue(this.receiptEntryForm.value.Amount_FC)
     this.receiptEntryForm.controls.Amount_LC.setValue(this.receiptEntryForm.value.Amount_FC)
     this.setGridData()
@@ -389,17 +397,19 @@ export class AddReceiptComponent implements OnInit {
   /**calculate amount and split to rows */
   calculateGridAmount() {
     let formData = this.receiptEntryForm.value
-
+    let Amount_LC = this.commonService.emptyToZero(formData.Amount_LC)
+    let Amount_FC = this.commonService.emptyToZero(formData.Amount_FC)
     let payAmountSum: number = 0
     this.gridDataSource.forEach((item: any, index: any) => {
       payAmountSum += parseInt(item.PAY_AMOUNT_FC)
       item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0, 'THREE')
       item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(0, 'THREE')
     })
+    let SchemeBalance =  this.commonService.decimalQuantityFormat((payAmountSum), 'AMOUNT')
     this.receiptEntryForm.controls.SchemeBalance.setValue(
-      this.commonService.decimalQuantityFormat((payAmountSum), 'AMOUNT')
+      this.commonService.commaSeperation(SchemeBalance)
     )
-    if (formData.Amount_LC > payAmountSum || formData.Amount_FC > payAmountSum) {
+    if (Amount_LC > payAmountSum || Amount_FC > payAmountSum) {
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than ' + this.receiptEntryForm.value.SchemeBalance)
       this.receiptEntryForm.controls.Amount_LC.setValue(
         this.commonService.decimalQuantityFormat(0, 'AMOUNT')
@@ -412,23 +422,25 @@ export class AddReceiptComponent implements OnInit {
       )
       return
     }
-    let balanceAmount: number = parseInt(formData.Amount_LC) - parseInt(formData.InstallmentAmount)
-    let totalRowsToUpdate = Math.floor(formData.Amount_LC / formData.InstallmentAmount)
+    let balanceAmount: number = Amount_LC - this.commonService.emptyToZero(formData.InstallmentAmount)
+    let totalRowsToUpdate = Math.floor(Amount_LC / this.commonService.emptyToZero(formData.InstallmentAmount))
     let flag = 0
     this.gridDataSource.forEach((item: any, index: any) => {
       if (balanceAmount <= 0) {
-        this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(formData.Amount_FC, 'THREE')
-        this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(formData.Amount_LC, 'THREE')
+        this.gridDataSource[0].RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(Amount_FC, 'THREE')
+        this.gridDataSource[0].RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(Amount_LC, 'THREE')
         flag = 1
       }
       if (flag == 1) return
       if (totalRowsToUpdate >= index + 1) {
-        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(formData.InstallmentAmount, 'THREE')
-        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(formData.InstallmentAmount, 'THREE')
+        item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat((formData.InstallmentAmount), 'THREE')
+        item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat((formData.InstallmentAmount), 'THREE')
       } else {
-        item.RCVD_AMOUNTFC = parseInt(formData.Amount_FC) - (totalRowsToUpdate * formData.InstallmentAmount)
+        item.RCVD_AMOUNTFC = Amount_FC - (totalRowsToUpdate * 
+          this.commonService.emptyToZero(formData.InstallmentAmount))
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
-        item.RCVD_AMOUNTCC = parseInt(formData.Amount_LC) - (totalRowsToUpdate * formData.InstallmentAmount)
+        item.RCVD_AMOUNTCC = Amount_LC - (totalRowsToUpdate * 
+          this.commonService.emptyToZero(formData.InstallmentAmount))
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
         flag = 1
       }

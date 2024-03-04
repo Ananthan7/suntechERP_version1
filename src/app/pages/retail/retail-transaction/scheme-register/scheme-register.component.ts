@@ -611,6 +611,60 @@ export class SchemeRegisterComponent implements OnInit {
       }
     }
   }
+  setPostData() {
+    let formValue = this.schemeRegistrationForm.value
+    let params = {
+      "MID": this.content ? this.content.MID : 0,
+      "SCH_CUSTOMER_ID": this.content ? this.content.SCH_CUSTOMER_ID : "",
+      "SCH_CUSTOMER_CODE": formValue.Code,
+      "SCH_CUSTOMER_NAME": formValue.Name,
+      "SCH_SCHEME_CODE": formValue.SchemeId,
+      "SCH_METALCURRENCY": "",
+      "SCH_JOIN_DATE": this.commonService.formatDateTime(new Date(formValue.DateOfJoining)),
+      "SCH_SCHEME_PERIOD": this.commonService.emptyToZero(formValue.TenurePeriod),
+      "SCH_FREQUENCY": formValue.Frequency,
+      "SCH_INST_AMOUNT_FC": this.commonService.CCToFC(
+        this.commonService.compCurrency,
+        this.commonService.emptyToZero(formValue.InstallmentAmount)
+      ) || 0,
+      "SCH_INST_AMOUNT_CC": this.commonService.emptyToZero(formValue.InstallmentAmount),
+      "SCH_ASSURED_AMT_FC": this.commonService.CCToFC(
+        this.commonService.compCurrency,
+        this.commonService.emptyToZero(formValue.SumAssured)
+      ) || 0,
+      "SCH_ASSURED_AMT_CC": this.commonService.emptyToZero(formValue.SumAssured),
+      "SCH_EXPIRE_DATE": this.commonService.formatDateTime(new Date(formValue.MaturingDate)),
+      "SCH_REMINDER_DAYS": this.commonService.emptyToZero(formValue.AlertBeforeDays),
+      "SCH_REMINDER_MODE": formValue.Frequency,
+      "SCHEME_BONUS": this.commonService.emptyToZero(formValue.BonusInstallment),
+      "REMARKS": formValue.Remarks,
+      "SCH_UNITS": this.commonService.emptyToZero(formValue.Units),
+      "SCH_CANCEL_AMT": this.commonService.emptyToZero(formValue.CancellationCharge),
+      "SCH_STATUS": formValue.SCH_STATUS,
+      "PAY_DATE": this.commonService.formatDateTime(new Date(formValue.DateOfJoining)),
+      "PAY_BRANCH_CODE": formValue.Branch,
+      "PAY_VOCTYPE": formValue.VOCTYPE,
+      "PAY_VOCNO": 0,
+      "PAY_YEARMONTH": this.commonService.yearSelected,
+      "PAY_AMOUNTFC": this.commonService.emptyToZero(formValue.InstallmentAmount) * this.commonService.emptyToZero(formValue.TenurePeriod),
+      "PAY_AMOUNTCC": this.commonService.emptyToZero(formValue.InstallmentAmount) * this.commonService.emptyToZero(formValue.TenurePeriod),
+      "SCH_ALERT_EMAIL": formValue.Email,
+      "SCH_ALERT_MOBILE": formValue.MobileNo,
+      "SCH_SEND_ALERT": formValue.SendAlert,
+      "PAN_NUMBER": formValue.PanNo,
+      "SCH_PAN_NUMBER": formValue.PanNo,
+      "VOCDATE": formValue.VOCDATE,
+      "SCH_CANCEL": true,
+      "SCH_REDEEM": true,
+      "REDEEM_REFERENCE": "",
+      "SCHEME_BRANCH": formValue.Branch,
+      "SALESPERSON_CODE": formValue.Salesman,
+      "SALESMAN_NAME": formValue.SalesmanName,
+      "Details": this.SchemeMasterDetails || []
+    }
+    this.detailArray = []
+    this.detailArray.push(params)
+  }
   
   /**USE: set form data for saving */
   setFormData() {
@@ -841,60 +895,7 @@ export class SchemeRegisterComponent implements OnInit {
     }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  setPostData() {
-    let formValue = this.schemeRegistrationForm.value
-    let params = {
-      "MID": this.content ? this.content.MID : 0,
-      "SCH_CUSTOMER_ID": this.content ? this.content.SCH_CUSTOMER_ID : "",
-      "SCH_CUSTOMER_CODE": formValue.Code,
-      "SCH_CUSTOMER_NAME": formValue.Name,
-      "SCH_SCHEME_CODE": formValue.SchemeId,
-      "SCH_METALCURRENCY": "",
-      "SCH_JOIN_DATE": this.commonService.formatDateTime(new Date(formValue.DateOfJoining)),
-      "SCH_SCHEME_PERIOD": this.commonService.emptyToZero(formValue.TenurePeriod),
-      "SCH_FREQUENCY": formValue.Frequency,
-      "SCH_INST_AMOUNT_FC": this.commonService.CCToFC(
-        this.commonService.compCurrency,
-        this.commonService.emptyToZero(formValue.InstallmentAmount)
-      ) || 0,
-      "SCH_INST_AMOUNT_CC": this.commonService.emptyToZero(formValue.InstallmentAmount),
-      "SCH_ASSURED_AMT_FC": this.commonService.CCToFC(
-        this.commonService.compCurrency,
-        this.commonService.emptyToZero(formValue.SumAssured)
-      ) || 0,
-      "SCH_ASSURED_AMT_CC": this.commonService.emptyToZero(formValue.SumAssured),
-      "SCH_EXPIRE_DATE": this.commonService.formatDateTime(new Date(formValue.MaturingDate)),
-      "SCH_REMINDER_DAYS": this.commonService.emptyToZero(formValue.AlertBeforeDays),
-      "SCH_REMINDER_MODE": formValue.Frequency,
-      "SCHEME_BONUS": this.commonService.emptyToZero(formValue.BonusInstallment),
-      "REMARKS": formValue.Remarks,
-      "SCH_UNITS": this.commonService.emptyToZero(formValue.Units),
-      "SCH_CANCEL_AMT": this.commonService.emptyToZero(formValue.CancellationCharge),
-      "SCH_STATUS": formValue.SCH_STATUS,
-      "PAY_DATE": this.commonService.formatDateTime(new Date(formValue.DateOfJoining)),
-      "PAY_BRANCH_CODE": formValue.Branch,
-      "PAY_VOCTYPE": formValue.VOCTYPE,
-      "PAY_VOCNO": 0,
-      "PAY_YEARMONTH": this.commonService.yearSelected,
-      "PAY_AMOUNTFC": this.commonService.emptyToZero(formValue.InstallmentAmount * formValue.TenurePeriod),
-      "PAY_AMOUNTCC": this.commonService.emptyToZero(formValue.InstallmentAmount * formValue.TenurePeriod),
-      "SCH_ALERT_EMAIL": formValue.Email,
-      "SCH_ALERT_MOBILE": formValue.MobileNo,
-      "SCH_SEND_ALERT": formValue.SendAlert,
-      "PAN_NUMBER": formValue.PanNo,
-      "SCH_PAN_NUMBER": formValue.PanNo,
-      "VOCDATE": formValue.VOCDATE,
-      "SCH_CANCEL": true,
-      "SCH_REDEEM": true,
-      "REDEEM_REFERENCE": "",
-      "SCHEME_BRANCH": formValue.Branch,
-      "SALESPERSON_CODE": formValue.Salesman,
-      "SALESMAN_NAME": formValue.SalesmanName,
-      "Details": this.SchemeMasterDetails || []
-    }
-    this.detailArray = []
-    this.detailArray.push(params)
-  }
+  
   formatDateMaturingDate(event: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue)

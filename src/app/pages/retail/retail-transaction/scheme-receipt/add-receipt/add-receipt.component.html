@@ -80,26 +80,29 @@
             <div class="col-lg-3 col-md-4 col-sm-12 d-flex">
                 <span class="matlabels">Mode Of Receipt
                 </span>
-                <ng-select [items]="payTypeArray" style="width: 40%;margin-left: 15px;"
+                <ng-select [items]="payTypeArray"
+                    style="width: 40%;margin-left: 15px;"
                     bindLabel="ENGLISH"
                     bindValue="ENGLISH" (change)="paymentTypeChange($event)"
                     formControlName="Type">
-                </ng-select> 
+                </ng-select>
             </div>
             <div class="col-lg-4 col-md-5 col-sm-12 d-flex">
-                <mat-form-field style="width: 30%">
-                    <input type="text" placeholder="Type" matInput
-                        readonly
-                        formControlName="TypeCode">
-                </mat-form-field>
-                <mat-form-field style="width: 40%;margin-left: 5px;">
-                    <input type="text" matInput readonly
-                        formControlName="TypeCodeDESC" />
-                </mat-form-field>
-                <master-search [MasterSearchData]="creditMasterData"
-                    *ngIf="isViewTypeCode"
-                    (newRowClick)="creditCardSelect($event)">
-                </master-search>
+                <ng-container *ngIf="isViewTypeCode">
+                    <mat-form-field style="width: 30%">
+                        <input type="text" placeholder="Type" matInput
+                            readonly
+                            formControlName="TypeCode">
+                    </mat-form-field>
+                    <mat-form-field style="width: 40%;margin-left: 5px;">
+                        <input type="text" matInput readonly
+                            formControlName="TypeCodeDESC" />
+                    </mat-form-field>
+                    <master-search [MasterSearchData]="creditMasterData"
+                        *ngIf="isViewTypeCode"
+                        (newRowClick)="creditCardSelect($event)">
+                    </master-search>
+                </ng-container>
             </div>
             <div class="col-lg-3 col-md-5 col-sm-12 mt-3">
                 <b>Cheque Details</b>
@@ -127,7 +130,8 @@
                     <span class="matlabels">Number
                     </span>
                     <mat-form-field style="width: 55%">
-                        <input type="number" matInput [readonly]="isViewCheckDetail"
+                        <input type="number" matInput
+                            [readonly]="isViewCheckDetail"
                             formControlName="ChequeNumber" />
                     </mat-form-field>
                 </div>
@@ -211,7 +215,8 @@
                     <span class="matlabels">Drawn Bank
                     </span>
                     <mat-form-field style="width: 50%">
-                        <input type="text" matInput [readonly]="isViewCheckDetail"
+                        <input type="text" matInput
+                            [readonly]="isViewCheckDetail"
                             formControlName="DrawnBank" />
                     </mat-form-field>
                 </div>
@@ -240,22 +245,21 @@
                     <span class="matlabels">Dep. Bank
                     </span>
                     <mat-form-field style="width: 50%">
-                        <input type="text" matInput [readonly]="isViewCheckDetail"
+                        <input type="text" matInput
+                            [readonly]="isViewCheckDetail"
                             formControlName="DepBank" />
                     </mat-form-field>
                 </div>
             </div>
         </div>
         <div class="row border-bottom">
-            <div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-12 d-flex">
                 <span class="matlabels">Narration
                 </span>
-                <span style="width: 65%">
-                    <mat-form-field style="margin-left: 4px">
-                        <input type="text" matInput
-                            formControlName="Narration" />
-                    </mat-form-field>
-                </span>
+                <mat-form-field style="width: 95%; margin-left: 4px">
+                    <input type="text" matInput
+                        formControlName="Narration" />
+                </mat-form-field>
             </div>
         </div>
         <div class="row">

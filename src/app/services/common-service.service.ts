@@ -901,8 +901,18 @@ export class CommonServiceService {
     return endDate;
   }
   commaSeperation(data: any) {
-    if (!Number(data))  data
-    return Number(data).toLocaleString('en-US', { style: 'decimal' })
+    // if (!Number(data))  return data
+    let number = ''
+    data = data.toString().replace(/,/g, '');
+    if (data.toString().includes(".")) {
+      let parts = data.split(".");
+      data = parts[0]
+      number = Number(data).toLocaleString('en-US', { style: 'decimal' })
+      number = number+'.'+parts[1]
+    }else{
+      number = Number(data).toLocaleString('en-US', { style: 'decimal' })
+    }
+    return number
   }
   calculateDateDifference(userDateValue: any) {
     const userDate: any = new Date(userDateValue);
