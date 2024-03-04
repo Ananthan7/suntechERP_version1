@@ -1,0 +1,112 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Details </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header (cancelClick)="close()"></modal-header>
+  <div class="col-md-12">
+      <div class="row">
+           <form >
+               <div class="container-fluid pt-3">
+                  <div class="row justify-content-between">
+                      <div class="col-md-8">
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">First Name :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                              <input type="text" matInput />
+                            </mat-form-field>
+                          </div>
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Date Of Birth :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput [matDatepicker]="date" [max]="date" formControlName="date"
+                                    placeholder="DD/MM/YYYY" DateValidation />
+                                <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                                <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
+                            </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Middle Name :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                              <input type="text" matInput  />
+                            </mat-form-field>
+                          </div>
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Wedding Date :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput [matDatepicker]="date1" [max]="date1" formControlName="date1"
+                                    placeholder="DD/MM/YYYY" DateValidation />
+                                <mat-datepicker-toggle matSuffix [for]="date1"></mat-datepicker-toggle>
+                                <mat-datepicker [startAt]="currentDate" #date1></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Last Name :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                              <input type="number" matInput  />
+                            </mat-form-field>
+                          </div>
+                          <label for="inputPassword" class="col-sm-2 col-form-label">ID Exp Date :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput [matDatepicker]="date2" [max]="date2" formControlName="date2"
+                                    placeholder="DD/MM/YYYY" DateValidation />
+                                <mat-datepicker-toggle matSuffix [for]="date2"></mat-datepicker-toggle>
+                                <mat-datepicker [startAt]="currentDate" #date2></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="row mb-3">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Card Type :</label>
+                                    <div class="col-md-3">
+                                        <mat-form-field style="width: 80%;">
+                                            <input type="text" matInput  />
+                                        </mat-form-field>
+                                        <master-search></master-search>
+                                    </div>
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Card Name :</label>
+                                    <div class="col-md-4">
+                                        <mat-form-field style="width: 70%;">
+                                            <input type="text" matInput  />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Card Type :</label>
+                                 <div class="col-md-4">
+                                    <mat-form-field style="width: 100%;">
+                                        <input type="text" matInput  />
+                                    </mat-form-field>
+                                  </div>
+                               
+                                 <div class="col-md-3 offset-3">
+                                    <button type="button" mat-flat-button color="primary">Close</button>
+                                 </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+               </div>
+            </form>
+        </div>
+   </div>
+  
