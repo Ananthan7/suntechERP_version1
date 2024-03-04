@@ -42,8 +42,8 @@ export class AddReceiptComponent implements OnInit {
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 70,
-    SEARCH_FIELD: "ACCODE,ACCOUNT_HEAD,BANK_CODE",
+    LOOKUPID: 152,
+    SEARCH_FIELD: "ACCODE,ACCOUNT_HEAD",
     SEARCH_HEADING: "Account Master",
     SEARCH_VALUE: "",
     WHERECONDITION: "ACCODE<>''",
@@ -213,11 +213,16 @@ export class AddReceiptComponent implements OnInit {
     }
   }
   selectedAcCode(data: any) {
-    this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE)
+    if(data.accode){
+      this.receiptEntryForm.controls.AC_Code.setValue(data.accode)
+      this.receiptEntryForm.controls.AC_Description.setValue(data.account_head)
+      this.getAccountMaster(data.accode)
+      if(data.BANK_CODE) this.receiptEntryForm.controls.DepBank.setValue(data.BANK_CODE)
+    }
     if (data.ACCODE) {
+      this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE)
       this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD)
       this.getAccountMaster(data.ACCODE)
-      if(data.BANK_CODE) this.receiptEntryForm.controls.DepBank.setValue(data.BANK_CODE)
     }
   }
   creditCardSelect(data: any) {
@@ -551,15 +556,17 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.TypeCode.setValue(null);
       this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
       this.accountMasterData.LOAD_ONCLICK = true;
-      this.accountMasterData.SEARCH_FIELD = 'ACCODE,ACCOUNT_HEAD,BANK_CODE';
       this.accountMasterData.PAGENO = 1;
+      this.accountMasterData.SEARCH_FIELD = 'ACCODE,ACCOUNT_HEAD';
       this.accountMasterData.API_VALUE = 'SchemeReceipt/GetCashAccode/'+this.commonService.branchCode
       this.getBranchMasterList()
     } else if (event.ENGLISH == 'Cheque') {
+      this.accountMasterData.LOOKUPID = 70;
       this.isViewCheckDetail = false;
       this.isViewTypeCode = false;
       this.accountMasterData.LOAD_ONCLICK = true;
       this.accountMasterData.PAGENO = 1;
+      this.accountMasterData.SEARCH_FIELD = 'BANK_CODE';
       this.accountMasterData.WHERECONDITION = "ACCOUNT_MODE='B' AND Accode <> ''"
     } else if (event.ENGLISH == 'TT') {
       this.isViewTypeCode = false;
