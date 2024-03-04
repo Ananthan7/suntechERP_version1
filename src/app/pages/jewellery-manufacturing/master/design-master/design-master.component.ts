@@ -32,12 +32,12 @@ export class DesignMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   currentFilter: any; 
-
+  branchCode?: String;
   selectedTabIndex = 0;
 
   columnhead:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
   columnheader:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
-  // columnheader1:any[] = ['Srno','Division','Stone Type', 'Stock Code','Karat','Shape','Color','Ext.Color','Clarity','Ext.Clarity','Sieve Std.','Description','Sieve From'];
+  // columnheader1:any[] = ['SRNO','Division','Stone Type', 'Stock Code','Karat','Shape','Color','Ext.Color','Clarity','Ext.Clarity','Sieve Std.','Description','Sieve From'];
   columnheader2:any[] = ['Comp. Code','Sr no','Division','Stone Type', 'Stock Code','Karat','Int. Color','Ext. Color','Shape','Int. Clarity','Ext. Clarity'];
   columnheader3:any[] = ['',];
   columnheader4:any[] = ['SINO','Size Code','Description','Default'];
@@ -56,11 +56,15 @@ export class DesignMasterComponent implements OnInit {
   column13:any[] = ['SINO','Billing Code','Description'];
   column14:any[] = ['SINO','Finishing Code','Description','Default'];
   column15:any[] = ['Size','Pcs'];
-  columnhead1:any[] = ['Srno','Comp.Code','Description','Pcs', 'Size Set Code','Size Code','Type','Category','Shape','Height','Width','Length','Radius'];
+  columnhead1:any[] = ['SRNO','Comp.Code','Description','Pcs', 'Size Set Code','Size Code','Type','Category','Shape','Height','Width','Length','Radius'];
   columnhead2:any[] = ['DESIGN_C','PART_CODE','PART_DESCRIPTION','METAL_WT', 'LS_PCS','LS_WT','CS_PCS','CS_WT','PL_PCS','PL_WT','OTH_PCS','OTH_WT','TOTAL_PCS'];
  
   seasons: string[] = ['Customer Exclusive', 'Keep on Hold', 'Add Steel'];
   designPartDetails: any[] = [];
+  selectedIndexes: any = [];
+  userbranch = localStorage.getItem('userbranch');
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -76,7 +80,6 @@ export class DesignMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
     this.setAllInitialValues()
   }
 
@@ -113,6 +116,22 @@ export class DesignMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+
+  onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        console.log(acc);
+
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
   }
 
 
@@ -169,8 +188,11 @@ export class DesignMasterComponent implements OnInit {
     subCollection : [''],
     collection : [''],
     parentDesign : [''],
-    select : ['1'],
+    prefixSelect : ['S'],
     noOfSubItems: ['1'],
+    division: [''],
+    stock_Code: [''],
+
 
   });
 
@@ -202,10 +224,11 @@ export class DesignMasterComponent implements OnInit {
   }
 
   adddata() {
+  
     let length = this.tableData.length;
     let srno = length + 1;
     let data =  {
-      "Srno": srno,
+      "SRNO": srno,
       "Division": "",
       "Stone_Type": "",
       "Stock_Code": "",
@@ -222,62 +245,63 @@ export class DesignMasterComponent implements OnInit {
     };
   
     this.tableData.push(data);
+    console.log(this.tableData);
    
 }
 
-// divisiontemp(data:any,value: any){
-//   this.tableData[value.data.Srno - 1].Division = data.target.value;
-// }
-
-stoneTypetemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].StoneType = data.target.value;
+divisiontemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Division = data.target.value;
 }
 
-// stockCodetemp(data:any,value: any){
-//   this.tableData[value.data.Srno - 1].StockCode = data.target.value;
-// }
+stoneTypetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].StoneType = data.target.value;
+}
+
+ stockCodetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].StockCode = data.target.value;
+}
 
 karattemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].Karat = data.target.value;
+  this.tableData[value.data.SRNO - 1].Karat = data.target.value;
 }
 
 shapetemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].Shape = data.target.value;
+  this.tableData[value.data.SRNO - 1].Shape = data.target.value;
 }
 
 colortemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].Color = data.target.value;
+  this.tableData[value.data.SRNO - 1].Color = data.target.value;
 }
 
 extColortemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].ExtColor = data.target.value;
+  this.tableData[value.data.SRNO - 1].ExtColor = data.target.value;
 }
 
 claritytemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].Clarity = data.target.value;
+  this.tableData[value.data.SRNO - 1].Clarity = data.target.value;
 }
 
 extClaritytemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].ExtClarity = data.target.value;
+  this.tableData[value.data.SRNO - 1].ExtClarity = data.target.value;
 }
 
 sieveStdtemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].SieveStd = data.target.value;
+  this.tableData[value.data.SRNO - 1].SieveStd = data.target.value;
 }
 
 descriptiontemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].Description = data.target.value;
+  this.tableData[value.data.SRNO - 1].Description = data.target.value;
 }
 
 sieveFromtemp(data:any,value: any){
-  this.tableData[value.data.Srno - 1].SieveFrom = data.target.value;
+  this.tableData[value.data.SRNO - 1].SieveFrom = data.target.value;
 }
 
 adddatas(){
   let length = this.tableDatas.length;
   let srno = length + 1;
   let datas =  {
-    "Srno": srno,
+    "SRNO": srno,
     "Division": "",
     "StoneType": "",
     "StockCode": "",
@@ -295,51 +319,51 @@ this.tableDatas.push(datas);
 }
 
 compCodetemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].CompCode = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].CompCode = data.target.value;
 }
 
 Descriptiontemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].Description = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].Description = data.target.value;
 }
 
 Pcstemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].Pcs = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].Pcs = data.target.value;
 }
 
 sizeSetCodetemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].SizeSetCode = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].SizeSetCode = data.target.value;
 }
 
 sizeCodetemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].SizeCode = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].SizeCode = data.target.value;
 }
 
 typetemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].Type = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].Type = data.target.value;
 }
 
 categorytemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].Category = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].Category = data.target.value;
 }
 
 Shapetemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].Shape = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].Shape = data.target.value;
 }
 
 heighttemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].Height = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].Height = data.target.value;
 }
 
 widthtemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].Width = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].Width = data.target.value;
 }
 
 lengthtemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].Length = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].Length = data.target.value;
 }
 
 radiustemp(data:any,value: any){
-  this.tableDatas[value.data.Srno - 1].Radius = data.target.value;
+  this.tableDatas[value.data.SRNO - 1].Radius = data.target.value;
 }
 
 
@@ -648,31 +672,13 @@ removedatas(){
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
+    WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   currencyCodeSelected(e:any){
     console.log(e);
     this.designmasterForm.controls.currency.setValue(e.CURRENCY_CODE);
-  }
-
-  designCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 14,
-    SEARCH_FIELD: 'DESIGN_CODE',
-    SEARCH_HEADING: 'Design Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION = ''  + strPrefix + '' AND DESIGN_PREFIX = 1",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  designCodeSelected(e:any){
-    console.log(e);
-    this.designmasterForm.controls.code.setValue(e.DESIGN_CODE);
-    this.designmasterForm.controls.designdesc.setValue(e.DESIGN_DESCRIPTION);
   }
 
   prefixCodeData: MasterSearchModel = {
@@ -689,6 +695,24 @@ removedatas(){
   prefixCodeSelected(e:any){
     console.log(e);
     this.designmasterForm.controls.prefix.setValue(e.PREFIX_CODE);
+  }
+
+  designCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: 'DESIGN_CODE',
+    SEARCH_HEADING: 'Design Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION='" + this.designmasterForm.value.prefixSelect + "' AND DESIGN_PREFIX =1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  designCodeSelected(e:any){
+    console.log(e);
+    this.designmasterForm.controls.code.setValue(e.PREFIX_CODE);
+    this.designmasterForm.controls.designdesc.setValue(e.DESCRIPTION);
   }
   
   parentDesignCodeData: MasterSearchModel = {
@@ -798,11 +822,57 @@ removedatas(){
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  divisionCodeSelected(value:any,data:any){
-    this.tableData[value.data.Srno - 1].Division = data.DIVISION_CODE;
-    // console.log(data);
-    console.log(value);
+  divisionCodeSelected(value:any,data:any, controlName: string){
+    console.log('Data ',data);
+    console.log('values ',value);
+ 
+    this.tableData[data.data.SRNO - 1].Division = value.DIVISION_CODE;
+    console.log(data.data.SRNO)
+}
+  // divisionCodeSelected(value: any, data: any , controlName: string) {
+  //   try {
+  //     console.log('Received value:', value);
+  //     console.log('Received data:', data);
+  
+  //     // Ensure that value.data is defined and has SRNO property
+  //     if (value.data && value.data.SRNO !== undefined && value.data.SRNO !== null) {
+  //       const srnoIndex = value.data.SRNO - 1;
+  
+  //       // Ensure that the index is within the bounds of this.tableData
+  //       if (srnoIndex >= 0 && srnoIndex < this.tableData.length) {
+  //         this.tableData[srnoIndex].Division = data.DIVISION_CODE;
+  //         console.log('Table data after update:', this.tableData);
+  //       } else {
+  //         console.error('Invalid SRNO index:', srnoIndex);
+  //       }
+  //     } else {
+  //       console.error('SRNO is undefined or null in value.data:', value.data);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error in divisionCodeSelected:', error);
+  //   }
+  // }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'STOCK Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
+
+  stockCodeDataSelected(value:any,data:any, controlName: string){
+    console.log(data);
+    console.log(value);
+
+    this.tableData[data.data.SRNO - 1].Stock_Code = value.STOCK_CODE;
+  }
+  
+  
 
   karatCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -820,24 +890,11 @@ removedatas(){
     this.designmasterForm.controls.karat.setValue(e.KARAT_CODE);
   }
 
-  // karatCodeSelected1(value:any,data:any){
-  //   this.tableData[value.data.Srno - 1].Karat = data.KARAT_CODE;
-  // }
+  karatCodeSelected1(value:any,data:any, controlName: string){
+    console.log('Data ',data);
+    console.log('values ',value);
 
-  stockCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'STOCK Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  stockCodeDataSelected(value:any,data:any){
-    this.tableData[value.data.Srno - 1].Stock_Code = data.STOCK_CODE;
+    this.tableData[data.data.SRNO - 1].Karat = value.KARAT_CODE;
   }
   
   
@@ -1323,7 +1380,7 @@ removedatas(){
       "DESIGN_STNMTL_DETAIL": [
         {
           "UNIQUEID": 0,
-          "Srno": 0,
+          "SRNO": 0,
           "METALSTONE": "",
           "DIVCODE": "",
           "KARAT_CODE": "",
@@ -1443,7 +1500,7 @@ removedatas(){
       "METAL_STOCK_MASTER_VENDOR": [
         {
           "UNIQUEID": 0,
-          "Srno": 0,
+          "SRNO": 0,
           "STOCK_CODE": "",
           "ACCODE": "",
           "DEL_DAYS": 0,
@@ -1819,7 +1876,7 @@ removedatas(){
       "DESIGN_STNMTL_DETAIL": [
         {
           "UNIQUEID": 0,
-          "Srno": 0,
+          "SRNO": 0,
           "METALSTONE": "",
           "DIVCODE": "",
           "KARAT_CODE": "",
@@ -1939,7 +1996,7 @@ removedatas(){
       "METAL_STOCK_MASTER_VENDOR": [
         {
           "UNIQUEID": 0,
-          "Srno": 0,
+          "SRNO": 0,
           "STOCK_CODE": "",
           "ACCODE": "",
           "DEL_DAYS": 0,
