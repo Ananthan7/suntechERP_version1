@@ -23,7 +23,7 @@ import { CustomDateFormat1, CustomDateFormat2, CustomDateFormat3 } from './pos-c
 import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
-  import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
+import { PosSalesOrderCancellationComponent } from './pos-sales-order-cancellation/pos-sales-order-cancellation.component';
 import { PcrSelectionComponent } from './advance-return/pcr-selection/pcr-selection.component';
 import { DxDataGridModule } from 'devextreme-angular';
 import { SalesEstimationComponent } from './sales-estimation/sales-estimation.component';
@@ -63,6 +63,8 @@ import { DiamondBranchTransferInAutoRepairDetailsComponent } from './diamond-bra
 import { MetalBranchTransferOutRepairDetailComponent } from './metal-branch-transfer-out-repair/metal-branch-transfer-out-repair-detail/metal-branch-transfer-out-repair-detail.component';
 import { DiamonBranchTransferOutDetailsComponent } from './diamond-branch-transfer-out-repair/diamon-branch-transfer-out-details/diamon-branch-transfer-out-details.component';
 import { PosSalesDiaDetailsIGSTComponent } from './pos-credit-sale-recipt/pos-sales-dia-details-i-gst/pos-sales-dia-details-i-gst.component';
+import { RepairMetalPurchaseDetailsComponent } from './repair-metal-purchase/repair-metal-purchase-details/repair-metal-purchase-details.component';
+import { RepairDiamondPurchaseDetailComponent } from './repair-diamond-purchase/repair-diamond-purchase-detail/repair-diamond-purchase-detail.component';
 import { PosSalesDiaDetailsIGSTIndComponent } from './pos-credit-sale-recipt/pos-sales-dia-details-i-gst-ind/pos-sales-dia-details-i-gst-ind.component';
 import { PosSalesDiaUnfixDetailsGSTComponent } from './pos-credit-sale-recipt/pos-sales-dia-unfix-details-gst/pos-sales-dia-unfix-details-gst.component';
 import { PosReturnSalesDiaDetailsIGSTComponent } from './pos-return/pos-return-sales-dia-details-i-gst/pos-return-sales-dia-details-i-gst.component';
@@ -100,29 +102,29 @@ import { PosReturnSalesDiaUnfixDetailsGSTComponent } from './pos-return/pos-retu
     SchemeReceiptComponent,
     AddReceiptComponent,
     AddSchemeComponent,
-    OrderLockUnlockComponent, 
-    PosSalesmanTargetAnalysisComponent, 
-    BranchTransferRepairOutComponent, 
+    OrderLockUnlockComponent,
+    PosSalesmanTargetAnalysisComponent,
+    BranchTransferRepairOutComponent,
     BranchTransferRepairRtnComponent,
 
-    LoyaltyRegisterComponent, 
-    PosSalesmanCommissionComponent, 
-    GoldExchangeComponent, 
+    LoyaltyRegisterComponent,
+    PosSalesmanCommissionComponent,
+    GoldExchangeComponent,
 
-    
-    PosReturnComponent, 
-    RepairMetalPurchaseComponent, 
-    RepairDiamondPurchaseComponent, 
-    PosCreditSaleReciptComponent, 
 
-    
-    RepairJewelleryReceiptComponent,     
-    RepairIssueToWorkshopComponent, 
-    RepairIssueFromWorkshopComponent, 
-    BranchTransferRepairRtnComponent, 
+    PosReturnComponent,
+    RepairMetalPurchaseComponent,
+    RepairDiamondPurchaseComponent,
+    PosCreditSaleReciptComponent,
+
+
+    RepairJewelleryReceiptComponent,
+    RepairIssueToWorkshopComponent,
+    RepairIssueFromWorkshopComponent,
+    BranchTransferRepairRtnComponent,
     RepairCustomerDeliveryComponent,
     PosSalesPaymentComponent,
-    RepairIssueFromWorkshopComponent,    
+    RepairIssueFromWorkshopComponent,
     RepairCustomerDeliveryComponent, GoldExchangeDetailsComponent,
     RepairIssueFromWorkshopComponent,
     RepairCustomerDeliveryComponent,     
@@ -132,8 +134,18 @@ import { PosReturnSalesDiaUnfixDetailsGSTComponent } from './pos-return/pos-retu
     MetalBranchTransferInAutoRepairComponent, 
     DiamondBranchTransferOutRepairComponent, 
     DiamondBranchTransferInAutoRepairComponent, 
-    RepairSaleComponent, DiamondBranchTransferInAutoRepairDetailsComponent, MetalBranchTransferOutRepairDetailComponent, DiamonBranchTransferOutDetailsComponent, PosSalesDiaDetailsIGSTComponent, PosSalesDiaDetailsIGSTIndComponent, PosSalesDiaUnfixDetailsGSTComponent, PosReturnSalesDiaDetailsIGSTComponent, PosReturnSalesDiaDetailsIGSTIndComponent, PosReturnSalesDiaUnfixDetailsGSTComponent
-    ],
+    RepairSaleComponent, 
+    DiamondBranchTransferInAutoRepairDetailsComponent, 
+    MetalBranchTransferOutRepairDetailComponent, 
+    DiamonBranchTransferOutDetailsComponent, 
+    PosSalesDiaDetailsIGSTComponent, 
+    PosSalesDiaDetailsIGSTIndComponent, 
+    PosSalesDiaUnfixDetailsGSTComponent, 
+    PosReturnSalesDiaDetailsIGSTComponent, 
+    PosReturnSalesDiaDetailsIGSTIndComponent, 
+    PosReturnSalesDiaUnfixDetailsGSTComponent 
+    
+  ],
   imports: [
     CommonModule,
     RetailTransactionRoutingModule,

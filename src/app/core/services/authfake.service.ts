@@ -49,7 +49,7 @@ export class AuthfakeauthenticationService {
         // remove user from local storage to log user out
         localStorage.removeItem('userRole');
         localStorage.removeItem('USER_PARAMETER');
-        localStorage.removeItem('username');
+        // localStorage.removeItem('username');
         localStorage.removeItem('module');
         localStorage.removeItem('submodule');
         this.currentUserSubject.next(null!);
