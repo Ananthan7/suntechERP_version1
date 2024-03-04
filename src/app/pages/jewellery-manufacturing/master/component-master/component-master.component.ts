@@ -128,17 +128,43 @@ export class ComponentMasterComponent implements OnInit {
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'COMPSIZE_CODE',
     SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SIZE MASTER'",
+    WHERECONDITION: "COMPSIZE_CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   sizeCodeSelected(e:any){
     console.log(e);
-    this.componentmasterForm.controls.size.setValue(e.CODE);
+
+    const apiDescription = e.DESCRIPTION;
+
+    // Split the DESCRIPTION string into an array using the ',' delimiter
+    const descriptionArray = apiDescription.split(',');
+    
+    // Assign values to variables
+    let height, width, length, radius;
+    
+
+      height = descriptionArray[0]; 
+      width = descriptionArray[1];  
+      length = descriptionArray[2]; 
+      radius = descriptionArray[3]; 
+    
+    
+    console.log("Height:", height);
+    console.log("Width:", width);
+    console.log("Length:", length);
+    console.log("Radius:", radius);
+
+
+    this.componentmasterForm.controls.size.setValue(e.COMPSIZE_CODE);
+    this.componentmasterForm.controls.height.setValue(height);
+    this.componentmasterForm.controls.length.setValue(width);
+    this.componentmasterForm.controls.width.setValue(length);
+    this.componentmasterForm.controls.radius.setValue(radius);
   }
 
   shapeCodeData: MasterSearchModel = {

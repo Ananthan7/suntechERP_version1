@@ -253,9 +253,31 @@ export class ApprovalMasterComponent implements OnInit {
     console.log(this.selectedIndexes);
   }
 
-  removedata() {
+  // removedata() {
 
+  //   console.log(this.selectedIndexes);
+  //   if (this.selectedIndexes.length > 0) {
+  //     Swal.fire({
+  //       title: 'Are you sure?',
+  //       text: "You won't be able to revert this!",
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: 'Yes, delete!'
+  //     }).then((result) => {
+        
+  //     this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+  //     })
+  //   } else {
+  //     this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+  //   }
+
+  // }
+
+  removedata() {
     console.log(this.selectedIndexes);
+  
     if (this.selectedIndexes.length > 0) {
       Swal.fire({
         title: 'Are you sure?',
@@ -266,14 +288,21 @@ export class ApprovalMasterComponent implements OnInit {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete!'
       }).then((result) => {
-
-      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-      })
+        if (result.isConfirmed) {
+          // Simulate deletion without using an actual API call
+          if (this.tableData.length > 0) {
+            this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+          } else {
+            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+          }
+        }
+      });
     } else {
-      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
     }
-
   }
+
 
   checkFinalApproval(){
     let final = []

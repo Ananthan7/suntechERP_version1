@@ -70,6 +70,9 @@ import { PosSalesDiaUnfixDetailsGSTComponent } from './pos-credit-sale-recipt/po
 import { PosReturnSalesDiaDetailsIGSTComponent } from './pos-return/pos-return-sales-dia-details-i-gst/pos-return-sales-dia-details-i-gst.component';
 import { PosReturnSalesDiaDetailsIGSTIndComponent } from './pos-return/pos-return-sales-dia-details-i-gst-ind/pos-return-sales-dia-details-i-gst-ind.component';
 import { PosReturnSalesDiaUnfixDetailsGSTComponent } from './pos-return/pos-return-sales-dia-unfix-details-gst/pos-return-sales-dia-unfix-details-gst.component';
+import { PosCreditSaleReciptDetailsComponent } from './pos-credit-sale-recipt/pos-credit-sale-recipt-details/pos-credit-sale-recipt-details.component';
+import { PullPOSComponent } from './pos-credit-sale-recipt/pull-pos/pull-pos.component';
+import { VoucherRedeemComponent } from './pos-credit-sale-recipt/voucher-redeem/voucher-redeem.component';
 
 
 @NgModule({
@@ -145,7 +148,10 @@ import { PosReturnSalesDiaUnfixDetailsGSTComponent } from './pos-return/pos-retu
     PosReturnSalesDiaDetailsIGSTIndComponent, 
     PosReturnSalesDiaUnfixDetailsGSTComponent,
     RepairMetalPurchaseDetailsComponent,
-    RepairDiamondPurchaseDetailComponent
+    RepairDiamondPurchaseDetailComponent,
+    PosCreditSaleReciptDetailsComponent,
+    PullPOSComponent,
+    VoucherRedeemComponent
   ],
   imports: [
     CommonModule,

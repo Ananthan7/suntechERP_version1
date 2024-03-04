@@ -26,7 +26,7 @@ export class StonePricingMasterComponent implements OnInit {
   myNumber: any;
   branchCode?: String;
 
- branchCodeCondition = this.branchCode ? `CMBRANCH_CODE = ${this.branchCode}` : '1 <> 1';
+  userbranch = localStorage.getItem('userbranch');
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -156,7 +156,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: this.branchCodeCondition,
+    WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK:true,

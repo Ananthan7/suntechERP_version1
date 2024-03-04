@@ -62,7 +62,7 @@
                                     <input type="text" matInput formControlName="designcode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="designCodeData"
-                                (newRowClick)="designCodeSelected($event)" (onchange)="addTableData()"></master-search>
+                                (newRowClick)="designCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
@@ -451,7 +451,7 @@
                         <dxo-selection
                         [selectAllMode]="allMode"
                         [showCheckBoxesMode]="checkBoxesMode"
-                        mode="multiple"
+                        mode="single"
                       ></dxo-selection>
                           <dxi-column dataField="SINO" caption="SI NO"> </dxi-column>
                           <dxi-column dataField="job_reference" caption="Job Reference " cellTemplate="job_referencetemp"></dxi-column>
