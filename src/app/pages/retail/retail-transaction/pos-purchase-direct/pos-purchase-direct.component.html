@@ -166,7 +166,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="tableData" [height]="250">
+                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="tableData" [height]="250" [showColumnLines]="true" [showRowLines]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true">
                     </dxo-editing>
@@ -176,7 +176,7 @@
                      <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
                     </dxi-column>                   -->
-                  <dxi-column dataField="KARAT_CODE" caption="Karat" [width]="70"></dxi-column>
+                  <dxi-column dataField="KARAT_CODE"  caption="Karat" [width]="70"></dxi-column>
                   <dxi-column dataField="KARAT_RATE" caption="Sale Rate" [width]="100"></dxi-column>
                   <dxi-column dataField="POPKARAT_RATE" caption="Purchase Rate" [width]="100"></dxi-column>
                   
