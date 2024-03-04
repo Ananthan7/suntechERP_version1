@@ -529,6 +529,7 @@ export class AddReceiptComponent implements OnInit {
   }
   //type change
   paymentTypeChange(event: any) {
+    this.accountMasterData.LOOKUPID = 152;
     this.accountMasterData.SEARCH_FIELD = 'ACCODE';
     this.accountMasterData.API_VALUE = ""
     this.accountMasterData.WHERECONDITION = "ACCODE<>''"
