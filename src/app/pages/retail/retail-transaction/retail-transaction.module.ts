@@ -144,7 +144,8 @@ import { PosReturnSalesDiaUnfixDetailsGSTComponent } from './pos-return/pos-retu
     PosReturnSalesDiaDetailsIGSTComponent, 
     PosReturnSalesDiaDetailsIGSTIndComponent, 
     PosReturnSalesDiaUnfixDetailsGSTComponent,
-    RepairMetalPurchaseDetailsComponent
+    RepairMetalPurchaseDetailsComponent,
+    RepairDiamondPurchaseDetailComponent
   ],
   imports: [
     CommonModule,
