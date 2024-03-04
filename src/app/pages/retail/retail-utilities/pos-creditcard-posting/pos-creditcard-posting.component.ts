@@ -86,7 +86,7 @@ export class PosCreditcardPostingComponent implements OnInit {
         <div class="col-md-3">
           <div class="position-relative d-flex">
             <mat-form-field style="width: 70%;">
-              <input type="text" matInput formControlName="voctype" />
+              <input type="text" matInput formControlName="vocdate" />
             </mat-form-field>
           </div>
         </div>
@@ -96,7 +96,7 @@ export class PosCreditcardPostingComponent implements OnInit {
       <div class="col-md-3">
         <div class="position-relative d-flex">
           <mat-form-field style="width: 70%;">
-            <input type="text" matInput formControlName="voctype" />
+            <input type="text" matInput formControlName="vocno" />
           </mat-form-field>
         </div>
       </div>
@@ -106,7 +106,7 @@ export class PosCreditcardPostingComponent implements OnInit {
     <div class="col-md-3">
       <div class="position-relative d-flex">
         <mat-form-field style="width: 70%;">
-          <input type="text" matInput formControlName="voctype" />
+          <input type="text" matInput formControlName="commamount" />
         </mat-form-field>
       </div>
     </div>
@@ -116,7 +116,7 @@ export class PosCreditcardPostingComponent implements OnInit {
   <div class="col-md-3">
     <div class="position-relative d-flex">
       <mat-form-field style="width: 70%;">
-        <input type="text" matInput formControlName="voctype" />
+        <input type="text" matInput formControlName="vatamount" />
       </mat-form-field>
     </div>
   </div>
@@ -126,7 +126,7 @@ export class PosCreditcardPostingComponent implements OnInit {
 <div class="col-md-3">
   <div class="position-relative d-flex">
     <mat-form-field style="width: 70%;">
-      <input type="text" matInput formControlName="voctype" />
+      <input type="text" matInput formControlName="amountposted" />
     </mat-form-field>
   </div>
 </div>
@@ -136,7 +136,7 @@ export class PosCreditcardPostingComponent implements OnInit {
 <div class="col-md-3">
   <div class="position-relative d-flex">
     <mat-form-field style="width: 70%;">
-      <input type="text" matInput formControlName="voctype" />
+      <input type="text" matInput formControlName="noitem" />
     </mat-form-field>
   </div>
 </div>
@@ -146,7 +146,7 @@ export class PosCreditcardPostingComponent implements OnInit {
 <div class="col-md-3">
   <div class="position-relative d-flex">
     <mat-form-field style="width: 70%;">
-      <input type="text" matInput formControlName="voctype" />
+      <input type="text" matInput formControlName="narration" />
     </mat-form-field>
   </div>
 </div>
@@ -158,12 +158,13 @@ export class PosCreditcardPostingComponent implements OnInit {
           cancelButtonText: 'Cancel',
           preConfirm: () => {
             return {
-              invoctype: (<HTMLInputElement>document.getElementById('invoctype')).value,
+              voctype: (<HTMLInputElement>document.getElementById('invoctype')).value,
               vocdate: (<HTMLInputElement>document.getElementById('vocdate')).value,
               vocno: (<HTMLInputElement>document.getElementById('vocno')).value,
-              commAmount: (<HTMLInputElement>document.getElementById('commAmount')).value,
+              commamount: (<HTMLInputElement>document.getElementById('commAmount')).value,
               vatAmount: (<HTMLInputElement>document.getElementById('vatAmount')).value,
-              noItem: (<HTMLInputElement>document.getElementById('noItem')).value,
+              amountposted: (<HTMLInputElement>document.getElementById('noItem')).value,
+              noitem: (<HTMLInputElement>document.getElementById('noItem')).value,
               narration: (<HTMLTextAreaElement>document.getElementById('narration')).value
             };
           }
