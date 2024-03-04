@@ -10,28 +10,11 @@ import Swal from "sweetalert2";
 import * as convert from "xml-js";
 import { AddReceiptComponent } from "./add-receipt/add-receipt.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
-// Custom date formats
-export const MY_DATE_FORMATS = {
-  parse: {
-    dateInput: 'DD/MM/YYYY',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'DD/MM/YYYY',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 @Component({
   selector: "app-scheme-receipt",
   templateUrl: "./scheme-receipt.component.html",
   styleUrls: ["./scheme-receipt.component.scss"],
-  providers: [
-    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
-  ]
 })
 export class SchemeReceiptComponent implements OnInit {
   @Input() content!: any;
@@ -158,9 +141,7 @@ export class SchemeReceiptComponent implements OnInit {
     private renderer: Renderer2,
     private snackBar: MatSnackBar,
     private activeModal: NgbActiveModal,
-    private _adapter: DateAdapter<Date>
   ) {
-    this._adapter.setLocale('en');
     this.deleteRow = this.deleteRow.bind(this);
   }
 
@@ -179,13 +160,6 @@ export class SchemeReceiptComponent implements OnInit {
       this.renderer.selectRootElement(this.inputElement.nativeElement).focus();
     }
   }
-  chosenDate: any;
-
-  addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.chosenDate = event.value;
-    console.log(this.chosenDate,'this.chosenDate');
-    
-  }
   /**USE: set values for view and edit */
   setInitialValues() {
     if (!this.content) {
@@ -200,7 +174,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.Branch.setValue(this.commonService.nullToString(this.content.BRANCH_CODE));
     this.receiptDetailsForm.controls.VocType.setValue(this.commonService.nullToString(this.content.VOCTYPE));
     
-    this.receiptDetailsForm.controls.VocDate.setValue(this.content.VOCDATE);
+    this.receiptDetailsForm.controls.VocDate.setValue(new Date(this.content.VOCDATE));
     this.receiptDetailsForm.controls.PostedDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.RefDate.setValue(this.content.POSTDATE);
     this.receiptDetailsForm.controls.Salesman.setValue(this.content.SALESPERSON_CODE);

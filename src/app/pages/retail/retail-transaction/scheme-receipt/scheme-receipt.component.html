@@ -45,37 +45,6 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-lg-4 col-md-12 col-sm-12">
-                                        <div class="row">
-                                            <span class="matlabels">Due Days
-                                            </span>
-                                            <span style="width: 60%">
-                                                <mat-form-field
-                                                    style="width: 30%">
-                                                    <input type="number"
-                                                        matInput
-                                                        formControlName="DueDays"
-                                                        class="text-right"
-                                                        (focusout)="calculateDueDays()" />
-                                                </mat-form-field>
-                                                <mat-form-field
-                                                    style="width: 50%;margin-left: 4px;">
-                                                    <input matInput
-                                                        DateValidation
-                                                        (dateChange)="dateRefChange($event)"
-                                                        [matDatepicker]="RefDate"
-                                                        formControlName="RefDate"
-                                                        placeholder="DD/MM/YYYY" />
-                                                    <mat-datepicker-toggle
-                                                        matSuffix
-                                                        [for]="RefDate"></mat-datepicker-toggle>
-                                                    <mat-datepicker
-                                                        #RefDate></mat-datepicker>
-                                                </mat-form-field>
-                                            </span>
-                                        </div>
-                                    </div> -->
-
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-12 col-sm-12">
@@ -89,16 +58,14 @@
                                                         DateValidation
                                                         [readonly]="viewMode"
                                                         (dateChange)="dateChange($event,'VocDate')"
-                                                        [matDatepicker]="VocDates"
+                                                        [matDatepicker]="vocDateR"
                                                         formControlName="VocDate"
-                                                        placeholder="DD/MM/YYYY"
-                                                        (dateInput)="addEvent('input', $event)" />
+                                                        placeholder="DD/MM/YYYY" />
                                                     <mat-datepicker-toggle
                                                         matSuffix
-                                                        [for]="VocDates"></mat-datepicker-toggle>
-                                                    <mat-datepicker startView="month"
-                                                        [disabled]="viewMode"
-                                                        #VocDates></mat-datepicker>
+                                                        [for]="vocDateR"></mat-datepicker-toggle>
+                                                    <mat-datepicker
+                                                        #vocDateR></mat-datepicker>
                                                     <!-- <mat-error
                                                             *ngIf="receiptDetailsForm.get('VocDate')?.hasError('invalidDate')">
                                                             Invalid date format
@@ -401,7 +368,8 @@
                                 <span class="matlabels">Narration
                                 </span>
                                 <mat-form-field style="width: 100%">
-                                    <input type="text" matInput [readonly]="viewMode"
+                                    <input type="text" matInput
+                                        [readonly]="viewMode"
                                         formControlName="Narration" />
                                 </mat-form-field>
                             </div>

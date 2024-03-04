@@ -42,8 +42,8 @@ export class AddReceiptComponent implements OnInit {
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 81,
-    SEARCH_FIELD: "ACCODE",
+    LOOKUPID: 70,
+    SEARCH_FIELD: "ACCODE,ACCOUNT_HEAD,BANK_CODE",
     SEARCH_HEADING: "Account Master",
     SEARCH_VALUE: "",
     WHERECONDITION: "ACCODE<>''",
@@ -217,6 +217,7 @@ export class AddReceiptComponent implements OnInit {
     if (data.ACCODE) {
       this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD)
       this.getAccountMaster(data.ACCODE)
+      if(data.BANK_CODE) this.receiptEntryForm.controls.DepBank.setValue(data.BANK_CODE)
     }
   }
   creditCardSelect(data: any) {
@@ -528,6 +529,7 @@ export class AddReceiptComponent implements OnInit {
   }
   //type change
   paymentTypeChange(event: any) {
+    this.accountMasterData.SEARCH_FIELD = 'ACCODE';
     this.accountMasterData.API_VALUE = ""
     this.accountMasterData.WHERECONDITION = "ACCODE<>''"
     this.isViewCheckDetail = true;
@@ -548,6 +550,7 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.TypeCode.setValue(null);
       this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
       this.accountMasterData.LOAD_ONCLICK = true;
+      this.accountMasterData.SEARCH_FIELD = 'ACCODE,ACCOUNT_HEAD,BANK_CODE';
       this.accountMasterData.PAGENO = 1;
       this.accountMasterData.API_VALUE = 'SchemeReceipt/GetCashAccode/'+this.commonService.branchCode
       this.getBranchMasterList()

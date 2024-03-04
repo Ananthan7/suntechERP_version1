@@ -27,15 +27,15 @@
                             <input matInput readonly
                                 DateValidation
                                 name="VocDate"
-                                [matDatepicker]="VocDate"
+                                [matDatepicker]="VocDates"
                                 formControlName="VOCDATE"
                                 placeholder="DD/MM/YYYY"
                                 (dateChange)="formatDate($event)" />
                             <mat-datepicker-toggle
                                 matSuffix
-                                [for]="VocDate"></mat-datepicker-toggle>
+                                [for]="VocDates"></mat-datepicker-toggle>
                             <mat-datepicker disabled="true"
-                                #VocDate></mat-datepicker>
+                                #VocDates></mat-datepicker>
                             <!-- <mat-error
                                         *ngIf="receiptDetailsForm.controls.VocDate.touched 
                                                     && receiptDetailsForm.controls.VocDate.hasError('pattern')">
