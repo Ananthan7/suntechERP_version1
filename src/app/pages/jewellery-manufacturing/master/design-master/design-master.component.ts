@@ -28,12 +28,18 @@ export class DesignMasterComponent implements OnInit {
 
   tableData: any[] = [];
   tableDatas: any[] = [];
+  tableDataCutRange: any[] = [];
+  tableDataCountryRange: any[] = [];
+  tableDataDyeCodeRange: any[] = [];
+
+
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
 
   currentFilter: any; 
   branchCode?: String;
   selectedTabIndex = 0;
+  selectedTabIndex1 = 0;
 
   columnhead:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
   columnheader:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
@@ -2160,10 +2166,48 @@ removedatas(){
   }
 
   adddataAttributes(){
-
+    let length = this.tableDataCutRange.length;
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Width Code": "",
+      "Description": "",
+  }
+  this.tableDataCutRange.push(datas);
   }
 
   removedataAttributes(){
 
   }
+
+  adddataAttributesCountry(){
+    let length = this.tableDataCountryRange.length;
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Country Code": "",
+      "Description": "",
+  }
+  this.tableDataCountryRange.push(datas);
+  }
+
+  removedataAttributesCountry(){
+
+  }
+
+  adddataAttributesDyeCodeRange(){
+    let length = this.tableDataDyeCodeRange.length;
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Dye Code": "",
+      "Description": "",
+  }
+  this.tableDataDyeCodeRange.push(datas);
+  }
+
+  removedataAttributesDyeCodeRange(){
+
+  }
+
 }

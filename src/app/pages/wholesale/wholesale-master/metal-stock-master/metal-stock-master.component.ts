@@ -331,7 +331,7 @@ export class MetalStockMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'HSN',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: " Types= 'HSN MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -343,7 +343,7 @@ export class MetalStockMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'HS Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "Types= 'HS MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
