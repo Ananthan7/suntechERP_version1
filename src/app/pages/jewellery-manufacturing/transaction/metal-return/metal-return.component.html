@@ -128,22 +128,23 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true">
+                        <dx-data-grid id="gridContainer" [dataSource]="metalReturnDetailsData"  [showBorders]="true"  (onRowClick)="onRowClickHandler($event)">
                             <dxo-selection  [selectAllMode]="allMode"
                                         [showCheckBoxesMode]="checkBoxesMode"
                                         mode="multiple"></dxo-selection>
-          
-                            <dxi-column dataField="Job Id" dataType="Job Id"  caption="Job Id"></dxi-column>
-                        <dxi-column dataField="Uniq Job Id"  caption="Uniq job Id"></dxi-column>
-                        <dxi-column dataField="Process" caption="Process"></dxi-column>
-                        <dxi-column dataField="Design" caption="Design"></dxi-column>
-                        <dxi-column dataField="Stock Code" caption="Stock Code"></dxi-column>
-                        <dxi-column dataField="Worker" caption="Worker"></dxi-column>
-                        <dxi-column dataField="Description" caption="Description"></dxi-column>
-                        <dxi-column dataField="Carat" caption="Carat"></dxi-column>
-                        <dxi-column dataField="Rate" caption="Rate"></dxi-column>
-                        <dxi-column dataField="Division" caption="Division"></dxi-column>
-                        <dxi-column dataField="Amount" caption="Amount"></dxi-column>
+
+                        <dxi-column dataField="SRNO"  caption="SRNO"></dxi-column>
+                        <dxi-column dataField="JOB_NUMBER" dataType="Job Id"  caption="Job Id"></dxi-column>
+                        <dxi-column dataField="UNQ_JOB_ID"  caption="Uniq job Id"></dxi-column>
+                        <dxi-column dataField="PROCESS_CODE" caption="Process"></dxi-column>
+                        <dxi-column dataField="DESIGN_CODE" caption="Design"></dxi-column>
+                        <dxi-column dataField="STOCK_CODE" caption="Stock Code"></dxi-column>
+                        <dxi-column dataField="WORKER_CODE" caption="Worker"></dxi-column>
+                        <dxi-column dataField="JOB_DESCRIPTION" caption="Description"></dxi-column>
+                        <dxi-column dataField="KARAT_CODE" caption="Carat"></dxi-column>
+                        <dxi-column dataField="RATE_TYPE" caption="Rate"></dxi-column>
+                        <dxi-column dataField="DIVCODE" caption="Division"></dxi-column>
+                        <dxi-column dataField="TOTAL_AMOUNTFC" caption="Amount"></dxi-column>
 
 
                             <dxo-summary>
@@ -160,6 +161,7 @@
                             </dxi-total-item>
           
                             </dxo-summary>
+                
                           </dx-data-grid>
                     </div>
                     
