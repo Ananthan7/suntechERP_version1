@@ -3156,7 +3156,7 @@ export class AddPosComponent implements OnInit {
               this.customerDetails.LASTNAME
             );
             this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
-              this.customerDetails.TEL2
+              this.customerDetails.MOBILE1
             );
             this.customerDetailForm.controls.fcn_cust_detail_gender.setValue(
               this.customerDetails.GENDER
@@ -3455,7 +3455,7 @@ export class AddPosComponent implements OnInit {
               result.LASTNAME
             );
             this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
-              result.TEL2
+              result.MOBILE1
             );
             this.customerDetailForm.controls.fcn_cust_detail_gender.setValue(
               result.GENDER
@@ -3674,7 +3674,7 @@ export class AddPosComponent implements OnInit {
   async getIdMaster() {
     // const resp = this.comFunc.getMasterByID('ID MASTER');
     const resp = await this.comFunc.idMaster;
-    console.log(this.comFunc.idMaster);
+    console.log('idMaster',this.comFunc.idMaster);
     var data = resp.map((t: any) => t.CODE);
     this.idTypeOptions = data;
     this.idTypeOptionList = resp;
