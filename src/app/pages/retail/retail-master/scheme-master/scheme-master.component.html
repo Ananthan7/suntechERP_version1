@@ -7,7 +7,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<modal-header [disableSaveBtn]="viewMode" [disableDeleteBtn]="viewMode" 
+    (cancelClick)="close()" (saveClick)="formSubmit()"
+    (deleteClick)="deleteSchemeMaster()"></modal-header>
 <!-- content section -->
 
 <div class="container-fluid pt-3">
@@ -15,153 +17,206 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Code*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" (focusout)="getSchemeMasterList($event)" 
+                            <input type="text" [readonly]="viewMode"
+                                oninput="this.value = this.value.toUpperCase()"
+                                (focusout)="getSchemeMasterList()" maxlength="6"
                                 matInput formControlName="code" />
                         </mat-form-field>
                     </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Prefix</label>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
+                        <label class="col-form-label m-2">Prefix</label>
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="prefix" />
+                            <input type="text" matInput [readonly]="viewMode"
+                                (focusout)="prefixCodeValidate()"
+                                formControlName="prefix" />
                         </mat-form-field>
                         <master-search [MasterSearchData]="prefixCodeData"
+                            *ngIf="!viewMode"
                             (newRowClick)="prefixSelected($event)"></master-search>
                     </div>
-                    <label for="inputPassword" class="col-sm-1 col-form-label">Status</label>
-                    <div class="col-md-3">
-                        <mat-checkbox formControlName="Active">Active</mat-checkbox>
+                    <div class="col-md-4">
+                        <label class="col-form-label me-2">Status</label>
+                        <mat-checkbox class="mt-2" [disabled]="viewMode"
+                            formControlName="schemeStatus">Active</mat-checkbox>
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Description</label>
-                    <div class="col-md-10">
-                        <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="description" />
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-md-8">
+                        <mat-form-field style="width: 70%;">
+                            <input [readonly]="viewMode" type="text" matInput
+                                oninput="this.value = this.value.toUpperCase()"
+                                formControlName="description" maxlength="40"/>
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Frequency</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Frequency*</label>
                     <div class="col-md-2">
-                        <mat-form-field  style="width: 100%;">
+                        <ng-select [readonly]="viewMode" [items]="frequencyList"
+                            bindLabel="ENGLISH"
+                            bindValue="ENGLISH"
+                            formControlName="frequency"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
                             <mat-select formControlName="frequency">
-                                <mat-option
-                                *ngFor="let data of frequencyList"
-                                [value]="data.ENGLISH"
-                                >{{ data.ENGLISH }}</mat-option
-                              >
+                                <mat-option *ngFor="let data of frequencyList"
+                                    [value]="data.ENGLISH">{{ data.ENGLISH
+                                    }}</mat-option>
                             </mat-select>
-                          </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Tenure/Period</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Tenure/Period*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="tenurePeriod" />
+                            <input type="text" matInput maxlength="5" 
+                                (keypress)="isNumeric($event)"
+                                class="text-right" [readonly]="viewMode"
+                                formControlName="tenurePeriod" />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Installment Amount</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Installment
+                        Amount*</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" style="text-align: right;"
-                            matInput formControlName="installmentAmount" />
+                            <input type="text" [readonly]="viewMode"
+                                style="text-align: right;" maxlength="15" 
+                                (keypress)="isNumeric($event)" CommaSeparatedNumber
+                                matInput formControlName="installmentAmount" />
                         </mat-form-field>
                     </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Receipt Mode</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <ng-select [items]="receipt1List" [readonly]="viewMode"
+                            bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
+                            formControlName="receiptModeone"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeone">
                                 <mat-option
-                                *ngFor="let data of receipt1List" 
-                                [value]="data.CREDIT_CODE"
-                                >{{ data.CREDIT_CODE }}</mat-option
-                              >
+                                    *ngFor="let data of receipt1List"
+                                    [value]="data.CREDIT_CODE">{{
+                                    data.CREDIT_CODE }}</mat-option>
                             </mat-select>
-                        </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <label for="inputPassword" 
-                    class="col-sm-2 col-form-label">Bonus Installment </label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Bonus Installment
+                    </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
                             <input type="text" style="text-align: right;"
-                            matInput formControlName="bonusInstallment" />
+                                [readonly]="viewMode" maxlength="5" 
+                                (keypress)="isNumeric($event)" CommaSeparatedNumber
+                                matInput formControlName="bonusInstallment" />
                         </mat-form-field>
                     </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Receipt Mode</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
-                            <mat-select formControlName="receiptModeTwo">
+                        <ng-select [items]="receipt2List" [readonly]="viewMode"
+                            bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
+                            formControlName="receiptModeTwo"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
+                           <mat-select formControlName="receiptModeTwo">
                                 <mat-option
-                                *ngFor="let data of receipt2List" 
-                                [value]="data.CREDIT_CODE"
-                                >{{ data.CREDIT_CODE }}</mat-option
-                              >
-                            </mat-select>
-                        </mat-form-field>
+                                    *ngFor="let data of receipt2List"
+                                    [value]="data.CREDIT_CODE">{{
+                                    data.CREDIT_CODE }}</mat-option>
+                            </mat-select> 
+                        </mat-form-field>-->
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Cancel Charges </label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Cancel Charges </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" style="text-align: right;"
-                            matInput formControlName="cancelCharges" />
+                            <input type="text" maxlength="15" 
+                                (keypress)="isNumeric($event)"
+                                style="text-align: right;"
+                                [readonly]="viewMode" CommaSeparatedNumber
+                                matInput formControlName="cancelCharges" />
                         </mat-form-field>
                     </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Receipt Mode</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <ng-select [items]="receipt2List" [readonly]="viewMode"
+                            bindLabel="CREDIT_CODE" bindValue="CREDIT_CODE"
+                            formControlName="receiptModeThree"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
                             <mat-select formControlName="receiptModeThree">
                                 <mat-option
-                                *ngFor="let data of receipt2List" 
-                                [value]="data.CREDIT_CODE"
-                                >{{ data.CREDIT_CODE }}</mat-option
-                              >
+                                    *ngFor="let data of receipt2List"
+                                    [value]="data.CREDIT_CODE">{{
+                                    data.CREDIT_CODE }}</mat-option>
                             </mat-select>
-                        </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Deposit In</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Deposit In</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <ng-select [items]="depositinList" bindLabel="ENGLISH"
+                            bindValue="ENGLISH" [readonly]="viewMode"
+                            formControlName="depositIn"></ng-select>
+                        <!-- <mat-form-field style="width: 100%;">
                             <mat-select formControlName="depositIn">
                                 <mat-option
-                                *ngFor="let data of depositinList"
-                                [value]="data.ENGLISH"
-                                >{{ data.ENGLISH }}</mat-option
-                              >
-                             </mat-select>
-                        </mat-form-field>
+                                    *ngFor="let data of depositinList"
+                                    [value]="data.ENGLISH">{{ data.ENGLISH
+                                    }}</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Start Date</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Start Date</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;">
-                            <input matInput [matDatepicker]="startDate" [max]="startDate" formControlName="startDate"
-                                placeholder="DD/MM/YYYY" DateValidation  (dateChange)="formatDate($event)"/>
-                            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-                            <mat-datepicker #startDate></mat-datepicker>
+                            <input matInput DateValidation
+                                name="startDate"
+                                [readonly]="viewMode"
+                                [matDatepicker]="StartDate"
+                                formControlName="startDate"
+                                placeholder="DD/MM/YYYY"
+                                (dateChange)="formatDate($event)" />
+                            <mat-datepicker-toggle
+                                matSuffix
+                                [for]="StartDate"></mat-datepicker-toggle>
+                            <mat-datepicker [disabled]="viewMode"
+                                #StartDate></mat-datepicker>
                         </mat-form-field>
                     </div>
                     <div class="col-md-2">
-                        <mat-checkbox>Scheme Amt Not Fixed</mat-checkbox>
+                        <mat-checkbox formControlName="SCHEMEFIXEDAMT"
+                            [disabled]="viewMode">
+                            Scheme Amt Not Fixed</mat-checkbox>
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Remarks</label>
+                    <label for="inputPassword"
+                        class="col-sm-2 col-form-label">Remarks</label>
                     <div class="col-md-10">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="remarks" />
+                            <input type="text" matInput [readonly]="viewMode"
+                                formControlName="remarks" maxlength="100" />
                         </mat-form-field>
                     </div>
                 </div>

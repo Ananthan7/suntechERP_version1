@@ -4,3 +4,17 @@
         z-index: 1070 !important;
     }
 }
+
+::ng-deep {
+    .mat-form-field {
+        font-weight: 600 !important;
+    }
+}
+
+.mat-input-element {
+    font-size: 14px !important;
+}
+.selectBankList{
+    border: 0px 2px 0px 0px;
+    border-color: grey;
+}

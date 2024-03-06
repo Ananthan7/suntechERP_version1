@@ -26,10 +26,9 @@ export class RetailGridComponent implements OnInit {
   totalDataCount: number = 10000; // Total number of items hardcoded 10k will reassign on API call
   pageSize: number = 10; // Number of items per page
   pageIndex: number = 1; // Current page index
-
+  yearSelected = localStorage.getItem('CURRENTYEAR');
+  branchCode = this.CommonService.branchCode
   nextCall: any = 0
-  visibleFields = [];
-
   //subscription variable
   subscriptions$: Subscription[] = [];
   constructor(
@@ -41,11 +40,10 @@ export class RetailGridComponent implements OnInit {
     this.viewRowDetails = this.viewRowDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
     this.tableName = this.CommonService.getqueryParamTable()
+    this.getMasterGridData()
   }
 
   ngOnInit(): void {
-    this.vocType = this.CommonService.getqueryParamVocType()
-    this.getGridVisibleSettings();
   }
 
   addButtonClick() {
@@ -75,50 +73,55 @@ export class RetailGridComponent implements OnInit {
 
   // next data call
   nextPage() {
-    if ((this.pageIndex + 1) * this.pageSize < this.totalDataCount) {
+    if (this.pageSize <= this.totalDataCount) {
+      console.log('fored');
+
       this.pageIndex = this.pageIndex + 1;
       this.getMasterGridData();
     }
   }
-  checkVocTypeCondition(value: any) {
-    if (!value) return ''
-    if (this.vocType == 'SCR') return '';
-    if (this.vocType == 'SRC') return '';
-    if (this.vocType == 'MASSCH') return '';
-    return value
-  }
-  checkVocTypeReturnNumber(value: any) {
-    if (!value) return 0
-    if (this.vocType == 'SCR') return 0;
-    if (this.vocType == 'SRC') return 0;
-    if (this.vocType == 'MASSCH') return 0;
-    return value
-  }
   checkVocTypeTable(value: any) {
-    if (!value) return 0
-    if (this.vocType == 'SRC') return 'CURRENCY_RECEIPT ';
+    if (this.vocType == 'SRC') return 'CURRENCY_RECEIPT'; 
     return value
+  }
+  getSchemeMaturedAPI() {
+    let API = 'SchemeMatured/' + this.CommonService.branchCode
+    let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
+      this.skeltonLoading = false;
+      if (resp.schemeMatureds && resp.schemeMatureds[0].length > 0) {
+        this.totalDataCount = resp.schemeMatureds[0].length
+
+        if (this.orderedItems.length > 0) {
+          this.orderedItems = [...this.orderedItems, ...resp.schemeMatureds[0]];
+        } else {
+          this.orderedItems = resp.schemeMatureds[0];
+          if (this.orderedItems.length == 10) this.nextPage()
+        }
+
+        this.orderedItemsHead = Object.keys(this.orderedItems[0]);
+        // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
+        // this.ChangeDetector.detectChanges()
+        // this.orderedItems = this.orderedItems.sort((a, b) => b.MID - a.MID);
+      } else {
+        this.snackBar.open('Data not available!', 'Close', {
+          duration: 3000,
+        });
+      }
+    });
   }
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
-    if (data?.refresh) {
+    if (data) {
       this.pageIndex = 1;
       this.orderedItems = [];
       this.orderedItemsHead = [];
+      this.vocType = data.VOCTYPE || this.CommonService.getqueryParamVocType()
+      this.mainVocType = data.MAIN_VOCTYPE || this.CommonService.getqueryParamMainVocType();
+      this.tableName = data.HEADER_TABLE || this.CommonService.getqueryParamTable()
+    } else {
       this.tableName = this.CommonService.getqueryParamTable()
       this.vocType = this.CommonService.getqueryParamVocType()
-    } else if (data) {
-        this.pageIndex = 1;
-        this.orderedItems = [];
-        this.orderedItemsHead = [];
-        this.vocType = data.VOCTYPE;
-        this.mainVocType = data.MAIN_VOCTYPE;
-        this.tableName = data.HEADER_TABLE;
-      }
-      else {
-        this.tableName = this.CommonService.getqueryParamTable()
-        this.vocType = this.CommonService.getqueryParamVocType()
-      }
+    }
     if (this.orderedItems.length == 0) {
       this.skeltonLoading = true
     } else {
@@ -126,16 +129,22 @@ export class RetailGridComponent implements OnInit {
         duration: 3000,
       });
     }
+    console.log(this.vocType, 'this.vocType');
+
+    if (this.vocType == 'GEN') {
+      this.getSchemeMaturedAPI()
+      return
+    }
     let params
-    if (data?.MENU_SUB_MODULE == 'Transaction' || this.vocType) {
+    // if (this.vocType != 'SCR') {
       params = {
         "PAGENO": this.pageIndex,
-        "RECORDS": this.pageSize,
+        "RECORDS": this.pageSize == 10 ? 10 : this.totalDataCount,
         "TABLE_NAME": this.checkVocTypeTable(this.tableName),
         "CUSTOM_PARAM": {
           "FILTER": {
-            "YEARMONTH": this.checkVocTypeReturnNumber(this.CommonService.yearSelected),
-            "BRANCH_CODE": this.CommonService.branchCode,
+            "YEARMONTH": this.yearSelected,
+            "BRANCH_CODE": this.branchCode,
             "VOCTYPE": this.vocType
           },
           "TRANSACTION": {
@@ -144,24 +153,19 @@ export class RetailGridComponent implements OnInit {
           }
         }
       }
-    } else {
-      params = {
-        "PAGENO": this.pageIndex,
-        "RECORDS": this.pageSize,
-        "TABLE_NAME": this.tableName,
-        "CUSTOM_PARAM": {
-          // "FILTER": {
-          //   "YEARMONTH": localStorage.getItem('YEAR') || '',
-          //   "BRANCH_CODE": this.CommonService.branchCode,
-          //   "VOCTYPE": this.vocType || ""
-          // },
-          "TRANSACTION": {
-            // "VOCTYPE": this.vocType || "",
-            "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
-          }
-        }
-      }
-    }
+    // } 
+    //  else {
+    //   params = {
+    //     "PAGENO": this.pageIndex,
+    //     "RECORDS": this.pageSize,
+    //     "TABLE_NAME": this.tableName,
+    //     "CUSTOM_PARAM": {
+    //       "FILTER": {
+    //         "PAY_BRANCH_CODE": this.branchCode,
+    //       } 
+    //     }
+    //   }
+    // }
 
 
     let sub: Subscription = this.dataService.postDynamicAPI('TransctionMainGrid', params)
@@ -182,77 +186,18 @@ export class RetailGridComponent implements OnInit {
               this.nextPage()
             }
           }
-          // this.orderedItemsHead = Object.keys(this.orderedItems[0]);
 
-          this.orderedItemsHead = Object.keys(this.orderedItems[0])
-            .map((key) => {
-              return { FIELD_NAME: key };
-            });
-
-
-          console.log('=================visibleFields===================');
-          console.log(this.visibleFields, this.orderedItemsHead);
-
-          console.log('====================================');
-          console.log(this.visibleFields.filter((data: any) => data.VISIBLE === true).map((data: any) => data.FIELD_NAME));
-
-
-
-          this.orderedItemsHead = this.visibleFields.filter((data: any) => {
-            if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') {
-              data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
-            }
-
-            if (data.DATA_TYPE == 'datetime') {
-              data.FORMAT = 'dd-MM-yyyy';
-              data.DATATYPE = 'date';
-            }
-
-            const isSpecialField = ['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME);
-            const isVisible = data.VISIBLE == true;
-
-            return isSpecialField || (isVisible && this.orderedItemsHead.some(val => data.FIELD_NAME.toString().toLowerCase() === val.FIELD_NAME.toString().toLowerCase()));
-          });
-
-          // this.orderedItemsHead = this.visibleFields.filter((data: any, i) => {
-
-          //   const headData = this.orderedItemsHead.some((val) => {
-
-          //     // if (val.FIELD_NAME == 'MID') val.VISIBLE = true;
-          //     // if (data.FIELD_NAME == 'VOCNO') data.DATA_TYPE = '';
-          //     // if (data.ALIGNMENT == 'Near') data.ALIGNMENT = 'left';
-          //     // if (data.ALIGNMENT == 'Far') data.ALIGNMENT = 'right';
-          //     // if (data.ALIGNMENT == '') data.ALIGNMENT = 'center';
-
-          //     if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
-          //     if (data.DATA_TYPE == 'datetime') data.FORMAT = 'dd-MM-yyyy';
-
-          //     if (data.DATA_TYPE == 'datetime') data.DATATYPE = 'date';
-          //     // data.DATA_TYPE == 'numeric' ? { type: 'fixedPoint', precision: 2, useGrouping: true } : (data.FIELD_NAME.toString().toLowerCase() == 'vocdate' ? 'dd-MM-yyyy' : auto)"
-
-          //     // if (['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME)) {
-          //     //   console.log('field ', data.FIELD_NAME);
-
-          //     //   return true;
-          //     // }
-          //     // else
-          //       return  ['BRANCH_CODE', 'VOCTYPE', 'VOCNO', 'VOCDATE'].includes(data.FIELD_NAME) || data.FIELD_NAME === val.FIELD_NAME && data.VISIBLE == true
-          //   }
-          //   )
-          //   console.log('headData ', headData);
-
-          //   return headData;
-          // }
-
-
-          // );
-
-          this.orderedItemsHead = this.orderedItemsHead.sort((a, b) => a.DISPLAY_ODER - b.DISPLAY_ODER);
-
-          console.log('==============orderedItemsHead======================');
-          console.log(this.orderedItemsHead);
-          console.log('====================================');
-          // this.orderedItemsHead.unshift(this.orderedItemsHead.pop())
+          if (this.vocType == 'MASSCH') {
+            this.orderedItems = this.changeKeyName(this.orderedItems, 'SCHEME_METALCURRENCY', 'DEPOSIT_IN')
+            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_CURRENCY_CODE')
+            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_METALCURRENCY')
+            this.orderedItems = this.removeKeyValueFromArray(this.orderedItems, 'SCHEME_UNIT')
+          }
+          if (this.vocType == 'SCR') {
+            this.orderedItems = this.changeKeyName(this.orderedItems, 'SCH_METALCURRENCY', 'DEPOSIT_IN')
+          }
+          let headers = Object.keys(this.orderedItems[0]);
+          this.orderedItemsHead = this.filterArrayValues(headers, 'MID')
           // this.ChangeDetector.detectChanges()
         } else {
           this.snackBar.open('Data not available!', 'Close', {
@@ -268,35 +213,28 @@ export class RetailGridComponent implements OnInit {
       });
     this.subscriptions$.push(sub)
   }
-
-
-  getGridVisibleSettings() {
-    let sub: Subscription = this.dataService.getDynamicAPI(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
-      .subscribe((resp: any) => {
-        this.snackBar.dismiss();
-        this.skeltonLoading = false;
-        if (resp != null) {
-          if (resp.status == 'Success') {
-            this.visibleFields = resp.response;
-            this.visibleFields.forEach((item: any, i) => {
-              item.Id = i + 1;
-            });
-            this.getMasterGridData()
-
-          }
-          else {
-            this.visibleFields = [];
-          }
-        } else {
-          this.visibleFields = [];
-        }
-
-      });
-    this.subscriptions$.push(sub)
-
+  removeKeyValueFromArray(arrayOfObjects: any, keyToRemove: any) {
+    return arrayOfObjects.map((obj: any) => {
+      const newObj = { ...obj };
+      delete newObj[keyToRemove];
+      return newObj;
+    });
   }
-
-
+  filterArrayValues(array: any, keyName: any) {
+    return array.filter((item: any) => item != keyName)
+  }
+  changeKeyName(array: any, oldKey: any, newKey: any) {
+    return array.map((obj: any) => {
+      // Create a new object with all properties of the original object
+      const newObj = { ...obj };
+      // If the oldKey exists in the object, delete it and add a new property with the newKey
+      if (newObj.hasOwnProperty(oldKey)) {
+        newObj[newKey] = newObj[oldKey];
+        delete newObj[oldKey];
+      }
+      return newObj;
+    });
+  }
   //unsubscriptions of streams
   ngOnDestroy() {
     this.snackBar.dismiss();

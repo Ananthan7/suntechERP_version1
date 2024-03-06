@@ -28,6 +28,8 @@ export class ModalHeaderComponent implements OnInit {
   @Input() isViewPost: boolean = false;
   @Input() isViewPreview: boolean = false;
   @Input() isViewExport: boolean = false;
+  @Input() disableSaveBtn: boolean = false;
+  @Input() disableDeleteBtn: boolean = false;
   @Input() isSelectAll: boolean = false;
   @Input() isSelectNone: boolean = false;
   @Input() isInvert: boolean = false;
@@ -68,26 +70,26 @@ export class ModalHeaderComponent implements OnInit {
   PostClicked() {
     this.PostClick.emit();
   }
-  ExportClicked(){
+  ExportClicked() {
     this.PostClick.emit();
   }
-  PreviewClicked(){
-    this.PostClick.emit();
-
-  }
-  selectallClicked(){
+  PreviewClicked() {
     this.PostClick.emit();
 
   }
-  selectnoneClicked(){
+  selectallClicked() {
     this.PostClick.emit();
 
   }
-  invertClicked(){
+  selectnoneClicked() {
     this.PostClick.emit();
 
   }
-  lockClicked(){
+  invertClicked() {
+    this.PostClick.emit();
+
+  }
+  lockClicked() {
     this.PostClick.emit();
 
   }

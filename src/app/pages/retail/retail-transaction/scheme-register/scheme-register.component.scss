@@ -1,28 +1,34 @@
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
   .matlabels {
-    font-weight: 700;
+    font-weight: 600;
     font-size: 11px;
+    min-width: 25% !important;
   }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   .matlabels {
-    font-weight: 700;
+    font-weight: 600;
     font-size: 11px;
+    min-width: 25% !important;
   }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
   .matlabels {
-    font-weight: 700;
+    font-weight: 600;
     font-size: 13px;
-    min-width: 25% !important;
+    min-width: 40% !important;
   }
 }
-
+.fileAttach{
+  height: 22px;
+  font-size: 12px; 
+  padding-top:2px !important;
+}
 //styles common
 .favItems {
   color: #3599cc;

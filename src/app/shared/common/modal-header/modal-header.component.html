@@ -9,6 +9,7 @@
                 </button>
                 <ng-template #elseBlock>
                     <button type="button" class="btn btn-primary text-center"
+                        [disabled]="disableSaveBtn"
                         (click)="saveClicked()">
                         Save
                     </button>
@@ -22,6 +23,7 @@
             </div>
             <div class="p-1" *ngIf="isViewDelete">
                 <button type="button" class="btn btn-danger text-center"
+                    [disabled]="disableDeleteBtn"
                     (click)="deleteClicked()">
                     Delete
                 </button>
@@ -74,7 +76,7 @@
                     Export
                 </button>
             </div>
-            <div class="p-1" *ngIf="isSelectAll">
+<div class="p-1" *ngIf="isSelectAll">
                 <button type="button" class="btn btn-danger text-center"
                     (click)="selectallClicked()">
                     Select All

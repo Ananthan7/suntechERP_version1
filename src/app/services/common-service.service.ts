@@ -269,6 +269,7 @@ export class CommonServiceService {
       'STONE': Number(this.allbranchMaster.BSQTYDECIMALS),
       'PURITY': 6,
       'RATE': 6,
+      'THREE': 3,
     };
   }
   /**USE: common fuction to format the Number to limit decimal places from branch master */
@@ -530,7 +531,8 @@ export class CommonServiceService {
   }
 
   emptyToZero(value: any) {
-    value = typeof (value) == 'number' || value == undefined ? value : value.toString().trim();
+    value = value.toString().replace(/,/g, '');
+    value = typeof (value) == 'number' || !value  ? value : value.toString().trim();
     // if (value == null || value.toString() == '' || value == undefined || value == 'NaN') {
     if (value == '' || !value) {
       return 0;
@@ -873,9 +875,44 @@ export class CommonServiceService {
     });
     return dataArray
   }
+  addDaysToDate(startDate: any, daysToAdd: any) {
+    const currentDate = new Date(startDate); // Create a Date object from the given date
+    const futureDate = new Date(currentDate.getTime() + Number(daysToAdd) * 24 * 60 * 60 * 1000); // Add days in milliseconds
+    return futureDate;
+  }
+  addMonthsToDate(startDate: any, numberOfMonths: number) {
+    const endDate = new Date(startDate);
+    const newMonth = startDate.getMonth() + numberOfMonths;
+    
+    // Adjust for cases where adding/subtracting months might affect the year
+    endDate.setMonth(newMonth);
+    // If the new month is greater than 11 (December), we need to adjust the year
+    if (newMonth > 11) {
+      const yearDiff = Math.floor(newMonth / 12);
+      endDate.setFullYear(startDate.getFullYear() + yearDiff);
+      endDate.setMonth(newMonth % 12); // Set the month back to 0-based index
+    }
+
+    return endDate;
+  }
+  addWeeksToDate(startDate: Date, numberOfWeeks: number) {
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + numberOfWeeks * 7);
+    return endDate;
+  }
   commaSeperation(data: any) {
-    if (!Number(data)) return data
-    return Number(data).toLocaleString('en-US', { style: 'decimal' })
+    // if (!Number(data))  return data
+    let number = ''
+    data = data.toString().replace(/,/g, '');
+    if (data.toString().includes(".")) {
+      let parts = data.split(".");
+      data = parts[0]
+      number = Number(data).toLocaleString('en-US', { style: 'decimal' })
+      number = number+'.'+parts[1]
+    }else{
+      number = Number(data).toLocaleString('en-US', { style: 'decimal' })
+    }
+    return number
   }
   calculateDateDifference(userDateValue: any) {
     const userDate: any = new Date(userDateValue);
