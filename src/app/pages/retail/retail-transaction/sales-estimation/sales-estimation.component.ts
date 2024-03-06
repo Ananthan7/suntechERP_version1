@@ -64,7 +64,6 @@ export class SalesEstimationComponent implements OnInit {
 
     selectedTabIndex = 0;
 
-
     private onChangeCallback: (_: any) => void = noop;
 
     viewOnly: boolean = false;
@@ -723,7 +722,7 @@ export class SalesEstimationComponent implements OnInit {
             fcn_cust_detail_occupation: [''],
             fcn_cust_detail_company: [''],
             fcn_cust_detail_state: [''],
-            fcn_cust_type: ['', Validators.required],
+            fcn_cust_type: [''],
             fcn_cust_desg: ['', Validators.required],
             fcn_mob_code: ['', Validators.required],
          
@@ -2872,7 +2871,46 @@ export class SalesEstimationComponent implements OnInit {
                     VOCDATE: this.convertDateWithTimeZero(
                         new Date(this.vocDataForm.value.vocdate).toISOString()
                     ),
-                    // new values - poscustomer
+                    // // new values - poscustomer
+                    // 'OT_TRANSFER_TIME': this.customerDetails?.OT_TRANSFER_TIME || '',
+                    // 'COUNTRY_DESC': this.customerDetails?.COUNTRY_DESC || '',
+                    // 'STATE_DESC': this.customerDetails?.STATE_DESC || '',
+                    // 'CITY_DESC': this.customerDetails?.CITY_DESC || '',
+                    // 'FAVORITE_CELEB_DESC': this.customerDetails?.FAVORITE_CELEB_DESC || '',
+                    // 'RELIGION_DESC': this.customerDetails?.RELIGION_DESC || '',
+                    // 'CATEGORY_DESC': this.customerDetails?.CATEGORY_DESC || '',
+                    // 'CUST_STATUS_DESC': this.customerDetails?.CUST_STATUS_DESC || '',
+                    // 'NATIONALITY_DESC': this.customerDetails?.NATIONALITY_DESC || '',
+                    // 'TYPE_DESC': this.customerDetails?.TYPE_DESC || '',
+
+                    // "BRANCH_CODE": this.strBranchcode || '',
+                    // "DETAILS_JOHARA": this.customerDetails?.DETAILS_JOHARA || '',
+                    // "DETAILS_FARAH": this.customerDetails?.DETAILS_FARAH || '',
+                    // "DETAILS_JAWAHERALSHARQ": this.customerDetails?.DETAILS_JAWAHERALSHARQ || '',
+                    // "FESTIVAL_EID": this.customerDetails?.FESTIVAL_EID || false,
+                    // "FESTIVAL_CHRISTMAS": this.customerDetails?.FESTIVAL_CHRISTMAS || false,
+                    // "FESTIVAL_DIWALI": this.customerDetails?.FESTIVAL_DIWALI || false,
+                    // "FESTIVAL_NATIONALDAY": this.customerDetails?.FESTIVAL_NATIONALDAY || false,
+                    // "FESTIVAL_ONAM": this.customerDetails?.FESTIVAL_ONAM || false,
+                    // "FESTIVAL_PONGAL": this.customerDetails?.FESTIVAL_PONGAL || false,
+                    // "FESTIVAL_NEWYEAR": this.customerDetails?.FESTIVAL_NEWYEAR || false,
+                    // "REASON_OF_PURCHASE": this.customerDetails?.REASON_OF_PURCHASE || '',
+                    // "AGE_GROUP": this.customerDetails?.AGE_GROUP || '',
+                    // "GIFT_PURCHASED_FOR": this.customerDetails?.GIFT_PURCHASED_FOR || '',
+                    // "PURCHASE_OCCASION": this.customerDetails?.PURCHASE_OCCASION || '',
+                    // "NEXT_VISIT": this.customerDetails?.NEXT_VISIT || '',
+                    // "SHOWROOMACCESSIBILITY": this.customerDetails?.SHOWROOMACCESSIBILITY || '',
+                    // "PRODUCTRANGEAVAILABILITY": this.customerDetails?.PRODUCTRANGEAVAILABILITY || '',
+
+                    // "LOOKING_FOR": this.customerDetails?.LOOKING_FOR || '',
+                    // "POSCUSTIDEXP_DATE":  this.customerDetails?.POSCUSTIDEXP_DATE || this.dummyDate,
+
+                    // // new fields added 12-02-2024
+                    // "ATTACHMENT_FROM_SCANNER": this.customerDetails?.ATTACHMENT_FROM_SCANNER ||  false,
+                    // "GOOD_QUALITY_A_K_A": "",
+                    // "LOW_QUALITY_A_K_A": "",
+                    // "POSKNOWNABOUT": 0
+                     // new values - poscustomer
                     'OT_TRANSFER_TIME': this.customerDetails?.OT_TRANSFER_TIME || '',
                     'COUNTRY_DESC': this.customerDetails?.COUNTRY_DESC || '',
                     'STATE_DESC': this.customerDetails?.STATE_DESC || '',
@@ -2883,6 +2921,7 @@ export class SalesEstimationComponent implements OnInit {
                     'CUST_STATUS_DESC': this.customerDetails?.CUST_STATUS_DESC || '',
                     'NATIONALITY_DESC': this.customerDetails?.NATIONALITY_DESC || '',
                     'TYPE_DESC': this.customerDetails?.TYPE_DESC || '',
+
 
                     "BRANCH_CODE": this.strBranchcode || '',
                     "DETAILS_JOHARA": this.customerDetails?.DETAILS_JOHARA || '',
@@ -2905,6 +2944,13 @@ export class SalesEstimationComponent implements OnInit {
 
                     "LOOKING_FOR": this.customerDetails?.LOOKING_FOR || '',
 
+                    "POSCUSTIDEXP_DATE": this.customerDetailForm.value.fcn_customer_exp_date || this.dummyDate,
+
+                    // new fields added 27-12-2023
+                    "ATTACHMENT_FROM_SCANNER": true, // need to discuss
+                    "GOOD_QUALITY_A_K_A": "",
+                    "LOW_QUALITY_A_K_A": "",
+                    "POSKNOWNABOUT": 0
 
                 };
 
@@ -3241,6 +3287,8 @@ export class SalesEstimationComponent implements OnInit {
             }
         }
     }
+
+    
     onCustomerNameFocus(value: any = null) {
         console.log(value);
         let _cust_mobile_no = value == null ? this.customerDataForm.value.fcn_customer_mobile : value;

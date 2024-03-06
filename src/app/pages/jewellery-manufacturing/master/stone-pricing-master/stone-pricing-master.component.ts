@@ -25,8 +25,9 @@ export class StonePricingMasterComponent implements OnInit {
   editPrice: boolean = false;
   myNumber: any;
   branchCode?: String;
-
- branchCodeCondition = this.branchCode ? `CMBRANCH_CODE = ${this.branchCode}` : '1 <> 1';
+  salesRate: any;
+  salesRatePercentage: any;
+  userbranch = localStorage.getItem('userbranch');
 
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -156,7 +157,7 @@ export class StonePricingMasterComponent implements OnInit {
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
-    WHERECONDITION: this.branchCodeCondition,
+    WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK:true,
@@ -282,6 +283,30 @@ export class StonePricingMasterComponent implements OnInit {
 
 
   }
+
+  salesChange() {
+    this.salesRate = this.stonePrizeMasterForm.value.selling_rate;
+    this.salesRatePercentage = this.stonePrizeMasterForm.value.selling;
+
+    if(this.salesRate === '')
+    {
+      this.stonePrizeMasterForm.controls.selling_rate.disable();
+      this.stonePrizeMasterForm.controls.selling.enable();
+      this.stonePrizeMasterForm.controls.selling_rate.setValue('');
+    }
+    else if (this.salesRatePercentage === '')
+    {
+      this.stonePrizeMasterForm.controls.selling.disable();
+      this.stonePrizeMasterForm.controls.selling_rate.enable();
+      this.stonePrizeMasterForm.controls.selling.setValue('');
+
+    }
+    else if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
+      this.toastr.error('Enter values either Selling % or Selling Rate');
+      return;
+    }
+  }
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -297,6 +322,8 @@ export class StonePricingMasterComponent implements OnInit {
       this.toastr.error('Enter values either Selling % or Selling Rate');
       return;
     }
+
+
     else {
 
       let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
@@ -541,23 +568,10 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
-  //   commaSeperation(data: any) {
-  //     console.log(data);
-  //     if (!Number(data)) return data; // Use data directly
-  //     return Number(data).toLocaleString('en-US', { style: 'decimal' });
-  // }
-  commaSeperation(data: any) {
-    this.myNumber = parseFloat(this.myNumber.toString().replace(/,/g, '')).toLocaleString();
-  }
-
-  onInputChange1(event: any): void {
-    const inputValue = event.target.value;
-
-    // Remove non-numeric characters and format with commas
-    const formattedValue = inputValue.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-    // Update the component variable
-    this.myNumber = parseInt(formattedValue.replace(/,/g, ''), 10);
+    commaSeperation(data: any) {
+      console.log(data);
+      if (!Number(data)) return data; // Use data directly
+      return Number(data).toLocaleString('en-US', { style: 'decimal' });
   }
 
   ngOnDestroy() {

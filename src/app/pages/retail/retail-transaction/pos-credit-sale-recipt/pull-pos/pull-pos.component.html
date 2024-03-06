@@ -1,0 +1,63 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Pull POS 2 POS </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header (cancelClick)="close()"></modal-header>
+  <div class="col-md-12">
+      <div class="row">
+           <form >
+               <div class="container-fluid pt-3">
+                  <div class="row justify-content-between">
+                      <div class="col-md-8">
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Branch :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                              <input type="text" matInput />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Fin.Year :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                              <input type="text" matInput  />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Voc Type :</label>
+                          <div class="col-md-4">
+                            <mat-form-field style="width: 100%;">
+                              <input type="number" matInput  />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Voc No :</label>
+                            <div class="col-md-4">
+                              <mat-form-field style="width: 100%;">
+                                <input type="number" matInput  />
+                              </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <div class="col-md-1 offset-3">
+                                <button type="button" mat-flat-button color="primary">Ok</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" mat-flat-button color="primary">Cancel</button>
+                              </div>
+                        </div>
+                      </div>
+                    </div>
+
+                 
+               </div>
+            </form>
+        </div>
+   </div>
+  

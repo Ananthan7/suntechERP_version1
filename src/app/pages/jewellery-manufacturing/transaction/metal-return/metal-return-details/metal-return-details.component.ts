@@ -25,6 +25,8 @@ export class MetalReturnDetailsComponent implements OnInit {
   yearMonth?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  jobNumberDetailData: any[] = [];
+  userName = localStorage.getItem('username');
 
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -121,7 +123,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     metalAmountFc : [''],
     metalAmountLc : [''],
     totalRateFc : [''],
-    purityDiff : ['',[Validators.required]],
+    purityDiff : [''],
     totalRateLc : [''],
     jobPcs: [''],
     jobPcsDate: [''],
@@ -134,11 +136,13 @@ export class MetalReturnDetailsComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private dataService: SuntechAPIService,
+    private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
+    
   }
 
   
@@ -157,6 +161,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.jobDes.setValue(e.job_description);
     this.metalReturnDetailsForm.controls.subJobNo.setValue(e.job_number);
     this.metalReturnDetailsForm.controls.subJobNoDes.setValue(e.job_description);
+    this.jobNumberValidate({ target: { value: e.job_number } })
   }
   ProcessCodeSelected(e:any){
     console.log(e);
@@ -196,8 +201,8 @@ export class MetalReturnDetailsComponent implements OnInit {
           "VOCTYPE": "MIS",
           "VOCDATE": "2023-10-06T09:31:04.626Z",
           "JOB_NUMBER": this.metalReturnDetailsForm.value.jobNumber,
-          "JOB_DATE": this.metalReturnDetailsForm.value.jobDate,
-          "JOB_SO_NUMBER": this.metalReturnDetailsForm.value.subJobNo,
+          "JOB_DATE": "2024-03-05T12:13:39.290Z",
+          "JOB_SO_NUMBER": this.comService.emptyToZero(this.metalReturnDetailsForm.value.subJobNo),
           "UNQ_JOB_ID": "",
           "JOB_DESCRIPTION": this.metalReturnDetailsForm.value.subJobNoDes,
           "BRANCH_CODE": this.branchCode,
@@ -215,16 +220,16 @@ export class MetalReturnDetailsComponent implements OnInit {
           "METAL_RATE": 0,
           "CURRENCY_CODE": "",
           "CURRENCY_RATE": 0,
-          "METAL_GRM_RATEFC": this.metalReturnDetailsForm.value.metalGramRateFc,
-          "METAL_GRM_RATELC": this.metalReturnDetailsForm.value.metalGramRateLc,
-          "METAL_AMOUNTFC": this.metalReturnDetailsForm.value.metalAmountFc,
-          "METAL_AMOUNTLC": this.metalReturnDetailsForm.value.metalAmountLc,
-          "MAKING_RATEFC": this.metalReturnDetailsForm.value.makingRateFc,
-          "MAKING_RATELC": this.metalReturnDetailsForm.value.makingRateLc,
-          "MAKING_AMOUNTFC": this.metalReturnDetailsForm.value.makingAmountFC,
-          "MAKING_AMOUNTLC": this.metalReturnDetailsForm.value.makingAmountFC,
-          "TOTAL_RATEFC": this.metalReturnDetailsForm.value.totalRateFc,
-          "TOTAL_RATELC": this.metalReturnDetailsForm.value.totalRateLc,
+          "METAL_GRM_RATEFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalGramRateFc),
+          "METAL_GRM_RATELC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalGramRateLc),
+          "METAL_AMOUNTFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalAmountFc),
+          "METAL_AMOUNTLC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalAmountLc),
+          "MAKING_RATEFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingRateFc),
+          "MAKING_RATELC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingRateLc),
+          "MAKING_AMOUNTFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingAmountFC),
+          "MAKING_AMOUNTLC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingAmountFC),
+          "TOTAL_RATEFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.totalRateFc),
+          "TOTAL_RATELC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.totalRateLc),
           "TOTAL_AMOUNTFC": 0,
           "TOTAL_AMOUNTLC": 0,
           "PROCESS_CODE": this.metalReturnDetailsForm.value.processCode,
@@ -244,7 +249,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           "DT_VOCTYPE": "JWA",
           "DT_VOCNO": 0,
           "DT_YEARMONTH": this.yearMonth,
-          "PUDIFF": this.metalReturnDetailsForm.value.purityDiff,
+          "PUDIFF": 0,
           "JOB_PURITY": 0
     }
     this.close(postData);
@@ -395,7 +400,88 @@ export class MetalReturnDetailsComponent implements OnInit {
   jobNumberSelected(e:any){
     console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.PREFIX_CODE);
+   
   }
+  subJobNumberValidate(event?: any) {
+    let postData = {
+      "SPID": "040",
+      "parameter": {
+        'strUNQ_JOB_ID': this.metalReturnDetailsForm.value.subJobNo,
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
+      }
+    }
 
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        console.log(postData,'uuu')
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          this.metalReturnDetailsForm.controls.processCode.setValue(data[0].PROCESS)
+          this.metalReturnDetailsForm.controls.workerCode.setValue(data[0].WORKER)
+          this.metalReturnDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
+          this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(data[0].STOCK_DESCRIPTION)
+          this.metalReturnDetailsForm.controls.pureWeight.setValue(data[0].PUREWT)
+          this.metalReturnDetailsForm.controls.pcs.setValue(data[0].PCS)
+          this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(data[0].WORKERDESC)
+          this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
+          this.metalReturnDetailsForm.controls.grossWeight.setValue(data[0].METAL)
+          this.metalReturnDetailsForm.controls.purity.setValue(data[0].PURITY)
+          this.metalReturnDetailsForm.controls.netWeight.setValue(data[0].NETWT)
+          this.metalReturnDetailsForm.controls.stoneWeight.setValue(data[0].STONE)
+          this.metalReturnDetailsForm.controls.location.setValue(data[0].LOCTYPE_CODE)
+          this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
+         
+         
+      
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strJobNumber': this.comService.nullToString(event.target.value),
+        'strCurrenctUser': this.comService.nullToString(this.userName)
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            console.log(data,'pppp')
+            this.jobNumberDetailData = data
+            this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
+            this.metalReturnDetailsForm.controls.subJobNoDes.setValue(data[0].JOB_DESCRIPTION)
+           
+
+            this.subJobNumberValidate()
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
  
 }

@@ -306,7 +306,7 @@ export class MeltingTypeComponent implements OnInit {
         "DIVISION_CODE": this.meltingTypeForm.value.divCode,
         "DEF_ALLOY_STOCK": "",
         "DEF_ALLOY_DESCRIPTION": "",
-        "ALLOY_PER": 100 || "",
+        "ALLOY_PER": "",
       };
       this.tableData.push(data);
       console.log(data);
