@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subscription } from 'rxjs';
@@ -7,7 +7,6 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { NewPosEntryComponent } from './new-pos-entry/new-pos-entry.component';
 import { AddPosComponent } from './add-pos/add-pos.component';
 import { PosCurrencyReceiptComponent } from './pos-currency-receipt/pos-currency-receipt.component';
-import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 import { TouristVatRefundVerificationComponent } from './tourist-vat-refund-verification/tourist-vat-refund-verification.component';
 import { AdvanceReturnComponent } from './advance-return/advance-return.component';
@@ -19,6 +18,7 @@ import { SchemeReceiptComponent } from './scheme-receipt/scheme-receipt.componen
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { map, pairwise, startWith, filter } from 'rxjs/operators';
+import { SchemeMaturedComponent } from './scheme-matured/scheme-matured.component';
 import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
 import { OrderLockUnlockComponent } from './order-lock-unlock/order-lock-unlock.component';
 import { PosSalesmanTargetAnalysisComponent } from './pos-salesman-target-analysis/pos-salesman-target-analysis.component';
@@ -50,7 +50,7 @@ import { MatDialog } from '@angular/material/dialog';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RetailTransactionComponent implements OnInit {
-  @ViewChild(RetailGridComponent) masterGridComponent?: RetailGridComponent;
+  @ViewChild(RetailGridComponent) retailGridComponent?: RetailGridComponent;
   //variables
   menuTitle: string = '';
   tableName: any;
@@ -99,7 +99,7 @@ export class RetailTransactionComponent implements OnInit {
     private snackBar: MatSnackBar,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    public dialog: MatDialog,
+public dialog: MatDialog,
 
 
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
@@ -128,15 +128,6 @@ export class RetailTransactionComponent implements OnInit {
   async editRowDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
-    let posPlanetFile: any = await this.createPlanetPOSFindFile(str);
-    console.log(posPlanetFile);
-
-    if (posPlanetFile.value) {
-    } else {
-      this.snackBar.open(posPlanetFile.data.message, 'OK');
-      return;
-    }
-
     let isAuth = await this.openAuthModal();
     if (isAuth)
       this.openModalView(str)
@@ -177,7 +168,7 @@ export class RetailTransactionComponent implements OnInit {
       'DiamondBranchTransferOutRepairComponent': DiamondBranchTransferOutRepairComponent,
       'DiamondBranchTransferInAutoRepairComponent': DiamondBranchTransferInAutoRepairComponent,
       'RepairSaleComponent': RepairSaleComponent,
-
+      'SchemeMaturedComponent': SchemeMaturedComponent,
 
 
       // Add components and update in operationals > menu updation grid form component name
@@ -187,16 +178,16 @@ export class RetailTransactionComponent implements OnInit {
     } else {
       this.CommonService.showSnackBarMsg('Module Not Created')
     }
-    this.modalRef = this.modalService.open(this.componentSelected, {
+    const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
       size: 'xl',
       backdrop: 'static',
-      keyboard: true,
+      keyboard: false,
       windowClass: 'modal-full-width'
     });
 
-    this.modalRef.componentInstance.content = data;
+    modalRef.componentInstance.content = data;
 
-    this.modalRef.result.then((result) => {
+    modalRef.result.then((result) => {
       if (result === 'reloadMainGrid') {
         this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
       } else if (result == 'OpenModal') {
@@ -210,40 +201,7 @@ export class RetailTransactionComponent implements OnInit {
       }
       // Handle modal dismissal (if needed)
     });
-
-
   }
-
-  @HostListener('document:keydown.escape', ['$event'])
-  handleEscape(event: KeyboardEvent) {
-    if (this.modalRef && this.modalService.hasOpenModals()) {
-
-      // this.openDialog('Warning', 'Are you sure want to remove this record?', false, true);
-      // this.dialogBox.afterClosed().subscribe((data: any) => {
-      //   if (data != 'No') {
-
-      //   }else{
-      //     this.modalRef.close();
-      //   }
-      // });
-
-      const shouldCloseModal = confirm('Are you sure you want to close the modal?');
-      if (shouldCloseModal) {
-        this.modalRef.close();
-      } else {
-        this.modalRef.shown;
-      }
-    }
-  }
-
-  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
-    this.dialogBox = this.dialog.open(DialogboxComponent, {
-      width: '40%',
-      disableClose: true,
-      data: { title, msg, okBtn, swapColor },
-    });
-  }
-
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     if (data) {
@@ -260,8 +218,7 @@ export class RetailTransactionComponent implements OnInit {
       }
       this.PERMISSIONS = data.PERMISSION;
     }
-
-    this.masterGridComponent?.getMasterGridData(data)
+    this.retailGridComponent?.getMasterGridData(data)
   }
 
 
@@ -275,7 +232,7 @@ export class RetailTransactionComponent implements OnInit {
         {
           size: "lg",
           backdrop: true,
-          keyboard: true,
+          keyboard: false,
           windowClass: "modal-full-width",
         }
       );

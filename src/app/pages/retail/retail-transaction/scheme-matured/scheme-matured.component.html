@@ -1,0 +1,72 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Scheme Matured</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- content section -->
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="card p-3">
+            <div class="row">
+                    <dx-data-grid id="gridContainer"
+                    [dataSource]="SchemeMasterDetails"
+                    [showRowLines]="true"
+                    height="auto" [columnAutoWidth]="true"
+                    [showBorders]="true"
+                    [allowColumnResizing]="true">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-selection mode="single"></dxo-selection>
+                    <dxi-column dataField="SRNO" caption="Sr No"
+                        alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="PAY_DATE" caption="Pay Date"
+                        alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="PAY_AMOUNT_CC"
+                        caption="Pay Amout" [allowEditing]="true"
+                        alignment="right">
+                    </dxi-column>
+                    <dxi-column dataField="PAY_STATUS"
+                        cellTemplate="PayStatus" caption="Pay Status"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="REMAINDER_DATE"
+                        caption="Reminder Date" 
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="REMAINDER_SEND"
+                        caption="Reminder Send"
+                        cellTemplate="ReminderSend"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="RCVD_DATE" caption="Receipt Date"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="RCVD_BRANCH_CODE"
+                        caption="Receipt Branch"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="RCVD_VOCTYPE"
+                        caption="Receipt Voctype"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="RCVD_VOCNO" caption="Receipt No"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="RCVD_AMOUNTCC" caption="Receipt Amount"
+                        [allowEditing]="true" alignment="center">
+                    </dxi-column>
+                    <div *dxTemplate="let data of 'PayStatus'">
+                        <mat-checkbox ></mat-checkbox>
+                    </div> 
+                    <div *dxTemplate="let data of 'ReminderSend'">
+                        <mat-checkbox ></mat-checkbox>
+                    </div> 
+                </dx-data-grid>
+            </div>
+        </div>
+    </div>
+
+</div>
