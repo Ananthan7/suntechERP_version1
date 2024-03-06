@@ -25,7 +25,7 @@ export class DesignMasterComponent implements OnInit {
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
   strPrefix: string = "";
-
+  images: string[] = [];
   tableData: any[] = [];
   tableDatas: any[] = [];
   tableDataCutRange: any[] = [];
@@ -904,33 +904,49 @@ removedatas(){
   }
   
   
-  onFileChangedimage(event:any) {
-    this.imageurl = event.target.files[0]
-    console.log(this.imageurl)
-    let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
+  // onFileChangedimage(event:any) {
+  //   this.imageurl = event.target.files[0]
+  //   console.log(this.imageurl)
+  //   let reader = new FileReader();
+  //   if(event.target.files && event.target.files.length > 0) {
+  //     let file = event.target.files[0];
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       this.image = reader.result; 
+  //     };
+  //   }
+  // }
+
+  // onFileChanged(event:any) {
+  //   this.url = event.target.files[0].name
+  //   console.log(this.url)
+  //   let reader = new FileReader();
+  //   if(event.target.files && event.target.files.length > 0) {
+  //     let file = event.target.files[0];
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       this.urls = reader.result; 
+  //     };
+  //   }
+  // }
+
+
+
+onFileChangedimage(event: any) {
+  if (event.target.files && event.target.files.length > 0) {
+
+    for (let i = 0; i < event.target.files.length; i++) {
+  let reader = new FileReader();
+
+      let file = event.target.files[i];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.image = reader.result; 
+        this.images.push(reader.result as string);
       };
     }
   }
 
-  onFileChanged(event:any) {
-    this.url = event.target.files[0].name
-    console.log(this.url)
-    let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.urls = reader.result; 
-      };
-    }
-  }
-
-
+}
   setFormValues() {
     if(!this.content) return
     console.log(this.content);

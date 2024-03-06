@@ -26,7 +26,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-3 col-form-label">Design * :</label>
                     <div class="col-md-3">
@@ -402,13 +402,12 @@
                       </div>
 
 
-
                     </mat-tab>
                   </mat-tab-group>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                   <div class="row">
-                    <div class="col-md-7">
+                    <!-- <div class="col-md-7">
                       <div class="upload-btn-wrapper">
                         <button class="btn btnnew border-dark">
                           <img src={{image}} style="width:126px;height:124px">
@@ -417,44 +416,104 @@
                         <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
                           (change)="onFileChangedimage($event)">
                       </div>
-                    </div>
-
-                    <!-- <div class="col-md-7">
-                          <div class="icons">
-                              <div class="image_box"></div>
-                              <div class="icons_footer">
-                                <i class="fas fa-backward-fast icon-common"></i>
-                                <i class="fas fa-caret-left icon-common"></i>
-                                <span>0/10</span>
-                                <i class="fas fa-caret-right icon-common"></i>
-                                <i class="fas fa-forward-fast icon-common"></i>
-                                <i class="fas fa-xmark icon-common text-danger"></i>
-                                <i class="fas fa-plus icon-common"></i>
+                    </div> -->
+                    <div class="row mt-4">
+                      <!-- <div class="col-md-7">
+                        <div class="container">
+                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="
+                          margin-left: 26px;">
+                            <div class="carousel-inner">
+                              <div class="carousel-item active">
+                                <div class="upload-btn-wrapper">
+                                  <button class="btn btnnew border-dark">
+                                    <img src={{image}} style="width:126px;height:124px">
+                                  </button>
+                                  <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                                    (change)="onFileChangedimage($event)">
+                                </div>
                               </div>
                             </div>
+                            <button class="carousel-control-prev" type="button"
+                              data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                              data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>  -->
+
+                      <div class="col-md-7">
+                        <div class="container">
+                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="margin-left: 26px;">
+                            <div class="carousel-inner">
+                              <div class="carousel-item active" *ngFor="let img of images; let i = index" [class.active]="i === 0">
+                                <div class="upload-btn-wrapper">
+                                  <button class="btn btnnew border-dark">
+                                    <img src={{img}} style="width:126px;height:124px">
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple>
+                        </div>
+                      </div>
+                      
+                      
+                      
+
+                      <!-- <div class="row mt-3">
+                        <div class="col-md-7">
+                          <div class="upload-btn-wrapper">
+                            <button class="btn btnnew border-dark">
+                              <img src={{image}} style="width:126px;height:124px">
+                            </button>
+                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)">
+                          </div>
+                        </div>
                       </div> -->
-                    <div class="col-md-5">
-                      <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 25px;
+
+
+
+                      <div class="col-md-5">
+                        <div class="p-1 bd-highlight">
+                          <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 25px;
                         padding-right: 25px;" (click)="openaddDesignSequence()">
-                          Sequence
-                        </button>
-                      </div>
-                      <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
-                          (click)="openaddLabourChargesDetails()">
-                          Labour Charges
-                        </button>
-                      </div>
-                      <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 21px;
+                            Sequence
+                          </button>
+                        </div>
+                        <div class="p-1 bd-highlight">
+                          <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
+                            (click)="openaddLabourChargesDetails()">
+                            Labour Charges
+                          </button>
+                        </div>
+                        <div class="p-1 bd-highlight">
+                          <button type="button" class="btn btn-outline-primary metal-issue-del-btn" style="padding-left: 21px;
                         padding-right: 21px;" (click)="openaddDesignTransaction()">
-                          Transaction
-                        </button>
+                            Transaction
+                          </button>
+                        </div>
                       </div>
                     </div>
-
                   </div>
+
+
+
+
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-6 col-form-label">Engraving Text:</label>
                     <div class="col-md-6">
@@ -861,7 +920,7 @@
                   <mat-tab label="Dye Strip Range">
                     <div class="col-md-12 pt-2">
                       <dx-data-grid id="gridContainer" [dataSource]="tableDataDyeCodeRange" [showBorders]="true"
-                      [showColumnLines]="true" [showRowLines]="true" keyExpr="SINO" class="mt-3">
+                        [showColumnLines]="true" [showRowLines]="true" keyExpr="SINO" class="mt-3">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>

@@ -27,6 +27,8 @@ export class StonePricingMasterComponent implements OnInit {
   branchCode?: String;
   salesRate: any;
   salesRatePercentage: any;
+  deal: any;
+  displayDeal: string = '';
   userbranch = localStorage.getItem('userbranch');
 
   priceCodeData: MasterSearchModel = {
@@ -306,6 +308,14 @@ export class StonePricingMasterComponent implements OnInit {
       return;
     }
   }
+
+
+
+  keyupvalue(e: any) {
+    console.log(e);
+    this.displayDeal = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
