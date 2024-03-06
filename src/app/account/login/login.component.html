@@ -1,321 +1,76 @@
 <div class="auth-wrapper-bg">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <!-- left section starts -->
             <div
-                class="col-md-6 col-sm-10 d-flex justify-content-end flex-column bg_1">
-                <!-- <h1 class="text-white">SUN FACETS 2.0</h1>
+                class="col-md-7 col-sm-10 d-flex justify-content-center flex-column">
+                <h1 class="text-white">SUN FACETS 2.0</h1>
                 <span class="description text-white">Presenting
                     efficient ERP software for Jewellery business providing integrated
-                    automation solutions catering to the Jewellery Industry.</span> -->
-                <div>
-                    <div class="overlay overlay_1">
-                        <div class="slideshow-container">
-                            <div class="mySlides">
-                                <div class="text-head">
-                                    <div class="text-body">
-                                        <h5 class="text-white mb-0">Welcome to
-                                            Jewellery ERP Software - Your
-                                            All-in-One Solution for Jewellery
-                                            Business Management.</h5>
-                                    </div>
-
-                                    <div class="text-card">
-                                        <div>
-                                            <p>
-                                                Industry-Specific Functionality:
-                                                SUNFACET is uniquely tailored to
-                                                the needs of the Jewellery
-                                                industry, offering specialized
-                                                features for this niche market.
-                                                By understanding the nuances of
-                                                the jewellery business, our
-                                                software provides comprehensive
-                                                solutions that meet the specific
-                                                needs of manufacturers,
-                                                wholesalers, and retailers.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mySlides">
-                                <div class="text-head">
-                                    <div class="text-body">
-                                        <h5 class="text-white mb-0">Welcome to
-                                            Jewellery ERP Software - Your
-                                            All-in-One Solution for Jewellery
-                                            Business Management.</h5>
-                                    </div>
-
-                                    <div class="text-card">
-                                        <div>
-                                            <p>
-                                                Integrated Business Management:
-                                                Unlike generic ERP solutions,
-                                                SUNFACET offers seamless
-                                                integration of all business
-                                                functions, including inventory
-                                                management, sales, CRM, and
-                                                financials, within a single
-                                                platform. This integration
-                                                enables users to streamline
-                                                processes, eliminate data silos,
-                                                and gain real-time insights into
-                                                their operations. From tracking
-                                                the lifecycle of jewellery
-                                                pieces to managing customer
-                                                relationships and analyzing
-                                                sales performance, our software
-                                                provides a holistic view of the
-                                                business, empowering users to
-                                                make informed decisions and
-                                                drive growth.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mySlides">
-                                <div class="text-head">
-                                    <div class="text-body">
-                                        <h5 class="text-white mb-0">Welcome to
-                                            Jewellery ERP Software - Your
-                                            All-in-One Solution for Jewellery
-                                            Business Management.</h5>
-                                    </div>
-
-                                    <div class="text-card">
-                                        <div>
-                                            <p>
-                                                Scalability and Customization:
-                                                Whether you're a small boutique
-                                                or a large-scale jewellery
-                                                manufacturer, SUNFACET is
-                                                designed to scale with your
-                                                business. Our flexible
-                                                architecture allows for easy
-                                                customization to accommodate
-                                                unique business requirements and
-                                                evolving industry trends.
-                                                Whether you need to add new
-                                                features, integrate third-party
-                                                applications, or expand into new
-                                                markets, our software provides
-                                                the flexibility and scalability
-                                                to support your growth
-                                                trajectory without compromising
-                                                performance or reliability
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- <button (click)="plusSlides(-1)">Previous</button>
-                            <button (click)="plusSlides(1)">Next</button> -->
-
-                        </div>
-                        <br>
-
-                        <div class="indicator"
-                            style="text-align:center;margin-top: 100px;">
-                            <span class="dot active"
-                                (click)="currentSlide(1)"></span>
-                            <span class="dot active"
-                                (click)="currentSlide(2)"></span>
-                            <span class="dot active"
-                                (click)="currentSlide(3)"></span>
-                        </div>
-
-                    </div>
-
-                </div>
+                    automation solutions catering to the Jewellery Industry.</span>
             </div>
-
             <!-- right section / form section starts -->
-            <div class="col-md-6 auth-side-form p-5">
+            <div class="col-md-5 auth-side-form p-5">
                 <div class="auth-content">
                     <div class="d-flex justify-content-center">
                         <img src="assets/images/logo/logo-suntech.png" w alt
-                            class="img-fluid mb-2 d-block">
+                            class="img-fluid mb-4 d-block">
                     </div>
-                    <span style="font-size: 24px;font-weight: 600;">Login</span>
+                        <span style="font-size: 24px;font-weight: 600;"
+                            class="mb-4">Sign In</span>
+
+
                     <form class="example-form" [formGroup]='dataForm'
                         autocomplete="off">
-                        <div class="row justify-content-center">
-                            <div class="col-md-8">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Username</mat-label>
+                            <input matInput placeholder="Username" value
+                                (keyup)="changeTextUpperCase($event)"
+                                (focusout)="checkUserName($event)">
+                        </mat-form-field>
 
-                                <div class>
-                                    <label for="input"
-                                        class=" col-form-label">Username</label>
-                                    <!-- <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input matInput  value
-                                            (keyup)="changeTextUpperCase($event)"
-                                            (focusout)="checkUserName($event)">
-                                    </mat-form-field> -->
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <!-- <mat-label>Outline form field</mat-label> -->
-                                        <!-- <input matInput placeholder="Placeholder"> -->
-                                        <input matInput id="username" value
-                                            (keyup)="changeTextUpperCase($event)"
-                                            (focusout)="checkUserName($event)"
-                                            formControlName="username">
-                                        <!-- <mat-icon matPrefix class="srchicon">search</mat-icon> -->
-                                        <mat-icon matPrefix
-                                            class="person icon_1">person</mat-icon>
-                                    </mat-form-field>
-                                </div>
-                                <div class>
-                                    <label for="input"
-                                        class=" col-form-label">Password</label>
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input id="password" type="password"
-                                            matInput value
-                                            (focusout)="checkUserNamePassword($event)"
-                                            formControlName="password">
-                                        <mat-icon matPrefix
-                                            class="lock icon_1">lock</mat-icon>
-                                    </mat-form-field>
-
-                                </div>
-                                <div class>
-                                    <label for="input"
-                                        class=" col-form-label">Branch</label>
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input id="branch" type="text"
-                                            autocomplete="new-password" matInput
-                                            formControlName="branch"
-                                            [matAutocomplete]="branch"
-                                            (keyup)="changeBranchText($event)"
-                                            (focusout)="changeBranch($event)">
-                                        <mat-autocomplete
-                                            #branch="matAutocomplete"
-                                            autoActiveFirstOption>
-                                            <mat-option
-                                                *ngFor="let option of  filteredOptions | async"
-                                                [value]="option">
-                                                {{option}}
-                                            </mat-option>
-                                        </mat-autocomplete>
-                                        <mat-icon matPrefix
-                                            class="webhook icon_1">webhook</mat-icon>
-                                    </mat-form-field>
-                                </div>
-                                <div class>
-                                    <label for="input"
-                                        class=" col-form-label">Year</label>
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input id="year" matInput type="text"
-                                            formControlName="year"
-                                            [matAutocomplete]="year"
-                                            (focusout)="validateYear($event)">
-                                        <mat-autocomplete
-                                            #year="matAutocomplete"
-                                            autoActiveFirstOption>
-                                            <mat-option
-                                                *ngFor="let option of  filteredOptions_year | async"
-                                                [value]="option">
-                                                {{option}}
-                                            </mat-option>
-                                        </mat-autocomplete>
-                                        <mat-icon matPrefix
-                                            class="date_range icon_1">date_range</mat-icon>
-                                    </mat-form-field>
-                                </div>
-                                <div class="my-2">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input"
-                                            formControlName="keepLog"
-                                            (change)="changeKeepLog($event)"
-                                            type="checkbox"
-                                            id="flexSwitchCheckDefault">
-                                        <label class="form-check-label l_1"
-                                            for="flexSwitchCheckDefault">Keep me
-                                            logged in</label>
-                                    </div>
-                                </div>
-                                <div class="mt-4 pt-4">
-                                    <button
-                                        class="btn btn-block btn-primary w-100 mb-0"
-                                        style="border-radius: 5px !important; background: linear-gradient(180deg, #1E3C72 0%, #2A5298 100%) !important"
-                                        (click)="signin()">Sign In</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="row justify-content-center">
-                            <div class="col-md-8">
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Outline form field</mat-label>
-                                    <input matInput placeholder="Placeholder">
-                                    <mat-icon
-                                        matSuffix>sentiment_very_satisfied</mat-icon>
-                                    <mat-hint>Hint</mat-hint>
-                                </mat-form-field>
-
-                                <mat-form-field class="example-full-width">
-                                    <mat-label>Username</mat-label>
-                                    <input matInput placeholder="Username" value
-                                        (keyup)="changeTextUpperCase($event)"
-                                        (focusout)="checkUserName($event)">
-                                </mat-form-field>
-
-                                <mat-form-field class="example-full-width">
-                                    <mat-label>Password</mat-label>
-                                    <input id="password" type="password"
-                                        matInput
-                                        placeholder="Password"
-                                        value
-                                        (focusout)="checkUserNamePassword($event)">
-                                </mat-form-field>
-                                <mat-form-field class="example-full-width">
-                                    <mat-label>Branch</mat-label>
-                                    <input id="branch" type="text"
-                                        autocomplete="new-password"
-                                        matInput
-                                        formControlName="branch"
-                                        [matAutocomplete]="branch"
-                                        (keyup)="changeBranchText($event)"
-                                        (focusout)="changeBranch($event)">
-                                    <mat-autocomplete #branch="matAutocomplete"
-                                        autoActiveFirstOption>
-                                        <mat-option
-                                            *ngFor="let option of  filteredOptions | async"
-                                            [value]="option">
-                                            {{option}}
-                                        </mat-option>
-                                    </mat-autocomplete>
-                                </mat-form-field>
-                                <mat-form-field class="example-full-width">
-                                    <mat-label>Year</mat-label>
-                                    <input id="year" matInput type="text"
-                                        formControlName="year"
-                                        [matAutocomplete]="year"
-                                        (focusout)="validateYear($event)">
-                                    <mat-autocomplete #year="matAutocomplete"
-                                        autoActiveFirstOption>
-                                        <mat-option
-                                            *ngFor="let option of  filteredOptions_year | async"
-                                            [value]="option">
-                                            {{option}}
-                                        </mat-option>
-                                    </mat-autocomplete>
-                                </mat-form-field>
-                            </div>
-                        </div> -->
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Password</mat-label>
+                            <input id="password"  type="password" matInput
+                                placeholder="Password"
+                                value (focusout)="checkUserNamePassword($event)">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Branch</mat-label>
+                            <input id="branch" type="text" autocomplete="new-password"
+                                matInput
+                                formControlName="branch"
+                                [matAutocomplete]="branch"
+                                (keyup)="changeBranchText($event)"
+                                (focusout)="changeBranch($event)">
+                            <mat-autocomplete #branch="matAutocomplete"
+                                autoActiveFirstOption>
+                                <mat-option
+                                    *ngFor="let option of  filteredOptions | async"
+                                    [value]="option">
+                                    {{option}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Year</mat-label>
+                            <input id="year"  matInput type="text" formControlName="year"
+                                [matAutocomplete]="year" (focusout)="validateYear($event)">
+                            <mat-autocomplete #year="matAutocomplete"
+                                autoActiveFirstOption>
+                                <mat-option
+                                    *ngFor="let option of  filteredOptions_year | async"
+                                    [value]="option">
+                                    {{option}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
                     </form>
 
-                    <!-- <button class="btn btn-block btn-primary w-100 mb-0"
-                                style="border-radius: 5px !important;"
-                                (click)="signin()">Sign In</button> -->
-
-                    <!--<div class="text-center">
+                    <button class="btn btn-block btn-primary w-100 mb-0"
+                        style="border-radius: 5px !important;"
+                        (click)="signin()">Sign In</button>
+                    <div class="text-center">
                         <div class="saprator my-4"><span></span></div>
                         <p class="mb-2 text-muted">Forgot password? <a
                                 style="font-weight: 600;"
@@ -325,7 +80,7 @@
                                 style="font-weight: 600;"
                                 [routerLink]="['/auth/signup-v2']"
                                 class="f-w-400">Sign Up</a></p>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -40,35 +40,30 @@ export class LoginComponent implements OnInit {
   options_year: string[] = [''];
   filteredOptions_year: Observable<string[]> | undefined;
   private subscriptions: Subscription[] = [];
-  currentIndex = 0;
-  slideIndex = 1;
 
 
   constructor(
     private snackBar: MatSnackBar,
     private router: Router,
     public dataService: SuntechAPIService,
-    private comService: CommonServiceService,
-    private renderer: Renderer2
+    private comService: CommonServiceService
 
   ) {
     let isLayoutRTL = false;
     this.changeRtlLayout(isLayoutRTL);
     let map = new Map();
-
     this.dataForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
       branch: new FormControl('', Validators.required),
       year: new FormControl('', Validators.required),
-      keepLog: new FormControl('',)
     });
-
 
 
   }
   ngAfterViewInit() {
 
+    this.comService.formControlSetReadOnly('password', true);
+    this.comService.formControlSetReadOnly('branch', true);
+    this.comService.formControlSetReadOnly('year', true);
 
     // this.getCompanyParameter()
     // this.getMessageBox()
@@ -91,73 +86,7 @@ export class LoginComponent implements OnInit {
     // }
   }
   ngOnInit() {
-    
-    this.comService.formControlSetReadOnly('password', true);
-    this.comService.formControlSetReadOnly('branch', true);
-    this.comService.formControlSetReadOnly('year', true);
-    
-    const keepLog = localStorage.getItem('keepLog') === 'true';
-    this.dataForm.controls.keepLog.setValue(keepLog) ;
-    if (keepLog == true) {
-      this.setGetUserAuthDetails();
-    }
-
-    this.showSlides(this.slideIndex);
-  }
-
-  changeKeepLog(e: any){
-
-    // if(e.target.checked){
-    //   this.setGetUserAuthDetails('add');
-    // }else{
-    //   localStorage.setItem('keepLog',  'false');
-    //   localStorage.setItem('password',  '');
-    // }
-
-  }
-  setGetUserAuthDetails(type?: any) {
-    if (type == null) {
-      const username = localStorage.getItem('username');
-      const password = localStorage.getItem('password');
-  
-      this.dataForm.controls.username.setValue(username);
-      this.dataForm.controls.password.setValue(password);
-
-      this.user_name = username;
-      this.comService.formControlSetReadOnly('password', false);
-      this.validateState = 1;
-      this.renderer.selectRootElement('#password')?.focus();
-
-
-    } else {
-      localStorage.setItem('keepLog',  'true');
-      localStorage.setItem('username',  this.dataForm.value.username);
-      localStorage.setItem('password',  this.dataForm.value.password);
-    }
-
-  }
-  plusSlides(n: number) {
-    this.showSlides(this.slideIndex += n);
-  }
-
-  currentSlide(n: number) {
-    this.showSlides(this.slideIndex = n);
-  }
-
-  showSlides(n: number) {
-    let i;
-    let slides = document.getElementsByClassName("mySlides");
-    let dots = document.getElementsByClassName("dot");
-    if (n > slides.length) { this.slideIndex = 1; }
-    if (n < 1) { this.slideIndex = slides.length; }
-    for (i = 0; i < slides.length; i++) {
-      (slides[i] as HTMLElement).style.display = "none";
-    }
-    for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-    }
-    (slides[this.slideIndex - 1] as HTMLElement).style.display = "block";
-    dots[this.slideIndex - 1].className += " active";
+    this.getYearMonthAPI()
   }
 
   private _filter(value: string): string[] {
@@ -195,7 +124,6 @@ export class LoginComponent implements OnInit {
           this.validateState = 1;
         } else {
           this.comService.formControlSetReadOnly('password', true);
-          this.renderer.selectRootElement('#username')?.focus();
 
         }
         this.snackBar.dismiss();
@@ -207,7 +135,6 @@ export class LoginComponent implements OnInit {
   // use: to check username and password from API
   checkUserNamePassword(event: any) {
     let password = event.target.value;
-
     if (this.validateState == 1) {
       if (password != '') {
 
@@ -218,10 +145,7 @@ export class LoginComponent implements OnInit {
         let API = 'ValidatePassword?strusername=' + this.user_name + '&strPassword=' + password
         let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp: any) => {
           if (resp.status == 'Success') {
-
-            this.renderer.selectRootElement('#branch')?.focus();
-
-            this.snackBar.open('loading...');
+      this.snackBar.open('loading...');
             let API2 = 'UseBranchNetMaster/' + this.user_name + ''
             let sub2: Subscription = this.dataService.getDynamicAPI(API2).subscribe((resp) => {
               if (resp.status == 'Success') {
@@ -233,7 +157,6 @@ export class LoginComponent implements OnInit {
                 var data = this.all_branch.map((item: any) => item.BRANCH_CODE);
 
                 this.options = data;
-                this.dataForm.controls.branch.setValue(data[0]);
                 this.filteredOptions =
                   this.dataForm.controls.branch.valueChanges.pipe(
                     startWith(''),
@@ -249,8 +172,6 @@ export class LoginComponent implements OnInit {
             this.validateState = 2;
             this.snackBar.dismiss();
           } else {
-            this.renderer.selectRootElement('#password')?.focus();
-
             this.snackBar.dismiss();
 
             this.snackBar.open(
@@ -273,9 +194,7 @@ export class LoginComponent implements OnInit {
     }
   }
   validateYear(event: any) {
-    if (event.target.value == '') {
-      this.renderer.selectRootElement('#year')?.focus();
-    }
+    if (event.target.value == '') return;
     let yearSelected = this.options_year.filter((item: any) => item == event.target.value)
     if (yearSelected.length == 0) {
       this.dataForm.controls.year.setValue('')
@@ -287,11 +206,7 @@ export class LoginComponent implements OnInit {
   }
   /**USE: branch change function to call financial year API */
   changeBranch(e: any) {
-    if (e.target.value == '') {
-      this.renderer.selectRootElement('#branch')?.focus();
-
-      return;
-    }
+    if (e.target.value == '') return;
     let optionsSelected = this.options.filter((item: any) => item == (e.target.value).toUpperCase())
     if (optionsSelected.length == 0) {
       this.dataForm.controls.branch.setValue('')
@@ -299,7 +214,6 @@ export class LoginComponent implements OnInit {
     }
     let selectedBranch = this.dataForm.value.branch;
     if (selectedBranch != '') {
-
       this.snackBar.open('loading...');
       let API = `FinancialYear?branchcode=${selectedBranch}&strusername=${this.user_name}`
       let sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((resp) => {
@@ -307,12 +221,9 @@ export class LoginComponent implements OnInit {
         if (resp.status == 'Success') {
           this.snackBar.dismiss();
           this.comService.formControlSetReadOnly('year', false);
-          this.renderer.selectRootElement('#year')?.focus();
 
           this.all_year = resp.response;
           this.options_year = this.all_year.map((item: any) => item.fyearcode);
-
-          this.dataForm.controls.year.setValue(this.options_year[0]);
 
           this.filteredOptions_year =
             this.dataForm.controls.year.valueChanges.pipe(
@@ -322,7 +233,6 @@ export class LoginComponent implements OnInit {
 
         } else {
           this.comService.formControlSetReadOnly('year', true);
-          this.renderer.selectRootElement('#branch')?.focus();
 
         }
       });
@@ -331,21 +241,28 @@ export class LoginComponent implements OnInit {
     }
 
   }
+  yearSelected: any = ''
+  getYearMonthAPI(){
+    let API = 'BaseFinanceYear/GetBaseFinancialYear'
+    let yr = this.comService.currentDate
+    let param = {
+      VOCDATE: this.comService.formatYYMMDD(yr)
+    }
+    let sub: Subscription = this.dataService.getDynamicAPIwithParams(API,param)
+    .subscribe((resp: any) => {
+      if (resp.status == "Success") {
+        this.yearSelected = resp.BaseFinancialyear
+        localStorage.setItem('YEAR', this.yearSelected);
+      }
+    });
+    this.subscriptions.push(sub)
+  }
   /**USE: sign in with API branchmaster */
   signin() {
     let branch = this.dataForm.value.branch;
     let year = this.dataForm.value.year;
 
     if (branch != '' && this.validateState == 2 && year != '') {
-
-      if(this.dataForm.value.keepLog)      {
-        this.setGetUserAuthDetails('add');
-      }else{
-        localStorage.setItem('keepLog',  'false');
-        localStorage.setItem('password',  '');
-      }
-
-
       let API = 'BranchMaster/' + branch
       let sub: Subscription = this.dataService.getDynamicAPI(API)
         .subscribe((resp: any) => {
@@ -363,8 +280,7 @@ export class LoginComponent implements OnInit {
             // localStorage.setItem('currentUser', JSON.stringify(this.userDetails));
             localStorage.setItem('username', this.user_name);
             localStorage.setItem('userbranch', branch);
-            localStorage.setItem('YEAR', year);
-            console.log('fired2');
+            localStorage.setItem('CURRENTYEAR', year);
 
             // this.getBranchCurrencyMaster();
             // this.router.navigate(['/']);
