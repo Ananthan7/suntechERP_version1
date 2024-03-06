@@ -22,6 +22,7 @@ export class SchemeRegisterComponent implements OnInit {
   formdata = new FormData();
   isLoading: boolean = false
   viewMode: boolean = false;
+  editMode: boolean = false;
   isViewSchemeMasterGrid: boolean = true;
 
   selectedFieldValue: string = '';
@@ -164,6 +165,9 @@ export class SchemeRegisterComponent implements OnInit {
     if (this.content?.FLAG == 'VIEW') {
       this.viewMode = true
     }
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.editMode = true
+    }
     this.schemeRegistrationForm.controls.SchemeType.setValue('AMOUNT');
     this.schemeRegistrationForm.controls.Branch.setValue(this.commonService.branchCode);
     this.schemeRegistrationForm.controls.DateOfJoining.setValue(this.currentDate)
@@ -200,6 +204,9 @@ export class SchemeRegisterComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.SchemeMasterDetails = data.Details
+          if(data.SCH_CANCEL){
+            this.viewMode = true
+          }
           this.schemeRegistrationForm.controls.Branch.setValue(data.PAY_BRANCH_CODE)
           this.schemeRegistrationForm.controls.Salesman.setValue(data.SALESPERSON_CODE)
           this.schemeRegistrationForm.controls.SalesmanName.setValue(data.SALESMAN_NAME)
@@ -353,8 +360,21 @@ export class SchemeRegisterComponent implements OnInit {
     }
   }
   cancelScheme() {
-    this.SchemeMasterDetails = []
-    this.schemeRegistrationForm.controls.code.setValue('')
+    if(!this.content?.SCH_CUSTOMER_ID) {
+      this.commonService.toastErrorByMsgId('customer id not available')
+      return
+    }
+     let API = `SchemeRegistration/DeleteSchemeRegistration/`+this.content?.SCH_CUSTOMER_ID
+     let param = { SCH_CUSTOMER_ID: this.content?.SCH_CUSTOMER_ID || '' }
+     let Sub: Subscription = this.dataService.deleteDynamicAPI(API, param)
+       .subscribe((result: any) => {
+         if (result.response) {
+          this.viewMode = true
+          this.commonService.toastSuccessByMsgId(result.message)
+         } else {
+           this.commonService.toastErrorByMsgId(result.message)
+         }
+       })
   }
   addScheme() {
     this.isViewSchemeMasterGrid = false
@@ -432,9 +452,9 @@ export class SchemeRegisterComponent implements OnInit {
         if (resp) {
           this.SchemeMasterDetails = resp.response
           this.SchemeMasterDetails.forEach((item: any) => {
-            item.RCVD_BRANCH_CODE = this.schemeRegistrationForm.value.Branch
-            item.RCVD_VOCTYPE = this.schemeRegistrationForm.value.VOCTYPE
-            item.RCVD_YEARMONTH = this.commonService.yearSelected
+            // item.RCVD_BRANCH_CODE = this.schemeRegistrationForm.value.Branch
+            // item.RCVD_VOCTYPE = this.schemeRegistrationForm.value.VOCTYPE
+            // item.RCVD_YEARMONTH = this.commonService.yearSelected
             item.RCVD_VOCNO = item.RCVD_VOCNO.toString()
             if (item.REMAINDER_SEND.toString() == '0') {
               item.REMAINDER_SEND = false
@@ -692,7 +712,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${i}].schemeData.REMARKS`, 'REMARKS');
       this.formdata.append(`Model.model[${i}].schemeData.SCH_UNITS`, formValue.Units);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_CANCEL_AMT`, item.SCH_CANCEL_AMT);
-      this.formdata.append(`Model.model[${i}].schemeData.SCH_STATUS`, '1');
+      this.formdata.append(`Model.model[${i}].schemeData.SCH_STATUS`, '0');
       this.formdata.append(`Model.model[${i}].schemeData.PAY_DATE`, this.commonService.formatDate(new Date(formValue.DateOfJoining)));
       this.formdata.append(`Model.model[${i}].schemeData.PAY_BRANCH_CODE`, this.commonService.nullToString(this.commonService.branchCode));
       this.formdata.append(`Model.model[${i}].schemeData.PAY_VOCTYPE`, formValue.VOCTYPE);
