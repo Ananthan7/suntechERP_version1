@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Walking Customers </h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Walkin Customers </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
       <i class="feather icon-x close-icon"></i>
     </button>
@@ -9,7 +9,7 @@
   <modal-header (cancelClick)="close()"></modal-header>
   <div class="row">
     <div class="col-md-12">
-      <form>
+      <form [formGroup]="poswalkincustomersForm">
         <div class="container-fluid pt-3">
           <div class="row">
             <div class="col-md-8">
@@ -18,23 +18,23 @@
                 <label for="inputPassword" class="col-sm-2 col-form-label">Voucher Type * :</label>
                 <div class="col-md-1">
                   <mat-form-field style="width: 100%;">
-                    <input type="text" matInput />
+                    <input type="text" matInput formControlName="voctype"/>
                   </mat-form-field>
                 </div>
                 <div class="col-md-3">
                     <mat-form-field style="width: 70%;">
-                        <input type="text" matInput  />
+                        <input type="text" matInput  formControlName="vocno"/>
                       </mat-form-field>
                 </div>
                 <div class="col-md-3">
                     <label for="inputPassword" class="col-sm-6 col-form-label">Nationality :</label>
                     <mat-form-field style="width: 40%;">
-                        <input type="text" matInput  />
+                        <input type="text" matInput  formControlName="nationality_code"/>
                       </mat-form-field>
                   </div>
                   <div class="col-md-3">
                     <mat-form-field style="width: 80%;">
-                        <input type="text" matInput  />
+                        <input type="text" matInput  formControlName="nationality"/>
                       </mat-form-field>
                       <master-search>
                     </master-search>
@@ -44,20 +44,20 @@
                 <label for="inputPassword" class="col-sm-2 col-form-label">Voucher Date :</label>
                 <div class="col-md-4">
                     <mat-form-field style="width: 70%">
-                        <input matInput [matDatepicker]="vocdate" name="vocdate"  placeholder="DD/MM/YYYY" DateValidation />
+                        <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate" placeholder="DD/MM/YYYY" DateValidation />
                         <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                         <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
                       </mat-form-field>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputPassword" class="col-sm-6 col-form-label">Mobile :</label>
+                    <label for="inputPassword" class="col-sm-6 col-form-label" >Mobile :</label>
                     <mat-form-field style="width: 40%;">
-                        <input type="text" matInput  />
+                        <input type="text" matInput  formControlName="mobile_code"/>
                       </mat-form-field>
                   </div>
                   <div class="col-md-3">
                     <mat-form-field style="width: 80%;">
-                        <input type="text" matInput  />
+                        <input type="text" matInput  formControlName="mobile"/>
                       </mat-form-field>
                 </div>
               </div>
@@ -65,7 +65,7 @@
                 <label for="inputPassword" class="col-sm-2 col-form-label">Name :</label>
                 <div class="col-md-8">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput  />
+                    <input type="text" matInput  formControlName="name"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -73,7 +73,7 @@
                 <label for="inputPassword" class="col-sm-2 col-form-label">Email ID :</label>
                 <div class="col-md-8">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput  />
+                    <input type="text" matInput formControlName="email" />
                   </mat-form-field>
                 </div>
               </div>
@@ -81,14 +81,14 @@
                 <label for="inputPassword" class="col-sm-2 col-form-label">Salesman :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 70%;">
-                    <input type="text" matInput />
+                    <input type="text" matInput formControlName="salesman_code"/>
                   </mat-form-field>
                   <master-search>
                 </master-search>
                 </div>
                 <div class="col-md-3">
                     <mat-form-field style="width: 90%;">
-                      <input type="text" matInput >
+                      <input type="text" matInput formControlName="salesman" >
                     </mat-form-field>
                   </div>
               </div>
@@ -101,7 +101,7 @@
                     <label for="inputPassword" class="col-sm-5 col-form-label">Feed Back :</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 80%;">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="feedback"/>
                       </mat-form-field>
                       <master-search>
                     </master-search>
@@ -112,7 +112,7 @@
                     <label for="inputPassword" class="col-sm-5 col-form-label">Description :</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 80%;">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="description"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -141,7 +141,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-sm-10 offset-2">
-                            <textarea  rows="4" cols="74" class="tx-1" formControlName="comments"></textarea>
+                            <textarea  rows="4" cols="74" class="tx-1" formControlName="customer_address"></textarea>
                             <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> -->
                         </div>
                     </div>
@@ -155,7 +155,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-sm-10 offset-2">
-                            <textarea  rows="4" cols="74" class="tx-1" formControlName="comments"></textarea>
+                            <textarea  rows="4" cols="74" class="tx-1" formControlName="remarks"></textarea>
                             <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> -->
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-sm-11 offset-3">
-                            <textarea  rows="4" cols="110" class="tx-1" formControlName="comments"></textarea>
+                            <textarea  rows="4" cols="110" class="tx-1" formControlName="suggestions"></textarea>
                             <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> -->
                         </div>
                     </div>

@@ -8,7 +8,7 @@
   <modal-header  (cancelClick)="close()"></modal-header>
   <div class="row">
       <div class="col-md-12">
-          <form>
+          <form [formGroup]="loyaltyregisterFrom">
               <div class="container-fluid pt-3">
                   <div class="row justify-content-between">
                       <div class="col-md-8">
@@ -16,7 +16,7 @@
                           <label for="inputPassword" class="col-sm-2 col-form-label">Branch :</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 100%;">
-                                <mat-select>
+                                <mat-select formControlName="voctype">
                                   <mat-option value="1"></mat-option>
                                 </mat-select>
                               </mat-form-field>
@@ -36,16 +36,16 @@
                           <label for="inputPassword" class="col-sm-2 col-form-label">Date :</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 100%">
-                                <input matInput [matDatepicker]="vocdate" name="vocdate"  placeholder="DD/MM/YYYY" DateValidation />
-                                <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                                <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                                <input matInput [matDatepicker]="fromdate" name="fromdate"  placeholder="DD/MM/YYYY" DateValidation />
+                                <mat-datepicker-toggle matSuffix [for]="fromdate"></mat-datepicker-toggle>
+                                <mat-datepicker [startAt]="currentDate" #fromdate></mat-datepicker>
                               </mat-form-field>
                           </div>
                           <div class="col-md-3 offset-1">
                             <mat-form-field style="width: 100%">
-                                <input matInput [matDatepicker]="vocdate" name="vocdate" placeholder="DD/MM/YYYY" DateValidation />
-                                <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                                <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
+                                <input matInput [matDatepicker]="todate" name="todate" placeholder="DD/MM/YYYY" DateValidation />
+                                <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+                                <mat-datepicker [startAt]="currentDate" #fromdate></mat-datepicker>
                               </mat-form-field>
                           </div>
                           
@@ -55,18 +55,18 @@
                           <label for="inputPassword" class="col-sm-2 col-form-label">Customer :</label>
                           <div class="col-md-2">
                             <mat-form-field style="width: 100%;">
-                              <input type="number" matInput  />
+                              <input type="text" matInput formControlName="customerfrom" />
                             </mat-form-field>
                           </div>
                           <div class="col-md-2">
                             <mat-form-field style="width: 100%;">
-                              <input type="number" matInput  />
+                              <input type="text" matInput formControlName="customerto" />
                             </mat-form-field>
                           </div>
                           <label for="inputPassword" class="col-sm-2 col-form-label">Report To :</label>
                           <div class="col-md-2">
                             <mat-form-field style="width: 100%;">
-                                <mat-select>
+                                <mat-select formControlName="reportto">
                                   <mat-option value="1"></mat-option>
                                 </mat-select>
                               </mat-form-field>
@@ -78,12 +78,12 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label">Points :</label>
                             <div class="col-md-2">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" matInput  />
+                                <input type="number" matInput formControlName="pointsfrom" />
                               </mat-form-field>
                             </div>
                             <div class="col-md-2">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" matInput  />
+                                <input type="number" matInput formControlName="pointsto" />
                               </mat-form-field>
                             </div>
                         

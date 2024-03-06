@@ -9,7 +9,7 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (continueClick)="lockClicked()"
 [isLock]="true"></modal-header>
 <div class="container-fluid pt-3">
-    <form>
+    <form [formGroup]="orderlockandunlockForm">
         <div class="row mb-3">
             <div class="col-md-3">
                 <div class="row">
@@ -17,7 +17,7 @@
                     <div class="col-sm-5">
                         <div class="position-relative d-flex">
                             <mat-form-field style="width: 100%">
-                                <input type="text" matInput  />
+                                <input type="text" matInput formControlName="branch" />
                             </mat-form-field>
                             <master-search [MasterSearchData]="branchCodeData"></master-search>
                         </div>
@@ -53,12 +53,12 @@
                           <div class="col-sm-1"></div>
                           <div class="col-sm-4">
                             <mat-form-field style="width: 100%">
-                              <input type="text" matInput  />
+                              <input type="text" matInput  formControlName="order_code"/>
                             </mat-form-field>
                           </div>
                           <div class="col-sm-4">
                             <mat-form-field style="width: 100%">
-                              <input type="text" matInput />
+                              <input type="text" matInput formControlName="order_no"/>
                             </mat-form-field>
                           </div>
                         </div>
@@ -69,7 +69,7 @@
                             <div class="col-sm-1"></div>
                             <div class="col-sm-4">
                               <mat-form-field style="width: 100%">
-                                <input type="text" matInput  />
+                                <input type="text" matInput formControlName="order_age" />
                               </mat-form-field>
                             </div>
                             <div class="col-sm-4">
@@ -86,7 +86,7 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
                                     <input matInput [matDatepicker]="vocdate"  
-                                    placeholder="DD/MM/YYYY"  DateValidation />
+                                    formControlName="fromdate" placeholder="DD/MM/YYYY"  DateValidation />
                                   <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                                   <mat-datepicker #vocdate></mat-datepicker>
                                   </mat-form-field>
@@ -97,7 +97,7 @@
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
                                     <input matInput [matDatepicker]="vocdate"  
-                                    placeholder="DD/MM/YYYY"  DateValidation />
+                                    formControlName="todate" placeholder="DD/MM/YYYY"  DateValidation />
                                   <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                                   <mat-datepicker  #vocdate></mat-datepicker>
                                   </mat-form-field>
