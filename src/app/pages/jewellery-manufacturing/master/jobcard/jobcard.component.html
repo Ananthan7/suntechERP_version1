@@ -20,7 +20,7 @@
                     <div class="col-md-6">
                         <div class="row align-items-center mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Order
-                                Type*:</label>
+                                Type * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="orderType" />
@@ -56,13 +56,13 @@
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Design
-                                Code :</label>
+                                Code * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="designcode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="designCodeData"
-                                (newRowClick)="designCodeSelected($event)" (onchange)="addTableData()"></master-search>
+                                (newRowClick)="designCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 100%;">
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Customer
+                            <label for="input" class="col-sm-3 col-form-label">Customer * 
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
@@ -88,7 +88,7 @@
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Sales
-                                Order*:</label>
+                                Order :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="salesorder" />
@@ -110,7 +110,7 @@
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-3 col-form-label">Cost
-                                Code :</label>
+                                Code * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="costcode" />
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Karat
+                            <label for="input" class="col-sm-3 col-form-label">Karat * 
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
@@ -169,7 +169,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Color
+                            <label for="input" class="col-sm-3 col-form-label">Color * 
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
@@ -178,7 +178,7 @@
                                 <master-search [MasterSearchData]="colorCodeData"
                                 (newRowClick)="colorCodeSelected($event)"></master-search>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Brand * 
+                            <label for="input" class="col-sm-3 col-form-label">Brand
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
@@ -215,14 +215,14 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-3 col-form-label">Size*
+                            <label for="input" class="col-sm-3 col-form-label">Size
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="size" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Length*
+                            <label for="input" class="col-sm-3 col-form-label">Length
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
@@ -249,7 +249,7 @@
                                     <input type="text" matInput readonly formControlName="jobtype" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-3 col-form-label">Purity*
+                            <label for="input" class="col-sm-3 col-form-label">Purity *
                                 : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
@@ -287,7 +287,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Salesman
+                            <label for="input" class="col-sm-5 col-form-label">Salesman * 
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
@@ -334,7 +334,7 @@
                         </div>
                         <div class="row mb-2">
                             <label for="input" class="col-sm-5 col-form-label">Main
-                                Metal : </label>
+                                Metal * : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="mainmetal" />
@@ -366,7 +366,7 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-5 col-form-label">Seq.Code
+                            <label for="input" class="col-sm-5 col-form-label">Seq.Code * 
                                 : </label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 80%;">
@@ -442,16 +442,13 @@
                 <div class="row">
                     <div class="col-md-12">
                         <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
-                        [showRowLines]="true" class="mt-3"
-                         
-                        >
-      
+                        [showRowLines]="true" class="mt-3">
                         <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
       
                         <dxo-selection
                         [selectAllMode]="allMode"
                         [showCheckBoxesMode]="checkBoxesMode"
-                        mode="multiple"
+                        mode="single"
                       ></dxo-selection>
                           <dxi-column dataField="SINO" caption="SI NO"> </dxi-column>
                           <dxi-column dataField="job_reference" caption="Job Reference " cellTemplate="job_referencetemp"></dxi-column>

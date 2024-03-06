@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-component-master',
@@ -17,25 +18,148 @@ export class ComponentMasterComponent implements OnInit {
 
   @Input() content!: any; 
   tableData: any[] = [];
-
+  selectedIndexes: any = [];
   columnhead: any[] = ['Srno','Div.','Stock Code','Karat','Stock Type','Pcs','Wt/Ct','Color','Clarity','Shape','Sieve Std.','Description','Size','Process Type','Remarks','Pointer Wt','Ext.Clarity','Sieve From','Description','Sieve To','Description']
   columnhead2: any[] = ['',]
   selectedTabIndex = 0;
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+  imageurl: any;
+  image: string | ArrayBuffer | null | undefined;
+  
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
   ) { }
  
   ngOnInit(): void {
+    if (this.content.FLAG == 'VIEW') {
+     
+      this.setFormValues();
+    } else (this.content.FLAG == 'EDIT')
+     {
+      this.setFormValues();
+    }
+
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
     this.componentmasterForm.controls.currencyCode.setValue(CURRENCY_CODE);
     let currrate = this.commonService.getCurrRate(CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(currrate);
   }
+
+  
+  divisionCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  divisionCodeSelected(value:any,data:any, controlName: string){
+    console.log('Data ',data);
+    console.log('values ',value);
+ 
+    this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
+
+}
+
+stockCodeData: MasterSearchModel = {
+  PAGENO: 1,
+  RECORDS: 10,
+  LOOKUPID: 23,
+  SEARCH_FIELD: 'STOCK_CODE',
+  SEARCH_HEADING: 'STOCK Code',
+  SEARCH_VALUE: '',
+  WHERECONDITION: "STOCK_CODE<> ''",
+  VIEW_INPUT: true,
+  VIEW_TABLE: true,
+}
+
+stockCodeDataSelected(value:any,data:any, controlName: string){
+  console.log(data);
+  console.log(value);
+
+  this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
+}
+
+onFileChangedimage(event:any) {
+  this.imageurl = event.target.files[0]
+  console.log(this.imageurl)
+  let reader = new FileReader();
+  if(event.target.files && event.target.files.length > 0) {
+    let file = event.target.files[0];
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.image = reader.result; 
+    };
+  }
+}
+
+onFileChanged(event:any) {
+  this.url = event.target.files[0].name
+  console.log(this.url)
+  let reader = new FileReader();
+  if(event.target.files && event.target.files.length > 0) {
+    let file = event.target.files[0];
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.urls = reader.result; 
+    };
+  }
+}
+
+  setFormValues() {
+    if (!this.content) return
+
+
+
+    this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
+    this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)
+    this.componentmasterForm.controls.sizeSet.setValue(this.content.SIZE_FROM)
+    this.componentmasterForm.controls.size.setValue(this.content.SIZE)
+    this.componentmasterForm.controls.sieve_to.setValue(this.content.SIEVE_TO)
+    this.componentmasterForm.controls.type.setValue(this.content.TYPE_CODE)
+    this.componentmasterForm.controls.category.setValue(this.content.CATEGORY_CODE)
+    this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
+    this.componentmasterForm.controls.settingType.setValue(this.content.SETTING)
+    this.componentmasterForm.controls.remarks.setValue(this.content.CURRENCYCODE)
+    this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
+    this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
+    this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
+    this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
+    this.componentmasterForm.controls.processSeq.setValue(this.content.PROCESS_CODE)
+    this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
+    this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
+    this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
+
+  }
+
+  onSelectionChanged(event: any) {
+    const values: number[] = event.selectedRowKeys;
+    const indexes: number[] = [];
+
+    values.forEach((selectedValue: number) => {
+      const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
+
+      // Check if the value is not already in the selectedIndexes array
+      if (index !== -1 && !this.selectedIndexes.includes(index)) {
+        indexes.push(index);
+      }
+    });
+
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
+  }
+
 
   private subscriptions: Subscription[] = [];
 
@@ -128,17 +252,43 @@ export class ComponentMasterComponent implements OnInit {
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'COMPSIZE_CODE',
     SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SIZE MASTER'",
+    WHERECONDITION: "COMPSIZE_CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   sizeCodeSelected(e:any){
     console.log(e);
-    this.componentmasterForm.controls.size.setValue(e.CODE);
+
+    const apiDescription = e.DESCRIPTION;
+
+    // Split the DESCRIPTION string into an array using the ',' delimiter
+    const descriptionArray = apiDescription.split(',');
+    
+    // Assign values to variables
+    let height, width, length, radius;
+    
+
+      height = descriptionArray[0]; 
+      width = descriptionArray[1];  
+      length = descriptionArray[2]; 
+      radius = descriptionArray[3]; 
+    
+    
+    console.log("Height:", height);
+    console.log("Width:", width);
+    console.log("Length:", length);
+    console.log("Radius:", radius);
+
+
+    this.componentmasterForm.controls.size.setValue(e.COMPSIZE_CODE);
+    this.componentmasterForm.controls.height.setValue(height);
+    this.componentmasterForm.controls.length.setValue(width);
+    this.componentmasterForm.controls.width.setValue(length);
+    this.componentmasterForm.controls.radius.setValue(radius);
   }
 
   shapeCodeData: MasterSearchModel = {
@@ -240,7 +390,14 @@ export class ComponentMasterComponent implements OnInit {
 
   deleteTableData(){
 
-
+    console.log(this.commonService.transformDecimalVB(6, this.componentmasterForm.value.purity));
+    //  this.tableData.push(data);
+    console.log(this.selectedIndexes);
+    if (this.selectedIndexes.length > 0) {
+      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+    }
   }
 
   setPostData(){
@@ -248,7 +405,7 @@ export class ComponentMasterComponent implements OnInit {
     let postData = {
       "DESIGN_CODE": this.componentmasterForm.value.code || "",
       "DESIGN_DESCRIPTION":  this.componentmasterForm.value.codedes || "",
-      "CURRENCY_CODE": this.componentmasterForm.value.currencyCode,
+      "CURRENCY_CODE": "1",
       "CC_RATE":  this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
       "COST_CODE": this.componentmasterForm.value.costCenter|| "",
       "TYPE_CODE": this.componentmasterForm.value.type|| "",
@@ -292,7 +449,7 @@ export class ComponentMasterComponent implements OnInit {
       "COLOR":  "",
       "CLARITY": "",
       "SIZE":  this.componentmasterForm.value.size || "",
-      "SIEVE":  "",
+      "SIEVE":  this.componentmasterForm.value.sieve_to || "",
       "SHAPE":  this.componentmasterForm.value.shape || "",
       "GRADE": "",
       "FLUOR": "",
@@ -370,7 +527,7 @@ export class ComponentMasterComponent implements OnInit {
       "PENDING_JOB_PCS": 0,
       "PENDING_JOBS": 0,
       "LAST_COST": 0,
-      "SEQ_CODE": "",
+      "SEQ_CODE": this.componentmasterForm.value.processSeq|| "",
       "SEQ_DESCRIPTION": "",
       "EDITED_ON": "2023-11-27T06:54:03.761Z",
       "EDITED_BY": "",
@@ -459,7 +616,7 @@ export class ComponentMasterComponent implements OnInit {
       "METAL_VALUECC": 0,
       "PAIR_REF": "",
       "SURFACEPROPERTY": "",
-      "WIDTH": 0,
+      "WIDTH":  this.componentmasterForm.value.width|| "",
       "THICKNESS": 0,
       "ENGRAVING_TEXT": "",
       "ENGRAVING_FONT": "",
@@ -501,9 +658,9 @@ export class ComponentMasterComponent implements OnInit {
       "CC_MAKING": "",
       "STONE_INCLUDED": true,
       "CAD_REQUIRED": true,
-      "HEIGHT": "",
-      "RADIUS": "",
-      "LENGTH": "",
+      "HEIGHT":  this.componentmasterForm.value.height|| "",
+      "RADIUS":  this.componentmasterForm.value.radius|| "",
+      "LENGTH": this.componentmasterForm.value.length|| "",
       "COMPSIZE_CODE": "",
       "COMPSET_CODE": "",
       "PROD_VARIANCE": 0,
@@ -553,14 +710,14 @@ export class ComponentMasterComponent implements OnInit {
         {
           "UNIQUEID": 0,
           "SRNO": 0,
-          "METALSTONE": "",
-          "DIVCODE": "",
+          "METALSTONE": "5",
+          "DIVCODE": "c",
           "KARAT_CODE": "",
           "CARAT": 0,
           "GROSS_WT": 0,
           "PCS": 0,
           "RATE_TYPE": "",
-          "CURRENCY_CODE": this.commonService.getCurrRate,
+          "CURRENCY_CODE": "AED",
           "RATE": 0,
           "AMOUNTFC": 0,
           "AMOUNTLC": 0,
@@ -597,7 +754,7 @@ export class ComponentMasterComponent implements OnInit {
           "D_REMARKS": "",
           "POINTER_WT": 0,
           "SIEVE_FROM": "",
-          "SIEVE_TO": "",
+          "SIEVE_TO":  this.componentmasterForm.value.sieve_to|| "",
           "PURITY": 0,
           "OTHER_ATTR": ""
         }
