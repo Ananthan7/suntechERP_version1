@@ -21,6 +21,7 @@ export class LoyaltyRegisterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   isReadOnly:boolean=true;
   vocMaxDate = new Date();
+  todate = new Date();
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
 
   constructor(
