@@ -356,21 +356,21 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
 
 
-          // let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
+          let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
 
-          // amount_LC = Number(amount_LC.toFixed(2))
+          amount_LC = Number(amount_LC.toFixed(2))
 
 
-          // let amount_FC: number = Number(this.currencyRate) * amount_LC
-          // amount_FC = Number(amount_FC.toFixed(2))
+          let amount_FC: number = Number(this.currencyRate) * amount_LC
+          amount_FC = Number(amount_FC.toFixed(2))
 
-          // let trn_Fc_amount: number = Number(this.content.SCHEME_AMOUNT) - amount_FC
-          // trn_Fc_amount = Number(trn_Fc_amount.toFixed(2))
-          // this.receiptEntryForm.controls.TRN_Amount_FC.setValue(trn_Fc_amount)
+          let trn_Fc_amount: number = Number(this.content.SCHEME_AMOUNT) - amount_FC
+          trn_Fc_amount = Number(trn_Fc_amount.toFixed(2))
+          this.receiptEntryForm.controls.TRN_Amount_FC.setValue(trn_Fc_amount)
 
-          // let trn_amount_lc: number = Number(this.content.SCHEME_AMOUNT) - amount_LC
-          // trn_amount_lc = Number(trn_amount_lc.toFixed(2))
-          // this.receiptEntryForm.controls.TRN_Amount_LC.setValue(trn_amount_lc)
+          let trn_amount_lc: number = Number(this.content.SCHEME_AMOUNT) - amount_LC
+          trn_amount_lc = Number(trn_amount_lc.toFixed(2))
+          this.receiptEntryForm.controls.TRN_Amount_LC.setValue(trn_amount_lc)
         } else {
           this.commonService.toastErrorByMsgId('Accode not found in credit master')
         }

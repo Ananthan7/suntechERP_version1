@@ -204,7 +204,7 @@ export class SchemeRegisterComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.SchemeMasterDetails = data.Details
-          if(data.SCH_CANCEL){
+          if (data.SCH_CANCEL) {
             this.viewMode = true
           }
           this.schemeRegistrationForm.controls.Branch.setValue(data.PAY_BRANCH_CODE)
@@ -360,21 +360,21 @@ export class SchemeRegisterComponent implements OnInit {
     }
   }
   cancelScheme() {
-    if(!this.content?.SCH_CUSTOMER_ID) {
+    if (!this.content?.SCH_CUSTOMER_ID) {
       this.commonService.toastErrorByMsgId('customer id not available')
       return
     }
-     let API = `SchemeRegistration/DeleteSchemeRegistration/`+this.content?.SCH_CUSTOMER_ID
-     let param = { SCH_CUSTOMER_ID: this.content?.SCH_CUSTOMER_ID || '' }
-     let Sub: Subscription = this.dataService.deleteDynamicAPI(API, param)
-       .subscribe((result: any) => {
-         if (result.response) {
+    let API = `SchemeRegistration/DeleteSchemeRegistration/` + this.content?.SCH_CUSTOMER_ID
+    let param = { SCH_CUSTOMER_ID: this.content?.SCH_CUSTOMER_ID || '' }
+    let Sub: Subscription = this.dataService.deleteDynamicAPI(API, param)
+      .subscribe((result: any) => {
+        if (result.status == "Success") {
           this.viewMode = true
           this.commonService.toastSuccessByMsgId(result.message)
-         } else {
-           this.commonService.toastErrorByMsgId(result.message)
-         }
-       })
+        } else {
+          this.commonService.toastErrorByMsgId(result.message)
+        }
+      })
   }
   addScheme() {
     this.isViewSchemeMasterGrid = false
@@ -387,7 +387,7 @@ export class SchemeRegisterComponent implements OnInit {
       .subscribe((result: any) => {
         if (result.response) {
           let data = result.response
-          if(data.STATUS == false){
+          if (data.STATUS == false) {
             this.commonService.toastErrorByMsgId('Selected Scheme is Inactive')
             this.schemeRegistrationForm.controls.SchemeId.setValue('')
             return
@@ -411,7 +411,7 @@ export class SchemeRegisterComponent implements OnInit {
             this.commonService.commaSeperation(data.CANCEL_CHARGE)
           )
           this.schemeRegistrationForm.controls.InstallmentAmount.setValue(
-              this.commonService.commaSeperation(data.SCHEME_AMOUNT)
+            this.commonService.commaSeperation(data.SCHEME_AMOUNT)
           )
           let maturingdate
           if (data.SCHEME_FREQUENCY.toUpperCase() == 'WEEKLY') {
@@ -672,7 +672,7 @@ export class SchemeRegisterComponent implements OnInit {
     this.detailArray = []
     this.detailArray.push(params)
   }
-  
+
   /**USE: set form data for saving */
   setFormData() {
     this.setPostData();
@@ -902,7 +902,7 @@ export class SchemeRegisterComponent implements OnInit {
     }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  
+
   formatDateMaturingDate(event: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue)

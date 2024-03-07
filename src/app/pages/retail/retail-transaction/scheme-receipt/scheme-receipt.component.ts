@@ -401,7 +401,11 @@ export class SchemeReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           this.receiptDetailsForm.controls.SchemeID.setValue(data.SCH_CUSTOMER_ID)
-          this.disableAddBtnGrid = false;
+          if(data.SCH_CANCEL){
+            this.disableAddBtnGrid = true;
+          }else{
+            this.disableAddBtnGrid = false;
+          }
           this.receiptDetailsForm.controls.SchemeCode.setValue(data.SCH_SCHEME_CODE)
           this.receiptDetailsForm.controls.SCH_CUSTOMER_CODE.setValue(data.SCH_CUSTOMER_CODE)
           this.receiptDetailsForm.controls.SchemeUniqueID.setValue(data.SCH_CUSTOMER_ID)
@@ -432,7 +436,7 @@ export class SchemeReceiptComponent implements OnInit {
           let data = result.response;
           if (data[0].DEFACCODE != "") {
             this.receiptDetailsForm.controls.PartyCode.setValue(data[0].DEFACCODE);
-            this.receiptDetailsForm.controls.PartyDescription.setValue(data[0].DESCRIPTION);
+            this.receiptDetailsForm.controls.PartyDescription.setValue(data[0].ACCOUNT_HEAD);
             this.newReceiptData.PARTY_CODE = data[0].DEFACCODE;
           } else {
             this.fetchCreditCardMaster();
