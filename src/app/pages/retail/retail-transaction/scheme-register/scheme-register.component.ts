@@ -485,26 +485,13 @@ export class SchemeRegisterComponent implements OnInit {
   //search Value Change SCHEME_CUSTCODE
   searchValueChange(event: any, searchFlag: string, schemeFlag?: boolean) {
     if (event.target.value == '' || this.content?.FLAG == 'VIEW') return
-    // let API = `Scheme/CustomerMaster?${searchFlag}=${event.target.value}`
     let API = `PosCustomerMaster/GetCustomerByCode/${searchFlag}=${event.target.value}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
         this.selectedCustomer(result.response, schemeFlag)
       } else {
         this.reset()
-        // this.changeCode(event,searchFlag)
-        Swal.fire({
-          title: 'Customer Not Found!',
-          text: "",
-          icon: 'warning',
-          showCancelButton: false,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Ok'
-        }).then((result) => {
-          // if (result.isConfirmed) {
-          // }
-        })
+        this.commonService.toastErrorByMsgId('Customer Not Found!')
       }
     }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -709,7 +696,7 @@ export class SchemeRegisterComponent implements OnInit {
       this.formdata.append(`Model.model[${i}].schemeData.SCH_REMINDER_DAYS`, formValue.AlertBeforeDays || 0);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_REMINDER_MODE`, formValue.Frequency);
       this.formdata.append(`Model.model[${i}].schemeData.SCHEME_BONUS`, item.SCHEME_BONUS);
-      this.formdata.append(`Model.model[${i}].schemeData.REMARKS`, 'REMARKS');
+      this.formdata.append(`Model.model[${i}].schemeData.REMARKS`, item.REMARKS);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_UNITS`, formValue.Units);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_CANCEL_AMT`, item.SCH_CANCEL_AMT);
       this.formdata.append(`Model.model[${i}].schemeData.SCH_STATUS`, '0');
@@ -763,7 +750,7 @@ export class SchemeRegisterComponent implements OnInit {
         this.formdata.append(`Model.model[0].imageData.UNIQUEID`, '');
         this.formdata.append(`Model.model[0].imageData.SRNO`, formValue.UNIQUEID);
         this.formdata.append(`Model.model[0].imageData.VOCDATE`, this.commonService.formatDate(new Date(formValue.VOCDATE)));
-        this.formdata.append(`Model.model[0].imageData.REMARKS`, 'REMARKS');
+        this.formdata.append(`Model.model[0].imageData.REMARKS`, formValue.Remarks);
         this.formdata.append(`Model.model[0].imageData.CODE`, formValue.Code);
         this.formdata.append(`Model.model[0].imageData.EXPIRE_DATE`, '');
         this.formdata.append(`Model.model[0].imageData.DOC_ACTIVESTATUS`, '');

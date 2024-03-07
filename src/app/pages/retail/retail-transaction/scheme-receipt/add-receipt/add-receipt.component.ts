@@ -101,6 +101,8 @@ export class AddReceiptComponent implements OnInit {
     DrawnBank: [''],
     DepBank: [''],
     IGST_ACCODE: [''],
+    CGST_ACCODE: [''],
+    SGST_ACCODE: [''],
   })
   private subscriptions: Subscription[] = [];
   constructor(
@@ -309,38 +311,45 @@ export class AddReceiptComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  getGSTDetail() {
-    let param = {
-      accode: this.content.PartyCode,
-      branch_code: this.commonService.branchCode,
-      mainvoctype: this.commonService.getqueryParamMainVocType(),
-    }
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('TaxDetails/GetGSTDetail', param)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
-          this.receiptEntryForm.controls.IGST_ACCODE.setValue(data.IGST_ACCODE);
-        } else {
-          this.commonService.toastErrorByMsgId('IGST Code not found')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
+  // getGSTDetail() {
+  //   let param = {
+  //     accode: this.content.PartyCode,
+  //     branch_code: this.commonService.branchCode,
+  //     mainvoctype: this.commonService.getqueryParamMainVocType(),
+  //   }
+  //   let Sub: Subscription = this.dataService.getDynamicAPIwithParams('TaxDetails/GetGSTDetail', param)
+  //     .subscribe((result) => {
+  //       if (result.response) {
+  //         let data = result.response
+  //         this.receiptEntryForm.controls.IGST_ACCODE.setValue(data.IGST_ACCODE);
+  //       } else {
+  //         this.commonService.toastErrorByMsgId('IGST Code not found')
+  //       }
+  //     }, err => alert(err))
+  //   this.subscriptions.push(Sub)
+  // }
   //USE to get HSN and VAT and calculations
   getTaxDetails() {
-    let date = this.commonService.formatDate(new Date())
     let accountCode = this.content.PartyCode
     if (!accountCode) {
       this.commonService.toastErrorByMsgId('Party Code Not Found')
       return
     }
-    let Sub: Subscription = this.dataService.getDynamicAPI(`TaxDetails?Accode=${accountCode}&strdate=${date}`)
+    let param ={
+      Accode: accountCode,
+      strdate: this.commonService.formatDate(new Date()),
+      branch_code: this.commonService.branchCode,
+      mainvoctype: this.commonService.getqueryParamMainVocType()
+    }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(`TaxDetails`,param)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.getGSTDetail()
           this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_SAC_CODE);
           this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER);
+          this.receiptEntryForm.controls.IGST_ACCODE.setValue(data.IGST_ACCODE);
+          this.receiptEntryForm.controls.SGST_ACCODE.setValue(data.SGST_ACCODE);
+          this.receiptEntryForm.controls.CGST_ACCODE.setValue(data.CGST_ACCODE);
           // this.content.SCHEME_AMOUNT = 100 //TODO
 
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)

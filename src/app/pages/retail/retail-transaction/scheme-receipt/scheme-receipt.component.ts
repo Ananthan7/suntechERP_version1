@@ -129,6 +129,8 @@ export class SchemeReceiptComponent implements OnInit {
     PartyAmtCode: [''],
     PartyAddress: [''],
     IGST_ACCODE: [''],
+    SGST_ACCODE: [''],
+    CGST_ACCODE: [''],
     TotalAmount: [0],
     TotalTax: [0],
   });
@@ -516,12 +518,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.POSCustomerName.setValue(data.NAME);
     this.receiptDetailsForm.controls.POSCustomerCode.setValue(data.CODE);
     this.receiptDetailsForm.controls.POSCustomerMobile.setValue(data.MOBILE);
-    this.receiptDetailsForm.controls.SchemeCode.setValue('');
-    this.receiptDetailsForm.controls.SchemeID.setValue('');
-    this.receiptDetailsForm.controls.PartyAmtCode.setValue('');
-    this.receiptDetailsForm.controls.PartyAmount.setValue('');
-    this.orderedItems = []
-
+    this.resetSchemeDetails()
     this.fetchSchemeWithCustCode(this.receiptDetailsForm.value.POSCustomerCode);
   }
   //customer selection from selectedCustomer MainGrid
@@ -531,10 +528,18 @@ export class SchemeReceiptComponent implements OnInit {
     this.CustomerCodeSearch = data.CODE;
     this.mainGridCodeChange(data.CODE);
   }
+  resetSchemeDetails(){
+    this.receiptDetailsForm.controls.SchemeCode.setValue('');
+    this.receiptDetailsForm.controls.SchemeID.setValue('');
+    this.receiptDetailsForm.controls.PartyAmtCode.setValue('');
+    this.receiptDetailsForm.controls.PartyAmount.setValue('');
+    this.orderedItems = []
+  }
   //party Code Change
   customerChange(event: any, searchFlag: string) {
     if (event.target.value == "" || this.content?.FLAG == 'VIEW') return;
     this.VocNumberMain = "";
+    this.resetSchemeDetails()
     this.commonService.showSnackBarMsg('Loading ...')
     let API = `${searchFlag}=${event.target.value}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
@@ -543,18 +548,10 @@ export class SchemeReceiptComponent implements OnInit {
         if (result.response) {
           let data = result.response;
           if (data) {
-            this.receiptDetailsForm.controls.POSCustomerName.setValue(
-              data.NAME
-            );
-            this.receiptDetailsForm.controls.POSCustomerMobile.setValue(
-              data.MOBILE
-            );
-            this.receiptDetailsForm.controls.POSCustomerCode.setValue(
-              data.CODE
-            );
-            this.receiptDetailsForm.controls.POSCustomerEmail.setValue(
-              data.EMAIL
-            );
+            this.receiptDetailsForm.controls.POSCustomerName.setValue(data.NAME);
+            this.receiptDetailsForm.controls.POSCustomerMobile.setValue(data.MOBILE);
+            this.receiptDetailsForm.controls.POSCustomerCode.setValue(data.CODE);
+            this.receiptDetailsForm.controls.POSCustomerEmail.setValue(data.EMAIL);
             this.fetchSchemeWithCustCode(data.CODE);
           }
         } else {
@@ -902,12 +899,12 @@ export class SchemeReceiptComponent implements OnInit {
         "SGST_PER": 0,
         "SGST_AMOUNTFC": 0,
         "SGST_AMOUNTCC": 0,
-        "IGST_PER": 0,
+        "IGST_PER": item.TRN_Per,
         "IGST_AMOUNTFC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
         "IGST_AMOUNTCC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
-        "CGST_ACCODE": "",
-        "SGST_ACCODE": "",
-        "IGST_ACCODE": this.commonService.nullToString(this.receiptDetailsForm.value.IGST_ACCODE),
+        "CGST_ACCODE": this.commonService.nullToString(item.CGST_ACCODE),
+        "SGST_ACCODE": this.commonService.nullToString(item.SGST_ACCODE),
+        "IGST_ACCODE": this.commonService.nullToString(item.IGST_ACCODE),
         "GST_HEADER_AMOUNT": this.commonService.emptyToZero(this.TOTAL_AMOUNTLC),
         "GST_NUMBER": "",
         "INVOICE_NUMBER": item.TRN_No,
