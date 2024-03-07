@@ -10,6 +10,7 @@ import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
+import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 
 @Component({
   selector: "app-branch-transfer-repair-rtn",
@@ -25,6 +26,47 @@ export class BranchTransferRepairRtnComponent implements OnInit {
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
+  tableData: any[] = []; 
+  viewMode: boolean = false;
+  currentDate = new Date();
+
+  salesManCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
+    SEARCH_HEADING: 'SALES MAN ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  branchCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'BRANCH CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+ partyCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'PARTY CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -37,7 +79,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
   branchTransferRepairRtnForm: FormGroup = this.formBuilder.group({
     vocType: [""],
     vocNo: ["1"],
-    vocDate: [""],
+    vocDate: [new Date()],
     salesMan: [""],
     branch: [""],
     branchName: [""],
@@ -50,6 +92,45 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.branchTransferRepairRtnForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+      this.setFormValues();
+    } else if (this.content.FLAG == 'EDIT') {
+      this.viewMode = false;
+      this.setFormValues();
+    }
+    // if (this.content?.MID != null){
+    //   this.setFormValues();
+    // this.viewMode = true;
+    // }
+  }
+
+  salesManSelected(e:any){
+    console.log(e);
+    this.branchTransferRepairRtnForm.controls.salesMan.setValue(e.SALESPERSON_CODE);
+  }
+
+  partyCodeSelected(e:any){
+    console.log(e);
+  }
+  
+  branchCodeSelected(data: any) {
+    console.log(data); 
+    this.branchTransferRepairRtnForm.controls.branch.setValue(data.BRANCH_CODE);
+    this.branchTransferRepairRtnForm.controls.branchName.setValue(data.BRANCH_NAME);    
+  }
+
+  setFormValues(){
+    console.log('this.content', this.content);
+    if (!this.content) return
+    this.branchTransferRepairRtnForm.controls.branchCode.setValue(this.content.BRANCH_CODE);
+    this.branchTransferRepairRtnForm.controls.vocType.setValue(this.content.VOCTYPE);
+    this.branchTransferRepairRtnForm.controls.vocNo.setValue(this.content.VOCNO);
+    this.branchTransferRepairRtnForm.controls.vocDate.setValue(this.content.VOCDATE);
+    this.branchTransferRepairRtnForm.controls.yearMonth.setValue(this.content.YEARMONTH);
+    this.branchTransferRepairRtnForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
+    this.branchTransferRepairRtnForm.controls.branch.setValue(this.content.BRANCHTO);
+    this.branchTransferRepairRtnForm.controls.transferRemarks.setValue(this.content.REMARKS);
   }
 
   close(data?: any) {
@@ -60,7 +141,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
   
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      // this.updateMeltingType()
+      this.updatebranchTransferRepairRTN()
       return
     }
 
@@ -78,7 +159,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
       "YEARMONTH": this.yearMonth,
       "SALESPERSON_CODE": this.branchTransferRepairRtnForm.value.salesMan,
       "BRANCHTO": this.branchTransferRepairRtnForm.value.branch,
-      "REMARKS": "string",
+      "REMARKS": this.branchTransferRepairRtnForm.value.transferRemarks,
       "SYSTEM_DATE": "2024-03-06T13:12:01.635Z",
       "NAVSEQNO": 0,
       "STATUS": "string",
@@ -126,7 +207,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
               }
             });
             this.branchTransferRepairRtnForm.reset()
-            // this.tableData = []
+            this.tableData = []
           }
         } else {
           this.toastr.error('Not saved')
@@ -135,7 +216,8 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  update() { console.log(this.branchCode,'working')
+  updatebranchTransferRepairRTN() {
+  console.log(this.branchCode,'working')
   let API = `RepairTransfer/UpdateRepairTransfer/${this.branchCode}/${this.branchTransferRepairRtnForm.value.voctype}/${this.branchTransferRepairRtnForm.value.vocNo}/${this.comService.yearSelected}` ;
   let postData = {
     "MID": 0,
@@ -193,7 +275,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
             }).then((result: any) => {
               if (result.value) {
                 this.branchTransferRepairRtnForm.reset()
-                // this.tableData = []
+                this.tableData = []
                 this.close('reloadMainGrid')
               }
             });
@@ -207,7 +289,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     /**USE: delete Melting Type From Row */
     
 deleteMeltingType() {
-  if (!this.content.WORKER_CODE) {
+  if (!this.content.branchCode) {
     Swal.fire({
       title: '',
       text: 'Please Select data to delete!',
@@ -244,7 +326,7 @@ deleteMeltingType() {
               }).then((result: any) => {
                 if (result.value) {
                   this.branchTransferRepairRtnForm.reset()
-                  // this.tableData = []
+                  this.tableData = []
                   this.close('reloadMainGrid')
                 }
               });
@@ -258,7 +340,7 @@ deleteMeltingType() {
               }).then((result: any) => {
                 if (result.value) {
                   this.branchTransferRepairRtnForm.reset()
-                  // this.tableData = []
+                  this.tableData = []
                   this.close()
                 }
               });

@@ -1721,7 +1721,7 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Pcs </mat-label>
-                <input type="number" [min]="0" [maxLength]="8" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                <input type="number" class="text-right" [min]="0" [maxLength]="8" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   matInput formControlName="fcn_exchange_pcs" [readonly]="viewOnly" />
               </mat-form-field>
             </div>
