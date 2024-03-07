@@ -26,6 +26,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   jobNumberDetailData: any[] = [];
+  viewMode: boolean = false;
   userName = localStorage.getItem('username');
 
   ProcessCodeData: MasterSearchModel = {
@@ -39,7 +40,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
 
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -52,7 +53,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
 
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -65,7 +66,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
 
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -93,41 +94,44 @@ export class MetalReturnDetailsComponent implements OnInit {
 
 
   metalReturnDetailsForm: FormGroup = this.formBuilder.group({
-    jobNumber : ['',[Validators.required]],
-    jobDes : [''],
-    subJobNo : [''],
-    subJobNoDes : [''],
-    processCode : ['',[Validators.required]],
-    processCodeDesc : [''],
-    workerCode : ['',[Validators.required]],
-    workerCodeDesc : [''],
-    designCode : [''],
-    partcode : [''],
-    makingRateFc : [''],
-    makingRateLc : [''],
-    makingAmountLC : [''],
-    makingAmountFC : [''],
-    treeNumber : [''], // no
-    location : ['',[Validators.required]],
-    stockCode : ['',[Validators.required]],
-    stockCodeDesc : [''],
-    pcs : [''],
-    purity : [''],
-    grossWeight : [''],
-    netWeight : [''],
-    stoneWeight : [''],
-    pureWeight : [''],
-    remarks : [''],
-    metalGramRateFc : [''],
-    metalGramRateLc : [''],
-    metalAmountFc : [''],
-    metalAmountLc : [''],
-    totalRateFc : [''],
-    purityDiff : [''],
-    totalRateLc : [''],
+    jobNumber: ['', [Validators.required]],
+    jobDes: [''],
+    subJobNo: [''],
+    subJobNoDes: [''],
+    processCode: ['', [Validators.required]],
+    processCodeDesc: [''],
+    workerCode: ['', [Validators.required]],
+    workerCodeDesc: [''],
+    designCode: [''],
+    partcode: [''],
+    makingRateFc: [''],
+    makingRateLc: [''],
+    makingAmountLC: [''],
+    makingAmountFC: [''],
+    treeNumber: [''], // no
+    location: ['', [Validators.required]],
+    stockCode: ['', [Validators.required]],
+    stockCodeDesc: [''],
+    pcs: [''],
+    purity: [''],
+    grossWeight: [''],
+    netWeight: [''],
+    stoneWeight: [''],
+    pureWeight: [''],
+    remarks: [''],
+    metalGramRateFc: [''],
+    metalGramRateLc: [''],
+    metalAmountFc: [''],
+    metalAmountLc: [''],
+    totalRateFc: [''],
+    purityDiff: [''],
+    totalRateLc: [''],
     jobPcs: [''],
     jobPcsDate: [''],
+    vocType: [''],
+    FLAG: [null]
   });
+  data: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -142,20 +146,28 @@ export class MetalReturnDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    
+    this.setFormValues()
+    if (this.content) {
+      this.metalReturnDetailsForm.controls.FLAG.setValue(this.content[0].FLAG)
+    }
+    console.log(this.content.FLAG, 'viewMode is true');
+    if (this.content[0].FLAG == 'VIEW') {
+      this.viewMode = true;
+
+    }
   }
 
-  
-  WorkerCodeSelected(e:any){
+
+  WorkerCodeSelected(e: any) {
     console.log(e);
     this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
     this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(e.DESCRIPTION);
   }
-  locationCodeSelected(e:any){
+  locationCodeSelected(e: any) {
     console.log(e);
     this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
   }
-  jobnoCodeSelected(e:any){
+  jobnoCodeSelected(e: any) {
     console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
     this.metalReturnDetailsForm.controls.jobDes.setValue(e.job_description);
@@ -163,24 +175,55 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.subJobNoDes.setValue(e.job_description);
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
-  ProcessCodeSelected(e:any){
+  ProcessCodeSelected(e: any) {
     console.log(e);
     this.metalReturnDetailsForm.controls.processCode.setValue(e.Process_Code);
     this.metalReturnDetailsForm.controls.processCodeDesc.setValue(e.Description);
   }
 
-  stockCodeSelected(e:any){
+  stockCodeSelected(e: any) {
     console.log(e);
     this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(e.DESCRIPTION);
   }
-  
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
-  }   
-  
-  continue(){}
+  }
+  setFormValues() {
+    if (!this.content) return
+    if (this.content[0]?.HEADERDETAILS) {
+      let data = this.content[0]?.HEADERDETAILS
+      this.metalReturnDetailsForm.controls.vocType.setValue(data.vocType)
+      console.log(this.content, 'headerdetaails');
+    }
+    console.log(this.content, 'ppppp');
+
+
+    this.metalReturnDetailsForm.controls.jobNumber.setValue(this.content.JOB_NUMBER)
+    this.metalReturnDetailsForm.controls.jobDes.setValue(this.content.JOB_DESCRIPTION)
+    this.metalReturnDetailsForm.controls.subJobNo.setValue(this.content.JOB_SO_NUMBER)
+    this.metalReturnDetailsForm.controls.subJobNoDes.setValue(this.content.JOB_DESCRIPTION)
+    this.metalReturnDetailsForm.controls.processCode.setValue(this.content.PROCESS_CODE)
+    this.metalReturnDetailsForm.controls.processCodeDesc.setValue(this.content.PROCESS_NAME)
+    this.metalReturnDetailsForm.controls.workerCode.setValue(this.content.WORKER_CODE)
+    this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(this.content.WORKER_NAME)
+    this.metalReturnDetailsForm.controls.designCode.setValue(this.content.DESIGN_CODE)
+    this.metalReturnDetailsForm.controls.stoneWeight.setValue(this.content.STONE_WT)
+    this.metalReturnDetailsForm.controls.pureWeight.setValue(this.content.PURE_WT)
+    this.metalReturnDetailsForm.controls.pcs.setValue(this.content.PCS)
+    this.metalReturnDetailsForm.controls.purity.setValue(this.content.PURITY)
+    this.metalReturnDetailsForm.controls.grossWeight.setValue(this.content.GROSS_WT)
+    this.metalReturnDetailsForm.controls.netWeight.setValue(this.content.NET_WT)
+    this.metalReturnDetailsForm.controls.stockCode.setValue(this.content.STOCK_CODE)
+    this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(this.content.STOCK_DESCRIPTION)
+    this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE)
+    this.metalReturnDetailsForm.controls.partcode.setValue(this.content.PART_CODE)
+
+  };
+
+  continue() { }
 
 
   formSubmit() {
@@ -195,129 +238,130 @@ export class MetalReturnDetailsComponent implements OnInit {
     }
 
     let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
-    let postData =        {
-          "SRNO": 0,
-          "VOCNO": 0,
-          "VOCTYPE": "MIS",
-          "VOCDATE": "2023-10-06T09:31:04.626Z",
-          "JOB_NUMBER": this.metalReturnDetailsForm.value.jobNumber,
-          "JOB_DATE": "2024-03-05T12:13:39.290Z",
-          "JOB_SO_NUMBER": this.comService.emptyToZero(this.metalReturnDetailsForm.value.subJobNo),
-          "UNQ_JOB_ID": "",
-          "JOB_DESCRIPTION": this.metalReturnDetailsForm.value.subJobNoDes,
-          "BRANCH_CODE": this.branchCode,
-          "DESIGN_CODE": this.metalReturnDetailsForm.value.designCode,
-          "DIVCODE": "s",
-          "STOCK_CODE": this.metalReturnDetailsForm.value.stockCode,
-          "STOCK_DESCRIPTION": this.metalReturnDetailsForm.value.stockCodeDesc,
-          "SUB_STOCK_CODE": "0",
-          "KARAT_CODE": "",
-          "PCS": this.metalReturnDetailsForm.value.pcs,
-          "GROSS_WT": this.metalReturnDetailsForm.value.grossWeight,
-          "PURITY": this.metalReturnDetailsForm.value.purity,
-          "PURE_WT": this.metalReturnDetailsForm.value.pureWeight,
-          "RATE_TYPE": "",
-          "METAL_RATE": 0,
-          "CURRENCY_CODE": "",
-          "CURRENCY_RATE": 0,
-          "METAL_GRM_RATEFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalGramRateFc),
-          "METAL_GRM_RATELC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalGramRateLc),
-          "METAL_AMOUNTFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalAmountFc),
-          "METAL_AMOUNTLC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalAmountLc),
-          "MAKING_RATEFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingRateFc),
-          "MAKING_RATELC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingRateLc),
-          "MAKING_AMOUNTFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingAmountFC),
-          "MAKING_AMOUNTLC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingAmountFC),
-          "TOTAL_RATEFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.totalRateFc),
-          "TOTAL_RATELC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.totalRateLc),
-          "TOTAL_AMOUNTFC": 0,
-          "TOTAL_AMOUNTLC": 0,
-          "PROCESS_CODE": this.metalReturnDetailsForm.value.processCode,
-          "PROCESS_NAME": this.metalReturnDetailsForm.value.processCodeDesc,
-          "WORKER_CODE": this.metalReturnDetailsForm.value.workerCode,
-          "WORKER_NAME": this.metalReturnDetailsForm.value.workerCodeDesc,
-          "UNQ_DESIGN_ID": "",
-          "WIP_ACCODE": "",
-          "UNIQUEID": 0,
-          "LOCTYPE_CODE": this.metalReturnDetailsForm.value.location,
-          "RETURN_STOCK": "",
-          "SUB_RETURN_STOCK": "",
-          "STONE_WT": this.metalReturnDetailsForm.value.stoneWeight,
-          "NET_WT": this.metalReturnDetailsForm.value.netWeight,
-          "PART_CODE": this.metalReturnDetailsForm.value.partcode,
-          "DT_BRANCH_CODE": this.branchCode,
-          "DT_VOCTYPE": "JWA",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": this.yearMonth,
-          "PUDIFF": 0,
-          "JOB_PURITY": 0
+    let postData = {
+      "SRNO": 0,
+      "VOCNO": 0,
+      "VOCTYPE": this.metalReturnDetailsForm.value.vocType,
+      "VOCDATE": "2023-10-06T09:31:04.626Z",
+      "JOB_NUMBER": this.metalReturnDetailsForm.value.jobNumber,
+      "JOB_DATE": "2024-03-05T12:13:39.290Z",
+      "JOB_SO_NUMBER": this.comService.emptyToZero(this.metalReturnDetailsForm.value.subJobNo),
+      "UNQ_JOB_ID": "",
+      "JOB_DESCRIPTION": this.metalReturnDetailsForm.value.subJobNoDes,
+      "BRANCH_CODE": this.branchCode,
+      "DESIGN_CODE": this.metalReturnDetailsForm.value.designCode,
+      "DIVCODE": "s",
+      "STOCK_CODE": this.metalReturnDetailsForm.value.stockCode,
+      "STOCK_DESCRIPTION": this.metalReturnDetailsForm.value.stockCodeDesc,
+      "SUB_STOCK_CODE": "0",
+      "KARAT_CODE": "",
+      "PCS": this.metalReturnDetailsForm.value.pcs,
+      "GROSS_WT": this.metalReturnDetailsForm.value.grossWeight,
+      "PURITY": this.metalReturnDetailsForm.value.purity,
+      "PURE_WT": this.metalReturnDetailsForm.value.pureWeight,
+      "RATE_TYPE": "",
+      "METAL_RATE": 0,
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
+      "METAL_GRM_RATEFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalGramRateFc),
+      "METAL_GRM_RATELC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalGramRateLc),
+      "METAL_AMOUNTFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalAmountFc),
+      "METAL_AMOUNTLC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.metalAmountLc),
+      "MAKING_RATEFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingRateFc),
+      "MAKING_RATELC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingRateLc),
+      "MAKING_AMOUNTFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingAmountFC),
+      "MAKING_AMOUNTLC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.makingAmountFC),
+      "TOTAL_RATEFC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.totalRateFc),
+      "TOTAL_RATELC": this.comService.emptyToZero(this.metalReturnDetailsForm.value.totalRateLc),
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
+      "PROCESS_CODE": this.metalReturnDetailsForm.value.processCode,
+      "PROCESS_NAME": this.metalReturnDetailsForm.value.processCodeDesc,
+      "WORKER_CODE": this.metalReturnDetailsForm.value.workerCode,
+      "WORKER_NAME": this.metalReturnDetailsForm.value.workerCodeDesc,
+      "UNQ_DESIGN_ID": "",
+      "WIP_ACCODE": "",
+      "UNIQUEID": 0,
+      "LOCTYPE_CODE": this.metalReturnDetailsForm.value.location,
+      "RETURN_STOCK": "",
+      "SUB_RETURN_STOCK": "",
+      "STONE_WT": this.metalReturnDetailsForm.value.stoneWeight,
+      "NET_WT": this.metalReturnDetailsForm.value.netWeight,
+      "PART_CODE": "",
+      "DT_BRANCH_CODE": this.branchCode,
+      "DT_VOCTYPE": "DMR",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": this.yearMonth,
+      "PUDIFF": 0,
+      "JOB_PURITY": 0
     }
     this.close(postData);
   }
 
   updateMeltingType() {
-    let API = 'JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/'+ this.metalReturnDetailsForm.value.brnachCode + this.metalReturnDetailsForm.value.voctype + this.metalReturnDetailsForm.value.vocNo + this.metalReturnDetailsForm.value.yearMoth ;
-    let postData =        {
-          "SRNO": 0,
-          "VOCNO": 0,
-          "VOCTYPE": "str",
-          "VOCDATE": "2023-10-06T09:31:04.626Z",
-          "JOB_NUMBER": this.metalReturnDetailsForm.value.jobNumber,
-          "JOB_DATE": this.metalReturnDetailsForm.value.jobDate,
-          "JOB_SO_NUMBER": this.metalReturnDetailsForm.value.subJobNo,
-          "UNQ_JOB_ID": "",
-          "JOB_DESCRIPTION": this.metalReturnDetailsForm.value.subJobNoDes,
-          "BRANCH_CODE": "",
-          "DESIGN_CODE": this.metalReturnDetailsForm.value.designCode,
-          "DIVCODE": "s",
-          "STOCK_CODE": this.metalReturnDetailsForm.value.stockCode,
-          "STOCK_DESCRIPTION": this.metalReturnDetailsForm.value.stockCodeDesc,
-          "SUB_STOCK_CODE": "",
-          "KARAT_CODE": "",
-          "PCS": this.metalReturnDetailsForm.value.pcs,
-          "GROSS_WT": this.metalReturnDetailsForm.value.grossWeight,
-          "PURITY": this.metalReturnDetailsForm.value.purity,
-          "PURE_WT": this.metalReturnDetailsForm.value.pureWeight,
-          "RATE_TYPE": "",
-          "METAL_RATE": 0,
-          "CURRENCY_CODE": "",
-          "CURRENCY_RATE": 0,
-          "METAL_GRM_RATEFC": this.metalReturnDetailsForm.value.metalGramRateFc,
-          "METAL_GRM_RATELC": this.metalReturnDetailsForm.value.metalGramRateLc,
-          "METAL_AMOUNTFC": this.metalReturnDetailsForm.value.metalAmountFc,
-          "METAL_AMOUNTLC": this.metalReturnDetailsForm.value.metalAmountLc,
-          "MAKING_RATEFC": this.metalReturnDetailsForm.value.makingRateFc,
-          "MAKING_RATELC": this.metalReturnDetailsForm.value.makingRateLc,
-          "MAKING_AMOUNTFC": this.metalReturnDetailsForm.value.makingAmountFC,
-          "MAKING_AMOUNTLC": this.metalReturnDetailsForm.value.makingAmountFC,
-          "TOTAL_RATEFC": this.metalReturnDetailsForm.value.totalRateFc,
-          "TOTAL_RATELC": this.metalReturnDetailsForm.value.totalRateLc,
-          "TOTAL_AMOUNTFC": 0,
-          "TOTAL_AMOUNTLC": 0,
-          "PROCESS_CODE": this.metalReturnDetailsForm.value.processCode,
-          "PROCESS_NAME": this.metalReturnDetailsForm.value.processCodeDesc,
-          "WORKER_CODE": this.metalReturnDetailsForm.value.workerCode,
-          "WORKER_NAME": this.metalReturnDetailsForm.value.workerCodeDesc,
-          "UNQ_DESIGN_ID": "",
-          "WIP_ACCODE": "",
-          "UNIQUEID": 0,
-          "LOCTYPE_CODE": this.metalReturnDetailsForm.value.location,
-          "RETURN_STOCK": "",
-          "SUB_RETURN_STOCK": "",
-          "STONE_WT": this.metalReturnDetailsForm.value.stoneWeight,
-          "NET_WT": this.metalReturnDetailsForm.value.netWeight,
-          "PART_CODE": this.metalReturnDetailsForm.value.part_code,
-          "DT_BRANCH_CODE": this.branchCode,
-          "DT_VOCTYPE": "str",
-          "DT_VOCNO": 0,
-          "DT_YEARMONTH": this.yearMonth,
-          "PUDIFF": this.metalReturnDetailsForm.value.purityDiff,
-          "JOB_PURITY": 0
-        }
-  
-        this.close({postData});
+
+    let postData =
+    {
+      "SRNO": 0,
+      "VOCNO": 0,
+      "VOCTYPE": this.metalReturnDetailsForm.value.vocType,
+      "VOCDATE": "2023-10-06T09:31:04.626Z",
+      "JOB_NUMBER": this.metalReturnDetailsForm.value.jobNumber,
+      "JOB_DATE": this.metalReturnDetailsForm.value.jobDate,
+      "JOB_SO_NUMBER": this.metalReturnDetailsForm.value.subJobNo,
+      "UNQ_JOB_ID": "",
+      "JOB_DESCRIPTION": this.metalReturnDetailsForm.value.subJobNoDes,
+      "BRANCH_CODE": "",
+      "DESIGN_CODE": this.metalReturnDetailsForm.value.designCode,
+      "DIVCODE": "s",
+      "STOCK_CODE": this.metalReturnDetailsForm.value.stockCode,
+      "STOCK_DESCRIPTION": this.metalReturnDetailsForm.value.stockCodeDesc,
+      "SUB_STOCK_CODE": "",
+      "KARAT_CODE": "",
+      "PCS": this.metalReturnDetailsForm.value.pcs,
+      "GROSS_WT": this.metalReturnDetailsForm.value.grossWeight,
+      "PURITY": this.metalReturnDetailsForm.value.purity,
+      "PURE_WT": this.metalReturnDetailsForm.value.pureWeight,
+      "RATE_TYPE": "",
+      "METAL_RATE": 0,
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
+      "METAL_GRM_RATEFC": this.metalReturnDetailsForm.value.metalGramRateFc,
+      "METAL_GRM_RATELC": this.metalReturnDetailsForm.value.metalGramRateLc,
+      "METAL_AMOUNTFC": this.metalReturnDetailsForm.value.metalAmountFc,
+      "METAL_AMOUNTLC": this.metalReturnDetailsForm.value.metalAmountLc,
+      "MAKING_RATEFC": this.metalReturnDetailsForm.value.makingRateFc,
+      "MAKING_RATELC": this.metalReturnDetailsForm.value.makingRateLc,
+      "MAKING_AMOUNTFC": this.metalReturnDetailsForm.value.makingAmountFC,
+      "MAKING_AMOUNTLC": this.metalReturnDetailsForm.value.makingAmountFC,
+      "TOTAL_RATEFC": this.metalReturnDetailsForm.value.totalRateFc,
+      "TOTAL_RATELC": this.metalReturnDetailsForm.value.totalRateLc,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
+      "PROCESS_CODE": this.metalReturnDetailsForm.value.processCode,
+      "PROCESS_NAME": this.metalReturnDetailsForm.value.processCodeDesc,
+      "WORKER_CODE": this.metalReturnDetailsForm.value.workerCode,
+      "WORKER_NAME": this.metalReturnDetailsForm.value.workerCodeDesc,
+      "UNQ_DESIGN_ID": "",
+      "WIP_ACCODE": "",
+      "UNIQUEID": 0,
+      "LOCTYPE_CODE": this.metalReturnDetailsForm.value.location,
+      "RETURN_STOCK": "",
+      "SUB_RETURN_STOCK": "",
+      "STONE_WT": this.metalReturnDetailsForm.value.stoneWeight,
+      "NET_WT": this.metalReturnDetailsForm.value.netWeight,
+      "PART_CODE": "",
+      "DT_BRANCH_CODE": this.branchCode,
+      "DT_VOCTYPE": this.metalReturnDetailsForm.value.vocType,
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": this.yearMonth,
+      "PUDIFF": this.metalReturnDetailsForm.value.purityDiff,
+      "JOB_PURITY": 0
     }
-      /**USE: delete Melting Type From Row */
+
+    this.close({ postData });
+  }
+  /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (!this.content.WORKER_CODE) {
       Swal.fire({
@@ -383,7 +427,7 @@ export class MetalReturnDetailsComponent implements OnInit {
       }
     });
   }
-  
+
 
   jobNumberData: MasterSearchModel = {
     PAGENO: 1,
@@ -397,10 +441,10 @@ export class MetalReturnDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  jobNumberSelected(e:any){
+  jobNumberSelected(e: any) {
     console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.PREFIX_CODE);
-   
+
   }
   subJobNumberValidate(event?: any) {
     let postData = {
@@ -415,7 +459,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        console.log(postData,'uuu')
+        console.log(postData, 'uuu')
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
@@ -433,9 +477,9 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.metalReturnDetailsForm.controls.stoneWeight.setValue(data[0].STONE)
           this.metalReturnDetailsForm.controls.location.setValue(data[0].LOCTYPE_CODE)
           this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
-         
-         
-      
+
+
+
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -463,11 +507,11 @@ export class MetalReturnDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
-            console.log(data,'pppp')
+            console.log(data, 'pppp')
             this.jobNumberDetailData = data
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.subJobNoDes.setValue(data[0].JOB_DESCRIPTION)
-           
+
 
             this.subJobNumberValidate()
           } else {
@@ -483,5 +527,5 @@ export class MetalReturnDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
- 
+
 }
