@@ -428,6 +428,7 @@ export class SchemeReceiptComponent implements OnInit {
           let data = result.response;
           if (data[0].DEFACCODE != "") {
             this.receiptDetailsForm.controls.PartyCode.setValue(data[0].DEFACCODE);
+            this.receiptDetailsForm.controls.PartyDescription.setValue(data[0].DESCRIPTION);
             this.newReceiptData.PARTY_CODE = data[0].DEFACCODE;
           } else {
             this.fetchCreditCardMaster();
