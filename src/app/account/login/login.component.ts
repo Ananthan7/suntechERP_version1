@@ -188,6 +188,7 @@ export class LoginComponent implements OnInit {
         if (resp.status == 'Success') {
 
           this.comService.formControlSetReadOnly('password', false);
+          this.renderer.selectRootElement('#password')?.focus();
 
           this.userDetails = resp.response
           // localStorage.setItem('userRole', resp['response']['GROUP_NAME']);
