@@ -86,6 +86,9 @@ export class DesignMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.images = ['src/assets/images/transparentImg.png'] ;
+
     this.setAllInitialValues()
   }
 
@@ -933,6 +936,9 @@ removedatas(){
 
 
 onFileChangedimage(event: any) {
+
+  this.images = [];
+
   if (event.target.files && event.target.files.length > 0) {
 
     for (let i = 0; i < event.target.files.length; i++) {

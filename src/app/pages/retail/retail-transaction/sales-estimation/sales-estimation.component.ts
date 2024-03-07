@@ -3201,6 +3201,12 @@ export class SalesEstimationComponent implements OnInit {
                                         if (resp.status == "Success") {
                                             // this.customerDetails = resp.response;
                                             this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
+                                            this.openDialog('Success', JSON.stringify(data.response), true);
+                                            this.dialogBox.afterClosed().subscribe((data: any) => {
+                                                if (data == 'OK') {
+                                                    this.modalReference.close();
+                                                }
+                                            });
                                         } else {
                                             this.snackBar.open('Digiscreen Failed');
                                         }
