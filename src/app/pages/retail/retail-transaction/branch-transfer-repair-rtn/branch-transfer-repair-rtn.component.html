@@ -18,12 +18,12 @@
                     <label for="inputPassword" class="col-md-4 col-form-label">Voc Type</label>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="vocType" />
+                            <input type="text" matInput formControlName="vocType" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="vocNo" />
+                            <input type="number" class="text-right" matInput formControlName="vocNo" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -31,17 +31,22 @@
                     <label for="inputPassword" class="col-md-4 col-form-label">Voc Date</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input type="date" matInput formControlName="vocDate" />
-                        </mat-form-field>
+                            <!-- <input type="date" matInput formControlName="vocDate" [readonly]="viewMode"/> -->
+                                <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
+                                    [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
+                                <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                                <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                            </mat-form-field>
                     </div>
                 </div>
                 <div class="row">
                     <label for="inputPassword" class="col-md-4 col-form-label">Sales Man</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="salesMan" />
+                            <input type="text" matInput formControlName="salesMan" [readonly]="viewMode"/>
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
+                        (newRowClick)="salesManSelected($event)"></master-search>
                     </div>
                 </div>
             </div>
@@ -50,16 +55,17 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Branch</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="branch" />
+                            <input type="text" matInput formControlName="branch" [readonly]="viewMode"/>
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="branchCodeData" *ngIf="!viewMode"
+                        (newRowClick)="branchCodeSelected($event)"></master-search>
                     </div>
                 </div>
                 <div class="row">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Branch Name</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="branchName" />
+                            <input type="text" matInput formControlName="branchName" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -67,16 +73,17 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Code</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="partyCode" />
+                            <input type="text" matInput formControlName="partyCode" [readonly]="viewMode"/>
                         </mat-form-field>
-                        <master-search></master-search>
+                        <master-search [MasterSearchData]="partyCodeData" *ngIf="!viewMode"
+                        (newRowClick)="partyCodeSelected($event)"></master-search>
                     </div>
                 </div>
                 <div class="row">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Party Name</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="partyName" />
+                            <input type="text" matInput formControlName="partyName" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -86,7 +93,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Transfer Remarks</label>
                     <div class="col-md-12">
                         <mat-form-field style="width: 100%;">
-                            <textarea matInput rows="4" formControlName="transferRemarks"></textarea>
+                            <textarea matInput rows="4" formControlName="transferRemarks" [readonly]="viewMode"></textarea>
                         </mat-form-field>
                     </div>
                 </div>

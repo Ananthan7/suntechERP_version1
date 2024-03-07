@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (deleteClick)="deleteRepairCustomerDelivery()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid">
     <div class="pt-3">
@@ -78,13 +78,13 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label ">Mobile : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="mobile" [readonly]="viewMode" />
+                                    <input class="text-right" type="number" matInput formControlName="mobile" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label ">Tel : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="tel" [readonly]="viewMode" />
+                                    <input class="text-right" type="number" matInput formControlName="tel" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="currencyDesc" [readonly]="viewMode" />
+                                    <input class="text-right" type="number"  AmountDecimalInput matInput formControlName="currencyDesc" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -270,7 +270,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="repairAmt"
+                                            <input class="text-right" type="number" AmountDecimalInput matInput formControlName="repairAmt"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
@@ -292,7 +292,7 @@
                                     <div class="col-md-6">
                                         <div class="">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="subTotal"
+                                                <input class="text-right" type="number" AmountDecimalInput matInput formControlName="subTotal"
                                                     [readonly]="viewMode" />
                                             </mat-form-field>
                                         </div>
@@ -303,7 +303,7 @@
                                     </label>
                                     <div class="col-sm-6">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="roundOffAmount"
+                                            <input class="text-right" type="number" AmountDecimalInput matInput formControlName="roundOffAmount"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
@@ -312,7 +312,7 @@
                                     <label for="inputPassword" class="col-sm-6 col-form-label">Net Total : </label>
                                     <div class="col-sm-6">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="netTotal"
+                                            <input class="text-right" type="number" AmountDecimalInput matInput formControlName="netTotal"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>

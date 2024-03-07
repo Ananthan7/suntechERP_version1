@@ -721,10 +721,10 @@ export class PosCustomerMasterComponent implements OnInit {
 
           "LOOKING_FOR": this.customerDetails?.LOOKING_FOR || '',
 
-          "POSCUSTIDEXP_DATE":  this.customerDetails?.POSCUSTIDEXP_DATE || this.dummyDate,
+          "POSCUSTIDEXP_DATE": this.customerDetails?.POSCUSTIDEXP_DATE || this.dummyDate,
 
           // new fields added 12-02-2024
-          "ATTACHMENT_FROM_SCANNER": this.customerDetails?.ATTACHMENT_FROM_SCANNER ||  false,
+          "ATTACHMENT_FROM_SCANNER": this.customerDetails?.ATTACHMENT_FROM_SCANNER || false,
           "GOOD_QUALITY_A_K_A": "",
           "LOW_QUALITY_A_K_A": "",
           "POSKNOWNABOUT": 0
@@ -918,85 +918,92 @@ export class PosCustomerMasterComponent implements OnInit {
                 Gender: payload.Gender,
                 CustomerIdType: payload.CustomerIdType
               };
+              if (this.amlNameValidation) {
 
-              this.apiService.getDynamicAPIwithParams('AMLValidation', queryParams).subscribe(async (data) => {
-                this.isCustProcessing = false;
+                this.apiService.getDynamicAPIwithParams('AMLValidation', queryParams).subscribe(async (data) => {
+                  this.isCustProcessing = false;
 
-                this.snackBar.open('Loading...');
+                  this.snackBar.open('Loading...');
 
-                this.apiService
-                  .putDynamicAPI(
-                    `PosCustomerMaster/UpdateDigiScreened/code=${this.customerDetails.CODE}/DigiScreened=true`,
-                    ''
-                  )
-                  .subscribe((resp) => {
-                    this.snackBar.dismiss();
-                    if (resp.status == "Success") {
-                      // this.customerDetails = resp.response;
-                      this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
-                    } else {
-                      this.snackBar.open('Digiscreen Failed');
-                    }
-
-                    console.log('====================================');
-                    console.log('resp', resp);
-                    console.log('====================================');
-                  });
-
-                if (data.response.isMatched != null) {
-                  this.snackBar.dismiss();
-
-                  if (data.response.isMatched.toUpperCase() == 'YES') {
-                    // if (data.response == 'yes') {
-                    this.openDialog('Warning', 'We cannot proceed', true);
-                    this.dialogBox.afterClosed().subscribe((data: any) => {
-                      if (data == 'OK') {
-                        // this.modalReference.close();
-                      }
-                    });
-                    // need to use put api
-                    this.amlNameValidationData = true;
-
-                    this.apiService
-                      .putDynamicAPI(
-                        `PosCustomerMaster/updateCustomerAmlNameValidation/code=${this.customerDetails.CODE}/AmlNameValidation=true`,
-                        ''
-                      )
-                      // .updateAMLNameValidation(this.customerDetails.CODE, true)
-                      .subscribe((resp) => {
+                  this.apiService
+                    .putDynamicAPI(
+                      `PosCustomerMaster/UpdateDigiScreened/code=${this.customerDetails.CODE}/DigiScreened=true`,
+                      ''
+                    )
+                    .subscribe((resp) => {
+                      this.snackBar.dismiss();
+                      if (resp.status == "Success") {
                         // this.customerDetails = resp.response;
-                        this.customerDetails.AMLNAMEVALIDATION =
-                          resp.response != null ? resp.response?.AMLNAMEVALIDATION : true;
+                        this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
+                      } else {
+                        this.snackBar.open('Digiscreen Failed');
+                      }
 
-                        console.log('====================================');
-                        console.log('resp', resp);
-                        console.log('====================================');
+                      console.log('====================================');
+                      console.log('resp', resp);
+                      console.log('====================================');
+                    });
+
+                  if (data.response.isMatched != null) {
+                    this.snackBar.dismiss();
+
+                    if (data.response.isMatched.toUpperCase() == 'YES') {
+                      // if (data.response == 'yes') {
+                      this.openDialog('Warning', 'We cannot proceed', true);
+                      this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                          // this.modalReference.close();
+                          this.closeModal();
+                        }
                       });
-                    // }
-                  } else {
+                      // need to use put api
+                      this.amlNameValidationData = true;
 
-                    this.openDialog('Success', JSON.stringify(data.response), true);
+                      this.apiService
+                        .putDynamicAPI(
+                          `PosCustomerMaster/updateCustomerAmlNameValidation/code=${this.customerDetails.CODE}/AmlNameValidation=true`,
+                          ''
+                        )
+                        // .updateAMLNameValidation(this.customerDetails.CODE, true)
+                        .subscribe((resp) => {
+                          // this.customerDetails = resp.response;
+                          this.customerDetails.AMLNAMEVALIDATION =
+                            resp.response != null ? resp.response?.AMLNAMEVALIDATION : true;
+
+                          console.log('====================================');
+                          console.log('resp', resp);
+                          console.log('====================================');
+                        });
+                      // }
+                    } else {
+
+                      this.openDialog('Success', JSON.stringify(data.response), true);
+                      this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+                          // this.modalReference.close();
+                          this.closeModal();
+                        }
+                      });
+                      //proceed
+                      this.amlNameValidationData = false;
+                    }
+                  } else {
+                    this.openDialog('Warning', JSON.stringify(data.response), true);
                     this.dialogBox.afterClosed().subscribe((data: any) => {
                       if (data == 'OK') {
                         // this.modalReference.close();
                         this.closeModal();
                       }
                     });
-                    //proceed
-                    this.amlNameValidationData = false;
-                  }
-                } else {
-                  this.openDialog('Warning', JSON.stringify(data.response), true);
-                  this.dialogBox.afterClosed().subscribe((data: any) => {
-                    if (data == 'OK') {
-                      // this.modalReference.close();
-                      this.closeModal();
-                    }
-                  });
-                  this.amlNameValidationData = true;
+                    this.amlNameValidationData = true;
 
-                }
-              });
+                  }
+                });
+              } else {
+                this.isCustProcessing = false;
+                this.closeModal();
+
+              }
             } else {
               this.isCustProcessing = false;
 

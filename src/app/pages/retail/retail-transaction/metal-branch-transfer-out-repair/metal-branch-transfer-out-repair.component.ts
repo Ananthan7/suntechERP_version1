@@ -58,7 +58,29 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
   
   
   }
-
+  metalBranchTransferOutRepairForm: FormGroup = this.formBuilder.group({
+    voctype:[''],
+    vocNo:[''],
+    vocDate:[''],
+    enteredBy:[''],
+    itemCurrency:[''],
+    itemCurrencyAmount:[''],
+    branchCurrency:[''],
+    branchCurrencyDes:[''],
+    metalRate:[''],
+    metalRate2:[''],
+    fixed:[''],
+    branchto:[''],
+    branchtoDes:[''],
+    locationTo:[''],
+    returnLocation:[''],
+    shipsTo:[''],
+    shipToDes:[''],
+    deliveryDate:[''],
+    creditDays:[''],
+    creditDate:[''],
+    Driver1:['']
+  })
 
 
   

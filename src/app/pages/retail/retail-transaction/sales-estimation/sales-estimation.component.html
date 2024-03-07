@@ -1761,7 +1761,7 @@
               <mat-form-field>
                 <mat-label>Pcs </mat-label>
                 <!-- oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" -->
-                <input type="number" [min]="0" [maxLength]="8" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                <input type="number" class="text-right" [min]="0" [maxLength]="8" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   matInput formControlName="fcn_exchange_pcs" [readonly]="viewOnly" />
               </mat-form-field>
             </div>
