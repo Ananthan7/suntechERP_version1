@@ -5,7 +5,7 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header  (cancelClick)="close()"></modal-header>
+  <modal-header (saveClick)="formSubmit()"  (cancelClick)="close()"></modal-header>
   <div class="row">
       <div class="col-md-12">
           <form [formGroup]="loyaltyregisterFrom">
@@ -16,7 +16,7 @@
                           <label for="inputPassword" class="col-sm-2 col-form-label">Branch :</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 100%;">
-                                <mat-select formControlName="voctype">
+                                <mat-select formControlName="branch">
                                   <mat-option value="1"></mat-option>
                                 </mat-select>
                               </mat-form-field>
@@ -42,11 +42,11 @@
                               </mat-form-field>
                           </div>
                           <div class="col-md-3 offset-1">
-                            <!-- <mat-form-field style="width: 100%">
+                            <mat-form-field style="width: 100%">
                                 <input matInput [matDatepicker]="todate" name="todate" placeholder="DD/MM/YYYY" DateValidation />
                                 <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
-                                <mat-datepicker [startAt]="currentDate" #fromdate></mat-datepicker>
-                              </mat-form-field> -->
+                                <mat-datepicker [startAt]="currentDate" #todate></mat-datepicker>
+                              </mat-form-field>
                           </div>
                           
                         </div>
@@ -78,12 +78,12 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label">Points :</label>
                             <div class="col-md-2">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" matInput formControlName="pointsfrom" />
+                                <input type="number" matInput formControlName="pointsfrom" style="text-align: right;" />
                               </mat-form-field>
                             </div>
                             <div class="col-md-2">
                               <mat-form-field style="width: 100%;">
-                                <input type="number" matInput formControlName="pointsto" />
+                                <input type="number" matInput formControlName="pointsto" style="text-align: right;" />
                               </mat-form-field>
                             </div>
                         

@@ -37,14 +37,14 @@ export class LabourChargeMasterComponent implements OnInit {
   salesRateMetal : any;
   salesRatePercentageMetal: any;
 
-  // displayCostRate: any;
-  // displayDiaSellingRate: any;
-  // displayDiaCtWtFrom: any;
-  // displayDiaCtWtTo: any;
-  // displayMetalCostRate: any;
-  // displayMetalSellingRate: any;
-  // displayMetalWtFrom: any;
-  // displayMetalWtTo: any;
+   displayDiaCostRate: any;
+   displayDiaSellingRate: any;
+   displayDiaCtWtFrom: any;
+  displayDiaCtWtTo: any;
+  displayMetalCostRate: any;
+  displayMetalSellingRate: any;
+  displayMetalWtFrom: any;
+  displayMetalWtTo: any;
 
 
 
@@ -911,16 +911,51 @@ export class LabourChargeMasterComponent implements OnInit {
     }
   }
 
-  // keyupvalue(e: any) {
-  //   console.log(e);
-  //   this.displayCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //   this.displayDiaSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //   this.displayDiaCtWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //   this.displayDiaCtWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //   this.displayMetalCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //   this.displayMetalSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //   this.displayMetalWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //   this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  // }
+  DiaCostRatekeyupvalue(e: any) {
+    console.log(e);
+    this.displayDiaCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //this.displayDiaSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // this.displayDiaCtWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // this.displayDiaCtWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // this.displayMetalCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // this.displayMetalSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // this.displayMetalWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  DiaSellingRatekeyupvalue(e: any){
+    console.log(e)
+    this.displayDiaSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  DiaCtWtFromkeyupvalue(e: any) {
+    console.log(e);
+    this.displayDiaCtWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  DiaCtWtTokeyupvalue(e: any) {
+    console.log(e);
+    this.displayDiaCtWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  MetalCostRatekeyupvalue(e: any) {
+    console.log(e);
+    this.displayMetalCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  MetalSellingRatekeyupvalue(e: any) {
+    console.log(e);
+    this.displayMetalSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  MetalWtFromkeyupvalue(e: any) {
+    console.log(e);
+    this.displayMetalWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  MetalWtTokeyupvalue(e: any) {
+    console.log(e);
+    this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
 }
