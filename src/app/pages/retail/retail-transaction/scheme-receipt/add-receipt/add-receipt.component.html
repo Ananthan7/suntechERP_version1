@@ -187,7 +187,7 @@
                     </span>
                     <span style="width: 45%">
                         <mat-form-field>
-                            <input type="text" matInput
+                            <input type="text" matInput [readonly]="disableAmountFC"
                                 class="text-right" AmountDecimalInput
                                 formControlName="Amount_FC"
                                 (focusout)="calculateAmountFC()"
@@ -229,7 +229,7 @@
                     </span>
                     <span style="width: 45%">
                         <mat-form-field>
-                            <input type="text" matInput
+                            <input type="text" matInput [readonly]="viewMode"
                                 class="text-right" AmountDecimalInput
                                 formControlName="Amount_LC"
                                 (focusout)="calculateAmountLC()"

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -26,6 +25,7 @@ export class AddReceiptComponent implements OnInit {
   payTypeArray: any[] = [];
   gridDataSource: any[] = [];
   schemeFlag: boolean = false;
+  viewMode: boolean = false;
   /**serach modal data */
   branchMasterData: any = {
     TABLE_NAME: 'BRANCH_MASTER',
@@ -100,12 +100,12 @@ export class AddReceiptComponent implements OnInit {
     ChequeDate: [''],
     DrawnBank: [''],
     DepBank: [''],
+    IGST_ACCODE: [''],
   })
   private subscriptions: Subscription[] = [];
   constructor(
     private formBuilder: FormBuilder,
     private commonService: CommonServiceService,
-    private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private activeModal: NgbActiveModal,
     // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
@@ -126,11 +126,11 @@ export class AddReceiptComponent implements OnInit {
   setFormValues() {
     this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
     this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
-    this.setFormControlValue('InstallmentAmount',this.content.SCH_INST_AMOUNT_FC)
-    this.setFormControlValue('Header_Amount',this.content.SCH_INST_AMOUNT_FC)
-    this.setFormControlValue('Amount_LC',this.content.SCH_INST_AMOUNT_FC)
-    this.setFormControlValue('Amount_FC',this.content.SCH_INST_AMOUNT_FC)
-    this.setFormControlValue('SchemeTotalAmount',this.content.SCHEME_AMOUNT)
+    this.setFormControlValue('InstallmentAmount', this.content.SCH_INST_AMOUNT_FC)
+    this.setFormControlValue('Header_Amount', this.content.SCH_INST_AMOUNT_FC)
+    this.setFormControlValue('Amount_LC', this.content.SCH_INST_AMOUNT_FC)
+    this.setFormControlValue('Amount_FC', this.content.SCH_INST_AMOUNT_FC)
+    this.setFormControlValue('SchemeTotalAmount', this.content.SCHEME_AMOUNT)
     this.setGridData()
   }
   // setInitialValues() {
@@ -182,7 +182,9 @@ export class AddReceiptComponent implements OnInit {
           this.gridDataSource = result.response
           this.calculateGridAmount()
         } else {
-          this.toastr.error('grid data not found')
+          this.disableAmountFC = true;
+          this.viewMode = true;
+          this.commonService.toastErrorByMsgId('grid data not found')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -196,11 +198,11 @@ export class AddReceiptComponent implements OnInit {
     }
   }
   selectedAcCode(data: any) {
-    if(data.accode){
+    if (data.accode) {
       this.receiptEntryForm.controls.AC_Code.setValue(data.accode)
       this.receiptEntryForm.controls.AC_Description.setValue(data.account_head)
       this.getAccountMaster(data.accode)
-      if(data.BANK_CODE) this.receiptEntryForm.controls.DepBank.setValue(data.BANK_CODE)
+      if (data.BANK_CODE) this.receiptEntryForm.controls.DepBank.setValue(data.BANK_CODE)
     }
     if (data.ACCODE) {
       this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE)
@@ -223,41 +225,41 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.Branch.setValue(data[0].BRANCH_CODE)
 
     } else {
-      this.toastr.error('Branch not found!');
+      this.commonService.toastErrorByMsgId('Branch not found!');
       this.receiptEntryForm.value.Branch.setValue('')
     }
   }
   //use: form submit
   onSubmit() {
     let formValue = this.receiptEntryForm.value
-    if(formValue.Type == 'Cheque' && formValue.ChequeDate == ''){
+    if (formValue.Type == 'Cheque' && formValue.ChequeDate == '') {
       this.commonService.toastErrorByMsgId('Cheque Date Required')
       return
     }
-    if(formValue.Type == 'Cheque' && formValue.ChequeNumber == ''){
+    if (formValue.Type == 'Cheque' && formValue.ChequeNumber == '') {
       this.commonService.toastErrorByMsgId('Cheque Number Required')
       return
     }
-    if(Number(formValue.Amount_FC) == 0 || Number(formValue.Amount_LC) == 0){
+    if (Number(formValue.Amount_FC) == 0 || Number(formValue.Amount_LC) == 0) {
       this.commonService.toastErrorByMsgId('Amount cannot be zero')
       return
     }
-    if(formValue.TRN_Per == ''){
+    if (formValue.TRN_Per == '') {
       this.commonService.toastErrorByMsgId('Issue while loading tax details, try again')
       return
     }
-    if(formValue.AC_Code == ''){
+    if (formValue.AC_Code == '') {
       this.commonService.toastErrorByMsgId('A/C Code Required')
       return
     }
     if (this.receiptEntryForm.invalid) {
-      this.toastr.error('select all required details!');
+      this.commonService.toastErrorByMsgId('select all required details!');
       return;
     } else {
       this.close(this.receiptEntryForm.value)
     }
   }
-
+  disableAmountFC: boolean = false;
   //Account master
   getAccountMaster(accountCode: string) {
     this.commonService.toastInfoByMsgId('MSG81447');
@@ -269,53 +271,74 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
           if (data.CURRENCY_CODE) {
             this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
+            if (data.CURRENCY_CODE == this.commonService.compCurrency) {
+              this.disableAmountFC = true
+            }
             this.currencyCodeChange(data.CURRENCY_CODE);
           } else {
-            this.toastr.error('PartyCode not found in credit master')
+            this.commonService.toastErrorByMsgId('PartyCode not found in credit master')
           }
         } else {
-          this.toastr.error('PartyCode not found in credit master')
+          this.commonService.toastErrorByMsgId('PartyCode not found in credit master')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  // accountMasterChanged(event: any) {
-  //   let Sub: Subscription = this.dataService.getDynamicAPI('Scheme/AccountMaster?ACCODE=' + event.target.value)
-  //     .subscribe((result) => {
-  //       if (result.response) {
-  //         let data = result.response
+  accountMasterChanged(event: any) {
+    let API = 'Scheme/AccountMaster?ACCODE='
+    let Sub: Subscription = this.dataService.getDynamicAPI(API + event.target.value)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
 
-  //         this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE);
-  //         this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
-  //         if (data.CURRENCY_CODE) {
-  //           this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
-  //           this.currencyCodeChange(data.CURRENCY_CODE);
-  //         } else {
-  //           this.toastr.error('Account Code not found')
-  //           this.receiptEntryForm.controls.AC_Code.setValue('');
-  //           this.receiptEntryForm.controls.AC_Description.setValue('');
-  //         }
-  //       } else {
-  //         this.toastr.error('Account Code not found')
-  //         this.receiptEntryForm.controls.AC_Code.setValue('');
-  //         this.receiptEntryForm.controls.AC_Description.setValue('');
-  //       }
-  //     }, err => alert(err))
-  //   this.subscriptions.push(Sub)
-  // }
+          this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE);
+          this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
+          if (data.CURRENCY_CODE) {
+            this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
+            this.currencyCodeChange(data.CURRENCY_CODE);
+          } else {
+            this.commonService.toastErrorByMsgId('Account Code not found')
+            this.receiptEntryForm.controls.AC_Code.setValue('');
+            this.receiptEntryForm.controls.AC_Description.setValue('');
+          }
+        } else {
+          this.commonService.toastErrorByMsgId('Account Code not found')
+          this.receiptEntryForm.controls.AC_Code.setValue('');
+          this.receiptEntryForm.controls.AC_Description.setValue('');
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  getGSTDetail() {
+    let param = {
+      accode: this.content.PartyCode,
+      branch_code: this.commonService.branchCode,
+      mainvoctype: this.commonService.getqueryParamMainVocType(),
+    }
+    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('TaxDetails/GetGSTDetail', param)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.receiptEntryForm.controls.IGST_ACCODE.setValue(data.IGST_ACCODE);
+        } else {
+          this.commonService.toastErrorByMsgId('IGST Code not found')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
   //USE to get HSN and VAT and calculations
   getTaxDetails() {
     let date = this.commonService.formatDate(new Date())
     let accountCode = this.content.PartyCode
     if (!accountCode) {
-      this.toastr.error('Accode not found')
+      this.commonService.toastErrorByMsgId('Party Code Not Found')
       return
     }
     let Sub: Subscription = this.dataService.getDynamicAPI(`TaxDetails?Accode=${accountCode}&strdate=${date}`)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-
+          this.getGSTDetail()
           this.receiptEntryForm.controls.HSN_AC.setValue(data.HSN_SAC_CODE);
           this.receiptEntryForm.controls.TRN_Per.setValue(data.VAT_PER);
           // this.content.SCHEME_AMOUNT = 100 //TODO
@@ -324,54 +347,49 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
 
 
-          let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
+          // let amount_LC: number = this.calculateVAT(Number(data.VAT_PER), Number(this.content.SCH_INST_AMOUNT_FC))
 
-          amount_LC = Number(amount_LC.toFixed(2))
-
-
-          let amount_FC: number = Number(this.currencyRate) * amount_LC
-          amount_FC = Number(amount_FC.toFixed(2))
-
-          let trn_Fc_amount: number = Number(this.content.SCHEME_AMOUNT) - amount_FC
-          trn_Fc_amount = Number(trn_Fc_amount.toFixed(2))
-          this.receiptEntryForm.controls.TRN_Amount_FC.setValue(trn_Fc_amount)
-
-          let trn_amount_lc: number = Number(this.content.SCHEME_AMOUNT) - amount_LC
-          trn_amount_lc = Number(trn_amount_lc.toFixed(2))
-          this.receiptEntryForm.controls.TRN_Amount_LC.setValue(trn_amount_lc)
+          // amount_LC = Number(amount_LC.toFixed(2))
 
 
+          // let amount_FC: number = Number(this.currencyRate) * amount_LC
+          // amount_FC = Number(amount_FC.toFixed(2))
 
-          // "VAT_CODE": "VAT5",
-          // "HSN_SAC_CODE": "VAT5",
-          // "VAT_PER": "5.00",
-          // "EXPENSE_ACCODE": "225004",
-          // "VAT_DATE": "8/26/2023 12:00:00 AM"
+          // let trn_Fc_amount: number = Number(this.content.SCHEME_AMOUNT) - amount_FC
+          // trn_Fc_amount = Number(trn_Fc_amount.toFixed(2))
+          // this.receiptEntryForm.controls.TRN_Amount_FC.setValue(trn_Fc_amount)
+
+          // let trn_amount_lc: number = Number(this.content.SCHEME_AMOUNT) - amount_LC
+          // trn_amount_lc = Number(trn_amount_lc.toFixed(2))
+          // this.receiptEntryForm.controls.TRN_Amount_LC.setValue(trn_amount_lc)
         } else {
           this.commonService.toastErrorByMsgId('Accode not found in credit master')
         }
       }, err => this.commonService.toastErrorByMsgId(err))
     this.subscriptions.push(Sub)
   }
+
   private calculateVAT(VAT: number, AMOUNT: number): number {
     return (AMOUNT / (100 + VAT)) * 100
   }
-  setFormControlValue(controlName: string,amount:any){
+  setFormControlValue(controlName: string, amount: any) {
     amount = this.commonService.emptyToZero(amount)
-    amount = this.commonService.decimalQuantityFormat(amount,'AMOUNT')
+    amount = this.commonService.decimalQuantityFormat(amount, 'AMOUNT')
     this.receiptEntryForm.controls[controlName].setValue(
       this.commonService.commaSeperation(amount)
     )
   }
   calculateAmountLC() {
     let form = this.receiptEntryForm.value
+    if (this.commonService.emptyToZero(form.SchemeBalance) == 0) {
+      this.commonService.toastErrorByMsgId('Scheme Balance is' + form.SchemeBalance)
+      return
+    }
     if (this.commonService.emptyToZero(form.SchemeBalance) < this.commonService.emptyToZero(form.Amount_LC)) {
-      this.receiptEntryForm.controls.Amount_LC.setValue(0)
+      this.receiptEntryForm.controls.Amount_LC.setValue('')
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance ' + form.SchemeBalance)
       return
     }
-    console.log(form.Amount_LC,'form.Amount_LC');
-    
     this.setFormControlValue('Amount_LC', form.Amount_LC)
     this.setFormControlValue('Header_Amount', form.Amount_LC)
     this.setFormControlValue('Amount_FC', form.Amount_LC)
@@ -379,12 +397,15 @@ export class AddReceiptComponent implements OnInit {
   }
   calculateAmountFC() {
     let form = this.receiptEntryForm.value
+    if (this.commonService.emptyToZero(form.SchemeBalance) == 0) {
+      this.commonService.toastErrorByMsgId('Scheme Balance is' + form.SchemeBalance)
+      return
+    }
     if (this.commonService.emptyToZero(form.SchemeBalance) < this.commonService.emptyToZero(form.Amount_FC)) {
-      this.receiptEntryForm.controls.Amount_FC.setValue(0)
+      this.receiptEntryForm.controls.Amount_FC.setValue('')
       this.commonService.toastErrorByMsgId('Allocating Amount cannot allow more than Scheme Balance ' + form.SchemeBalance)
       return
     }
-    console.log(form.Amount_FC,'form.Amount_LC');
     this.setFormControlValue('Amount_FC', form.Amount_FC)
     this.setFormControlValue('Header_Amount', form.Amount_FC)
     this.setFormControlValue('Amount_LC', form.Amount_FC)
@@ -401,7 +422,7 @@ export class AddReceiptComponent implements OnInit {
       item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(0, 'THREE')
       item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(0, 'THREE')
     })
-    let SchemeBalance =  this.commonService.decimalQuantityFormat((payAmountSum), 'AMOUNT')
+    let SchemeBalance = this.commonService.decimalQuantityFormat((payAmountSum), 'AMOUNT')
     this.receiptEntryForm.controls.SchemeBalance.setValue(
       this.commonService.commaSeperation(SchemeBalance)
     )
@@ -436,10 +457,10 @@ export class AddReceiptComponent implements OnInit {
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat((item.RCVD_AMOUNTCC), 'THREE')
       } else {
-        item.RCVD_AMOUNTFC = Amount_FC - (totalRowsToUpdate * 
+        item.RCVD_AMOUNTFC = Amount_FC - (totalRowsToUpdate *
           this.commonService.emptyToZero(formData.InstallmentAmount))
         item.RCVD_AMOUNTFC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
-        item.RCVD_AMOUNTCC = Amount_LC - (totalRowsToUpdate * 
+        item.RCVD_AMOUNTCC = Amount_LC - (totalRowsToUpdate *
           this.commonService.emptyToZero(formData.InstallmentAmount))
         item.RCVD_AMOUNTCC = this.commonService.decimalQuantityFormat(item.RCVD_AMOUNTFC, 'THREE')
         flag = 1
@@ -448,11 +469,11 @@ export class AddReceiptComponent implements OnInit {
     })
     this.setNarrationString() //narration add
   }
-  setNarrationString(){
+  setNarrationString() {
     let narrationStr: string = ''
     this.gridDataSource.forEach((item: any, index: any) => {
-      if(Number(item.RCVD_AMOUNTFC) != 0){
-        narrationStr +=  `${item.PAY_DATE} : ${item.RCVD_AMOUNTFC} #`
+      if (Number(item.RCVD_AMOUNTFC) != 0) {
+        narrationStr += `${item.PAY_DATE} : ${item.RCVD_AMOUNTFC} #`
       }
     })
     this.receiptEntryForm.controls.Narration.setValue(narrationStr)
@@ -488,7 +509,7 @@ export class AddReceiptComponent implements OnInit {
           let data = result.response
           this.typeCodeArray = data.filter((value: any) => value.MODE == 1)
         } else {
-          this.toastr.error('Currency rate not Found')
+          this.commonService.toastErrorByMsgId('Currency rate not Found')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -521,7 +542,7 @@ export class AddReceiptComponent implements OnInit {
     ]
     this.receiptEntryForm.controls.Type.setValue('Cash')
     //     } else {
-    //       this.toastr.error('Receipt Mode not found')
+    //       this.commonService.toastErrorByMsgId('Receipt Mode not found')
     //     }
     //   }, (err: any) => alert(err))
     // this.subscriptions.push(Sub)
@@ -552,7 +573,7 @@ export class AddReceiptComponent implements OnInit {
       this.accountMasterData.LOAD_ONCLICK = true;
       this.accountMasterData.PAGENO = 1;
       this.accountMasterData.SEARCH_FIELD = 'ACCODE,ACCOUNT_HEAD';
-      this.accountMasterData.API_VALUE = 'SchemeReceipt/GetCashAccode/'+this.commonService.branchCode
+      this.accountMasterData.API_VALUE = 'SchemeReceipt/GetCashAccode/' + this.commonService.branchCode
       this.getBranchMasterList()
     } else if (event.ENGLISH == 'Cheque') {
       this.accountMasterData.LOOKUPID = 70;

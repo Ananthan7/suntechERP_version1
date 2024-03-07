@@ -128,6 +128,7 @@ export class SchemeReceiptComponent implements OnInit {
     PartyAmount: [''],
     PartyAmtCode: [''],
     PartyAddress: [''],
+    IGST_ACCODE: [''],
     TotalAmount: [0],
     TotalTax: [0],
   });
@@ -197,6 +198,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.PartyAmount.setValue(this.content.TOTAL_AMOUNTFC);
     this.receiptDetailsForm.controls.TotalAmount.setValue(this.content.TOTAL_AMOUNTFC);
     this.receiptDetailsForm.controls.TotalTax.setValue(this.content.GST_TOTALFC);
+    this.receiptDetailsForm.controls.IGST_ACCODE.setValue(this.content.IGST_ACCODE);
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
@@ -905,7 +907,7 @@ export class SchemeReceiptComponent implements OnInit {
         "IGST_AMOUNTCC": this.commonService.emptyToZero(this.receiptDetailsForm.value.TotalTax),
         "CGST_ACCODE": "",
         "SGST_ACCODE": "",
-        "IGST_ACCODE": "",
+        "IGST_ACCODE": this.commonService.nullToString(this.receiptDetailsForm.value.IGST_ACCODE),
         "GST_HEADER_AMOUNT": this.commonService.emptyToZero(this.TOTAL_AMOUNTLC),
         "GST_NUMBER": "",
         "INVOICE_NUMBER": item.TRN_No,
@@ -968,7 +970,7 @@ export class SchemeReceiptComponent implements OnInit {
       "FLAG_INPROCESS": "N",
       "SUPINVNO": "",
       "SUPINVDATE": this.commonService.formatDateTime(this.currentDate),
-      "HHACCOUNT_HEAD": this.rightSideHeader || "Advance From Retail Customers",
+      "HHACCOUNT_HEAD": this.rightSideHeader || "Advance From Retail Customers By Scheme",
       "SALESPERSON_CODE": this.receiptDetailsForm.value.Salesman || "",
       "BALANCE_FC": this.commonService.emptyToZero(this.totalValue_FC),
       "BALANCE_CC": this.commonService.emptyToZero(this.totalValue),
