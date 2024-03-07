@@ -150,8 +150,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
     // this.posCurrencyReceiptForm.controls['vocNo'].disable();
 
     this.branchCode = this.comService.branchCode;
-    this.yearMonth = this.comService.yearSelected;
+    // this.yearMonth = this.comService.yearSelected;
     this.userName = this.comService.userName;
+
 
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comService.allbranchMaster = JSON.parse(branchParams);
@@ -160,6 +161,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     this.posCurrencyReceiptForm.controls.vocDate.setValue(this.currentDate)
     this.posCurrencyReceiptForm.controls.vocType.setValue(this.comService.getqueryParamVocType())
+
+    this.getFinancialYear();
+
 
     if (this.content?.MID != null)
       this.getArgsData();
@@ -657,6 +661,18 @@ export class PosCurrencyReceiptComponent implements OnInit {
         this.posCurrencyDetailsData.forEach((data, index) => data.SRNO = index + 1);
       }
     });
+  }
+
+
+  async getFinancialYear() {
+    const API = `BaseFinanceYear/GetBaseFinancialYear?VOCDATE=${this.comService.cDateFormat(this.posCurrencyReceiptForm.value.vocDate)}`;
+    const res = await this.dataService.getDynamicAPI(API).toPromise()
+    console.log(res);
+    if (res.status == "Success") {
+      this.yearMonth = res.BaseFinancialyear;
+      console.log('BaseFinancialyear', res.BaseFinancialyear);
+      
+    }
   }
 
 }

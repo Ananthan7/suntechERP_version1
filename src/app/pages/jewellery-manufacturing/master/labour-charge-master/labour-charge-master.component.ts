@@ -19,12 +19,12 @@ export class LabourChargeMasterComponent implements OnInit {
   @Input() content!: any;
   viewMode: boolean = false;
   buttonField: boolean = true;
-  forDesignOnlyTrue:boolean = true;
+  forDesignOnlyTrue: boolean = true;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branch = localStorage.getItem('userbranch');
   private subscriptions: Subscription[] = [];
-  stockcodeDisable:boolean = false;
+  stockcodeDisable: boolean = false;
   methodList: any[] = [];
   labourTypeList: any[] = [];
   DialabourTypeList: any[] = [];
@@ -32,13 +32,30 @@ export class LabourChargeMasterComponent implements OnInit {
   currencyList: any[] = [];
   settingTypeList: any[] = [];
   divisionMS: any = 'ID';
+  salesRate: any;
+  salesRatePercentage: any;
+  salesRateMetal : any;
+  salesRatePercentageMetal: any;
+
+  // displayCostRate: any;
+  // displayDiaSellingRate: any;
+  // displayDiaCtWtFrom: any;
+  // displayDiaCtWtTo: any;
+  // displayMetalCostRate: any;
+  // displayMetalSellingRate: any;
+  // displayMetalWtFrom: any;
+  // displayMetalWtTo: any;
+
+
+
+
 
 
   diamondlabourMasterForm: FormGroup = this.formBuilder.group({
     mid: [],
     divisions: ['', [Validators.required]],
     labour_code: ['', [Validators.required]],
-    labour_description:['', [Validators.required]],
+    labour_description: ['', [Validators.required]],
     shape: ['', [Validators.required]],
     process: ['', [Validators.required]],
     size_from: ['', [Validators.required]],
@@ -69,16 +86,16 @@ export class LabourChargeMasterComponent implements OnInit {
     metallabour_description: ['', [Validators.required]],
     metallabourType: ['', [Validators.required]],
     metalcurrency: ['', [Validators.required]],
-    karat: [''],
+    karat: ['', [Validators.required]],
     labourAc: ['', [Validators.required]],
     color: [''],
-    metalcost_rate: [''],
+    metalcost_rate: ['', [Validators.required]],
     typecode: [''],
-    metalselling_rate: [''],
-    category: [''],
-    metalSelling: [''],
+    metalselling_rate: ['', [Validators.required]],
+    category: ['', [Validators.required]],
+    metalSelling: ['', [Validators.required]],
     subCategory: [''],
-    wastage: [''],
+    wastage: ['', [Validators.required]],
     brand: [''],
     metalunitList: ['', [Validators.required]],
     purity: [''],
@@ -280,18 +297,18 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   // metallabourMasterForm
-stockCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 23,
-  SEARCH_FIELD: 'STOCK_CODE',
-  SEARCH_HEADING: 'Stock Type',
-  SEARCH_VALUE: '',
-  WHERECONDITION: `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`,
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-  LOAD_ONCLICK:true,
-};
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
 
 
 
@@ -310,7 +327,7 @@ stockCodeData: MasterSearchModel = {
       this.setFormValues()
       this.setInitialValues()
     }
-  
+
     // this.diamondlabourMasterForm = this.formBuilder.group({
     //   labourType: new FormControl(''),
     //   settingType: new FormControl({ value: '', disabled: true }),
@@ -486,7 +503,7 @@ stockCodeData: MasterSearchModel = {
   }
 
   metaldivisionCodeSelected(e: any) {
-    
+
     console.log(e);
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
@@ -506,7 +523,7 @@ stockCodeData: MasterSearchModel = {
     console.log(e);
     this.diamondlabourMasterForm.controls.sieve.setValue(e.CODE);
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(e.DESCRIPTION);
-    
+
   }
 
   stockCodeSelected(e: any) {
@@ -514,7 +531,7 @@ stockCodeData: MasterSearchModel = {
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
-     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
   currencyCodeSelected(e: any) {
@@ -606,6 +623,47 @@ stockCodeData: MasterSearchModel = {
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
   }
 
+  salesChange() {
+    this.salesRate = this.diamondlabourMasterForm.value.selling_rate;
+    this.salesRatePercentage = this.diamondlabourMasterForm.value.selling;
+
+    if (this.salesRate === '') {
+      this.diamondlabourMasterForm.controls.selling_rate.disable();
+      this.diamondlabourMasterForm.controls.selling.enable();
+      this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+    }
+    else if (this.salesRatePercentage === '') {
+      this.diamondlabourMasterForm.controls.selling.disable();
+      this.diamondlabourMasterForm.controls.selling_rate.enable();
+      this.diamondlabourMasterForm.controls.selling.setValue('');
+
+    }
+    else if (this.diamondlabourMasterForm.value.selling === '' && this.diamondlabourMasterForm.value.selling_rate === '') {
+      this.toastr.error('Enter values either Selling % or Selling Rate');
+      return;
+    }
+  }
+
+  salesChangeMetal() {
+    this.salesRateMetal = this.metallabourMasterForm.value.metalselling_rate;
+    this.salesRatePercentageMetal = this.metallabourMasterForm.value.metalSelling;
+
+    if (this.salesRateMetal === '') {
+      this.metallabourMasterForm.controls.metalselling_rate.disable();
+      this.metallabourMasterForm.controls.metalSelling.enable();
+      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+    }
+    else if (this.salesRatePercentageMetal === '') {
+      this.metallabourMasterForm.controls.metalSelling.disable();
+      this.metallabourMasterForm.controls.metalselling_rate.enable();
+      this.metallabourMasterForm.controls.metalSelling.setValue('');
+
+    }
+    else if (this.metallabourMasterForm.value.metalSelling === '' && this.metallabourMasterForm.value.metalselling_rate === '') {
+      this.toastr.error('Enter values either Selling % or Selling Rate');
+      return;
+    }
+  }
 
 
 
@@ -630,11 +688,11 @@ stockCodeData: MasterSearchModel = {
     let postData = {
       "MID": 0,
       "SRNO": 0,
-      "CODE": this.diamondlabourMasterForm.value.labour_code || "",
+      "CODE": this.diamondlabourMasterForm.value.labour_code,
       "DESCRIPTION": this.diamondlabourMasterForm.value.labour_description || "",
       "LABTYPE": this.diamondlabourMasterForm.value.labourType || "",
       "METHOD": this.diamondlabourMasterForm.value.method || "",
-      "DIVISION": this.diamondlabourMasterForm.value.division,
+      "DIVISION": this.diamondlabourMasterForm.value.divisions,
       "SHAPE": this.diamondlabourMasterForm.value.shape,
       "SIZE_FROM": this.diamondlabourMasterForm.value.size_from,
       "SIZE_TO": this.diamondlabourMasterForm.value.size_to,
@@ -646,7 +704,7 @@ stockCodeData: MasterSearchModel = {
       "LAST_SELLING_RATE": this.metallabourMasterForm.value.metalselling_rate,
       "LAST_UPDATE": "2023-09-12T11:17:56.924Z",
       "CRACCODE": "",
-      "DIVISION_CODE": this.metallabourMasterForm.value.division || "",
+      "DIVISION_CODE": this.metallabourMasterForm.value.metalDivision ,
       "CURRENCY_CODE": this.metallabourMasterForm.value.currency || "",
       "SELLING_PER": this.diamondlabourMasterForm.value.selling,
       "ACCESSORIES": 0,
@@ -853,5 +911,16 @@ stockCodeData: MasterSearchModel = {
     }
   }
 
+  // keyupvalue(e: any) {
+  //   console.log(e);
+  //   this.displayCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  //   this.displayDiaSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  //   this.displayDiaCtWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  //   this.displayDiaCtWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  //   this.displayMetalCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  //   this.displayMetalSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  //   this.displayMetalWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  //   this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
 
 }

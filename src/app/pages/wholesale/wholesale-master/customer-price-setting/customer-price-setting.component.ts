@@ -24,6 +24,12 @@ export class CustomerPriceSettingComponent implements OnInit {
   @Input() content!: any; 
   tableData: any[] = [];
   currentDate = new FormControl(new Date());
+
+  isdisabled:boolean = true
+  checkboxvalue:boolean = true
+  public isDisabled = true;
+  public isChecked = true;
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -34,6 +40,11 @@ export class CustomerPriceSettingComponent implements OnInit {
   ) { }
  
   ngOnInit(): void {
+    // this.customerpricesettingForm.controls['designCode'].disable();
+  }
+
+  selectstock(event:any){
+    this.isdisabled = false
   }
 
   customerpricesettingForm: FormGroup = this.formBuilder.group({

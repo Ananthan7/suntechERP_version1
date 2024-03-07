@@ -11,10 +11,10 @@
         <div class="col-md-12">
             <div class="sales-card-body p-2">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
 
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-2 col-form-label">Code :</label>
+                            <label for="input" class="col-sm-2 col-form-label">Code * :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="code" />
@@ -34,7 +34,7 @@
                             <label for="input" class="col-sm-2 col-form-label">Size Set
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="sizeSet" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="sizeSetCodeData"
@@ -43,7 +43,7 @@
                             </div>
                             <label for="input" class="col-sm-2 col-form-label">Type :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="type" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="typeCodeData"
@@ -54,7 +54,7 @@
                         <div class="row mb-2">
                             <label for="input" class="col-sm-2 col-form-label">Size :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="size" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="sizeCodeData"
@@ -64,7 +64,7 @@
                             <label for="input" class="col-sm-2 col-form-label">Category
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="category" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="categoryCodeData"
@@ -75,7 +75,7 @@
                         <div class="row mb-2">
                             <label for="input" class="col-sm-2 col-form-label">Shape :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="shape" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="shapeCodeData"
@@ -85,7 +85,7 @@
                             <label for="input" class="col-sm-2 col-form-label">Setting
                                 Type:</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 80%;">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="settingType" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="settingTypeCodeData"
@@ -107,22 +107,20 @@
 
                     </div>
 
-                    <div class="col-md-5">
+                    <div class="col-md-4">
 
                         <div class="row mb-2">
                             <label for="input" class="col-sm-2 col-form-label">Height :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text"   class="text-right" matInput
-                                        formControlName="height" />
+                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly formControlName="height" />
                                 </mat-form-field>
 
                             </div>
                             <label for="input" class="col-sm-2 col-form-label">Length :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text"   class="text-right" matInput
-                                        formControlName="length" />
+                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly formControlName="length" />
                                 </mat-form-field>
 
                             </div>
@@ -132,16 +130,14 @@
                             <label for="input" class="col-sm-2 col-form-label">Width :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text"   class="text-right" matInput
-                                        formControlName="width" />
+                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly formControlName="width" />
                                 </mat-form-field>
 
                             </div>
                             <label for="input" class="col-sm-2 col-form-label">Radius :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 80%;">
-                                    <input type="text"   class="text-right" matInput
-                                        formControlName="radius" />
+                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly formControlName="radius" />
                                 </mat-form-field>
 
                             </div>
@@ -174,6 +170,16 @@
                         </div>
 
                     </div>
+                    <div class="col-md-3">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btnnew border-dark">
+                                <img src={{image}} style="width:126px;height:124px">
+
+                            </button>
+                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                                (change)="onFileChangedimage($event)">
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -194,18 +200,19 @@
                             <mat-tab label="Components">
                                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true"
                                     [allowColumnReordering]="true" [allowColumnResizing]="true" [dataSource]="tableData"
-                                    class="mt-3" [columnAutoWidth]="true">
-                                    <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
-                                    </dxo-editing>
+                                    class="mt-3" [columnAutoWidth]="true" [showColumnLines]="true" [showRowLines]="true"
+                                    (onSelectionChanged)="onSelectionChanged($event)">
                                     <dxo-selection mode="multiple"></dxo-selection>
+                                    <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                                    </dxo-editing> -->
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                                     <dxi-column dataField="SRNO" caption="SrNo">
                                     </dxi-column>
-                                    <dxi-column dataField="DIVCODE" caption="Div Code">
+                                    <dxi-column dataField="DIVCODE" caption="Div Code" cellTemplate="divisiontemp">
                                     </dxi-column>
-                                    <dxi-column dataField="STOCK_CODE" caption="Stock Code">
+                                    <dxi-column dataField="STOCK_CODE" caption="Stock Code"
+                                        cellTemplate="stockCodetemp">
                                     </dxi-column>
                                     <dxi-column dataField="CARAT" caption="Karat">
                                     </dxi-column>
@@ -245,12 +252,22 @@
                                     </dxi-column>
                                     <dxi-column dataField="DESCRIPTION" caption="Description">
                                     </dxi-column>
-                                    
 
-                                    <!-- <dxi-column *ngFor="let data of columnhead"
-                                dataField="{{ data }}" caption="{{ data }}" [allowEditing]="true"
-                                alignment="center" backgroundcolor="#000">
-                            </dxi-column> -->
+
+                                    <div *dxTemplate="let data of 'divisiontemp'">
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="divisionCode"
+                                            (newRowClick)="divisionCodeSelected($event,data,'divisiontemp')">
+                                        </master-search>
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'stockCodetemp'">
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="stockCodeData"
+                                            (newRowClick)="stockCodeDataSelected($event,data,'stockCodetemp')">
+                                        </master-search>
+                                    </div>
+
                                 </dx-data-grid>
                             </mat-tab>
 
@@ -280,9 +297,12 @@
             <div class="row mb-2">
                 <div class="col-md-5 offset-sm-11">
                     <div class="row">
+
                         <button type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                             Image
                         </button>
+                        <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                            (change)="onFileChangedimage($event)">
                     </div>
                 </div>
             </div>

@@ -25,15 +25,21 @@ export class DesignMasterComponent implements OnInit {
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
   strPrefix: string = "";
-
+  images: string[] = [];
   tableData: any[] = [];
   tableDatas: any[] = [];
+  tableDataCutRange: any[] = [];
+  tableDataCountryRange: any[] = [];
+  tableDataDyeCodeRange: any[] = [];
+
+
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
 
   currentFilter: any; 
   branchCode?: String;
   selectedTabIndex = 0;
+  selectedTabIndex1 = 0;
 
   columnhead:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
   columnheader:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
@@ -898,33 +904,49 @@ removedatas(){
   }
   
   
-  onFileChangedimage(event:any) {
-    this.imageurl = event.target.files[0]
-    console.log(this.imageurl)
-    let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
+  // onFileChangedimage(event:any) {
+  //   this.imageurl = event.target.files[0]
+  //   console.log(this.imageurl)
+  //   let reader = new FileReader();
+  //   if(event.target.files && event.target.files.length > 0) {
+  //     let file = event.target.files[0];
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       this.image = reader.result; 
+  //     };
+  //   }
+  // }
+
+  // onFileChanged(event:any) {
+  //   this.url = event.target.files[0].name
+  //   console.log(this.url)
+  //   let reader = new FileReader();
+  //   if(event.target.files && event.target.files.length > 0) {
+  //     let file = event.target.files[0];
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       this.urls = reader.result; 
+  //     };
+  //   }
+  // }
+
+
+
+onFileChangedimage(event: any) {
+  if (event.target.files && event.target.files.length > 0) {
+
+    for (let i = 0; i < event.target.files.length; i++) {
+  let reader = new FileReader();
+
+      let file = event.target.files[i];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.image = reader.result; 
+        this.images.push(reader.result as string);
       };
     }
   }
 
-  onFileChanged(event:any) {
-    this.url = event.target.files[0].name
-    console.log(this.url)
-    let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.urls = reader.result; 
-      };
-    }
-  }
-
-
+}
   setFormValues() {
     if(!this.content) return
     console.log(this.content);
@@ -2160,10 +2182,48 @@ removedatas(){
   }
 
   adddataAttributes(){
-
+    let length = this.tableDataCutRange.length;
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Width Code": "",
+      "Description": "",
+  }
+  this.tableDataCutRange.push(datas);
   }
 
   removedataAttributes(){
 
   }
+
+  adddataAttributesCountry(){
+    let length = this.tableDataCountryRange.length;
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Country Code": "",
+      "Description": "",
+  }
+  this.tableDataCountryRange.push(datas);
+  }
+
+  removedataAttributesCountry(){
+
+  }
+
+  adddataAttributesDyeCodeRange(){
+    let length = this.tableDataDyeCodeRange.length;
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Dye Code": "",
+      "Description": "",
+  }
+  this.tableDataDyeCodeRange.push(datas);
+  }
+
+  removedataAttributesDyeCodeRange(){
+
+  }
+
 }

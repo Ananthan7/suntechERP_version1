@@ -9,7 +9,7 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="row">
-    <form [formGroup]="repairCustomerDeliveryForm">
+    <form >
 
         <div class="row mt-3">
 
@@ -55,7 +55,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input type="text" matInput formControlName="voctype"
-                                                        [readonly]="viewMode" />
+                                                          />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -63,7 +63,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input class="text-right" type="number" matInput
-                                                        formControlName="vocNo" [readonly]="viewMode" />
+                                                        formControlName="vocNo"   />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -74,7 +74,7 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 72%;">
                                                 <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                                                    [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
+                                                      placeholder="DD/MM/YYYY" DateValidation />
                                                 <mat-datepicker-toggle matSuffix
                                                     [for]="vocDate"></mat-datepicker-toggle>
                                                 <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
@@ -87,10 +87,9 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 70%;">
                                                 <input type="text" matInput formControlName="salesMan"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
-                                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                                (newRowClick)="salesManSelected($event)"></master-search>
+                                            <master-search></master-search>
                                         </div>
                                     </div>
                                     <div class="row mb-1 ">
@@ -100,7 +99,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input type="text" matInput formControlName="voctype"
-                                                        [readonly]="viewMode" />
+                                                          />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -108,7 +107,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input class="text-right" type="number" matInput
-                                                        formControlName="vocNo" [readonly]="viewMode" />
+                                                        formControlName="vocNo"   />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -120,7 +119,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input type="text" matInput formControlName="voctype"
-                                                        [readonly]="viewMode" />
+                                                          />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -128,7 +127,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input class="text-right" type="number" matInput
-                                                        formControlName="vocNo" [readonly]="viewMode" />
+                                                        formControlName="vocNo"   />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -140,7 +139,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input type="text" matInput formControlName="voctype"
-                                                        [readonly]="viewMode" />
+                                                          />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -155,13 +154,13 @@
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-sm-3">
@@ -177,15 +176,14 @@
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 70%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
-                                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                                (newRowClick)="salesManSelected($event)"></master-search>
+                                            <master-search></master-search>
                                         </div>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
 
                                         </div>
@@ -197,10 +195,9 @@
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 60%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
-                                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                                (newRowClick)="salesManSelected($event)"></master-search>
+                                            <master-search></master-search>
                                         </div>
 
                                         <label for="inputPassword" class="col-sm-3 col-form-label ">
@@ -208,10 +205,9 @@
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 60%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
-                                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                                (newRowClick)="salesManSelected($event)"></master-search>
+                                            <master-search ></master-search>
 
                                         </div>
                                     </div>
@@ -222,15 +218,14 @@
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 70%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
-                                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                                (newRowClick)="salesManSelected($event)"></master-search>
+                                            <master-search ></master-search>
                                         </div>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
 
                                         </div>
@@ -242,7 +237,7 @@
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
                                                 <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                                                    [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
+                                                      placeholder="DD/MM/YYYY" DateValidation />
                                                 <mat-datepicker-toggle matSuffix
                                                     [for]="vocDate"></mat-datepicker-toggle>
                                                 <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
@@ -253,14 +248,14 @@
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
 
                                         </div>
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%;">
                                                 <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                                                    [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
+                                                      placeholder="DD/MM/YYYY" DateValidation />
                                                 <mat-datepicker-toggle matSuffix
                                                     [for]="vocDate"></mat-datepicker-toggle>
                                                 <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
@@ -274,7 +269,7 @@
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -304,10 +299,9 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 80%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
-                                            <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                                (newRowClick)="salesManSelected($event)"></master-search>
+                                            <master-search ></master-search>
                                         </div>
                                     </div>
 
@@ -322,7 +316,7 @@
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -338,7 +332,7 @@
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -350,7 +344,7 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%;">
                                                 <input type="text" matInput formControlName="remarks"
-                                                    [readonly]="viewMode" />
+                                                      />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -366,10 +360,9 @@
                                             <div class="col-sm-6">
                                                 <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="salesMan"
-                                                        [readonly]="viewMode" />
+                                                          />
                                                 </mat-form-field>
-                                                <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                                                    (newRowClick)="salesManSelected($event)"></master-search>
+                                                <master-search ></master-search>
                                             </div>
                                         </div>
 
@@ -384,7 +377,7 @@
                                             <div class="col-sm-6">
                                                 <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="taxCode"
-                                                        [readonly]="viewMode" />
+                                                          />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -394,7 +387,7 @@
                                             <div class="col-sm-6">
                                                 <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="type"
-                                                        [readonly]="viewMode" />
+                                                          />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -416,13 +409,13 @@
 
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 80%;">
-                                        <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
+                                        <input type="text" matInput formControlName="voctype"   />
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 80%;">
-                                        <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
+                                        <input type="text" matInput formControlName="voctype"   />
                                     </mat-form-field>
                                 </div>
 
@@ -431,17 +424,17 @@
 
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
+                                        <input type="text" matInput formControlName="voctype"   />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 50%;">
-                                        <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
+                                        <input type="text" matInput formControlName="voctype"   />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 50%;">
-                                        <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
+                                        <input type="text" matInput formControlName="voctype"   />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-1">
@@ -495,7 +488,7 @@
                                                         <div class="col-md-1 d-flex">
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput formControlName="remarks"
-                                                                    [readonly]="viewMode" />
+                                                                      />
                                                             </mat-form-field>
                                                         </div>
                                                         <label for="inputPassword"
@@ -503,7 +496,7 @@
                                                         <div class="col-md-1 d-flex">
                                                             <mat-form-field style="width: 100%;">
                                                                 <input type="text" matInput formControlName="remarks"
-                                                                    [readonly]="viewMode" />
+                                                                      />
                                                             </mat-form-field>
                                                         </div>
                                                         <div class="col-md-2 d-flex">
@@ -513,7 +506,7 @@
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
                                                                         formControlName="remarks"
-                                                                        [readonly]="viewMode" />
+                                                                          />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -585,7 +578,7 @@
                                                                         <mat-form-field style="width: 100%;">
                                                                             <input type="text" matInput
                                                                                 formControlName="subTotal"
-                                                                                [readonly]="viewMode" />
+                                                                                  />
                                                                         </mat-form-field>
                                                                     </div>
                                                                 </div>
@@ -604,7 +597,7 @@
                                                                         <mat-form-field style="width: 100%;">
                                                                             <input type="text" matInput
                                                                                 formControlName="subTotal"
-                                                                                [readonly]="viewMode" />
+                                                                                  />
                                                                         </mat-form-field>
                                                                     </div>
                                                                 </div>
@@ -623,7 +616,7 @@
                                                                         <mat-form-field style="width: 100%;">
                                                                             <input type="text" matInput
                                                                                 formControlName="subTotal"
-                                                                                [readonly]="viewMode" />
+                                                                                  />
                                                                         </mat-form-field>
                                                                     </div>
                                                                 </div>
@@ -654,7 +647,7 @@
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
                                                                         formControlName="subTotal"
-                                                                        [readonly]="viewMode" />
+                                                                          />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -668,7 +661,7 @@
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
                                                                         formControlName="subTotal"
-                                                                        [readonly]="viewMode" />
+                                                                          />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -683,7 +676,7 @@
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
                                                                         formControlName="subTotal"
-                                                                        [readonly]="viewMode" />
+                                                                          />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -700,7 +693,7 @@
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
                                                                         formControlName="subTotal"
-                                                                        [readonly]="viewMode" />
+                                                                          />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -713,7 +706,7 @@
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
                                                                         formControlName="subTotal"
-                                                                        [readonly]="viewMode" />
+                                                                          />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -726,7 +719,7 @@
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
                                                                         formControlName="subTotal"
-                                                                        [readonly]="viewMode" />
+                                                                          />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -738,7 +731,7 @@
                                                                     <mat-form-field style="width: 100%;">
                                                                         <input type="text" matInput
                                                                             formControlName="subTotal"
-                                                                            [readonly]="viewMode" />
+                                                                              />
                                                                     </mat-form-field>
                                                                 </div>
                                                             </div>
@@ -753,7 +746,7 @@
                                                                     <mat-form-field style="width: 100%;">
                                                                         <input type="text" matInput
                                                                             formControlName="subTotal"
-                                                                            [readonly]="viewMode" />
+                                                                              />
                                                                     </mat-form-field>
                                                                 </div>
                                                             </div>
@@ -787,14 +780,13 @@
                         Driver : </label>
                     <div class="col-sm-4">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                            <input type="text" matInput formControlName="remarks"   />
                         </mat-form-field>
-                        <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
-                            (newRowClick)="salesManSelected($event)"></master-search>
+                        <master-search ></master-search>
                     </div>
                     <div class="col-sm-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                            <input type="text" matInput formControlName="remarks"   />
                         </mat-form-field>
 
                     </div>

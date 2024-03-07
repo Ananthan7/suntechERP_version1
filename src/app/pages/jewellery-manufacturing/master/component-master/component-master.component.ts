@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-component-master',
@@ -15,50 +16,173 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class ComponentMasterComponent implements OnInit {
 
-  @Input() content!: any; 
+  @Input() content!: any;
   tableData: any[] = [];
-
-  columnhead: any[] = ['Srno','Div.','Stock Code','Karat','Stock Type','Pcs','Wt/Ct','Color','Clarity','Shape','Sieve Std.','Description','Size','Process Type','Remarks','Pointer Wt','Ext.Clarity','Sieve From','Description','Sieve To','Description']
+  selectedIndexes: any = [];
+  columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
   columnhead2: any[] = ['',]
   selectedTabIndex = 0;
+  urls: string | ArrayBuffer | null | undefined;
+  url: any;
+  imageurl: any;
+  image: string | ArrayBuffer | null | undefined;
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
+    private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
   ) { }
- 
+
   ngOnInit(): void {
+    if (this.content.FLAG == 'VIEW') {
+
+      this.setFormValues();
+    } else (this.content.FLAG == 'EDIT')
+    {
+      this.setFormValues();
+    }
+
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
     this.componentmasterForm.controls.currencyCode.setValue(CURRENCY_CODE);
     let currrate = this.commonService.getCurrRate(CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(currrate);
   }
 
+
+  divisionCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  divisionCodeSelected(value: any, data: any, controlName: string) {
+    console.log('Data ', data);
+    console.log('values ', value);
+
+    this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
+
+  }
+
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'STOCK Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  stockCodeDataSelected(value: any, data: any, controlName: string) {
+    console.log(data);
+    console.log(value);
+
+    this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
+  }
+
+  onFileChangedimage(event: any) {
+    this.imageurl = event.target.files[0]
+    console.log(this.imageurl)
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.image = reader.result;
+      };
+    }
+  }
+
+  onFileChanged(event: any) {
+    this.url = event.target.files[0].name
+    console.log(this.url)
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.urls = reader.result;
+      };
+    }
+  }
+
+  setFormValues() {
+    if (!this.content) return
+
+
+
+    this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
+    this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)
+    this.componentmasterForm.controls.sizeSet.setValue(this.content.SIZE_FROM)
+    this.componentmasterForm.controls.size.setValue(this.content.SIZE)
+    this.componentmasterForm.controls.sieve_to.setValue(this.content.SIEVE_TO)
+    this.componentmasterForm.controls.type.setValue(this.content.TYPE_CODE)
+    this.componentmasterForm.controls.category.setValue(this.content.CATEGORY_CODE)
+    this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
+    this.componentmasterForm.controls.settingType.setValue(this.content.SETTING)
+    this.componentmasterForm.controls.remarks.setValue(this.content.CURRENCYCODE)
+    this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
+    this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
+    this.componentmasterForm.controls.width.setValue(this.content.WIDTH)
+    this.componentmasterForm.controls.radius.setValue(this.content.RADIUS)
+    this.componentmasterForm.controls.processSeq.setValue(this.content.PROCESS_CODE)
+    this.componentmasterForm.controls.costCenter.setValue(this.content.COST_CODE)
+    this.componentmasterForm.controls.currencyCode.setValue(this.content.CURRENCY_CODE)
+    this.componentmasterForm.controls.currencyRate.setValue(this.content.CC_RATE)
+
+  }
+
+  onSelectionChanged(event: any) {
+    const values: number[] = event.selectedRowKeys;
+    const indexes: number[] = [];
+
+    values.forEach((selectedValue: number) => {
+      const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
+
+      // Check if the value is not already in the selectedIndexes array
+      if (index !== -1 && !this.selectedIndexes.includes(index)) {
+        indexes.push(index);
+      }
+    });
+
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
+  }
+
+
   private subscriptions: Subscription[] = [];
 
   componentmasterForm: FormGroup = this.formBuilder.group({
-    code: [""],
-    codedes: [""],
-    sizeSet : [""],
+    code: ["", [Validators.required]],
+    codedes: ["", [Validators.required]],
+    sizeSet: [""],
     size: [""],
-    type : [""],
+    type: [""],
     category: [""],
     shape: [""],
     settingType: [""],
-    remarks : [""],
-    height : [""],
-    length  : [""],
-    width  : [""],
-    radius  : [""],
-    processSeq : [""],
-    costCenter  : [""],
-    currencyCode  : [""],
-    currencyRate  : [""],
+    remarks: [""],
+    height: [""],
+    length: [""],
+    width: [""],
+    radius: [""],
+    processSeq: [""],
+    costCenter: [""],
+    currencyCode: [""],
+    currencyRate: [""],
   });
-  
+
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -70,7 +194,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  categoryCodeSelected(e:any){
+  categoryCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.category.setValue(e.CODE);
   }
@@ -84,13 +208,13 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_VALUE: '',
     WHERECONDITION: "COMP_PREFIX = 1",
     VIEW_INPUT: true,
-    VIEW_TABLE: true,    
+    VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  codeCodeSelected(e:any){
+  codeCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.code.setValue(e.PREFIX_CODE);
-    this.componentmasterForm.controls.codedes.setValue(e.DESCRIPTION); 
+    this.componentmasterForm.controls.codedes.setValue(e.DESCRIPTION);
   }
 
   typeCodeData: MasterSearchModel = {
@@ -104,7 +228,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  typeCodeSelected(e:any){
+  typeCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.type.setValue(e.CODE);
   }
@@ -120,7 +244,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  sizeSetCodeSelected(e:any){
+  sizeSetCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
   }
@@ -136,23 +260,24 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  sizeCodeSelected(e:any){
+  sizeCodeSelected(e: any) {
     console.log(e);
 
     const apiDescription = e.DESCRIPTION;
 
     // Split the DESCRIPTION string into an array using the ',' delimiter
     const descriptionArray = apiDescription.split(',');
-    
+
+
     // Assign values to variables
     let height, width, length, radius;
-    
 
-      height = descriptionArray[0]; 
-      width = descriptionArray[1];  
-      length = descriptionArray[2]; 
-      radius = descriptionArray[3]; 
-    
+
+    height = descriptionArray[0];
+    width = descriptionArray[1];
+    length = descriptionArray[2];
+    radius = descriptionArray[3];
+
     
     console.log("Height:", height);
     console.log("Width:", width);
@@ -160,12 +285,59 @@ export class ComponentMasterComponent implements OnInit {
     console.log("Radius:", radius);
 
 
+
+    // const resultheight = height.split('');
+    // resultheight.shift();
+    // resultheight.pop();
+
+    // let heightValue = resultheight.join("");
+    // console.log(heightValue);
+
+    // const resultwidth = width.split('');
+    // resultwidth.shift();
+    // resultwidth.pop();
+
+    // let widthValue = resultwidth.join("");
+    // console.log(widthValue);
+
+    // const resultlength = length.split('');
+    // resultlength.shift();
+    // resultlength.pop();
+
+    // let lengthValue = resultlength.join("");
+    // console.log(lengthValue);
+
+    // const resultradius = radius.split('');
+    // resultradius.shift();
+    // resultradius.pop();
+
+    // let radiusValue = resultradius.join("");
+    // console.log(radiusValue);
+
+    const finalHeight = this.commonService.dataSplitPop(height);
+    const finalWidth = this.commonService.dataSplitPop(width);
+    const finalLength = this.commonService.dataSplitPop(length);
+    const finalRadius = this.commonService.dataSplitPop(radius);
+
+
     this.componentmasterForm.controls.size.setValue(e.COMPSIZE_CODE);
-    this.componentmasterForm.controls.height.setValue(height);
-    this.componentmasterForm.controls.length.setValue(width);
-    this.componentmasterForm.controls.width.setValue(length);
-    this.componentmasterForm.controls.radius.setValue(radius);
+    this.componentmasterForm.controls.height.setValue(finalHeight);
+    this.componentmasterForm.controls.length.setValue(finalWidth);
+    this.componentmasterForm.controls.width.setValue(finalLength);
+    this.componentmasterForm.controls.radius.setValue(finalRadius);
   }
+
+  // dataSplitPop(data:any){
+
+  //   const result = data.split('');
+  //   result.shift();
+  //   result.pop();
+
+  //   let heightValue = result.join("");
+  //   console.log(heightValue);
+  //   return heightValue;
+
+  // }
 
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -178,7 +350,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  shapeCodeSelected(e:any){
+  shapeCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.shape.setValue(e.CODE);
   }
@@ -194,7 +366,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  settingTypeCodeSelected(e:any){
+  settingTypeCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.settingType.setValue(e.CODE);
   }
@@ -210,7 +382,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  processSeqCodeSelected(e:any){
+  processSeqCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.processSeq.setValue(e.SEQ_CODE);
   }
@@ -226,11 +398,11 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  costCenterCodeSelected(e:any){
+  costCenterCodeSelected(e: any) {
     console.log(e);
     this.componentmasterForm.controls.costCenter.setValue(e.COST_CODE);
   }
-  
+
 
 
   close(data?: any) {
@@ -238,59 +410,66 @@ export class ComponentMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  addTableData(){
+  addTableData() {
     let length = this.tableData.length;
 
-      let srno = length + 1;
-      let data = {
-        "SRNO": srno,
-        "DIVCODE": "",
-        "STOCK_CODE": "",
-        "CARAT": "",
-        "STOCK_FCCOST": "",
-        "PCS": "",
-        "GROSS_WT": "",
-        "COLOR": "",
-        "CLARITY": "",
-        "SHAPE": "",
-        "SIEVE": "",
-        "DESCRIPTION": "",
-        "DSIZE": "",
-        "PROCESS_TYPE": "",
-        "D_REMARKS": "",
-      };
-      this.tableData.push(data);
-      this.tableData.filter((data, i) => data.SRNO = i + 1)
-  }
-  
-
-  deleteTableData(){
-
-
+    let srno = length + 1;
+    let data = {
+      "SRNO": srno,
+      "DIVCODE": "",
+      "STOCK_CODE": "",
+      "CARAT": "",
+      "STOCK_FCCOST": "",
+      "PCS": "",
+      "GROSS_WT": "",
+      "COLOR": "",
+      "CLARITY": "",
+      "SHAPE": "",
+      "SIEVE": "",
+      "DESCRIPTION": "",
+      "DSIZE": "",
+      "PROCESS_TYPE": "",
+      "D_REMARKS": "",
+    };
+    this.tableData.push(data);
+    this.tableData.filter((data, i) => data.SRNO = i + 1)
   }
 
-  setPostData(){
-    
+
+  deleteTableData() {
+
+    console.log(this.commonService.transformDecimalVB(6, this.componentmasterForm.value.purity));
+    //  this.tableData.push(data);
+    console.log(this.selectedIndexes);
+    if (this.selectedIndexes.length > 0) {
+      this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
+    }
+  }
+
+  setPostData() {
+
     let postData = {
       "DESIGN_CODE": this.componentmasterForm.value.code || "",
-      "DESIGN_DESCRIPTION":  this.componentmasterForm.value.codedes || "",
-      "CURRENCY_CODE": this.componentmasterForm.value.currencyCode,
-      "CC_RATE":  this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
-      "COST_CODE": this.componentmasterForm.value.costCenter|| "",
-      "TYPE_CODE": this.componentmasterForm.value.type|| "",
-      "CATEGORY_CODE": this.componentmasterForm.value.category|| "",
+      "DESIGN_DESCRIPTION": this.componentmasterForm.value.codedes || "",
+      "CURRENCY_CODE": "1",
+      "CC_RATE": this.commonService.emptyToZero(this.componentmasterForm.value.currencyRate),
+      "COST_CODE": this.componentmasterForm.value.costCenter || "",
+      "TYPE_CODE": this.componentmasterForm.value.type || "",
+      "CATEGORY_CODE": this.componentmasterForm.value.category || "",
       "SUBCATEGORY_CODE": "string",
-      "BRAND_CODE":  "string",
-      "COUNTRY_CODE":  "string",
+      "BRAND_CODE": "string",
+      "COUNTRY_CODE": "string",
       "SUPPLIER_CODE": "string",
       "SUPPLIER_REF": "string",
-      "SET_REF":"string",
+      "SET_REF": "string",
       "PICTURE_NAME": "string",
       "PICTURE_NAME1": "",
       "STOCK_FCCOST": 0,
       "STOCK_LCCOST": 0,
       "PRICE1PER": "",
-      "PRICE2PER":"string",
+      "PRICE2PER": "string",
       "PRICE3PER": "string",
       "PRICE4PER": "string",
       "PRICE5PER": "string",
@@ -315,11 +494,11 @@ export class ComponentMasterComponent implements OnInit {
       "CHARGE5FC": 0,
       "CHARGE5LC": 0,
       "SHORT_ID": "",
-      "COLOR":  "",
+      "COLOR": "",
       "CLARITY": "",
-      "SIZE":  this.componentmasterForm.value.size || "",
-      "SIEVE":  "",
-      "SHAPE":  this.componentmasterForm.value.shape || "",
+      "SIZE": this.componentmasterForm.value.size || "",
+      "SIEVE": this.componentmasterForm.value.sieve_to || "",
+      "SHAPE": this.componentmasterForm.value.shape || "",
       "GRADE": "",
       "FLUOR": "",
       "FINISH": "",
@@ -396,7 +575,7 @@ export class ComponentMasterComponent implements OnInit {
       "PENDING_JOB_PCS": 0,
       "PENDING_JOBS": 0,
       "LAST_COST": 0,
-      "SEQ_CODE": "",
+      "SEQ_CODE": this.componentmasterForm.value.processSeq || "",
       "SEQ_DESCRIPTION": "",
       "EDITED_ON": "2023-11-27T06:54:03.761Z",
       "EDITED_BY": "",
@@ -485,7 +664,7 @@ export class ComponentMasterComponent implements OnInit {
       "METAL_VALUECC": 0,
       "PAIR_REF": "",
       "SURFACEPROPERTY": "",
-      "WIDTH": 0,
+      "WIDTH": this.componentmasterForm.value.width || "",
       "THICKNESS": 0,
       "ENGRAVING_TEXT": "",
       "ENGRAVING_FONT": "",
@@ -527,9 +706,9 @@ export class ComponentMasterComponent implements OnInit {
       "CC_MAKING": "",
       "STONE_INCLUDED": true,
       "CAD_REQUIRED": true,
-      "HEIGHT": "",
-      "RADIUS": "",
-      "LENGTH": "",
+      "HEIGHT": this.componentmasterForm.value.height || "",
+      "RADIUS": this.componentmasterForm.value.radius || "",
+      "LENGTH": this.componentmasterForm.value.length || "",
       "COMPSIZE_CODE": "",
       "COMPSET_CODE": "",
       "PROD_VARIANCE": 0,
@@ -579,14 +758,14 @@ export class ComponentMasterComponent implements OnInit {
         {
           "UNIQUEID": 0,
           "SRNO": 0,
-          "METALSTONE": "",
-          "DIVCODE": "",
+          "METALSTONE": "5",
+          "DIVCODE": "c",
           "KARAT_CODE": "",
           "CARAT": 0,
           "GROSS_WT": 0,
           "PCS": 0,
           "RATE_TYPE": "",
-          "CURRENCY_CODE": this.commonService.getCurrRate,
+          "CURRENCY_CODE": "AED",
           "RATE": 0,
           "AMOUNTFC": 0,
           "AMOUNTLC": 0,
@@ -600,7 +779,7 @@ export class ComponentMasterComponent implements OnInit {
           "DESIGN_CODE": "",
           "KARAT": "",
           "PRICEID": "",
-          "SIZE_FROM":"" ,
+          "SIZE_FROM": "",
           "SIZE_TO": "",
           "RATEFC": 0,
           "PART_CODE": "",
@@ -623,7 +802,7 @@ export class ComponentMasterComponent implements OnInit {
           "D_REMARKS": "",
           "POINTER_WT": 0,
           "SIEVE_FROM": "",
-          "SIEVE_TO": "",
+          "SIEVE_TO": this.componentmasterForm.value.sieve_to || "",
           "PURITY": 0,
           "OTHER_ATTR": ""
         }
@@ -730,9 +909,9 @@ export class ComponentMasterComponent implements OnInit {
     }
     return postData
   }
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -740,14 +919,14 @@ export class ComponentMasterComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-  
+
     let API = 'DesignMaster/InsertDesignMaster'
     let postData = this.setPostData()
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -769,20 +948,20 @@ export class ComponentMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  update(){
+  update() {
     if (this.componentmasterForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
-  
-    let API = 'DesignMaster/UpdateDesignMaster/'+this.content.DESIGN_CODE
+
+    let API = 'DesignMaster/UpdateDesignMaster/' + this.content.DESIGN_CODE
     let postData = this.setPostData()
-    
-  
+
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if(result.status == "Success"){
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -802,7 +981,7 @@ export class ComponentMasterComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
-   
+
   }
 
   deleteRecord() {

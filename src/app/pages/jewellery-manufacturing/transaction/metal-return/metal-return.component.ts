@@ -22,13 +22,17 @@ export class MetalReturnComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   currentFilter: any;
   tableData: any[] = ['Process','Worker','Job No','Sub.Job No','Design','Stock Code','Gross Wt.','Net Wt.','Purity','Pure Wt.'];
-  metalReturnDetailsData : any[] = ['Job id','Unq job id','Process','Design','Stock Code','Worker',' Description','Carat','Rate','Division','Amount'];
+  metalReturnDetailsData : any[] = [];
   columnhead: any[] = [''];
   branchCode?: String;
   yearMonth?: String;
   vocMaxDate = new Date();
   currentDate: any = this.commonService.currentDate;
   userName = this.commonService.userName;
+  tableRowCount: number = 0;
+  detailData: any[] = [];
+  selectRowIndex: any;
+  selectedKey: number[] = []
 
   allMode: string;
   checkBoxesMode: string;
@@ -87,7 +91,7 @@ export class MetalReturnComponent implements OnInit {
   metalReturnForm: FormGroup = this.formBuilder.group({
 
     vocType: ['',[Validators.required]],
-    vocNo : ['',[Validators.required]],
+    vocNo : [1],
     vocDate : [''],
     vocTime : [new Date().toTimeString().slice(0, 5),[Validators.required]],
     enteredBy : [''],
@@ -114,6 +118,7 @@ export class MetalReturnComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.setInitialValues()
+    this.setAllInitialValues()
   }
 
   setInitialValues() {
@@ -134,6 +139,49 @@ export class MetalReturnComponent implements OnInit {
       let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
       this.metalReturnForm.controls.vocdate.setValue(new Date(date))
     }
+  }
+  setAllInitialValues() {
+    console.log(this.content)
+    if (!this.content) return
+    let API = `JobMetalReturnMasterDJ/GetJobMetalReturnMasterDJWithMID/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.metalReturnDetailsData = data.Details
+          data.Details.forEach((element: any) => {
+            this.tableData.push({
+              Job_id: element.JOB_NUMBER,
+              Unq_job_id: element.UNQ_JOB_ID,
+              Process: element.PROCESS_CODE,
+              Design: element.DESIGN_CODE,
+              Stock_Code: element.STOCK_CODE,
+              Worker: element.WORKER_CODE,
+              Description: element.JOB_DESCRIPTION,
+              Carat: element.KARAT_CODE,
+              Rate: element.RATE_TYPE,
+              Division: element.DIVCODE,
+              Amount: element.NET_WT,
+
+
+            })
+          });
+          this.metalReturnForm.controls.voctype.setValue(data.VOCTYPE)
+          this.metalReturnForm.controls.vocno.setValue(data.VOCNO)
+          this.metalReturnForm.controls.vocdate.setValue(data.VOCDATE)
+          this.metalReturnForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
+          this.metalReturnForm.controls.workerDes.setValue(data.Details[0].WORKER_NAME)
+          
+
+
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+
   }
   
   close(data?: any) {
@@ -161,23 +209,66 @@ export class MetalReturnComponent implements OnInit {
     this.metalReturnForm.controls.location.setValue(e.LOCATION_CODE);
   }
 
-  openaddmetalreturn() {
+  openaddmetalreturn(data?: any) {
+    console.log(data)
+    if (data) {
+      data[0] = this.metalReturnForm.value;
+    } else {
+      data = [{ HEADERDETAILS: this.metalReturnForm.value }]
+    }
     const modalRef: NgbModalRef = this.modalService.open(MetalReturnDetailsComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    console.log(data,'data')
+    modalRef.componentInstance.content = data
     modalRef.result.then((postData) => {
-      console.log(postData);      
       if (postData) {
-        console.log('Data from modal:', postData);       
+        console.log('Data from modal:', postData);
         this.metalReturnDetailsData.push(postData);
+        console.log(this.metalReturnDetailsData);
+        this.setValuesToHeaderGrid(postData);
+
       }
+
     });
+  }
+  onRowClickHandler(event: any) {
+
+    this.selectRowIndex = (event.dataIndex)
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.ID == selectedData.SRNO)
+    this.openaddmetalreturn(selectedData)
+
 
   }
-
+  setValuesToHeaderGrid(detailDataToParent: any) {
+    console.log(detailDataToParent,'detailDataToParent');
+    
+    if (detailDataToParent.SRNO) {
+      console.log(this.metalReturnDetailsData);
+      
+      this.swapObjects(this.metalReturnDetailsData, [detailDataToParent], (detailDataToParent.SRNO-1))
+    } else {
+      this.tableRowCount += 1
+      detailDataToParent.SRNO = this.tableRowCount
+      // this.tableRowCount += 1
+      // this.content.SRNO = this.tableRowCount
+    }
+    if (detailDataToParent) {
+      this.detailData.push({ ID: this.tableRowCount, DATA: detailDataToParent })
+    }
+  }
+  swapObjects(array1: any, array2: any, index: number) {
+    // Check if the index is valid
+    if (index >= 0 && index < array1.length) {
+      array1[index] = array2[0];
+    } else {
+      console.error('Invalid index');
+    }
+  }
   deleteTableData(){
    
   }
@@ -202,7 +293,7 @@ export class MetalReturnComponent implements OnInit {
       "VOCNO": this.metalReturnForm.value.vocNo,
       "VOCDATE": this.metalReturnForm.value.vocDate,
       "YEARMONTH": this.yearMonth,
-      "DOCTIME": "2023-10-06T11:27:36.260Z",
+      "DOCTIME": "2024-03-05T12:13:39.290Z",
       "CURRENCY_CODE": "",
       "CURRENCY_RATE": 0,
       "METAL_RATE_TYPE": "",
@@ -216,7 +307,7 @@ export class MetalReturnComponent implements OnInit {
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_PURE_WT": 0,
-      "SMAN": this.metalReturnForm.value.enteredBy,
+      "SMAN": "string",
       "REMARKS": this.metalReturnForm.value.remarks,
       "NAVSEQNO": 0,
       "FIX_UNFIX": true,
@@ -232,7 +323,7 @@ export class MetalReturnComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status == "Success") {
+          if (result.status.trim() == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',

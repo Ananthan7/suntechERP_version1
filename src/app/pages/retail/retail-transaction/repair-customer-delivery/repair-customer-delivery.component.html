@@ -8,10 +8,10 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
-<div class="row">
-    <div>
+<div class="container-fluid">
+    <div class="pt-3">
         <form [formGroup]="repairCustomerDeliveryForm">
-            <div class="container-fluid pt-3">
+            <div class="">
                 <div class="row">
                     <div class="col-md-6">
 
@@ -21,29 +21,25 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="row mb-1 ">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Type * : </label>
                             <div class="col-md-3">
-                                <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
-                                    </mat-form-field>
-                                </div>
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput formControlName="voctype" [readonly]="viewMode" />
+                                </mat-form-field>
                             </div>
                             <div class="col-md-3">
-                                <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
-                                        <input class="text-right" type="number" matInput formControlName="vocNo"
-                                            [readonly]="viewMode" />
-                                    </mat-form-field>
-                                </div>
+                                <mat-form-field style="width: 100%;">
+                                    <input class="text-right" type="number" matInput formControlName="vocNo"
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date : </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 72%;">
+                            <div class="col-sm-8">
+                                <mat-form-field style="width: 70%;">
                                     <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
                                         [readonly]="viewMode" placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
@@ -53,7 +49,7 @@
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-4 col-form-label">SalesMan : </label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="salesMan" [readonly]="viewMode" />
                                 </mat-form-field>
@@ -61,32 +57,31 @@
                                     (newRowClick)="salesManSelected($event)"></master-search>
                             </div>
                         </div>
-
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-4 col-form-label ">Customer : </label>
-                            <div class="col-sm-8">
-                                <mat-form-field style="width: 40%;">
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="customer" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="customerCodeData" *ngIf="!viewMode"
                                     (newRowClick)="customerSelected($event)"></master-search>
-                                <mat-form-field style="width: 40%;">
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="customerDesc" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-3 col-form-label ">Mobile : </label>
-
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="mobile" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-
-                            <label for="inputPassword" class="col-sm-2 col-form-label ">Tel : </label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">Tel : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="tel" [readonly]="viewMode" />
@@ -94,15 +89,13 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label ">Nationality : </label>
-
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">Nationality : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="nationality" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
-
-                            <label for="inputPassword" class="col-sm-2 col-form-label ">Type : </label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label ">Type : </label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="type" [readonly]="viewMode" />
@@ -119,7 +112,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5 col-form-label">Currency : </label>
                             <div class="col-sm-3">
@@ -151,7 +144,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
@@ -193,9 +186,8 @@
                                     <div class="col-md-12">
                                         <dx-resizable id="gridContainer" [width]="firstTableWidth" [height]="280"
                                             [keepAspectRatio]="false" handles="right">
-                                            <dx-data-grid width="auto" #dataGrid id="gridContainer"
-                                                [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
-                                                [showRowLines]="true" class="mt-3">
+                                            <dx-data-grid width="auto" #dataGrid id="gridContainer" [showBorders]="true"
+                                                [showColumnLines]="true" [showRowLines]="true" class="mt-3">
                                                 <dxo-editing mode="cell" [allowUpdating]="!viewMode">
                                                 </dxo-editing>
                                                 <dxo-paging [enabled]="false"></dxo-paging>
@@ -224,7 +216,7 @@
                                             style="display: flex; justify-content: space-between; align-items: center;">
                                             <span>Check The Diamond/Product After
                                                 Recieveing From Work</span>
-                                            <mat-checkbox class="example-margin"></mat-checkbox>
+                                            <mat-checkbox class="example-margin" formControlName="CheckTheDiamondProduct"></mat-checkbox>
                                         </div>
                                     </div>
                                 </div>
@@ -233,7 +225,7 @@
                                         <div
                                             style="display: flex; justify-content: space-between; align-items: center;">
                                             <span>Repair Reciept Recieved Back from Customer</span>
-                                            <mat-checkbox class="example-margin"></mat-checkbox>
+                                            <mat-checkbox class="example-margin" formControlName="RepairRecieptRecieved"></mat-checkbox>
                                         </div>
 
                                     </div>
@@ -241,7 +233,7 @@
 
                                 <div class="row align-items-baseline b-1">
                                     <div class="col-md-4 boxed-label">
-                                        <h6>Repair POS</h6>
+                                        <h6 class="m-0">Repair POS</h6>
                                     </div>
                                     <div class="col-sm-2">
                                         <div class="p-1 bd-highlight">
@@ -254,7 +246,7 @@
                                     </div>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="vocType"
+                                            <input type="text" matInput formControlName="posVocType"
                                                 [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
@@ -296,28 +288,32 @@
 
                             <div class="col-md-4">
                                 <div class="row mb-1 ">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label">Sub Total : </label>
+                                    <label for="inputPassword" class="col-sm-6 col-form-label">Sub Total : </label>
                                     <div class="col-md-6">
-                                        <div class="position-relative d-flex">
+                                        <div class="">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="subTotal" [readonly]="viewMode" />
+                                                <input type="text" matInput formControlName="subTotal"
+                                                    [readonly]="viewMode" />
                                             </mat-form-field>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label">Round off Amount : </label>
+                                    <label for="inputPassword" class="col-sm-6 col-form-label">Round off Amount :
+                                    </label>
                                     <div class="col-sm-6">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="roundOffAmount" [readonly]="viewMode" />
+                                            <input type="text" matInput formControlName="roundOffAmount"
+                                                [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label">Net Total : </label>
+                                    <label for="inputPassword" class="col-sm-6 col-form-label">Net Total : </label>
                                     <div class="col-sm-6">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="netTotal" [readonly]="viewMode" />
+                                            <input type="text" matInput formControlName="netTotal"
+                                                [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
                                 </div>

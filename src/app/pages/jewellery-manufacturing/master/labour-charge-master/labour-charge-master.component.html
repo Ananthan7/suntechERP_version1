@@ -132,9 +132,9 @@
                   (newRowClick)="sizeToCodeSelected($event)"></master-search>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
-              <div class="col-sm-3">
+              <div class="col-sm-3">z
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6"  style="text-align: right;" formControlName="cost_rate" />
+                  <input type="number"   matInput maxlength="6"  style="text-align: right;" formControlName="cost_rate" />
                 </mat-form-field>
               </div>
             </div>
@@ -149,7 +149,7 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6"  style="text-align: right;" formControlName="selling_rate" />
+                  <input type="number" matInput    maxlength="6" AmountDecimalInput style="text-align: right;" formControlName="selling_rate" (change)="salesChange()" />
                 </mat-form-field>
               </div>
             </div>
@@ -160,10 +160,10 @@
                   <input type="text" matInput maxlength="6" formControlName="sieve_desc" />
                 </mat-form-field>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
+              <label for="input" class="col-sm-2 col-form-label">Selling % *:</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6"  style="text-align: right;" formControlName="selling" />
+                  <input type="number" matInput maxlength="6" AmountDecimalInput  style="text-align: right;" formControlName="selling" (change)="salesChange()"/>
                 </mat-form-field>
               </div>
             </div>
@@ -171,7 +171,7 @@
               <label for="input" class="col-sm-2 col-form-label">Ct Wt From * :</label>
               <div class="col-sm-3">
                   <mat-form-field>
-                      <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;" formControlName="ctWtFrom"  />
+                      <input type="number" matInput maxlength="6" MetalDecimalInput style="text-align: right;" formControlName="ctWtFrom"  />
                   </mat-form-field>
               </div>
               
@@ -191,7 +191,7 @@
               <label for="input" class="col-sm-2 col-form-label">Ct Wt to * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6" AmountDecimalInput style="text-align: right;" formControlName="ctWtTo" />
+                  <input type="number" matInput maxlength="6"  MetalDecimalInput style="text-align: right;" formControlName="ctWtTo" />
                 </mat-form-field>
               </div>
               <div class="col-sm-6">
@@ -262,7 +262,7 @@
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Karat :</label>
+              <label for="input" class="col-sm-2 col-form-label">Karat * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput maxlength="6" formControlName="karat" />
@@ -287,10 +287,10 @@
                 </mat-form-field>
                 <master-search [MasterSearchData]="colorData" (newRowClick)="colorDataSelected($event)"></master-search>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Cost Rate :</label>
+              <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" formControlName="metalcost_rate"  style="text-align: right;" />
+                  <input matInput type="number"  formControlName="metalcost_rate"  style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -303,15 +303,15 @@
                 <master-search [MasterSearchData]="typeCodeData"
                   (newRowClick)="typeCodeSelected($event)"></master-search>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Selling Rate :</label>
+              <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number" formControlName="metalselling_rate"  style="text-align: right;"  />
+                  <input matInput type="number"  AmountDecimalInput formControlName="metalselling_rate"  style="text-align: right;"  (change)="salesChangeMetal()"/>
                 </mat-form-field>
               </div>
             </div>
             <div class="row mb-2">
-              <label for="input" class="col-sm-2 col-form-label">Category :</label>
+              <label for="input" class="col-sm-2 col-form-label">Category * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
                   <input type="text" matInput maxlength="6" formControlName="category" />
@@ -319,10 +319,10 @@
                 <master-search [MasterSearchData]="categoryCodeData"
                   (newRowClick)="categorySelected($event)"></master-search>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Selling % :</label>
+              <label for="input" class="col-sm-2 col-form-label">Selling % * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input type="number" matInput formControlName="metalSelling"  style="text-align: right;" />
+                  <input type="number" matInput AmountDecimalInput formControlName="metalSelling"  style="text-align: right;" (change)="salesChangeMetal()"/>
                 </mat-form-field>
               </div>
             </div>
@@ -374,7 +374,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="number"  formControlName="wtFrom" AmountDecimalInput   style="text-align: right;" />
+                  <input matInput type="number"  formControlName="wtFrom" MetalDecimalInput   style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -382,7 +382,7 @@
               <label for="input" class="col-sm-2 col-form-label">Wt To :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="number"   formControlName="wtTo" AmountDecimalInput style="text-align: right;" />
+                  <input matInput type="number"    formControlName="wtTo" MetalDecimalInput style="text-align: right;" />
                 </mat-form-field>
               </div>
               <div class="col-sm-3 mb-2">
