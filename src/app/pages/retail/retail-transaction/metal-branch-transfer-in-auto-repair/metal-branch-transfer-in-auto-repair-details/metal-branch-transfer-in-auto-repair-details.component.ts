@@ -7,17 +7,17 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
+import { Code } from 'angular-feather/icons';
 import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/transaction/cad-processing/alloy-allocation/alloy-allocation.component';
-import { MetalBranchTransferOutRepairDetailComponent } from './metal-branch-transfer-out-repair-detail/metal-branch-transfer-out-repair-detail.component';
 
 
 
 @Component({
-  selector: 'app-metal-branch-transfer-out-repair',
-  templateUrl: './metal-branch-transfer-out-repair.component.html',
-  styleUrls: ['./metal-branch-transfer-out-repair.component.scss']
+  selector: 'app-metal-branch-transfer-in-auto-repair-details',
+  templateUrl: './metal-branch-transfer-in-auto-repair-details.component.html',
+  styleUrls: ['./metal-branch-transfer-in-auto-repair-details.component.scss']
 })
-export class MetalBranchTransferOutRepairComponent implements OnInit {
+export class MetalBranchTransferInAutoRepairDetailsComponent implements OnInit {
   @Input() content!: any;
   @Input()
   selectedIndex!: number | null;
@@ -28,7 +28,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
   columnheadItemDetails:any[] = ['Sr.No','Div','Description','Remarks','Pcs','Gr.Wt','Repair Type','Type'];
   columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
   divisionMS: any = 'ID';
-  columnheadItemDetails2:any[] = ['Repair Narration']
+  columnheadItemDetails2:any[] = ['SI.No' , 'Tax%' , 'Tax Amount'];
   branchCode?: String;
   yearMonth?: String;
   currentDate = new FormControl(new Date());
@@ -56,52 +56,26 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
 
   ngOnInit(): void {
   
-  
   }
-  metalBranchTransferOutRepairForm: FormGroup = this.formBuilder.group({
-    voctype:[''],
-    vocNo:[''],
-    vocDate:[''],
-    enteredBy:[''],
-    itemCurrency:[''],
-    itemCurrencyAmount:[''],
-    branchCurrency:[''],
-    branchCurrencyDes:[''],
-    metalRate:[''],
-    metalRate2:[''],
-    fixed:[''],
-    branchto:[''],
-    branchtoDes:[''],
-    locationTo:[''],
-    returnLocation:[''],
-    shipsTo:[''],
-    shipToDes:[''],
-    deliveryDate:[''],
-    creditDays:[''],
-    creditDate:[''],
-    Driver1:['']
-  })
 
+  diamondBranchTransferinAutoRepairDetailForm: FormGroup = this.formBuilder.group({
+   
+  });
 
-  
-  
-  
 
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
- 
 
   adddata() {
 
-   
 }
 
 
 adddatas() {
- 
+  
 }
 
 removedata(){
@@ -112,17 +86,24 @@ removedatas(){
   this.tableDatas.pop();
 }
 
+
+
   formSubmit() {
-    
+ 
   }
 
   updateMeltingType() {
-  
-  }
  
+    }
+      /**USE: delete Melting Type From Row */
+  deleteMeltingType() {
+ 
+  }
+  
+
 
   openaddalloyallocation() {
-    const modalRef: NgbModalRef = this.modalService.open(MetalBranchTransferOutRepairDetailComponent, {
+    const modalRef: NgbModalRef = this.modalService.open(AlloyAllocationComponent, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,

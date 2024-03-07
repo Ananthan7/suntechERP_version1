@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Diamond Branch Transfer in Auto Repair</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Diamond Branch Transfer in Auto Repair637</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -8,16 +8,13 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
-<div class="row">
-    <form >
-
+<div class="container-fluid ">
+    <form [formGroup]="metalBranchTransferOutRepairForm">
         <div class="row mt-3">
-
             <div class="col-md-12">
                 <mat-tab-group [(selectedIndex)]="selectedTabIndex">
                     <mat-tab label="Header Details" id="get">
-                        <div class="container-fluid pt-3">
-
+                        <div class="pt-3">
                             <div class="row">
                                 <div class="col-md-3">
                                     <h6>Not Authorized </h6>
@@ -54,8 +51,7 @@
                                         <div class="col-md-3">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName="voctype"
-                                                          />
+                                                    <input type="text" matInput formControlName="voctype" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -63,7 +59,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input class="text-right" type="number" matInput
-                                                        formControlName="vocNo"   />
+                                                        formControlName="vocNo" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -74,7 +70,7 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 72%;">
                                                 <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                                                      placeholder="DD/MM/YYYY" DateValidation />
+                                                    placeholder="DD/MM/YYYY" DateValidation />
                                                 <mat-datepicker-toggle matSuffix
                                                     [for]="vocDate"></mat-datepicker-toggle>
                                                 <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
@@ -86,8 +82,7 @@
                                         <label for="inputPassword" class="col-sm-4 col-form-label">Entered By : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 70%;">
-                                                <input type="text" matInput formControlName="salesMan"
-                                                      />
+                                                <input type="text" matInput formControlName="enteredBy" />
                                             </mat-form-field>
                                             <master-search></master-search>
                                         </div>
@@ -98,8 +93,7 @@
                                         <div class="col-md-3">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName="voctype"
-                                                          />
+                                                    <input type="text" matInput formControlName="itemCurrency" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -107,7 +101,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input class="text-right" type="number" matInput
-                                                        formControlName="vocNo"   />
+                                                        formControlName="itemCurrencyAmount" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -118,8 +112,7 @@
                                         <div class="col-md-3">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName="voctype"
-                                                          />
+                                                    <input type="text" matInput formControlName="branchCurrency" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -127,7 +120,7 @@
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
                                                     <input class="text-right" type="number" matInput
-                                                        formControlName="vocNo"   />
+                                                        formControlName="branchCurrencyDes" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -138,8 +131,7 @@
                                         <div class="col-md-3">
                                             <div class="position-relative d-flex">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="text" matInput formControlName="voctype"
-                                                          />
+                                                    <input type="text" matInput formControlName="branchCurrency" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -153,19 +145,17 @@
                                             Metal Rate : </label>
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="metalRate" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="metalRate2" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="checkbox ">
-                                                <mat-checkbox>Fixed</mat-checkbox>
+                                                <mat-checkbox formControlName="fixed">Fixed</mat-checkbox>
                                             </div>
                                         </div>
                                     </div>
@@ -175,15 +165,13 @@
                                             Branch To : </label>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 70%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="branchto" />
                                             </mat-form-field>
                                             <master-search></master-search>
                                         </div>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="branchtoDes" />
                                             </mat-form-field>
 
                                         </div>
@@ -194,8 +182,7 @@
                                             Location To : </label>
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 60%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="locationTo" />
                                             </mat-form-field>
                                             <master-search></master-search>
                                         </div>
@@ -204,10 +191,9 @@
                                             Return Location : </label>
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 60%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="returnLocation" />
                                             </mat-form-field>
-                                            <master-search ></master-search>
+                                            <master-search></master-search>
 
                                         </div>
                                     </div>
@@ -217,15 +203,13 @@
                                             Ship To : </label>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 70%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="shipsTo" />
                                             </mat-form-field>
-                                            <master-search ></master-search>
+                                            <master-search></master-search>
                                         </div>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="shipToDes" />
                                             </mat-form-field>
 
                                         </div>
@@ -236,29 +220,30 @@
                                         </label>
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                                                      placeholder="DD/MM/YYYY" DateValidation />
+                                                <input matInput [matDatepicker]="deliveryDate"
+                                                    formControlName="deliveryDate" placeholder="DD/MM/YYYY"
+                                                    DateValidation />
                                                 <mat-datepicker-toggle matSuffix
-                                                    [for]="vocDate"></mat-datepicker-toggle>
-                                                <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                                                    [for]="deliveryDate"></mat-datepicker-toggle>
+                                                <mat-datepicker [startAt]="currentDate" #deliveryDate></mat-datepicker>
                                             </mat-form-field>
                                         </div>
                                         <label for="inputPassword" class="col-sm-2 col-form-label">Credit Days :
                                         </label>
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="creditDays" />
                                             </mat-form-field>
 
                                         </div>
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%;">
-                                                <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                                                      placeholder="DD/MM/YYYY" DateValidation />
+                                                <input matInput [matDatepicker]="creditDate"
+                                                    formControlName="creditDate" placeholder="DD/MM/YYYY"
+                                                    DateValidation />
                                                 <mat-datepicker-toggle matSuffix
-                                                    [for]="vocDate"></mat-datepicker-toggle>
-                                                <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                                                    [for]="creditDate"></mat-datepicker-toggle>
+                                                <mat-datepicker [startAt]="currentDate" #creditDate></mat-datepicker>
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -268,8 +253,7 @@
                                             Reference : </label>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="reference" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -283,7 +267,7 @@
                                     <div class="row mb-1">
                                         <div class="col-sm-6">
                                             <div class="checkbox ">
-                                                <mat-checkbox>Sales Return</mat-checkbox>
+                                                <mat-checkbox formControlName="salesReturn">Sales Return</mat-checkbox>
                                             </div>
                                         </div>
                                         <label for="inputPassword" class="col-sm-6 col-form-label ">
@@ -293,30 +277,30 @@
                                     <div class="row mb-1">
                                         <div class="col-sm-6">
                                             <div class="checkbox ">
-                                                <mat-checkbox>Scrap Transfer</mat-checkbox>
+                                                <mat-checkbox formControlName="scrapTransfer">Scrap
+                                                    Transfer</mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 80%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="scrapTransferText">
                                             </mat-form-field>
-                                            <master-search ></master-search>
+                                            <master-search></master-search>
                                         </div>
                                     </div>
 
                                     <div class="row mb-1">
                                         <div class="col-sm-6">
                                             <div class="checkbox ">
-                                                <mat-checkbox>Inclusive Tax</mat-checkbox>
+                                                <mat-checkbox formControlName="InclusiveTax">Inclusive
+                                                    Tax</mat-checkbox>
                                             </div>
                                         </div>
                                         <label for="inputPassword" class="col-sm-3 col-form-label ">
                                             Vehicle : </label>
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="vechile" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -324,15 +308,14 @@
                                     <div class="row mb-1">
                                         <div class="col-sm-6">
                                             <div class="checkbox ">
-                                                <mat-checkbox>Apply TCS</mat-checkbox>
+                                                <mat-checkbox formControlName="applyTcs">Apply TCS</mat-checkbox>
                                             </div>
                                         </div>
                                         <label for="inputPassword" class="col-sm-3 col-form-label ">
                                             LR No. : </label>
                                         <div class="col-sm-3">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="lrNo" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -343,8 +326,7 @@
                                             Doc Reference : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks"
-                                                      />
+                                                <input type="text" matInput formControlName="docReference" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -359,10 +341,9 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput formControlName="salesMan"
-                                                          />
+                                                    <input type="text" matInput formControlName="stateCode" />
                                                 </mat-form-field>
-                                                <master-search ></master-search>
+                                                <master-search></master-search>
                                             </div>
                                         </div>
 
@@ -376,8 +357,7 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput formControlName="taxCode"
-                                                          />
+                                                    <input type="text" matInput formControlName="taxCode" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -386,8 +366,7 @@
                                             <label for="inputPassword" class="col-sm-4 col-form-label">Type : </label>
                                             <div class="col-sm-6">
                                                 <mat-form-field style="width: 70%;">
-                                                    <input type="text" matInput formControlName="type"
-                                                          />
+                                                    <input type="text" matInput formControlName="type" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -409,13 +388,13 @@
 
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 80%;">
-                                        <input type="text" matInput formControlName="voctype"   />
+                                        <input type="text" matInput formControlName="PosVocNo" />
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 80%;">
-                                        <input type="text" matInput formControlName="voctype"   />
+                                        <input type="text" matInput formControlName="voctype" />
                                     </mat-form-field>
                                 </div>
 
@@ -424,17 +403,17 @@
 
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="voctype"   />
+                                        <input type="text" matInput formControlName="batchSiNo" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 50%;">
-                                        <input type="text" matInput formControlName="voctype"   />
+                                        <input type="text" matInput formControlName="voctype" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 50%;">
-                                        <input type="text" matInput formControlName="voctype"   />
+                                        <input type="text" matInput formControlName="voctype" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-1">
@@ -487,16 +466,16 @@
                                                         </div>
                                                         <div class="col-md-1 d-flex">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="remarks"
-                                                                      />
+                                                                <input type="text" matInput
+                                                                    formControlName="importMBCYear" />
                                                             </mat-form-field>
                                                         </div>
                                                         <label for="inputPassword"
                                                             class="col-sm-2 col-form-label">Document : </label>
                                                         <div class="col-md-1 d-flex">
                                                             <mat-form-field style="width: 100%;">
-                                                                <input type="text" matInput formControlName="remarks"
-                                                                      />
+                                                                <input type="text" matInput
+                                                                    formControlName="Document" />
                                                             </mat-form-field>
                                                         </div>
                                                         <div class="col-md-2 d-flex">
@@ -505,8 +484,7 @@
                                                             <div class="col-md-6">
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
-                                                                        formControlName="remarks"
-                                                                          />
+                                                                        formControlName="mbcVocNo" />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -577,8 +555,7 @@
                                                                     <div class="position-relative d-flex">
                                                                         <mat-form-field style="width: 100%;">
                                                                             <input type="text" matInput
-                                                                                formControlName="subTotal"
-                                                                                  />
+                                                                                formControlName="purityDiff" />
                                                                         </mat-form-field>
                                                                     </div>
                                                                 </div>
@@ -596,8 +573,7 @@
                                                                     <div class="position-relative d-flex">
                                                                         <mat-form-field style="width: 100%;">
                                                                             <input type="text" matInput
-                                                                                formControlName="subTotal"
-                                                                                  />
+                                                                                formControlName="StoneDiff" />
                                                                         </mat-form-field>
                                                                     </div>
                                                                 </div>
@@ -615,8 +591,7 @@
                                                                     <div class="position-relative d-flex">
                                                                         <mat-form-field style="width: 100%;">
                                                                             <input type="text" matInput
-                                                                                formControlName="subTotal"
-                                                                                  />
+                                                                                formControlName="subTotal" />
                                                                         </mat-form-field>
                                                                     </div>
                                                                 </div>
@@ -631,7 +606,7 @@
                                                             class="col-sm-2 col-form-label">Narration
                                                             : </label>
                                                         <div class="col-md-10">
-                                                            <textarea style="width: 100%;"></textarea>
+                                                            <textarea style="width: 100%;" formControlName="narration"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -646,8 +621,7 @@
                                                             <div class="position-relative d-flex">
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
-                                                                        formControlName="subTotal"
-                                                                          />
+                                                                        formControlName="TotalAmount" />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -660,8 +634,7 @@
                                                             <div class="position-relative d-flex">
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
-                                                                        formControlName="subTotal"
-                                                                          />
+                                                                        formControlName="OtherAmount" />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -675,8 +648,7 @@
                                                             <div class="position-relative d-flex">
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
-                                                                        formControlName="subTotal"
-                                                                          />
+                                                                        formControlName="tcsAmount" />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -692,8 +664,7 @@
                                                             <div class="position-relative d-flex">
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
-                                                                        formControlName="subTotal"
-                                                                          />
+                                                                        formControlName="totalGst" />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -705,8 +676,7 @@
                                                             <div class="position-relative d-flex">
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
-                                                                        formControlName="subTotal"
-                                                                          />
+                                                                        formControlName="RoundTo" />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -718,8 +688,7 @@
                                                             <div class="position-relative d-flex">
                                                                 <mat-form-field style="width: 100%;">
                                                                     <input type="text" matInput
-                                                                        formControlName="subTotal"
-                                                                          />
+                                                                        formControlName="RoundTo" />
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -730,8 +699,7 @@
                                                                 <div class="position-relative d-flex">
                                                                     <mat-form-field style="width: 100%;">
                                                                         <input type="text" matInput
-                                                                            formControlName="subTotal"
-                                                                              />
+                                                                            formControlName="netAmount" />
                                                                     </mat-form-field>
                                                                 </div>
                                                             </div>
@@ -745,8 +713,7 @@
                                                                 <div class="position-relative d-flex">
                                                                     <mat-form-field style="width: 100%;">
                                                                         <input type="text" matInput
-                                                                            formControlName="subTotal"
-                                                                              />
+                                                                            formControlName="netAmountLc" />
                                                                     </mat-form-field>
                                                                 </div>
                                                             </div>
@@ -780,13 +747,13 @@
                         Driver : </label>
                     <div class="col-sm-4">
                         <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="remarks"   />
+                            <input type="text" matInput formControlName="Driver" />
                         </mat-form-field>
-                        <master-search ></master-search>
+                        <master-search></master-search>
                     </div>
                     <div class="col-sm-4">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="remarks"   />
+                            <input type="text" matInput formControlName="Driver1" />
                         </mat-form-field>
 
                     </div>

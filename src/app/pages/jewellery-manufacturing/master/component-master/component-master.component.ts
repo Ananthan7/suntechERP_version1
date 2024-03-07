@@ -27,6 +27,7 @@ export class ComponentMasterComponent implements OnInit {
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
 
+  images: string[] = [];
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -38,6 +39,9 @@ export class ComponentMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.images = ['src/assets/images/transparentImg.png'] ;
+
     if (this.content.FLAG == 'VIEW') {
 
       this.setFormValues();
@@ -60,7 +64,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION_CODE<> ''",
+    WHERECONDITION: "division='M'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -69,19 +73,22 @@ export class ComponentMasterComponent implements OnInit {
     console.log('values ', value);
 
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
+    this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
 
   }
+
 
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'STOCK Code',
+    SEARCH_HEADING: 'Stock Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+   // WHERECONDITION: `DIVISION_CODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
 
   stockCodeDataSelected(value: any, data: any, controlName: string) {
@@ -89,33 +96,34 @@ export class ComponentMasterComponent implements OnInit {
     console.log(value);
 
     this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
+    this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
-  onFileChangedimage(event: any) {
-    this.imageurl = event.target.files[0]
-    console.log(this.imageurl)
-    let reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.image = reader.result;
-      };
-    }
-  }
+  // onFileChangedimage(event: any) {
+  //   this.imageurl = event.target.files[0]
+  //   console.log(this.imageurl)
+  //   let reader = new FileReader();
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     let file = event.target.files[0];
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       this.image = reader.result;
+  //     };
+  //   }
+  // }
 
-  onFileChanged(event: any) {
-    this.url = event.target.files[0].name
-    console.log(this.url)
-    let reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.urls = reader.result;
-      };
-    }
-  }
+  // onFileChanged(event: any) {
+  //   this.url = event.target.files[0].name
+  //   console.log(this.url)
+  //   let reader = new FileReader();
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     let file = event.target.files[0];
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       this.urls = reader.result;
+  //     };
+  //   }
+  // }
 
   setFormValues() {
     if (!this.content) return
@@ -1049,6 +1057,25 @@ export class ComponentMasterComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+
+  onFileChangedimage(event: any) {
+
+    this.images = [];
+
+    if (event.target.files && event.target.files.length > 0) {
+  
+      for (let i = 0; i < event.target.files.length; i++) {
+    let reader = new FileReader();
+  
+        let file = event.target.files[i];
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.images.push(reader.result as string);
+        };
+      }
+    }
+  
   }
 
 }

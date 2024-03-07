@@ -151,3 +151,32 @@ border-radius: 5px !important;
   font-size: 100px;
   cursor:pointer;
 }
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  text-align: center;
+}
+
+.upload-btn-wrapper 
+.btnnew {
+  color: white;
+  font-size: 14px;
+  background: #ffffff;
+  margin-left: 14px;
+  width: 152px;
+  height: 150px;
+  
+}
+
+.upload-btn-wrapper 
+.uploadproduct {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  font-size: 100px;
+  cursor: pointer;
+}

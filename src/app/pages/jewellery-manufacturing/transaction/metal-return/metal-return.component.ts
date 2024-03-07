@@ -21,8 +21,8 @@ export class MetalReturnComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   currentFilter: any;
-  tableData: any[] = ['Process','Worker','Job No','Sub.Job No','Design','Stock Code','Gross Wt.','Net Wt.','Purity','Pure Wt.'];
-  metalReturnDetailsData : any[] = [];
+  tableData: any[] = ['Process', 'Worker', 'Job No', 'Sub.Job No', 'Design', 'Stock Code', 'Gross Wt.', 'Net Wt.', 'Purity', 'Pure Wt.'];
+  metalReturnDetailsData: any[] = [];
   columnhead: any[] = [''];
   branchCode?: String;
   yearMonth?: String;
@@ -32,7 +32,9 @@ export class MetalReturnComponent implements OnInit {
   tableRowCount: number = 0;
   detailData: any[] = [];
   selectRowIndex: any;
-  selectedKey: number[] = []
+  selectedKey: number[] = [];
+  selectedIndexes: any = [];
+  viewMode: boolean = false;
 
   allMode: string;
   checkBoxesMode: string;
@@ -63,7 +65,7 @@ export class MetalReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -75,7 +77,7 @@ export class MetalReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
 
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -90,15 +92,16 @@ export class MetalReturnComponent implements OnInit {
   }
   metalReturnForm: FormGroup = this.formBuilder.group({
 
-    vocType: ['',[Validators.required]],
-    vocNo : [1],
-    vocDate : [''],
-    vocTime : [new Date().toTimeString().slice(0, 5),[Validators.required]],
-    enteredBy : [''],
-    process : [''],
-    worker : [''],
-    location : [''],
-    remarks : [''],
+    vocType: ['', [Validators.required]],
+    vocNo: [1],
+    vocDate: [''],
+    vocTime: [new Date().toTimeString().slice(0, 5), [Validators.required]],
+    enteredBy: [''],
+    process: [''],
+    worker: [''],
+    location: [''],
+    remarks: [''],
+    FLAG: [null]
   });
 
   constructor(
@@ -112,14 +115,21 @@ export class MetalReturnComponent implements OnInit {
   ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
-   }
+  }
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.setInitialValues()
     this.setAllInitialValues()
+    if (this.content.FLAG == 'VIEW') {
+      this.viewMode = true;
+    }
+    if (this.content?.FLAG) {
+      this.metalReturnForm.controls.FLAG.setValue(this.content.FLAG)
+    }
   }
+
 
   setInitialValues() {
     this.branchCode = this.commonService.branchCode;
@@ -149,8 +159,10 @@ export class MetalReturnComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.metalReturnDetailsData = data.Details
+          console.log(this.tableData, 'table')
           data.Details.forEach((element: any) => {
             this.tableData.push({
+              SRNO: element.SRNO,
               Job_id: element.JOB_NUMBER,
               Unq_job_id: element.UNQ_JOB_ID,
               Process: element.PROCESS_CODE,
@@ -166,13 +178,14 @@ export class MetalReturnComponent implements OnInit {
 
             })
           });
-          this.metalReturnForm.controls.voctype.setValue(data.VOCTYPE)
-          this.metalReturnForm.controls.vocno.setValue(data.VOCNO)
-          this.metalReturnForm.controls.vocdate.setValue(data.VOCDATE)
+          this.metalReturnForm.controls.vocType.setValue(data.VOCTYPE)
+          this.metalReturnForm.controls.vocNo.setValue(data.VOCNO)
+          this.metalReturnForm.controls.vocDate.setValue(data.VOCDATE)
+          this.metalReturnForm.controls.process.setValue(data.Details[0].PROCESS_CODE)
           this.metalReturnForm.controls.worker.setValue(data.Details[0].WORKER_CODE)
-          this.metalReturnForm.controls.workerDes.setValue(data.Details[0].WORKER_NAME)
-          
-
+          this.metalReturnForm.controls.enteredBy.setValue(data.Details[0].SMAN)
+          this.metalReturnForm.controls.location.setValue(data.Details[0].LOCTYPE_CODE)
+          this.metalReturnForm.controls.remarks.setValue(data.Details[0].REMARKS)
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -183,7 +196,7 @@ export class MetalReturnComponent implements OnInit {
     this.subscriptions.push(Sub)
 
   }
-  
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -191,20 +204,20 @@ export class MetalReturnComponent implements OnInit {
 
   userDataSelected(value: any) {
     console.log(value);
-       this.metalReturnForm.controls.enteredBy.setValue(value.UsersName);
+    this.metalReturnForm.controls.enteredBy.setValue(value.UsersName);
   }
 
-  ProcessCodeSelected(e:any){
+  ProcessCodeSelected(e: any) {
     console.log(e);
     this.metalReturnForm.controls.process.setValue(e.Process_Code);
   }
-  
-  WorkerCodeSelected(e:any){
+
+  WorkerCodeSelected(e: any) {
     console.log(e);
     this.metalReturnForm.controls.worker.setValue(e.WORKER_CODE);
   }
 
-  locationCodeSelected(e:any){
+  locationCodeSelected(e: any) {
     console.log(e);
     this.metalReturnForm.controls.location.setValue(e.LOCATION_CODE);
   }
@@ -222,7 +235,7 @@ export class MetalReturnComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    console.log(data,'data')
+    console.log(data, 'data')
     modalRef.componentInstance.content = data
     modalRef.result.then((postData) => {
       if (postData) {
@@ -245,12 +258,11 @@ export class MetalReturnComponent implements OnInit {
 
   }
   setValuesToHeaderGrid(detailDataToParent: any) {
-    console.log(detailDataToParent,'detailDataToParent');
-    
+    console.log(detailDataToParent, 'detailDataToParent');
     if (detailDataToParent.SRNO) {
       console.log(this.metalReturnDetailsData);
-      
-      this.swapObjects(this.metalReturnDetailsData, [detailDataToParent], (detailDataToParent.SRNO-1))
+
+      this.swapObjects(this.metalReturnDetailsData, [detailDataToParent], (detailDataToParent.SRNO - 1))
     } else {
       this.tableRowCount += 1
       detailDataToParent.SRNO = this.tableRowCount
@@ -269,14 +281,30 @@ export class MetalReturnComponent implements OnInit {
       console.error('Invalid index');
     }
   }
-  deleteTableData(){
-   
+  deleteTableData(): void {
+    console.log(this.selectedKey, 'data')
+    this.selectedKey.forEach((element: any) => {
+      this.metalReturnDetailsData.splice(element.SRNO - 1, 1)
+    })
   }
+  onSelectionChanged(event: any) {
 
+
+    this.selectedKey = event.selectedRowKeys;
+    console.log(this.selectedKey, 'srno')
+    let indexes: Number[] = [];
+    this.metalReturnDetailsData.reduce((acc, value, index) => {
+      if (this.selectedKey.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+  }
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
-      // this.updateMeltingType()
+       this.updateMeltingType()
       return
     }
 
@@ -286,7 +314,7 @@ export class MetalReturnComponent implements OnInit {
     }
 
     let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
-    let postData ={
+    let postData = {
       "MID": 0,
       "VOCTYPE": this.metalReturnForm.value.vocType,
       "BRANCH_CODE": this.branchCode,
@@ -319,7 +347,7 @@ export class MetalReturnComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "Details": this.metalReturnDetailsData,
     }
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
@@ -346,34 +374,129 @@ export class MetalReturnComponent implements OnInit {
   }
 
   updateMeltingType() {
-    let API = 'JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/'+ this.metalReturnForm.value.brnachCode + this.metalReturnForm.value.voctype + this.metalReturnForm.value.vocNo + this.metalReturnForm.value.yearMoth ;
-      let postData ={}
-  
-      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.metalReturnForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
-          }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
+    if (this.metalReturnForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
     }
-      /**USE: delete Melting Type From Row */
+    let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${this.branchCode}/${this.metalReturnForm.value.vocType}/${this.metalReturnForm.value.vocNo}/${this.commonService.yearSelected}`
+    let postData = {
+
+      "MID": 0,
+      "VOCTYPE": this.metalReturnForm.value.vocType,
+      "BRANCH_CODE": this.branchCode,
+      "VOCNO": this.metalReturnForm.value.vocNo,
+      "VOCDATE": this.metalReturnForm.value.vocDate,
+      "YEARMONTH": this.yearMonth,
+      "DOCTIME": "2024-03-07T05:31:29.356Z",
+      "CURRENCY_CODE": "stri",
+      "CURRENCY_RATE": 0,
+      "METAL_RATE_TYPE": "string",
+      "METAL_RATE": 0,
+      "TOTAL_AMOUNTFC_METAL": 0,
+      "TOTAL_AMOUNTLC_METAL": 0,
+      "TOTAL_AMOUNTFC_MAKING": 0,
+      "TOTAL_AMOUNTLC_MAKING": 0,
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTLC": 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_GROSS_WT": 0,
+      "TOTAL_PURE_WT": 0,
+      "SMAN": "string",
+      "REMARKS": "string",
+      "NAVSEQNO": 0,
+      "FIX_UNFIX": true,
+      "AUTOPOSTING": true,
+      "POSTDATE": "string",
+      "SYSTEM_DATE": "2024-03-07T05:31:29.356Z",
+      "PRINT_COUNT": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "Details": [
+        {
+          "SRNO": 0,
+          "VOCNO": 0,
+          "VOCTYPE": "str",
+          "VOCDATE": "2024-03-07T05:31:29.357Z",
+          "JOB_NUMBER": "string",
+          "JOB_DATE": "2024-03-07T05:31:29.357Z",
+          "JOB_SO_NUMBER": 0,
+          "UNQ_JOB_ID": "string",
+          "JOB_DESCRIPTION": "string",
+          "BRANCH_CODE": "string",
+          "DESIGN_CODE": "string",
+          "DIVCODE": "s",
+          "STOCK_CODE": "string",
+          "STOCK_DESCRIPTION": "string",
+          "SUB_STOCK_CODE": "string",
+          "KARAT_CODE": "stri",
+          "PCS": 0,
+          "GROSS_WT": 0,
+          "PURITY": 0,
+          "PURE_WT": 0,
+          "RATE_TYPE": "string",
+          "METAL_RATE": 0,
+          "CURRENCY_CODE": "stri",
+          "CURRENCY_RATE": 0,
+          "METAL_GRM_RATEFC": 0,
+          "METAL_GRM_RATELC": 0,
+          "METAL_AMOUNTFC": 0,
+          "METAL_AMOUNTLC": 0,
+          "MAKING_RATEFC": 0,
+          "MAKING_RATELC": 0,
+          "MAKING_AMOUNTFC": 0,
+          "MAKING_AMOUNTLC": 0,
+          "TOTAL_RATEFC": 0,
+          "TOTAL_RATELC": 0,
+          "TOTAL_AMOUNTFC": 0,
+          "TOTAL_AMOUNTLC": 0,
+          "PROCESS_CODE": "string",
+          "PROCESS_NAME": "string",
+          "WORKER_CODE": "string",
+          "WORKER_NAME": "string",
+          "UNQ_DESIGN_ID": "string",
+          "WIP_ACCODE": "string",
+          "UNIQUEID": 0,
+          "LOCTYPE_CODE": "string",
+          "RETURN_STOCK": "string",
+          "SUB_RETURN_STOCK": "string",
+          "STONE_WT": 0,
+          "NET_WT": 0,
+          "PART_CODE": "string",
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "str",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "string",
+          "PUDIFF": 0,
+          "JOB_PURITY": 0
+        }
+      ]
+    }
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.metalReturnForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (!this.content.WORKER_CODE) {
       Swal.fire({
@@ -439,7 +562,7 @@ export class MetalReturnComponent implements OnInit {
       }
     });
   }
-  
+
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -452,7 +575,7 @@ export class MetalReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  processSelected(e:any){
+  processSelected(e: any) {
     console.log(e);
     this.metalReturnForm.controls.process.setValue(e.Process_Code);
   }
@@ -469,7 +592,7 @@ export class MetalReturnComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  workerSelected(e:any){
+  workerSelected(e: any) {
     console.log(e);
     this.metalReturnForm.controls.worker.setValue(e.WORKER_CODE);
   }

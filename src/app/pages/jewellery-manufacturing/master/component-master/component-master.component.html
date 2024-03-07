@@ -170,16 +170,32 @@
                         </div>
 
                     </div>
-                    <div class="col-md-3">
-                        <div class="upload-btn-wrapper">
-                            <button class="btn btnnew border-dark">
-                                <img src={{image}} style="width:126px;height:124px">
-
+                    <div class="col-md-2">
+                        <div class="container">
+                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" >
+                            <div class="carousel-inner">
+                              <div class="carousel-item active" *ngFor="let img of images; let i = index" [class.active]="i === 0">
+                                <div class="upload-btn-wrapper">
+                                  <button class="btn btnnew border-dark">
+                                    <img src={{img}} style="width:126px;height:124px">
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
                             </button>
-                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                                (change)="onFileChangedimage($event)">
+                            <!-- <div class="upload-btn-wrapper">
+                            <button class="btn btnnew border-dark"></button></div> -->
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple>
                         </div>
-                    </div>
+                      </div>
 
                 </div>
             </div>
@@ -301,8 +317,7 @@
                         <button type="button" class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                             Image
                         </button>
-                        <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                            (change)="onFileChangedimage($event)">
+                        <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple>
                     </div>
                 </div>
             </div>

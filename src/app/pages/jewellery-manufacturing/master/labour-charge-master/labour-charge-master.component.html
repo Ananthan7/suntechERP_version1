@@ -132,9 +132,10 @@
                   (newRowClick)="sizeToCodeSelected($event)"></master-search>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
-              <div class="col-sm-3">z
+              <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number"   matInput maxlength="6"  style="text-align: right;" formControlName="cost_rate" />
+                  <input type="text" [(ngModel)]="displayDiaCostRate"  matInput NumberOnly  #costRateid 
+                  (keyup)="DiaCostRatekeyupvalue(costRateid.value)"  style="text-align: right;" formControlName="cost_rate"/>
                 </mat-form-field>
               </div>
             </div>
@@ -149,7 +150,8 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput    maxlength="6" AmountDecimalInput style="text-align: right;" formControlName="selling_rate" (change)="salesChange()" />
+                  <input type="text"  [(ngModel)]="displayDiaSellingRate"  matInput NumberOnly  #DiaSellingRateid 
+                  (keyup)="DiaSellingRatekeyupvalue(DiaSellingRateid.value)"  style="text-align: right;" formControlName="selling_rate" (change)="salesChange()" />
                 </mat-form-field>
               </div>
             </div>
@@ -171,7 +173,8 @@
               <label for="input" class="col-sm-2 col-form-label">Ct Wt From * :</label>
               <div class="col-sm-3">
                   <mat-form-field>
-                      <input type="number" matInput maxlength="6" MetalDecimalInput style="text-align: right;" formControlName="ctWtFrom"  />
+                      <input type="text" matInput  [(ngModel)]="displayDiaCtWtFrom"  matInput NumberOnly  #DiaCtWtFrom 
+                      (keyup)="DiaCtWtFromkeyupvalue(DiaCtWtFrom.value)"   style="text-align: right;" formControlName="ctWtFrom"  />
                   </mat-form-field>
               </div>
               
@@ -191,7 +194,8 @@
               <label for="input" class="col-sm-2 col-form-label">Ct Wt to * :</label>
               <div class="col-sm-3">
                 <mat-form-field>
-                  <input type="number" matInput maxlength="6"  MetalDecimalInput style="text-align: right;" formControlName="ctWtTo" />
+                  <input type="text" matInput   [(ngModel)]="displayDiaCtWtTo"  matInput NumberOnly  #DiaCtWtTo 
+                  (keyup)="DiaCtWtTokeyupvalue(DiaCtWtTo.value)"   style="text-align: right;" formControlName="ctWtTo" />
                 </mat-form-field>
               </div>
               <div class="col-sm-6">
@@ -290,7 +294,8 @@
               <label for="input" class="col-sm-2 col-form-label">Cost Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number"  formControlName="metalcost_rate"  style="text-align: right;" />
+                  <input matInput type="text"  [(ngModel)]="displayMetalCostRate"  matInput NumberOnly  #MetalCostRate 
+                  (keyup)="MetalCostRatekeyupvalue(MetalCostRate.value)" formControlName="metalcost_rate"  style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -306,7 +311,8 @@
               <label for="input" class="col-sm-2 col-form-label">Selling Rate * :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 90%">
-                  <input matInput type="number"  AmountDecimalInput formControlName="metalselling_rate"  style="text-align: right;"  (change)="salesChangeMetal()"/>
+                  <input matInput type="text"  [(ngModel)]="displayMetalSellingRate"  matInput NumberOnly  #MetalSellingRate 
+                  (keyup)="MetalSellingRatekeyupvalue(MetalSellingRate.value)" formControlName="metalselling_rate"  style="text-align: right;"  (change)="salesChangeMetal()"/>
                 </mat-form-field>
               </div>
             </div>
@@ -374,7 +380,8 @@
               <label for="input" class="col-sm-2 col-form-label">Wt From :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="number"  formControlName="wtFrom" MetalDecimalInput   style="text-align: right;" />
+                  <input matInput type="text"  [(ngModel)]="displayMetalWtFrom"  matInput NumberOnly  #MetalWtFrom 
+                  (keyup)="MetalWtFromkeyupvalue(MetalWtFrom.value)"  formControlName="wtFrom"    style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -382,7 +389,8 @@
               <label for="input" class="col-sm-2 col-form-label">Wt To :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%">
-                  <input matInput type="number"    formControlName="wtTo" MetalDecimalInput style="text-align: right;" />
+                  <input matInput type="text"  [(ngModel)]="displayMetalWtTo"  matInput NumberOnly  #MetalWtTo 
+                  (keyup)="MetalWtTokeyupvalue(MetalWtTo.value)"   formControlName="wtTo"  style="text-align: right;" />
                 </mat-form-field>
               </div>
               <div class="col-sm-3 mb-2">
