@@ -28,12 +28,12 @@ export class ComponentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.commonService.toastSuccessByMsgId('MSG81447');
-    let API = 'SequenceMasterDJ/GetSequenceMasterDJDetail/';
+    let API = 'JobTransactionsGrid/GetJobTransaction/{BRANCH}/{JOB_NUMBER}';
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe(
         (result) => {
-          if (result.status === 'Success' && result.response.sequenceDetails) {
-            this.tableDataProcess = result.response.sequenceDetails.map((item: any, index: number) => {
+          if (result.status === 'Success' && result.response) {
+            this.tableDataProcess = result.response.map((item: any, index: number) => {
               return { ...item, SELECT1: false, SRNO: index + 1 };
             });
             console.log(this.tableDataProcess);

@@ -18,7 +18,19 @@
                 <div class="row justify-content-center">
                   <div class="col-md-11 pt-3 mb-2">
                     <h6 class="p-l1">Issue</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [dataSource]="tableDataProcess" >
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                     <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                      </dxi-column>  -->
+                    </dx-data-grid>
+
+
+                    <!-- <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
                       [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true">
@@ -29,7 +41,7 @@
                       <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                         [allowEditing]="true" alignment="center" backgroundcolor="#000">
                       </dxi-column>
-                    </dx-data-grid>
+                    </dx-data-grid> -->
                   </div>
                 </div>
                 <div class="row justify-content-center">
