@@ -278,7 +278,11 @@ export class LoginComponent implements OnInit {
   }
   validateYear(event: any) {
     if (event.target.value == '') {
-      this.renderer.selectRootElement('#year')?.focus();
+      if(this.dataForm.value.branch != ''){
+        this.renderer.selectRootElement('#year')?.focus();
+      }else{
+        this.renderer.selectRootElement('#branch')?.focus();
+      }
     }
     let yearSelected = this.options_year.filter((item: any) => item == event.target.value)
     if (yearSelected.length == 0) {
