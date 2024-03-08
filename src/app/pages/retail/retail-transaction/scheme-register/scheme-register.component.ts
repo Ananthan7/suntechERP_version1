@@ -8,6 +8,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-scheme-register',
@@ -944,4 +945,27 @@ export class SchemeRegisterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
+
+  
+  changeDateOfJoining(event: any) {
+    this.updateMaturingDate();
+  }
+
+  updateMaturingDate() {
+    let value = this.schemeRegistrationForm.value.TenurePeriod;
+    const dateOfJoining = new Date(this.schemeRegistrationForm.value.DateOfJoining);
+    if (value != '') {
+      if (this.schemeRegistrationForm.value.Frequency.toUpperCase() == 'WEEKLY') {
+        const updatedDate = dateOfJoining.getDate() + (parseInt(value) * 7 );
+        dateOfJoining.setDate(updatedDate);
+      }else{
+        const updatedDate = dateOfJoining.getMonth() + parseInt(value);
+        dateOfJoining.setMonth(updatedDate);
+      }
+      this.schemeRegistrationForm.controls.MaturingDate.setValue(dateOfJoining);
+    } else {
+      this.schemeRegistrationForm.controls.MaturingDate.setValue(dateOfJoining);
+    }
+  }
+
 }

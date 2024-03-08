@@ -78,14 +78,16 @@
                     <div class="col-lg-3 col-md-12 col-sm-12">
                         <label class="matlabels">Date Of Joining :
                         </label>
-                        <mat-form-field style="width: 50%;">
+                        <mat-form-field style="width: 50%;" >
                             <input matInput [disabled]="viewMode"
                                 DateValidation
                                 name="DOJ"
                                 [matDatepicker]="DOJ"
                                 formControlName="DateOfJoining"
                                 placeholder="DD/MM/YYYY"
-                                (dateChange)="formatDate($event)" />
+                                (dateChange)="changeDateOfJoining($event)" 
+                                />
+                                <!-- (dateChange)="formatDate($event)"  -->
                             <mat-datepicker-toggle
                                 matSuffix
                                 [for]="DOJ"></mat-datepicker-toggle>
@@ -210,7 +212,8 @@
                             <input type="number" matInput
                                 class="text-right"
                                 [readonly]="viewMode || schemeRegistrationForm.value.SchemeId !=''"
-                                formControlName="TenurePeriod" />
+                                formControlName="TenurePeriod" 
+                                (change)="updateMaturingDate()"/>
                         </mat-form-field>
                     </div>
                     <div class="col-lg-3 col-md-12 col-sm-12">
