@@ -26,6 +26,7 @@ export class ComponentMasterComponent implements OnInit {
   url: any;
   imageurl: any;
   image: string | ArrayBuffer | null | undefined;
+  
 
   images: string[] = [];
   constructor(
@@ -40,7 +41,7 @@ export class ComponentMasterComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.images = ['src/assets/images/transparentImg.png'] ;
+    this.images = ['src/assets/images/transparentImg.png'];
 
     if (this.content.FLAG == 'VIEW') {
 
@@ -73,7 +74,8 @@ export class ComponentMasterComponent implements OnInit {
     console.log('values ', value);
 
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
-    this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
+
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${value.DIVISION_CODE}' and SUBCODE = '0'`;
 
   }
 
@@ -85,7 +87,8 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Type',
     SEARCH_VALUE: '',
-   // WHERECONDITION: `DIVISION_CODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`,
+     //WHERECONDITION: `DIVISION_CODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`,
+    // WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -96,34 +99,9 @@ export class ComponentMasterComponent implements OnInit {
     console.log(value);
 
     this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
-    this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
+  //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
-  // onFileChangedimage(event: any) {
-  //   this.imageurl = event.target.files[0]
-  //   console.log(this.imageurl)
-  //   let reader = new FileReader();
-  //   if (event.target.files && event.target.files.length > 0) {
-  //     let file = event.target.files[0];
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       this.image = reader.result;
-  //     };
-  //   }
-  // }
-
-  // onFileChanged(event: any) {
-  //   this.url = event.target.files[0].name
-  //   console.log(this.url)
-  //   let reader = new FileReader();
-  //   if (event.target.files && event.target.files.length > 0) {
-  //     let file = event.target.files[0];
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       this.urls = reader.result;
-  //     };
-  //   }
-  // }
 
   setFormValues() {
     if (!this.content) return
@@ -207,6 +185,24 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.category.setValue(e.CODE);
   }
 
+  
+  karatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 17,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  karatCodeSelected(value: any, data: any, controlName: string){
+
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    //this.componentmasterForm.controls.karat.setValue(e.KARAT_CODE);
+  }
+
   codeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -286,7 +282,7 @@ export class ComponentMasterComponent implements OnInit {
     length = descriptionArray[2];
     radius = descriptionArray[3];
 
-    
+
     console.log("Height:", height);
     console.log("Width:", width);
     console.log("Length:", length);
@@ -1064,10 +1060,10 @@ export class ComponentMasterComponent implements OnInit {
     this.images = [];
 
     if (event.target.files && event.target.files.length > 0) {
-  
+
       for (let i = 0; i < event.target.files.length; i++) {
-    let reader = new FileReader();
-  
+        let reader = new FileReader();
+
         let file = event.target.files[i];
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -1075,7 +1071,53 @@ export class ComponentMasterComponent implements OnInit {
         };
       }
     }
-  
+
+  }
+
+  stockType(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
+  }
+  pcstemp(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].PCS = data.target.value;
+  }
+  wtCtt(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].GROSS_WT = data.target.value;
+  }
+  color(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].COLOR = data.target.value;
+  }
+  clarity(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].CLARITY = data.target.value;
+  }
+  shape(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].SHAPE = data.target.value;
+  }
+  sieve(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].SIEVE = data.target.value;
+  }
+  description(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].DESCRIPTION = data.target.value;
+  }
+  size(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].DSIZE = data.target.value;
+  }
+  processType(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].PROCESS_TYPE = data.target.value;
+  }
+  remark(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].D_REMARKS = data.target.value;
+  }
+  pointerWt(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
+  }
+  extClarity(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
+  }
+  sieveFrom(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
+  }
+  sieveTo(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
   }
 
 }
