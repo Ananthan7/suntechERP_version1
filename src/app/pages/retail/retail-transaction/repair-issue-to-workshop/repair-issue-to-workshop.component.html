@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -36,8 +36,7 @@
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
                                     <mat-form-field style="width: 100%;">
-                                        <input class="text-right" type="number" matInput formControlName="vocNo"
-                                              />
+                                        <input class="text-right" type="number" matInput formControlName="vocNo" style="text-align: right;"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -89,6 +88,7 @@
                                 <mat-form-field style="width: 60%;">
                                     <input type="text" matInput formControlName="partyCode"   />
                                 </mat-form-field>
+                                <master-search></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
