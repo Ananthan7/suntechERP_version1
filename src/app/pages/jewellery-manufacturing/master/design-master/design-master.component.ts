@@ -31,7 +31,8 @@ export class DesignMasterComponent implements OnInit {
   tableDataCutRange: any[] = [];
   tableDataCountryRange: any[] = [];
   tableDataDyeCodeRange: any[] = [];
-
+  fieldDisable : boolean = false;
+  FieldEnable : boolean = false;
 
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
@@ -836,7 +837,18 @@ removedatas(){
     console.log('values ',value);
  
     this.tableData[data.data.SRNO - 1].Division = value.DIVISION_CODE;
-    console.log(data.data.SRNO)
+    console.log(data.data.SRNO);
+
+    if(value.DIVISION == 'M'){
+      this.fieldDisable = true;
+
+    }
+    else if(value.DIVISION == 'S'){
+      this.FieldEnable = true;
+
+    }
+
+
 }
   // divisionCodeSelected(value: any, data: any , controlName: string) {
   //   try {
