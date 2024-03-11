@@ -11,7 +11,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <form>
+        <form [formGroup]="repairEnquiryForm" (saveClick)="formSubmit()">
             <div class="row"> 
                 <div class="col-md-4 mt-3">
                     <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
@@ -32,7 +32,7 @@
                     <label for="input" class="col-sm-2 col-form-label">Enter Search Text Here</label>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;">
-                            <input type="text" matInput  />
+                            <input type="text" matInput  formControlName="enterSearch"/>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-1">

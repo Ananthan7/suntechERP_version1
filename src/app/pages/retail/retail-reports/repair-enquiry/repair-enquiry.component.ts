@@ -15,12 +15,12 @@ import themes from 'devextreme/ui/themes';
   styleUrls: ['./repair-enquiry.component.scss']
 })
 export class RepairEnquiryComponent implements OnInit {
-
+  @Input() content!: any;
   selectedTabIndex = 0;
   tableData: any = [];
   showHeaderFilter: boolean;
-  currentFilter: any;
   showFilterRow: boolean;
+  private subscriptions: Subscription[] = [];
   allMode: string;
   checkBoxesMode: string;
   constructor(
@@ -40,8 +40,54 @@ export class RepairEnquiryComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  repairEnquiryForm: FormGroup = this.formBuilder.group({
+    
+    enterSearch: [''],
+    
+  });
+
   close(data?: any) {
     this.activeModal.close(data);
+  }
+
+  formSubmit() {
+  
+
+    if (this.repairEnquiryForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = '/RptRepairEnquiryNet'
+    let postData ={
+      
+      "strRepairType": 0,
+      "strSearch": this.repairEnquiryForm.value.enterSearch,
+      "strBranch": " "
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.repairEnquiryForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
 
 
