@@ -55,7 +55,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">SalesMan : </label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="salesMan" [readonly]="viewMode"  oninput="this.value = this.value.toUpperCase()"/>
+                                    <input type="text" matInput formControlName="salesMan" [readonly]="viewMode"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="salesManCodeData" *ngIf="!viewMode"
                                     (newRowClick)="salesManSelected($event)"></master-search>
@@ -68,18 +68,18 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label ">PartyCode : </label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 40%;">
-                                    <input type="text" matInput formControlName="partyCode" [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()" />
+                                    <input type="text" matInput formControlName="partyCode" [readonly]="viewMode"  />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="customerCodeData" *ngIf="!viewMode"
                                     (newRowClick)="customerSelected($event)"></master-search>
                                 <mat-form-field style="width: 40%;">
-                                    <input type="text" matInput formControlName="partyDesc" [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()"/>
+                                    <input type="text" matInput formControlName="partyDesc" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword" class="col-sm-2 col-form-label ">Branchcurr : </label>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="branchcurrcode" [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()"/>
+                                    <input type="text" matInput formControlName="branchcurrcode" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
@@ -97,6 +97,7 @@
                                 <mat-form-field style="width: 200%;">
                                     <input type="text" matInput formControlName="partyName" [readonly]="viewMode" />
                                 </mat-form-field>
+                            
                             </div>
 
                             <!-- <label for="inputPassword" class="col-sm-2 col-form-label ">Tel : </label>
@@ -129,13 +130,13 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label ">Customer Code : </label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 40%;">
-                                    <input type="text" matInput formControlName="customerCode" [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()"/>
+                                    <input type="text" matInput formControlName="customerCode" [readonly]="viewMode" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="customerCodeData" *ngIf="!viewMode"
                                     (newRowClick)="customerSelected($event)"></master-search>
                                 <mat-form-field style="width: 40%;">
                                     <input type="text" matInput formControlName="customerCodeDesc"
-                                        [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()"/>
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -178,7 +179,7 @@
                             <mat-tab label="Received From Workshops">
                                 <div class="row mb-3">
                                     <div class="col-md-12">
-                                        <dx-resizable id="gridContainer"  [height]="280"
+                                        <dx-resizable id="gridContainer"
                                             [keepAspectRatio]="false" handles="right">
                                             <dx-data-grid width="auto" #dataGrid id="gridContainer"
                                                 [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"
@@ -205,7 +206,7 @@
 
                 <div class="row mt-3">
                     <div class="col-md-12">
-                        <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+                        <mat-tab-group [(selectedIndex)]="selectedTabIndex1">
                             <mat-tab label="Pending Repair Items" id="get">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
@@ -225,7 +226,7 @@
                             <mat-tab label="Received Items To Deliver">
                                 <div class="row mb-3">
                                     <div class="col-md-12">
-                                        <dx-resizable id="gridContainer" [height]="280"
+                                        <dx-resizable id="gridContainer"
                                             [keepAspectRatio]="false" handles="right">
                                             <dx-data-grid width="auto" #dataGrid id="gridContainer"
                                                 [dataSource]="tableDatas" [showBorders]="true" [showColumnLines]="true"

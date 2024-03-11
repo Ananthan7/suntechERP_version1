@@ -109,6 +109,7 @@
           <th style="vertical-align: middle; text-align: center">
             Net Amount (Excl.VAT)
           </th>
+          <th style="vertical-align: middle; text-align: center">Discount</th>
           <th style="vertical-align: middle; text-align: center">VAT %</th>
           <th style="vertical-align: middle; text-align: center">Tax Amount</th>
           <th style="vertical-align: middle; text-align: center">
@@ -138,6 +139,9 @@
             <!-- {{ cli.mkg_amount| number:'1.2' }} -->
           </td>
           <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.dis_amt | number : "1.2" }}
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
             {{ cli.taxPer | number : "1.2" }}
             <!-- {{ branch_tax_percentage }} -->
           </td>
@@ -164,6 +168,7 @@
   
           </tr> -->
         <tr>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -215,6 +220,14 @@
           <td style="text-align-last: right">
             {{ prnt_inv_total_gross_amt | number : "1.2" }}
             <!-- {{ prnt_inv_net_total_without_tax }} -->
+          </td>
+        </tr>
+        <tr>
+          <td colspan="8" style="font-weight: 600; text-align-last: right">
+            Total Discount
+          </td>
+          <td style="text-align-last: right">
+            {{ order_items_total_discount_amount | number : "1.2" }}
           </td>
         </tr>
         <tr>
@@ -2526,13 +2539,13 @@
                 <div class="bg-gray-card">
                   <div class="form-group row">
                     <div class="col-md-3">
-                      <mat-form-field style="width: 70%;">
+                      <mat-form-field style="width: 100%;">
                         <mat-label>Division </mat-label>
                         <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division" readonly />
                       </mat-form-field>
-                      <master-search [MasterSearchData]="divisionCodeData"
+                      <!-- <master-search [MasterSearchData]="divisionCodeData"
                         (newRowClick)="divisionCodeSelected($event)">>
-                      </master-search>
+                      </master-search> -->
                     </div>
                     <div class="col-md-2">
 
@@ -2548,13 +2561,13 @@
                           (change)="getStockDesc($event)"
                           [readonly]="viewOnly"
                         /> -->
-                      <mat-form-field style="width: 70%;">
+                      <mat-form-field style="width: 100%;">
                         <mat-label>Item Code </mat-label>
                         <input type="text" matInput formControlName="design" />
 
                       </mat-form-field>
-                      <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)">
-                      </master-search>
+                      <!-- <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)">
+                      </master-search> -->
 
                       <!-- <input type="text" matInput formControlName="fcn_li_item_code" #fcn_li_item_code
                             id="fcn_li_item_code" value="{{ li_item_code_val }}" autofocus
