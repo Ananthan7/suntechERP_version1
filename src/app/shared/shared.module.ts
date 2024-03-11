@@ -74,6 +74,7 @@ import { UppercaseDirective } from './directives/uppercase.directive';
 import { DurationPickerComponent } from './common/duration-picker/duration-picker.component';
 import { FormatThreeDecimalDirective } from './directives/format-three-decimal.directive';
 import { CommaSeparatedNumberDirective } from './directives/comma-separated-number.directive';
+import { AuditTrailComponent } from './common/audit-trail/audit-trail.component';
 @NgModule({
   declarations: [
     //pipes declarations
@@ -104,6 +105,7 @@ import { CommaSeparatedNumberDirective } from './directives/comma-separated-numb
     DurationPickerComponent,
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,
+    AuditTrailComponent,
   ],
   imports: [
     CommonModule,

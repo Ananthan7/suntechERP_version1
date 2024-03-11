@@ -199,8 +199,8 @@ export class SchemeReceiptComponent implements OnInit {
     this.receiptDetailsForm.controls.PartyAmtCode.setValue(this.content.PARTY_CURRENCY);
     this.receiptDetailsForm.controls.PartyAmount.setValue(this.content.TOTAL_AMOUNTFC);
     this.receiptDetailsForm.controls.TotalAmount.setValue(this.content.TOTAL_AMOUNTFC);
-    this.receiptDetailsForm.controls.TotalTax.setValue(this.content.GST_TOTALFC);
     this.receiptDetailsForm.controls.IGST_ACCODE.setValue(this.content.IGST_ACCODE);
+    this.receiptDetailsForm.controls.TotalTax.setValue(this.content.IGST_AMOUNTFC);
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
@@ -755,13 +755,7 @@ export class SchemeReceiptComponent implements OnInit {
             this.rightSideHeader = data.ACCOUNT_HEAD;
           }
         } else {
-          this.toastr.error(
-            "PartyCode not found in credit master",
-            result.Message ? result.Message : "",
-            {
-              timeOut: 3000,
-            }
-          );
+          this.commonService.toastErrorByMsgId("PartyCode not found in credit master");
         }
       },
       (err) =>
@@ -978,7 +972,7 @@ export class SchemeReceiptComponent implements OnInit {
       "SALESPERSON_CODE": this.receiptDetailsForm.value.Salesman || "",
       "BALANCE_FC": this.commonService.emptyToZero(this.totalValue_FC),
       "BALANCE_CC": this.commonService.emptyToZero(this.totalValue),
-      "AUTHORIZEDPOSTING": true,
+      "AUTHORIZEDPOSTING": false,
       "AUTOGENREF": "",
       "AUTOGENMID": 0,
       "AUTOGENVOCTYPE": "",
@@ -988,7 +982,7 @@ export class SchemeReceiptComponent implements OnInit {
       "DRAFT_FLAG": "",
       "POSSCHEMEID": this.commonService.nullToString(this.receiptDetailsForm.value.SchemeUniqueID),
       "PARTY_ADDRESS": "",
-      "AUTOPOSTING": true,
+      "AUTOPOSTING": false,
       "POSTDATE": this.commonService.formatDateTime(this.receiptDetailsForm.value.PostedDate),
       "FLAG_EDIT_ALLOW": "",
       "BASE_CURRENCY": this.commonService.nullToString(this.receiptDetailsForm.value.CurrCode),

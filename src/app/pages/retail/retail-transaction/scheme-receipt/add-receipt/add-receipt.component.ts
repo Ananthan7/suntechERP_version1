@@ -214,7 +214,6 @@ export class AddReceiptComponent implements OnInit {
     }
     if(data.CURRENCY_CODE){
       this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE)
-      this.currencyCodeChange(data.CURRENCY_CODE)
     }
   }
   creditCardSelect(data: any) {
@@ -276,15 +275,14 @@ export class AddReceiptComponent implements OnInit {
           let data = result.response
 
           this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD);
-          if (data.CURRENCY_CODE) {
+          if (this.receiptEntryForm.value.CurrCode == '') {
             this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE);
-            if (data.CURRENCY_CODE == this.commonService.compCurrency) {
-              this.disableAmountFC = true
-            }
-            this.currencyCodeChange(data.CURRENCY_CODE);
-          } else {
-            this.commonService.toastErrorByMsgId('PartyCode not found in credit master')
           }
+          if (this.receiptEntryForm.value.CurrCode == this.commonService.compCurrency) {
+            this.disableAmountFC = true
+          }
+          this.currencyCodeChange(this.receiptEntryForm.value.CurrCode);
+         
         } else {
           this.commonService.toastErrorByMsgId('PartyCode not found in credit master')
         }
