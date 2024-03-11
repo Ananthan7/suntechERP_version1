@@ -27,6 +27,7 @@ export class RepairIssueFromWorkshopComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
   selectedTabIndex = 0;
+  selectedTabIndex1 = 0;
 
   constructor(
     private activeModal: NgbActiveModal,
