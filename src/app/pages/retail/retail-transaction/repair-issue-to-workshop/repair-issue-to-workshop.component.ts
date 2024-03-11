@@ -56,27 +56,6 @@ export class RepairIssueToWorkshopComponent implements OnInit {
 
   });
 
- 
-
-  adddata() {
-  
-   
-}
-
-
-
-adddatas() {
- 
-}
-
-removedata(){
-  this.tableData.pop();
-}
-
-removedatas(){
-  this.tableDatas.pop();
-}
-
 
   formSubmit() {
 
@@ -236,7 +215,7 @@ removedatas(){
     }
      
 
-  deleteMeltingType() {
+    deleteRecord() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.MID) {
       Swal.fire({
