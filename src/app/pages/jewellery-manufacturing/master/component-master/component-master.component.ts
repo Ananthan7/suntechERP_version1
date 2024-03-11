@@ -434,6 +434,12 @@ export class ComponentMasterComponent implements OnInit {
       "DSIZE": "",
       "PROCESS_TYPE": "",
       "D_REMARKS": "",
+      "POINTER_WT": "",
+      "EXT_Color": "",
+      "EXT_CLARITY": "",
+      "SIEVE_FROM": "",
+      "SIEVE_TO": "",
+    
     };
     this.tableData.push(data);
     this.tableData.filter((data, i) => data.SRNO = i + 1)
@@ -1057,7 +1063,7 @@ export class ComponentMasterComponent implements OnInit {
 
   onFileChangedimage(event: any) {
 
-    this.images = [];
+      this.images = [];
 
     if (event.target.files && event.target.files.length > 0) {
 
@@ -1108,16 +1114,19 @@ export class ComponentMasterComponent implements OnInit {
     this.tableData[value.data.SRNO - 1].D_REMARKS = data.target.value;
   }
   pointerWt(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
+    this.tableData[value.data.SRNO - 1].POINTER_WT = data.target.value;
   }
   extClarity(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
+    this.tableData[value.data.SRNO - 1].EXT.CLARITY = data.target.value;
   }
   sieveFrom(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
+    this.tableData[value.data.SRNO - 1].SIEVE_FROM = data.target.value;
   }
   sieveTo(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].MOBILE_NO = data.target.value;
+    this.tableData[value.data.SRNO - 1].SIEVE_TO = data.target.value;
+  }
+  extColor(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
   }
 
 }
