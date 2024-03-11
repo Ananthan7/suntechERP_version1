@@ -863,6 +863,9 @@ export class SchemeReceiptComponent implements OnInit {
   setDetailData() {
     let detailsArray: any = [];
     let datas: any = {};
+    let branchData = this.commonService.allbranchMaster
+    console.log(branchData);
+    
     this.orderedItems.forEach((item: any) => {
       datas = {
         "UNIQUEID": 0,
@@ -918,9 +921,9 @@ export class SchemeReceiptComponent implements OnInit {
         "SGST_CTRLACCODE": "",
         "IGST_CTRLACCODE": "",
         "HSN_CODE": this.commonService.nullToString(item.HSN_AC),
-        "DT_GST_TYPE": "",
-        "DT_GST_CODE": "",
-        "DT_GST_GROUP": "",
+        "DT_GST_TYPE": "IGST",
+        "DT_GST_CODE": this.commonService.nullToString(branchData.BRANCH_TAXTYPE),
+        "DT_GST_GROUP": this.commonService.nullToString(item.GST_GROUP),
         "DT_GST_STATE_CODE": "",
         "INCLUSIVE": true,
         "COMM_PER": 0,

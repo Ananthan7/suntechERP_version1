@@ -103,6 +103,7 @@ export class AddReceiptComponent implements OnInit {
     IGST_ACCODE: [''],
     CGST_ACCODE: [''],
     SGST_ACCODE: [''],
+    GST_GROUP: [''],
   })
   private subscriptions: Subscription[] = [];
   constructor(
@@ -210,6 +211,10 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.AC_Code.setValue(data.ACCODE)
       this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD)
       this.getAccountMaster(data.ACCODE)
+    }
+    if(data.CURRENCY_CODE){
+      this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE)
+      this.currencyCodeChange(data.CURRENCY_CODE)
     }
   }
   creditCardSelect(data: any) {
@@ -350,7 +355,7 @@ export class AddReceiptComponent implements OnInit {
           this.receiptEntryForm.controls.IGST_ACCODE.setValue(data.IGST_ACCODE);
           this.receiptEntryForm.controls.SGST_ACCODE.setValue(data.SGST_ACCODE);
           this.receiptEntryForm.controls.CGST_ACCODE.setValue(data.CGST_ACCODE);
-          // this.content.SCHEME_AMOUNT = 100 //TODO
+          this.receiptEntryForm.controls.GST_GROUP.setValue(data.GST_GROUP);
 
           this.receiptEntryForm.controls.HeaderAmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
           this.receiptEntryForm.controls.AmountWithTRN.setValue(this.content.SCHEME_AMOUNT)
@@ -581,7 +586,7 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.TypeCodeDESC.setValue('');
       this.accountMasterData.LOAD_ONCLICK = true;
       this.accountMasterData.PAGENO = 1;
-      this.accountMasterData.SEARCH_FIELD = 'ACCODE,ACCOUNT_HEAD';
+      this.accountMasterData.SEARCH_FIELD = 'ACCODE,ACCOUNT_HEAD,CURRENCY_CODE';
       this.accountMasterData.API_VALUE = 'SchemeReceipt/GetCashAccode/' + this.commonService.branchCode
       this.getBranchMasterList()
     } else if (event.ENGLISH == 'Cheque') {
