@@ -1128,6 +1128,9 @@ export class AddPosComponent implements OnInit {
         this.viewOnly = true;
       }
 
+      if (!this.viewOnly && !this.editOnly)
+        this.open(this.mymodal);
+
     } else {
       this.getFinancialYear();
       this.generateVocNo();
@@ -1311,9 +1314,9 @@ export class AddPosComponent implements OnInit {
           //   this.amlNameValidationData = true;
           //   this.openDialog('Warning', 'Pending for approval', true);
           // }
-        /**end set customer data */
+          /**end set customer data */
 
-        this.boardingPassForm.controls.passDetails.setValue(retailSaleData.BOARDINGPASS);
+          this.boardingPassForm.controls.passDetails.setValue(retailSaleData.BOARDINGPASS);
         this.boardingPassForm.controls.flightNo.setValue(retailSaleData.FLIGHTNO);
         this.boardingPassForm.controls.boardingDate.setValue(retailSaleData.BOARDINGDATE);
         this.boardingPassForm.controls.boardingTo.setValue(retailSaleData.BOARDINGFROM);
@@ -1585,7 +1588,10 @@ export class AddPosComponent implements OnInit {
     //Add 'implements AfterViewInit' to the class.
     if (this.viewOnly) this.setReadOnlyForViewMode();
 
-    this.open(this.mymodal);
+    // console.log('viewonly',this.viewOnly , this.editOnly);
+
+    // if(!this.viewOnly && !this.editOnly)
+    // this.open(this.mymodal);
 
   }
 
@@ -2022,6 +2028,14 @@ export class AddPosComponent implements OnInit {
         receiptSrNO = itemsLengths;
       }
 
+      AMOUNT_FC =   this.comFunc.transformDecimalVB(
+        this.comFunc.amtDecimals,
+        AMOUNT_FC
+      )
+      AMOUNT_CC =   this.comFunc.transformDecimalVB(
+        this.comFunc.amtDecimals,
+        AMOUNT_CC
+      )
       var receiptDetails = {
         "SRNO": receiptSrNO,
         "REFMID": this.retailSalesMID || receiptSrNO,
@@ -3674,7 +3688,7 @@ export class AddPosComponent implements OnInit {
   async getIdMaster() {
     // const resp = this.comFunc.getMasterByID('ID MASTER');
     const resp = await this.comFunc.idMaster;
-    console.log('idMaster',this.comFunc.idMaster);
+    console.log('idMaster', this.comFunc.idMaster);
     var data = resp.map((t: any) => t.CODE);
     this.idTypeOptions = data;
     this.idTypeOptionList = resp;
@@ -6305,7 +6319,8 @@ export class AddPosComponent implements OnInit {
           dblVatTot = this.comFunc.emptyToZero(this.order_items_total_tax);
 
           if ((dblRounddiff - dblVatTot) < 0.05) {
-            this.vatRoundOffAmt = this.comFunc.CCToFC(this.comFunc.compCurrency, (dblRounddiff - dblVatTot));
+            this.vatRoundOffAmt = this.comFunc.transformDecimalVB(
+              this.comFunc.amtDecimals, this.comFunc.CCToFC(this.comFunc.compCurrency, (dblRounddiff - dblVatTot)));
             dblVatAmtRd = this.comFunc.emptyToZero(this.vatRoundOffAmt);
             this.order_items_total_tax = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, (this.comFunc.emptyToZero(this.order_items_total_tax) + this.comFunc.emptyToZero(dblVatAmtRd)));
 
@@ -7150,8 +7165,8 @@ export class AddPosComponent implements OnInit {
     console.log('====================================');
   }
 
-  saveAndContinue(type: any){
-    if(type =='continue'){
+  saveAndContinue(type: any) {
+    if (type == 'continue') {
       this.addNew();
     }
   }
@@ -7600,7 +7615,7 @@ export class AddPosComponent implements OnInit {
                   this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
                   // this.close('reloadMainGrid');
-                  if (this.posPlanetIssuing){
+                  if (this.posPlanetIssuing) {
                     this.posPlanetFileInsert();
                     this.createPlanetPOSVoidFile(); // need to check
                   }
@@ -7643,7 +7658,7 @@ export class AddPosComponent implements OnInit {
 
                 this.saveAndContinue(type);
 
-                
+
                 setTimeout(() => {
                   // location.reload();
                   // this.router.navigateByUrl('/pos');
@@ -10730,6 +10745,9 @@ export class AddPosComponent implements OnInit {
 
   setTabByIndex(index: any, data?: any) {
 
+    this.order_items_total_net_amount = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.order_items_total_net_amount);
+    this.balanceAmount = this.comFunc.transformDecimalVB(this.comFunc.amtDecimals, this.balanceAmount);
+    
     this.selectedTabIndex = index;
     if (this.receiptModesList?.BTN_CASH == true && this.selectedTabIndex == 0) {
       if (data != null && data != undefined && data != undefined) {
@@ -10979,7 +10997,16 @@ export class AddPosComponent implements OnInit {
     // this.accountLookupList.filter((data)=> data.)
   }
   changeReceiptAmtFC(event: any, formName: keyof AddPosComponent, fieldName?: any) {
-    this[formName].controls[fieldName].setValue(event.target.value);
+    const value = event.target.value;
+    const upValue =  this.comFunc.transformDecimalVB(
+      this.comFunc.amtDecimals, value);
+
+      event.target.value = upValue;
+      this[formName].controls[fieldName].setValue(
+        upValue
+       );
+
+
   }
 
 
@@ -11493,7 +11520,7 @@ export class AddPosComponent implements OnInit {
   }
 
   // call after edit save
-  createPlanetPOSVoidFile(){
+  createPlanetPOSVoidFile() {
     const API = `POSPlanetFile/CreatePlanetPOSVoidFile/${this.strBranchcode}/${this.vocType}/${this.baseYear}/${this.vocDataForm.value.fcn_voc_no}`;
     this.suntechApi.postDynamicAPI(API, {})
       .subscribe((res: any) => {
@@ -11501,5 +11528,5 @@ export class AddPosComponent implements OnInit {
         }
       });
   }
- 
+
 }
