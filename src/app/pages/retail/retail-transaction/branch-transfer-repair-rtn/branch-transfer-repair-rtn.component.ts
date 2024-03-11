@@ -29,6 +29,7 @@ export class BranchTransferRepairRtnComponent implements OnInit {
   tableData: any[] = []; 
   viewMode: boolean = false;
   currentDate = new Date();
+  userbranch = localStorage.getItem('userbranch');
 
   salesManCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -59,10 +60,10 @@ export class BranchTransferRepairRtnComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'accode',
     SEARCH_HEADING: 'PARTY CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "accode<>'' AND  AC_OnHold = 0 AND BRANCH_CODE = "+ this.userbranch + "AND Account_Mode='P'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,

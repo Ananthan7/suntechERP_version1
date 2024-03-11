@@ -230,43 +230,39 @@
                                     <dxi-column dataField="STOCK_CODE" caption="Stock Code"
                                         cellTemplate="stockCodetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="CARAT" caption="Karat">
+                                    <dxi-column dataField="CARAT" caption="Karat" cellTemplate="karattemp">
                                     </dxi-column>
-                                    <dxi-column dataField="STOCK_FCCOST" caption="Stock Type">
+                                    <dxi-column dataField="STOCK_FCCOST" caption="Stock Type" cellTemplate="stockTypetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="PCS" caption="Pcs">
+                                    <dxi-column dataField="PCS" caption="Pcs" cellTemplate="pcstemp">
                                     </dxi-column>
-                                    <dxi-column dataField="GROSS_WT" caption="Wt/Ct">
+                                    <dxi-column dataField="GROSS_WT" caption="Wt/Ct" cellTemplate="wtCttemp">
                                     </dxi-column>
-                                    <dxi-column dataField="COLOR" caption="Color">
+                                    <dxi-column dataField="COLOR" caption="Color" cellTemplate="colortemp">
                                     </dxi-column>
-                                    <dxi-column dataField="CLARITY" caption="Clarity">
+                                    <dxi-column dataField="CLARITY" caption="Clarity" cellTemplate="claritytemp">
                                     </dxi-column>
-                                    <dxi-column dataField="SHAPE" caption="Shape">
+                                    <dxi-column dataField="SHAPE" caption="Shape" cellTemplate="shapetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="SIEVE" caption="Sieve Std">
+                                    <dxi-column dataField="SIEVE" caption="Sieve Std" cellTemplate="sievetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="DESCRIPTION" caption="Description">
+                                    <dxi-column dataField="DESCRIPTION" caption="Description" cellTemplate="descriptiontemp">
                                     </dxi-column>
-                                    <dxi-column dataField="DSIZE" caption="Size">
+                                    <dxi-column dataField="DSIZE" caption="Size" cellTemplate="sizetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="PROCESS_TYPE" caption="Process Type">
+                                    <dxi-column dataField="PROCESS_TYPE" caption="Process Type" cellTemplate="processTypetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="D_REMARKS" caption="Remarks">
+                                    <dxi-column dataField="D_REMARKS" caption="Remarks" cellTemplate="remarktemp">
                                     </dxi-column>
-                                    <dxi-column dataField="POINTER_WT" caption="pointer Wt">
+                                    <dxi-column dataField="POINTER_WT" caption="pointer Wt" cellTemplate="pointerWttemp">
                                     </dxi-column>
-                                    <dxi-column dataField="EXT_Color" caption="Ext.Color">
+                                    <dxi-column dataField="EXT_Color" caption="Ext.Color" cellTemplate="extColortemp">
                                     </dxi-column>
-                                    <dxi-column dataField="EXT.CLARITY" caption="Ext.Clarity">
+                                    <dxi-column dataField="EXT.CLARITY" caption="Ext.Clarity" cellTemplate="extClaritytemp">
                                     </dxi-column>
-                                    <dxi-column dataField="SIEVE_FROM" caption="Sieve from">
+                                    <dxi-column dataField="SIEVE_FROM" caption="Sieve from" cellTemplate="sieveFromtemp">
                                     </dxi-column>
-                                    <dxi-column dataField="DESCRIPTION" caption="Description">
-                                    </dxi-column>
-                                    <dxi-column dataField="SIEVE_TO" caption="Sieve To">
-                                    </dxi-column>
-                                    <dxi-column dataField="DESCRIPTION" caption="Description">
+                                    <dxi-column dataField="SIEVE_TO" caption="Sieve To" cellTemplate="sieveTotemp">
                                     </dxi-column>
 
 
@@ -282,6 +278,88 @@
                                         <master-search [MasterSearchData]="stockCodeData"
                                             (newRowClick)="stockCodeDataSelected($event,data,'stockCodetemp')">
                                         </master-search>
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'karattemp'">
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="karatCodeData"
+                                            (newRowClick)="karatCodeSelected($event,data,'karattemp')">
+                                        </master-search>
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'stockTypetemp'">
+                                        <input type="text" (change)="stockType($event,data)" [value]="data.value"
+                                      style="width: 100%;" required />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'pcstemp'">
+                                        <input type="text" (change)="pcstemp($event,data)" [value]="data.value"
+                                           style="width: 100%;" required   />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'wtCttemp'">
+                                        <input type="text" (change)="wtCtt($event,data)" [value]="data.value"
+                                           style="width: 100%;" required  />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'colortemp'">
+                                        <input type="text" (change)="color($event,data)" [value]="data.value"
+                                           style="width: 100%;" required   />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'claritytemp'">
+                                        <input type="text" (change)="clarity($event,data)" [value]="data.value"
+                                           style="width: 100%;" required    />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'shapetemp'">
+                                        <input type="text" (change)="shape($event,data)" [value]="data.value"
+                                           style="width: 100%;" required    />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'sievetemp'">
+                                        <input type="text" (change)="sieve($event,data)" [value]="data.value"
+                                           style="width: 100%;" required    />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'descriptiontemp'">
+                                        <input type="text" (change)="description($event,data)" [value]="data.value"
+                                           style="width: 100%;" required    />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'sizetemp'">
+                                        <input type="text" (change)="size($event,data)" [value]="data.value"
+                                           style="width: 100%;" required    />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'processTypetemp'">
+                                        <input type="text" (change)="processType($event,data)" [value]="data.value"
+                                           style="width: 100%;" required    />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'remarktemp'">
+                                        <input type="text" (change)="remark($event,data)" [value]="data.value"
+                                           style="width: 100%;" required    />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'pointerWttemp'">
+                                        <input type="text" (change)="pointerWt($event,data)" [value]="data.value"
+                                           style="width: 100%;" required    />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'extClaritytemp'">
+                                        <input type="text" (change)="extClarity($event,data)" [value]="data.value"
+                                           style="width: 100%;" required   />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'sieveFromtemp'">
+                                        <input type="email" (change)="sieveFrom($event,data)" [value]="data.value"
+                                           style="width: 100%;" required   />
+                                    </div>
+
+                                    <div *dxTemplate="let data of 'sieveTotemp'">
+                                        <input type="email" (change)="sieveTo($event,data)" [value]="data.value"
+                                           style="width: 100%;" required   />
                                     </div>
 
                                 </dx-data-grid>
