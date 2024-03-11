@@ -3078,6 +3078,7 @@ export class SalesEstimationComponent implements OnInit {
                         // this.snackBar.dismiss();
                         this.snackBar.open('Customer details saved successfully', '', {
                             duration: 1000 // time in milliseconds
+                            
                         });
 
                         // ${data.AMLDIGICOMPANYNAME}/${data.AMLDIGIUSERNAME}/${data.AMLDIGIPASSWORD}/${data.CODE}/${data.FIRSTNAME}/${data.MIDDLENAME}/${data.LASTNAME}/%27%27/${data.POSCustIDNo}/${data.NATIONALITY}/${data.DATE_OF_BIRTH}/${data.CUST_Type}/${data.AMLUSERID}/${data.AMLDIGITHRESHOLD}/${data.AMLDIGICOMPANYNAME}/1/${data.DIGIIPPATH}`);
@@ -3247,12 +3248,9 @@ export class SalesEstimationComponent implements OnInit {
                                             });
                                         // }
                                     } else {
-
                                         this.openDialog('Success', JSON.stringify(data.response), true);
-                                        this.dialogBox.afterClosed().subscribe((data: any) => {
-                                            if (data == 'OK') {
+                                        this.dialogBox.afterClosed().subscribe((data: any) => { 
                                                 this.modalReference.close();
-                                            }
                                         });
                                         //proceed
                                         this.amlNameValidationData = false;
@@ -3271,7 +3269,6 @@ export class SalesEstimationComponent implements OnInit {
 
                         } else {
                             this.isCustProcessing = false;
-
                             this.modalReference.close();
                         }
                     } else {
@@ -3283,10 +3280,8 @@ export class SalesEstimationComponent implements OnInit {
                     }
                 });
 
-
             } else {
                 this.isCustProcessing = false;
-
                 this.snackBar.open('Please Fill Required Fields', '', {
                     duration: 2000 // time in milliseconds
                 });

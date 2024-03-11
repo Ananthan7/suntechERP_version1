@@ -172,7 +172,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="container">
-                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" >
+                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-pause="hover" data-bs-interval="false">
                             <div class="carousel-inner">
                               <div class="carousel-item active" *ngFor="let img of images; let i = index" [class.active]="i === 0">
                                 <div class="upload-btn-wrapper">
@@ -223,7 +223,7 @@
                                     </dxo-editing> -->
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column dataField="SRNO" caption="SrNo">
+                                    <dxi-column dataField="SRNO" caption="SRNo">
                                     </dxi-column>
                                     <dxi-column dataField="DIVCODE" caption="Div Code" cellTemplate="divisiontemp">
                                     </dxi-column>
@@ -258,7 +258,7 @@
                                     </dxi-column>
                                     <dxi-column dataField="EXT_Color" caption="Ext.Color" cellTemplate="extColortemp">
                                     </dxi-column>
-                                    <dxi-column dataField="EXT.CLARITY" caption="Ext.Clarity" cellTemplate="extClaritytemp">
+                                    <dxi-column dataField="EXT_CLARITY" caption="Ext.Clarity" cellTemplate="extClaritytemp">
                                     </dxi-column>
                                     <dxi-column dataField="SIEVE_FROM" caption="Sieve from" cellTemplate="sieveFromtemp">
                                     </dxi-column>
@@ -345,6 +345,12 @@
                                     <div *dxTemplate="let data of 'pointerWttemp'">
                                         <input type="text" (change)="pointerWt($event,data)" [value]="data.value"
                                            style="width: 100%;" required    />
+                                    </div>
+
+                                  
+                                    <div *dxTemplate="let data of 'extColortemp'">
+                                        <input type="text" (change)="extColor($event,data)" [value]="data.value"
+                                           style="width: 100%;" required   />
                                     </div>
 
                                     <div *dxTemplate="let data of 'extClaritytemp'">

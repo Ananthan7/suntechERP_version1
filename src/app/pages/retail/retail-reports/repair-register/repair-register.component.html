@@ -8,7 +8,7 @@
   <modal-header  (cancelClick)="close()"></modal-header>
   <div class="row">
       <div class="col-md-12">
-          <form [formGroup]="karatmasterFrom">
+          <form [formGroup]="repairRegisterForm" saveclick="formSubmit()">
               <div class="container-fluid pt-3">
                   <div class="row justify-content-between">
 
@@ -26,7 +26,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 100%">
                                 <input matInput DateValidation 
-                                    [matDatepicker]="date" formControlName="date"
+                                    [matDatepicker]="date" formControlName="fromDate"
                                     placeholder="DD/MM/YYYY" />
                                 <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
                                 <mat-datepicker #date></mat-datepicker>
@@ -35,7 +35,7 @@
                           <label for="inputPassword" class="col-sm-2 col-form-label">Party Code :</label>
                           <div class="col-md-4">
                             <mat-form-field style="width: 80%;">
-                              <input type="text" matInput  />
+                              <input type="text" matInput  formControlName="partyCode">
                             </mat-form-field>
                             <master-search>
                             </master-search>
@@ -46,7 +46,7 @@
                           <div class="col-md-3">
                             <mat-form-field style="width: 100%">
                                 <input matInput DateValidation 
-                                    [matDatepicker]="date" formControlName="date"
+                                    [matDatepicker]="date" formControlName="toDate"
                                     placeholder="DD/MM/YYYY" />
                                 <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
                                 <mat-datepicker #date></mat-datepicker>
@@ -55,7 +55,7 @@
                           <label for="inputPassword" class="col-sm-2 col-form-label">Party Name :</label>
                           <div class="col-md-5">
                             <mat-form-field style="width: 100%;">
-                              <input type="text" matInput  />
+                              <input type="text" matInput formControlName="partyName" />
                             </mat-form-field>
                           </div>
                         </div>

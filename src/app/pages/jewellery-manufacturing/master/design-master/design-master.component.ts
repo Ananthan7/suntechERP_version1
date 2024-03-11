@@ -31,6 +31,23 @@ export class DesignMasterComponent implements OnInit {
   tableDataCutRange: any[] = [];
   tableDataCountryRange: any[] = [];
   tableDataDyeCodeRange: any[] = [];
+  tableDataWeightRange: any[] = [];
+  tableDataWaxModels: any[] = [];
+  tableDataApprovedVendors: any[] = [];
+  tableDataEnamelColor: any[] = [];
+  tableDataComponents: any[] = [];
+  tableDataSizeRange: any[] = [];
+  tableDataWidthRange: any[] = [];
+  tableDataLength: any[] = [];
+  tableDataHeight: any[] = [];
+  tableDataKaratRange: any[] = [];
+  tableDataColorRange: any[] = [];
+  tableDataStockCode: any[] = [];
+  tableDataFinishingRange: any[] = [];
+  Disable: boolean = false;
+
+
+
   fieldDisable : boolean = false;
   FieldEnable : boolean = false;
 
@@ -40,7 +57,7 @@ export class DesignMasterComponent implements OnInit {
   currentFilter: any; 
   branchCode?: String;
   selectedTabIndex = 0;
-  selectedTabIndex1 = 0;
+  selectedTabIndex1 = 1;
 
   columnhead:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
   columnheader:any[] = ['Mould Number','Parts','Type', 'Location','Voucher Date','Voucher No'];
@@ -52,7 +69,7 @@ export class DesignMasterComponent implements OnInit {
   column2:any[] = ['SINO','Country Code','Description'];
   column3:any[] = ['SINO','Dye Code','Description'];
   column4:any[] = ['SINO','Wax Model Code','Description'];
-  column5:any[] = ['Sr.No','Accode','Description','Vend Design','Del.Days','Credit Days','Mode Of Payment'];
+  column5:any[] = ['SINO','Accode','Description','Vend Design','Del.Days','Credit Days','Mode Of Payment'];
   column6:any[] = ['SINO','Color Code','Description'];
   column7:any[] = ['SINO','Comp Code','Description'];
   column8:any[] = ['SINO','Width Code','Description'];
@@ -62,7 +79,7 @@ export class DesignMasterComponent implements OnInit {
   column12:any[] = ['SINO','Color Range','Description','Default'];
   column13:any[] = ['SINO','Billing Code','Description'];
   column14:any[] = ['SINO','Finishing Code','Description','Default'];
-  column15:any[] = ['Size','Pcs'];
+  column15:any[] = ['SINO','Size','Pcs'];
   columnhead1:any[] = ['SRNO','Comp.Code','Description','Pcs', 'Size Set Code','Size Code','Type','Category','Shape','Height','Width','Length','Radius'];
   columnhead2:any[] = ['DESIGN_C','PART_CODE','PART_DESCRIPTION','METAL_WT', 'LS_PCS','LS_WT','CS_PCS','CS_WT','PL_PCS','PL_WT','OTH_PCS','OTH_WT','TOTAL_PCS'];
  
@@ -251,7 +268,18 @@ export class DesignMasterComponent implements OnInit {
       "Sieve_Std": 0,
       "Description": "",
       "Sieve_From": 0,
-
+      "Sieve_To": 0,
+      "Description_detail": "",
+      "Description_detail2": "",
+      "Size":"",
+      "Pcs":"",
+      "WtCt":"",
+      "ProcessType":"",
+      "PointerWt":"",
+      "Remark":"",
+      "currency":"",
+      "Design_currency":"",
+      "Purity":"",
     };
   
     this.tableData.push(data);
@@ -306,6 +334,47 @@ descriptiontemp(data:any,value: any){
 sieveFromtemp(data:any,value: any){
   this.tableData[value.data.SRNO - 1].SieveFrom = data.target.value;
 }
+
+
+
+SieveTotemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Sieve_To = data.target.value;
+}
+Description_detailtemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Description_detail = data.target.value;
+}
+Description_detail2temp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Description_detail2 = data.target.value;
+}
+Sizetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Size = data.target.value;
+}
+Pcstempp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Pcs = data.target.value;
+}
+WtCttemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].WtCt = data.target.value;
+}
+ProcessTypetemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].ProcessType = data.target.value;
+}
+PointerWttemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].PointerWt = data.target.value;
+}
+Remarktemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Remark = data.target.value;
+}
+currencytemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].currency = data.target.value;
+}
+Design_currencytemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Design_currency = data.target.value;
+}
+Puritytemp(data:any,value: any){
+  this.tableData[value.data.SRNO - 1].Purity = data.target.value;
+}
+
+
 
 adddatas(){
   let length = this.tableDatas.length;
@@ -832,7 +901,10 @@ removedatas(){
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
+  
   divisionCodeSelected(value:any,data:any, controlName: string){
+    this.tableData[data.data.SRNO - 1].Division = ('');
     console.log('Data ',data);
     console.log('values ',value);
  
@@ -840,11 +912,14 @@ removedatas(){
     console.log(data.data.SRNO);
 
     if(value.DIVISION == 'M'){
+      this.Disable = true;
       this.fieldDisable = true;
-
+      this.FieldEnable = false;
     }
     else if(value.DIVISION == 'S'){
+      this.Disable = false;
       this.FieldEnable = true;
+      this.fieldDisable = false;
 
     }
 
@@ -2243,5 +2318,257 @@ onFileChangedimage(event: any) {
   removedataAttributesDyeCodeRange(){
 
   }
+
+
+  adddataAttributesWeightRange(){
+    let length = this.tableDataWeightRange.length;
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Size": "",
+      "Pcs": "",
+  }
+  this.tableDataWeightRange.push(datas);
+
+    
+  }
+
+  removedataAttributesWeightRange(){
+
+  }
+
+  adddataAttributesWaxModels(){
+    let length = this.tableDataWaxModels.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Wax Model Code": "",
+      "Description": "",
+  }
+  this.tableDataWaxModels.push(datas);
+
+  }
+
+  removedataAttributesWaxModels(){
+
+  }
+
+
+  adddataAttributeApprovedVendors(){
+    let length = this.tableDataApprovedVendors.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Accode": "",
+      "Description": "",
+      "Vend Design": "",
+      "Del.Days": "",
+      "Credit Days": "",
+      "Mode Of Payment": "",
+  }
+  this.tableDataApprovedVendors.push(datas);
+  
+  }
+
+  removedataAttributesApprovedVendors(){
+
+  }
+
+  adddataAttributeEnamelColor(){
+    let length = this.tableDataEnamelColor.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Color Code": "",
+      "Description": "",
+     
+  }
+  this.tableDataEnamelColor.push(datas);
+  
+  }
+
+  removedataAttributesEnamelColor(){
+
+  }
+
+  
+  adddataAttributeComponents(){
+    let length = this.tableDataComponents.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Comp Code": "",
+      "Description": "",
+      
+     
+  }
+  this.tableDataComponents.push(datas);
+  
+  }
+
+  removedataAttributesComponents(){
+
+  }
+
+
+  
+  
+  adddataAttributeSizeRange(){
+    let length = this.tableDataSizeRange.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Size Code": "",
+      "Description": "",
+      "Default":"",
+      
+     
+  }
+  this.tableDataSizeRange.push(datas);
+ 
+  }
+
+  removedataAttributesSizeRange(){
+
+  }
+
+  
+  adddataAttributeWidthRange(){
+    let length = this.tableDataWidthRange.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Width Code": "",
+      "Description": "",
+     
+  }
+  this.tableDataWidthRange.push(datas);
+  }
+
+  
+  removedataAttributesWidthRange(){
+
+  }
+
+  
+
+  adddataAttributeLength(){
+    let length = this.tableDataLength.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Length Code": "",
+      "Description": "",
+     
+  }
+  this.tableDataLength.push(datas);
+  }
+
+  
+  removedataAttributesLength(){
+
+  }
+
+  adddataAttributeHeight(){
+    let length = this.tableDataHeight.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Height Code": "",
+      "Description": "",
+     
+  }
+  this.tableDataHeight.push(datas);
+  }
+
+  
+  removedataAttributesHeight(){
+
+  }
+
+  adddataAttributeKaratRange(){
+    let length = this.tableDataKaratRange.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Karat Code": "",
+      "Description": "",
+      "Default" : "",
+     
+  }
+  this.tableDataKaratRange.push(datas);
+  }
+
+  
+  removedataAttributesKaratRange(){
+
+  }
+
+
+
+  adddataAttributeColorRange(){
+    let length = this.tableDataColorRange.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Color Code": "",
+      "Description": "",
+      "Default" : "",
+     
+  }
+  this.tableDataColorRange.push(datas);
+  }
+
+  
+  removedataAttributesColorRange(){
+
+  }
+
+  adddataAttributeStockCode(){
+    let length = this.tableDataStockCode.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Billing Code": "",
+      "Description": "",
+  }
+  this.tableDataStockCode.push(datas);
+  }
+
+  
+  removedataAttributesStockCode(){
+
+  }
+
+ 
+  adddataAttributeFinishingRange(){
+    let length = this.tableDataFinishingRange.length;
+
+    let srno = length + 1;
+    let datas =  {
+      "SINO": srno,
+      "Finishing Code": "",
+      "Description": "",
+      "Default" : "",
+  }
+  this.tableDataFinishingRange.push(datas);
+  }
+
+  
+  removedataAttributesFinishingRange(){
+
+  }
+
 
 }
