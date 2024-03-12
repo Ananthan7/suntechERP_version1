@@ -64,6 +64,7 @@ export class RetailTransactionComponent implements OnInit {
   dialogBoxResult: any;
 
   modalRef!: NgbModalRef;
+  posPlanetIssuing: boolean = false;
 
   //   reasonLookup: MasterSearchModel =
   //   {
@@ -115,6 +116,8 @@ export class RetailTransactionComponent implements OnInit {
       localStorage.removeItem('AddNewFlag')
     }
 
+    this.posPlanetIssuing = this.CommonService.allbranchMaster.POSPLANETISSUING;
+
     this.getReasonMasters();
 
   }
@@ -128,13 +131,17 @@ export class RetailTransactionComponent implements OnInit {
   async editRowDetails(e: any) {
     let str = e.row.data;
     str.FLAG = 'EDIT'
-    let posPlanetFile: any = await this.createPlanetPOSFindFile(str);
-    console.log(posPlanetFile);
 
-    if (posPlanetFile.value) {
-    } else {
-      this.snackBar.open(posPlanetFile.data.message, 'OK');
-      return;
+    if(this.posPlanetIssuing){
+
+      let posPlanetFile: any = await this.createPlanetPOSFindFile(str);
+      console.log(posPlanetFile);
+      
+      if (posPlanetFile.value) {
+      } else {
+        this.snackBar.open(posPlanetFile.data.message, 'OK');
+        return;
+      }
     }
 
     let isAuth = await this.openAuthModal();
