@@ -223,7 +223,8 @@ import { AuditTrailComponent } from './common/audit-trail/audit-trail.component'
     MatCheckboxModule, MatProgressSpinnerModule,
     MatRadioModule,MatCardModule,
     OverlayPanelModule,DragDropModule,
-    MatTableModule,CalendarModule 
+    MatTableModule,CalendarModule,
+    AuditTrailComponent
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })

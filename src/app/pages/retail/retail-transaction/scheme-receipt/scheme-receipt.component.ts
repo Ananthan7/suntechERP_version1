@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import * as convert from "xml-js";
 import { AddReceiptComponent } from "./add-receipt/add-receipt.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import { AuditTrailComponent } from "src/app/shared/common/audit-trail/audit-trail.component";
 
 @Component({
   selector: "app-scheme-receipt",
@@ -18,6 +19,8 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 })
 export class SchemeReceiptComponent implements OnInit {
   @Input() content!: any;
+  @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
+
   // @ViewChild("content") contentTemplate: any;
   @ViewChild("inputElement") inputElement!: ElementRef;
   schemeReceiptList: any[] = [];
@@ -56,6 +59,8 @@ export class SchemeReceiptComponent implements OnInit {
   branchName: any = localStorage.getItem("BRANCH_PARAMETER");
   schemeDataFlag: boolean = false;
   disableAddBtnGrid: boolean = true;
+  VIEWEDITFLAG: string = '';
+  dataIndex: any;
   customerMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -204,8 +209,10 @@ export class SchemeReceiptComponent implements OnInit {
     this.getDetailsForEdit(this.content.MID)
     this.getSalesmanList();
   }
-  VIEWEDITFLAG: string = '';
-  dataIndex: any;
+ 
+  auditTrailClick(){
+    this.auditTrailComponent?.showDialog()
+  }
   onRowClickHandler(event: any) {
     this.VIEWEDITFLAG = 'EDIT'
     this.dataIndex = event.dataIndex

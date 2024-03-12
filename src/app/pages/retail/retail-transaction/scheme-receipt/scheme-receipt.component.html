@@ -7,9 +7,10 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    (auditTrailClick)="auditTrailClick()"
     [isViewDelete]="false" [isViewPost]="true" [isViewAuditTrail]="true"
     [disableSaveBtn]="viewMode"></modal-header>
-
+<audit-trail></audit-trail>
 <!-- content section starts -->
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">

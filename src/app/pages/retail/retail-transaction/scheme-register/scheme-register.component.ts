@@ -946,7 +946,7 @@ export class SchemeRegisterComponent implements OnInit {
     }
   }
 
-  
+
   changeDateOfJoining(event: any) {
     this.updateMaturingDate();
   }
@@ -956,9 +956,9 @@ export class SchemeRegisterComponent implements OnInit {
     const dateOfJoining = new Date(this.schemeRegistrationForm.value.DateOfJoining);
     if (value != '') {
       if (this.schemeRegistrationForm.value.Frequency.toUpperCase() == 'WEEKLY') {
-        const updatedDate = dateOfJoining.getDate() + (parseInt(value) * 7 );
+        const updatedDate = dateOfJoining.getDate() + (parseInt(value) * 7);
         dateOfJoining.setDate(updatedDate);
-      }else{
+      } else {
         const updatedDate = dateOfJoining.getMonth() + parseInt(value);
         dateOfJoining.setMonth(updatedDate);
       }
