@@ -25,9 +25,8 @@ export class CustomerPriceSettingComponent implements OnInit {
   tableData: any[] = [];
   currentDate = new FormControl(new Date());
 
-  isdisabled:boolean = true
+  isdisabled:boolean = false;
   checkboxvalue:boolean = true
-  public isDisabled = true;
   public isChecked = true;
 
   constructor(
@@ -44,7 +43,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
 
   selectstock(event:any){
-    this.isdisabled = false
+    this.isdisabled = true
   }
 
   customerpricesettingForm: FormGroup = this.formBuilder.group({
@@ -55,8 +54,8 @@ export class CustomerPriceSettingComponent implements OnInit {
     currency:['',[Validators.required]],
     approvedby:[''],
     enteredBy:[''],
-    stockCode:['',[Validators.required]],
-    designCode:['',[Validators.required]],
+    stockCode:[''],
+    designCode:[''],
     group1:['',[Validators.required]],
     group2:['',[Validators.required]],
     group3:['',[Validators.required]],
