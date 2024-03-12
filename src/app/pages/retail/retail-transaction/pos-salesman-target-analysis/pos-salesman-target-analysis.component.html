@@ -7,7 +7,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="container-fluid pt-3">
-    <form>
+    <form [formGroup]="posSalesmanTargetAnalysis">
         <div class="row mb-3 border">
             <div class="col-md-3 border">
                 <div class="row">
@@ -16,7 +16,7 @@
                       <div class="position-relative d-flex">
                         <mat-form-field style="width: 100%;">
                             <input matInput [matDatepicker]="vocdate"  
-                            placeholder="DD/MM/YYYY"  DateValidation />
+                            placeholder="DD/MM/YYYY"  DateValidation formControlName="vocDate"/>
                           <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
                           <mat-datepicker #vocdate></mat-datepicker>
                           </mat-form-field>
@@ -28,7 +28,7 @@
                     <div class="col-sm-9">
                       <div class="position-relative d-flex">
                         <mat-form-field style="width: 100%;">
-                            <input matInput type="text"/>                          
+                            <input matInput type="text" formControlName="salesPersonCode"/>                          
                           </mat-form-field>
                           <master-search ></master-search>
                       </div>

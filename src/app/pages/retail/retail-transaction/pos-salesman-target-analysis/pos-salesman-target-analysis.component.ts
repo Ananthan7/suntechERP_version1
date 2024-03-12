@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pos-salesman-target-analysis',
@@ -19,6 +21,8 @@ export class PosSalesmanTargetAnalysisComponent implements OnInit {
 
   branchcolumnhead:any[]=['Code','Sales person','Pcs / Grms','Branch','Sales Amount','GP %'];
 
+  private subscriptions: Subscription[] = [];
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -32,8 +36,48 @@ export class PosSalesmanTargetAnalysisComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  formSubmit(){
+  posSalesmanTargetAnalysis: FormGroup = this.formBuilder.group({
+    vocDate: [new Date()],
+    salesPersonCode: [''],   
+  });
 
+  formSubmit() {
+   
+
+    if (this.posSalesmanTargetAnalysis.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = '/SalesMan'
+    let postData =[
+      {
+        "salesPersonCode": this.posSalesmanTargetAnalysis.value.salesPersonCode,
+        "Description": " "
+      }
+    ]
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.posSalesmanTargetAnalysis.reset()
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
 
   close(data?: any) {
