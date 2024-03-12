@@ -394,7 +394,7 @@ export class AddReceiptComponent implements OnInit {
   calculateAmountLC() {
     let form = this.receiptEntryForm.value
     if (this.commonService.emptyToZero(form.SchemeBalance) == 0) {
-      this.commonService.toastErrorByMsgId('Scheme Balance is' + form.SchemeBalance)
+      this.commonService.toastErrorByMsgId('Scheme Balance is ' + form.SchemeBalance)
       return
     }
     if (this.commonService.emptyToZero(form.SchemeBalance) < this.commonService.emptyToZero(form.Amount_LC)) {

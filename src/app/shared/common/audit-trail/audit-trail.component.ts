@@ -1,5 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'audit-trail',
@@ -11,9 +14,12 @@ export class AuditTrailComponent implements OnInit {
   @Input() dataToEditrow: any;
   @Input() gridData: any[] = [];
   @ViewChild('content') public content!: NgbModal;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private modalService: NgbModal,
+    private commonService: CommonServiceService,
+    private dataService: SuntechAPIService,
   ) { }
 
   ngOnInit(): void {
@@ -37,5 +43,27 @@ export class AuditTrailComponent implements OnInit {
         // Handle modal dismissal (if needed)
       }
     );
+  }
+
+  currencyCodeChange(value: string) {
+    if (value == '') return
+    let API = `CurrencyMaster/GetCurrencyMasterDetail/${value}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+        
+        } else {
+          this.commonService.toastErrorByMsgId('Currency rate not Found')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('Currency rate not Found')
+      })
+    this.subscriptions.push(Sub)
+  }
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());
+      this.subscriptions = []; // Clear the array
+    }
   }
 }
