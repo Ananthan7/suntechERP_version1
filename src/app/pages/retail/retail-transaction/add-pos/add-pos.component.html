@@ -68,6 +68,7 @@
           <th style="vertical-align: middle; text-align: center">
             Net Amount (Excl.VAT)
           </th>
+          <th style="vertical-align: middle; text-align: center">Discount</th>
           <th style="vertical-align: middle; text-align: center">VAT %</th>
           <th style="vertical-align: middle; text-align: center">Tax Amount</th>
           <th style="vertical-align: middle; text-align: center">
@@ -97,6 +98,9 @@
             <!-- {{ cli.mkg_amount| number:'1.2' }} -->
           </td>
           <td style="border-bottom-style: hidden; text-align-last: right">
+            {{ cli.dis_amt | number : "1.2" }}
+          </td>
+          <td style="border-bottom-style: hidden; text-align-last: right">
             {{ cli.taxPer | number : "1.2" }}
             <!-- {{ branch_tax_percentage }} -->
           </td>
@@ -123,6 +127,7 @@
   
           </tr> -->
         <tr>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -169,7 +174,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="8" style="font-weight: 600; text-align-last: right">
+          <td colspan="9" style="font-weight: 600; text-align-last: right">
             Total Before VAT
           </td>
           <td style="text-align-last: right">
@@ -178,7 +183,15 @@
           </td>
         </tr>
         <tr>
-          <td colspan="8" style="font-weight: 600; text-align-last: right">
+          <td colspan="9" style="font-weight: 600; text-align-last: right">
+            Total Discount
+          </td>
+          <td style="text-align-last: right">
+            {{ order_items_total_discount_amount | number : "1.2" }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="9" style="font-weight: 600; text-align-last: right">
             Total VAT 5%
           </td>
           <td style="text-align-last: right">
@@ -186,7 +199,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="8" style="font-weight: 600; text-align-last: right">
+          <td colspan="9" style="font-weight: 600; text-align-last: right">
             Net Amount
           </td>
           <td style="text-align-last: right">
@@ -196,22 +209,22 @@
         </tr>
 
         <tr style="border-bottom: hidden" *ngIf="invReturnSalesTotalNetTotal != 0">
-          <td colspan="9" style="font-weight: 600">
+          <td colspan="10" style="font-weight: 600">
             Sales Return : {{ invReturnSalesTotalNetTotal | number : "1.2" }}
           </td>
         </tr>
         <tr style="border-bottom: hidden" *ngIf="order_total_exchange != 0">
-          <td colspan="9" style="font-weight: 600">
+          <td colspan="10" style="font-weight: 600">
             Exchange : {{ order_total_exchange | number : "1.2" }}
           </td>
         </tr>
         <tr style="border-bottom: hidden">
-          <td colspan="9" style="font-weight: 600">
+          <td colspan="10" style="font-weight: 600">
             Received : {{ prnt_received_amount | number : "1.2" }}
           </td>
         </tr>
         <tr>
-          <td colspan="9" style="text-transform: capitalize">
+          <td colspan="11" style="text-transform: capitalize">
             {{
             prnt_received_amount_words != ""
             ? prnt_received_amount_words +
@@ -223,21 +236,21 @@
 
         <tr>
           <td colspan="3">Confirmed on behalf of</td>
-          <td colspan="6" style="font-weight: 600; text-align-last: right">
+          <td colspan="7" style="font-weight: 600; text-align-last: right">
             Suntech Business Solutions
           </td>
         </tr>
 
         <tr style="border-bottom: hidden; height: 120px">
           <td colspan="3"></td>
-          <td colspan="3"></td>
+          <td colspan="4"></td>
           <td colspan="3"></td>
         </tr>
         <tr>
           <td colspan="3" style="font-weight: 600; font-size: 14px; text-align: center">
             CUSTOMER'S SIGNATURE
           </td>
-          <td colspan="3" style="font-weight: 600; font-size: 14px; text-align: center">
+          <td colspan="4" style="font-weight: 600; font-size: 14px; text-align: center">
             INVOICE CHECKED BY
           </td>
           <td colspan="3" style="font-weight: 600; font-size: 14px; text-align: center">
@@ -245,7 +258,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="9" style="font-weight: 300; text-align-last: center; font-size: 14px">
+          <td colspan="10" style="font-weight: 300; text-align-last: center; font-size: 14px">
             THANK YOU FOR SHOPPING WITH US
           </td>
         </tr>
@@ -326,7 +339,7 @@
         </div>
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
-            <mat-label>Rate</mat-label>
+            <mat-label>Cur. Rate</mat-label>
             <input type="text" matInput id="txtCurRate" formControlName="txtCurRate" />
           </mat-form-field>
         </div>
@@ -591,9 +604,9 @@
                           
                           <dxo-editing [allowUpdating]="true" [allowDeleting]="!viewOnly">
                            
-                            <!-- <dxo-texts caption="Action" alignment="right" [editRow]="viewOnly ? 'View' : 'Edit'"
+                            <dxo-texts  alignment="right" [editRow]="viewOnly ? 'View' : 'Edit'"
                               deleteRow="Remove">
-                            </dxo-texts> -->
+                            </dxo-texts>
                           </dxo-editing>
 
                           <dxo-selection mode="single"></dxo-selection>
@@ -617,8 +630,8 @@
                           <dxi-column dataField="net_amount" caption="Total amount" alignment="right" format="currency"
                             [format]="{ style: 'currency', currency: 'AED' }" [allowEditing]="false" precision="2"  [width]="150">
                           </dxi-column>
-                          <dxi-column caption="Actions" [width]="100" [allowEditing]="false">
-                          </dxi-column>
+                          <!-- <dxi-column caption="Actions" [width]="100" [allowEditing]="false">
+                          </dxi-column> -->
                           <!-- <dxi-column type="buttons" >
                                                       <dxi-button template="orders">
                                                           <div *dxTemplate="let data of 'orders'">
@@ -1145,7 +1158,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-xl-6" (click)="viewOnly || isSaved ? '' : saveOrder('continue')" *ngIf="!viewOnly">
+          <div class="col-md-6 col-xl-6 mt-2" (click)="viewOnly || isSaved ? '' : saveOrder('continue')" *ngIf="!viewOnly">
             <div class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
                 <i class="fa fa-save"></i> <span> Save & Continue</span>
