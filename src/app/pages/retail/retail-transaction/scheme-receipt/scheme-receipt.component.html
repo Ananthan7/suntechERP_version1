@@ -30,8 +30,7 @@
                                             <span class="matlabels">Voc Type*
                                             </span>
                                             <span style="width: 65%">
-                                                <mat-form-field
-                                                    style="width: 30%">
+                                                <mat-form-field style="width: 25%">
                                                     <input type="text" matInput
                                                         readonly
                                                         formControlName="VocType" />
@@ -54,7 +53,7 @@
                                                 Voc Date*
                                             </span>
                                             <span style="width: 65%">
-                                                <mat-form-field style="width: 150px">
+                                                <mat-form-field >
                                                     <!-- <mat-label>Date Of Birth</mat-label> -->
                                                     <input matInput DateValidation
                                                         [matDatepicker]="dob"
@@ -64,27 +63,6 @@
                                                         [for]="dob"></mat-datepicker-toggle>
                                                     <mat-datepicker #dob></mat-datepicker>
                                                 </mat-form-field>
-                                                <!-- <mat-form-field>
-                                                    <input matInput
-                                                        DateValidation
-                                                        [readonly]="viewMode"
-                                                        (dateChange)="dateChange($event,'VocDate')"
-                                                        [matDatepicker]="vocDateR"
-                                                        formControlName="VocDate"
-                                                        placeholder="DD/MM/YYYY" />
-                                                    <mat-datepicker-toggle
-                                                        matSuffix
-                                                        [for]="vocDateR"></mat-datepicker-toggle>
-                                                    <mat-datepicker
-                                                        #vocDateR></mat-datepicker>
-                                                    <mat-error
-                                                        *ngIf="receiptDetailsForm.controls.VocDate.touched 
-                                                                    && receiptDetailsForm.controls.VocDate.hasError('pattern')">
-                                                        Invalid date format
-                                                        (dd/mm/yyyy)
-                                                    </mat-error>
-                                                </mat-form-field> -->
-
                                             </span>
                                         </div>
                                     </div>
@@ -241,7 +219,7 @@
                                                 Scheme Code*
                                             </span>
                                             <span style="width: 70%">
-                                                <mat-form-field>
+                                                <mat-form-field style="width: 60%">
                                                     <input type="text" readonly
                                                         matInput
                                                         formControlName="SchemeCode"
